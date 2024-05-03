@@ -46,13 +46,17 @@ public class UserVO {
 //	private String phone;
 //	private String secondaryPhone;
 	private boolean loginStatus;
+	
+
 	private boolean isActive;
+
 //	@Enumerated(EnumType.STRING)
 //	private Gender gender;
 //	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-dd-MM")
 //	private LocalDate dob;
 	@Enumerated(EnumType.STRING)
 	private Role role;
+	
 
 	@Embedded
 	private CreatedUpdatedDate commonDate = new CreatedUpdatedDate();
