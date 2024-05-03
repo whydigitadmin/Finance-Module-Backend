@@ -36,11 +36,10 @@ public class SetTaxRateVO {
 	private String subChapter;
 	@Column(name = "hsncode", length = 20)
 	private String hsnCode;
-	@Column(name = "branch/location", length = 50)
+	@Column(name = "branchlocation", length = 50)
 	private String branch;
 	@Column(name = "newrate", precision = 15,scale = 7)
 	private float newRate;
-//	@Column(name = "excepmted", length=1)
 	private boolean excepmted;
 	@Column(name = "createdby", length=30)
 	private String createdBy;
