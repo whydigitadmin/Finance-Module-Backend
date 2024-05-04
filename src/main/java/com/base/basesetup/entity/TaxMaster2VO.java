@@ -40,6 +40,7 @@ public class TaxMaster2VO {
 	private boolean sgstRcmPayable;
 	
 
+
 	@ManyToOne
 	@JoinColumn(name="taxmasterid")
 	@JsonBackReference
@@ -47,6 +48,7 @@ public class TaxMaster2VO {
 	
 	
 	
+
 	@Embedded
 	@Builder.Default
 	private CreatedUpdatedDate commonDate = new CreatedUpdatedDate();

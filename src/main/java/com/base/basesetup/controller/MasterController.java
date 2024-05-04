@@ -26,7 +26,9 @@ import com.base.basesetup.common.UserConstants;
 import com.base.basesetup.dto.ResponseDTO;
 import com.base.basesetup.dto.TaxMasterDTO;
 import com.base.basesetup.entity.SetTaxRateVO;
+
 import com.base.basesetup.entity.TaxMasterVO;
+
 import com.base.basesetup.service.MasterService;
 
 
@@ -58,26 +60,29 @@ public class MasterController extends BaseController {
 			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
 		}
 		if (StringUtils.isBlank(errorMsg)) {
-			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "SetTaxRate information get successfully");
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "SetTaxRate information get successfullyByOrgId");
 			responseObjectsMap.put("setTaxRateVO", setTaxRateVO);
 			responseDTO = createServiceResponse(responseObjectsMap);
 		} else {
-			responseDTO = createServiceResponseError(responseObjectsMap, "SetTaxRate information receive failed", errorMsg);
+			responseDTO = createServiceResponseError(responseObjectsMap, "SetTaxRate information receive failedByOrgId", errorMsg);
 		}
 		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
 		return ResponseEntity.ok().body(responseDTO);
 
 	}
 	
+
 	//TAXMASTER
 	
    @PutMapping("updateCreateTaxMaster")
 	public ResponseEntity<ResponseDTO> updateCreateTaxMaster(@Valid @RequestBody TaxMasterDTO taxMasterDTO) {
 		String methodName = "updateCreateTaxMaster()";
+
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
 		String errorMsg = null;
 		Map<String, Object> responseObjectsMap = new HashMap<>();
 		ResponseDTO responseDTO = null;
+
 		try {
 			TaxMasterVO taxMasterVO = masterService.updateCreateTaxMaster(taxMasterDTO);
 			if (taxMasterVO != null) {
@@ -97,6 +102,7 @@ public class MasterController extends BaseController {
 		return ResponseEntity.ok().body(responseDTO);
 	}
 	
+
 	
 	
 	

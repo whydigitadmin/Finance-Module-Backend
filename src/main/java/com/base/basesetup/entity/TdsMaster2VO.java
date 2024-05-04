@@ -8,13 +8,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.base.basesetup.dto.CreatedUpdatedDate;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,35 +19,32 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "tcsmaster2")
+@Table(name = "tdsmaster2")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class TcsMaster2VO {
-	
+public class TdsMaster2VO {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY, generator = "tcsmaster2gen")
-	@SequenceGenerator(name = "tcsmaster2gen", sequenceName = "tcsmaster2seq", initialValue = 1000000001, allocationSize = 1)
-	@Column(name = "tcsmaster2id")
-	private Long tcsMaster2Id;
-	@Column(name = "Serialno",length =50)
-	private long SerialNo;
+	@GeneratedValue(strategy = GenerationType.IDENTITY, generator = "tdsmaster2gen")
+	@SequenceGenerator(name = "tdsmaster2gen", sequenceName = "tdsmaster2seq", initialValue = 1000000001, allocationSize = 1)
+	@Column(name = "tdsmaster2id")
+	private Long tdsMaster2Id;
+	@Column(name = "orgid", length = 20)
+	private Long orgId;
+
 	@Column(name = "fromdate")
 	private LocalDate fromDate;
 	@Column(name = "todate")
 	private LocalDate toDate;
-	@Column(name = "tcspercentage",precision =2,scale = 3)
+	@Column(name = "tcspercentage", precision = 2, scale = 2)
 	private float tcsPercentage;
-	
-	
-	@ManyToOne
-	@JoinColumn(name = "tcsmasterid")
-	@JsonBackReference
-	private TcsMasterVO tcsMasterVO;
-	
+	@Column(name = "surpercentage", precision = 2, scale = 2)
+	private float surPercentage;
+	@Column(name = "edcesspercentage", precision = 2, scale = 2)
+	private float edcessPercentage;
+
 	@Embedded
 	@Builder.Default
 	private CreatedUpdatedDate commonDate = new CreatedUpdatedDate();
-	
 }

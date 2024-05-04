@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.base.basesetup.dto.TaxMaster2DTO;
 import com.base.basesetup.dto.TaxMasterDTO;
 import com.base.basesetup.entity.SetTaxRateVO;
+
 import com.base.basesetup.entity.TaxMaster2VO;
 import com.base.basesetup.entity.TaxMasterVO;
 import com.base.basesetup.exception.ApplicationException;
@@ -20,17 +21,20 @@ import com.base.basesetup.repo.TaxMaster2Repo;
 import com.base.basesetup.repo.TaxMasterRepo;
 
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
+
 @Service
 public class MasterServiceImpl implements MasterService{
 	public static final Logger LOGGER = LoggerFactory.getLogger(MasterServiceImpl.class);
 	@Autowired
 	SetTaxRateRepo setTaxRateRepo;
+
 	
 	@Autowired
 	TaxMasterRepo taxMasterRepo;
 	
 	@Autowired
 	TaxMaster2Repo taxMaster2Repo;
+
 
 	@Override
 	public List<SetTaxRateVO> getAllSetTaxRateByOrgId(Long orgId) {	
@@ -46,6 +50,7 @@ public class MasterServiceImpl implements MasterService{
 	}
 
 	@Override
+
 	public TaxMasterVO updateCreateTaxMaster(TaxMasterDTO taxMasterDTO) throws ApplicationException {
 		TaxMasterVO taxMasterVO = new TaxMasterVO();
 		if (ObjectUtils.isNotEmpty(taxMasterDTO.getTaxMasterId())) {
@@ -88,5 +93,6 @@ public class MasterServiceImpl implements MasterService{
 		taxMasterVO.setTaxPercentage(taxMasterDTO.getTaxPercentage());
 		taxMasterVO.setTaxDescription(taxMasterDTO.getTaxDescription());
 		taxMasterVO.setActive(taxMasterDTO.isActive());
+
 	}
 }
