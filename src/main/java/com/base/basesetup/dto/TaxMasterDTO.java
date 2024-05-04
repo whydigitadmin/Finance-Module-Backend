@@ -1,5 +1,7 @@
 package com.base.basesetup.dto;
 
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,7 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TaxMasterDTO {
-
 	
 	private Long taxMasterId;
 	private Long orgId;
@@ -16,4 +17,6 @@ public class TaxMasterDTO {
 	private float taxPercentage;
 	private String taxDescription;
 	private boolean active;
+	
+	private List<TaxMaster2DTO>  taxMaster2DTO;
 }

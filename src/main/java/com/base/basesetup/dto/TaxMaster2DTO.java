@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 public class TaxMaster2DTO {
 
 	private Long taxMaster2Id;
-
 	private Long inputAccount;
 	private Long outputAccount;
 	private boolean sgstRcmPayable;
