@@ -17,26 +17,24 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "taxmaster")
+@Table(name = "tcsmaster")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class TaxMasterVO {
+public class TcsMasterVO {
+	
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY, generator = "taxmastergen")
-	@SequenceGenerator(name = "taxmastergen", sequenceName = "taxmasterseq", initialValue = 1000000001, allocationSize = 1)
-	@Column(name = "taxmasterid")
-	private Long taxMasterId;
+	@GeneratedValue(strategy = GenerationType.IDENTITY, generator = "tcsmastergen")
+	@SequenceGenerator(name = "tcsmastergen", sequenceName = "tcsmasterseq", initialValue = 1000000001, allocationSize = 1)
+	@Column(name = "tcsmasterid")
+	private Long tcsMasterId;
 	@Column(name = "orgid", length=20)
 	private Long orgId;
-	@Column(name = "taxtype", length=10)
-	private String taxType;
-	@Column(name = "taxpercentage", precision = 2,scale = 2)
-	private float taxPercentage;
-	@Column(name = "taxdescription", length=100)
-	private String taxDescription;
-	
+	@Column(name = "section", length=10)
+	private  String section;
+	@Column(name = "sectionname", length=50)
+	private String sectionName;
 	@Column(name = "createdby", length=30)
 	private String createdBy;
 	@Column(name = "updatedby", length=30)
@@ -45,10 +43,14 @@ public class TaxMasterVO {
 	private String cancelRemarks;
 	private boolean cancel;
 	private boolean active;
-
+	
 	
 
+	
+	
+	
 	@Embedded
 	@Builder.Default
 	private CreatedUpdatedDate commonDate = new CreatedUpdatedDate();
+	
 }
