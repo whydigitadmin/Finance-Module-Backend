@@ -51,12 +51,13 @@ public class TaxMasterVO {
 	private boolean cancel;
 	private boolean active;
 
+
 	
 	@OneToMany(mappedBy = "taxMasterVO",cascade = CascadeType.ALL)
 	@JsonManagedReference
 	private List<TaxMaster2VO> taxMaster2VO;
 	
-	
+
 
 	@Embedded
 	@Builder.Default
