@@ -117,6 +117,34 @@ public class MasterController extends BaseController {
 		return ResponseEntity.ok().body(responseDTO);
 
 	}
+	@GetMapping("/getAllTcsMasterById")
+	public ResponseEntity<ResponseDTO> getAllTcsMasterById(@RequestParam(required = false) Long id) {
+		String methodName = "getAllTcsMasterById()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		List<TcsMasterVO> tcsMasterVO = new ArrayList<>();
+		try {
+			tcsMasterVO = masterService.getAllTcsMasterById(id);
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "TcsMaster information get successfullyById");
+			responseObjectsMap.put("tcsMasterVO", tcsMasterVO);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap, "TcsMaster information receive failedById", errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+
+	}
+	
+	
+	
 	
 	
 }

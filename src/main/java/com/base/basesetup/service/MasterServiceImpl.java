@@ -61,4 +61,17 @@ public class MasterServiceImpl implements MasterService{
 		}
 		return tcsMasterVO;
 		}
+
+	@Override
+	public List<TcsMasterVO> getAllTcsMasterById(Long id) {
+		List<TcsMasterVO> tcsMasterVO = new ArrayList<>();
+		if (ObjectUtils.isNotEmpty(id)) {
+			LOGGER.info("Successfully Received  TcsMasterInformation BY Id : {}", id);
+			tcsMasterVO = tcsMasterRepo.getAllTcsMasterById(id);
+		} else {
+			LOGGER.info("Successfully Received  TcsMasterInformation For All Id.");
+			tcsMasterVO = tcsMasterRepo.findAll();
+		}
+		return tcsMasterVO;
+		}
 	}

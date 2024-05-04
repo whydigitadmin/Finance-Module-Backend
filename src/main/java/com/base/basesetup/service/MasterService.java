@@ -15,4 +15,6 @@ public interface MasterService {
 
 	List<TcsMasterVO> getAllTcsMasterByOrgId(Long orgId);
 
+	List<TcsMasterVO> getAllTcsMasterById(Long id);
+
 }
