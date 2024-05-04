@@ -8,10 +8,13 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.base.basesetup.dto.CreatedUpdatedDate;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -39,6 +42,12 @@ public class TcsMaster2VO {
 	private LocalDate toDate;
 	@Column(name = "tcspercentage",precision =2,scale = 3)
 	private float tcsPercentage;
+	
+	
+	@ManyToOne
+	@JoinColumn(name = "tcsmasterid")
+	@JsonBackReference
+	private TcsMasterVO tcsMasterVO;
 	
 	@Embedded
 	@Builder.Default

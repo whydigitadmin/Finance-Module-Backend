@@ -37,6 +37,7 @@ public class TaxMaster2VO {
 	private boolean sgstRcmPayable;
 	
 
+
 	@Embedded
 	@Builder.Default
 	private CreatedUpdatedDate commonDate = new CreatedUpdatedDate();

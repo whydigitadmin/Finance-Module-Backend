@@ -46,7 +46,6 @@ public class TaxMasterVO {
 	private boolean cancel;
 	private boolean active;
 
-	
 
 	@Embedded
 	@Builder.Default

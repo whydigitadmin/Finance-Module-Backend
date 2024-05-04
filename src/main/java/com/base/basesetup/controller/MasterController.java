@@ -20,6 +20,7 @@ import com.base.basesetup.common.CommonConstant;
 import com.base.basesetup.common.UserConstants;
 import com.base.basesetup.dto.ResponseDTO;
 import com.base.basesetup.entity.SetTaxRateVO;
+import com.base.basesetup.entity.TcsMasterVO;
 import com.base.basesetup.service.MasterService;
 
 
@@ -88,5 +89,34 @@ public class MasterController extends BaseController {
 		return ResponseEntity.ok().body(responseDTO);
 
 	}
+	
+	// TcsMaster
+	
+	@GetMapping("/getAllTcsMasterByOrgId")
+	public ResponseEntity<ResponseDTO> getAllTcsMasterByOrgId(@RequestParam(required = false) Long orgId) {
+		String methodName = "getAllTcsMasterByOrgId()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		List<TcsMasterVO> tcsMasterVO = new ArrayList<>();
+		try {
+			tcsMasterVO = masterService.getAllTcsMasterByOrgId(orgId);
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "TcsMaster information get successfullyByOrgId");
+			responseObjectsMap.put("tcsMasterVO", tcsMasterVO);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap, "TcsMaster information receive failedByOrgId", errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+
+	}
+	
 	
 }
