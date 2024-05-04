@@ -29,5 +29,18 @@ public class MasterServiceImpl implements MasterService{
 	}
 	return setTaxRateVO;
 	}
+
+	@Override
+	public List<SetTaxRateVO> getAllSetTaxRateById(Long id) {
+		List<SetTaxRateVO> setTaxRateVO = new ArrayList<>();
+		if (ObjectUtils.isNotEmpty(id)) {
+			LOGGER.info("Successfully Received  SetTaxRateInformation BY Id : {}", id);
+			setTaxRateVO = setTaxRateRepo.getAllSetTaxRateById(id);
+		} else {
+			LOGGER.info("Successfully Received  SetTaxRateInformation For All Id.");
+			setTaxRateVO = setTaxRateRepo.findAll();
+		}
+		return setTaxRateVO;
+		}
 	
 	}

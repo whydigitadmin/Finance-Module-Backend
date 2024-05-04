@@ -10,4 +10,6 @@ public interface MasterService {
 
 	List<SetTaxRateVO> getAllSetTaxRateByOrgId(Long orgId);
 
+	List<SetTaxRateVO> getAllSetTaxRateById(Long id);
+
 }
