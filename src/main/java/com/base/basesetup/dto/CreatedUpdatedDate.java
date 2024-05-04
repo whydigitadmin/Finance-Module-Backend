@@ -11,6 +11,7 @@ package com.base.basesetup.dto;
 
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.PostLoad;
 import javax.persistence.PrePersist;
@@ -25,7 +26,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CreatedUpdatedDate {
+	@Column(name = "createddate")
 	private Date createdDate;
+	@Column(name = "updateddate")
 	private Date updatedDate;
 
 	@PrePersist
