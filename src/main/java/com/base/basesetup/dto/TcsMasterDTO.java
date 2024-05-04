@@ -7,12 +7,10 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class TaxMaster2DTO {
-
-	private Long taxMaster2Id;
-
-	private Long inputAccount;
-	private Long outputAccount;
-	private boolean sgstRcmPayable;
+public class TcsMasterDTO {
+	private Long tcsMasterId;
+	private Long orgId;
+	private String section;
+	private String sectionName;
 
 }

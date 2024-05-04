@@ -1,5 +1,7 @@
 package com.base.basesetup.entity;
 
+import java.time.LocalDate;
+
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -17,27 +19,29 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "taxmaster2")
+@Table(name = "tcsmaster2")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class TaxMaster2VO {
+public class TcsMaster2VO {
+	
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY, generator = "taxmaster2gen")
-	@SequenceGenerator(name = "taxmaster2gen", sequenceName = "taxmaster2seq", initialValue = 1000000001, allocationSize = 1)
-	@Column(name = "taxmaster2id")
-	private Long taxMaster2Id;
+	@GeneratedValue(strategy = GenerationType.IDENTITY, generator = "tcsmaster2gen")
+	@SequenceGenerator(name = "tcsmaster2gen", sequenceName = "tcsmaster2seq", initialValue = 1000000001, allocationSize = 1)
+	@Column(name = "tcsmaster2id")
+	private Long tcsMaster2Id;
+	@Column(name = "Serialno",length =50)
+	private long SerialNo;
+	@Column(name = "fromdate")
+	private LocalDate fromDate;
+	@Column(name = "todate")
+	private LocalDate toDate;
+	@Column(name = "tcspercentage",precision =2,scale = 3)
+	private float tcsPercentage;
 	
-	@Column(name = "inputaccount", length=20)
-	private Long inputAccount;
-	@Column(name = "outputaccount", length=20)
-	private Long outputAccount;
-	@Column(name = "sgstrcmpayable")
-	private boolean sgstRcmPayable;
-	
-
 	@Embedded
 	@Builder.Default
 	private CreatedUpdatedDate commonDate = new CreatedUpdatedDate();
+	
 }

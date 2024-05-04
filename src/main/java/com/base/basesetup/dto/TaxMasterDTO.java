@@ -8,9 +8,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TaxMasterDTO {
+
+	
 	private Long taxMasterId;
 	private Long orgId;
-	private String section;
-	private String sectionName;
-
+	private String taxType;
+	private float taxPercentage;
+	private String taxDescription;
+	private boolean active;
 }

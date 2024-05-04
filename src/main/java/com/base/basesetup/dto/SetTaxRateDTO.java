@@ -24,4 +24,6 @@ public class SetTaxRateDTO {
 	private float newRate;
 
 	private char excepmted;
+	
+	private boolean active;
 }
