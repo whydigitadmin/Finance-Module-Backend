@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class TdsMaster2DTO {
 	private Long tdsMaster2Id;
-	private Long orgId;
 
 	private LocalDate fromDate;
 	private LocalDate toDate;
