@@ -23,7 +23,7 @@ public class SetTaxRateDTO {
 
 	private float newRate;
 
-	private char excepmted;
-	
+	private String excepmted;
+
 	private boolean active;
 }

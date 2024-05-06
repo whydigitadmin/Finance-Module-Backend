@@ -3,24 +3,24 @@ package com.base.basesetup.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.apache.commons.lang3.ObjectUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.base.basesetup.dto.SetTaxRateDTO;
 import com.base.basesetup.dto.TaxMaster2DTO;
 import com.base.basesetup.dto.TaxMasterDTO;
 import com.base.basesetup.entity.SetTaxRateVO;
-
 import com.base.basesetup.entity.TaxMaster2VO;
 import com.base.basesetup.entity.TaxMasterVO;
 import com.base.basesetup.exception.ApplicationException;
 import com.base.basesetup.repo.SetTaxRateRepo;
 import com.base.basesetup.repo.TaxMaster2Repo;
 import com.base.basesetup.repo.TaxMasterRepo;
-
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 
 @Service
 public class MasterServiceImpl implements MasterService{
@@ -48,7 +48,54 @@ public class MasterServiceImpl implements MasterService{
 	}
 	return setTaxRateVO;
 	}
+	
+	
+	@Override
+	public List<SetTaxRateVO> getAllSetTaxRateById(Long id) {
+		List<SetTaxRateVO> setTaxRateVO = new ArrayList<>();
+		if (ObjectUtils.isNotEmpty(id)) {
+			LOGGER.info("Successfully Received  SetTaxRateInformation BY Id : {}", id);
+			setTaxRateVO = setTaxRateRepo.getAllSetTaxRateById(id);
+		} else {
+			LOGGER.info("Successfully Received  SetTaxRateInformation For All Id.");
+			setTaxRateVO = setTaxRateRepo.findAll();
+		}
+		return setTaxRateVO;
+		}
+      
+	
+	
+	@Override
+	public List<SetTaxRateVO> getAllSetTaxRate() {
+		return setTaxRateRepo.findAll();
+		}
+	
+	@Override
+	public SetTaxRateVO updateCreateSetTaxRate(@Valid SetTaxRateDTO setTaxRateDTO) throws ApplicationException {
+		SetTaxRateVO setTaxRateVO = new SetTaxRateVO();
+		if (ObjectUtils.isNotEmpty(setTaxRateDTO.getSetTaxRateId())) {
+			setTaxRateVO = setTaxRateRepo.findById(setTaxRateDTO.getSetTaxRateId())
+					.orElseThrow(() -> new ApplicationException("Invalid SetTaxRate details"));
+		}
+		getSetTaxRateVOFromSetTaxRateDTO(setTaxRateDTO, setTaxRateVO);
+		return setTaxRateRepo.save(setTaxRateVO);
+	}
+	
+	private void getSetTaxRateVOFromSetTaxRateDTO(@Valid SetTaxRateDTO setTaxRateDTO, SetTaxRateVO setTaxRateVO) {
+		setTaxRateVO.setOrgId(setTaxRateDTO.getOrgId());
+		setTaxRateVO.setChapter(setTaxRateDTO.getChapter());
+		setTaxRateVO.setSubChapter(setTaxRateDTO.getSubChapter());
+		setTaxRateVO.setHsnCode(setTaxRateDTO.getHsnCode());
+		setTaxRateVO.setBranch(setTaxRateDTO.getBranch());
+		setTaxRateVO.setNewRate(setTaxRateDTO.getNewRate());
+		setTaxRateVO.setExcepmted("e");
+		setTaxRateVO.setActive(setTaxRateDTO.isActive());
+		
+	}
 
+
+	//TAXMASTER
+	
 	@Override
 
 	public TaxMasterVO updateCreateTaxMaster(TaxMasterDTO taxMasterDTO) throws ApplicationException {
@@ -95,4 +142,7 @@ public class MasterServiceImpl implements MasterService{
 		taxMasterVO.setActive(taxMasterDTO.isActive());
 
 	}
+
+
+	
 }

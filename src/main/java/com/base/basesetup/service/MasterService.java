@@ -2,8 +2,11 @@ package com.base.basesetup.service;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.stereotype.Service;
 
+import com.base.basesetup.dto.SetTaxRateDTO;
 import com.base.basesetup.dto.TaxMasterDTO;
 import com.base.basesetup.entity.SetTaxRateVO;
 
@@ -18,5 +21,18 @@ public interface MasterService {
 
 	TaxMasterVO updateCreateTaxMaster(TaxMasterDTO taxMasterDTO) throws ApplicationException;
 
+
+	List<SetTaxRateVO> getAllSetTaxRateById(Long id);
+
+
+	List<SetTaxRateVO> getAllSetTaxRate();
+
+
+	SetTaxRateVO updateCreateSetTaxRate(@Valid SetTaxRateDTO setTaxRateDTO) throws ApplicationException;
+
+
+	 
+	
+	
 
 }
