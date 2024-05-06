@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.base.basesetup.dto.GroupLedgerDTO;
 import com.base.basesetup.dto.SetTaxRateDTO;
 import com.base.basesetup.dto.TaxMaster2DTO;
 import com.base.basesetup.dto.TaxMasterDTO;
@@ -18,6 +19,8 @@ import com.base.basesetup.dto.TcsMaster2DTO;
 import com.base.basesetup.dto.TcsMasterDTO;
 import com.base.basesetup.dto.TdsMaster2DTO;
 import com.base.basesetup.dto.TdsMasterDTO;
+import com.base.basesetup.entity.AccountVO;
+import com.base.basesetup.entity.GroupLedgerVO;
 import com.base.basesetup.entity.SetTaxRateVO;
 import com.base.basesetup.entity.TaxMaster2VO;
 import com.base.basesetup.entity.TaxMasterVO;
@@ -26,6 +29,8 @@ import com.base.basesetup.entity.TcsMasterVO;
 import com.base.basesetup.entity.TdsMaster2VO;
 import com.base.basesetup.entity.TdsMasterVO;
 import com.base.basesetup.exception.ApplicationException;
+import com.base.basesetup.repo.AccountRepo;
+import com.base.basesetup.repo.GroupLedgerRepo;
 import com.base.basesetup.repo.SetTaxRateRepo;
 import com.base.basesetup.repo.TaxMaster2Repo;
 import com.base.basesetup.repo.TaxMasterRepo;
@@ -49,14 +54,21 @@ public class MasterServiceImpl implements MasterService{
 
 	@Autowired
 	TcsMasterRepo tcsMasterRepo;
+	
 	@Autowired
 	TcsMaster2Repo tcsMaster2Repo;
 	
 	@Autowired
 	TdsMasterRepo tdsMasterRepo;
+	
 	@Autowired
 	TdsMaster2Repo tdsMaster2Repo;
 
+	@Autowired
+	AccountRepo accountRepo;
+	
+	@Autowired
+	GroupLedgerRepo groupLedgerRepo;
 
 	@Override
 	public List<SetTaxRateVO> getAllSetTaxRateByOrgId(Long orgId) {	
@@ -368,9 +380,79 @@ public class MasterServiceImpl implements MasterService{
 	}
 
 
-	
+	@Override
+	public List<AccountVO> getAllAccountByOrgId(Long orgId) {
+		List<AccountVO> accountVO = new ArrayList<>();
+		if (ObjectUtils.isNotEmpty(orgId)) {
+			LOGGER.info("Successfully Received  SetTaxRateInformation BY OrgId : {}", orgId);
+			accountVO = accountRepo.getAllAccountByOrgId(orgId);
+		} else {
+			LOGGER.info("Successfully Received  SetTaxRateInformation For All OrgId.");
+			accountVO = accountRepo.findAll();
+		}
+		return accountVO;
+		}
 
+
+	@Override
+	public List<AccountVO> getAllAccountByaccountId(Long accountId) {
+		
+		return accountRepo.findAll();
 	}
+
+
+	@Override
+	public List<GroupLedgerVO> getAllGroupLedgerById(Long id) {
+		
+		return groupLedgerRepo.findAll();
+	}
+
+
+	@Override
+	public List<GroupLedgerVO> getAllGroupLedgerByOrgId(Long orgId) {
+		List<GroupLedgerVO> groupLedgerVO = new ArrayList<>();
+		if (ObjectUtils.isNotEmpty(orgId)) {
+			LOGGER.info("Successfully Received  SetTaxRateInformation BY OrgId : {}", orgId);
+			groupLedgerVO = groupLedgerRepo.getAllGroupLedgerByOrgId(orgId);
+		} else {
+			LOGGER.info("Successfully Received  SetTaxRateInformation For All OrgId.");
+			groupLedgerVO = groupLedgerRepo.findAll();
+		}
+		return groupLedgerVO;
+		}
+
+
+
+	@Override
+	public GroupLedgerVO updateCreateGroupLedger(@Valid GroupLedgerDTO groupLedgerDTO) throws ApplicationException {
+		GroupLedgerVO groupLedgerVO = new GroupLedgerVO();
+		if (ObjectUtils.isNotEmpty(groupLedgerDTO.getGLId())) {
+			groupLedgerVO = groupLedgerRepo.findById(groupLedgerDTO.getGLId())
+					.orElseThrow(() -> new ApplicationException("Invalid GroupLedger details"));
+		}
+		getGroupLedgerVOFromGroupLedgerDTO(groupLedgerDTO, groupLedgerVO);
+		return groupLedgerRepo.save(groupLedgerVO);
+	}
+
+
+	private void getGroupLedgerVOFromGroupLedgerDTO(@Valid GroupLedgerDTO groupLedgerDTO, GroupLedgerVO groupLedgerVO) {
+		groupLedgerVO.setGroupNmae(groupLedgerDTO.getGroupNmae());
+		groupLedgerVO.setAccountCode(groupLedgerDTO.getAccountCode());
+		groupLedgerVO.setCoaList(groupLedgerDTO.getCoaList());
+		groupLedgerVO.setGstTaxFlag(true);
+		groupLedgerVO.setType(groupLedgerDTO.getType());
+		groupLedgerVO.setCategory(groupLedgerDTO.getCategory());
+		groupLedgerVO.setCurrency(groupLedgerDTO.getCurrency());
+		groupLedgerVO.setBranch(groupLedgerDTO.getBranch());
+		groupLedgerVO.setInterBranchAc(true);
+		groupLedgerVO.setControllAc(true);
+		groupLedgerVO.setAccountgroupName(groupLedgerDTO.getAccountgroupName());
+		
+	}
+	
+	
+	}
+	
 
 
 	

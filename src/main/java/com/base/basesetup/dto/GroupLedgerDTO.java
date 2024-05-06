@@ -1,7 +1,5 @@
 package com.base.basesetup.dto;
 
-import com.base.basesetup.entity.GroupLedgerVO;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,7 +21,7 @@ private Long gLId;
 	
 	private String coaList;
 	
-	private String groupName;
+	private String accountgroupName;
 	
 	private String type;
 	
