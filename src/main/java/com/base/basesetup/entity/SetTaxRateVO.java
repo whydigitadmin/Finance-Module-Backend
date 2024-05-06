@@ -40,7 +40,8 @@ public class SetTaxRateVO {
 	private String branch;
 	@Column(name = "newrate", precision = 15,scale = 7)
 	private float newRate;
-	private boolean excepmted;
+	@Column(name = "excepmted", length = 1)
+	private String excepmted;
 	@Column(name = "createdby", length=30)
 	private String createdBy;
 	@Column(name = "updatedby", length=30)
