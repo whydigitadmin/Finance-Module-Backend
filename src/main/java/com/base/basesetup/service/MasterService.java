@@ -6,10 +6,13 @@ import javax.validation.Valid;
 
 import org.springframework.stereotype.Service;
 
+import com.base.basesetup.dto.GroupLedgerDTO;
 import com.base.basesetup.dto.SetTaxRateDTO;
 import com.base.basesetup.dto.TaxMasterDTO;
 import com.base.basesetup.dto.TcsMasterDTO;
 import com.base.basesetup.dto.TdsMasterDTO;
+import com.base.basesetup.entity.AccountVO;
+import com.base.basesetup.entity.GroupLedgerVO;
 import com.base.basesetup.entity.SetTaxRateVO;
 
 import com.base.basesetup.entity.TaxMasterVO;
@@ -31,8 +34,6 @@ public interface MasterService {
 
 	List<SetTaxRateVO> getAllSetTaxRate();
 
-
-	SetTaxRateVO updateCreateSetTaxRate(@Valid SetTaxRateDTO setTaxRateDTO) throws ApplicationException;
 
 
 	List<TaxMasterVO> getAllTaxMasterByOrgId(Long orgId);
@@ -66,6 +67,26 @@ public interface MasterService {
 
 
 	TdsMasterVO updateCreateTdsMaster(@Valid TdsMasterDTO tdsMasterDTO) throws ApplicationException;
+
+
+	List<AccountVO> getAllAccountByOrgId(Long orgId);
+
+
+	List<AccountVO> getAllAccountByaccountId(Long accountId);
+
+
+	List<GroupLedgerVO> getAllGroupLedgerById(Long id);
+
+
+	List<GroupLedgerVO> getAllGroupLedgerByOrgId(Long orgId);
+
+
+	SetTaxRateVO updateCreateSetTaxRate(@Valid SetTaxRateDTO setTaxRateDTO) throws ApplicationException;
+
+
+	GroupLedgerVO updateCreateGroupLedger(@Valid GroupLedgerDTO groupLedgerDTO) throws ApplicationException;
+
+
 
 
 	 

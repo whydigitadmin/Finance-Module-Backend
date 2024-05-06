@@ -33,6 +33,8 @@ public class AccountVO {
 	@SequenceGenerator(name = "accountgen", sequenceName = "accountseq", initialValue = 1000000001, allocationSize = 1)
 	@Column(name = "accountid")
 	private Long accountId;
+	@Column(name = "orgid")
+	private Long orgId;
 	@Column(name = "accountgroup", length = 50)
 	private String accountGroup;
 	@Column(name = "branchlocation", length = 50)
@@ -67,11 +69,11 @@ public class AccountVO {
 	@JsonManagedReference
 	private List<Account1VO> account1VO;
 	
-	@OneToMany(mappedBy = "",cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "accountVO",cascade = CascadeType.ALL)
 	@JsonManagedReference
 	private List<Account2VO> account2VO;
 	
-	@OneToMany(mappedBy = "",cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "accountVO",cascade = CascadeType.ALL)
 	@JsonManagedReference
 	private List<Account3VO> account3VO;
 	
