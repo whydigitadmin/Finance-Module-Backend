@@ -1,0 +1,17 @@
+package com.base.basesetup.dto;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class Account1DTO {
+	private Long account1Id;
+	private String balanceSheet;
+	private String cashFlowStatement;
+	private String incomeStatement;
+}
