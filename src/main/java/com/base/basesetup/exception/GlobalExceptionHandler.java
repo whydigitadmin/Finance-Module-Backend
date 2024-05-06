@@ -1,5 +1,5 @@
-package com.base.basesetup.exception;
 
+ package com.base.basesetup.exception;
 import java.time.Instant;
 import java.util.Locale;
 import java.util.Map;

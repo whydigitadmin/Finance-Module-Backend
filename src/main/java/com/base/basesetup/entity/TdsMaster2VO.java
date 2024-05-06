@@ -8,10 +8,13 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.base.basesetup.dto.CreatedUpdatedDate;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -30,8 +33,7 @@ public class TdsMaster2VO {
 	@SequenceGenerator(name = "tdsmaster2gen", sequenceName = "tdsmaster2seq", initialValue = 1000000001, allocationSize = 1)
 	@Column(name = "tdsmaster2id")
 	private Long tdsMaster2Id;
-	@Column(name = "orgid", length = 20)
-	private Long orgId;
+
 
 	@Column(name = "fromdate")
 	private LocalDate fromDate;
@@ -43,6 +45,12 @@ public class TdsMaster2VO {
 	private float surPercentage;
 	@Column(name = "edcesspercentage", precision = 2, scale = 2)
 	private float edcessPercentage;
+	
+	
+	@ManyToOne
+	@JoinColumn(name = "tdsmasterid")
+	@JsonBackReference
+	private TdsMasterVO tdsMasterVO;
 
 	@Embedded
 	@Builder.Default

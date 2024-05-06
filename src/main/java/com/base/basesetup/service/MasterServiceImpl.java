@@ -14,13 +14,25 @@ import org.springframework.stereotype.Service;
 import com.base.basesetup.dto.SetTaxRateDTO;
 import com.base.basesetup.dto.TaxMaster2DTO;
 import com.base.basesetup.dto.TaxMasterDTO;
+import com.base.basesetup.dto.TcsMaster2DTO;
+import com.base.basesetup.dto.TcsMasterDTO;
+import com.base.basesetup.dto.TdsMaster2DTO;
+import com.base.basesetup.dto.TdsMasterDTO;
 import com.base.basesetup.entity.SetTaxRateVO;
 import com.base.basesetup.entity.TaxMaster2VO;
 import com.base.basesetup.entity.TaxMasterVO;
+import com.base.basesetup.entity.TcsMaster2VO;
+import com.base.basesetup.entity.TcsMasterVO;
+import com.base.basesetup.entity.TdsMaster2VO;
+import com.base.basesetup.entity.TdsMasterVO;
 import com.base.basesetup.exception.ApplicationException;
 import com.base.basesetup.repo.SetTaxRateRepo;
 import com.base.basesetup.repo.TaxMaster2Repo;
 import com.base.basesetup.repo.TaxMasterRepo;
+import com.base.basesetup.repo.TcsMaster2Repo;
+import com.base.basesetup.repo.TcsMasterRepo;
+import com.base.basesetup.repo.TdsMaster2Repo;
+import com.base.basesetup.repo.TdsMasterRepo;
 
 @Service
 public class MasterServiceImpl implements MasterService{
@@ -34,6 +46,16 @@ public class MasterServiceImpl implements MasterService{
 	
 	@Autowired
 	TaxMaster2Repo taxMaster2Repo;
+
+	@Autowired
+	TcsMasterRepo tcsMasterRepo;
+	@Autowired
+	TcsMaster2Repo tcsMaster2Repo;
+	
+	@Autowired
+	TdsMasterRepo tdsMasterRepo;
+	@Autowired
+	TdsMaster2Repo tdsMaster2Repo;
 
 
 	@Override
@@ -144,5 +166,212 @@ public class MasterServiceImpl implements MasterService{
 	}
 
 
+	@Override
+	public List<TaxMasterVO> getAllTaxMasterByOrgId(Long orgId) {
+		List<TaxMasterVO> taxMasterVO = new ArrayList<>();
+		if (ObjectUtils.isNotEmpty(orgId)) {
+			LOGGER.info("Successfully Received  TaxMasterInformation BY OrgId : {}", orgId);
+			taxMasterVO = taxMasterRepo.getAllTaxMasterByOrgId(orgId);
+		} else {
+			LOGGER.info("Successfully Received  TaxMasterInformation For All OrgId.");
+			taxMasterVO = taxMasterRepo.findAll();
+		}
+		return taxMasterVO;
+		}
+
+
+	@Override
+	public List<TaxMasterVO> getAllTaxMasterById(Long id) {
+		List<TaxMasterVO> taxMasterVO = new ArrayList<>();
+		if (ObjectUtils.isNotEmpty(id)) {
+			LOGGER.info("Successfully Received  TaxMasterInformation BY Id : {}", id);
+			taxMasterVO = taxMasterRepo.getAllTaxMasterById(id);
+		} else {
+			LOGGER.info("Successfully Received  TaxMasterInformation For All Id.");
+			taxMasterVO = taxMasterRepo.findAll();
+		}
+		return taxMasterVO;
+		}
+
+
+	@Override
+	public List<TaxMasterVO> getAllTaxMaster() {
+		return taxMasterRepo.findAll();
+	}
+
+	//TCSMASTER
 	
-}
+	@Override
+	public List<TcsMasterVO> getAllTcsMasterByOrgId(Long orgId) {
+		List<TcsMasterVO> tcsMasterVO = new ArrayList<>();
+		if (ObjectUtils.isNotEmpty(orgId)) {
+			LOGGER.info("Successfully Received  TcsMasterInformation BY OrgId : {}", orgId);
+			tcsMasterVO = tcsMasterRepo.getAllTcsMasterByOrgId(orgId);
+		} else {
+			LOGGER.info("Successfully Received  TcsMasterInformation For All OrgId.");
+			tcsMasterVO = tcsMasterRepo.findAll();
+		}
+		return tcsMasterVO;
+		}
+
+
+	@Override
+	public List<TcsMasterVO> getAllTcsMasterById(Long id) {
+		List<TcsMasterVO> tcsMasterVO = new ArrayList<>();
+		if (ObjectUtils.isNotEmpty(id)) {
+			LOGGER.info("Successfully Received  TcsMasterInformation BY Id : {}", id);
+			tcsMasterVO = tcsMasterRepo.getAllTcsMasterById(id);
+		} else {
+			LOGGER.info("Successfully Received  TcsMasterInformation For All Id.");
+			tcsMasterVO = tcsMasterRepo.findAll();
+		}
+		return tcsMasterVO;
+		}
+
+
+	@Override
+	public List<TcsMasterVO> getAllTcsMaster() {
+		return tcsMasterRepo.findAll();
+	}
+
+
+	@Override
+	public TcsMasterVO updateCreateTcsMaster(@Valid TcsMasterDTO tcsMasterDTO) throws ApplicationException {
+		TcsMasterVO tcsMasterVO = new TcsMasterVO();
+		if (ObjectUtils.isNotEmpty(tcsMasterDTO.getTcsMasterId())) {
+			tcsMasterVO = tcsMasterRepo.findById(tcsMasterDTO.getTcsMasterId())
+					.orElseThrow(() -> new ApplicationException("Invalid Tcs Master details"));
+		}
+
+		List<TcsMaster2VO> tcsMaster2VOs = new ArrayList<>();
+		if (tcsMasterDTO.getTcsMaster2DTO() != null) {
+			for (TcsMaster2DTO tcsMaster2DTO : tcsMasterDTO.getTcsMaster2DTO()) {
+				if (tcsMaster2DTO.getTcsMaster2Id() != null & ObjectUtils.isNotEmpty(tcsMaster2DTO.getTcsMaster2Id())) {
+					TcsMaster2VO tcsMaster2VO = tcsMaster2Repo.findById(tcsMaster2DTO.getTcsMaster2Id()).get();
+					tcsMaster2VO.setFromDate(tcsMaster2DTO.getFromDate());
+					tcsMaster2VO.setToDate(tcsMaster2DTO.getToDate());
+					tcsMaster2VO.setSerialNo(tcsMaster2DTO.getSerialNo());
+					tcsMaster2VO.setTcsPercentage(tcsMaster2DTO.getTcsPercentage());
+					tcsMaster2VO.setTcsMasterVO(tcsMasterVO);
+					tcsMaster2VOs.add(tcsMaster2VO);
+					
+				} else {
+					TcsMaster2VO tcsMaster2VO = new TcsMaster2VO();
+					tcsMaster2VO.setFromDate(tcsMaster2DTO.getFromDate());
+					tcsMaster2VO.setToDate(tcsMaster2DTO.getToDate());
+					tcsMaster2VO.setSerialNo(tcsMaster2DTO.getSerialNo());
+					tcsMaster2VO.setTcsPercentage(tcsMaster2DTO.getTcsPercentage());
+					tcsMaster2VO.setTcsMasterVO(tcsMasterVO);
+					tcsMaster2VOs.add(tcsMaster2VO);
+				}
+			}
+		}
+
+		getTcsMasterVOFromTcsMasterDTO(tcsMasterDTO, tcsMasterVO);
+
+		tcsMasterVO.setTcsMaster2VO(tcsMaster2VOs);
+		return tcsMasterRepo.save(tcsMasterVO);
+
+	}
+
+	private void getTcsMasterVOFromTcsMasterDTO(@Valid TcsMasterDTO tcsMasterDTO, TcsMasterVO tcsMasterVO) {
+		tcsMasterVO.setOrgId(tcsMasterDTO.getOrgId());
+		tcsMasterVO.setSection(tcsMasterDTO.getSection());
+		tcsMasterVO.setSectionName(tcsMasterDTO.getSectionName());
+		tcsMasterVO.setActive(tcsMasterDTO.isActive());
+	}
+
+
+		
+	//TDSMaster
+	
+	@Override
+	public List<TdsMasterVO> getAllTdsMasterByOrgId(Long orgId) {
+		List<TdsMasterVO> tdsMasterVO = new ArrayList<>();
+		if (ObjectUtils.isNotEmpty(orgId)) {
+			LOGGER.info("Successfully Received  TdsMasterInformation BY OrgId : {}", orgId);
+			tdsMasterVO = tdsMasterRepo.getAllTdsMasterByOrgId(orgId);
+		} else {
+			LOGGER.info("Successfully Received  TdsMasterInformation For All OrgId.");
+			tdsMasterVO = tdsMasterRepo.findAll();
+		}
+		return tdsMasterVO;
+		}
+
+
+	@Override
+	public List<TdsMasterVO> getAllTdsMasterById(Long id) {
+		List<TdsMasterVO> tdsMasterVO = new ArrayList<>();
+		if (ObjectUtils.isNotEmpty(id)) {
+			LOGGER.info("Successfully Received  TdsMasterInformation BY Id : {}", id);
+			tdsMasterVO = tdsMasterRepo.getAllTdsMasterById(id);
+		} else {
+			LOGGER.info("Successfully Received  TdsMasterInformation For All Id.");
+			tdsMasterVO = tdsMasterRepo.findAll();
+		}
+		return tdsMasterVO;
+		}
+
+
+	@Override
+	public List<TdsMasterVO> getAllTdsMaster() {
+		return tdsMasterRepo.findAll();
+	}
+
+
+	@Override
+	public TdsMasterVO updateCreateTdsMaster(@Valid TdsMasterDTO tdsMasterDTO) throws ApplicationException {
+		TdsMasterVO tdsMasterVO = new TdsMasterVO();
+		if (ObjectUtils.isNotEmpty(tdsMasterDTO.getTdsMasterId())) {
+			tdsMasterVO = tdsMasterRepo.findById(tdsMasterDTO.getTdsMasterId())
+					.orElseThrow(() -> new ApplicationException("Invalid Tds Master details"));
+		}
+
+		List<TdsMaster2VO> tdsMaster2VOs = new ArrayList<>();
+		if (tdsMasterDTO.getTdsMaster2DTO() != null) {
+			for (TdsMaster2DTO tdsMaster2DTO : tdsMasterDTO.getTdsMaster2DTO()) {
+				if (tdsMaster2DTO.getTdsMaster2Id() != null & ObjectUtils.isNotEmpty(tdsMaster2DTO.getTdsMaster2Id())) {
+					TdsMaster2VO tdsMaster2VO = tdsMaster2Repo.findById(tdsMaster2DTO.getTdsMaster2Id()).get();
+					tdsMaster2VO.setFromDate(tdsMaster2DTO.getFromDate());
+					tdsMaster2VO.setToDate(tdsMaster2DTO.getToDate());
+					tdsMaster2VO.setSurPercentage(tdsMaster2DTO.getSurPercentage());
+					tdsMaster2VO.setEdcessPercentage(tdsMaster2DTO.getEdcessPercentage());
+					tdsMaster2VO.setTcsPercentage(tdsMaster2DTO.getTcsPercentage());
+					tdsMaster2VO.setTdsMasterVO(tdsMasterVO);
+					tdsMaster2VOs.add(tdsMaster2VO);
+					
+				} else {
+					TdsMaster2VO tdsMaster2VO = new TdsMaster2VO();
+					tdsMaster2VO.setFromDate(tdsMaster2DTO.getFromDate());
+					tdsMaster2VO.setToDate(tdsMaster2DTO.getToDate());
+					tdsMaster2VO.setSurPercentage(tdsMaster2DTO.getSurPercentage());
+					tdsMaster2VO.setEdcessPercentage(tdsMaster2DTO.getEdcessPercentage());
+					tdsMaster2VO.setTcsPercentage(tdsMaster2DTO.getTcsPercentage());
+					tdsMaster2VO.setTdsMasterVO(tdsMasterVO);
+					tdsMaster2VOs.add(tdsMaster2VO);
+				}
+			}
+		}
+
+		getTdsMasterVOFromTdsMasterDTO(tdsMasterDTO, tdsMasterVO);
+
+		tdsMasterVO.setTdsMaster2VO(tdsMaster2VOs);
+		return tdsMasterRepo.save(tdsMasterVO);
+
+	}
+
+	private void getTdsMasterVOFromTdsMasterDTO(@Valid TdsMasterDTO tdsMasterDTO, TdsMasterVO tdsMasterVO) {
+		tdsMasterVO.setOrgId(tdsMasterDTO.getOrgId());
+		tdsMasterVO.setSection(tdsMasterDTO.getSection());
+		tdsMasterVO.setSectionName(tdsMasterDTO.getSectionName());
+		tdsMasterVO.setActive(tdsMasterDTO.isActive());
+	}
+
+
+	
+
+	}
+
+
+	
+
