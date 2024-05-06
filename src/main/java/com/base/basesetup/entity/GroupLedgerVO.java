@@ -17,7 +17,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "hsnsaccode")
+@Table(name = "groupLedger")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -29,6 +29,8 @@ public class GroupLedgerVO {
 	@SequenceGenerator(name = "hsnsaccodegen", sequenceName = "groupledgerseq", initialValue = 1000000001, allocationSize = 1)
 	@Column(name = "groupledgerid")
 	private Long gLId;
+	@Column(name = "orgid")
+	private Long orgId;
 	@Column(name = "groupname", length=50)
 	private String groupNmae;
 	@Column(name = "gsttaxflag")

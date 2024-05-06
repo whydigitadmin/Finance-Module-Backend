@@ -33,6 +33,8 @@ public class AccountVO {
 	@SequenceGenerator(name = "accountgen", sequenceName = "accountseq", initialValue = 1000000001, allocationSize = 1)
 	@Column(name = "accountid")
 	private Long accountId;
+	@Column(name = "orgid")
+	private Long orgId;
 	@Column(name = "accountgroup", length = 50)
 	private String accountGroup;
 	@Column(name = "branchlocation", length = 50)
