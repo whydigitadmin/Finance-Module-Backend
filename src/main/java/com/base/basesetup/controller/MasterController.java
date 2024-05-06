@@ -23,11 +23,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.base.basesetup.common.CommonConstant;
 import com.base.basesetup.common.UserConstants;
+import com.base.basesetup.dto.GroupLedgerDTO;
 import com.base.basesetup.dto.ResponseDTO;
 import com.base.basesetup.dto.SetTaxRateDTO;
 import com.base.basesetup.dto.TaxMasterDTO;
 import com.base.basesetup.dto.TcsMasterDTO;
 import com.base.basesetup.dto.TdsMasterDTO;
+import com.base.basesetup.entity.AccountVO;
+import com.base.basesetup.entity.GroupLedgerVO;
 import com.base.basesetup.entity.SetTaxRateVO;
 import com.base.basesetup.entity.TaxMasterVO;
 import com.base.basesetup.entity.TcsMasterVO;
@@ -152,7 +155,7 @@ public class MasterController extends BaseController {
 		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
 		return ResponseEntity.ok().body(responseDTO);
 	}
-	//
+	
 
 	//TAXMASTER
 	
@@ -478,7 +481,167 @@ public class MasterController extends BaseController {
 				return ResponseEntity.ok().body(responseDTO);
 			}
 		   
+	//Account 
+		 
+		 @GetMapping("/getAllAccountByOrgId")
+			public ResponseEntity<ResponseDTO> getAllAccountByOrgId( @RequestParam(required = false) Long orgId) {
+				String methodName = "getAllAccountByOrgId()";
+				LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+				String errorMsg = null;
+				Map<String, Object> responseObjectsMap = new HashMap<>();
+				ResponseDTO responseDTO = null;
+				List<AccountVO> accountVO = new ArrayList<>();
+				try {
+					accountVO = masterService.getAllAccountByOrgId(orgId);
+				} catch (Exception e) {
+					errorMsg = e.getMessage();
+					LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+				}
+				if (StringUtils.isBlank(errorMsg)) {
+					responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "Account information get successfully ByOrgId");
+					responseObjectsMap.put("accountVO", accountVO);
+					responseDTO = createServiceResponse(responseObjectsMap);
+				} else {
+					responseDTO = createServiceResponseError(responseObjectsMap, "Account information receive failedByOrgId", errorMsg);
+				}
+				LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+				return ResponseEntity.ok().body(responseDTO);
+
+			}
+		 
+		 @GetMapping("/getAllAccountById")
+			public ResponseEntity<ResponseDTO> getAllAccountByaccountId( @RequestParam(required = false) Long accountId) {
+				String methodName = "getAllAccountByaccountId()";
+				LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+				String errorMsg = null;
+				Map<String, Object> responseObjectsMap = new HashMap<>();
+				ResponseDTO responseDTO = null;
+				List<AccountVO> accountVO = new ArrayList<>();
+				try {
+					accountVO = masterService.getAllAccountByaccountId(accountId);
+				} catch (Exception e) {
+					errorMsg = e.getMessage();
+					LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+				}
+				if (StringUtils.isBlank(errorMsg)) {
+					responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "Account information get successfully By AccountID");
+					responseObjectsMap.put("accountVO", accountVO);
+					responseDTO = createServiceResponse(responseObjectsMap);
+				} else {
+					responseDTO = createServiceResponseError(responseObjectsMap, "Account information receive failedByOrgId", errorMsg);
+				}
+				LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+				return ResponseEntity.ok().body(responseDTO);
+
+			}
 	
+//		 @PutMapping("updateCreateAccount")
+//			public ResponseEntity<ResponseDTO> updateCreateAccount(@Valid @RequestBody Acc setTaxRateDTO) {
+//				String methodName = "updateCreateSetTaxRate()";
+//
+//				LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+//				String errorMsg = null;
+//				Map<String, Object> responseObjectsMap = new HashMap<>();
+//				ResponseDTO responseDTO = null;
+//
+//				try {
+//					AccountVO accountVO = masterService.updateCreateAccount(setTaxRateDTO);
+//					if (accountVO != null) {
+//						responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "Account updated successfully");
+//						responseObjectsMap.put("accountVO", accountVO);
+//						responseDTO = createServiceResponse(responseObjectsMap);
+//					} else {
+//						errorMsg = "Account not found for ID: " + setTaxRateDTO.getSetTaxRateId();
+//						responseDTO = createServiceResponseError(responseObjectsMap, "Account update failed", errorMsg);
+//					}
+//				} catch (Exception e) {
+//					errorMsg = e.getMessage();
+//					LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+//					responseDTO = createServiceResponseError(responseObjectsMap, "Account update failed", errorMsg);
+//				}
+//				LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+//				return ResponseEntity.ok().body(responseDTO);
+//			}
 	
-	
+		 //Group Ledger
+		 @GetMapping("/getAllGroupLedgerByOrgId")
+			public ResponseEntity<ResponseDTO> getAllGroupLedgerByOrgId( @RequestParam(required = false) Long orgId) {
+				String methodName = "getAllGroupLedgerByOrgId()";
+				LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+				String errorMsg = null;
+				Map<String, Object> responseObjectsMap = new HashMap<>();
+				ResponseDTO responseDTO = null;
+				List<GroupLedgerVO> groupLedgerVO = new ArrayList<>();
+				try {
+					groupLedgerVO = masterService.getAllGroupLedgerByOrgId(orgId);
+				} catch (Exception e) {
+					errorMsg = e.getMessage();
+					LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+				}
+				if (StringUtils.isBlank(errorMsg)) {
+					responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "Group Ledger information get successfully ByOrgId");
+					responseObjectsMap.put("groupLedgerVO", groupLedgerVO);
+					responseDTO = createServiceResponse(responseObjectsMap);
+				} else {
+					responseDTO = createServiceResponseError(responseObjectsMap, "Group Ledger information receive failedByOrgId", errorMsg);
+				}
+				LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+				return ResponseEntity.ok().body(responseDTO);
+
+			}
+		 
+		 @GetMapping("/getAllGroupLedgerById")
+			public ResponseEntity<ResponseDTO> getAllGroupLedgerById( @RequestParam(required = false) Long id) {
+				String methodName = "getAllGroupLedgerById()";
+				LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+				String errorMsg = null;
+				Map<String, Object> responseObjectsMap = new HashMap<>();
+				ResponseDTO responseDTO = null;
+				List<GroupLedgerVO> groupLedgerVO = new ArrayList<>();
+				try {
+					groupLedgerVO = masterService.getAllGroupLedgerById(id);
+				} catch (Exception e) {
+					errorMsg = e.getMessage();
+					LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+				}
+				if (StringUtils.isBlank(errorMsg)) {
+					responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "Group Ledger information get successfully ByOrgId");
+					responseObjectsMap.put("groupLedgerVO", groupLedgerVO);
+					responseDTO = createServiceResponse(responseObjectsMap);
+				} else {
+					responseDTO = createServiceResponseError(responseObjectsMap, "Group Ledger information receive failedByOrgId", errorMsg);
+				}
+				LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+				return ResponseEntity.ok().body(responseDTO);
+
+			}
+		 
+		 @PutMapping("updateCreateGroupLedger")
+			public ResponseEntity<ResponseDTO> updateCreateGroupLedger(@Valid @RequestBody GroupLedgerDTO groupLedgerDTO) {
+				String methodName = "updateCreateGroupLedger()";
+
+				LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+				String errorMsg = null;
+				Map<String, Object> responseObjectsMap = new HashMap<>();
+				ResponseDTO responseDTO = null;
+
+				try {
+					GroupLedgerVO groupLedgerVO = masterService.updateCreateGroupLedger(groupLedgerDTO);
+					if (groupLedgerVO != null) {
+						responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "Group Ledger updated successfully");
+						responseObjectsMap.put("groupLedgerVO", groupLedgerVO);
+						responseDTO = createServiceResponse(responseObjectsMap);
+					} else {
+						errorMsg = "Group Ledger not found for ID: " + groupLedgerDTO.getGLId();
+						responseDTO = createServiceResponseError(responseObjectsMap, "Group Ledger update failed", errorMsg);
+					}
+				} catch (Exception e) {
+					errorMsg = e.getMessage();
+					LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+					responseDTO = createServiceResponseError(responseObjectsMap, "Group Ledger update failed", errorMsg);
+				}
+				LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+				return ResponseEntity.ok().body(responseDTO);
+			}
+		 
 }

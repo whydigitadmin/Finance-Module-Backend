@@ -17,7 +17,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "groupLedger")
+@Table(name = "groupledger")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -26,7 +26,7 @@ public class GroupLedgerVO {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY, generator = "groupledgergen")
-	@SequenceGenerator(name = "hsnsaccodegen", sequenceName = "groupledgerseq", initialValue = 1000000001, allocationSize = 1)
+	@SequenceGenerator(name = "groupledgergen", sequenceName = "groupledgerseq", initialValue = 1000000001, allocationSize = 1)
 	@Column(name = "groupledgerid")
 	private Long gLId;
 	@Column(name = "orgid")
