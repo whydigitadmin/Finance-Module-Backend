@@ -32,7 +32,7 @@ public class GroupLedgerVO {
 	@Column(name = "orgid")
 	private Long orgId;
 	@Column(name = "groupname", length=50)
-	private String groupNmae;
+	private String groupName;
 	@Column(name = "gsttaxflag")
 	private boolean gstTaxFlag;
 	@Column(name = "accountcode", length=20)

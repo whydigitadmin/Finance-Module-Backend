@@ -531,9 +531,17 @@ public class MasterServiceImpl implements MasterService{
 
 	@Override
 	public List<GroupLedgerVO> getAllGroupLedgerById(Long id) {
-		
-		return groupLedgerRepo.findAll();
-	}
+		List<GroupLedgerVO> groupLedgerVO = new ArrayList<>();
+		if (ObjectUtils.isNotEmpty(id)) {
+			LOGGER.info("Successfully Received  SetTaxRateInformation BY Id : {}", id);
+			groupLedgerVO = groupLedgerRepo.getAllGroupLedgerById(id);
+		} else {
+			LOGGER.info("Successfully Received  SetTaxRateInformation For All Id.");
+			groupLedgerVO = groupLedgerRepo.findAll();
+		}
+		return groupLedgerVO;
+		}
+	
 
 
 	@Override
@@ -564,7 +572,8 @@ public class MasterServiceImpl implements MasterService{
 
 
 	private void getGroupLedgerVOFromGroupLedgerDTO(@Valid GroupLedgerDTO groupLedgerDTO, GroupLedgerVO groupLedgerVO) {
-		groupLedgerVO.setGroupNmae(groupLedgerDTO.getGroupNmae());
+		groupLedgerVO.setGroupName(groupLedgerDTO.getGroupName());
+		groupLedgerVO.setOrgId(groupLedgerDTO.getOrgId());
 		groupLedgerVO.setAccountCode(groupLedgerDTO.getAccountCode());
 		groupLedgerVO.setCoaList(groupLedgerDTO.getCoaList());
 		groupLedgerVO.setGstTaxFlag(true);
@@ -572,6 +581,7 @@ public class MasterServiceImpl implements MasterService{
 		groupLedgerVO.setCategory(groupLedgerDTO.getCategory());
 		groupLedgerVO.setCurrency(groupLedgerDTO.getCurrency());
 		groupLedgerVO.setBranch(groupLedgerDTO.getBranch());
+		groupLedgerVO.setActive(groupLedgerDTO.isActive());
 		groupLedgerVO.setInterBranchAc(true);
 		groupLedgerVO.setControllAc(true);
 		groupLedgerVO.setAccountgroupName(groupLedgerDTO.getAccountgroupName());

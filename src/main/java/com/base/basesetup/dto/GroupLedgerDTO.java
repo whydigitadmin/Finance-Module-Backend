@@ -11,9 +11,11 @@ import lombok.NoArgsConstructor;
 @Builder
 public class GroupLedgerDTO {
 
-private Long gLId;
+    private Long gLId;
 	
-	private String groupNmae;
+    private Long orgId;
+    
+	private String groupName;
 	
 	private boolean gstTaxflag;
 	
@@ -34,5 +36,7 @@ private Long gLId;
 	private String currency;
 	
 	private String branch;
+	
+	private boolean active;
 	
 }
