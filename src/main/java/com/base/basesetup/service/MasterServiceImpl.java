@@ -11,6 +11,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.base.basesetup.dto.Account1DTO;
+import com.base.basesetup.dto.Account2DTO;
+import com.base.basesetup.dto.Account3DTO;
+import com.base.basesetup.dto.AccountDTO;
 import com.base.basesetup.dto.GroupLedgerDTO;
 import com.base.basesetup.dto.SetTaxRateDTO;
 import com.base.basesetup.dto.TaxMaster2DTO;
@@ -19,6 +23,9 @@ import com.base.basesetup.dto.TcsMaster2DTO;
 import com.base.basesetup.dto.TcsMasterDTO;
 import com.base.basesetup.dto.TdsMaster2DTO;
 import com.base.basesetup.dto.TdsMasterDTO;
+import com.base.basesetup.entity.Account1VO;
+import com.base.basesetup.entity.Account2VO;
+import com.base.basesetup.entity.Account3VO;
 import com.base.basesetup.entity.AccountVO;
 import com.base.basesetup.entity.GroupLedgerVO;
 import com.base.basesetup.entity.SetTaxRateVO;
@@ -29,6 +36,9 @@ import com.base.basesetup.entity.TcsMasterVO;
 import com.base.basesetup.entity.TdsMaster2VO;
 import com.base.basesetup.entity.TdsMasterVO;
 import com.base.basesetup.exception.ApplicationException;
+import com.base.basesetup.repo.Account1Repo;
+import com.base.basesetup.repo.Account2Repo;
+import com.base.basesetup.repo.Account3Repo;
 import com.base.basesetup.repo.AccountRepo;
 import com.base.basesetup.repo.GroupLedgerRepo;
 import com.base.basesetup.repo.SetTaxRateRepo;
@@ -66,6 +76,15 @@ public class MasterServiceImpl implements MasterService{
 
 	@Autowired
 	AccountRepo accountRepo;
+	
+	@Autowired
+	Account1Repo account1Repo;
+	
+	@Autowired
+	Account2Repo account2Repo;
+	
+	@Autowired
+	Account3Repo account3Repo;
 	
 	@Autowired
 	GroupLedgerRepo groupLedgerRepo;
@@ -379,6 +398,7 @@ public class MasterServiceImpl implements MasterService{
 		tdsMasterVO.setActive(tdsMasterDTO.isActive());
 	}
 
+	//AccountVO
 
 	@Override
 	public List<AccountVO> getAllAccountByOrgId(Long orgId) {
@@ -396,10 +416,118 @@ public class MasterServiceImpl implements MasterService{
 
 	@Override
 	public List<AccountVO> getAllAccountByaccountId(Long accountId) {
+		List<AccountVO> accountVO = new ArrayList<>();
+		if (ObjectUtils.isNotEmpty(accountId)) {
+			LOGGER.info("Successfully Received  SetTaxRateInformation BY Id : {}", accountId);
+			accountVO = accountRepo.getAllAccountByaccountId(accountId);
+		} else {
+			LOGGER.info("Successfully Received  SetTaxRateInformation For All Id.");
+			accountVO = accountRepo.findAll();
+		}
+		return accountVO;
+		}
+
+	@Override
+	public AccountVO updateCreateAccount(@Valid AccountDTO accountDTO) throws ApplicationException {
+		AccountVO accountVO = new AccountVO();
+		if (ObjectUtils.isNotEmpty(accountDTO.getAccountId())) {
+			accountVO = accountRepo.findById(accountDTO.getAccountId())
+					.orElseThrow(() -> new ApplicationException("Invalid account details"));
+		}
+		List<Account1VO> account1VOs = new ArrayList<>();
+		if (accountDTO.getAccount1DTO() != null) {
+			for (Account1DTO account1DTO : accountDTO.getAccount1DTO()) {
+				if (account1DTO.getAccount1Id() != null & ObjectUtils.isNotEmpty(account1DTO.getAccount1Id())) {
+					Account1VO 	account1VO = account1Repo.findById(account1DTO.getAccount1Id()).get();
+					account1VO.setBalanceSheet(account1DTO.getBalanceSheet());
+					account1VO.setIncomeStatement(account1DTO.getIncomeStatement());
+					account1VO.setCashFlowStatement(account1DTO.getCashFlowStatement());
+					account1VO.setAccountVO(accountVO);
+					account1VOs.add(account1VO);
+					
+				} else {
+					Account1VO 	account1VO = new Account1VO();
+					account1VO.setBalanceSheet(account1DTO.getBalanceSheet());
+					account1VO.setIncomeStatement(account1DTO.getIncomeStatement());
+					account1VO.setCashFlowStatement(account1DTO.getCashFlowStatement());
+					account1VO.setAccountVO(accountVO);
+					account1VOs.add(account1VO);
+				}
+			}
+		}
+		List<Account2VO> account2VOs = new ArrayList<>();
+		if (accountDTO.getAccount2DTO() != null) {
+			for (Account2DTO account2DTO : accountDTO.getAccount2DTO()) {
+				if (account2DTO.getAccount2Id() != null & ObjectUtils.isNotEmpty(account2DTO.getAccount2Id())) {
+					Account2VO 	account2VO = account2Repo.findById(account2DTO.getAccount2Id()).get();
+					account2VO.setBankType(account2DTO.getBankType());
+					account2VO.setOverDraftLimit(account2DTO.getOverDraftLimit());
+					account2VO.setAccountNo(account2DTO.getAccountNo());
+					account2VO.setAccountVO(accountVO);
+					account2VOs.add(account2VO);
+					
+				} else {
+					Account2VO 	account2VO = new Account2VO();
+					account2VO.setBankType(account2DTO.getBankType());
+					account2VO.setOverDraftLimit(account2DTO.getOverDraftLimit());
+					account2VO.setAccountNo(account2DTO.getAccountNo());
+					account2VO.setAccountVO(accountVO);
+					account2VOs.add(account2VO);
+					
+				}
+			}
+		}
+		List<Account3VO> account3VOs = new ArrayList<>();
+		if (accountDTO.getAccount3DTO() != null) {
+			for (Account3DTO account3DTO : accountDTO.getAccount3DTO()) {
+				if (account3DTO.getAccount3Id() != null & ObjectUtils.isNotEmpty(account3DTO.getAccount3Id())) {
+					Account3VO 	account3VO = account3Repo.findById(account3DTO.getAccount3Id()).get();
+					account3VO.setCompany(account3DTO.getCompany());
+					account3VO.setBranchLocation(account3DTO.getBranchLocation());
+					account3VO.setAccountVO(accountVO);
+					account3VOs.add(account3VO);
+					
+				} else {
+					Account3VO 	account3VO = new Account3VO();
+					account3VO.setCompany(account3DTO.getCompany());
+					account3VO.setBranchLocation(account3DTO.getBranchLocation());
+					account3VO.setAccountVO(accountVO);
+					account3VOs.add(account3VO);
+					
+				}
+			}
+		}
 		
-		return accountRepo.findAll();
+		getAccountVOFromAccountDTO(accountDTO, accountVO);
+
+		accountVO.setAccount1VO(account1VOs);
+		accountVO.setAccount2VO(account2VOs);
+		accountVO.setAccount3VO(account3VOs);
+		return accountRepo.save(accountVO);
+
 	}
 
+	private void getAccountVOFromAccountDTO(@Valid AccountDTO accountDTO, AccountVO accountVO) {
+		accountVO.setOrgId(accountDTO.getOrgId());
+		accountVO.setAccountGroup(accountDTO.getAccountGroup());
+		accountVO.setBranchLocation(accountDTO.getBranchLocation());
+		accountVO.setAccountType(accountDTO.getAccountType());
+		accountVO.setGroupName(accountDTO.getGroupName());
+		accountVO.setAccountCode(accountDTO.getAccountCode());
+		accountVO.setAccountGroupName(accountDTO.getBranchLocation());
+		accountVO.setCurrency(accountDTO.getCurrency());
+		accountVO.setCategory(accountDTO.getCategory());
+		accountVO.setBlock(accountDTO.isBlock());
+		accountVO.setItcApplicable(accountDTO.isItcApplicable());
+		accountVO.setActive(accountDTO.isActive());
+		
+	}
+
+
+	
+	
+	
+	//groupledgerVO
 
 	@Override
 	public List<GroupLedgerVO> getAllGroupLedgerById(Long id) {
@@ -449,6 +577,9 @@ public class MasterServiceImpl implements MasterService{
 		groupLedgerVO.setAccountgroupName(groupLedgerDTO.getAccountgroupName());
 		
 	}
+
+
+	
 	
 	
 	}

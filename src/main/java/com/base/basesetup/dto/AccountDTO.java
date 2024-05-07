@@ -14,6 +14,8 @@ import lombok.NoArgsConstructor;
 public class AccountDTO {
 
 	private Long accountId;
+	
+	private Long orgId;
 
 	private String accountGroup;
 
@@ -34,6 +36,8 @@ public class AccountDTO {
 	private boolean block;
 
 	private boolean isItcApplicable;
+	
+	private boolean active;
 	
 	
 	private List<Account1DTO> account1DTO;
