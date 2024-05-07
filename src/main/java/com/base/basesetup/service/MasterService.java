@@ -6,6 +6,7 @@ import javax.validation.Valid;
 
 import org.springframework.stereotype.Service;
 
+import com.base.basesetup.dto.AccountDTO;
 import com.base.basesetup.dto.GroupLedgerDTO;
 import com.base.basesetup.dto.SetTaxRateDTO;
 import com.base.basesetup.dto.TaxMasterDTO;
@@ -85,6 +86,9 @@ public interface MasterService {
 
 
 	GroupLedgerVO updateCreateGroupLedger(@Valid GroupLedgerDTO groupLedgerDTO) throws ApplicationException;
+
+
+	AccountVO updateCreateAccount(@Valid AccountDTO accountDTO) throws ApplicationException;
 
 
 

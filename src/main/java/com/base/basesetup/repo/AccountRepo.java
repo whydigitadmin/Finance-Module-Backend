@@ -11,4 +11,7 @@ public interface AccountRepo extends JpaRepository<AccountVO, Long>{
 @Query(value = "select * from account where orgid=?1",nativeQuery = true)
 	List<AccountVO> getAllAccountByOrgId(Long orgId);
 
+@Query(value = "select * from account where accountid=?1",nativeQuery = true)
+List<AccountVO> getAllAccountByaccountId(Long accountId);
+
 }
