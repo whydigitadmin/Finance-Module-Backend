@@ -36,10 +36,9 @@ import com.base.basesetup.dto.ResponseDTO;
 import com.base.basesetup.dto.SignUpFormDTO;
 import com.base.basesetup.entity.UserVO;
 import com.base.basesetup.service.UserService;
-
+@CrossOrigin
 @RestController
 @RequestMapping("/api/user")
-@CrossOrigin
 public class UserController extends BaseController {
 	public static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 
