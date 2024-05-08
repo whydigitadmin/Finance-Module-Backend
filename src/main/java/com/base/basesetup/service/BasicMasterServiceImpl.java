@@ -71,11 +71,11 @@ public class BasicMasterServiceImpl implements BasicMasterService {
 
 	private void getCurrencyVOFromCurrencyDTO(@Valid CurrencyDTO currencyDTO, CurrencyVO currencyVO) {
 		currencyVO.setOrgId(currencyDTO.getOrgId());
-		currencyVO.setUserid(currencyDTO.getUserid());
+		currencyVO.setUserId(currencyDTO.getUserid());
 		currencyVO.setCountry(currencyDTO.getCountry());
 		currencyVO.setCurrency(currencyDTO.getCurrency());
-		currencyVO.setSubcurrency(currencyDTO.getSubcurrency());
-		currencyVO.setCurrencysymbol(currencyDTO.getCurrencysymbol());
+		currencyVO.setSubCurrency(currencyDTO.getSubCurrency());
+		currencyVO.setCurrencySymbol(currencyDTO.getCurrencySymbol());
 	}
 
 //	Company -----------------------------------------------------------------------------------
@@ -119,8 +119,8 @@ public class BasicMasterServiceImpl implements BasicMasterService {
 
 	private void getCompanyVOFromCompanyDTO(@Valid CompanyDTO companyDTO, CompanyVO companyVO) {
 		companyVO.setOrgId(companyDTO.getOrgId());
-		companyVO.setCompanycode(companyDTO.getCompanycode());
-		companyVO.setCompanyname(companyDTO.getCompanyname());
+		companyVO.setCompanyCode(companyDTO.getCompanyCode());
+		companyVO.setCompanyName(companyDTO.getCompanyName());
 		companyVO.setCountry(companyDTO.getCountry());
 		companyVO.setCurrency(companyDTO.getCurrency());
 		companyVO.setMainCurrency(companyDTO.getMainCurrency());
@@ -132,8 +132,8 @@ public class BasicMasterServiceImpl implements BasicMasterService {
 		companyVO.setEmail(companyDTO.getEmail());
 		companyVO.setWebSite(companyDTO.getWebSite());
 		companyVO.setNote(companyDTO.getNote());
-		companyVO.setUserid(companyDTO.getUserid());
-		companyVO.setEmployeecode(companyDTO.getEmployeecode());
+		companyVO.setUserId(companyDTO.getUserid());
+		companyVO.setEmployeeCode(companyDTO.getEmployeeCode());
 		companyVO.setEmployeeName(companyDTO.getEmployeeName());
 		companyVO.setPassword(companyDTO.getPassword());
 	}

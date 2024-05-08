@@ -12,8 +12,8 @@ import lombok.NoArgsConstructor;
 public class CompanyDTO {
 	private Long id;
 	private Long orgId;
-	private String companycode;
-	private String companyname;
+	private String companyCode;
+	private String companyName;
 	private String country;
 	private String currency;
 	private String mainCurrency;
@@ -27,6 +27,6 @@ public class CompanyDTO {
 	private String note;
 	private String userid;
 	private String employeeName;
-	private String employeecode;
+	private String employeeCode;
 	private String password;
 }

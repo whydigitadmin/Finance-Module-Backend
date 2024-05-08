@@ -32,7 +32,7 @@ public class AccountVO {
 	@GeneratedValue(strategy = GenerationType.IDENTITY, generator = "accountgen")
 	@SequenceGenerator(name = "accountgen", sequenceName = "accountseq", initialValue = 1000000001, allocationSize = 1)
 	@Column(name = "accountid")
-	private Long accountId;
+	private Long id;
 	@Column(name = "orgid")
 	private Long orgId;
 	@Column(name = "accountgroup", length = 50)
@@ -58,7 +58,7 @@ public class AccountVO {
 
 	@Column(name = "createdby", length = 30)
 	private String createdBy;
-	@Column(name = "updatedby", length = 30)
+	@Column(name = "modifiedby", length = 30)
 	private String updatedBy;
 	@Column(name = "cancelremarks", length = 50)
 	private String cancelRemarks;

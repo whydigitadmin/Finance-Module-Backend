@@ -17,45 +17,39 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "currency")
+@Table(name = "country")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CurrencyVO {
+public class CountryVO {
+
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "currencygen")
-	@SequenceGenerator(name = "currencygen",sequenceName = "currencyVO",initialValue = 1000000001,allocationSize = 1)
-	@Column(name="currencyid")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "countrygen")
+	@SequenceGenerator(name = "countrygen", sequenceName = "countryVO", initialValue = 1000000001, allocationSize = 1)
+	@Column(name = "countryid")
 	private Long id;
-	
-	@Column(name="userid", length = 30)
+	@Column(name = "country")
+	private String countryName;
+	@Column(name = "countrycode")
+	private String countryCode;
+	@Column(name = "active")
+	private boolean active;
+	@Column(name = "orgid")
+	private Long orgId;
+	@Column(name = "userid")
 	private String userId;
-	@Column(name="country", length = 30)
-	private String country;
-	@Column(name="currency", length = 30)
-	private String currency;
-	@Column(name="subcurrency", length = 30)
-    private String subCurrency;
-	@Column(name="currencysymbol", length = 30)
-    private String currencySymbol;
-	@Column(name="orgid")
-    private Long orgId;
-	
-	@Column(name="active")
-    private boolean active;
 	@Column(unique = true)
 	private String dupchk;
-	@Column(name="createdby", length = 30)
+	@Column(name = "createdby")
 	private String createdBy;
-	@Column(name="modifiedby", length = 30)
+	@Column(name = "modifiedby")
 	private String updatedBy;
-	@Column(name="cancel")
+	@Column(name = "cancel")
 	private boolean cancel;
-	
+
 	@Embedded
 	@Builder.Default
 	private CreatedUpdatedDate commonDate = new CreatedUpdatedDate();
-	
 
 }

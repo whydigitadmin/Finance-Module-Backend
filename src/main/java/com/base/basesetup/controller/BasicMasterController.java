@@ -31,7 +31,7 @@ import com.base.basesetup.service.BasicMasterService;
 
 @CrossOrigin
 @RestController
-@RequestMapping("api/basicMaster")
+@RequestMapping("/api/basicMaster")
 public class BasicMasterController extends BaseController {
 
 	@Autowired
