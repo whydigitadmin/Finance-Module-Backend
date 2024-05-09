@@ -75,9 +75,13 @@ public class CompanyVO {
 	private String updatedBy;
 	@Column(name = "cancel")
 	private boolean cancel;
+	@Column(name = "fileupload")
+	private String fileUpload;
+	
 
 	@Embedded
 	@Builder.Default
 	private CreatedUpdatedDate commonDate = new CreatedUpdatedDate();
+
 
 }

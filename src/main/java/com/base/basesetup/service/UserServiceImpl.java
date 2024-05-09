@@ -18,16 +18,22 @@ import com.base.basesetup.dto.LoginFormDTO;
 import com.base.basesetup.dto.ResetPasswordFormDTO;
 import com.base.basesetup.dto.Role;
 import com.base.basesetup.dto.SignUpFormDTO;
+import com.base.basesetup.dto.UserResponseDTO;
+import com.base.basesetup.entity.TokenVO;
 import com.base.basesetup.entity.UserActionVO;
 import com.base.basesetup.entity.UserVO;
 import com.base.basesetup.repo.UserActionRepo;
 import com.base.basesetup.repo.UserRepo;
+import com.base.basesetup.security.TokenProvider;
 import com.base.basesetup.util.CryptoUtils;
 
 @Service
 public class UserServiceImpl implements UserService {
 	public static final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
 
+	@Autowired
+	TokenProvider tokenProvider;
+	
 	@Autowired
 	UserRepo userRepo;
 
@@ -60,10 +66,10 @@ public class UserServiceImpl implements UserService {
 		userVO.setUserName(signUpRequest.getUserName());
 		userVO.setEmail(signUpRequest.getEmail());
 		try {
-			userVO.setPassword(encoder.encode(CryptoUtils.getDecrypt(signUpRequest.getPassword())));
+		    userVO.setPassword(encoder.encode(CryptoUtils.getDecrypt(signUpRequest.getPassword())));
 		} catch (Exception e) {
-			LOGGER.error(e.getMessage());
-			throw new ApplicationContextException(UserConstants.ERRROR_MSG_UNABLE_TO_ENCODE_USER_PASSWORD);
+		    LOGGER.error(e.getMessage());
+		    throw new ApplicationContextException(UserConstants.ERRROR_MSG_UNABLE_TO_ENCODE_USER_PASSWORD);
 		}
 		userVO.setRole(Role.ROLE_USER);
 		userVO.setActive(true);
@@ -71,7 +77,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public UserVO login(LoginFormDTO loginRequest) {
+	public UserResponseDTO login(LoginFormDTO loginRequest) {
 		String methodName = "login()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
 		if (ObjectUtils.isEmpty(loginRequest) || StringUtils.isBlank(loginRequest.getUserName())
@@ -89,8 +95,27 @@ public class UserServiceImpl implements UserService {
 			throw new ApplicationContextException(
 					UserConstants.ERRROR_MSG_USER_INFORMATION_NOT_FOUND_AND_ASKING_SIGNUP);
 		}
+		UserResponseDTO userResponseDTO = mapUserVOToDTO(userVO);
+		TokenVO tokenVO = tokenProvider.createToken(userVO.getUserId(), loginRequest.getUserName());
+		userResponseDTO.setToken(tokenVO.getToken());
+		userResponseDTO.setTokenId(tokenVO.getId());
 		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
-		return userVO;
+		return userResponseDTO;
+	}
+
+	private static UserResponseDTO mapUserVOToDTO(UserVO userVO) {
+		UserResponseDTO userDTO = new UserResponseDTO();
+		userDTO.setUserId(userVO.getUserId());
+		userDTO.setFirstName(userVO.getFirstName());
+		userDTO.setLastName(userVO.getLastName());
+		userDTO.setEmail(userVO.getEmail());
+		userDTO.setUserName(userVO.getUserName());
+		userDTO.setLoginStatus(userVO.isLoginStatus());
+		userDTO.setActive(userVO.isActive());
+		userDTO.setRole(userVO.getRole());
+		
+		userDTO.setAccountRemovedDate(userVO.getAccountRemovedDate());
+		return userDTO;
 	}
 
 	/**

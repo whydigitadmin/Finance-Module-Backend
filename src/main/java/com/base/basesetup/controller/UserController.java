@@ -34,6 +34,7 @@ import com.base.basesetup.dto.LoginFormDTO;
 import com.base.basesetup.dto.ResetPasswordFormDTO;
 import com.base.basesetup.dto.ResponseDTO;
 import com.base.basesetup.dto.SignUpFormDTO;
+import com.base.basesetup.dto.UserResponseDTO;
 import com.base.basesetup.entity.UserVO;
 import com.base.basesetup.service.UserService;
 @CrossOrigin
@@ -77,7 +78,7 @@ public class UserController extends BaseController {
 		String errorMsg = null;
 		Map<String, Object> responseObjectsMap = new HashMap<>();
 		ResponseDTO responseDTO = null;
-		UserVO userVO = null;
+		UserResponseDTO userVO = null;
 		try {
 			userVO = userService.login(loginRequest);
 		} catch (Exception e) {

@@ -2,6 +2,7 @@ package com.base.basesetup.entity;
 
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -25,10 +26,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UserVO {
 
-	@SuppressWarnings("unused")
-	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "user_id")
 	private Long userId;
 	private Long orgId;
 	private String firstName;
@@ -36,8 +36,6 @@ public class UserVO {
 	private String email;
 	private String userName;
 	private String password;
-//	private String phone;
-//	private String secondaryPhone;
 	private boolean loginStatus;
 	
 

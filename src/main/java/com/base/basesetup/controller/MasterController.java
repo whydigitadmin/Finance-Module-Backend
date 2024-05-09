@@ -39,7 +39,7 @@ import com.base.basesetup.service.MasterService;
 
 @CrossOrigin
 @RestController
-@RequestMapping("api/master")
+@RequestMapping("/api/master")
 public class MasterController extends BaseController {
 
 	@Autowired
