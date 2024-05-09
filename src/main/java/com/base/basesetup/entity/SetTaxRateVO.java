@@ -27,7 +27,7 @@ public class SetTaxRateVO {
 	@GeneratedValue(strategy = GenerationType.IDENTITY, generator = "settaxrategen")
 	@SequenceGenerator(name = "settaxrategen", sequenceName = "settaxrateseq", initialValue = 1000000001, allocationSize = 1)
 	@Column(name = "settaxrateid")
-	private Long setTaxRateId;
+	private Long id;
 	@Column(name = "orgid", length=20)
 	private Long orgId;
 	@Column(name = "chapter", length = 50)
@@ -44,7 +44,7 @@ public class SetTaxRateVO {
 	private String excepmted;
 	@Column(name = "createdby", length=30)
 	private String createdBy;
-	@Column(name = "updatedby", length=30)
+	@Column(name = "modifiedby", length=30)
 	private String updatedBy;
 	@Column(name = "cancelremarks", length=50)
 	private String cancelRemarks;

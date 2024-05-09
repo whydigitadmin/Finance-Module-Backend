@@ -28,7 +28,7 @@ public class HsnSacCodeVO {
 	@GeneratedValue(strategy = GenerationType.IDENTITY, generator = "hsnsaccodegen")
 	@SequenceGenerator(name = "hsnsaccodegen", sequenceName = "hsnsaccodeseq", initialValue = 1000000001, allocationSize = 1)
 	@Column(name = "hsnsaccodeid")
-	private Long hsnSacCodeId;
+	private Long id;
 	@Column(name = "orgid", length=20)
 	private Long orgId;
 	@Column(name = "type", length=10)
@@ -51,7 +51,7 @@ public class HsnSacCodeVO {
 	
 	@Column(name = "createdby", length=30)
 	private String createdBy;
-	@Column(name = "updatedby", length=30)
+	@Column(name = "modifiedby", length=30)
 	private String updatedBy;
 	@Column(name = "cancelremarks", length=50)
 	private String cancelRemarks;

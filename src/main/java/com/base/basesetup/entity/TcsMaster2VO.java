@@ -33,7 +33,7 @@ public class TcsMaster2VO {
 	@GeneratedValue(strategy = GenerationType.IDENTITY, generator = "tcsmaster2gen")
 	@SequenceGenerator(name = "tcsmaster2gen", sequenceName = "tcsmaster2seq", initialValue = 1000000001, allocationSize = 1)
 	@Column(name = "tcsmaster2id")
-	private Long tcsMaster2Id;
+	private Long id;
 	@Column(name = "Serialno",length =50)
 	private long SerialNo;
 	@Column(name = "fromdate")

@@ -32,7 +32,7 @@ public class TaxMasterVO {
 	@GeneratedValue(strategy = GenerationType.IDENTITY, generator = "taxmastergen")
 	@SequenceGenerator(name = "taxmastergen", sequenceName = "taxmasterseq", initialValue = 1000000001, allocationSize = 1)
 	@Column(name = "taxmasterid")
-	private Long taxMasterId;
+	private Long id;
 	@Column(name = "orgid", length = 20)
 	private Long orgId;
 	@Column(name = "taxtype", length = 10)
@@ -44,7 +44,7 @@ public class TaxMasterVO {
 
 	@Column(name = "createdby", length = 30)
 	private String createdBy;
-	@Column(name = "updatedby", length = 30)
+	@Column(name = "modifiedby", length = 30)
 	private String updatedBy;
 	@Column(name = "cancelremarks", length = 50)
 	private String cancelRemarks;

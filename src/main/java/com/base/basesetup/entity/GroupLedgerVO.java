@@ -28,7 +28,7 @@ public class GroupLedgerVO {
 	@GeneratedValue(strategy = GenerationType.IDENTITY, generator = "groupledgergen")
 	@SequenceGenerator(name = "groupledgergen", sequenceName = "groupledgerseq", initialValue = 1000000001, allocationSize = 1)
 	@Column(name = "groupledgerid")
-	private Long gLId;
+	private Long id;
 	@Column(name = "orgid")
 	private Long orgId;
 	@Column(name = "groupname", length=50)
@@ -57,7 +57,7 @@ public class GroupLedgerVO {
 	
 	@Column(name = "createdby", length=30)
 	private String createdBy;
-	@Column(name = "updatedby", length=30)
+	@Column(name = "modifiedby", length=30)
 	private String updatedBy;
 	@Column(name = "cancelremarks", length=50)
 	private String cancelRemarks;

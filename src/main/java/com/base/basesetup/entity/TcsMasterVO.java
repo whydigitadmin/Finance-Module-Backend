@@ -33,7 +33,7 @@ public class TcsMasterVO {
 	@GeneratedValue(strategy = GenerationType.IDENTITY, generator = "tcsmastergen")
 	@SequenceGenerator(name = "tcsmastergen", sequenceName = "tcsmasterseq", initialValue = 1000000001, allocationSize = 1)
 	@Column(name = "tcsmasterid")
-	private Long tcsMasterId;
+	private Long id;
 	@Column(name = "orgid", length=20)
 	private Long orgId;
 	@Column(name = "section", length=10)
@@ -42,7 +42,7 @@ public class TcsMasterVO {
 	private String sectionName;
 	@Column(name = "createdby", length=30)
 	private String createdBy;
-	@Column(name = "updatedby", length=30)
+	@Column(name = "modifiyedby", length=30)
 	private String updatedBy;
 	@Column(name = "cancelremarks", length=50)
 	private String cancelRemarks;

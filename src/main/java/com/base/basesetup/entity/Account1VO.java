@@ -30,7 +30,7 @@ public class Account1VO {
 	@GeneratedValue(strategy = GenerationType.IDENTITY, generator = "account1gen")
 	@SequenceGenerator(name = "account1gen", sequenceName = "account1seq", initialValue = 1000000001, allocationSize = 1)
 	@Column(name = "account1id")
-	private Long account1Id;
+	private Long id;
 
 	@Column(name = "balancesheet")
 	private String balanceSheet;

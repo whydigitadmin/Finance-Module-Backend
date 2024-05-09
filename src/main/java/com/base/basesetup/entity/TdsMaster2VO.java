@@ -32,7 +32,7 @@ public class TdsMaster2VO {
 	@GeneratedValue(strategy = GenerationType.IDENTITY, generator = "tdsmaster2gen")
 	@SequenceGenerator(name = "tdsmaster2gen", sequenceName = "tdsmaster2seq", initialValue = 1000000001, allocationSize = 1)
 	@Column(name = "tdsmaster2id")
-	private Long tdsMaster2Id;
+	private Long id;
 
 
 	@Column(name = "fromdate")
