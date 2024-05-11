@@ -30,11 +30,11 @@ public class TaxMaster2VO {
 	@GeneratedValue(strategy = GenerationType.IDENTITY, generator = "taxmaster2gen")
 	@SequenceGenerator(name = "taxmaster2gen", sequenceName = "taxmaster2seq", initialValue = 1000000001, allocationSize = 1)
 	@Column(name = "taxmaster2id")
-	private Long taxMaster2Id;
+	private Long id;
 	
-	@Column(name = "inputaccount", length=20)
+	@Column(name = "inputaccount")
 	private Long inputAccount;
-	@Column(name = "outputaccount", length=20)
+	@Column(name = "outputaccount")
 	private Long outputAccount;
 	@Column(name = "sgstrcmpayable")
 	private boolean sgstRcmPayable;
@@ -45,7 +45,6 @@ public class TaxMaster2VO {
 	@JoinColumn(name="taxmasterid")
 	@JsonBackReference
 	private TaxMasterVO taxMasterVO;
-	
 	
 	
 

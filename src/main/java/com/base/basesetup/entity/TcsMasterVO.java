@@ -33,18 +33,18 @@ public class TcsMasterVO {
 	@GeneratedValue(strategy = GenerationType.IDENTITY, generator = "tcsmastergen")
 	@SequenceGenerator(name = "tcsmastergen", sequenceName = "tcsmasterseq", initialValue = 1000000001, allocationSize = 1)
 	@Column(name = "tcsmasterid")
-	private Long tcsMasterId;
-	@Column(name = "orgid", length=20)
+	private Long id;
+	@Column(name = "orgid")
 	private Long orgId;
-	@Column(name = "section", length=10)
+	@Column(name = "section")
 	private  String section;
-	@Column(name = "sectionname", length=50)
+	@Column(name = "sectionname")
 	private String sectionName;
-	@Column(name = "createdby", length=30)
+	@Column(name = "createdby")
 	private String createdBy;
-	@Column(name = "updatedby", length=30)
+	@Column(name = "modifiyedby")
 	private String updatedBy;
-	@Column(name = "cancelremarks", length=50)
+	@Column(name = "cancelremarks")
 	private String cancelRemarks;
 	private boolean cancel;
 	private boolean active;

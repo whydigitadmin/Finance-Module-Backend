@@ -32,18 +32,18 @@ public class TdsMaster2VO {
 	@GeneratedValue(strategy = GenerationType.IDENTITY, generator = "tdsmaster2gen")
 	@SequenceGenerator(name = "tdsmaster2gen", sequenceName = "tdsmaster2seq", initialValue = 1000000001, allocationSize = 1)
 	@Column(name = "tdsmaster2id")
-	private Long tdsMaster2Id;
+	private Long id;
 
 
 	@Column(name = "fromdate")
 	private LocalDate fromDate;
 	@Column(name = "todate")
 	private LocalDate toDate;
-	@Column(name = "tcspercentage", precision = 2, scale = 2)
+	@Column(name = "tcspercentage")
 	private float tcsPercentage;
-	@Column(name = "surpercentage", precision = 2, scale = 2)
+	@Column(name = "surpercentage")
 	private float surPercentage;
-	@Column(name = "edcesspercentage", precision = 2, scale = 2)
+	@Column(name = "edcesspercentage")
 	private float edcessPercentage;
 	
 	

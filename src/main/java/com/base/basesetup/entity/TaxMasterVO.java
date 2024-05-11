@@ -32,32 +32,28 @@ public class TaxMasterVO {
 	@GeneratedValue(strategy = GenerationType.IDENTITY, generator = "taxmastergen")
 	@SequenceGenerator(name = "taxmastergen", sequenceName = "taxmasterseq", initialValue = 1000000001, allocationSize = 1)
 	@Column(name = "taxmasterid")
-	private Long taxMasterId;
-	@Column(name = "orgid", length=20)
+	private Long id;
+	@Column(name = "orgid")
 	private Long orgId;
-	@Column(name = "taxtype", length=10)
+	@Column(name = "taxtype")
 	private String taxType;
-	@Column(name = "taxpercentage", precision = 2,scale = 2)
+	@Column(name = "taxpercentage")
 	private float taxPercentage;
-	@Column(name = "taxdescription", length=100)
+	@Column(name = "taxdescription")
 	private String taxDescription;
-	
-	@Column(name = "createdby", length=30)
+
+	@Column(name = "createdby")
 	private String createdBy;
-	@Column(name = "updatedby", length=30)
+	@Column(name = "modifiedby")
 	private String updatedBy;
-	@Column(name = "cancelremarks", length=50)
+	@Column(name = "cancelremarks")
 	private String cancelRemarks;
 	private boolean cancel;
 	private boolean active;
 
-
-	
-	@OneToMany(mappedBy = "taxMasterVO",cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "taxMasterVO", cascade = CascadeType.ALL)
 	@JsonManagedReference
 	private List<TaxMaster2VO> taxMaster2VO;
-	
-
 
 	@Embedded
 	@Builder.Default

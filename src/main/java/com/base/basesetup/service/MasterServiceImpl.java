@@ -50,59 +50,57 @@ import com.base.basesetup.repo.TdsMaster2Repo;
 import com.base.basesetup.repo.TdsMasterRepo;
 
 @Service
-public class MasterServiceImpl implements MasterService{
+public class MasterServiceImpl implements MasterService {
 	public static final Logger LOGGER = LoggerFactory.getLogger(MasterServiceImpl.class);
 	@Autowired
 	SetTaxRateRepo setTaxRateRepo;
 
-	
 	@Autowired
 	TaxMasterRepo taxMasterRepo;
-	
+
 	@Autowired
 	TaxMaster2Repo taxMaster2Repo;
 
 	@Autowired
 	TcsMasterRepo tcsMasterRepo;
-	
+
 	@Autowired
 	TcsMaster2Repo tcsMaster2Repo;
-	
+
 	@Autowired
 	TdsMasterRepo tdsMasterRepo;
-	
+
 	@Autowired
 	TdsMaster2Repo tdsMaster2Repo;
 
 	@Autowired
 	AccountRepo accountRepo;
-	
+
 	@Autowired
 	Account1Repo account1Repo;
-	
+
 	@Autowired
 	Account2Repo account2Repo;
-	
+
 	@Autowired
 	Account3Repo account3Repo;
-	
+
 	@Autowired
 	GroupLedgerRepo groupLedgerRepo;
 
 	@Override
-	public List<SetTaxRateVO> getAllSetTaxRateByOrgId(Long orgId) {	
+	public List<SetTaxRateVO> getAllSetTaxRateByOrgId(Long orgId) {
 		List<SetTaxRateVO> setTaxRateVO = new ArrayList<>();
-	if (ObjectUtils.isNotEmpty(orgId)) {
-		LOGGER.info("Successfully Received  SetTaxRateInformation BY OrgId : {}", orgId);
-		setTaxRateVO = setTaxRateRepo.getAllSetTaxRateByOrgId(orgId);
-	} else {
-		LOGGER.info("Successfully Received  SetTaxRateInformation For All OrgId.");
-		setTaxRateVO = setTaxRateRepo.findAll();
+		if (ObjectUtils.isNotEmpty(orgId)) {
+			LOGGER.info("Successfully Received  SetTaxRateInformation BY OrgId : {}", orgId);
+			setTaxRateVO = setTaxRateRepo.getAllSetTaxRateByOrgId(orgId);
+		} else {
+			LOGGER.info("Successfully Received  SetTaxRateInformation For All OrgId.");
+			setTaxRateVO = setTaxRateRepo.findAll();
+		}
+		return setTaxRateVO;
 	}
-	return setTaxRateVO;
-	}
-	
-	
+
 	@Override
 	public List<SetTaxRateVO> getAllSetTaxRateById(Long id) {
 		List<SetTaxRateVO> setTaxRateVO = new ArrayList<>();
@@ -114,15 +112,13 @@ public class MasterServiceImpl implements MasterService{
 			setTaxRateVO = setTaxRateRepo.findAll();
 		}
 		return setTaxRateVO;
-		}
-      
-	
-	
+	}
+
 	@Override
 	public List<SetTaxRateVO> getAllSetTaxRate() {
 		return setTaxRateRepo.findAll();
-		}
-	
+	}
+
 	@Override
 	public SetTaxRateVO updateCreateSetTaxRate(@Valid SetTaxRateDTO setTaxRateDTO) throws ApplicationException {
 		SetTaxRateVO setTaxRateVO = new SetTaxRateVO();
@@ -133,7 +129,7 @@ public class MasterServiceImpl implements MasterService{
 		getSetTaxRateVOFromSetTaxRateDTO(setTaxRateDTO, setTaxRateVO);
 		return setTaxRateRepo.save(setTaxRateVO);
 	}
-	
+
 	private void getSetTaxRateVOFromSetTaxRateDTO(@Valid SetTaxRateDTO setTaxRateDTO, SetTaxRateVO setTaxRateVO) {
 		setTaxRateVO.setOrgId(setTaxRateDTO.getOrgId());
 		setTaxRateVO.setChapter(setTaxRateDTO.getChapter());
@@ -143,12 +139,10 @@ public class MasterServiceImpl implements MasterService{
 		setTaxRateVO.setNewRate(setTaxRateDTO.getNewRate());
 		setTaxRateVO.setExcepmted("e");
 		setTaxRateVO.setActive(setTaxRateDTO.isActive());
-		
 	}
 
+	// TAXMASTER
 
-	//TAXMASTER
-	
 	@Override
 
 	public TaxMasterVO updateCreateTaxMaster(TaxMasterDTO taxMasterDTO) throws ApplicationException {
@@ -168,7 +162,7 @@ public class MasterServiceImpl implements MasterService{
 					taxMaster2VO.setSgstRcmPayable(true);
 					taxMaster2VO.setTaxMasterVO(taxMasterVO);
 					taxMaster2VOs.add(taxMaster2VO);
-					
+
 				} else {
 					TaxMaster2VO taxMaster2VO = new TaxMaster2VO();
 					taxMaster2VO.setInputAccount(taxMaster2DTO.getInputAccount());
@@ -196,7 +190,6 @@ public class MasterServiceImpl implements MasterService{
 
 	}
 
-
 	@Override
 	public List<TaxMasterVO> getAllTaxMasterByOrgId(Long orgId) {
 		List<TaxMasterVO> taxMasterVO = new ArrayList<>();
@@ -208,8 +201,7 @@ public class MasterServiceImpl implements MasterService{
 			taxMasterVO = taxMasterRepo.findAll();
 		}
 		return taxMasterVO;
-		}
-
+	}
 
 	@Override
 	public List<TaxMasterVO> getAllTaxMasterById(Long id) {
@@ -222,16 +214,15 @@ public class MasterServiceImpl implements MasterService{
 			taxMasterVO = taxMasterRepo.findAll();
 		}
 		return taxMasterVO;
-		}
-
+	}
 
 	@Override
 	public List<TaxMasterVO> getAllTaxMaster() {
 		return taxMasterRepo.findAll();
 	}
 
-	//TCSMASTER
-	
+	// TCSMASTER
+
 	@Override
 	public List<TcsMasterVO> getAllTcsMasterByOrgId(Long orgId) {
 		List<TcsMasterVO> tcsMasterVO = new ArrayList<>();
@@ -243,8 +234,7 @@ public class MasterServiceImpl implements MasterService{
 			tcsMasterVO = tcsMasterRepo.findAll();
 		}
 		return tcsMasterVO;
-		}
-
+	}
 
 	@Override
 	public List<TcsMasterVO> getAllTcsMasterById(Long id) {
@@ -257,14 +247,12 @@ public class MasterServiceImpl implements MasterService{
 			tcsMasterVO = tcsMasterRepo.findAll();
 		}
 		return tcsMasterVO;
-		}
-
+	}
 
 	@Override
 	public List<TcsMasterVO> getAllTcsMaster() {
 		return tcsMasterRepo.findAll();
 	}
-
 
 	@Override
 	public TcsMasterVO updateCreateTcsMaster(@Valid TcsMasterDTO tcsMasterDTO) throws ApplicationException {
@@ -285,7 +273,7 @@ public class MasterServiceImpl implements MasterService{
 					tcsMaster2VO.setTcsPercentage(tcsMaster2DTO.getTcsPercentage());
 					tcsMaster2VO.setTcsMasterVO(tcsMasterVO);
 					tcsMaster2VOs.add(tcsMaster2VO);
-					
+
 				} else {
 					TcsMaster2VO tcsMaster2VO = new TcsMaster2VO();
 					tcsMaster2VO.setFromDate(tcsMaster2DTO.getFromDate());
@@ -312,10 +300,8 @@ public class MasterServiceImpl implements MasterService{
 		tcsMasterVO.setActive(tcsMasterDTO.isActive());
 	}
 
+	// TDSMaster
 
-		
-	//TDSMaster
-	
 	@Override
 	public List<TdsMasterVO> getAllTdsMasterByOrgId(Long orgId) {
 		List<TdsMasterVO> tdsMasterVO = new ArrayList<>();
@@ -327,8 +313,7 @@ public class MasterServiceImpl implements MasterService{
 			tdsMasterVO = tdsMasterRepo.findAll();
 		}
 		return tdsMasterVO;
-		}
-
+	}
 
 	@Override
 	public List<TdsMasterVO> getAllTdsMasterById(Long id) {
@@ -341,14 +326,12 @@ public class MasterServiceImpl implements MasterService{
 			tdsMasterVO = tdsMasterRepo.findAll();
 		}
 		return tdsMasterVO;
-		}
-
+	}
 
 	@Override
 	public List<TdsMasterVO> getAllTdsMaster() {
 		return tdsMasterRepo.findAll();
 	}
-
 
 	@Override
 	public TdsMasterVO updateCreateTdsMaster(@Valid TdsMasterDTO tdsMasterDTO) throws ApplicationException {
@@ -370,7 +353,7 @@ public class MasterServiceImpl implements MasterService{
 					tdsMaster2VO.setTcsPercentage(tdsMaster2DTO.getTcsPercentage());
 					tdsMaster2VO.setTdsMasterVO(tdsMasterVO);
 					tdsMaster2VOs.add(tdsMaster2VO);
-					
+
 				} else {
 					TdsMaster2VO tdsMaster2VO = new TdsMaster2VO();
 					tdsMaster2VO.setFromDate(tdsMaster2DTO.getFromDate());
@@ -398,7 +381,7 @@ public class MasterServiceImpl implements MasterService{
 		tdsMasterVO.setActive(tdsMasterDTO.isActive());
 	}
 
-	//AccountVO
+	// AccountVO
 
 	@Override
 	public List<AccountVO> getAllAccountByOrgId(Long orgId) {
@@ -411,8 +394,7 @@ public class MasterServiceImpl implements MasterService{
 			accountVO = accountRepo.findAll();
 		}
 		return accountVO;
-		}
-
+	}
 
 	@Override
 	public List<AccountVO> getAllAccountByaccountId(Long accountId) {
@@ -425,7 +407,7 @@ public class MasterServiceImpl implements MasterService{
 			accountVO = accountRepo.findAll();
 		}
 		return accountVO;
-		}
+	}
 
 	@Override
 	public AccountVO updateCreateAccount(@Valid AccountDTO accountDTO) throws ApplicationException {
@@ -438,15 +420,15 @@ public class MasterServiceImpl implements MasterService{
 		if (accountDTO.getAccount1DTO() != null) {
 			for (Account1DTO account1DTO : accountDTO.getAccount1DTO()) {
 				if (account1DTO.getAccount1Id() != null & ObjectUtils.isNotEmpty(account1DTO.getAccount1Id())) {
-					Account1VO 	account1VO = account1Repo.findById(account1DTO.getAccount1Id()).get();
+					Account1VO account1VO = account1Repo.findById(account1DTO.getAccount1Id()).get();
 					account1VO.setBalanceSheet(account1DTO.getBalanceSheet());
 					account1VO.setIncomeStatement(account1DTO.getIncomeStatement());
 					account1VO.setCashFlowStatement(account1DTO.getCashFlowStatement());
 					account1VO.setAccountVO(accountVO);
 					account1VOs.add(account1VO);
-					
+
 				} else {
-					Account1VO 	account1VO = new Account1VO();
+					Account1VO account1VO = new Account1VO();
 					account1VO.setBalanceSheet(account1DTO.getBalanceSheet());
 					account1VO.setIncomeStatement(account1DTO.getIncomeStatement());
 					account1VO.setCashFlowStatement(account1DTO.getCashFlowStatement());
@@ -459,21 +441,21 @@ public class MasterServiceImpl implements MasterService{
 		if (accountDTO.getAccount2DTO() != null) {
 			for (Account2DTO account2DTO : accountDTO.getAccount2DTO()) {
 				if (account2DTO.getAccount2Id() != null & ObjectUtils.isNotEmpty(account2DTO.getAccount2Id())) {
-					Account2VO 	account2VO = account2Repo.findById(account2DTO.getAccount2Id()).get();
+					Account2VO account2VO = account2Repo.findById(account2DTO.getAccount2Id()).get();
 					account2VO.setBankType(account2DTO.getBankType());
 					account2VO.setOverDraftLimit(account2DTO.getOverDraftLimit());
 					account2VO.setAccountNo(account2DTO.getAccountNo());
 					account2VO.setAccountVO(accountVO);
 					account2VOs.add(account2VO);
-					
+
 				} else {
-					Account2VO 	account2VO = new Account2VO();
+					Account2VO account2VO = new Account2VO();
 					account2VO.setBankType(account2DTO.getBankType());
 					account2VO.setOverDraftLimit(account2DTO.getOverDraftLimit());
 					account2VO.setAccountNo(account2DTO.getAccountNo());
 					account2VO.setAccountVO(accountVO);
 					account2VOs.add(account2VO);
-					
+
 				}
 			}
 		}
@@ -481,23 +463,23 @@ public class MasterServiceImpl implements MasterService{
 		if (accountDTO.getAccount3DTO() != null) {
 			for (Account3DTO account3DTO : accountDTO.getAccount3DTO()) {
 				if (account3DTO.getAccount3Id() != null & ObjectUtils.isNotEmpty(account3DTO.getAccount3Id())) {
-					Account3VO 	account3VO = account3Repo.findById(account3DTO.getAccount3Id()).get();
+					Account3VO account3VO = account3Repo.findById(account3DTO.getAccount3Id()).get();
 					account3VO.setCompany(account3DTO.getCompany());
 					account3VO.setBranchLocation(account3DTO.getBranchLocation());
 					account3VO.setAccountVO(accountVO);
 					account3VOs.add(account3VO);
-					
+
 				} else {
-					Account3VO 	account3VO = new Account3VO();
+					Account3VO account3VO = new Account3VO();
 					account3VO.setCompany(account3DTO.getCompany());
 					account3VO.setBranchLocation(account3DTO.getBranchLocation());
 					account3VO.setAccountVO(accountVO);
 					account3VOs.add(account3VO);
-					
+
 				}
 			}
 		}
-		
+
 		getAccountVOFromAccountDTO(accountDTO, accountVO);
 
 		accountVO.setAccount1VO(account1VOs);
@@ -520,21 +502,23 @@ public class MasterServiceImpl implements MasterService{
 		accountVO.setBlock(accountDTO.isBlock());
 		accountVO.setItcApplicable(accountDTO.isItcApplicable());
 		accountVO.setActive(accountDTO.isActive());
-		
+
 	}
 
-
-	
-	
-	
-	//groupledgerVO
+	// groupledgerVO
 
 	@Override
 	public List<GroupLedgerVO> getAllGroupLedgerById(Long id) {
-		
-		return groupLedgerRepo.findAll();
+		List<GroupLedgerVO> groupLedgerVO = new ArrayList<>();
+		if (ObjectUtils.isNotEmpty(id)) {
+			LOGGER.info("Successfully Received  SetTaxRateInformation BY Id : {}", id);
+			groupLedgerVO = groupLedgerRepo.getAllGroupLedgerById(id);
+		} else {
+			LOGGER.info("Successfully Received  SetTaxRateInformation For All Id.");
+			groupLedgerVO = groupLedgerRepo.findAll();
+		}
+		return groupLedgerVO;
 	}
-
 
 	@Override
 	public List<GroupLedgerVO> getAllGroupLedgerByOrgId(Long orgId) {
@@ -547,9 +531,7 @@ public class MasterServiceImpl implements MasterService{
 			groupLedgerVO = groupLedgerRepo.findAll();
 		}
 		return groupLedgerVO;
-		}
-
-
+	}
 
 	@Override
 	public GroupLedgerVO updateCreateGroupLedger(@Valid GroupLedgerDTO groupLedgerDTO) throws ApplicationException {
@@ -562,9 +544,9 @@ public class MasterServiceImpl implements MasterService{
 		return groupLedgerRepo.save(groupLedgerVO);
 	}
 
-
 	private void getGroupLedgerVOFromGroupLedgerDTO(@Valid GroupLedgerDTO groupLedgerDTO, GroupLedgerVO groupLedgerVO) {
-		groupLedgerVO.setGroupNmae(groupLedgerDTO.getGroupNmae());
+		groupLedgerVO.setGroupName(groupLedgerDTO.getGroupName());
+		groupLedgerVO.setOrgId(groupLedgerDTO.getOrgId());
 		groupLedgerVO.setAccountCode(groupLedgerDTO.getAccountCode());
 		groupLedgerVO.setCoaList(groupLedgerDTO.getCoaList());
 		groupLedgerVO.setGstTaxFlag(true);
@@ -572,19 +554,11 @@ public class MasterServiceImpl implements MasterService{
 		groupLedgerVO.setCategory(groupLedgerDTO.getCategory());
 		groupLedgerVO.setCurrency(groupLedgerDTO.getCurrency());
 		groupLedgerVO.setBranch(groupLedgerDTO.getBranch());
+		groupLedgerVO.setActive(groupLedgerDTO.isActive());
 		groupLedgerVO.setInterBranchAc(true);
 		groupLedgerVO.setControllAc(true);
 		groupLedgerVO.setAccountgroupName(groupLedgerDTO.getAccountgroupName());
-		
+
 	}
 
-
-	
-	
-	
-	}
-	
-
-
-	
-
+}
