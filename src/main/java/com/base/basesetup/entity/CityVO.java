@@ -28,23 +28,23 @@ public class CityVO {
 	@Column(name="cityid")
 	private Long id;
 	
-	@Column(name="citycode", length = 30)
+	@Column(name="citycode")
 	private String cityCode;
-	@Column(name="country", length = 30)
+	@Column(name="country")
 	private String country;
-	@Column(name="city", length = 30)
+	@Column(name="city")
     private String cityName;
-	@Column(name="state", length = 30)
+	@Column(name="state")
     private String state;
 	@Column(name="active")
     private boolean active;
-	@Column(name="userid", length = 30)
+	@Column(name="userid")
     private String userId;
 	@Column(unique = true)
 	private String dupchk;
-	@Column(name="createdby", length = 30)
+	@Column(name="createdby")
 	private String createdBy;
-	@Column(name="modifiedby", length = 30)
+	@Column(name="modifiedby")
 	private String updatedBy;
 	@Column(name="orgid")
 	private Long orgId;

@@ -29,9 +29,9 @@ public class CompanyVO {
 	@Column(name = "companyid")
 	private Long id;
 
-	@Column(unique = true)
+	@Column(name = "companycode")
 	private String companyCode;
-	@Column(unique = true)
+	@Column(name = "companyname")
 	private String companyName;
 	@Column(name = "country")
 	private String country;
@@ -55,10 +55,6 @@ public class CompanyVO {
 	private String webSite;
 	@Column(name = "notes")
 	private String note;
-	@Column(name = "userid")
-	private String userId;
-	@Column(name="orgid")
-	private Long orgId;
 	@Column(name = "active")
 	private boolean active;
 	@Column(unique = true)
@@ -77,11 +73,9 @@ public class CompanyVO {
 	private boolean cancel;
 	@Column(name = "fileupload")
 	private String fileUpload;
-	
 
 	@Embedded
 	@Builder.Default
 	private CreatedUpdatedDate commonDate = new CreatedUpdatedDate();
-
 
 }

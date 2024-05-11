@@ -2,6 +2,7 @@ package com.base.basesetup.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -12,25 +13,31 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.base.basesetup.dto.BranchDTO;
 import com.base.basesetup.dto.CityDTO;
 import com.base.basesetup.dto.CompanyDTO;
 import com.base.basesetup.dto.CountryDTO;
 import com.base.basesetup.dto.CurrencyDTO;
 import com.base.basesetup.dto.EmployeeDTO;
+import com.base.basesetup.dto.Role;
 import com.base.basesetup.dto.StateDTO;
+import com.base.basesetup.entity.BranchVO;
 import com.base.basesetup.entity.CityVO;
 import com.base.basesetup.entity.CompanyVO;
 import com.base.basesetup.entity.CountryVO;
 import com.base.basesetup.entity.CurrencyVO;
 import com.base.basesetup.entity.EmployeeVO;
+import com.base.basesetup.entity.FinancialYearVO;
 import com.base.basesetup.entity.StateVO;
 import com.base.basesetup.entity.UserVO;
 import com.base.basesetup.exception.ApplicationException;
+import com.base.basesetup.repo.BranchRepo;
 import com.base.basesetup.repo.CityRepo;
 import com.base.basesetup.repo.CompanyRepo;
 import com.base.basesetup.repo.CountryRepo;
 import com.base.basesetup.repo.CurrencyRepo;
 import com.base.basesetup.repo.EmployeeRepo;
+import com.base.basesetup.repo.FinancialRepo;
 import com.base.basesetup.repo.StateRepo;
 import com.base.basesetup.repo.UserRepo;
 import com.base.basesetup.util.CryptoUtils;
@@ -63,6 +70,13 @@ public class BasicMasterServiceImpl implements BasicMasterService {
 
 	@Autowired
 	CityRepo cityRepo;
+
+	@Autowired
+	FinancialRepo finRepo;
+	
+	@Autowired
+	BranchRepo branchRepo;
+
 //	Currency -----------------------------------------------------------------------------------
 
 	@Override
@@ -147,11 +161,24 @@ public class BasicMasterServiceImpl implements BasicMasterService {
 					.orElseThrow(() -> new ApplicationException("Invalid Company Details"));
 		}
 		getCompanyVOFromCompanyDTO(companyDTO, companyVO);
-		return companyRepo.save(companyVO);
+		companyRepo.save(companyVO);
+		EmployeeVO emp = new EmployeeVO();
+		emp.setEmployeeCode(companyVO.getEmployeeCode());
+		emp.setEmployeeName(companyVO.getEmployeeName());
+		emp.setOrgId(companyVO.getId());
+		employeeRepo.save(emp);
+		UserVO userVO = new UserVO();
+		userVO.setEmail(companyVO.getEmail());
+		userVO.setRole(Role.ROLE_ADMIN);
+		userVO.setUserName(companyVO.getEmployeeCode());
+		userVO.setOrgId(companyVO.getId());
+		userVO.setPassword(encoder.encode(CryptoUtils.getDecrypt(companyVO.getPassword())));
+		userRepo.save(userVO);
+		return companyVO;
+
 	}
 
 	private void getCompanyVOFromCompanyDTO(@Valid CompanyDTO companyDTO, CompanyVO companyVO) throws Exception {
-		companyVO.setOrgId(companyDTO.getOrgId());
 		companyVO.setCompanyCode(companyDTO.getCompanyCode());
 		companyVO.setCompanyName(companyDTO.getCompanyName());
 		companyVO.setCountry(companyDTO.getCountry());
@@ -165,22 +192,12 @@ public class BasicMasterServiceImpl implements BasicMasterService {
 		companyVO.setEmail(companyDTO.getEmail());
 		companyVO.setWebSite(companyDTO.getWebSite());
 		companyVO.setNote(companyDTO.getNote());
-		companyVO.setUserId(companyDTO.getUserid());
 		companyVO.setEmployeeCode(companyDTO.getEmployeeCode());
 		companyVO.setEmployeeName(companyDTO.getEmployeeName());
 		companyVO.setPassword(companyDTO.getPassword());
-		//
-		CompanyVO company = new CompanyVO();
-		EmployeeVO emp = new EmployeeVO();
-		emp.setEmployeeCode(company.getEmployeeCode());
-		emp.setEmployeeName(company.getEmployeeName());
-		emp.setOrgId(company.getId());
-		employeeRepo.save(emp);
-		UserVO userVO = new UserVO();
-		userVO.setUserName(company.getEmployeeCode());
-		userVO.setOrgId(company.getId());
-		userVO.setPassword(encoder.encode(CryptoUtils.getDecrypt(company.getPassword())));
-		userRepo.save(userVO);
+		companyVO.setCreatedBy(companyDTO.getCreatedBy());
+		companyVO.setUpdatedBy(companyDTO.getUpdatedBy());
+
 	}
 
 //	Employee -----------------------------------------------------------------------------------
@@ -232,6 +249,9 @@ public class BasicMasterServiceImpl implements BasicMasterService {
 		employeeVO.setDesignation(employeeDTO.getDesignation());
 		employeeVO.setJoiningDate(employeeDTO.getJoiningDate());
 		employeeVO.setDateOfBirth(employeeDTO.getDateOfBirth());
+		employeeVO.setUserId(employeeDTO.getUserId());
+		employeeVO.setCreatedBy(employeeDTO.getCreatedBy());
+		employeeVO.setUpdateBy(employeeDTO.getUpdatedBy());
 
 	}
 
@@ -325,7 +345,17 @@ public class BasicMasterServiceImpl implements BasicMasterService {
 		stateVO.setStateCode(stateDTO.getStateCode());
 		stateVO.setStateName(stateDTO.getStateName());
 		stateVO.setUserId(stateDTO.getUserId());
+		stateVO.setCountry(stateDTO.getCountry());
+		stateVO.setRegion(stateDTO.getRegion());
+		stateVO.setStateNumber(stateDTO.getStateNumber());
+	}
 
+//	private String country;
+//	private String region;
+//	private int stateNumber;
+	@Override
+	public List<StateVO> getAllStateByCountry(Long orgId, String country) {
+		return stateRepo.findAllStateByCountry(orgId, country);
 	}
 
 //City -----------------------------------------------------------------------------------
@@ -373,6 +403,93 @@ public class BasicMasterServiceImpl implements BasicMasterService {
 		cityVO.setCountry(cityDTO.getCountry());
 		cityVO.setUserId(cityDTO.getUserId());
 		cityVO.setState(cityDTO.getState());
+
+	}
+
+	@Override
+	public List<CityVO> getAllCityByState(Long orgId, String state) {
+		return cityRepo.findAllCityByState(orgId, state);
+	}
+
+//Financial Year-----------------------------------------------------------------------------------
+	@Override
+	public List<FinancialYearVO> getAllFinancial() {
+		return finRepo.findAll();
+	}
+
+	@Override
+	public FinancialYearVO createFinancial(FinancialYearVO financialYearVO) {
+		return finRepo.save(financialYearVO);
+	}
+
+	@Override
+	public Optional<FinancialYearVO> updateFinancial(FinancialYearVO financialYearVO) {
+		if (finRepo.existsById(financialYearVO.getId())) {
+			return Optional.of(finRepo.save(financialYearVO));
+		} else {
+			return Optional.empty();
+		}
+
+	}
+
+//Branch-----------------------------------------------------------------------------------
+	@Override
+	public List<BranchVO> getBranchById(Long id) {
+		List<BranchVO> branchVO = new ArrayList<>();
+		if (ObjectUtils.isNotEmpty(id)) {
+			LOGGER.info("Successfully Received Branch BY Id : {}", id);
+			branchVO = branchRepo.findBranchById(id);
+		} else {
+			LOGGER.info("Successfully Received Branch For All Id.");
+			branchVO = branchRepo.findAll();
+		}
+		return branchVO;
+	}
+
+	@Override
+	public List<BranchVO> getBranchByOrgId(Long orgId) {
+		List<BranchVO> branchVO = new ArrayList<>();
+		if (ObjectUtils.isNotEmpty(orgId)) {
+			LOGGER.info("Successfully Received Branch BY OrgId : {}", orgId);
+			branchVO = branchRepo.findBranchByOrgId(orgId);
+		} else {
+			LOGGER.info("Successfully Received Branch For All OrgId.");
+			branchVO = branchRepo.findAll();
+		}
+		return branchVO;
+	}
+
+	@Override
+	public BranchVO updateCreateBranch(@Valid BranchDTO branchDTO) throws ApplicationException {
+		BranchVO branchVO = new BranchVO();
+		if (ObjectUtils.isNotEmpty(branchDTO.getId())) {
+			branchVO = branchRepo.findById(branchDTO.getId())
+					.orElseThrow(() -> new ApplicationException("Invalid Branch Details"));
+		}
+		getBranchVOFromBranchDTO(branchDTO, branchVO);
+		return branchRepo.save(branchVO);
+	}
+
+	private void getBranchVOFromBranchDTO(@Valid BranchDTO branchDTO, BranchVO branchVO) {
+		branchVO.setOrgId(branchDTO.getOrgId());
+		branchVO.setBranch(branchDTO.getBranch());
+		branchVO.setBranchCode(branchDTO.getBranchCode());
+		branchVO.setAddressLine1(branchDTO.getAddressLine1());
+		branchVO.setAddressLine2(branchDTO.getAddressLine2());
+		branchVO.setPan(branchDTO.getPan());
+		branchVO.setGstIn(branchDTO.getGstIn());
+		branchVO.setPhone(branchDTO.getPhone());
+		branchVO.setState(branchDTO.getState());
+		branchVO.setCity(branchDTO.getCity());
+		branchVO.setPinCode(branchDTO.getPinCode());
+		branchVO.setCountry(branchDTO.getCountry());
+		branchVO.setStateNo(branchDTO.getStateNo());
+		branchVO.setStateCode(branchDTO.getStateCode());
+		branchVO.setRegion(branchDTO.getRegion());
+		branchVO.setLccurrency(branchDTO.getLccurrency());
+		branchVO.setCreatedBy(branchDTO.getCreatedBy());
+		branchVO.setUpdatedBy(branchDTO.getUpdatedBy());
+		branchVO.setUserId(branchDTO.getUserId());
 
 	}
 }

@@ -29,31 +29,31 @@ public class HsnSacCodeVO {
 	@SequenceGenerator(name = "hsnsaccodegen", sequenceName = "hsnsaccodeseq", initialValue = 1000000001, allocationSize = 1)
 	@Column(name = "hsnsaccodeid")
 	private Long id;
-	@Column(name = "orgid", length=20)
+	@Column(name = "orgid")
 	private Long orgId;
-	@Column(name = "type", length=10)
+	@Column(name = "type")
 	private String type;
-	@Column(name = "code", length=10)
+	@Column(name = "code")
 	private String code;
-	@Column(name = "description", length=100)
+	@Column(name = "description")
 	private String description;
-	@Column(name = "chapter", length=10)
+	@Column(name = "chapter")
 	private String chapter;
-	@Column(name = "chaptercode", length=10)
+	@Column(name = "chaptercode")
 	private String chapterCode;
-	@Column(name = "subchapter", length=10)
+	@Column(name = "subchapter")
 	private String subChapter;
-	@Column(name = "subchaptercode", length=10)
+	@Column(name = "subchaptercode")
 	private String subChapterCode;
-	@Column(name = "rate", precision = 15,scale = 7)
+	@Column(name = "rate")
 	private float rate;
 	private boolean excempted;
 	
-	@Column(name = "createdby", length=30)
+	@Column(name = "createdby")
 	private String createdBy;
-	@Column(name = "modifiedby", length=30)
+	@Column(name = "modifiedby")
 	private String updatedBy;
-	@Column(name = "cancelremarks", length=50)
+	@Column(name = "cancelremarks")
 	private String cancelRemarks;
 	private boolean cancel;
 	private boolean active;

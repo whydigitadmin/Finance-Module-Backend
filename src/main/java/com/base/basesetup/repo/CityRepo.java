@@ -15,4 +15,7 @@ public interface CityRepo extends JpaRepository<CityVO, Long> {
 	@Query(nativeQuery = true, value = "select * from city where orgid=?1")
 	List<CityVO> findCityByOrgId(Long orgId);
 
+	@Query(nativeQuery = true,value = "select * from city where orgid=?1 and state=?2")
+	List<CityVO> findAllCityByState(Long orgId, String state);
+
 }

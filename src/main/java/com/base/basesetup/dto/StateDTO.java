@@ -14,7 +14,6 @@ public class StateDTO {
 	private String country;
 	private String region;
 	private int stateNumber;
-	private boolean active;
 	private String userId;
 	private Long orgId;
 }

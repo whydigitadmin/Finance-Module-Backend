@@ -31,35 +31,35 @@ public class GroupLedgerVO {
 	private Long id;
 	@Column(name = "orgid")
 	private Long orgId;
-	@Column(name = "groupname", length=50)
+	@Column(name = "groupname")
 	private String groupName;
 	@Column(name = "gsttaxflag")
 	private boolean gstTaxFlag;
-	@Column(name = "accountcode", length=20)
+	@Column(name = "accountcode")
 	private String accountCode;
-	@Column(name = "coalist", length=30)
+	@Column(name = "coalist")
 	private String coaList;
-	@Column(name = "accountgroupname", length=30)
+	@Column(name = "accountgroupname")
 	private String accountgroupName;
-	@Column(name = "type", length=30)
+	@Column(name = "type")
 	private String type;
-	@Column(name = "interbranchac", length=30)
+	@Column(name = "interbranchac")
 	private boolean interBranchAc;
-	@Column(name = "controllac", length=30)
+	@Column(name = "controllac")
 	private boolean controllAc;
-	@Column(name = "category", length=50)
+	@Column(name = "category")
 	private String category;
-	@Column(name = "currency", length=50)
+	@Column(name = "currency")
 	private String currency;
-	@Column(name = "branch", length=50)
+	@Column(name = "branch")
 	private String branch;
 	
 	
-	@Column(name = "createdby", length=30)
+	@Column(name = "createdby")
 	private String createdBy;
-	@Column(name = "modifiedby", length=30)
+	@Column(name = "modifiedby")
 	private String updatedBy;
-	@Column(name = "cancelremarks", length=50)
+	@Column(name = "cancelremarks")
 	private String cancelRemarks;
 	private boolean cancel;
 	private boolean active;

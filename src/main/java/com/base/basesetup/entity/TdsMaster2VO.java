@@ -39,11 +39,11 @@ public class TdsMaster2VO {
 	private LocalDate fromDate;
 	@Column(name = "todate")
 	private LocalDate toDate;
-	@Column(name = "tcspercentage", precision = 2, scale = 2)
+	@Column(name = "tcspercentage")
 	private float tcsPercentage;
-	@Column(name = "surpercentage", precision = 2, scale = 2)
+	@Column(name = "surpercentage")
 	private float surPercentage;
-	@Column(name = "edcesspercentage", precision = 2, scale = 2)
+	@Column(name = "edcesspercentage")
 	private float edcessPercentage;
 	
 	

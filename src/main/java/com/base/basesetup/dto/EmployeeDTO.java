@@ -22,4 +22,7 @@ public class EmployeeDTO {
 	private String designation;
 	private String dateOfBirth;
 	private LocalDate joiningDate;
+	private String userId;
+	private String createdBy;
+	private String updatedBy;
 }

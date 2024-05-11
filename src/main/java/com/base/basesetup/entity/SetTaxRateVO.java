@@ -28,25 +28,25 @@ public class SetTaxRateVO {
 	@SequenceGenerator(name = "settaxrategen", sequenceName = "settaxrateseq", initialValue = 1000000001, allocationSize = 1)
 	@Column(name = "settaxrateid")
 	private Long id;
-	@Column(name = "orgid", length=20)
+	@Column(name = "orgid")
 	private Long orgId;
-	@Column(name = "chapter", length = 50)
+	@Column(name = "chapter")
 	private String chapter;
-	@Column(name = "subchapter", length = 50)
+	@Column(name = "subchapter")
 	private String subChapter;
-	@Column(name = "hsncode", length = 20)
+	@Column(name = "hsncode")
 	private String hsnCode;
-	@Column(name = "branchlocation", length = 50)
+	@Column(name = "branchlocation")
 	private String branch;
-	@Column(name = "newrate", precision = 15,scale = 7)
+	@Column(name = "newrate")
 	private float newRate;
-	@Column(name = "excepmted", length = 1)
+	@Column(name = "excepmted")
 	private String excepmted;
-	@Column(name = "createdby", length=30)
+	@Column(name = "createdby")
 	private String createdBy;
-	@Column(name = "modifiedby", length=30)
+	@Column(name = "modifiedby")
 	private String updatedBy;
-	@Column(name = "cancelremarks", length=50)
+	@Column(name = "cancelremarks")
 	private String cancelRemarks;
 	private boolean cancel;
 	private boolean active;

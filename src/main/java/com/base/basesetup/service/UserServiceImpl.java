@@ -33,7 +33,7 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	TokenProvider tokenProvider;
-	
+
 	@Autowired
 	UserRepo userRepo;
 
@@ -66,10 +66,10 @@ public class UserServiceImpl implements UserService {
 		userVO.setUserName(signUpRequest.getUserName());
 		userVO.setEmail(signUpRequest.getEmail());
 		try {
-		    userVO.setPassword(encoder.encode(CryptoUtils.getDecrypt(signUpRequest.getPassword())));
+			userVO.setPassword(encoder.encode(CryptoUtils.getDecrypt(signUpRequest.getPassword())));
 		} catch (Exception e) {
-		    LOGGER.error(e.getMessage());
-		    throw new ApplicationContextException(UserConstants.ERRROR_MSG_UNABLE_TO_ENCODE_USER_PASSWORD);
+			LOGGER.error(e.getMessage());
+			throw new ApplicationContextException(UserConstants.ERRROR_MSG_UNABLE_TO_ENCODE_USER_PASSWORD);
 		}
 		userVO.setRole(Role.ROLE_USER);
 		userVO.setActive(true);
@@ -113,7 +113,7 @@ public class UserServiceImpl implements UserService {
 		userDTO.setLoginStatus(userVO.isLoginStatus());
 		userDTO.setActive(userVO.isActive());
 		userDTO.setRole(userVO.getRole());
-		
+		userDTO.setOrgId(userVO.getOrgId());
 		userDTO.setAccountRemovedDate(userVO.getAccountRemovedDate());
 		return userDTO;
 	}

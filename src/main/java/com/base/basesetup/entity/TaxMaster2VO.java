@@ -32,9 +32,9 @@ public class TaxMaster2VO {
 	@Column(name = "taxmaster2id")
 	private Long id;
 	
-	@Column(name = "inputaccount", length=20)
+	@Column(name = "inputaccount")
 	private Long inputAccount;
-	@Column(name = "outputaccount", length=20)
+	@Column(name = "outputaccount")
 	private Long outputAccount;
 	@Column(name = "sgstrcmpayable")
 	private boolean sgstRcmPayable;

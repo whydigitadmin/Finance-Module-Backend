@@ -35,32 +35,32 @@ public class AccountVO {
 	private Long id;
 	@Column(name = "orgid")
 	private Long orgId;
-	@Column(name = "accountgroup", length = 50)
+	@Column(name = "accountgroup")
 	private String accountGroup;
-	@Column(name = "branchlocation", length = 50)
+	@Column(name = "branchlocation")
 	private String branchLocation;
-	@Column(name = "accounttype", length = 50)
+	@Column(name = "accounttype")
 	private String accountType;
-	@Column(name = "groupname", length = 50)
+	@Column(name = "groupname")
 	private String groupName;
-	@Column(name = "accountcode", length = 50)
+	@Column(name = "accountcode")
 	private String accountCode;
-	@Column(name = "accountgroupname", length = 50)
+	@Column(name = "accountgroupname")
 	private String accountGroupName;
-	@Column(name = "currency", length = 50)
+	@Column(name = "currency")
 	private String currency;
-	@Column(name = "category", length = 50)
+	@Column(name = "category")
 	private String category;
 	@Column(name = "block")
 	private boolean block;
 	@Column(name = "isitcapplicable")
 	private boolean isItcApplicable;
 
-	@Column(name = "createdby", length = 30)
+	@Column(name = "createdby")
 	private String createdBy;
-	@Column(name = "modifiedby", length = 30)
+	@Column(name = "modifiedby")
 	private String updatedBy;
-	@Column(name = "cancelremarks", length = 50)
+	@Column(name = "cancelremarks")
 	private String cancelRemarks;
 	private boolean cancel;
 	private boolean active;

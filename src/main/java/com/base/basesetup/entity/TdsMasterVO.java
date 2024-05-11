@@ -33,18 +33,18 @@ public class TdsMasterVO {
 	@SequenceGenerator(name = "tdsmastergen", sequenceName = "tdsmasterseq", initialValue = 1000000001, allocationSize = 1)
 	@Column(name = "tdsmasterid")
 	private Long id;
-	@Column(name = "orgid", length=20)
+	@Column(name = "orgid")
 	private Long orgId;
-	@Column(name = "section", length=10)
+	@Column(name = "section")
 	private String section;
-	@Column(name = "sectionname", length=50)
+	@Column(name = "sectionname")
 	private String sectionName;
 	
-	@Column(name = "createdby", length=30)
+	@Column(name = "createdby")
 	private String createdBy;
-	@Column(name = "modifiedby", length=30)
+	@Column(name = "modifiedby")
 	private String updatedBy;
-	@Column(name = "cancelremarks", length=50)
+	@Column(name = "cancelremarks")
 	private String cancelRemarks;
 	private boolean cancel;
 	private boolean active;

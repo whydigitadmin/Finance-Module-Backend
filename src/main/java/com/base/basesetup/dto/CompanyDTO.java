@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 @Builder
 public class CompanyDTO {
 	private Long id;
-	private Long orgId;
 	private String companyCode;
 	private String companyName;
 	private String country;
@@ -25,8 +24,9 @@ public class CompanyDTO {
 	private String email;
 	private String webSite;
 	private String note;
-	private String userid;
 	private String employeeName;
 	private String employeeCode;
 	private String password;
+	private String createdBy;
+	private String updatedBy;
 }

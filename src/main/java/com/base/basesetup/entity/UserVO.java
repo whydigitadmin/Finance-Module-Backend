@@ -28,14 +28,19 @@ public class UserVO {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "user_id")
+	@Column(name = "userid")
 	private Long userId;
+	@Column(name="orgid")
 	private Long orgId;
+	@Column(name="firstname")
 	private String firstName;
+	@Column(name="lastname")
 	private String lastName;
 	private String email;
+	@Column(name="username")
 	private String userName;
 	private String password;
+	@Column(name="loginstatus")
 	private boolean loginStatus;
 	
 

@@ -28,27 +28,27 @@ public class StateVO {
 	@Column(name="stateid")
 	private Long id;
 	
-	@Column(name="statecode", length = 30)
+	@Column(name="statecode")
 	private String stateCode;
-	@Column(name="state", length = 30)
+	@Column(name="state")
 	private String stateName;
-	@Column(name="country", length = 30)
+	@Column(name="country")
     private String country;
-	@Column(name="region", length = 30)
+	@Column(name="region")
     private String region;
-	@Column(name="stateno", length = 30)
+	@Column(name="stateno")
     private int stateNumber;
 	@Column(name="active")
     private boolean active;
-	@Column(name="userid", length = 30)
+	@Column(name="userid")
     private String userId;
     @Column(unique = true)
 	private String dupchk;
-    @Column(name="createdby", length = 30)
+    @Column(name="createdby")
     private String createdBy;
-    @Column(name="modifiedby", length = 30)
+    @Column(name="modifiedby")
 	private String updatedBy;
-    @Column(name="orgid", length = 30)
+    @Column(name="orgid")
 	private Long orgId;
     @Column(name="cancel")
 	private boolean cancel;
