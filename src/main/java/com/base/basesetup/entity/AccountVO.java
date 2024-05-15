@@ -64,21 +64,18 @@ public class AccountVO {
 	private String cancelRemarks;
 	private boolean cancel;
 	private boolean active;
-	
-	@OneToMany(mappedBy = "accountVO",cascade = CascadeType.ALL)
+
+	@OneToMany(mappedBy = "accountVO", cascade = CascadeType.ALL)
 	@JsonManagedReference
 	private List<Account1VO> account1VO;
-	
-	@OneToMany(mappedBy = "accountVO",cascade = CascadeType.ALL)
+
+	@OneToMany(mappedBy = "accountVO", cascade = CascadeType.ALL)
 	@JsonManagedReference
 	private List<Account2VO> account2VO;
-	
-	@OneToMany(mappedBy = "accountVO",cascade = CascadeType.ALL)
+
+	@OneToMany(mappedBy = "accountVO", cascade = CascadeType.ALL)
 	@JsonManagedReference
 	private List<Account3VO> account3VO;
-	
-	
-	
 
 	@Embedded
 	@Builder.Default

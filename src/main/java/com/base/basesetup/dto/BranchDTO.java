@@ -1,9 +1,5 @@
 package com.base.basesetup.dto;
 
-import java.util.List;
-
-import javax.persistence.Column;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -34,4 +30,5 @@ public class BranchDTO {
 	private String createdBy;
 	private String updatedBy;
 	private String userId;
+	private boolean active;
 }

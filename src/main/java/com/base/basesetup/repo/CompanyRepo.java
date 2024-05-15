@@ -15,4 +15,6 @@ public interface CompanyRepo extends JpaRepository<CompanyVO , Long>{
 	@Query(nativeQuery = true,value = "select * from company where orgid=?1")
 	List<CompanyVO> findCompanyByOrgId(Long orgId);
 
+	boolean existsByCompanyCodeAndOrgId(String companyCode, Long orgId);
+
 }

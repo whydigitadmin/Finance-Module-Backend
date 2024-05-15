@@ -74,7 +74,9 @@ public interface BasicMasterService {
 	List<CityVO> getAllCityByState(Long orgId, String state);
 	
 //	Financial Year
-	List<FinancialYearVO> getAllFinancial();
+	List<FinancialYearVO> getFinancialYearById(Long id);
+
+	List<FinancialYearVO> getFinancialYearByOrgId(Long orgid);
 	
 	FinancialYearVO createFinancial(FinancialYearVO finyr);
 	

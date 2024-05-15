@@ -557,7 +557,7 @@ public class MasterServiceImpl implements MasterService {
 		groupLedgerVO.setActive(groupLedgerDTO.isActive());
 		groupLedgerVO.setInterBranchAc(true);
 		groupLedgerVO.setControllAc(true);
-		groupLedgerVO.setAccountgroupName(groupLedgerDTO.getAccountgroupName());
+		groupLedgerVO.setAccountGroupName(groupLedgerDTO.getAccountGroupName());
 
 	}
 

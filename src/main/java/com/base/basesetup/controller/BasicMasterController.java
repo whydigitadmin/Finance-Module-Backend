@@ -79,7 +79,7 @@ public class BasicMasterController extends BaseController {
 		return ResponseEntity.ok().body(responseDTO);
 	}
 
-	@GetMapping("getCurrencyByOrgId")
+	@GetMapping("/getCurrencyByOrgId")
 	public ResponseEntity<ResponseDTO> getCurrencyByOrgId(@RequestParam(required = false) Long orgId) {
 		String methodName = "getCurrencyByOrgId()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
@@ -106,7 +106,7 @@ public class BasicMasterController extends BaseController {
 
 	}
 
-	@PutMapping("updateCreateCurrency")
+	@PutMapping("/updateCreateCurrency")
 	public ResponseEntity<ResponseDTO> updateCreateCurrency(@Valid @RequestBody CurrencyDTO currencyDTO) {
 		String methodName = "updateCreateCurrency()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
@@ -160,7 +160,7 @@ public class BasicMasterController extends BaseController {
 		return ResponseEntity.ok().body(responseDTO);
 	}
 
-	@GetMapping("getCompanyByOrgId")
+	@GetMapping("/getCompanyByOrgId")
 	public ResponseEntity<ResponseDTO> getCompanyByOrgId(@RequestParam(required = false) Long orgId) {
 		String methodName = "getCompanyByOrgId()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
@@ -187,7 +187,7 @@ public class BasicMasterController extends BaseController {
 
 	}
 
-	@PutMapping("updateCreateCompany")
+	@PutMapping("/updateCreateCompany")
 	public ResponseEntity<ResponseDTO> updateCreateCompany(@Valid @RequestBody CompanyDTO companyDTO) {
 		String methodName = "updateCreateCompany()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
@@ -240,7 +240,7 @@ public class BasicMasterController extends BaseController {
 		return ResponseEntity.ok().body(responseDTO);
 	}
 
-	@GetMapping("getEmployeeByOrgId")
+	@GetMapping("/getEmployeeByOrgId")
 	public ResponseEntity<ResponseDTO> getEmployeeByOrgId(@RequestParam(required = false) Long orgId) {
 		String methodName = "getEmployeeByOrgId()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
@@ -267,7 +267,7 @@ public class BasicMasterController extends BaseController {
 
 	}
 
-	@PutMapping("updateCreateEmployee")
+	@PutMapping("/updateCreateEmployee")
 	public ResponseEntity<ResponseDTO> updateCreateEmployee(@Valid @RequestBody EmployeeDTO employeeDTO) {
 		String methodName = "updateCreateEmployee()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
@@ -320,7 +320,7 @@ public class BasicMasterController extends BaseController {
 		return ResponseEntity.ok().body(responseDTO);
 	}
 
-	@GetMapping("getCountryByOrgId")
+	@GetMapping("/getCountryByOrgId")
 	public ResponseEntity<ResponseDTO> getCountryByOrgId(@RequestParam(required = false) Long orgId) {
 		String methodName = "getCountryByOrgId()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
@@ -347,7 +347,7 @@ public class BasicMasterController extends BaseController {
 
 	}
 
-	@PutMapping("updateCreateCountry")
+	@PutMapping("/updateCreateCountry")
 	public ResponseEntity<ResponseDTO> updateCreateCountry(@Valid @RequestBody CountryDTO countryDTO) {
 		String methodName = "updateCreateCountry()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
@@ -400,7 +400,7 @@ public class BasicMasterController extends BaseController {
 		return ResponseEntity.ok().body(responseDTO);
 	}
 
-	@GetMapping("getStateByOrgId")
+	@GetMapping("/getStateByOrgId")
 	public ResponseEntity<ResponseDTO> getStateByOrgId(@RequestParam(required = false) Long orgId) {
 		String methodName = "getStateByOrgId()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
@@ -427,7 +427,7 @@ public class BasicMasterController extends BaseController {
 
 	}
 
-	@GetMapping("getAllStateByCountry")
+	@GetMapping("/getAllStateByCountry")
 	public ResponseEntity<ResponseDTO> getAllStateByCountry(@RequestParam Long orgId, @RequestParam String country) {
 		String methodName = "getAllStateByCountry()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
@@ -454,7 +454,7 @@ public class BasicMasterController extends BaseController {
 		return ResponseEntity.ok().body(responseDTO);
 	}
 
-	@PutMapping("updateCreateState")
+	@PutMapping("/updateCreateState")
 	public ResponseEntity<ResponseDTO> updateCreateState(@Valid @RequestBody StateDTO stateDTO) {
 		String methodName = "updateCreateState()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
@@ -507,7 +507,7 @@ public class BasicMasterController extends BaseController {
 		return ResponseEntity.ok().body(responseDTO);
 	}
 
-	@GetMapping("getCityByOrgId")
+	@GetMapping("/getCityByOrgId")
 	public ResponseEntity<ResponseDTO> getCityByOrgId(@RequestParam(required = false) Long orgId) {
 		String methodName = "getCityByOrgId()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
@@ -534,7 +534,7 @@ public class BasicMasterController extends BaseController {
 
 	}
 
-	@GetMapping("getAllCityByState")
+	@GetMapping("/getAllCityByState")
 	public ResponseEntity<ResponseDTO> getAllCityByState(@RequestParam Long orgid, @RequestParam String state) {
 		String methodName = "getAllCityByState()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
@@ -561,7 +561,7 @@ public class BasicMasterController extends BaseController {
 		return ResponseEntity.ok().body(responseDTO);
 	}
 
-	@PutMapping("updateCreateCity")
+	@PutMapping("/updateCreateCity")
 	public ResponseEntity<ResponseDTO> updateCreateCity(@Valid @RequestBody CityDTO cityDTO) {
 		String methodName = "updateCreateCity()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
@@ -588,30 +588,57 @@ public class BasicMasterController extends BaseController {
 	}
 
 //Finacial Year--------------------------------------------------------------------------
-	@GetMapping("/financial")
-	public ResponseEntity<ResponseDTO> getAllFinancialYears() {
-		String methodName = "getAllFinancialYears()";
+	@GetMapping("/getFinancialYearById")
+	public ResponseEntity<ResponseDTO> getFinancialYearById(@RequestParam(required = false) Long id) {
+		String methodName = "getFinancialYearById()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
 		String errorMsg = null;
 		Map<String, Object> responseObjectsMap = new HashMap<>();
 		ResponseDTO responseDTO = null;
 		List<FinancialYearVO> financialYearVO = new ArrayList<>();
 		try {
-			financialYearVO = basicMasterService.getAllFinancial();
+			financialYearVO = basicMasterService.getFinancialYearById(id);
 		} catch (Exception e) {
 			errorMsg = e.getMessage();
 			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
 		}
 		if (StringUtils.isBlank(errorMsg)) {
-			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "Financial Year information get successfully");
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "FinancialYear information get successfully By Id");
 			responseObjectsMap.put("financialYearVO", financialYearVO);
 			responseDTO = createServiceResponse(responseObjectsMap);
 		} else {
-			responseDTO = createServiceResponseError(responseObjectsMap, "FinancialYear information receive failed",
+			responseDTO = createServiceResponseError(responseObjectsMap, "FinancialYear information receive failed By Id",
 					errorMsg);
 		}
 		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
 		return ResponseEntity.ok().body(responseDTO);
+	}
+
+	@GetMapping("/getFinancialYearByOrgId")
+	public ResponseEntity<ResponseDTO> getFinancialYearByOrgId(@RequestParam(required = false) Long orgId) {
+		String methodName = "getFinancialYearByOrgId()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		List<FinancialYearVO> financialYearVO = new ArrayList<>();
+		try {
+			financialYearVO = basicMasterService.getFinancialYearByOrgId(orgId);
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "FinancialYear information get successfully By OrgId");
+			responseObjectsMap.put("financialYearVO", financialYearVO);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap, "FinancialYear information receive failed By OrgId",
+					errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+
 	}
 
 	@PostMapping("/financial")
@@ -688,7 +715,7 @@ public class BasicMasterController extends BaseController {
 		return ResponseEntity.ok().body(responseDTO);
 	}
 
-	@GetMapping("getBranchByOrgId")
+	@GetMapping("/getBranchByOrgId")
 	public ResponseEntity<ResponseDTO> getBranchByOrgId(@RequestParam(required = false) Long orgId) {
 		String methodName = "getBranchByOrgId()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
@@ -715,7 +742,7 @@ public class BasicMasterController extends BaseController {
 
 	}
 
-	@PutMapping("updateCreateBranch")
+	@PutMapping("/updateCreateBranch")
 	public ResponseEntity<ResponseDTO> updateCreateBranch(@Valid @RequestBody BranchDTO branchDTO) {
 		String methodName = "updateCreateBranch()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);

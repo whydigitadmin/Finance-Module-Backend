@@ -25,4 +25,5 @@ public class EmployeeDTO {
 	private String userId;
 	private String createdBy;
 	private String updatedBy;
+	private boolean active;
 }

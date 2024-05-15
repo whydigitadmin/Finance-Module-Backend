@@ -38,7 +38,7 @@ public class CountryVO {
 	@Column(name = "orgid")
 	private Long orgId;
 	@Column(name = "userid")
-	private String userId;
+	private String userId;	
 	@Column(unique = true)
 	private String dupchk;
 	@Column(name = "createdby")
@@ -47,7 +47,7 @@ public class CountryVO {
 	private String updatedBy;
 	@Column(name = "cancel")
 	private boolean cancel;
-
+	
 	@Embedded
 	@Builder.Default
 	private CreatedUpdatedDate commonDate = new CreatedUpdatedDate();

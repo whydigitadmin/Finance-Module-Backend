@@ -23,7 +23,7 @@ public class GroupLedgerDTO {
 	
 	private String coaList;
 	
-	private String accountgroupName;
+	private String accountGroupName;
 	
 	private String type;
 	

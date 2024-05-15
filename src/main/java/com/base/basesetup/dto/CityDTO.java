@@ -15,4 +15,5 @@ public class CityDTO {
 	private String state;
 	private String userId;
 	private Long orgId;
+	private boolean active;
 }
