@@ -15,4 +15,6 @@ public interface EmployeeRepo extends JpaRepository<EmployeeVO,Long>{
 	@Query(nativeQuery = true,value = "select * from employee where orgid=?1")
 	List<EmployeeVO> findEmployeeByOrgId(Long orgId);
 
+	boolean existsByEmployeeCodeAndOrgId(String employeeCode, Long orgId);
+
 }

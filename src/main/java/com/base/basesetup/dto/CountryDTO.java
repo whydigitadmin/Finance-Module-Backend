@@ -15,4 +15,5 @@ public class CountryDTO {
 	private String countryCode;
 	private Long orgId;
 	private String userId;
+	private boolean active;
 }

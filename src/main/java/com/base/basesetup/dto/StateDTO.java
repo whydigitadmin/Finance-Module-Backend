@@ -16,4 +16,5 @@ public class StateDTO {
 	private int stateNumber;
 	private String userId;
 	private Long orgId;
+	private boolean active;
 }

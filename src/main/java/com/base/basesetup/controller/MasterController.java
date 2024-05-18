@@ -128,7 +128,7 @@ public class MasterController extends BaseController {
 		return ResponseEntity.ok().body(responseDTO);
 	}
 
-	@PutMapping("updateCreateSetTaxRate")
+	@PutMapping("/updateCreateSetTaxRate")
 	public ResponseEntity<ResponseDTO> updateCreateSetTaxRate(@Valid @RequestBody SetTaxRateDTO setTaxRateDTO) {
 		String methodName = "updateCreateSetTaxRate()";
 
@@ -349,7 +349,7 @@ public class MasterController extends BaseController {
 
 	}
 
-	@PutMapping("updateCreateTcsMaster")
+	@PutMapping("/updateCreateTcsMaster")
 	public ResponseEntity<ResponseDTO> updateCreateTcsMaster(@Valid @RequestBody TcsMasterDTO tcsMasterDTO) {
 		String methodName = "updateCreateTcsMaster()";
 
@@ -460,39 +460,34 @@ public class MasterController extends BaseController {
 
 	}
 
-	
-		
-		 @PutMapping("updateCreateTdsMaster")
-			public ResponseEntity<ResponseDTO> updateCreateTdsMaster(@Valid @RequestBody TdsMasterDTO tdsMasterDTO) {
-				String methodName = "updateCreateTdsMaster()";
+	@PutMapping("/updateCreateTdsMaster")
+	public ResponseEntity<ResponseDTO> updateCreateTdsMaster(@Valid @RequestBody TdsMasterDTO tdsMasterDTO) {
+		String methodName = "updateCreateTdsMaster()";
 
-				LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
-				String errorMsg = null;
-				Map<String, Object> responseObjectsMap = new HashMap<>();
-				ResponseDTO responseDTO = null;
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
 
-				try {
-					TdsMasterVO tdsMasterVO = masterService.updateCreateTdsMaster(tdsMasterDTO);
-					if (tdsMasterVO != null) {
-						responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "Tds Master updated successfully");
-					
-						
-						
-						responseObjectsMap.put("tdsMasterVO", tdsMasterVO);
-						responseDTO = createServiceResponse(responseObjectsMap);
-					} else {
-						errorMsg = "Tds Master not found for ID: " + tdsMasterDTO.getTdsMasterId();
-						responseDTO = createServiceResponseError(responseObjectsMap, "Tds Master update failed", errorMsg);
-					}
-				} catch (Exception e) {
-					errorMsg = e.getMessage();
-					LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
-					responseDTO = createServiceResponseError(responseObjectsMap, "Tds Master update failed", errorMsg);
-				}
-				LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
-				return ResponseEntity.ok().body(responseDTO);
+		try {
+			TdsMasterVO tdsMasterVO = masterService.updateCreateTdsMaster(tdsMasterDTO);
+			if (tdsMasterVO != null) {
+				responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "Tds Master updated successfully");
+
+				responseObjectsMap.put("tdsMasterVO", tdsMasterVO);
+				responseDTO = createServiceResponse(responseObjectsMap);
+			} else {
+				errorMsg = "Tds Master not found for ID: " + tdsMasterDTO.getTdsMasterId();
+				responseDTO = createServiceResponseError(responseObjectsMap, "Tds Master update failed", errorMsg);
 			}
-	
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+			responseDTO = createServiceResponseError(responseObjectsMap, "Tds Master update failed", errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+	}
 
 	// Account
 
@@ -547,40 +542,36 @@ public class MasterController extends BaseController {
 		}
 		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
 		return ResponseEntity.ok().body(responseDTO);
-
 	}
 
+	@PutMapping("/updateCreateAccount")
+	public ResponseEntity<ResponseDTO> updateCreateAccount(@Valid @RequestBody AccountDTO accountDTO) {
+		String methodName = "updateCreateAccount()";
 
-	
-		 @PutMapping("updateCreateAccount")
-			public ResponseEntity<ResponseDTO> updateCreateAccount(@Valid @RequestBody AccountDTO accountDTO) {
-				String methodName = "updateCreateAccount()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
 
-				LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
-				String errorMsg = null;
-				Map<String, Object> responseObjectsMap = new HashMap<>();
-				ResponseDTO responseDTO = null;
-
-				try {
-					AccountVO accountVO = masterService.updateCreateAccount(accountDTO);
-					if (accountVO != null) {
-						responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "Account updated successfully");
-						responseObjectsMap.put("accountVO", accountVO);
-						responseDTO = createServiceResponse(responseObjectsMap);
-					} else {
-						errorMsg = "Account not found for ID: " + accountDTO.getAccountId();
-						responseDTO = createServiceResponseError(responseObjectsMap, "Account update failed", errorMsg);
-					}
-				} catch (Exception e) {
-					errorMsg = e.getMessage();
-					LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
-					responseDTO = createServiceResponseError(responseObjectsMap, "Account update failed", errorMsg);
-				}
-				LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
-				return ResponseEntity.ok().body(responseDTO);
+		try {
+			AccountVO accountVO = masterService.updateCreateAccount(accountDTO);
+			if (accountVO != null) {
+				responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "Account updated successfully");
+				responseObjectsMap.put("accountVO", accountVO);
+				responseDTO = createServiceResponse(responseObjectsMap);
+			} else {
+				errorMsg = "Account not found for ID: " + accountDTO.getAccountId();
+				responseDTO = createServiceResponseError(responseObjectsMap, "Account update failed", errorMsg);
 			}
-	
-		
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+			responseDTO = createServiceResponseError(responseObjectsMap, "Account update failed", errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+	}
+
 	// Group Ledger
 	@GetMapping("/getAllGroupLedgerByOrgId")
 	public ResponseEntity<ResponseDTO> getAllGroupLedgerByOrgId(@RequestParam(required = false) Long orgId) {
@@ -636,7 +627,7 @@ public class MasterController extends BaseController {
 
 	}
 
-	@PutMapping("updateCreateGroupLedger")
+	@PutMapping("/updateCreateGroupLedger")
 	public ResponseEntity<ResponseDTO> updateCreateGroupLedger(@Valid @RequestBody GroupLedgerDTO groupLedgerDTO) {
 		String methodName = "updateCreateGroupLedger()";
 

@@ -15,4 +15,6 @@ public interface CountryRepo extends JpaRepository<CountryVO, Long> {
 	@Query(nativeQuery = true, value = "select * from country where orgid=?1")
 	List<CountryVO> findCountryByOrgId(Long orgId);
 
+	boolean existsByCountryNameAndOrgId(String countryName, Long orgId);
+
 }

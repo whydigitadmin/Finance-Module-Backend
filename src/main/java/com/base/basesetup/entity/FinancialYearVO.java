@@ -25,12 +25,24 @@ public class FinancialYearVO {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "finyrid")
-	private int id;
+	@Column(name = "financialyearid")
+	private Long id;
+	@Column(name = "orgid")
+	private Long orgId;
+	@Column(name = "active")
+	private boolean active;
+	@Column(name = "cancel")
+	private Long cancel;
+	@Column(name = "cancelremarks")
+	private Long cancelRemarks;
+	@Column(name = "sno")
+	private Long sno;
 	@Column(name = "finyr")
-	private int finYr;
+	private String finYr;
+	@Column(name="finyrid")
+	private String finYrId;
 	@Column(name = "finyridentifier")
-	private int finYrIdentifier;
+	private String finYrIdentifier;
 	@Column(name = "startdate")
 	private LocalDate startDate;
 	@Column(name = "enddate")

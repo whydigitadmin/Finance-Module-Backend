@@ -40,7 +40,7 @@ public class GroupLedgerVO {
 	@Column(name = "coalist")
 	private String coaList;
 	@Column(name = "accountgroupname")
-	private String accountgroupName;
+	private String accountGroupName;
 	@Column(name = "type")
 	private String type;
 	@Column(name = "interbranchac")
@@ -53,8 +53,6 @@ public class GroupLedgerVO {
 	private String currency;
 	@Column(name = "branch")
 	private String branch;
-	
-	
 	@Column(name = "createdby")
 	private String createdBy;
 	@Column(name = "modifiedby")
@@ -63,10 +61,7 @@ public class GroupLedgerVO {
 	private String cancelRemarks;
 	private boolean cancel;
 	private boolean active;
-	
-	
-	
-	
+
 	@Embedded
 	@Builder.Default
 	private CreatedUpdatedDate commonDate = new CreatedUpdatedDate();
