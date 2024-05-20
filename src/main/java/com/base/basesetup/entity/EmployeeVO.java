@@ -1,7 +1,6 @@
 package com.base.basesetup.entity;
 
 import java.time.LocalDate;
-import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -10,11 +9,14 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.base.basesetup.dto.CreatedUpdatedDate;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.AllArgsConstructor;
@@ -70,6 +72,7 @@ public class EmployeeVO {
 	private String cancelRemark;
 	@Column(name = "active")
 	private boolean active;
+	
 	
 	@JsonManagedReference
 	@OneToOne(mappedBy = "employeeVO", cascade = CascadeType.ALL)

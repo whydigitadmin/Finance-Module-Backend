@@ -19,4 +19,6 @@ public interface BranchRepo extends JpaRepository<BranchVO, Long> {
 
 	boolean existsByBranchCodeAndOrgId(String branchCode, Long orgId);
 
+	boolean existsByBranchAndOrgId(String branch, Long orgId);
+
 }

@@ -17,4 +17,6 @@ public interface CountryRepo extends JpaRepository<CountryVO, Long> {
 
 	boolean existsByCountryNameAndOrgId(String countryName, Long orgId);
 
+	boolean existsByCountryCodeAndOrgId(String countryCode, Long orgId);
+
 }
