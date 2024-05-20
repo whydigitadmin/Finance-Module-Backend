@@ -79,8 +79,7 @@ public class BasicMasterServiceImpl implements BasicMasterService {
 	@Autowired
 	BranchRepo branchRepo;
 
-	// Currency
-	// -----------------------------------------------------------------------------------
+// Currency-----------------------------------------------------------------------------------
 
 	@Override
 	public List<CurrencyVO> getCurrencyById(Long id) {
@@ -111,7 +110,7 @@ public class BasicMasterServiceImpl implements BasicMasterService {
 	@Override
 	public CurrencyVO updateCreateCurrency(@Valid CurrencyDTO currencyDTO) throws ApplicationException {
 		CurrencyVO currencyVO = new CurrencyVO();
-		if (currencyDTO.getId() != 0) {
+		if (ObjectUtils.isNotEmpty(currencyDTO.getId())) {
 			currencyVO = currencyRepo.findById(currencyDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid Currency Details"));
 		}
@@ -130,8 +129,7 @@ public class BasicMasterServiceImpl implements BasicMasterService {
 		currencyVO.setCurrencySymbol(currencyDTO.getCurrencySymbol());
 	}
 
-	// Company
-	// -----------------------------------------------------------------------------------
+// Company -----------------------------------------------------------------------------------
 
 	@Override
 	public List<CompanyVO> getCompanyById(Long id) {
@@ -162,7 +160,7 @@ public class BasicMasterServiceImpl implements BasicMasterService {
 	@Override
 	public CompanyVO updateCreateCompany(@Valid CompanyDTO companyDTO) throws Exception {
 		CompanyVO companyVO = new CompanyVO();
-		if (companyDTO.getId() != 0) {
+		if (ObjectUtils.isNotEmpty(companyDTO.getId())) {
 			companyVO = companyRepo.findById(companyDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid Company Details"));
 		}
@@ -288,7 +286,7 @@ public class BasicMasterServiceImpl implements BasicMasterService {
 	@Override
 	public EmployeeVO updateCreateEmployee(@Valid EmployeeDTO employeeDTO) throws Exception {
 		EmployeeVO employeeVO = new EmployeeVO();
-		if (employeeDTO.getId() != 0) {
+		if (ObjectUtils.isNotEmpty(employeeDTO.getId())) {
 			employeeVO = employeeRepo.findById(employeeDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid Employee Details"));
 		}
@@ -400,7 +398,7 @@ public class BasicMasterServiceImpl implements BasicMasterService {
 	@Override
 	public CountryVO updateCreateCountry(@Valid CountryDTO countryDTO) throws ApplicationException {
 		CountryVO countryVO = new CountryVO();
-		if (countryDTO.getId() != 0) {
+		if (ObjectUtils.isNotEmpty(countryDTO.getId())) {
 			countryVO = countryRepo.findById(countryDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid Country Details"));
 		}
@@ -480,7 +478,7 @@ public class BasicMasterServiceImpl implements BasicMasterService {
 	@Override
 	public StateVO updateCreateState(@Valid StateDTO stateDTO) throws ApplicationException {
 		StateVO stateVO = new StateVO();
-		if (stateDTO.getId() != 0) {
+		if (ObjectUtils.isNotEmpty(stateDTO.getId())) {
 			stateVO = stateRepo.findById(stateDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid State Details"));
 		}
@@ -704,7 +702,7 @@ public class BasicMasterServiceImpl implements BasicMasterService {
 	@Override
 	public BranchVO updateCreateBranch(@Valid BranchDTO branchDTO) throws ApplicationException {
 		BranchVO branchVO = new BranchVO();
-		if (branchDTO.getId() != 0) {
+		if (ObjectUtils.isNotEmpty(branchDTO.getId())) {
 			branchVO = branchRepo.findById(branchDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid Branch Details"));
 		}
