@@ -46,7 +46,7 @@ public interface BasicMasterService {
 
 	List<EmployeeVO> getEmployeeByOrgId(Long orgid);
 
-	EmployeeVO updateCreateEmployee(@Valid EmployeeDTO employeeDTO) throws ApplicationException;
+	EmployeeVO updateCreateEmployee(@Valid EmployeeDTO employeeDTO) throws ApplicationException, Exception;
 
 //	Country
 	List<CountryVO> getCountryById(Long id);

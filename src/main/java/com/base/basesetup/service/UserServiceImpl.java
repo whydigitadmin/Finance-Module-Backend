@@ -61,8 +61,7 @@ public class UserServiceImpl implements UserService {
 
 	private UserVO getUserVOFromSignUpFormDTO(SignUpFormDTO signUpRequest) {
 		UserVO userVO = new UserVO();
-		userVO.setFirstName(signUpRequest.getFirstName());
-		userVO.setLastName(signUpRequest.getLastName());
+		userVO.setEmployeeName(signUpRequest.getEmployeeName());
 		userVO.setUserName(signUpRequest.getUserName());
 		userVO.setEmail(signUpRequest.getEmail());
 		try {
@@ -86,10 +85,17 @@ public class UserServiceImpl implements UserService {
 		}
 		UserVO userVO = userRepo.findByUserName(loginRequest.getUserName());
 		if (ObjectUtils.isNotEmpty(userVO)) {
-			if (compareEncodedPasswordWithEncryptedPassword(loginRequest.getPassword(), userVO.getPassword())) {
+			if(userVO.isActive())
+			{
+				if (compareEncodedPasswordWithEncryptedPassword(loginRequest.getPassword(), userVO.getPassword())) {
 				updateUserLoginInformation(userVO);
-			} else {
-				throw new ApplicationContextException(UserConstants.ERRROR_MSG_PASSWORD_MISMATCH);
+				} else {
+					throw new ApplicationContextException(UserConstants.ERRROR_MSG_PASSWORD_MISMATCH);
+				}
+			}
+			else
+			{
+				throw new ApplicationContextException(UserConstants.ACCOUNT_INACTIVE_MESSAGE);
 			}
 		} else {
 			throw new ApplicationContextException(
@@ -106,8 +112,7 @@ public class UserServiceImpl implements UserService {
 	private static UserResponseDTO mapUserVOToDTO(UserVO userVO) {
 		UserResponseDTO userDTO = new UserResponseDTO();
 		userDTO.setUserId(userVO.getUserId());
-		userDTO.setFirstName(userVO.getFirstName());
-		userDTO.setLastName(userVO.getLastName());
+		userDTO.setEmployeeName(userVO.getEmployeeName());
 		userDTO.setEmail(userVO.getEmail());
 		userDTO.setUserName(userVO.getUserName());
 		userDTO.setLoginStatus(userVO.isLoginStatus());
