@@ -15,8 +15,7 @@ import lombok.NoArgsConstructor;
 public class UserResponseDTO {
 	private long userId;
 	private long orgId;
-	private String firstName;
-	private String lastName;
+	private String employeeName;
 	private String email;
 	private String userName;
 	private boolean loginStatus;

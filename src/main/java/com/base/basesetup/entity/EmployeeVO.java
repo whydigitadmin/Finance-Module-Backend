@@ -1,17 +1,21 @@
 package com.base.basesetup.entity;
 
 import java.time.LocalDate;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.base.basesetup.dto.CreatedUpdatedDate;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -48,6 +52,10 @@ public class EmployeeVO {
 	private String dateOfBirth;
 	@Column(name = "joiningdate")
 	private LocalDate joiningDate;
+	@Column(name = "role")
+	private String role;
+	@Column(name = "password")
+	private String password;
 	@Column(unique = true)
 	private String dupchk;
 	@Column(name = "createdby")
@@ -58,12 +66,15 @@ public class EmployeeVO {
 	private Long orgId;
 	@Column(name = "cancel")
 	private boolean cancel;
-	@Column(name = "userid")
-	private String userId;
 	@Column(name = "cancelremarks")
 	private String cancelRemark;
 	@Column(name = "active")
 	private boolean active;
+	
+	@JsonManagedReference
+	@OneToOne(mappedBy = "employeeVO", cascade = CascadeType.ALL)
+	private UserVO userVO;
+	
 
 	@Embedded
 	private CreatedUpdatedDate commonDate = new CreatedUpdatedDate();

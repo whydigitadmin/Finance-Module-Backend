@@ -10,9 +10,12 @@ import org.apache.commons.lang3.ObjectUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContextException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.base.basesetup.common.CommonConstant;
+import com.base.basesetup.common.UserConstants;
 import com.base.basesetup.dto.BranchDTO;
 import com.base.basesetup.dto.CityDTO;
 import com.base.basesetup.dto.CompanyDTO;
@@ -20,6 +23,7 @@ import com.base.basesetup.dto.CountryDTO;
 import com.base.basesetup.dto.CurrencyDTO;
 import com.base.basesetup.dto.EmployeeDTO;
 import com.base.basesetup.dto.Role;
+import com.base.basesetup.dto.SignUpFormDTO;
 import com.base.basesetup.dto.StateDTO;
 import com.base.basesetup.entity.BranchVO;
 import com.base.basesetup.entity.CityVO;
@@ -77,7 +81,8 @@ public class BasicMasterServiceImpl implements BasicMasterService {
 	@Autowired
 	BranchRepo branchRepo;
 
-//	Currency -----------------------------------------------------------------------------------
+	// Currency
+	// -----------------------------------------------------------------------------------
 
 	@Override
 	public List<CurrencyVO> getCurrencyById(Long id) {
@@ -152,7 +157,8 @@ public class BasicMasterServiceImpl implements BasicMasterService {
 
 	}
 
-//	Company -----------------------------------------------------------------------------------
+	// Company
+	// -----------------------------------------------------------------------------------
 
 	@Override
 	public List<CompanyVO> getCompanyById(Long id) {
@@ -242,7 +248,8 @@ public class BasicMasterServiceImpl implements BasicMasterService {
 
 	}
 
-//	Employee -----------------------------------------------------------------------------------
+	// Employee
+	// -----------------------------------------------------------------------------------
 
 	@Override
 	public List<EmployeeVO> getEmployeeById(Long id) {
@@ -271,14 +278,30 @@ public class BasicMasterServiceImpl implements BasicMasterService {
 	}
 
 	@Override
-	public EmployeeVO updateCreateEmployee(@Valid EmployeeDTO employeeDTO) throws ApplicationException {
+	public EmployeeVO updateCreateEmployee(@Valid EmployeeDTO employeeDTO) throws Exception {
 		EmployeeVO employeeVO = new EmployeeVO();
-		if (ObjectUtils.isNotEmpty(employeeDTO.getId())) {
+		if (employeeDTO.getId()!=0) {
 			employeeVO = employeeRepo.findById(employeeDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid Employee Details"));
 		}
 		getEmployeeVOFromEmployeeDTO(employeeDTO, employeeVO);
-		return employeeRepo.save(employeeVO);
+		employeeRepo.save(employeeVO);
+		UserVO userVO = new UserVO();
+		userVO.setEmployeeName(employeeDTO.getEmployeeName());
+		userVO.setUserName(employeeDTO.getEmployeeCode());
+		try {
+			userVO.setPassword(encoder.encode(CryptoUtils.getDecrypt(employeeDTO.getPassword())));
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage());
+			throw new ApplicationContextException(UserConstants.ERRROR_MSG_UNABLE_TO_ENCODE_USER_PASSWORD);
+		}
+		userVO.setRole(Role.ROLE_USER);
+		userVO.setActive(true);
+		userVO.setLoginStatus(false);
+		userVO.setEmployeeVO(employeeVO);
+		userRepo.save(userVO);
+		return employeeVO;
+		// return employeeRepo.save(employeeVO);
 	}
 
 	private void getEmployeeVOFromEmployeeDTO(@Valid EmployeeDTO employeeDTO, EmployeeVO employeeVO)
@@ -302,19 +325,22 @@ public class BasicMasterServiceImpl implements BasicMasterService {
 		employeeVO.setActive(employeeDTO.isActive());
 		employeeVO.setEmployeeCode(employeeDTO.getEmployeeCode());
 		employeeVO.setGender(employeeDTO.getGender());
+		employeeVO.setPassword(employeeDTO.getPassword());
+		employeeVO.setRole(employeeDTO.getRole());
+		employeeVO.setEmployeeName(employeeDTO.getEmployeeName());
 		employeeVO.setBranch(employeeDTO.getBranch());
 		employeeVO.setBranchCode(employeeDTO.getBranchCode());
 		employeeVO.setDepartment(employeeDTO.getDepartment());
 		employeeVO.setDesignation(employeeDTO.getDesignation());
 		employeeVO.setJoiningDate(employeeDTO.getJoiningDate());
 		employeeVO.setDateOfBirth(employeeDTO.getDateOfBirth());
-		employeeVO.setUserId(employeeDTO.getUserId());
 		employeeVO.setCreatedBy(employeeDTO.getCreatedBy());
 		employeeVO.setUpdateBy(employeeDTO.getUpdatedBy());
 
 	}
 
-//	Country -----------------------------------------------------------------------------------
+	// Country
+	// -----------------------------------------------------------------------------------
 
 	@Override
 	public List<CountryVO> getCountryById(Long id) {
@@ -376,7 +402,8 @@ public class BasicMasterServiceImpl implements BasicMasterService {
 
 	}
 
-//State -----------------------------------------------------------------------------------
+	// State
+	// -----------------------------------------------------------------------------------
 	@Override
 	public List<StateVO> getStateById(Long id) {
 		List<StateVO> stateVO = new ArrayList<>();
@@ -438,15 +465,16 @@ public class BasicMasterServiceImpl implements BasicMasterService {
 		stateVO.setStateNumber(stateDTO.getStateNumber());
 	}
 
-//	private String country;
-//	private String region;
-//	private int stateNumber;
+	// private String country;
+	// private String region;
+	// private int stateNumber;
 	@Override
 	public List<StateVO> getAllStateByCountry(Long orgId, String country) {
 		return stateRepo.findAllStateByCountry(orgId, country);
 	}
 
-//City -----------------------------------------------------------------------------------
+	// City
+	// -----------------------------------------------------------------------------------
 	@Override
 	public List<CityVO> getCityById(Long id) {
 		List<CityVO> cityVO = new ArrayList<>();
@@ -513,7 +541,8 @@ public class BasicMasterServiceImpl implements BasicMasterService {
 		return cityRepo.findAllCityByState(orgId, state);
 	}
 
-//Financial Year-----------------------------------------------------------------------------------
+	// Financial
+	// Year-----------------------------------------------------------------------------------
 	@Override
 	public List<FinancialYearVO> getFinancialYearById(Long id) {
 		List<FinancialYearVO> financialYearVO = new ArrayList<>();
@@ -539,7 +568,7 @@ public class BasicMasterServiceImpl implements BasicMasterService {
 		}
 		return financialYearVO;
 	}
-	
+
 	@Override
 	public FinancialYearVO createFinancial(FinancialYearVO financialYearVO) {
 		return finRepo.save(financialYearVO);
@@ -555,7 +584,7 @@ public class BasicMasterServiceImpl implements BasicMasterService {
 
 	}
 
-//Branch-----------------------------------------------------------------------------------
+	// Branch-----------------------------------------------------------------------------------
 	@Override
 	public List<BranchVO> getBranchById(Long id) {
 		List<BranchVO> branchVO = new ArrayList<>();
@@ -595,7 +624,7 @@ public class BasicMasterServiceImpl implements BasicMasterService {
 
 	private void getBranchVOFromBranchDTO(@Valid BranchDTO branchDTO, BranchVO branchVO) throws ApplicationException {
 		if (branchDTO.getId() != 0) {
-			BranchVO existingBranch= branchRepo.findById(branchDTO.getId())
+			BranchVO existingBranch = branchRepo.findById(branchDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Branch with ID " + branchDTO.getId() + " not found"));
 
 			if (!existingBranch.getBranchCode().equals(branchDTO.getBranchCode())) {

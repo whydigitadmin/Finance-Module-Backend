@@ -27,6 +27,7 @@ public class UserConstants {
 	public static final String ERRROR_MSG_INVALID_USER_ID = "Invalid userId.";
 	public static final String ERRROR_MSG_INVALID_USER_NAME = "Invalid userName.";
 	public static final String KEY_USER_VO = "userVO";
+	public static final String ACCOUNT_INACTIVE_MESSAGE = "Your Account is In-Active, Please Contact Administrator";
 	public static final String GET_USER_INFORMATION_SUCCESS_MESSAGE = "User information get successfully";
 	public static final String GET_USER_INFORMATION_FAILED_MESSAGE = "User information receive failed";
 	public static final String ERROR_MSG_METHOD_NAME_WITH_USER_NAME = "MethodName : {} UserName : {} Error : {}";

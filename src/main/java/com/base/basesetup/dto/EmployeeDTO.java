@@ -22,6 +22,8 @@ public class EmployeeDTO {
 	private String designation;
 	private String dateOfBirth;
 	private LocalDate joiningDate;
+	private String password;
+	private String role;
 	private String userId;
 	private String createdBy;
 	private String updatedBy;
