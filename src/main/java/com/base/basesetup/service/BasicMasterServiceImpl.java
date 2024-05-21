@@ -141,6 +141,11 @@ public class BasicMasterServiceImpl implements BasicMasterService {
 		currencyVO.setCurrencySymbol(currencyDTO.getCurrencySymbol());
 	}
 
+	@Override
+	public List<CurrencyVO> getCurrencyByActive() {
+		return currencyRepo.findCurrencyByActive();
+	}
+
 // Company-----------------------------------------------------------------------------------
 
 	@Override
@@ -266,6 +271,11 @@ public class BasicMasterServiceImpl implements BasicMasterService {
 		}
 	}
 
+	@Override
+	public List<CompanyVO> getCompanyByActive() {
+		return companyRepo.findCompanyByActive();
+	}
+
 	// Employee-----------------------------------------------------------------------------------//
 
 	@Override
@@ -377,6 +387,10 @@ public class BasicMasterServiceImpl implements BasicMasterService {
 
 	}
 
+	@Override
+	public List<EmployeeVO> getEmployeeByActive() {
+		return employeeRepo.findEmployeeByActive();
+	}
 	// Country-----------------------------------------------------------------------------------
 
 	@Override
@@ -457,6 +471,11 @@ public class BasicMasterServiceImpl implements BasicMasterService {
 
 		}
 
+	}
+
+	@Override
+	public List<CountryVO> getCountryByActive() {
+		return countryRepo.findCountryByActive();
 	}
 
 	// State-----------------------------------------------------------------------------------
@@ -550,6 +569,11 @@ public class BasicMasterServiceImpl implements BasicMasterService {
 		return stateRepo.findAllStateByCountry(orgId, country);
 	}
 
+	@Override
+	public List<StateVO> getStateByActive() {
+		return stateRepo.findStateByActive();
+	}
+
 	// City-----------------------------------------------------------------------------------
 	@Override
 	public List<CityVO> getCityById(Long id) {
@@ -637,6 +661,11 @@ public class BasicMasterServiceImpl implements BasicMasterService {
 	@Override
 	public List<CityVO> getAllCityByState(Long orgId, String state) {
 		return cityRepo.findAllCityByState(orgId, state);
+	}
+
+	@Override
+	public List<CityVO> getCityByActive() {
+		return cityRepo.findCityByActive();
 	}
 
 	// FinancialYear-----------------------------------------------------------------------------------
@@ -788,7 +817,10 @@ public class BasicMasterServiceImpl implements BasicMasterService {
 			branchVO.setUserId(branchDTO.getUserId());
 		}
 	}
-
+	@Override
+	public List<BranchVO> getBranchByActive() {
+		return branchRepo.findBranchByActive();
+	}
 //	Role------------------------------------------------------------------------------------------------
 
 	@Override
@@ -857,6 +889,10 @@ public class BasicMasterServiceImpl implements BasicMasterService {
 		roleVO.setUpdatedBy(roleDTO.getUpdatedBy());
 		roleVO.setActive(roleDTO.isActive());
 
+	}
+	@Override
+	public List<RoleVO> getRoleByActive() {
+		return roleRepo.findRoleByActive();
 	}
 
 }

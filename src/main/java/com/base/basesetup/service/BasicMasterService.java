@@ -36,12 +36,16 @@ public interface BasicMasterService {
 
 	CurrencyVO updateCreateCurrency(@Valid CurrencyDTO currencyDTO) throws ApplicationException;
 
+	List<CurrencyVO> getCurrencyByActive();
+
 //	Company
 	List<CompanyVO> getCompanyById(Long id);
 
 	List<CompanyVO> getCompanyByOrgId(Long orgid);
 
 	CompanyVO updateCreateCompany(@Valid CompanyDTO companyDTO) throws Exception;
+
+	List<CompanyVO> getCompanyByActive();
 
 //	Employee
 	List<EmployeeVO> getEmployeeById(Long id);
@@ -50,12 +54,16 @@ public interface BasicMasterService {
 
 	EmployeeVO updateCreateEmployee(@Valid EmployeeDTO employeeDTO) throws ApplicationException, Exception;
 
+	List<EmployeeVO> getEmployeeByActive();
+
 //	Country
 	List<CountryVO> getCountryById(Long id);
 
 	List<CountryVO> getCountryByOrgId(Long orgid);
 
 	CountryVO updateCreateCountry(@Valid CountryDTO countryDTO) throws ApplicationException;
+
+	List<CountryVO> getCountryByActive();
 
 //	State
 	List<StateVO> getStateById(Long id);
@@ -66,6 +74,8 @@ public interface BasicMasterService {
 
 	List<StateVO> getAllStateByCountry(Long orgId, String country);
 
+	List<StateVO> getStateByActive();
+
 //	City
 	List<CityVO> getCityById(Long id);
 
@@ -74,27 +84,33 @@ public interface BasicMasterService {
 	CityVO updateCreateCity(@Valid CityDTO cityDTO) throws ApplicationException;
 
 	List<CityVO> getAllCityByState(Long orgId, String state);
-	
+
+	List<CityVO> getCityByActive();
+
 //	Financial Year
 	List<FinancialYearVO> getFinancialYearById(Long id);
 
 	List<FinancialYearVO> getFinancialYearByOrgId(Long orgid);
-	
+
 	FinancialYearVO createFinancial(FinancialYearVO finyr);
-	
+
 	Optional<FinancialYearVO> updateFinancial(FinancialYearVO finyr);
-	
+
 //	Branch
 	List<BranchVO> getBranchById(Long id);
 
 	List<BranchVO> getBranchByOrgId(Long orgid);
 
 	BranchVO updateCreateBranch(@Valid BranchDTO branchDTO) throws ApplicationException;
-	
+
+	List<BranchVO> getBranchByActive();
+
 //	Role
 	List<RoleVO> getRoleById(Long id);
 
 	List<RoleVO> getRoleByOrgId(Long orgid);
 
 	RoleVO updateCreateRole(@Valid RoleDTO roleDTO) throws ApplicationException;
+	
+	List<RoleVO> getRoleByActive();
 }

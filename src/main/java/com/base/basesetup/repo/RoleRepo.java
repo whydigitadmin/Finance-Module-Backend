@@ -15,5 +15,8 @@ public interface RoleRepo extends JpaRepository<RoleVO, Long> {
 	@Query(nativeQuery = true,value = "select * from role where orgid=?1")
 	List<RoleVO> findRoleByOrgId(Long orgId);
 
+	@Query(nativeQuery = true,value = "select * from role where active=1")
+	List<RoleVO> findRoleByActive();
+
 
 }

@@ -131,7 +131,7 @@ public class MasterServiceImpl implements MasterService {
 	}
 
 	private void getSetTaxRateVOFromSetTaxRateDTO(@Valid SetTaxRateDTO setTaxRateDTO, SetTaxRateVO setTaxRateVO) {
-		
+
 		setTaxRateVO.setOrgId(setTaxRateDTO.getOrgId());
 		setTaxRateVO.setChapter(setTaxRateDTO.getChapter());
 		setTaxRateVO.setSubChapter(setTaxRateDTO.getSubChapter());
@@ -559,7 +559,5 @@ public class MasterServiceImpl implements MasterService {
 		groupLedgerVO.setInterBranchAc(true);
 		groupLedgerVO.setControllAc(true);
 		groupLedgerVO.setAccountGroupName(groupLedgerDTO.getAccountGroupName());
-
 	}
-
 }
