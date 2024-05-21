@@ -58,8 +58,6 @@ public class EmployeeVO {
 	private String role;
 	@Column(name = "password")
 	private String password;
-	@Column(unique = true)
-	private String dupchk;
 	@Column(name = "createdby")
 	private String createdBy;
 	@Column(name = "modifiedby")
