@@ -40,8 +40,6 @@ public class CityVO {
     private boolean active;
 	@Column(name="userid")
     private String userId;
-	@Column(unique = true)
-	private String dupchk;
 	@Column(name="createdby")
 	private String createdBy;
 	@Column(name="modifiedby")

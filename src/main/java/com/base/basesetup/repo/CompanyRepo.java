@@ -17,4 +17,6 @@ public interface CompanyRepo extends JpaRepository<CompanyVO , Long>{
 
 	boolean existsByCompanyCodeAndOrgId(String companyCode, Long orgId);
 
+	boolean existsByCompanyNameAndOrgId(String companyName, Long orgId);
+
 }

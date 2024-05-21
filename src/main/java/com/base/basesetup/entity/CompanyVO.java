@@ -58,8 +58,6 @@ public class CompanyVO {
 	private String note;
 	@Column(name = "active")
 	private boolean active;
-	@Column(unique = true)
-	private String dupchk;
 	@Column(name = "employeename")
 	private String employeeName;
 	@Column(name = "employeecode")
