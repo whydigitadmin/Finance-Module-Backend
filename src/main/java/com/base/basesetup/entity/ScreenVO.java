@@ -1,7 +1,6 @@
 package com.base.basesetup.entity;
 
 import javax.persistence.Column;
-import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -11,7 +10,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
-import com.base.basesetup.dto.CreatedUpdatedDate;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import lombok.AllArgsConstructor;
@@ -34,14 +32,10 @@ public class ScreenVO {
 	private String screenName;
 	@Column(name = "responsibilities")
 	private String responsibilities;
-	
-	
-	
+
 	@ManyToOne
 	@JsonBackReference
-	@JoinColumn(name = "responsibilities_id")
+	@JoinColumn(name = "responsibilitiesid")
 	private ResponsibilitiesVO responsibilitiesVO;
-	
-	@Embedded
-	private CreatedUpdatedDate commonDate = new CreatedUpdatedDate();
+
 }

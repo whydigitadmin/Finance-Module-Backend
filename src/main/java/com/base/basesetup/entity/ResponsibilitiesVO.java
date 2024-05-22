@@ -41,9 +41,9 @@ public class ResponsibilitiesVO {
 	@Column(name = "createdby")
 	private String createdBy;
 	@Column(name = "modifiedby")
-	private String updatedBy;	
-
-	@OneToMany(mappedBy = "responsibilitiesVO",cascade = CascadeType.ALL)
+	private String updatedBy;
+	
+	@OneToMany(mappedBy = "responsibilitiesVO", cascade = CascadeType.ALL, orphanRemoval = true)
 	@JsonManagedReference
 	private List<ScreenVO> screenVO;
 
