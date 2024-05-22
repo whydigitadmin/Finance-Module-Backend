@@ -947,10 +947,12 @@ public class BasicMasterServiceImpl implements BasicMasterService {
 				if (screenDTO.getId() != null & ObjectUtils.isNotEmpty(screenDTO.getId())) {
 					ScreenVO screenVO1 = screenRepo.findById(screenDTO.getId()).get();
 					screenVO1.setResponsibilities(screenDTO.getResponsibilities());
+					screenVO1.setScreenName(screenDTO.getScreenName());
 					screenVO.add(screenVO1);
 				} else {
 					ScreenVO screenVO1 = new ScreenVO();
 					screenVO1.setResponsibilities(screenDTO.getResponsibilities());
+					screenVO1.setScreenName(screenDTO.getScreenName());
 					screenVO.add(screenVO1);
 				}
 			}
