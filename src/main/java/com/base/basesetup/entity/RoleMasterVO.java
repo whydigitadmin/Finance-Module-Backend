@@ -25,7 +25,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class RoleVO {
+public class RoleMasterVO {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "rolegen")
@@ -47,9 +47,7 @@ public class RoleVO {
 	@Column(name = "cancelremarks")
 	private String cancelRemarks;
 	
-	@OneToMany(mappedBy = "roleVO",cascade = CascadeType.ALL)
-	@JsonManagedReference
-	private List<ResponsibilitiesVO> responsibilitiesVO;
+	
 	
 	@Embedded
 	private CreatedUpdatedDate commonDate = new CreatedUpdatedDate();

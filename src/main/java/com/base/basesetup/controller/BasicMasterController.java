@@ -30,7 +30,8 @@ import com.base.basesetup.dto.CountryDTO;
 import com.base.basesetup.dto.CurrencyDTO;
 import com.base.basesetup.dto.EmployeeDTO;
 import com.base.basesetup.dto.ResponseDTO;
-import com.base.basesetup.dto.RoleDTO;
+import com.base.basesetup.dto.ResponsibilitiesDTO;
+import com.base.basesetup.dto.RoleMasterDTO;
 import com.base.basesetup.dto.StateDTO;
 import com.base.basesetup.entity.BranchVO;
 import com.base.basesetup.entity.CityVO;
@@ -39,7 +40,8 @@ import com.base.basesetup.entity.CountryVO;
 import com.base.basesetup.entity.CurrencyVO;
 import com.base.basesetup.entity.EmployeeVO;
 import com.base.basesetup.entity.FinancialYearVO;
-import com.base.basesetup.entity.RoleVO;
+import com.base.basesetup.entity.ResponsibilitiesVO;
+import com.base.basesetup.entity.RoleMasterVO;
 import com.base.basesetup.entity.StateVO;
 import com.base.basesetup.service.BasicMasterService;
 
@@ -954,15 +956,15 @@ public class BasicMasterController extends BaseController {
 		return ResponseEntity.ok().body(responseDTO);
 	}
 
-//	Roles&Responsibilities-----------------------------------------------------------------
-	@GetMapping("/getRoleById")
+//	Roles-----------------------------------------------------------------
+	@GetMapping("/getRoleMasterById")
 	public ResponseEntity<ResponseDTO> getRoleById(@RequestParam(required = false) Long id) {
 		String methodName = "getRoleById()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
 		String errorMsg = null;
 		Map<String, Object> responseObjectsMap = new HashMap<>();
 		ResponseDTO responseDTO = null;
-		List<RoleVO> roleVO = new ArrayList<>();
+		List<RoleMasterVO> roleVO = new ArrayList<>();
 		try {
 			roleVO = basicMasterService.getRoleById(id);
 		} catch (Exception e) {
@@ -981,14 +983,14 @@ public class BasicMasterController extends BaseController {
 		return ResponseEntity.ok().body(responseDTO);
 	}
 
-	@GetMapping("/getRoleByOrgId")
+	@GetMapping("/getRoleMasterByOrgId")
 	public ResponseEntity<ResponseDTO> getRoleByOrgId(@RequestParam(required = false) Long orgId) {
 		String methodName = "getRoleByOrgId()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
 		String errorMsg = null;
 		Map<String, Object> responseObjectsMap = new HashMap<>();
 		ResponseDTO responseDTO = null;
-		List<RoleVO> roleVO = new ArrayList<>();
+		List<RoleMasterVO> roleVO = new ArrayList<>();
 		try {
 			roleVO = basicMasterService.getRoleByOrgId(orgId);
 		} catch (Exception e) {
@@ -1008,15 +1010,15 @@ public class BasicMasterController extends BaseController {
 
 	}
 
-	@PutMapping("/updateCreateRole")
-	public ResponseEntity<ResponseDTO> updateCreateRole(@Valid @RequestBody RoleDTO roleDTO) {
+	@PutMapping("/updateCreateRoleMaster")
+	public ResponseEntity<ResponseDTO> updateCreateRole(@Valid @RequestBody RoleMasterDTO roleDTO) {
 		String methodName = "updateCreateRole()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
 		String errorMsg = null;
 		Map<String, Object> responseObjectsMap = new HashMap<>();
 		ResponseDTO responseDTO = null;
 		try {
-			RoleVO roleVO = basicMasterService.updateCreateRole(roleDTO);
+			RoleMasterVO roleVO = basicMasterService.updateCreateRole(roleDTO);
 			if (roleVO != null) {
 				responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "Role updated successfully");
 				responseObjectsMap.put("roleVO", roleVO);
@@ -1034,29 +1036,141 @@ public class BasicMasterController extends BaseController {
 		return ResponseEntity.ok().body(responseDTO);
 	}
 
-		@GetMapping("/getRoleByActive")
-		public ResponseEntity<ResponseDTO> getRoleByActive() {
-			String methodName = "getRoleByActive()";
-			LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
-			String errorMsg = null;
-			Map<String, Object> responseObjectsMap = new HashMap<>();
-			ResponseDTO responseDTO = null;
-			List<RoleVO> roleVO = new ArrayList<>();
-			try {
-				roleVO = basicMasterService.getRoleByActive();
-			} catch (Exception e) {
-				errorMsg = e.getMessage();
-				LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
-			}
-			if (StringUtils.isBlank(errorMsg)) {
-				responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "Role information get successfully By Active");
-				responseObjectsMap.put("roleVO", roleVO);
+	@GetMapping("/getRoleMasterByActive")
+	public ResponseEntity<ResponseDTO> getRoleByActive() {
+		String methodName = "getRoleByActive()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		List<RoleMasterVO> roleVO = new ArrayList<>();
+		try {
+			roleVO = basicMasterService.getRoleByActive();
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "Role information get successfully By Active");
+			responseObjectsMap.put("roleVO", roleVO);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap, "Role information receive failed By Active",
+					errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+	}
+
+//	Responsibilities-----------------------------------------------------------------
+	@GetMapping("/getResponsibilitiesById")
+	public ResponseEntity<ResponseDTO> getResponsibilitiesById(@RequestParam(required = false) Long id) {
+		String methodName = "getResponsibilitiesById()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		List<ResponsibilitiesVO> responsibilitiesVO = new ArrayList<>();
+		try {
+			responsibilitiesVO = basicMasterService.getResponsibilitiesById(id);
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+					"Responsibilities information get successfully By Id");
+			responseObjectsMap.put("responsibilitiesVO", responsibilitiesVO);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					"Responsibilities information receive failed By Id", errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+	}
+
+	@GetMapping("/getResponsibilitiesByOrgId")
+	public ResponseEntity<ResponseDTO> getResponsibilitiesByOrgId(@RequestParam(required = false) Long orgId) {
+		String methodName = "getResponsibilitiesByOrgId()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		List<ResponsibilitiesVO> responsibilitiesVO = new ArrayList<>();
+		try {
+			responsibilitiesVO = basicMasterService.getResponsibilitiesByOrgId(orgId);
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+					"Responsibilities information get successfully By OrgId");
+			responseObjectsMap.put("responsibilitiesVO", responsibilitiesVO);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					"Responsibilities information receive failed By OrgId", errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+
+	}
+
+	@PutMapping("/updateCreateResponsibilities")
+	public ResponseEntity<ResponseDTO> updateCreateResponsibilities(
+			@Valid @RequestBody ResponsibilitiesDTO responsibilitiesDTO) {
+		String methodName = "updateCreateResponsibilities()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		try {
+			ResponsibilitiesVO responsibilitiesVO = basicMasterService
+					.updateCreateResponsibilities(responsibilitiesDTO);
+			if (responsibilitiesVO != null) {
+				responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "Responsibilities updated successfully");
+				responseObjectsMap.put("responsibilitiesVO", responsibilitiesVO);
 				responseDTO = createServiceResponse(responseObjectsMap);
 			} else {
-				responseDTO = createServiceResponseError(responseObjectsMap, "Role information receive failed By Active",
+				errorMsg = "Responsibilities not found for ID: " + responsibilitiesDTO.getId();
+				responseDTO = createServiceResponseError(responseObjectsMap, "Responsibilities update failed",
 						errorMsg);
 			}
-			LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
-			return ResponseEntity.ok().body(responseDTO);
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+			responseDTO = createServiceResponseError(responseObjectsMap, "Responsibilities update failed", errorMsg);
 		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+	}
+
+	@GetMapping("/getResponsibilitiesByActive")
+	public ResponseEntity<ResponseDTO> getResponsibilitiesByActive() {
+		String methodName = "getResponsibilitiesByActive()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		List<ResponsibilitiesVO> responsibilitiesVO = new ArrayList<>();
+		try {
+			responsibilitiesVO = basicMasterService.getResponsibilitiesByActive();
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+					"Responsibilities information get successfully By Active");
+			responseObjectsMap.put("responsibilitiesVO", responsibilitiesVO);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					"Responsibilities information receive failed By Active", errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+	}
 }
