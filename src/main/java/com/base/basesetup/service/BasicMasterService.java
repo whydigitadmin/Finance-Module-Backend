@@ -13,7 +13,8 @@ import com.base.basesetup.dto.CompanyDTO;
 import com.base.basesetup.dto.CountryDTO;
 import com.base.basesetup.dto.CurrencyDTO;
 import com.base.basesetup.dto.EmployeeDTO;
-import com.base.basesetup.dto.RoleDTO;
+import com.base.basesetup.dto.ResponsibilitiesDTO;
+import com.base.basesetup.dto.RoleMasterDTO;
 import com.base.basesetup.dto.StateDTO;
 import com.base.basesetup.entity.BranchVO;
 import com.base.basesetup.entity.CityVO;
@@ -22,7 +23,8 @@ import com.base.basesetup.entity.CountryVO;
 import com.base.basesetup.entity.CurrencyVO;
 import com.base.basesetup.entity.EmployeeVO;
 import com.base.basesetup.entity.FinancialYearVO;
-import com.base.basesetup.entity.RoleVO;
+import com.base.basesetup.entity.ResponsibilitiesVO;
+import com.base.basesetup.entity.RoleMasterVO;
 import com.base.basesetup.entity.StateVO;
 import com.base.basesetup.exception.ApplicationException;
 
@@ -36,12 +38,16 @@ public interface BasicMasterService {
 
 	CurrencyVO updateCreateCurrency(@Valid CurrencyDTO currencyDTO) throws ApplicationException;
 
+	List<CurrencyVO> getCurrencyByActive();
+
 //	Company
 	List<CompanyVO> getCompanyById(Long id);
 
 	List<CompanyVO> getCompanyByOrgId(Long orgid);
 
 	CompanyVO updateCreateCompany(@Valid CompanyDTO companyDTO) throws Exception;
+
+	List<CompanyVO> getCompanyByActive();
 
 //	Employee
 	List<EmployeeVO> getEmployeeById(Long id);
@@ -50,12 +56,16 @@ public interface BasicMasterService {
 
 	EmployeeVO updateCreateEmployee(@Valid EmployeeDTO employeeDTO) throws ApplicationException, Exception;
 
+	List<EmployeeVO> getEmployeeByActive();
+
 //	Country
 	List<CountryVO> getCountryById(Long id);
 
 	List<CountryVO> getCountryByOrgId(Long orgid);
 
 	CountryVO updateCreateCountry(@Valid CountryDTO countryDTO) throws ApplicationException;
+
+	List<CountryVO> getCountryByActive();
 
 //	State
 	List<StateVO> getStateById(Long id);
@@ -66,6 +76,8 @@ public interface BasicMasterService {
 
 	List<StateVO> getAllStateByCountry(Long orgId, String country);
 
+	List<StateVO> getStateByActive();
+
 //	City
 	List<CityVO> getCityById(Long id);
 
@@ -74,27 +86,42 @@ public interface BasicMasterService {
 	CityVO updateCreateCity(@Valid CityDTO cityDTO) throws ApplicationException;
 
 	List<CityVO> getAllCityByState(Long orgId, String state);
-	
+
+	List<CityVO> getCityByActive();
+
 //	Financial Year
 	List<FinancialYearVO> getFinancialYearById(Long id);
 
 	List<FinancialYearVO> getFinancialYearByOrgId(Long orgid);
-	
+
 	FinancialYearVO createFinancial(FinancialYearVO finyr);
-	
+
 	Optional<FinancialYearVO> updateFinancial(FinancialYearVO finyr);
-	
+
 //	Branch
 	List<BranchVO> getBranchById(Long id);
 
 	List<BranchVO> getBranchByOrgId(Long orgid);
 
 	BranchVO updateCreateBranch(@Valid BranchDTO branchDTO) throws ApplicationException;
-	
+
+	List<BranchVO> getBranchByActive();
+
 //	Role
-	List<RoleVO> getRoleById(Long id);
+	List<RoleMasterVO> getRoleById(Long id);
 
-	List<RoleVO> getRoleByOrgId(Long orgid);
+	List<RoleMasterVO> getRoleByOrgId(Long orgid);
 
-	RoleVO updateCreateRole(@Valid RoleDTO roleDTO) throws ApplicationException;
+	RoleMasterVO updateCreateRole(@Valid RoleMasterDTO roleDTO) throws ApplicationException;
+	
+	List<RoleMasterVO> getRoleByActive();
+	
+//	Responsibilities
+	List<ResponsibilitiesVO> getResponsibilitiesById(Long id);
+
+	List<ResponsibilitiesVO> getResponsibilitiesByOrgId(Long orgid);
+
+	ResponsibilitiesVO updateCreateResponsibilities(@Valid ResponsibilitiesDTO responsibilitiesDTO) throws ApplicationException;
+	
+	List<ResponsibilitiesVO> getResponsibilitiesByActive();
 }

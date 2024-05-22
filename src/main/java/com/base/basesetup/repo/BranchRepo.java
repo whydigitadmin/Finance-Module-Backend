@@ -21,4 +21,7 @@ public interface BranchRepo extends JpaRepository<BranchVO, Long> {
 
 	boolean existsByBranchAndOrgId(String branch, Long orgId);
 
+	@Query(nativeQuery = true,value = "select * from branch where active=1")
+	List<BranchVO> findBranchByActive();
+
 }

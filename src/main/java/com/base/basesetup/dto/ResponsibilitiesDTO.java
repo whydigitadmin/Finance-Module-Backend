@@ -1,5 +1,7 @@
 package com.base.basesetup.dto;
 
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,5 +13,10 @@ public class ResponsibilitiesDTO {
 
 	private Long id;
 	private String role;
-	private String responsibilities;
+	private boolean active;
+	private Long orgId;
+	private String createdBy;
+	private String updateBy;	
+	
+	private List<ScreenDTO> screenDTO;
 }

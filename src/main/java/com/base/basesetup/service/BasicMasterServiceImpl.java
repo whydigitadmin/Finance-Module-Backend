@@ -23,7 +23,8 @@ import com.base.basesetup.dto.CurrencyDTO;
 import com.base.basesetup.dto.EmployeeDTO;
 import com.base.basesetup.dto.ResponsibilitiesDTO;
 import com.base.basesetup.dto.Role;
-import com.base.basesetup.dto.RoleDTO;
+import com.base.basesetup.dto.RoleMasterDTO;
+import com.base.basesetup.dto.ScreenDTO;
 import com.base.basesetup.dto.StateDTO;
 import com.base.basesetup.entity.BranchVO;
 import com.base.basesetup.entity.CityVO;
@@ -33,7 +34,8 @@ import com.base.basesetup.entity.CurrencyVO;
 import com.base.basesetup.entity.EmployeeVO;
 import com.base.basesetup.entity.FinancialYearVO;
 import com.base.basesetup.entity.ResponsibilitiesVO;
-import com.base.basesetup.entity.RoleVO;
+import com.base.basesetup.entity.RoleMasterVO;
+import com.base.basesetup.entity.ScreenVO;
 import com.base.basesetup.entity.StateVO;
 import com.base.basesetup.entity.UserVO;
 import com.base.basesetup.exception.ApplicationException;
@@ -46,6 +48,7 @@ import com.base.basesetup.repo.EmployeeRepo;
 import com.base.basesetup.repo.FinancialRepo;
 import com.base.basesetup.repo.ResponsibilitiesRepo;
 import com.base.basesetup.repo.RoleRepo;
+import com.base.basesetup.repo.ScreenRepo;
 import com.base.basesetup.repo.StateRepo;
 import com.base.basesetup.repo.UserRepo;
 import com.base.basesetup.util.CryptoUtils;
@@ -90,6 +93,9 @@ public class BasicMasterServiceImpl implements BasicMasterService {
 
 	@Autowired
 	ResponsibilitiesRepo responsibilitiesRepo;
+
+	@Autowired
+	ScreenRepo screenRepo;
 
 // Currency-----------------------------------------------------------------------------------
 
@@ -139,6 +145,11 @@ public class BasicMasterServiceImpl implements BasicMasterService {
 		currencyVO.setCurrency(currencyDTO.getCurrency());
 		currencyVO.setSubCurrency(currencyDTO.getSubCurrency());
 		currencyVO.setCurrencySymbol(currencyDTO.getCurrencySymbol());
+	}
+
+	@Override
+	public List<CurrencyVO> getCurrencyByActive() {
+		return currencyRepo.findCurrencyByActive();
 	}
 
 // Company-----------------------------------------------------------------------------------
@@ -266,6 +277,11 @@ public class BasicMasterServiceImpl implements BasicMasterService {
 		}
 	}
 
+	@Override
+	public List<CompanyVO> getCompanyByActive() {
+		return companyRepo.findCompanyByActive();
+	}
+
 	// Employee-----------------------------------------------------------------------------------//
 
 	@Override
@@ -377,6 +393,10 @@ public class BasicMasterServiceImpl implements BasicMasterService {
 
 	}
 
+	@Override
+	public List<EmployeeVO> getEmployeeByActive() {
+		return employeeRepo.findEmployeeByActive();
+	}
 	// Country-----------------------------------------------------------------------------------
 
 	@Override
@@ -457,6 +477,11 @@ public class BasicMasterServiceImpl implements BasicMasterService {
 
 		}
 
+	}
+
+	@Override
+	public List<CountryVO> getCountryByActive() {
+		return countryRepo.findCountryByActive();
 	}
 
 	// State-----------------------------------------------------------------------------------
@@ -550,6 +575,11 @@ public class BasicMasterServiceImpl implements BasicMasterService {
 		return stateRepo.findAllStateByCountry(orgId, country);
 	}
 
+	@Override
+	public List<StateVO> getStateByActive() {
+		return stateRepo.findStateByActive();
+	}
+
 	// City-----------------------------------------------------------------------------------
 	@Override
 	public List<CityVO> getCityById(Long id) {
@@ -637,6 +667,11 @@ public class BasicMasterServiceImpl implements BasicMasterService {
 	@Override
 	public List<CityVO> getAllCityByState(Long orgId, String state) {
 		return cityRepo.findAllCityByState(orgId, state);
+	}
+
+	@Override
+	public List<CityVO> getCityByActive() {
+		return cityRepo.findCityByActive();
 	}
 
 	// FinancialYear-----------------------------------------------------------------------------------
@@ -789,11 +824,15 @@ public class BasicMasterServiceImpl implements BasicMasterService {
 		}
 	}
 
+	@Override
+	public List<BranchVO> getBranchByActive() {
+		return branchRepo.findBranchByActive();
+	}
 //	Role------------------------------------------------------------------------------------------------
 
 	@Override
-	public List<RoleVO> getRoleById(Long id) {
-		List<RoleVO> roleVO = new ArrayList<>();
+	public List<RoleMasterVO> getRoleById(Long id) {
+		List<RoleMasterVO> roleVO = new ArrayList<>();
 		if (ObjectUtils.isNotEmpty(id)) {
 			LOGGER.info("Successfully Received Role BY Id : {}", id);
 			roleVO = roleRepo.findRoleById(id);
@@ -805,8 +844,8 @@ public class BasicMasterServiceImpl implements BasicMasterService {
 	}
 
 	@Override
-	public List<RoleVO> getRoleByOrgId(Long orgId) {
-		List<RoleVO> roleVO = new ArrayList<>();
+	public List<RoleMasterVO> getRoleByOrgId(Long orgId) {
+		List<RoleMasterVO> roleVO = new ArrayList<>();
 		if (ObjectUtils.isNotEmpty(orgId)) {
 			LOGGER.info("Successfully Received Role BY OrgId : {}", orgId);
 			roleVO = roleRepo.findRoleByOrgId(orgId);
@@ -818,45 +857,126 @@ public class BasicMasterServiceImpl implements BasicMasterService {
 	}
 
 	@Override
-	public RoleVO updateCreateRole(RoleDTO roleDTO) throws ApplicationException {
-		RoleVO roleVO = new RoleVO();
-		if (ObjectUtils.isNotEmpty(roleDTO.getId())) {
-			roleVO = roleRepo.findById(roleDTO.getId())
-					.orElseThrow(() -> new ApplicationException("Invalid Role details"));
+	public RoleMasterVO updateCreateRole(@Valid RoleMasterDTO roleMasterDTO) throws ApplicationException {
+		RoleMasterVO roleMasterVO = new RoleMasterVO();
+		if (ObjectUtils.isNotEmpty(roleMasterDTO.getId())) {
+			roleMasterVO = roleRepo.findById(roleMasterDTO.getId())
+					.orElseThrow(() -> new ApplicationException("Invalid Role Details"));
 		}
-		//
+		getRoleMasterVOFromRoleMasterDTO(roleMasterDTO, roleMasterVO);
+		return roleRepo.save(roleMasterVO);
+	}
 
-		getRoleVOFromRoleDTO(roleDTO, roleVO);
+	private void getRoleMasterVOFromRoleMasterDTO(@Valid RoleMasterDTO roleMasterDTO, RoleMasterVO roleMasterVO)
+			throws ApplicationException {
+		if (ObjectUtils.isNotEmpty(roleMasterDTO.getId())) {
+			RoleMasterVO existingRoleMaster = roleRepo.findById(roleMasterDTO.getId()).orElseThrow(
+					() -> new ApplicationException("Role with ID " + roleMasterDTO.getId() + " not found"));
+			if (!existingRoleMaster.getRole().equals(roleMasterDTO.getRole())) {
+				// Check if there's already an entry with the same Entity Legal Name and orgId
+				if (roleRepo.existsByRoleAndOrgId(roleMasterDTO.getRole(), existingRoleMaster.getOrgId())) {
+					throw new ApplicationException("Role already exists");
+				}
+				// Update Entity Legal Name if there's no duplicate
+				roleMasterVO.setRole(roleMasterDTO.getRole());
+			}
+			roleMasterVO.setOrgId(roleMasterDTO.getOrgId());
+			roleMasterVO.setActive(roleMasterDTO.isActive());
+			roleMasterVO.setRole(roleMasterDTO.getRole());
+			roleMasterVO.setCreatedBy(roleMasterDTO.getCreatedBy());
+			roleMasterVO.setUpdatedBy(roleMasterDTO.getUpdatedBy());
+		} else {
+			if (roleRepo.existsByRoleAndOrgId(roleMasterDTO.getRole(), roleMasterVO.getOrgId())) {
+				throw new ApplicationException("Role already exists");
+			}
+			roleMasterVO.setOrgId(roleMasterDTO.getOrgId());
+			roleMasterVO.setActive(roleMasterDTO.isActive());
+			roleMasterVO.setRole(roleMasterDTO.getRole());
+			roleMasterVO.setCreatedBy(roleMasterDTO.getCreatedBy());
+			roleMasterVO.setUpdatedBy(roleMasterDTO.getUpdatedBy());
 
+		}
+
+	}
+
+	@Override
+	public List<RoleMasterVO> getRoleByActive() {
+		return roleRepo.findRoleByActive();
+	}
+
+//	Responsibilities-----------------------------------------------------------------------------------------
+	@Override
+	public List<ResponsibilitiesVO> getResponsibilitiesById(Long id) {
 		List<ResponsibilitiesVO> responsibilitiesVO = new ArrayList<>();
-		if (roleDTO.getResponsibilitiesDTO() != null) {
-			for (ResponsibilitiesDTO responsibilitiesDTO : roleDTO.getResponsibilitiesDTO()) {
-				if (responsibilitiesDTO.getId() != null & ObjectUtils.isNotEmpty(responsibilitiesDTO.getId())) {
-					ResponsibilitiesVO responsibilitiesVO1 = responsibilitiesRepo.findById(responsibilitiesDTO.getId())
-							.get();
-					responsibilitiesVO1.setRole(responsibilitiesDTO.getRole());
-					responsibilitiesVO1.setResponsibilities(responsibilitiesDTO.getResponsibilities());
-					responsibilitiesVO.add(responsibilitiesVO1);
+		if (ObjectUtils.isNotEmpty(id)) {
+			LOGGER.info("Successfully Received Responsibilities BY Id : {}", id);
+			responsibilitiesVO = responsibilitiesRepo.findResponsibilitiesById(id);
+		} else {
+			LOGGER.info("Successfully Received Responsibilities For All Id.");
+			responsibilitiesVO = responsibilitiesRepo.findAll();
+		}
+		return responsibilitiesVO;
+	}
+
+	@Override
+	public List<ResponsibilitiesVO> getResponsibilitiesByOrgId(Long orgId) {
+		List<ResponsibilitiesVO> responsibilitiesVO = new ArrayList<>();
+		if (ObjectUtils.isNotEmpty(orgId)) {
+			LOGGER.info("Successfully Received Responsibilities BY OrgId : {}", orgId);
+			responsibilitiesVO = responsibilitiesRepo.findResponsibilitiesByOrgId(orgId);
+		} else {
+			LOGGER.info("Successfully Received Responsibilities For All OrgId.");
+			responsibilitiesVO = responsibilitiesRepo.findAll();
+		}
+		return responsibilitiesVO;
+	}
+
+	@Override
+	public ResponsibilitiesVO updateCreateResponsibilities(ResponsibilitiesDTO responsibilitiesDTO)
+			throws ApplicationException {
+		ResponsibilitiesVO responsibilitiesVO = new ResponsibilitiesVO();
+		if (ObjectUtils.isNotEmpty(responsibilitiesDTO.getId())) {
+			responsibilitiesVO = responsibilitiesRepo.findById(responsibilitiesDTO.getId())
+					.orElseThrow(() -> new ApplicationException("Invalid Responsibilities details"));
+		}
+		getResponsibilitiesVOFromResponsibilitiesDTO(responsibilitiesDTO, responsibilitiesVO);
+
+		List<ScreenVO> screenVO = new ArrayList<>();
+		if (responsibilitiesDTO.getScreenDTO() != null) {
+			for (ScreenDTO screenDTO : responsibilitiesDTO.getScreenDTO()) {
+				if (screenDTO.getId() != null & ObjectUtils.isNotEmpty(screenDTO.getId())) {
+					ScreenVO screenVO1 = screenRepo.findById(screenDTO.getId()).get();
+					screenVO1.setResponsibilities(screenDTO.getResponsibilities());
+					screenVO1.setScreenName(screenDTO.getScreenName());
+					screenVO1.setResponsibilitiesVO(responsibilitiesVO);
+					screenVO.add(screenVO1);
 				} else {
-					ResponsibilitiesVO responsibilitiesVO1 = new ResponsibilitiesVO();
-					responsibilitiesVO1.setRole(responsibilitiesDTO.getRole());
-					responsibilitiesVO1.setResponsibilities(responsibilitiesDTO.getResponsibilities());
-					responsibilitiesVO.add(responsibilitiesVO1);
+					ScreenVO screenVO1 = new ScreenVO();
+					screenVO1.setResponsibilities(screenDTO.getResponsibilities());
+					screenVO1.setScreenName(screenDTO.getScreenName());
+					screenVO1.setResponsibilitiesVO(responsibilitiesVO);
+					screenVO.add(screenVO1);
 				}
 			}
 		}
-		roleVO.setResponsibilitiesVO(responsibilitiesVO);
-		return roleRepo.save(roleVO);
+		responsibilitiesVO.setScreenVO(screenVO);
+		return responsibilitiesRepo.save(responsibilitiesVO);
 	}
 
-	private void getRoleVOFromRoleDTO(RoleDTO roleDTO, RoleVO roleVO) {
+	private void getResponsibilitiesVOFromResponsibilitiesDTO(ResponsibilitiesDTO responsibilitiesDTO,
+			ResponsibilitiesVO responsibilitiesVO) {
 
-		roleVO.setOrgId(roleDTO.getOrgId());
-		roleVO.setRole(roleDTO.getRole());
-		roleVO.setCreatedBy(roleDTO.getCreatedBy());
-		roleVO.setUpdatedBy(roleDTO.getUpdatedBy());
-		roleVO.setActive(roleDTO.isActive());
+		responsibilitiesVO.setOrgId(responsibilitiesDTO.getOrgId());
+		responsibilitiesVO.setRole(responsibilitiesDTO.getRole());
+		responsibilitiesVO.setCreatedBy(responsibilitiesDTO.getCreatedBy());
+		responsibilitiesVO.setUpdatedBy(responsibilitiesDTO.getUpdateBy());
+		responsibilitiesVO.setActive(responsibilitiesDTO.isActive());
 
 	}
 
+	@Override
+	public List<ResponsibilitiesVO> getResponsibilitiesByActive() {
+		return responsibilitiesRepo.findResponsibilitiesByActive();
+
+	}
 }

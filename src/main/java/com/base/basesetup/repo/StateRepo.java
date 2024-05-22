@@ -17,11 +17,14 @@ public interface StateRepo extends JpaRepository<StateVO, Long> {
 	@Query(nativeQuery = true, value = "select * from state where orgid=?1")
 	List<StateVO> findStateByOrgId(Long orgId);
 
-	@Query(nativeQuery = true,value = "select * from state where orgid=?1 and country=?2")
+	@Query(nativeQuery = true, value = "select * from state where orgid=?1 and country=?2")
 	List<StateVO> findAllStateByCountry(Long orgId, String country);
 
 	boolean existsByStateNameAndOrgId(String stateName, Long orgId);
 
 	boolean existsByStateCodeAndOrgId(String stateCode, Long orgId);
+
+	@Query(nativeQuery = true, value = "select * from state where active=1")
+	List<StateVO> findStateByActive();
 
 }

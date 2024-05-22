@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class RoleDTO {
+public class RoleMasterDTO {
 
 	private Long id;
 	private String role;
@@ -17,5 +17,5 @@ public class RoleDTO {
 	private Long orgId;
 	private String createdBy;
 	private String updatedBy;
-	private List<ResponsibilitiesDTO> responsibilitiesDTO;
+	
 }

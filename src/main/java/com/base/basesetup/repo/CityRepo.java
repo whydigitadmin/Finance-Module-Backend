@@ -22,4 +22,7 @@ public interface CityRepo extends JpaRepository<CityVO, Long> {
 
 	boolean existsByCityCodeAndOrgId(String cityCode, Long orgId);
 
+	@Query(nativeQuery = true, value = "select * from city where active=1")
+	List<CityVO> findCityByActive();
+
 }
