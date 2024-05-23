@@ -31,6 +31,9 @@ public interface MasterService {
 	SetTaxRateVO updateCreateSetTaxRate(@Valid SetTaxRateDTO setTaxRateDTO) throws ApplicationException;
 
 	List<SetTaxRateVO> getAllSetTaxRate();
+	
+	List<SetTaxRateVO> getSetTaxRateByActive();
+
 
 //	TaxMasterVO
 	TaxMasterVO updateCreateTaxMaster(TaxMasterDTO taxMasterDTO) throws ApplicationException;
@@ -40,6 +43,9 @@ public interface MasterService {
 	List<TaxMasterVO> getAllTaxMasterById(Long id);
 
 	List<TaxMasterVO> getAllTaxMaster();
+	
+	List<TaxMasterVO> getTaxMasterByActive();
+
 
 //	TcsMasterVO
 	List<TcsMasterVO> getAllTcsMasterByOrgId(Long orgId);
@@ -49,6 +55,9 @@ public interface MasterService {
 	List<TcsMasterVO> getAllTcsMaster();
 
 	TcsMasterVO updateCreateTcsMaster(@Valid TcsMasterDTO tcsMasterDTO) throws ApplicationException;
+	
+	List<TcsMasterVO> getTcsMasterByActive();
+
 
 //	TdsMasterVO
 	List<TdsMasterVO> getAllTdsMasterByOrgId(Long orgId);
@@ -58,6 +67,9 @@ public interface MasterService {
 	List<TdsMasterVO> getAllTdsMaster();
 
 	TdsMasterVO updateCreateTdsMaster(@Valid TdsMasterDTO tdsMasterDTO) throws ApplicationException;
+	
+	List<TdsMasterVO> getTdsMasterByActive();
+
 
 //	AccountVO
 	List<AccountVO> getAllAccountByOrgId(Long orgId);
@@ -66,11 +78,18 @@ public interface MasterService {
 
 	List<AccountVO> getAllAccountByaccountId(Long accountId);
 
+	List<AccountVO> getAccountByActive();
+
 //	GroupLedgerVO
 	List<GroupLedgerVO> getAllGroupLedgerById(Long id);
 
 	List<GroupLedgerVO> getAllGroupLedgerByOrgId(Long orgId);
 
 	GroupLedgerVO updateCreateGroupLedger(@Valid GroupLedgerDTO groupLedgerDTO) throws ApplicationException;
+
+	List<GroupLedgerVO> getGroupLedgerByActive();
+
+
+
 
 }
