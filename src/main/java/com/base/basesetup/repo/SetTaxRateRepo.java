@@ -17,6 +17,9 @@ public interface SetTaxRateRepo extends JpaRepository<SetTaxRateVO, Long>{
     
 	@Query(value="Select * from settaxrate where settaxrateid=?1",nativeQuery = true)
 	List<SetTaxRateVO> getAllSetTaxRateById(Long id);
+
+	@Query(nativeQuery = true,value = "select * from settaxrate where active=1")
+	List<SetTaxRateVO> findSetTaxRateByActive();
     
 	
 }

@@ -141,6 +141,12 @@ public class MasterServiceImpl implements MasterService {
 		setTaxRateVO.setExcepmted("e");
 		setTaxRateVO.setActive(setTaxRateDTO.isActive());
 	}
+	
+	
+	@Override
+	public List<SetTaxRateVO> getSetTaxRateByActive() {
+		return setTaxRateRepo.findSetTaxRateByActive();
+	}
 
 	// TAXMASTER
 
@@ -221,6 +227,14 @@ public class MasterServiceImpl implements MasterService {
 	public List<TaxMasterVO> getAllTaxMaster() {
 		return taxMasterRepo.findAll();
 	}
+	
+	@Override
+	public List<TaxMasterVO> getTaxMasterByActive() {
+		return taxMasterRepo.findTaxMasterByActive();
+
+	}
+
+
 
 	// TCSMASTER
 
@@ -299,6 +313,12 @@ public class MasterServiceImpl implements MasterService {
 		tcsMasterVO.setSection(tcsMasterDTO.getSection());
 		tcsMasterVO.setSectionName(tcsMasterDTO.getSectionName());
 		tcsMasterVO.setActive(tcsMasterDTO.isActive());
+	}
+	
+	@Override
+	public List<TcsMasterVO> getTcsMasterByActive() {
+		return tcsMasterRepo.findTcsMasterByActive();
+
 	}
 
 	// TDSMaster
@@ -381,6 +401,14 @@ public class MasterServiceImpl implements MasterService {
 		tdsMasterVO.setSectionName(tdsMasterDTO.getSectionName());
 		tdsMasterVO.setActive(tdsMasterDTO.isActive());
 	}
+	
+	@Override
+	public List<TdsMasterVO> getTdsMasterByActive() {
+		return tdsMasterRepo.findTdsMasterByActive();
+
+	}
+
+
 
 	// AccountVO
 
@@ -505,6 +533,13 @@ public class MasterServiceImpl implements MasterService {
 		accountVO.setActive(accountDTO.isActive());
 
 	}
+	
+	@Override
+	public List<AccountVO> getAccountByActive() {
+		return accountRepo.findAccountByActive();
+
+	}
+
 
 	// groupledgerVO
 
@@ -560,4 +595,15 @@ public class MasterServiceImpl implements MasterService {
 		groupLedgerVO.setControllAc(true);
 		groupLedgerVO.setAccountGroupName(groupLedgerDTO.getAccountGroupName());
 	}
+
+	@Override
+	public List<GroupLedgerVO> getGroupLedgerByActive() {
+		return groupLedgerRepo.findGroupLedgerByActive();
+
+	}
+
+	
+	
+
+	
 }

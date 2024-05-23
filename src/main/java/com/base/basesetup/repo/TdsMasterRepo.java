@@ -18,4 +18,7 @@ public interface TdsMasterRepo extends JpaRepository<TdsMasterVO, Long>{
 	@Query(value="Select * from tdsmaster where tdsmasterid=?1",nativeQuery = true)
 	List<TdsMasterVO> getAllTdsMasterById(Long id);
 
+	@Query(nativeQuery = true,value = "select * from tdsmaster where active=1")
+	List<TdsMasterVO> findTdsMasterByActive();
+
 }

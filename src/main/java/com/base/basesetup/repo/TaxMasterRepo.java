@@ -17,4 +17,7 @@ public interface TaxMasterRepo extends JpaRepository<TaxMasterVO,Long>{
 	@Query(value="Select * from taxmaster where taxmasterid=?1",nativeQuery = true)
 	List<TaxMasterVO> getAllTaxMasterById(Long id);
 
+	@Query(nativeQuery = true,value = "select * from taxmaster where active=1")
+	List<TaxMasterVO> findTaxMasterByActive();
+
 }
