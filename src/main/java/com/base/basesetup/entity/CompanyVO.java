@@ -71,14 +71,12 @@ public class CompanyVO {
 	private String updatedBy;
 	@Column(name = "cancel")
 	private boolean cancel;
-	@Column(name = "imageupload")
-	private String imageUpload;
-	@Column(name="imagename")
+	@Column(name = "imagename")
 	private String imageName;
 	@Lob
 	@Column(name = "data", columnDefinition = "LONGBLOB")
 	private byte[] data;
-	
+
 	@Embedded
 	@Builder.Default
 	private CreatedUpdatedDate commonDate = new CreatedUpdatedDate();

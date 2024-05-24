@@ -195,7 +195,7 @@ public class BasicMasterServiceImpl implements BasicMasterService {
 		EmployeeVO emp = new EmployeeVO();
 		emp.setEmployeeCode(companyVO.getEmployeeCode());
 		emp.setEmployeeName(companyVO.getEmployeeName());
-		emp.setOrgId(companyVO.getId());
+		emp.setOrgId(companyVO.getOrgId());
 		emp.setActive(companyVO.isActive());
 		employeeRepo.save(emp);
 		UserVO userVO = new UserVO();

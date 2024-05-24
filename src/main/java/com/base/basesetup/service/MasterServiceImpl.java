@@ -15,7 +15,9 @@ import com.base.basesetup.dto.Account1DTO;
 import com.base.basesetup.dto.Account2DTO;
 import com.base.basesetup.dto.Account3DTO;
 import com.base.basesetup.dto.AccountDTO;
+import com.base.basesetup.dto.ExRatesDTO;
 import com.base.basesetup.dto.GroupLedgerDTO;
+import com.base.basesetup.dto.HsnSacCodeDTO;
 import com.base.basesetup.dto.SetTaxRateDTO;
 import com.base.basesetup.dto.TaxMaster2DTO;
 import com.base.basesetup.dto.TaxMasterDTO;
@@ -27,7 +29,9 @@ import com.base.basesetup.entity.Account1VO;
 import com.base.basesetup.entity.Account2VO;
 import com.base.basesetup.entity.Account3VO;
 import com.base.basesetup.entity.AccountVO;
+import com.base.basesetup.entity.ExRatesVO;
 import com.base.basesetup.entity.GroupLedgerVO;
+import com.base.basesetup.entity.HsnSacCodeVO;
 import com.base.basesetup.entity.SetTaxRateVO;
 import com.base.basesetup.entity.TaxMaster2VO;
 import com.base.basesetup.entity.TaxMasterVO;
@@ -40,7 +44,9 @@ import com.base.basesetup.repo.Account1Repo;
 import com.base.basesetup.repo.Account2Repo;
 import com.base.basesetup.repo.Account3Repo;
 import com.base.basesetup.repo.AccountRepo;
+import com.base.basesetup.repo.ExRatesRepo;
 import com.base.basesetup.repo.GroupLedgerRepo;
+import com.base.basesetup.repo.HsnSacCodeRepo;
 import com.base.basesetup.repo.SetTaxRateRepo;
 import com.base.basesetup.repo.TaxMaster2Repo;
 import com.base.basesetup.repo.TaxMasterRepo;
@@ -87,6 +93,12 @@ public class MasterServiceImpl implements MasterService {
 
 	@Autowired
 	GroupLedgerRepo groupLedgerRepo;
+	
+	@Autowired
+	HsnSacCodeRepo hsnSacCodeRepo;
+	
+	@Autowired
+	ExRatesRepo exRatesRepo;
 
 	@Override
 	public List<SetTaxRateVO> getAllSetTaxRateByOrgId(Long orgId) {
@@ -115,11 +127,6 @@ public class MasterServiceImpl implements MasterService {
 	}
 
 	@Override
-	public List<SetTaxRateVO> getAllSetTaxRate() {
-		return setTaxRateRepo.findAll();
-	}
-
-	@Override
 	public SetTaxRateVO updateCreateSetTaxRate(@Valid SetTaxRateDTO setTaxRateDTO) throws ApplicationException {
 		SetTaxRateVO setTaxRateVO = new SetTaxRateVO();
 		if (ObjectUtils.isNotEmpty(setTaxRateDTO.getSetTaxRateId())) {
@@ -141,8 +148,7 @@ public class MasterServiceImpl implements MasterService {
 		setTaxRateVO.setExcepmted("e");
 		setTaxRateVO.setActive(setTaxRateDTO.isActive());
 	}
-	
-	
+
 	@Override
 	public List<SetTaxRateVO> getSetTaxRateByActive() {
 		return setTaxRateRepo.findSetTaxRateByActive();
@@ -224,17 +230,10 @@ public class MasterServiceImpl implements MasterService {
 	}
 
 	@Override
-	public List<TaxMasterVO> getAllTaxMaster() {
-		return taxMasterRepo.findAll();
-	}
-	
-	@Override
 	public List<TaxMasterVO> getTaxMasterByActive() {
 		return taxMasterRepo.findTaxMasterByActive();
 
 	}
-
-
 
 	// TCSMASTER
 
@@ -262,11 +261,6 @@ public class MasterServiceImpl implements MasterService {
 			tcsMasterVO = tcsMasterRepo.findAll();
 		}
 		return tcsMasterVO;
-	}
-
-	@Override
-	public List<TcsMasterVO> getAllTcsMaster() {
-		return tcsMasterRepo.findAll();
 	}
 
 	@Override
@@ -314,7 +308,7 @@ public class MasterServiceImpl implements MasterService {
 		tcsMasterVO.setSectionName(tcsMasterDTO.getSectionName());
 		tcsMasterVO.setActive(tcsMasterDTO.isActive());
 	}
-	
+
 	@Override
 	public List<TcsMasterVO> getTcsMasterByActive() {
 		return tcsMasterRepo.findTcsMasterByActive();
@@ -347,11 +341,6 @@ public class MasterServiceImpl implements MasterService {
 			tdsMasterVO = tdsMasterRepo.findAll();
 		}
 		return tdsMasterVO;
-	}
-
-	@Override
-	public List<TdsMasterVO> getAllTdsMaster() {
-		return tdsMasterRepo.findAll();
 	}
 
 	@Override
@@ -401,14 +390,12 @@ public class MasterServiceImpl implements MasterService {
 		tdsMasterVO.setSectionName(tdsMasterDTO.getSectionName());
 		tdsMasterVO.setActive(tdsMasterDTO.isActive());
 	}
-	
+
 	@Override
 	public List<TdsMasterVO> getTdsMasterByActive() {
 		return tdsMasterRepo.findTdsMasterByActive();
 
 	}
-
-
 
 	// AccountVO
 
@@ -533,13 +520,12 @@ public class MasterServiceImpl implements MasterService {
 		accountVO.setActive(accountDTO.isActive());
 
 	}
-	
+
 	@Override
 	public List<AccountVO> getAccountByActive() {
 		return accountRepo.findAccountByActive();
 
 	}
-
 
 	// groupledgerVO
 
@@ -602,8 +588,122 @@ public class MasterServiceImpl implements MasterService {
 
 	}
 
-	
-	
+	// HsnSacCode
 
-	
+		@Override
+		public List<HsnSacCodeVO> getAllHsnSacCodeById(Long id) {
+			List<HsnSacCodeVO> hsnSacCodeVO = new ArrayList<>();
+			if (ObjectUtils.isNotEmpty(id)) {
+				LOGGER.info("Successfully Received  HsnSacCode Information BY Id : {}", id);
+				hsnSacCodeVO = hsnSacCodeRepo.getAllHsnSacCodeById(id);
+			} else {
+				LOGGER.info("Successfully Received  HsnSacCode Information For All Id.");
+				hsnSacCodeVO = hsnSacCodeRepo.findAll();
+			}
+			return hsnSacCodeVO;
+		}
+
+		@Override
+		public List<HsnSacCodeVO> getAllHsnSacCodeByOrgId(Long orgId) {
+			List<HsnSacCodeVO> hsnSacCodeVO = new ArrayList<>();
+			if (ObjectUtils.isNotEmpty(orgId)) {
+				LOGGER.info("Successfully Received  HsnSacCode Information BY OrgId : {}", orgId);
+				hsnSacCodeVO = hsnSacCodeRepo.getAllHsnSacCodeByOrgId(orgId);
+			} else {
+				LOGGER.info("Successfully Received  HsnSacCode Information For All OrgId.");
+				hsnSacCodeVO = hsnSacCodeRepo.findAll();
+			}
+			return hsnSacCodeVO;
+		}
+
+		@Override
+		public HsnSacCodeVO updateCreateHsnSacCode(@Valid HsnSacCodeDTO hsnSacCodeDTO) throws ApplicationException {
+			HsnSacCodeVO hsnSacCodeVO = new HsnSacCodeVO();
+			if (ObjectUtils.isNotEmpty(hsnSacCodeDTO.getId())) {
+				hsnSacCodeVO = hsnSacCodeRepo.findById(hsnSacCodeDTO.getId())
+						.orElseThrow(() -> new ApplicationException("Invalid HsnSacCode details"));
+			}
+			getHsnSacCodeVOFromHsnSacCodeDTO(hsnSacCodeDTO, hsnSacCodeVO);
+			return hsnSacCodeRepo.save(hsnSacCodeVO);
+		}
+
+		private void getHsnSacCodeVOFromHsnSacCodeDTO(@Valid HsnSacCodeDTO hsnSacCodeDTO, HsnSacCodeVO hsnSacCodeVO) {
+			hsnSacCodeVO.setOrgId(hsnSacCodeDTO.getOrgId());
+			hsnSacCodeVO.setType(hsnSacCodeDTO.getType());
+			hsnSacCodeVO.setActive(hsnSacCodeDTO.isActive());
+			hsnSacCodeVO.setCode(hsnSacCodeDTO.getCode());
+			hsnSacCodeVO.setDescription(hsnSacCodeDTO.getDescription());
+			hsnSacCodeVO.setChapter(hsnSacCodeDTO.getChapter());
+			hsnSacCodeVO.setChapterCode(hsnSacCodeDTO.getChapterCode());
+			hsnSacCodeVO.setSubChapter(hsnSacCodeDTO.getSubChapter());
+			hsnSacCodeVO.setSubChapterCode(hsnSacCodeDTO.getSubChapterCode());
+			hsnSacCodeVO.setRate(hsnSacCodeDTO.getRate());
+			hsnSacCodeVO.setExcempted(hsnSacCodeDTO.isExcempted());
+			hsnSacCodeVO.setCreatedBy(hsnSacCodeDTO.getCreatedBy());
+			hsnSacCodeVO.setUpdatedBy(hsnSacCodeDTO.getUpdatedBy());
+		}
+
+		@Override
+		public List<HsnSacCodeVO> getHsnSacCodeByActive() {
+			return hsnSacCodeRepo.findHsnSacCodeByActive();
+
+		}
+		// ExRates
+
+		@Override
+		public List<ExRatesVO> getAllExRatesById(Long id) {
+			List<ExRatesVO> exRatesVO = new ArrayList<>();
+			if (ObjectUtils.isNotEmpty(id)) {
+				LOGGER.info("Successfully Received  ExRates Information BY Id : {}", id);
+				exRatesVO = exRatesRepo.getAllExRatesById(id);
+			} else {
+				LOGGER.info("Successfully Received  ExRates Information For All Id.");
+				exRatesVO = exRatesRepo.findAll();
+			}
+			return exRatesVO;
+		}
+
+		@Override
+		public List<ExRatesVO> getAllExRatesByOrgId(Long orgId) {
+			List<ExRatesVO> exRatesVO = new ArrayList<>();
+			if (ObjectUtils.isNotEmpty(orgId)) {
+				LOGGER.info("Successfully Received  ExRates Information BY OrgId : {}", orgId);
+				exRatesVO = exRatesRepo.getAllExRatesByOrgId(orgId);
+			} else {
+				LOGGER.info("Successfully Received  ExRates Information For All OrgId.");
+				exRatesVO = exRatesRepo.findAll();
+			}
+			return exRatesVO;
+		}
+
+		@Override
+		public ExRatesVO updateCreateExRates(@Valid ExRatesDTO exRatesDTO) throws ApplicationException {
+			ExRatesVO exRatesVO = new ExRatesVO();
+			if (ObjectUtils.isNotEmpty(exRatesDTO.getId())) {
+				exRatesVO = exRatesRepo.findById(exRatesDTO.getId())
+						.orElseThrow(() -> new ApplicationException("Invalid ExRates details"));
+			}
+			getExRatesVOFromExRatesDTO(exRatesDTO, exRatesVO);
+			return exRatesRepo.save(exRatesVO);
+		}
+
+		private void getExRatesVOFromExRatesDTO(@Valid ExRatesDTO exRatesDTO, ExRatesVO exRatesVO) {
+			exRatesVO.setDocDate(exRatesDTO.getDocDate());
+			exRatesVO.setDocMonth(exRatesDTO.getDocMonth());
+			exRatesVO.setCurrency(exRatesDTO.getCurrency());
+			exRatesVO.setSellRate(exRatesDTO.getSellRate());
+			exRatesVO.setBuyRate(exRatesDTO.getBuyRate());
+			exRatesVO.setAvgRate(exRatesDTO.getAvgRate());
+			exRatesVO.setOrgId(exRatesDTO.getOrgId());
+			exRatesVO.setActive(exRatesDTO.isActive());
+			exRatesVO.setCreatedBy(exRatesDTO.getCreatedBy());
+			exRatesVO.setUpdatedBy(exRatesDTO.getUpdatedBy());
+		}
+
+		@Override
+		public List<ExRatesVO> getExRatesByActive() {
+			return exRatesRepo.findExRatesByActive();
+
+		}
+
 }

@@ -62,7 +62,8 @@ public class BasicMasterController extends BaseController {
 
 	public static final Logger LOGGER = LoggerFactory.getLogger(BasicMasterController.class);
 
-//	Currency -----------------------------------------------------------------------------------
+	// Currency
+	// -----------------------------------------------------------------------------------
 
 	@GetMapping("/getCurrencyById")
 	public ResponseEntity<ResponseDTO> getCurrencyById(@RequestParam(required = false) Long id) {
@@ -170,7 +171,8 @@ public class BasicMasterController extends BaseController {
 		return ResponseEntity.ok().body(responseDTO);
 	}
 
-//	Company -----------------------------------------------------------------------------------
+	// Company
+	// -----------------------------------------------------------------------------------
 	@GetMapping("/getCompanyById")
 	public ResponseEntity<ResponseDTO> getCompanyById(@RequestParam(required = false) Long id) {
 		String methodName = "getCompanyById()";
@@ -294,7 +296,8 @@ public class BasicMasterController extends BaseController {
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 	}
 
-//	Employee -----------------------------------------------------------------------------------
+	// Employee
+	// -----------------------------------------------------------------------------------
 	@GetMapping("/getEmployeeById")
 	public ResponseEntity<ResponseDTO> getEmployeeById(@RequestParam(required = false) Long id) {
 		String methodName = "getEmployeeById()";
@@ -401,7 +404,8 @@ public class BasicMasterController extends BaseController {
 
 	}
 
-//	Country -----------------------------------------------------------------------------------
+	// Country
+	// -----------------------------------------------------------------------------------
 	@GetMapping("/getCountryById")
 	public ResponseEntity<ResponseDTO> getCountryById(@RequestParam(required = false) Long id) {
 		String methodName = "getCountryById()";
@@ -507,7 +511,8 @@ public class BasicMasterController extends BaseController {
 		return ResponseEntity.ok().body(responseDTO);
 	}
 
-//	State -----------------------------------------------------------------------------------
+	// State
+	// -----------------------------------------------------------------------------------
 	@GetMapping("/getStateById")
 	public ResponseEntity<ResponseDTO> getStateById(@RequestParam(required = false) Long id) {
 		String methodName = "getStateById()";
@@ -640,7 +645,8 @@ public class BasicMasterController extends BaseController {
 		return ResponseEntity.ok().body(responseDTO);
 	}
 
-//	City -----------------------------------------------------------------------------------
+	// City
+	// -----------------------------------------------------------------------------------
 	@GetMapping("/getCityById")
 	public ResponseEntity<ResponseDTO> getCityById(@RequestParam(required = false) Long id) {
 		String methodName = "getCityById()";
@@ -773,7 +779,8 @@ public class BasicMasterController extends BaseController {
 		return ResponseEntity.ok().body(responseDTO);
 	}
 
-//Finacial Year--------------------------------------------------------------------------
+	// Finacial
+	// Year--------------------------------------------------------------------------
 	@GetMapping("/getFinancialYearById")
 	public ResponseEntity<ResponseDTO> getFinancialYearById(@RequestParam(required = false) Long id) {
 		String methodName = "getFinancialYearById()";
@@ -875,7 +882,8 @@ public class BasicMasterController extends BaseController {
 		return ResponseEntity.ok().body(responseDTO);
 	}
 
-//	Branch -----------------------------------------------------------------------------------
+	// Branch
+	// -----------------------------------------------------------------------------------
 	@GetMapping("/getBranchById")
 	public ResponseEntity<ResponseDTO> getBranchById(@RequestParam(required = false) Long id) {
 		String methodName = "getBranchById()";
@@ -981,7 +989,7 @@ public class BasicMasterController extends BaseController {
 		return ResponseEntity.ok().body(responseDTO);
 	}
 
-//	Roles-----------------------------------------------------------------
+	// Roles-----------------------------------------------------------------
 	@GetMapping("/getRoleMasterById")
 	public ResponseEntity<ResponseDTO> getRoleById(@RequestParam(required = false) Long id) {
 		String methodName = "getRoleById()";
@@ -1087,7 +1095,7 @@ public class BasicMasterController extends BaseController {
 		return ResponseEntity.ok().body(responseDTO);
 	}
 
-//	Responsibilities-----------------------------------------------------------------
+	// Responsibilities-----------------------------------------------------------------
 	@GetMapping("/getResponsibilitiesById")
 	public ResponseEntity<ResponseDTO> getResponsibilitiesById(@RequestParam(required = false) Long id) {
 		String methodName = "getResponsibilitiesById()";
