@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class AccountDTO {
 
-	private Long accountId;
+	private Long id;
 	
 	private Long orgId;
 

@@ -28,6 +28,7 @@ import com.base.basesetup.dto.GroupLedgerDTO;
 import com.base.basesetup.dto.HsnSacCodeDTO;
 import com.base.basesetup.dto.ResponseDTO;
 import com.base.basesetup.dto.SetTaxRateDTO;
+import com.base.basesetup.dto.SubLedgerAccountDTO;
 import com.base.basesetup.dto.TaxMasterDTO;
 import com.base.basesetup.dto.TcsMasterDTO;
 import com.base.basesetup.dto.TdsMasterDTO;
@@ -36,6 +37,7 @@ import com.base.basesetup.entity.ExRatesVO;
 import com.base.basesetup.entity.GroupLedgerVO;
 import com.base.basesetup.entity.HsnSacCodeVO;
 import com.base.basesetup.entity.SetTaxRateVO;
+import com.base.basesetup.entity.SubLedgerAccountVO;
 import com.base.basesetup.entity.TaxMasterVO;
 import com.base.basesetup.entity.TcsMasterVO;
 import com.base.basesetup.entity.TdsMasterVO;
@@ -525,21 +527,21 @@ public class MasterController extends BaseController {
 	}
 
 	@GetMapping("/getAllAccountById")
-	public ResponseEntity<ResponseDTO> getAllAccountByaccountId(@RequestParam(required = false) Long accountId) {
-		String methodName = "getAllAccountByaccountId()";
+	public ResponseEntity<ResponseDTO> getAllAccountById(@RequestParam(required = false) Long id) {
+		String methodName = "getAllAccountById()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
 		String errorMsg = null;
 		Map<String, Object> responseObjectsMap = new HashMap<>();
 		ResponseDTO responseDTO = null;
 		List<AccountVO> accountVO = new ArrayList<>();
 		try {
-			accountVO = masterService.getAllAccountByaccountId(accountId);
+			accountVO = masterService.getAllAccountById(id);
 		} catch (Exception e) {
 			errorMsg = e.getMessage();
 			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
 		}
 		if (StringUtils.isBlank(errorMsg)) {
-			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "Account information get successfully By AccountID");
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "Account information get successfully By id");
 			responseObjectsMap.put("accountVO", accountVO);
 			responseDTO = createServiceResponse(responseObjectsMap);
 		} else {
@@ -566,7 +568,7 @@ public class MasterController extends BaseController {
 				responseObjectsMap.put("accountVO", accountVO);
 				responseDTO = createServiceResponse(responseObjectsMap);
 			} else {
-				errorMsg = "Account not found for ID: " + accountDTO.getAccountId();
+				errorMsg = "Account not found for ID: " + accountDTO.getId();
 				responseDTO = createServiceResponseError(responseObjectsMap, "Account update failed", errorMsg);
 			}
 		} catch (Exception e) {
@@ -934,5 +936,117 @@ public class MasterController extends BaseController {
 		return ResponseEntity.ok().body(responseDTO);
 
 	}
+	// SubLedgerAccount
 
+	@GetMapping("/getAllSubLedgerAccountByOrgId")
+	public ResponseEntity<ResponseDTO> getAllSubLedgerAccountByOrgId(@RequestParam(required = false) Long orgId) {
+		String methodName = "getAllSubLedgerAccountByOrgId()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		List<SubLedgerAccountVO> subLedgerAccountVO = new ArrayList<>();
+		try {
+			subLedgerAccountVO = masterService.getAllSubLedgerAccountByOrgId(orgId);
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+					"SubLedgerAccount information get successfully ByOrgId");
+			responseObjectsMap.put("subLedgerAccountVO", subLedgerAccountVO);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					"SubLedgerAccount information receive failedByOrgId", errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+
+	}
+
+	@GetMapping("/getAllSubLedgerAccountById")
+	public ResponseEntity<ResponseDTO> getAllSubLedgerAccountById(@RequestParam(required = false) Long id) {
+		String methodName = "getAllSubLedgerAccountById()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		List<SubLedgerAccountVO> subLedgerAccountVO = new ArrayList<>();
+		try {
+			subLedgerAccountVO = masterService.getAllSubLedgerAccountById(id);
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+					"SubLedgerAccount information get successfully By Id");
+			responseObjectsMap.put("subLedgerAccountVO", subLedgerAccountVO);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					"SubLedgerAccount information receive failedByOrgId", errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+	}
+
+	@PutMapping("/updateCreateSubLedgerAccount")
+	public ResponseEntity<ResponseDTO> updateCreateSubLedgerAccount(
+			@Valid @RequestBody SubLedgerAccountDTO subLedgerAccountDTO) {
+		String methodName = "updateCreateSubLedgerAccount()";
+
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+
+		try {
+			SubLedgerAccountVO subLedgerAccountVO = masterService.updateCreateSubLedgerAccount(subLedgerAccountDTO);
+			if (subLedgerAccountVO != null) {
+				responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "SubLedgerAccount updated successfully");
+				responseObjectsMap.put("subLedgerAccountVO", subLedgerAccountVO);
+				responseDTO = createServiceResponse(responseObjectsMap);
+			} else {
+				errorMsg = "SubLedgerAccount not found for ID: " + subLedgerAccountDTO.getId();
+				responseDTO = createServiceResponseError(responseObjectsMap, "SubLedgerAccount update failed",
+						errorMsg);}
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+			responseDTO = createServiceResponseError(responseObjectsMap, "SubLedgerAccount update failed", errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+	}
+	
+	@GetMapping("/getSubLedgerAccountByActive")
+	public ResponseEntity<ResponseDTO> getSubLedgerAccountByActive() {
+		String methodName = "getSubLedgerAccountByActive()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		List<SubLedgerAccountVO> subLedgerAccountVO = new ArrayList<>();
+		try {
+			subLedgerAccountVO = masterService.getSubLedgerAccountByActive();
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+					"SubLedgerAccount information get successfully By Active");
+			responseObjectsMap.put("subLedgerAccountVO", subLedgerAccountVO);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					"SubLedgerAccount information receive failed By Active", errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+
+	}
 }
