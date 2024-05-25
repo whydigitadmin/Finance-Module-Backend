@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.base.basesetup.common.CommonConstant;
 import com.base.basesetup.common.UserConstants;
 import com.base.basesetup.dto.AccountDTO;
+import com.base.basesetup.dto.CostCenterDTO;
 import com.base.basesetup.dto.ExRatesDTO;
 import com.base.basesetup.dto.GroupLedgerDTO;
 import com.base.basesetup.dto.HsnSacCodeDTO;
@@ -33,6 +34,7 @@ import com.base.basesetup.dto.TaxMasterDTO;
 import com.base.basesetup.dto.TcsMasterDTO;
 import com.base.basesetup.dto.TdsMasterDTO;
 import com.base.basesetup.entity.AccountVO;
+import com.base.basesetup.entity.CostCenterVO;
 import com.base.basesetup.entity.ExRatesVO;
 import com.base.basesetup.entity.GroupLedgerVO;
 import com.base.basesetup.entity.HsnSacCodeVO;
@@ -1012,7 +1014,8 @@ public class MasterController extends BaseController {
 			} else {
 				errorMsg = "SubLedgerAccount not found for ID: " + subLedgerAccountDTO.getId();
 				responseDTO = createServiceResponseError(responseObjectsMap, "SubLedgerAccount update failed",
-						errorMsg);}
+						errorMsg);
+			}
 		} catch (Exception e) {
 			errorMsg = e.getMessage();
 			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
@@ -1021,7 +1024,7 @@ public class MasterController extends BaseController {
 		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
 		return ResponseEntity.ok().body(responseDTO);
 	}
-	
+
 	@GetMapping("/getSubLedgerAccountByActive")
 	public ResponseEntity<ResponseDTO> getSubLedgerAccountByActive() {
 		String methodName = "getSubLedgerAccountByActive()";
@@ -1049,4 +1052,115 @@ public class MasterController extends BaseController {
 		return ResponseEntity.ok().body(responseDTO);
 
 	}
+
+	// CostCenter
+
+	@GetMapping("/getAllCostCenterByOrgId")
+	public ResponseEntity<ResponseDTO> getAllCostCenterByOrgId(@RequestParam(required = false) Long orgId) {
+		String methodName = "getAllCostCenterByOrgId()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		List<CostCenterVO> costCenterVO = new ArrayList<>();
+		try {
+			costCenterVO = masterService.getAllCostCenterByOrgId(orgId);
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "CostCenter information get successfully ByOrgId");
+			responseObjectsMap.put("costCenterVO", costCenterVO);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap, "CostCenter information receive failedByOrgId",
+					errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+
+	}
+
+	@GetMapping("/getAllCostCenterById")
+	public ResponseEntity<ResponseDTO> getAllCostCenterById(@RequestParam(required = false) Long id) {
+		String methodName = "getAllCostCenterById()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		List<CostCenterVO> costCenterVO = new ArrayList<>();
+		try {
+			costCenterVO = masterService.getAllCostCenterById(id);
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "CostCenter information get successfully By id");
+			responseObjectsMap.put("costCenterVO", costCenterVO);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap, "CostCenter information receive failedByOrgId",
+					errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+	}
+
+	@PutMapping("/updateCreateCostCenter")
+	public ResponseEntity<ResponseDTO> updateCreateCostCenter(@Valid @RequestBody CostCenterDTO costCenterDTO) {
+		String methodName = "updateCreateCostCenter()";
+
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+
+		try {
+			CostCenterVO costCenterVO = masterService.updateCreateCostCenter(costCenterDTO);
+			if (costCenterVO != null) {
+				responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "CostCenter updated successfully");
+				responseObjectsMap.put("costCenterVO", costCenterVO);
+				responseDTO = createServiceResponse(responseObjectsMap);
+			} else {
+				errorMsg = "CostCenter not found for ID: " + costCenterDTO.getId();
+				responseDTO = createServiceResponseError(responseObjectsMap, "CostCenter update failed", errorMsg);
+			}
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+			responseDTO = createServiceResponseError(responseObjectsMap, "CostCenter update failed", errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+	}
+
+	@GetMapping("/getCostCenterByActive")
+	public ResponseEntity<ResponseDTO> getCostCenterByActive() {
+		String methodName = "getCostCenterByActive()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		List<CostCenterVO> costCenterVO = new ArrayList<>();
+		try {
+			costCenterVO = masterService.getCostCenterByActive();
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "CostCenter information get successfully By Active");
+			responseObjectsMap.put("costCenterVO", costCenterVO);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					"CostCenter information receive failed By Active", errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+
+	}
+
 }

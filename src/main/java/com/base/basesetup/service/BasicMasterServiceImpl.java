@@ -202,6 +202,9 @@ public class BasicMasterServiceImpl implements BasicMasterService {
 		userVO.setEmail(companyVO.getEmail());
 		userVO.setRole(Role.ROLE_ADMIN);
 		userVO.setEmployeeName(companyDTO.getEmployeeName());
+		if(userRepo.existsByUserName(companyDTO.getEmployeeCode())) {
+			throw new ApplicationException("Employee code already existes"); 
+		}
 		userVO.setUserName(companyVO.getEmployeeCode());
 		userVO.setOrgId(companyVO.getId());
 		userVO.setActive(companyVO.isActive());
@@ -346,6 +349,9 @@ public class BasicMasterServiceImpl implements BasicMasterService {
 		employeeRepo.save(employeeVO);
 		UserVO userVO = new UserVO();
 		userVO.setEmployeeName(employeeDTO.getEmployeeName());
+		if(userRepo.existsByUserName(employeeDTO.getEmployeeCode())) {
+			throw new ApplicationException("Employee code already existes"); 
+		}
 		userVO.setUserName(employeeDTO.getEmployeeCode());
 		userVO.setOrgId(employeeDTO.getOrgId());
 		try {

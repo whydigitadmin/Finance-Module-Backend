@@ -171,8 +171,7 @@ public class BasicMasterController extends BaseController {
 		return ResponseEntity.ok().body(responseDTO);
 	}
 
-	// Company
-	// -----------------------------------------------------------------------------------
+	// Company-----------------------------------------------------------------------------------
 	@GetMapping("/getCompanyById")
 	public ResponseEntity<ResponseDTO> getCompanyById(@RequestParam(required = false) Long id) {
 		String methodName = "getCompanyById()";
@@ -296,8 +295,7 @@ public class BasicMasterController extends BaseController {
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 	}
 
-	// Employee
-	// -----------------------------------------------------------------------------------
+	// Employee-----------------------------------------------------------------------------------
 	@GetMapping("/getEmployeeById")
 	public ResponseEntity<ResponseDTO> getEmployeeById(@RequestParam(required = false) Long id) {
 		String methodName = "getEmployeeById()";

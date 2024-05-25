@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import org.springframework.stereotype.Service;
 
 import com.base.basesetup.dto.AccountDTO;
+import com.base.basesetup.dto.CostCenterDTO;
 import com.base.basesetup.dto.ExRatesDTO;
 import com.base.basesetup.dto.GroupLedgerDTO;
 import com.base.basesetup.dto.HsnSacCodeDTO;
@@ -16,6 +17,7 @@ import com.base.basesetup.dto.TaxMasterDTO;
 import com.base.basesetup.dto.TcsMasterDTO;
 import com.base.basesetup.dto.TdsMasterDTO;
 import com.base.basesetup.entity.AccountVO;
+import com.base.basesetup.entity.CostCenterVO;
 import com.base.basesetup.entity.ExRatesVO;
 import com.base.basesetup.entity.GroupLedgerVO;
 import com.base.basesetup.entity.HsnSacCodeVO;
@@ -109,4 +111,13 @@ public interface MasterService {
 	List<SubLedgerAccountVO> getAllSubLedgerAccountById(Long id);
 
 	List<SubLedgerAccountVO> getSubLedgerAccountByActive();
+	
+//	CostCenterVO
+	List<CostCenterVO> getAllCostCenterByOrgId(Long orgId);
+
+	CostCenterVO updateCreateCostCenter(@Valid CostCenterDTO costCenterDTO) throws ApplicationException;
+
+	List<CostCenterVO> getAllCostCenterById(Long id);
+
+	List<CostCenterVO> getCostCenterByActive();
 }

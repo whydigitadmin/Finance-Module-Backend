@@ -15,6 +15,7 @@ import com.base.basesetup.dto.Account1DTO;
 import com.base.basesetup.dto.Account2DTO;
 import com.base.basesetup.dto.Account3DTO;
 import com.base.basesetup.dto.AccountDTO;
+import com.base.basesetup.dto.CostCenterDTO;
 import com.base.basesetup.dto.ExRatesDTO;
 import com.base.basesetup.dto.GroupLedgerDTO;
 import com.base.basesetup.dto.HsnSacCodeDTO;
@@ -30,6 +31,7 @@ import com.base.basesetup.entity.Account1VO;
 import com.base.basesetup.entity.Account2VO;
 import com.base.basesetup.entity.Account3VO;
 import com.base.basesetup.entity.AccountVO;
+import com.base.basesetup.entity.CostCenterVO;
 import com.base.basesetup.entity.ExRatesVO;
 import com.base.basesetup.entity.GroupLedgerVO;
 import com.base.basesetup.entity.HsnSacCodeVO;
@@ -46,6 +48,7 @@ import com.base.basesetup.repo.Account1Repo;
 import com.base.basesetup.repo.Account2Repo;
 import com.base.basesetup.repo.Account3Repo;
 import com.base.basesetup.repo.AccountRepo;
+import com.base.basesetup.repo.CostCenterRepo;
 import com.base.basesetup.repo.ExRatesRepo;
 import com.base.basesetup.repo.GroupLedgerRepo;
 import com.base.basesetup.repo.HsnSacCodeRepo;
@@ -105,6 +108,9 @@ public class MasterServiceImpl implements MasterService {
 
 	@Autowired
 	SubLedgerAccountRepo subLedgerAccountRepo;
+
+	@Autowired
+	CostCenterRepo costCenterRepo;
 
 	@Override
 	public List<SetTaxRateVO> getAllSetTaxRateByOrgId(Long orgId) {
@@ -194,7 +200,6 @@ public class MasterServiceImpl implements MasterService {
 		}
 
 		getTaxMasterVOFromTaxMasterDTO(taxMasterDTO, taxMasterVO);
-
 		taxMasterVO.setTaxMaster2VO(taxMaster2VOs);
 		return taxMasterRepo.save(taxMasterVO);
 
@@ -778,5 +783,59 @@ public class MasterServiceImpl implements MasterService {
 		return subLedgerAccountRepo.findSubLedgerAccountByActive();
 
 	}
+	// CostCenter
 
+	@Override
+	public List<CostCenterVO> getAllCostCenterById(Long id) {
+		List<CostCenterVO> costCenterVO = new ArrayList<>();
+		if (ObjectUtils.isNotEmpty(id)) {
+			LOGGER.info("Successfully Received  CostCenter Information BY Id : {}", id);
+			costCenterVO = costCenterRepo.getAllCostCenterById(id);
+		} else {
+			LOGGER.info("Successfully Received  CostCenter Information For All Id.");
+			costCenterVO = costCenterRepo.findAll();
+		}
+		return costCenterVO;
+	}
+
+	@Override
+	public List<CostCenterVO> getAllCostCenterByOrgId(Long orgId) {
+		List<CostCenterVO> costCenterVO = new ArrayList<>();
+		if (ObjectUtils.isNotEmpty(orgId)) {
+			LOGGER.info("Successfully Received  CostCenter Information BY OrgId : {}", orgId);
+			costCenterVO = costCenterRepo.getAllCostCenterByOrgId(orgId);
+		} else {
+			LOGGER.info("Successfully Received  CostCenter Information For All OrgId.");
+			costCenterVO = costCenterRepo.findAll();
+		}
+		return costCenterVO;
+	}
+
+	@Override
+	public CostCenterVO updateCreateCostCenter(@Valid CostCenterDTO costCenterDTO) throws ApplicationException {
+		CostCenterVO costCenterVO = new CostCenterVO();
+		if (ObjectUtils.isNotEmpty(costCenterDTO.getId())) {
+			costCenterVO = costCenterRepo.findById(costCenterDTO.getId())
+					.orElseThrow(() -> new ApplicationException("Invalid CostCenter details"));
+		}
+		getCostCenterVOFromCostCenterDTO(costCenterDTO, costCenterVO);
+		return costCenterRepo.save(costCenterVO);
+	}
+
+	private void getCostCenterVOFromCostCenterDTO(@Valid CostCenterDTO costCenterDTO, CostCenterVO costCenterVO) {
+		costCenterVO.setDimensionType(costCenterDTO.getDimensionType());
+		costCenterVO.setValueCode(costCenterDTO.getValueCode());
+		costCenterVO.setValueDescriopition(costCenterDTO.getValueDescripition());
+		costCenterVO.setOrgId(costCenterDTO.getOrgId());
+		costCenterVO.setCreatedBy(costCenterDTO.getCreatedBy());
+		costCenterVO.setUpdatedBy(costCenterDTO.getUpdatedBy());
+		costCenterVO.setActive(costCenterDTO.isActive());
+
+	}
+
+	@Override
+	public List<CostCenterVO> getCostCenterByActive() {
+		return costCenterRepo.findCostCenterByActive();
+
+	}
 }
