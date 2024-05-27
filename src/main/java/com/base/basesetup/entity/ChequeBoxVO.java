@@ -17,36 +17,41 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "costcenter")
+@Table(name = "chequeboxmaster")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CostCenterVO {
+public class ChequeBoxVO {
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = " costcentergen")
-	@SequenceGenerator(name = "costcentergen", sequenceName = "costcenterVO", initialValue = 1000000001, allocationSize = 1)
-	@Column(name = "costcenterid")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = " chequeboxmastergen")
+	@SequenceGenerator(name = "chequeboxmastergen", sequenceName = "chequeboxmasterVO", initialValue = 1000000001, allocationSize = 1)
+	@Column(name = "chequeboxmasterid")
 	private Long id;
-	@Column(name = "dimensiontype")
-	private String dimensionType;
-	@Column(name = "valuecode")
-	private String valueCode;
-	@Column(name = "valuedescripition")
-	private String valueDescriopition;
+	@Column(name = "branch")
+	private String branch;
+	@Column(name = "chequeboxid")
+	private String chequeBoxId;
+	@Column(name = "bank")
+	private String bank;
+	@Column(name = "checkprefix")
+	private String checkPrefix;
+	@Column(name = "checkstartno")
+	private String checkStartNo;
+	@Column(name = "noofchequeleaves")
+	private String noOfChequeLeaves;
 	@Column(name = "orgid")
 	private Long orgId;
 	@Column(name = "active")
 	private boolean active;
 	@Column(name = "cancel")
-	private String cancel;
+	private boolean cancel;
 	@Column(name = "cancelremarks")
 	private String cancelRemarks;
 	@Column(name = "createdby")
 	private String createdBy;
 	@Column(name = "modifiedby")
 	private String updatedBy;
-
 	@Embedded
 	@Builder.Default
 	private CreatedUpdatedDate commonDate = new CreatedUpdatedDate();

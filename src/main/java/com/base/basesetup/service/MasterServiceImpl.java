@@ -15,6 +15,7 @@ import com.base.basesetup.dto.Account1DTO;
 import com.base.basesetup.dto.Account2DTO;
 import com.base.basesetup.dto.Account3DTO;
 import com.base.basesetup.dto.AccountDTO;
+import com.base.basesetup.dto.ChequeBoxDTO;
 import com.base.basesetup.dto.CostCenterDTO;
 import com.base.basesetup.dto.ExRatesDTO;
 import com.base.basesetup.dto.GroupLedgerDTO;
@@ -31,6 +32,7 @@ import com.base.basesetup.entity.Account1VO;
 import com.base.basesetup.entity.Account2VO;
 import com.base.basesetup.entity.Account3VO;
 import com.base.basesetup.entity.AccountVO;
+import com.base.basesetup.entity.ChequeBoxVO;
 import com.base.basesetup.entity.CostCenterVO;
 import com.base.basesetup.entity.ExRatesVO;
 import com.base.basesetup.entity.GroupLedgerVO;
@@ -48,6 +50,7 @@ import com.base.basesetup.repo.Account1Repo;
 import com.base.basesetup.repo.Account2Repo;
 import com.base.basesetup.repo.Account3Repo;
 import com.base.basesetup.repo.AccountRepo;
+import com.base.basesetup.repo.ChequeBoxRepo;
 import com.base.basesetup.repo.CostCenterRepo;
 import com.base.basesetup.repo.ExRatesRepo;
 import com.base.basesetup.repo.GroupLedgerRepo;
@@ -111,6 +114,9 @@ public class MasterServiceImpl implements MasterService {
 
 	@Autowired
 	CostCenterRepo costCenterRepo;
+
+	@Autowired
+	ChequeBoxRepo chequeBoxRepo;
 
 	@Override
 	public List<SetTaxRateVO> getAllSetTaxRateByOrgId(Long orgId) {
@@ -569,8 +575,8 @@ public class MasterServiceImpl implements MasterService {
 	@Override
 	public GroupLedgerVO updateCreateGroupLedger(@Valid GroupLedgerDTO groupLedgerDTO) throws ApplicationException {
 		GroupLedgerVO groupLedgerVO = new GroupLedgerVO();
-		if (ObjectUtils.isNotEmpty(groupLedgerDTO.getGLId())) {
-			groupLedgerVO = groupLedgerRepo.findById(groupLedgerDTO.getGLId())
+		if (ObjectUtils.isNotEmpty(groupLedgerDTO.getId())) {
+			groupLedgerVO = groupLedgerRepo.findById(groupLedgerDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid GroupLedger details"));
 		}
 		getGroupLedgerVOFromGroupLedgerDTO(groupLedgerDTO, groupLedgerVO);
@@ -836,6 +842,64 @@ public class MasterServiceImpl implements MasterService {
 	@Override
 	public List<CostCenterVO> getCostCenterByActive() {
 		return costCenterRepo.findCostCenterByActive();
+
+	}
+
+	// ChequeBox
+	@Override
+	public List<ChequeBoxVO> getAllChequeBoxById(Long id) {
+		List<ChequeBoxVO> chequeBoxVO = new ArrayList<>();
+		if (ObjectUtils.isNotEmpty(id)) {
+			LOGGER.info("Successfully Received  ChequeBox Information BY Id : {}", id);
+			chequeBoxVO = chequeBoxRepo.getAllChequeBoxById(id);
+		} else {
+			LOGGER.info("Successfully Received  ChequeBox Information For All Id.");
+			chequeBoxVO = chequeBoxRepo.findAll();
+		}
+		return chequeBoxVO;
+	}
+
+	@Override
+	public List<ChequeBoxVO> getAllChequeBoxByOrgId(Long orgId) {
+		List<ChequeBoxVO> chequeBoxVO = new ArrayList<>();
+		if (ObjectUtils.isNotEmpty(orgId)) {
+			LOGGER.info("Successfully Received  ChequeBox Information BY OrgId : {}", orgId);
+			chequeBoxVO = chequeBoxRepo.getAllChequeBoxByOrgId(orgId);
+		} else {
+			LOGGER.info("Successfully Received ChequeBox Information For All OrgId.");
+			chequeBoxVO = chequeBoxRepo.findAll();
+		}
+		return chequeBoxVO;
+	}
+
+	@Override
+	public ChequeBoxVO updateCreateChequeBox(@Valid ChequeBoxDTO chequeBoxDTO) throws ApplicationException {
+		ChequeBoxVO chequeBoxVO = new ChequeBoxVO();
+		if (ObjectUtils.isNotEmpty(chequeBoxDTO.getId())) {
+			chequeBoxVO = chequeBoxRepo.findById(chequeBoxDTO.getId())
+					.orElseThrow(() -> new ApplicationException("Invalid ChequeBox details"));
+		}
+		getChequeBoxVOFromChequeBoxDTO(chequeBoxDTO, chequeBoxVO);
+		return chequeBoxRepo.save(chequeBoxVO);
+	}
+
+	private void getChequeBoxVOFromChequeBoxDTO(@Valid ChequeBoxDTO chequeBoxDTO, ChequeBoxVO chequeBoxVO) {
+		chequeBoxVO.setBranch(chequeBoxDTO.getBranch());
+		chequeBoxVO.setChequeBoxId(chequeBoxDTO.getChequeBoxId());
+		chequeBoxVO.setBank(chequeBoxDTO.getBank());
+		chequeBoxVO.setCheckPrefix(chequeBoxDTO.getCheckPrefix());
+		chequeBoxVO.setCheckStartNo(chequeBoxDTO.getCheckStartNo());
+		chequeBoxVO.setNoOfChequeLeaves(chequeBoxDTO.getNoOfChequeLeaves());
+		chequeBoxVO.setOrgId(chequeBoxDTO.getOrgId());
+		chequeBoxVO.setActive(chequeBoxDTO.isActive());
+		chequeBoxVO.setCreatedBy(chequeBoxDTO.getCreatedBy());
+		chequeBoxVO.setUpdatedBy(chequeBoxDTO.getUpdatedBy());
+
+	}
+
+	@Override
+	public List<ChequeBoxVO> getChequeBoxByActive() {
+		return chequeBoxRepo.findChequeBoxByActive();
 
 	}
 }

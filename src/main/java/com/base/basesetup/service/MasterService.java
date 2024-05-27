@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import org.springframework.stereotype.Service;
 
 import com.base.basesetup.dto.AccountDTO;
+import com.base.basesetup.dto.ChequeBoxDTO;
 import com.base.basesetup.dto.CostCenterDTO;
 import com.base.basesetup.dto.ExRatesDTO;
 import com.base.basesetup.dto.GroupLedgerDTO;
@@ -17,6 +18,7 @@ import com.base.basesetup.dto.TaxMasterDTO;
 import com.base.basesetup.dto.TcsMasterDTO;
 import com.base.basesetup.dto.TdsMasterDTO;
 import com.base.basesetup.entity.AccountVO;
+import com.base.basesetup.entity.ChequeBoxVO;
 import com.base.basesetup.entity.CostCenterVO;
 import com.base.basesetup.entity.ExRatesVO;
 import com.base.basesetup.entity.GroupLedgerVO;
@@ -120,4 +122,13 @@ public interface MasterService {
 	List<CostCenterVO> getAllCostCenterById(Long id);
 
 	List<CostCenterVO> getCostCenterByActive();
+	
+//	ChequeBox
+	List<ChequeBoxVO> getAllChequeBoxByOrgId(Long orgId);
+
+	ChequeBoxVO updateCreateChequeBox(@Valid ChequeBoxDTO chequeBoxDTO) throws ApplicationException;
+
+	List<ChequeBoxVO> getAllChequeBoxById(Long id);
+
+	List<ChequeBoxVO> getChequeBoxByActive();
 }

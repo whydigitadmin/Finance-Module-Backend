@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class GroupLedgerDTO {
 
-    private Long gLId;
+    private Long id;
 	
     private Long orgId;
     
