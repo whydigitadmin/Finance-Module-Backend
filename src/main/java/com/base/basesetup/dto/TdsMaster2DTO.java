@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TdsMaster2DTO {
-	private Long tdsMaster2Id;
+	private Long Id;
 
 	private LocalDate fromDate;
 	private LocalDate toDate;

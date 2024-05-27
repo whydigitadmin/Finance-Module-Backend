@@ -35,7 +35,6 @@ import com.base.basesetup.dto.TcsMasterDTO;
 import com.base.basesetup.dto.TdsMasterDTO;
 import com.base.basesetup.entity.AccountVO;
 import com.base.basesetup.entity.ChequeBoxVO;
-import com.base.basesetup.entity.CostCenterVO;
 import com.base.basesetup.entity.ExRatesVO;
 import com.base.basesetup.entity.GroupLedgerVO;
 import com.base.basesetup.entity.HsnSacCodeVO;
@@ -127,7 +126,7 @@ public class MasterController extends BaseController {
 				responseObjectsMap.put("setTaxRateVO", setTaxRateVO);
 				responseDTO = createServiceResponse(responseObjectsMap);
 			} else {
-				errorMsg = "SetTaxRate not found for ID: " + setTaxRateDTO.getSetTaxRateId();
+				errorMsg = "SetTaxRate not found for ID: " + setTaxRateDTO.getId();
 				responseDTO = createServiceResponseError(responseObjectsMap, "SetTaxRateVO update failed", errorMsg);
 			}
 		} catch (Exception e) {
@@ -238,7 +237,7 @@ public class MasterController extends BaseController {
 				responseObjectsMap.put("taxMasterVO", taxMasterVO);
 				responseDTO = createServiceResponse(responseObjectsMap);
 			} else {
-				errorMsg = "Tax Master not found for ID: " + taxMasterDTO.getTaxMasterId();
+				errorMsg = "Tax Master not found for ID: " + taxMasterDTO.getId();
 				responseDTO = createServiceResponseError(responseObjectsMap, "Tax Master update failed", errorMsg);
 			}
 		} catch (Exception e) {
@@ -349,7 +348,7 @@ public class MasterController extends BaseController {
 				responseObjectsMap.put("tcsMasterVO", tcsMasterVO);
 				responseDTO = createServiceResponse(responseObjectsMap);
 			} else {
-				errorMsg = "Tcs Master not found for ID: " + tcsMasterDTO.getTcsMasterId();
+				errorMsg = "Tcs Master not found for ID: " + tcsMasterDTO.getId();
 				responseDTO = createServiceResponseError(responseObjectsMap, "Tcs Master update failed", errorMsg);
 			}
 		} catch (Exception e) {
@@ -461,7 +460,7 @@ public class MasterController extends BaseController {
 				responseObjectsMap.put("tdsMasterVO", tdsMasterVO);
 				responseDTO = createServiceResponse(responseObjectsMap);
 			} else {
-				errorMsg = "Tds Master not found for ID: " + tdsMasterDTO.getTdsMasterId();
+				errorMsg = "Tds Master not found for ID: " + tdsMasterDTO.getId();
 				responseDTO = createServiceResponseError(responseObjectsMap, "Tds Master update failed", errorMsg);
 			}
 		} catch (Exception e) {

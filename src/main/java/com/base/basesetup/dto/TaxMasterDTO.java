@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class TaxMasterDTO {
 	
-	private Long taxMasterId;
+	private Long Id;
 	private Long orgId;
 	private String taxType;
 	private float taxPercentage;

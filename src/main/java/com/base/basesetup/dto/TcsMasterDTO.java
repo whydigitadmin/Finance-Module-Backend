@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TcsMasterDTO {
-	private Long tcsMasterId;
+	private Long Id;
 	private Long orgId;
 	private String section;
 	private String sectionName;
