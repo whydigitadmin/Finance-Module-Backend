@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContextException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.base.basesetup.common.UserConstants;
 import com.base.basesetup.dto.BranchDTO;
@@ -188,17 +190,24 @@ public class BasicMasterServiceImpl implements BasicMasterService {
 					.orElseThrow(() -> new ApplicationException("Invalid Company Details"));
 		}
 		getCompanyVOFromCompanyDTO(companyDTO, companyVO);
+
 		companyRepo.save(companyVO);
 		EmployeeVO emp = new EmployeeVO();
 		emp.setEmployeeCode(companyVO.getEmployeeCode());
 		emp.setEmployeeName(companyVO.getEmployeeName());
-		emp.setOrgId(companyVO.getId());
+		emp.setOrgId(companyVO.getOrgId());
+		emp.setActive(companyVO.isActive());
 		employeeRepo.save(emp);
 		UserVO userVO = new UserVO();
 		userVO.setEmail(companyVO.getEmail());
 		userVO.setRole(Role.ROLE_ADMIN);
+		userVO.setEmployeeName(companyDTO.getEmployeeName());
+		if(userRepo.existsByUserName(companyDTO.getEmployeeCode())) {
+			throw new ApplicationException("Employee code already existes"); 
+		}
 		userVO.setUserName(companyVO.getEmployeeCode());
 		userVO.setOrgId(companyVO.getId());
+		userVO.setActive(companyVO.isActive());
 		userVO.setPassword(encoder.encode(CryptoUtils.getDecrypt(companyVO.getPassword())));
 		userRepo.save(userVO);
 		return companyVO;
@@ -280,6 +289,25 @@ public class BasicMasterServiceImpl implements BasicMasterService {
 	@Override
 	public List<CompanyVO> getCompanyByActive() {
 		return companyRepo.findCompanyByActive();
+
+	}
+
+	@Override
+	public Optional<CompanyVO> getImage(Long id) {
+		return companyRepo.findById(id);
+	}
+
+	@Override
+	public CompanyVO saveImage(MultipartFile file, @RequestParam Long id)
+			throws ApplicationException, java.io.IOException {
+
+		CompanyVO image = companyRepo.findById(id)
+				.orElseThrow(() -> new ApplicationException("Invalid company id" + id));
+
+		image.setImageName(file.getOriginalFilename());
+		image.setData(file.getBytes());
+		return companyRepo.save(image);
+
 	}
 
 	// Employee-----------------------------------------------------------------------------------//
@@ -321,6 +349,9 @@ public class BasicMasterServiceImpl implements BasicMasterService {
 		employeeRepo.save(employeeVO);
 		UserVO userVO = new UserVO();
 		userVO.setEmployeeName(employeeDTO.getEmployeeName());
+		if(userRepo.existsByUserName(employeeDTO.getEmployeeCode())) {
+			throw new ApplicationException("Employee code already existes"); 
+		}
 		userVO.setUserName(employeeDTO.getEmployeeCode());
 		userVO.setOrgId(employeeDTO.getOrgId());
 		try {
@@ -369,6 +400,7 @@ public class BasicMasterServiceImpl implements BasicMasterService {
 			employeeVO.setDateOfBirth(employeeDTO.getDateOfBirth());
 			employeeVO.setCreatedBy(employeeDTO.getCreatedBy());
 			employeeVO.setUpdateBy(employeeDTO.getUpdatedBy());
+			employeeVO.setActive(employeeDTO.isActive());
 		} else {
 			if (employeeRepo.existsByEmployeeCodeAndOrgId(employeeDTO.getEmployeeCode(), employeeVO.getOrgId())) {
 				throw new ApplicationException("EmployeeCode already exists");
@@ -979,4 +1011,5 @@ public class BasicMasterServiceImpl implements BasicMasterService {
 		return responsibilitiesRepo.findResponsibilitiesByActive();
 
 	}
+
 }

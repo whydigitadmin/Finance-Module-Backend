@@ -12,38 +12,47 @@ import javax.persistence.Table;
 import com.base.basesetup.dto.CreatedUpdatedDate;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "role")
+@Table(name = "chequeboxmaster")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class RoleMasterVO {
-
+@Builder
+public class ChequeBoxVO {
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "rolegen")
-	@SequenceGenerator(name = "rolegen", sequenceName = "roleVO", initialValue = 1000000001, allocationSize = 1)
-	@Column(name = "roleid")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = " chequeboxmastergen")
+	@SequenceGenerator(name = "chequeboxmastergen", sequenceName = "chequeboxmasterVO", initialValue = 1000000001, allocationSize = 1)
+	@Column(name = "chequeboxmasterid")
 	private Long id;
-	@Column(name = "role")
-	private String role;
+	@Column(name = "branch")
+	private String branch;
+	@Column(name = "chequeboxid")
+	private String chequeBoxId;
+	@Column(name = "bank")
+	private String bank;
+	@Column(name = "checkprefix")
+	private String checkPrefix;
+	@Column(name = "checkstartno")
+	private String checkStartNo;
+	@Column(name = "noofchequeleaves")
+	private String noOfChequeLeaves;
+	@Column(name = "orgid")
+	private Long orgId;
 	@Column(name = "active")
 	private boolean active;
 	@Column(name = "cancel")
 	private boolean cancel;
-	@Column(name = "orgid")
-	private Long orgId;
+	@Column(name = "cancelremarks")
+	private String cancelRemarks;
 	@Column(name = "createdby")
 	private String createdBy;
 	@Column(name = "modifiedby")
 	private String updatedBy;
-	@Column(name = "cancelremarks")
-	private String cancelRemarks;
-	
-	
-	
 	@Embedded
+	@Builder.Default
 	private CreatedUpdatedDate commonDate = new CreatedUpdatedDate();
 }

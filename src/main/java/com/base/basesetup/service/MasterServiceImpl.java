@@ -15,8 +15,13 @@ import com.base.basesetup.dto.Account1DTO;
 import com.base.basesetup.dto.Account2DTO;
 import com.base.basesetup.dto.Account3DTO;
 import com.base.basesetup.dto.AccountDTO;
+import com.base.basesetup.dto.ChequeBoxDTO;
+import com.base.basesetup.dto.CostCenterDTO;
+import com.base.basesetup.dto.ExRatesDTO;
 import com.base.basesetup.dto.GroupLedgerDTO;
+import com.base.basesetup.dto.HsnSacCodeDTO;
 import com.base.basesetup.dto.SetTaxRateDTO;
+import com.base.basesetup.dto.SubLedgerAccountDTO;
 import com.base.basesetup.dto.TaxMaster2DTO;
 import com.base.basesetup.dto.TaxMasterDTO;
 import com.base.basesetup.dto.TcsMaster2DTO;
@@ -27,8 +32,13 @@ import com.base.basesetup.entity.Account1VO;
 import com.base.basesetup.entity.Account2VO;
 import com.base.basesetup.entity.Account3VO;
 import com.base.basesetup.entity.AccountVO;
+import com.base.basesetup.entity.ChequeBoxVO;
+import com.base.basesetup.entity.CostCenterVO;
+import com.base.basesetup.entity.ExRatesVO;
 import com.base.basesetup.entity.GroupLedgerVO;
+import com.base.basesetup.entity.HsnSacCodeVO;
 import com.base.basesetup.entity.SetTaxRateVO;
+import com.base.basesetup.entity.SubLedgerAccountVO;
 import com.base.basesetup.entity.TaxMaster2VO;
 import com.base.basesetup.entity.TaxMasterVO;
 import com.base.basesetup.entity.TcsMaster2VO;
@@ -40,8 +50,13 @@ import com.base.basesetup.repo.Account1Repo;
 import com.base.basesetup.repo.Account2Repo;
 import com.base.basesetup.repo.Account3Repo;
 import com.base.basesetup.repo.AccountRepo;
+import com.base.basesetup.repo.ChequeBoxRepo;
+import com.base.basesetup.repo.CostCenterRepo;
+import com.base.basesetup.repo.ExRatesRepo;
 import com.base.basesetup.repo.GroupLedgerRepo;
+import com.base.basesetup.repo.HsnSacCodeRepo;
 import com.base.basesetup.repo.SetTaxRateRepo;
+import com.base.basesetup.repo.SubLedgerAccountRepo;
 import com.base.basesetup.repo.TaxMaster2Repo;
 import com.base.basesetup.repo.TaxMasterRepo;
 import com.base.basesetup.repo.TcsMaster2Repo;
@@ -88,6 +103,21 @@ public class MasterServiceImpl implements MasterService {
 	@Autowired
 	GroupLedgerRepo groupLedgerRepo;
 
+	@Autowired
+	HsnSacCodeRepo hsnSacCodeRepo;
+
+	@Autowired
+	ExRatesRepo exRatesRepo;
+
+	@Autowired
+	SubLedgerAccountRepo subLedgerAccountRepo;
+
+	@Autowired
+	CostCenterRepo costCenterRepo;
+
+	@Autowired
+	ChequeBoxRepo chequeBoxRepo;
+
 	@Override
 	public List<SetTaxRateVO> getAllSetTaxRateByOrgId(Long orgId) {
 		List<SetTaxRateVO> setTaxRateVO = new ArrayList<>();
@@ -115,11 +145,6 @@ public class MasterServiceImpl implements MasterService {
 	}
 
 	@Override
-	public List<SetTaxRateVO> getAllSetTaxRate() {
-		return setTaxRateRepo.findAll();
-	}
-
-	@Override
 	public SetTaxRateVO updateCreateSetTaxRate(@Valid SetTaxRateDTO setTaxRateDTO) throws ApplicationException {
 		SetTaxRateVO setTaxRateVO = new SetTaxRateVO();
 		if (ObjectUtils.isNotEmpty(setTaxRateDTO.getSetTaxRateId())) {
@@ -141,8 +166,7 @@ public class MasterServiceImpl implements MasterService {
 		setTaxRateVO.setExcepmted("e");
 		setTaxRateVO.setActive(setTaxRateDTO.isActive());
 	}
-	
-	
+
 	@Override
 	public List<SetTaxRateVO> getSetTaxRateByActive() {
 		return setTaxRateRepo.findSetTaxRateByActive();
@@ -182,7 +206,6 @@ public class MasterServiceImpl implements MasterService {
 		}
 
 		getTaxMasterVOFromTaxMasterDTO(taxMasterDTO, taxMasterVO);
-
 		taxMasterVO.setTaxMaster2VO(taxMaster2VOs);
 		return taxMasterRepo.save(taxMasterVO);
 
@@ -224,17 +247,10 @@ public class MasterServiceImpl implements MasterService {
 	}
 
 	@Override
-	public List<TaxMasterVO> getAllTaxMaster() {
-		return taxMasterRepo.findAll();
-	}
-	
-	@Override
 	public List<TaxMasterVO> getTaxMasterByActive() {
 		return taxMasterRepo.findTaxMasterByActive();
 
 	}
-
-
 
 	// TCSMASTER
 
@@ -262,11 +278,6 @@ public class MasterServiceImpl implements MasterService {
 			tcsMasterVO = tcsMasterRepo.findAll();
 		}
 		return tcsMasterVO;
-	}
-
-	@Override
-	public List<TcsMasterVO> getAllTcsMaster() {
-		return tcsMasterRepo.findAll();
 	}
 
 	@Override
@@ -314,7 +325,7 @@ public class MasterServiceImpl implements MasterService {
 		tcsMasterVO.setSectionName(tcsMasterDTO.getSectionName());
 		tcsMasterVO.setActive(tcsMasterDTO.isActive());
 	}
-	
+
 	@Override
 	public List<TcsMasterVO> getTcsMasterByActive() {
 		return tcsMasterRepo.findTcsMasterByActive();
@@ -347,11 +358,6 @@ public class MasterServiceImpl implements MasterService {
 			tdsMasterVO = tdsMasterRepo.findAll();
 		}
 		return tdsMasterVO;
-	}
-
-	@Override
-	public List<TdsMasterVO> getAllTdsMaster() {
-		return tdsMasterRepo.findAll();
 	}
 
 	@Override
@@ -401,14 +407,12 @@ public class MasterServiceImpl implements MasterService {
 		tdsMasterVO.setSectionName(tdsMasterDTO.getSectionName());
 		tdsMasterVO.setActive(tdsMasterDTO.isActive());
 	}
-	
+
 	@Override
 	public List<TdsMasterVO> getTdsMasterByActive() {
 		return tdsMasterRepo.findTdsMasterByActive();
 
 	}
-
-
 
 	// AccountVO
 
@@ -426,11 +430,11 @@ public class MasterServiceImpl implements MasterService {
 	}
 
 	@Override
-	public List<AccountVO> getAllAccountByaccountId(Long accountId) {
+	public List<AccountVO> getAllAccountById(Long id) {
 		List<AccountVO> accountVO = new ArrayList<>();
-		if (ObjectUtils.isNotEmpty(accountId)) {
-			LOGGER.info("Successfully Received  SetTaxRateInformation BY Id : {}", accountId);
-			accountVO = accountRepo.getAllAccountByaccountId(accountId);
+		if (ObjectUtils.isNotEmpty(id)) {
+			LOGGER.info("Successfully Received  SetTaxRateInformation BY Id : {}", id);
+			accountVO = accountRepo.getAllAccountById(id);
 		} else {
 			LOGGER.info("Successfully Received  SetTaxRateInformation For All Id.");
 			accountVO = accountRepo.findAll();
@@ -441,8 +445,8 @@ public class MasterServiceImpl implements MasterService {
 	@Override
 	public AccountVO updateCreateAccount(@Valid AccountDTO accountDTO) throws ApplicationException {
 		AccountVO accountVO = new AccountVO();
-		if (ObjectUtils.isNotEmpty(accountDTO.getAccountId())) {
-			accountVO = accountRepo.findById(accountDTO.getAccountId())
+		if (ObjectUtils.isNotEmpty(accountDTO.getId())) {
+			accountVO = accountRepo.findById(accountDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid account details"));
 		}
 		List<Account1VO> account1VOs = new ArrayList<>();
@@ -533,13 +537,12 @@ public class MasterServiceImpl implements MasterService {
 		accountVO.setActive(accountDTO.isActive());
 
 	}
-	
+
 	@Override
 	public List<AccountVO> getAccountByActive() {
 		return accountRepo.findAccountByActive();
 
 	}
-
 
 	// groupledgerVO
 
@@ -572,8 +575,8 @@ public class MasterServiceImpl implements MasterService {
 	@Override
 	public GroupLedgerVO updateCreateGroupLedger(@Valid GroupLedgerDTO groupLedgerDTO) throws ApplicationException {
 		GroupLedgerVO groupLedgerVO = new GroupLedgerVO();
-		if (ObjectUtils.isNotEmpty(groupLedgerDTO.getGLId())) {
-			groupLedgerVO = groupLedgerRepo.findById(groupLedgerDTO.getGLId())
+		if (ObjectUtils.isNotEmpty(groupLedgerDTO.getId())) {
+			groupLedgerVO = groupLedgerRepo.findById(groupLedgerDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid GroupLedger details"));
 		}
 		getGroupLedgerVOFromGroupLedgerDTO(groupLedgerDTO, groupLedgerVO);
@@ -602,8 +605,301 @@ public class MasterServiceImpl implements MasterService {
 
 	}
 
-	
-	
+	// HsnSacCode
 
-	
+	@Override
+	public List<HsnSacCodeVO> getAllHsnSacCodeById(Long id) {
+		List<HsnSacCodeVO> hsnSacCodeVO = new ArrayList<>();
+		if (ObjectUtils.isNotEmpty(id)) {
+			LOGGER.info("Successfully Received  HsnSacCode Information BY Id : {}", id);
+			hsnSacCodeVO = hsnSacCodeRepo.getAllHsnSacCodeById(id);
+		} else {
+			LOGGER.info("Successfully Received  HsnSacCode Information For All Id.");
+			hsnSacCodeVO = hsnSacCodeRepo.findAll();
+		}
+		return hsnSacCodeVO;
+	}
+
+	@Override
+	public List<HsnSacCodeVO> getAllHsnSacCodeByOrgId(Long orgId) {
+		List<HsnSacCodeVO> hsnSacCodeVO = new ArrayList<>();
+		if (ObjectUtils.isNotEmpty(orgId)) {
+			LOGGER.info("Successfully Received  HsnSacCode Information BY OrgId : {}", orgId);
+			hsnSacCodeVO = hsnSacCodeRepo.getAllHsnSacCodeByOrgId(orgId);
+		} else {
+			LOGGER.info("Successfully Received  HsnSacCode Information For All OrgId.");
+			hsnSacCodeVO = hsnSacCodeRepo.findAll();
+		}
+		return hsnSacCodeVO;
+	}
+
+	@Override
+	public HsnSacCodeVO updateCreateHsnSacCode(@Valid HsnSacCodeDTO hsnSacCodeDTO) throws ApplicationException {
+		HsnSacCodeVO hsnSacCodeVO = new HsnSacCodeVO();
+		if (ObjectUtils.isNotEmpty(hsnSacCodeDTO.getId())) {
+			hsnSacCodeVO = hsnSacCodeRepo.findById(hsnSacCodeDTO.getId())
+					.orElseThrow(() -> new ApplicationException("Invalid HsnSacCode details"));
+		}
+		getHsnSacCodeVOFromHsnSacCodeDTO(hsnSacCodeDTO, hsnSacCodeVO);
+		return hsnSacCodeRepo.save(hsnSacCodeVO);
+	}
+
+	private void getHsnSacCodeVOFromHsnSacCodeDTO(@Valid HsnSacCodeDTO hsnSacCodeDTO, HsnSacCodeVO hsnSacCodeVO) {
+		hsnSacCodeVO.setOrgId(hsnSacCodeDTO.getOrgId());
+		hsnSacCodeVO.setType(hsnSacCodeDTO.getType());
+		hsnSacCodeVO.setActive(hsnSacCodeDTO.isActive());
+		hsnSacCodeVO.setCode(hsnSacCodeDTO.getCode());
+		hsnSacCodeVO.setDescription(hsnSacCodeDTO.getDescription());
+		hsnSacCodeVO.setChapter(hsnSacCodeDTO.getChapter());
+		hsnSacCodeVO.setChapterCode(hsnSacCodeDTO.getChapterCode());
+		hsnSacCodeVO.setSubChapter(hsnSacCodeDTO.getSubChapter());
+		hsnSacCodeVO.setSubChapterCode(hsnSacCodeDTO.getSubChapterCode());
+		hsnSacCodeVO.setRate(hsnSacCodeDTO.getRate());
+		hsnSacCodeVO.setExcempted(hsnSacCodeDTO.isExcempted());
+		hsnSacCodeVO.setCreatedBy(hsnSacCodeDTO.getCreatedBy());
+		hsnSacCodeVO.setUpdatedBy(hsnSacCodeDTO.getUpdatedBy());
+	}
+
+	@Override
+	public List<HsnSacCodeVO> getHsnSacCodeByActive() {
+		return hsnSacCodeRepo.findHsnSacCodeByActive();
+
+	}
+	// ExRates
+
+	@Override
+	public List<ExRatesVO> getAllExRatesById(Long id) {
+		List<ExRatesVO> exRatesVO = new ArrayList<>();
+		if (ObjectUtils.isNotEmpty(id)) {
+			LOGGER.info("Successfully Received  ExRates Information BY Id : {}", id);
+			exRatesVO = exRatesRepo.getAllExRatesById(id);
+		} else {
+			LOGGER.info("Successfully Received  ExRates Information For All Id.");
+			exRatesVO = exRatesRepo.findAll();
+		}
+		return exRatesVO;
+	}
+
+	@Override
+	public List<ExRatesVO> getAllExRatesByOrgId(Long orgId) {
+		List<ExRatesVO> exRatesVO = new ArrayList<>();
+		if (ObjectUtils.isNotEmpty(orgId)) {
+			LOGGER.info("Successfully Received  ExRates Information BY OrgId : {}", orgId);
+			exRatesVO = exRatesRepo.getAllExRatesByOrgId(orgId);
+		} else {
+			LOGGER.info("Successfully Received  ExRates Information For All OrgId.");
+			exRatesVO = exRatesRepo.findAll();
+		}
+		return exRatesVO;
+	}
+
+	@Override
+	public ExRatesVO updateCreateExRates(@Valid ExRatesDTO exRatesDTO) throws ApplicationException {
+		ExRatesVO exRatesVO = new ExRatesVO();
+		if (ObjectUtils.isNotEmpty(exRatesDTO.getId())) {
+			exRatesVO = exRatesRepo.findById(exRatesDTO.getId())
+					.orElseThrow(() -> new ApplicationException("Invalid ExRates details"));
+		}
+		getExRatesVOFromExRatesDTO(exRatesDTO, exRatesVO);
+		return exRatesRepo.save(exRatesVO);
+	}
+
+	private void getExRatesVOFromExRatesDTO(@Valid ExRatesDTO exRatesDTO, ExRatesVO exRatesVO) {
+		exRatesVO.setDocDate(exRatesDTO.getDocDate());
+		exRatesVO.setDocMonth(exRatesDTO.getDocMonth());
+		exRatesVO.setCurrency(exRatesDTO.getCurrency());
+		exRatesVO.setSellRate(exRatesDTO.getSellRate());
+		exRatesVO.setBuyRate(exRatesDTO.getBuyRate());
+		exRatesVO.setAvgRate(exRatesDTO.getAvgRate());
+		exRatesVO.setOrgId(exRatesDTO.getOrgId());
+		exRatesVO.setActive(exRatesDTO.isActive());
+		exRatesVO.setCreatedBy(exRatesDTO.getCreatedBy());
+		exRatesVO.setUpdatedBy(exRatesDTO.getUpdatedBy());
+	}
+
+	@Override
+	public List<ExRatesVO> getExRatesByActive() {
+		return exRatesRepo.findExRatesByActive();
+
+	}
+
+	// SubLedgerAccount
+
+	@Override
+	public List<SubLedgerAccountVO> getAllSubLedgerAccountById(Long id) {
+		List<SubLedgerAccountVO> subLedgerAccountVO = new ArrayList<>();
+		if (ObjectUtils.isNotEmpty(id)) {
+			LOGGER.info("Successfully Received  SubLedgerAccount Information BY Id : {}", id);
+			subLedgerAccountVO = subLedgerAccountRepo.getAllSubLedgerAccountById(id);
+		} else {
+			LOGGER.info("Successfully Received  SubLedgerAccount Information For All Id.");
+			subLedgerAccountVO = subLedgerAccountRepo.findAll();
+		}
+		return subLedgerAccountVO;
+	}
+
+	@Override
+	public List<SubLedgerAccountVO> getAllSubLedgerAccountByOrgId(Long orgId) {
+		List<SubLedgerAccountVO> subLedgerAccountVO = new ArrayList<>();
+		if (ObjectUtils.isNotEmpty(orgId)) {
+			LOGGER.info("Successfully Received  SubLedgerAccount Information BY OrgId : {}", orgId);
+			subLedgerAccountVO = subLedgerAccountRepo.getAllSubLedgerAccountByOrgId(orgId);
+		} else {
+			LOGGER.info("Successfully Received  SubLedgerAccount Information For All OrgId.");
+			subLedgerAccountVO = subLedgerAccountRepo.findAll();
+		}
+		return subLedgerAccountVO;
+	}
+
+	@Override
+	public SubLedgerAccountVO updateCreateSubLedgerAccount(@Valid SubLedgerAccountDTO subLedgerAccountDTO)
+			throws ApplicationException {
+		SubLedgerAccountVO subLedgerAccountVO = new SubLedgerAccountVO();
+		if (ObjectUtils.isNotEmpty(subLedgerAccountDTO.getId())) {
+			subLedgerAccountVO = subLedgerAccountRepo.findById(subLedgerAccountDTO.getId())
+					.orElseThrow(() -> new ApplicationException("Invalid SubLedgerAccount details"));
+		}
+		getSubLedgerAccountVOFromSubLedgerAccountDTO(subLedgerAccountDTO, subLedgerAccountVO);
+		return subLedgerAccountRepo.save(subLedgerAccountVO);
+	}
+
+	private void getSubLedgerAccountVOFromSubLedgerAccountDTO(@Valid SubLedgerAccountDTO subLedgerAccountDTO,
+			SubLedgerAccountVO subLedgerAccountVO) {
+		subLedgerAccountVO.setAccountsCategory(subLedgerAccountDTO.getAccountsCategory());
+		subLedgerAccountVO.setSubLedgerType(subLedgerAccountDTO.getSubLedgerType());
+		subLedgerAccountVO.setSubLedgerName(subLedgerAccountDTO.getSubLedgerName());
+		subLedgerAccountVO.setNewCode(subLedgerAccountDTO.getNewCode());
+		subLedgerAccountVO.setOldCode(subLedgerAccountDTO.getOldCode());
+		subLedgerAccountVO.setControllAccount(subLedgerAccountDTO.getControllAccount());
+		subLedgerAccountVO.setCurrency(subLedgerAccountDTO.getCurrency());
+		subLedgerAccountVO.setCreditDays(subLedgerAccountDTO.getCreditDays());
+		subLedgerAccountVO.setCreditLimit(subLedgerAccountDTO.getCreditLimit());
+		subLedgerAccountVO.setVatno(subLedgerAccountDTO.getVatno());
+		subLedgerAccountVO.setStateJutisiction(subLedgerAccountDTO.getStateJutisiction());
+		subLedgerAccountVO.setInvoiceType(subLedgerAccountDTO.getInvoiceType());
+		subLedgerAccountVO.setOrgId(subLedgerAccountDTO.getOrgId());
+		subLedgerAccountVO.setActive(subLedgerAccountDTO.isActive());
+		subLedgerAccountVO.setCreatedBy(subLedgerAccountDTO.getCreatedBy());
+		subLedgerAccountVO.setUpdatedBy(subLedgerAccountDTO.getUpdatedBy());
+
+	}
+
+	@Override
+	public List<SubLedgerAccountVO> getSubLedgerAccountByActive() {
+		return subLedgerAccountRepo.findSubLedgerAccountByActive();
+
+	}
+	// CostCenter
+
+	@Override
+	public List<CostCenterVO> getAllCostCenterById(Long id) {
+		List<CostCenterVO> costCenterVO = new ArrayList<>();
+		if (ObjectUtils.isNotEmpty(id)) {
+			LOGGER.info("Successfully Received  CostCenter Information BY Id : {}", id);
+			costCenterVO = costCenterRepo.getAllCostCenterById(id);
+		} else {
+			LOGGER.info("Successfully Received  CostCenter Information For All Id.");
+			costCenterVO = costCenterRepo.findAll();
+		}
+		return costCenterVO;
+	}
+
+	@Override
+	public List<CostCenterVO> getAllCostCenterByOrgId(Long orgId) {
+		List<CostCenterVO> costCenterVO = new ArrayList<>();
+		if (ObjectUtils.isNotEmpty(orgId)) {
+			LOGGER.info("Successfully Received  CostCenter Information BY OrgId : {}", orgId);
+			costCenterVO = costCenterRepo.getAllCostCenterByOrgId(orgId);
+		} else {
+			LOGGER.info("Successfully Received  CostCenter Information For All OrgId.");
+			costCenterVO = costCenterRepo.findAll();
+		}
+		return costCenterVO;
+	}
+
+	@Override
+	public CostCenterVO updateCreateCostCenter(@Valid CostCenterDTO costCenterDTO) throws ApplicationException {
+		CostCenterVO costCenterVO = new CostCenterVO();
+		if (ObjectUtils.isNotEmpty(costCenterDTO.getId())) {
+			costCenterVO = costCenterRepo.findById(costCenterDTO.getId())
+					.orElseThrow(() -> new ApplicationException("Invalid CostCenter details"));
+		}
+		getCostCenterVOFromCostCenterDTO(costCenterDTO, costCenterVO);
+		return costCenterRepo.save(costCenterVO);
+	}
+
+	private void getCostCenterVOFromCostCenterDTO(@Valid CostCenterDTO costCenterDTO, CostCenterVO costCenterVO) {
+		costCenterVO.setDimensionType(costCenterDTO.getDimensionType());
+		costCenterVO.setValueCode(costCenterDTO.getValueCode());
+		costCenterVO.setValueDescriopition(costCenterDTO.getValueDescripition());
+		costCenterVO.setOrgId(costCenterDTO.getOrgId());
+		costCenterVO.setCreatedBy(costCenterDTO.getCreatedBy());
+		costCenterVO.setUpdatedBy(costCenterDTO.getUpdatedBy());
+		costCenterVO.setActive(costCenterDTO.isActive());
+
+	}
+
+	@Override
+	public List<CostCenterVO> getCostCenterByActive() {
+		return costCenterRepo.findCostCenterByActive();
+
+	}
+
+	// ChequeBox
+	@Override
+	public List<ChequeBoxVO> getAllChequeBoxById(Long id) {
+		List<ChequeBoxVO> chequeBoxVO = new ArrayList<>();
+		if (ObjectUtils.isNotEmpty(id)) {
+			LOGGER.info("Successfully Received  ChequeBox Information BY Id : {}", id);
+			chequeBoxVO = chequeBoxRepo.getAllChequeBoxById(id);
+		} else {
+			LOGGER.info("Successfully Received  ChequeBox Information For All Id.");
+			chequeBoxVO = chequeBoxRepo.findAll();
+		}
+		return chequeBoxVO;
+	}
+
+	@Override
+	public List<ChequeBoxVO> getAllChequeBoxByOrgId(Long orgId) {
+		List<ChequeBoxVO> chequeBoxVO = new ArrayList<>();
+		if (ObjectUtils.isNotEmpty(orgId)) {
+			LOGGER.info("Successfully Received  ChequeBox Information BY OrgId : {}", orgId);
+			chequeBoxVO = chequeBoxRepo.getAllChequeBoxByOrgId(orgId);
+		} else {
+			LOGGER.info("Successfully Received ChequeBox Information For All OrgId.");
+			chequeBoxVO = chequeBoxRepo.findAll();
+		}
+		return chequeBoxVO;
+	}
+
+	@Override
+	public ChequeBoxVO updateCreateChequeBox(@Valid ChequeBoxDTO chequeBoxDTO) throws ApplicationException {
+		ChequeBoxVO chequeBoxVO = new ChequeBoxVO();
+		if (ObjectUtils.isNotEmpty(chequeBoxDTO.getId())) {
+			chequeBoxVO = chequeBoxRepo.findById(chequeBoxDTO.getId())
+					.orElseThrow(() -> new ApplicationException("Invalid ChequeBox details"));
+		}
+		getChequeBoxVOFromChequeBoxDTO(chequeBoxDTO, chequeBoxVO);
+		return chequeBoxRepo.save(chequeBoxVO);
+	}
+
+	private void getChequeBoxVOFromChequeBoxDTO(@Valid ChequeBoxDTO chequeBoxDTO, ChequeBoxVO chequeBoxVO) {
+		chequeBoxVO.setBranch(chequeBoxDTO.getBranch());
+		chequeBoxVO.setChequeBoxId(chequeBoxDTO.getChequeBoxId());
+		chequeBoxVO.setBank(chequeBoxDTO.getBank());
+		chequeBoxVO.setCheckPrefix(chequeBoxDTO.getCheckPrefix());
+		chequeBoxVO.setCheckStartNo(chequeBoxDTO.getCheckStartNo());
+		chequeBoxVO.setNoOfChequeLeaves(chequeBoxDTO.getNoOfChequeLeaves());
+		chequeBoxVO.setOrgId(chequeBoxDTO.getOrgId());
+		chequeBoxVO.setActive(chequeBoxDTO.isActive());
+		chequeBoxVO.setCreatedBy(chequeBoxDTO.getCreatedBy());
+		chequeBoxVO.setUpdatedBy(chequeBoxDTO.getUpdatedBy());
+
+	}
+
+	@Override
+	public List<ChequeBoxVO> getChequeBoxByActive() {
+		return chequeBoxRepo.findChequeBoxByActive();
+
+	}
 }

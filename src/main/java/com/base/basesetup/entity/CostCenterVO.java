@@ -12,38 +12,42 @@ import javax.persistence.Table;
 import com.base.basesetup.dto.CreatedUpdatedDate;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "role")
+@Table(name = "costcenter")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class RoleMasterVO {
-
+@Builder
+public class CostCenterVO {
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "rolegen")
-	@SequenceGenerator(name = "rolegen", sequenceName = "roleVO", initialValue = 1000000001, allocationSize = 1)
-	@Column(name = "roleid")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = " costcentergen")
+	@SequenceGenerator(name = "costcentergen", sequenceName = "costcenterVO", initialValue = 1000000001, allocationSize = 1)
+	@Column(name = "costcenterid")
 	private Long id;
-	@Column(name = "role")
-	private String role;
+	@Column(name = "dimensiontype")
+	private String dimensionType;
+	@Column(name = "valuecode")
+	private String valueCode;
+	@Column(name = "valuedescripition")
+	private String valueDescriopition;
+	@Column(name = "orgid")
+	private Long orgId;
 	@Column(name = "active")
 	private boolean active;
 	@Column(name = "cancel")
-	private boolean cancel;
-	@Column(name = "orgid")
-	private Long orgId;
+	private String cancel;
+	@Column(name = "cancelremarks")
+	private String cancelRemarks;
 	@Column(name = "createdby")
 	private String createdBy;
 	@Column(name = "modifiedby")
 	private String updatedBy;
-	@Column(name = "cancelremarks")
-	private String cancelRemarks;
-	
-	
-	
+
 	@Embedded
+	@Builder.Default
 	private CreatedUpdatedDate commonDate = new CreatedUpdatedDate();
 }

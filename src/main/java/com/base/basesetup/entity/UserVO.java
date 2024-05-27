@@ -11,7 +11,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -63,7 +62,7 @@ public class UserVO {
 	
 	@JsonBackReference
 	@OneToOne
-	@MapsId
+//	@MapsId
 	@JoinColumn(name="employeeid")
 	private EmployeeVO employeeVO;
 }

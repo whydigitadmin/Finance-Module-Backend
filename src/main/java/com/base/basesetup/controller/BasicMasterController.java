@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -11,15 +12,18 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.base.basesetup.common.CommonConstant;
 import com.base.basesetup.common.UserConstants;
@@ -43,7 +47,10 @@ import com.base.basesetup.entity.FinancialYearVO;
 import com.base.basesetup.entity.ResponsibilitiesVO;
 import com.base.basesetup.entity.RoleMasterVO;
 import com.base.basesetup.entity.StateVO;
+import com.base.basesetup.exception.ApplicationException;
 import com.base.basesetup.service.BasicMasterService;
+
+import io.jsonwebtoken.io.IOException;
 
 @CrossOrigin
 @RestController
@@ -55,7 +62,8 @@ public class BasicMasterController extends BaseController {
 
 	public static final Logger LOGGER = LoggerFactory.getLogger(BasicMasterController.class);
 
-//	Currency -----------------------------------------------------------------------------------
+	// Currency
+	// -----------------------------------------------------------------------------------
 
 	@GetMapping("/getCurrencyById")
 	public ResponseEntity<ResponseDTO> getCurrencyById(@RequestParam(required = false) Long id) {
@@ -163,7 +171,7 @@ public class BasicMasterController extends BaseController {
 		return ResponseEntity.ok().body(responseDTO);
 	}
 
-//	Company -----------------------------------------------------------------------------------
+	// Company-----------------------------------------------------------------------------------
 	@GetMapping("/getCompanyById")
 	public ResponseEntity<ResponseDTO> getCompanyById(@RequestParam(required = false) Long id) {
 		String methodName = "getCompanyById()";
@@ -269,7 +277,25 @@ public class BasicMasterController extends BaseController {
 		return ResponseEntity.ok().body(responseDTO);
 	}
 
-//	Employee -----------------------------------------------------------------------------------
+	@PostMapping("/uploadCompanyLogo")
+	public ResponseEntity<String> uploadImage(@RequestParam("file") MultipartFile file, @RequestParam("id") Long id)
+			throws IOException, java.io.IOException, ApplicationException {
+		CompanyVO image = basicMasterService.saveImage(file, id);
+		return ResponseEntity.status(HttpStatus.OK).body("Company Logo uploaded successfully: " + image.getId());
+	}
+
+	@GetMapping("/getCompanyLogo/{id}")
+	public ResponseEntity<byte[]> getImage(@PathVariable Long id) {
+		Optional<CompanyVO> imageOptional = basicMasterService.getImage(id);
+		if (imageOptional.isPresent()) {
+			CompanyVO image = imageOptional.get();
+			return ResponseEntity.ok().header("attachment; filename=\"" + image.getImageName() + "\"")
+					.body(image.getData());
+		}
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+	}
+
+	// Employee-----------------------------------------------------------------------------------
 	@GetMapping("/getEmployeeById")
 	public ResponseEntity<ResponseDTO> getEmployeeById(@RequestParam(required = false) Long id) {
 		String methodName = "getEmployeeById()";
@@ -376,7 +402,8 @@ public class BasicMasterController extends BaseController {
 
 	}
 
-//	Country -----------------------------------------------------------------------------------
+	// Country
+	// -----------------------------------------------------------------------------------
 	@GetMapping("/getCountryById")
 	public ResponseEntity<ResponseDTO> getCountryById(@RequestParam(required = false) Long id) {
 		String methodName = "getCountryById()";
@@ -482,7 +509,8 @@ public class BasicMasterController extends BaseController {
 		return ResponseEntity.ok().body(responseDTO);
 	}
 
-//	State -----------------------------------------------------------------------------------
+	// State
+	// -----------------------------------------------------------------------------------
 	@GetMapping("/getStateById")
 	public ResponseEntity<ResponseDTO> getStateById(@RequestParam(required = false) Long id) {
 		String methodName = "getStateById()";
@@ -615,7 +643,8 @@ public class BasicMasterController extends BaseController {
 		return ResponseEntity.ok().body(responseDTO);
 	}
 
-//	City -----------------------------------------------------------------------------------
+	// City
+	// -----------------------------------------------------------------------------------
 	@GetMapping("/getCityById")
 	public ResponseEntity<ResponseDTO> getCityById(@RequestParam(required = false) Long id) {
 		String methodName = "getCityById()";
@@ -748,7 +777,8 @@ public class BasicMasterController extends BaseController {
 		return ResponseEntity.ok().body(responseDTO);
 	}
 
-//Finacial Year--------------------------------------------------------------------------
+	// Finacial
+	// Year--------------------------------------------------------------------------
 	@GetMapping("/getFinancialYearById")
 	public ResponseEntity<ResponseDTO> getFinancialYearById(@RequestParam(required = false) Long id) {
 		String methodName = "getFinancialYearById()";
@@ -850,7 +880,8 @@ public class BasicMasterController extends BaseController {
 		return ResponseEntity.ok().body(responseDTO);
 	}
 
-//	Branch -----------------------------------------------------------------------------------
+	// Branch
+	// -----------------------------------------------------------------------------------
 	@GetMapping("/getBranchById")
 	public ResponseEntity<ResponseDTO> getBranchById(@RequestParam(required = false) Long id) {
 		String methodName = "getBranchById()";
@@ -956,7 +987,7 @@ public class BasicMasterController extends BaseController {
 		return ResponseEntity.ok().body(responseDTO);
 	}
 
-//	Roles-----------------------------------------------------------------
+	// Roles-----------------------------------------------------------------
 	@GetMapping("/getRoleMasterById")
 	public ResponseEntity<ResponseDTO> getRoleById(@RequestParam(required = false) Long id) {
 		String methodName = "getRoleById()";
@@ -1062,7 +1093,7 @@ public class BasicMasterController extends BaseController {
 		return ResponseEntity.ok().body(responseDTO);
 	}
 
-//	Responsibilities-----------------------------------------------------------------
+	// Responsibilities-----------------------------------------------------------------
 	@GetMapping("/getResponsibilitiesById")
 	public ResponseEntity<ResponseDTO> getResponsibilitiesById(@RequestParam(required = false) Long id) {
 		String methodName = "getResponsibilitiesById()";

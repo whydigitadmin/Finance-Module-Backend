@@ -6,6 +6,8 @@ import java.util.Optional;
 import javax.validation.Valid;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.base.basesetup.dto.BranchDTO;
 import com.base.basesetup.dto.CityDTO;
@@ -48,6 +50,10 @@ public interface BasicMasterService {
 	CompanyVO updateCreateCompany(@Valid CompanyDTO companyDTO) throws Exception;
 
 	List<CompanyVO> getCompanyByActive();
+
+	CompanyVO saveImage(MultipartFile file,@RequestParam Long id) throws ApplicationException, java.io.IOException;
+
+	Optional<CompanyVO> getImage(Long id);
 
 //	Employee
 	List<EmployeeVO> getEmployeeById(Long id);
@@ -113,15 +119,16 @@ public interface BasicMasterService {
 	List<RoleMasterVO> getRoleByOrgId(Long orgid);
 
 	RoleMasterVO updateCreateRole(@Valid RoleMasterDTO roleDTO) throws ApplicationException;
-	
+
 	List<RoleMasterVO> getRoleByActive();
-	
-//	Responsibilities
+
+//	Responsibilities 
 	List<ResponsibilitiesVO> getResponsibilitiesById(Long id);
 
 	List<ResponsibilitiesVO> getResponsibilitiesByOrgId(Long orgid);
 
-	ResponsibilitiesVO updateCreateResponsibilities(@Valid ResponsibilitiesDTO responsibilitiesDTO) throws ApplicationException;
-	
+	ResponsibilitiesVO updateCreateResponsibilities(@Valid ResponsibilitiesDTO responsibilitiesDTO)
+			throws ApplicationException;
+
 	List<ResponsibilitiesVO> getResponsibilitiesByActive();
 }

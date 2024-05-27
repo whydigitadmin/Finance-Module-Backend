@@ -7,8 +7,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class HsnSacCodeDTO {
-	private Long hsnSacCodeId;
+	private Long id;
 	private Long orgId;
+	private boolean active;
 	private String type;
 	private String code;
 	private String description;
@@ -18,4 +19,6 @@ public class HsnSacCodeDTO {
 	private String subChapterCode;
 	private float rate;
 	private boolean excempted;
+	private String createdBy;
+	private String updatedBy;
 }
