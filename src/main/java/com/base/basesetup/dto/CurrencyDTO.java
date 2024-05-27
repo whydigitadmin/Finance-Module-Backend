@@ -19,4 +19,5 @@ public class CurrencyDTO {
 	private String currencySymbol;
 	private Long orgId;
 	private boolean active;
+	private String baseCurrency;
 }

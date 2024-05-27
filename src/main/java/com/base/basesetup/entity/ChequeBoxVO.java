@@ -24,7 +24,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class ChequeBoxVO {
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = " chequeboxmastergen")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "chequeboxmastergen")
 	@SequenceGenerator(name = "chequeboxmastergen", sequenceName = "chequeboxmasterVO", initialValue = 1000000001, allocationSize = 1)
 	@Column(name = "chequeboxmasterid")
 	private Long id;
