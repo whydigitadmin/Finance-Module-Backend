@@ -42,7 +42,7 @@ public class CurrencyVO {
 	@Column(name = "orgid")
 	private Long orgId;
 	@Column(name = "basecurrency")
-	private Long baseCurrency;
+	private String baseCurrency;
 
 	@Column(name = "active")
 	private boolean active;

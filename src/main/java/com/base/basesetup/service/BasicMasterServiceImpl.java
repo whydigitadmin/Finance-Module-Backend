@@ -144,6 +144,7 @@ public class BasicMasterServiceImpl implements BasicMasterService {
 		currencyVO.setActive(currencyDTO.isActive());
 		currencyVO.setUserId(currencyDTO.getUserid());
 		currencyVO.setCountry(currencyDTO.getCountry());
+		currencyVO.setBaseCurrency(currencyDTO.getBaseCurrency());
 		currencyVO.setCurrency(currencyDTO.getCurrency());
 		currencyVO.setSubCurrency(currencyDTO.getSubCurrency());
 		currencyVO.setCurrencySymbol(currencyDTO.getCurrencySymbol());
