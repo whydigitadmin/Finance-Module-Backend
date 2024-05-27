@@ -147,8 +147,8 @@ public class MasterServiceImpl implements MasterService {
 	@Override
 	public SetTaxRateVO updateCreateSetTaxRate(@Valid SetTaxRateDTO setTaxRateDTO) throws ApplicationException {
 		SetTaxRateVO setTaxRateVO = new SetTaxRateVO();
-		if (ObjectUtils.isNotEmpty(setTaxRateDTO.getSetTaxRateId())) {
-			setTaxRateVO = setTaxRateRepo.findById(setTaxRateDTO.getSetTaxRateId())
+		if (ObjectUtils.isNotEmpty(setTaxRateDTO.getId())) {
+			setTaxRateVO = setTaxRateRepo.findById(setTaxRateDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid SetTaxRate details"));
 		}
 		getSetTaxRateVOFromSetTaxRateDTO(setTaxRateDTO, setTaxRateVO);
@@ -178,16 +178,16 @@ public class MasterServiceImpl implements MasterService {
 
 	public TaxMasterVO updateCreateTaxMaster(TaxMasterDTO taxMasterDTO) throws ApplicationException {
 		TaxMasterVO taxMasterVO = new TaxMasterVO();
-		if (ObjectUtils.isNotEmpty(taxMasterDTO.getTaxMasterId())) {
-			taxMasterVO = taxMasterRepo.findById(taxMasterDTO.getTaxMasterId())
+		if (ObjectUtils.isNotEmpty(taxMasterDTO.getId())) {
+			taxMasterVO = taxMasterRepo.findById(taxMasterDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid Tax Master details"));
 		}
 
 		List<TaxMaster2VO> taxMaster2VOs = new ArrayList<>();
 		if (taxMasterDTO.getTaxMaster2DTO() != null) {
 			for (TaxMaster2DTO taxMaster2DTO : taxMasterDTO.getTaxMaster2DTO()) {
-				if (taxMaster2DTO.getTaxMaster2Id() != null & ObjectUtils.isNotEmpty(taxMaster2DTO.getTaxMaster2Id())) {
-					TaxMaster2VO taxMaster2VO = taxMaster2Repo.findById(taxMaster2DTO.getTaxMaster2Id()).get();
+				if (taxMaster2DTO.getId() != null & ObjectUtils.isNotEmpty(taxMaster2DTO.getId())) {
+					TaxMaster2VO taxMaster2VO = taxMaster2Repo.findById(taxMaster2DTO.getId()).get();
 					taxMaster2VO.setInputAccount(taxMaster2DTO.getInputAccount());
 					taxMaster2VO.setOutputAccount(taxMaster2DTO.getOutputAccount());
 					taxMaster2VO.setSgstRcmPayable(true);
@@ -283,16 +283,16 @@ public class MasterServiceImpl implements MasterService {
 	@Override
 	public TcsMasterVO updateCreateTcsMaster(@Valid TcsMasterDTO tcsMasterDTO) throws ApplicationException {
 		TcsMasterVO tcsMasterVO = new TcsMasterVO();
-		if (ObjectUtils.isNotEmpty(tcsMasterDTO.getTcsMasterId())) {
-			tcsMasterVO = tcsMasterRepo.findById(tcsMasterDTO.getTcsMasterId())
+		if (ObjectUtils.isNotEmpty(tcsMasterDTO.getId())) {
+			tcsMasterVO = tcsMasterRepo.findById(tcsMasterDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid Tcs Master details"));
 		}
 
 		List<TcsMaster2VO> tcsMaster2VOs = new ArrayList<>();
 		if (tcsMasterDTO.getTcsMaster2DTO() != null) {
 			for (TcsMaster2DTO tcsMaster2DTO : tcsMasterDTO.getTcsMaster2DTO()) {
-				if (tcsMaster2DTO.getTcsMaster2Id() != null & ObjectUtils.isNotEmpty(tcsMaster2DTO.getTcsMaster2Id())) {
-					TcsMaster2VO tcsMaster2VO = tcsMaster2Repo.findById(tcsMaster2DTO.getTcsMaster2Id()).get();
+				if (tcsMaster2DTO.getId() != null & ObjectUtils.isNotEmpty(tcsMaster2DTO.getId())) {
+					TcsMaster2VO tcsMaster2VO = tcsMaster2Repo.findById(tcsMaster2DTO.getId()).get();
 					tcsMaster2VO.setFromDate(tcsMaster2DTO.getFromDate());
 					tcsMaster2VO.setToDate(tcsMaster2DTO.getToDate());
 					tcsMaster2VO.setSerialNo(tcsMaster2DTO.getSerialNo());
@@ -363,16 +363,16 @@ public class MasterServiceImpl implements MasterService {
 	@Override
 	public TdsMasterVO updateCreateTdsMaster(@Valid TdsMasterDTO tdsMasterDTO) throws ApplicationException {
 		TdsMasterVO tdsMasterVO = new TdsMasterVO();
-		if (ObjectUtils.isNotEmpty(tdsMasterDTO.getTdsMasterId())) {
-			tdsMasterVO = tdsMasterRepo.findById(tdsMasterDTO.getTdsMasterId())
+		if (ObjectUtils.isNotEmpty(tdsMasterDTO.getId())) {
+			tdsMasterVO = tdsMasterRepo.findById(tdsMasterDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid Tds Master details"));
 		}
 
 		List<TdsMaster2VO> tdsMaster2VOs = new ArrayList<>();
 		if (tdsMasterDTO.getTdsMaster2DTO() != null) {
 			for (TdsMaster2DTO tdsMaster2DTO : tdsMasterDTO.getTdsMaster2DTO()) {
-				if (tdsMaster2DTO.getTdsMaster2Id() != null & ObjectUtils.isNotEmpty(tdsMaster2DTO.getTdsMaster2Id())) {
-					TdsMaster2VO tdsMaster2VO = tdsMaster2Repo.findById(tdsMaster2DTO.getTdsMaster2Id()).get();
+				if (tdsMaster2DTO.getId() != null & ObjectUtils.isNotEmpty(tdsMaster2DTO.getId())) {
+					TdsMaster2VO tdsMaster2VO = tdsMaster2Repo.findById(tdsMaster2DTO.getId()).get();
 					tdsMaster2VO.setFromDate(tdsMaster2DTO.getFromDate());
 					tdsMaster2VO.setToDate(tdsMaster2DTO.getToDate());
 					tdsMaster2VO.setSurPercentage(tdsMaster2DTO.getSurPercentage());
@@ -452,8 +452,8 @@ public class MasterServiceImpl implements MasterService {
 		List<Account1VO> account1VOs = new ArrayList<>();
 		if (accountDTO.getAccount1DTO() != null) {
 			for (Account1DTO account1DTO : accountDTO.getAccount1DTO()) {
-				if (account1DTO.getAccount1Id() != null & ObjectUtils.isNotEmpty(account1DTO.getAccount1Id())) {
-					Account1VO account1VO = account1Repo.findById(account1DTO.getAccount1Id()).get();
+				if (account1DTO.getId() != null & ObjectUtils.isNotEmpty(account1DTO.getId())) {
+					Account1VO account1VO = account1Repo.findById(account1DTO.getId()).get();
 					account1VO.setBalanceSheet(account1DTO.getBalanceSheet());
 					account1VO.setIncomeStatement(account1DTO.getIncomeStatement());
 					account1VO.setCashFlowStatement(account1DTO.getCashFlowStatement());
@@ -473,8 +473,8 @@ public class MasterServiceImpl implements MasterService {
 		List<Account2VO> account2VOs = new ArrayList<>();
 		if (accountDTO.getAccount2DTO() != null) {
 			for (Account2DTO account2DTO : accountDTO.getAccount2DTO()) {
-				if (account2DTO.getAccount2Id() != null & ObjectUtils.isNotEmpty(account2DTO.getAccount2Id())) {
-					Account2VO account2VO = account2Repo.findById(account2DTO.getAccount2Id()).get();
+				if (account2DTO.getId() != null & ObjectUtils.isNotEmpty(account2DTO.getId())) {
+					Account2VO account2VO = account2Repo.findById(account2DTO.getId()).get();
 					account2VO.setBankType(account2DTO.getBankType());
 					account2VO.setOverDraftLimit(account2DTO.getOverDraftLimit());
 					account2VO.setAccountNo(account2DTO.getAccountNo());
@@ -495,8 +495,8 @@ public class MasterServiceImpl implements MasterService {
 		List<Account3VO> account3VOs = new ArrayList<>();
 		if (accountDTO.getAccount3DTO() != null) {
 			for (Account3DTO account3DTO : accountDTO.getAccount3DTO()) {
-				if (account3DTO.getAccount3Id() != null & ObjectUtils.isNotEmpty(account3DTO.getAccount3Id())) {
-					Account3VO account3VO = account3Repo.findById(account3DTO.getAccount3Id()).get();
+				if (account3DTO.getId() != null & ObjectUtils.isNotEmpty(account3DTO.getId())) {
+					Account3VO account3VO = account3Repo.findById(account3DTO.getId()).get();
 					account3VO.setCompany(account3DTO.getCompany());
 					account3VO.setBranchLocation(account3DTO.getBranchLocation());
 					account3VO.setAccountVO(accountVO);

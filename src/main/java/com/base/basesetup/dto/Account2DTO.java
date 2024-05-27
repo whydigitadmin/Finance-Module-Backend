@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 
 public class Account2DTO {
 	
-	private Long account2Id;
+	private Long Id;
 	private String bankType;
 	private Long accountNo;
 	private Long overDraftLimit;

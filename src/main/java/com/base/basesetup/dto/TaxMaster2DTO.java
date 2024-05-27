@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class TaxMaster2DTO {
 
-	private Long taxMaster2Id;
+	private Long Id;
 	private Long inputAccount;
 	private Long outputAccount;
 	private boolean sgstRcmPayable;

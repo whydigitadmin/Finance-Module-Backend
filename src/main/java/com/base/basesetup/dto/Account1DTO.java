@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class Account1DTO {
-	private Long account1Id;
+	private Long Id;
 	private String balanceSheet;
 	private String cashFlowStatement;
 	private String incomeStatement;

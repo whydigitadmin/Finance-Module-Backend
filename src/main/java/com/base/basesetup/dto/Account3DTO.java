@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class Account3DTO {
-	private Long account3Id;
+	private Long Id;
 	private String company;
 	private String branchLocation;
 
