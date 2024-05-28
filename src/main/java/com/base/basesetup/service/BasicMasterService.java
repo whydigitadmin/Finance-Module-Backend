@@ -38,7 +38,7 @@ public interface BasicMasterService {
 
 	List<CurrencyVO> getCurrencyByOrgId(Long orgid);
 
-	CurrencyVO updateCreateCurrency(@Valid CurrencyDTO currencyDTO) throws ApplicationException;
+	CurrencyVO updateCreateCurrency(@Valid CurrencyDTO currencyDTO) throws  Exception;
 
 	List<CurrencyVO> getCurrencyByActive();
 

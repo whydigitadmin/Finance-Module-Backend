@@ -41,6 +41,8 @@ public class CurrencyVO {
 	private String currencySymbol;
 	@Column(name = "orgid")
 	private Long orgId;
+	@Column(name = "basecurrency")
+	private String baseCurrency;
 
 	@Column(name = "active")
 	private boolean active;

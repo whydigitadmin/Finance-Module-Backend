@@ -102,7 +102,7 @@ public class MasterServiceImpl implements MasterService {
 
 	@Autowired
 	GroupLedgerRepo groupLedgerRepo;
-
+	
 	@Autowired
 	HsnSacCodeRepo hsnSacCodeRepo;
 
@@ -145,18 +145,32 @@ public class MasterServiceImpl implements MasterService {
 	}
 
 	@Override
-	public SetTaxRateVO updateCreateSetTaxRate(@Valid SetTaxRateDTO setTaxRateDTO) throws ApplicationException {
+	public SetTaxRateVO updateCreateSetTaxRate(@Valid SetTaxRateDTO setTaxRateDTO) throws Exception {
 		SetTaxRateVO setTaxRateVO = new SetTaxRateVO();
+
 		if (ObjectUtils.isNotEmpty(setTaxRateDTO.getId())) {
 			setTaxRateVO = setTaxRateRepo.findById(setTaxRateDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid SetTaxRate details"));
+		} else {
+			// Check for duplicates when creating a new record
+			if (setTaxRateRepo.existsByChapterAndOrgId(setTaxRateDTO.getChapter(), setTaxRateDTO.getOrgId())) {
+				throw new ApplicationException("Chapter already exists");
+			}
 		}
+
 		getSetTaxRateVOFromSetTaxRateDTO(setTaxRateDTO, setTaxRateVO);
+
+		// Check for duplicates when updating a record
+		if (ObjectUtils.isNotEmpty(setTaxRateDTO.getId()) && setTaxRateRepo.existsByChapterAndOrgIdAndIdNot(
+				setTaxRateVO.getChapter(), setTaxRateVO.getOrgId(), setTaxRateVO.getId())) {
+			throw new ApplicationException("Chapter already exists");
+		}
+
 		return setTaxRateRepo.save(setTaxRateVO);
 	}
 
-	private void getSetTaxRateVOFromSetTaxRateDTO(@Valid SetTaxRateDTO setTaxRateDTO, SetTaxRateVO setTaxRateVO) {
-
+	private void getSetTaxRateVOFromSetTaxRateDTO(@Valid SetTaxRateDTO setTaxRateDTO, SetTaxRateVO setTaxRateVO)
+			throws Exception {
 		setTaxRateVO.setOrgId(setTaxRateDTO.getOrgId());
 		setTaxRateVO.setChapter(setTaxRateDTO.getChapter());
 		setTaxRateVO.setSubChapter(setTaxRateDTO.getSubChapter());

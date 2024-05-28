@@ -128,25 +128,43 @@ public class BasicMasterServiceImpl implements BasicMasterService {
 	}
 
 	@Override
-	public CurrencyVO updateCreateCurrency(@Valid CurrencyDTO currencyDTO) throws ApplicationException {
+	public CurrencyVO updateCreateCurrency(@Valid CurrencyDTO currencyDTO) throws Exception {
 		CurrencyVO currencyVO = new CurrencyVO();
+
 		if (ObjectUtils.isNotEmpty(currencyDTO.getId())) {
 			currencyVO = currencyRepo.findById(currencyDTO.getId())
-					.orElseThrow(() -> new ApplicationException("Invalid Currency Details"));
+					.orElseThrow(() -> new ApplicationException("Invalid Currency details"));
+		} else {
+			// Check for duplicates when creating a new record
+			if (currencyRepo.existsByCurrencyAndOrgId(currencyDTO.getCurrency(), currencyDTO.getOrgId())) {
+				throw new ApplicationException("Currency already exists");
+			}
+			if (currencyRepo.existsByCountryAndOrgId(currencyDTO.getCountry(), currencyDTO.getOrgId()))
+				throw new ApplicationException("Country already exists");
 		}
+
 		getCurrencyVOFromCurrencyDTO(currencyDTO, currencyVO);
+
+		// Check for duplicates when updating a record
+		if (ObjectUtils.isNotEmpty(currencyDTO.getId()) && currencyRepo.existsByCurrencyAndOrgIdAndIdNot(
+				currencyVO.getCurrency(), currencyVO.getOrgId(), currencyVO.getId())) {
+			throw new ApplicationException("Currency already exists");
+		}
+
 		return currencyRepo.save(currencyVO);
 	}
 
-	private void getCurrencyVOFromCurrencyDTO(@Valid CurrencyDTO currencyDTO, CurrencyVO currencyVO)
-			throws ApplicationException {
+	private void getCurrencyVOFromCurrencyDTO(@Valid CurrencyDTO currencyDTO, CurrencyVO currencyVO) throws Exception {
 		currencyVO.setOrgId(currencyDTO.getOrgId());
 		currencyVO.setActive(currencyDTO.isActive());
 		currencyVO.setUserId(currencyDTO.getUserid());
 		currencyVO.setCountry(currencyDTO.getCountry());
+		currencyVO.setBaseCurrency(currencyDTO.getBaseCurrency());
 		currencyVO.setCurrency(currencyDTO.getCurrency());
 		currencyVO.setSubCurrency(currencyDTO.getSubCurrency());
 		currencyVO.setCurrencySymbol(currencyDTO.getCurrencySymbol());
+		currencyVO.setUpdatedBy(currencyDTO.getUpdatedBy());
+		currencyVO.setCreatedBy(currencyDTO.getCreatedBy());
 	}
 
 	@Override
@@ -202,8 +220,8 @@ public class BasicMasterServiceImpl implements BasicMasterService {
 		userVO.setEmail(companyVO.getEmail());
 		userVO.setRole(Role.ROLE_ADMIN);
 		userVO.setEmployeeName(companyDTO.getEmployeeName());
-		if(userRepo.existsByUserName(companyDTO.getEmployeeCode())) {
-			throw new ApplicationException("Employee code already existes"); 
+		if (userRepo.existsByUserName(companyDTO.getEmployeeCode())) {
+			throw new ApplicationException("Employee code already existes");
 		}
 		userVO.setUserName(companyVO.getEmployeeCode());
 		userVO.setOrgId(companyVO.getId());
@@ -349,8 +367,8 @@ public class BasicMasterServiceImpl implements BasicMasterService {
 		employeeRepo.save(employeeVO);
 		UserVO userVO = new UserVO();
 		userVO.setEmployeeName(employeeDTO.getEmployeeName());
-		if(userRepo.existsByUserName(employeeDTO.getEmployeeCode())) {
-			throw new ApplicationException("Employee code already existes"); 
+		if (userRepo.existsByUserName(employeeDTO.getEmployeeCode())) {
+			throw new ApplicationException("Employee code already existes");
 		}
 		userVO.setUserName(employeeDTO.getEmployeeCode());
 		userVO.setOrgId(employeeDTO.getOrgId());
