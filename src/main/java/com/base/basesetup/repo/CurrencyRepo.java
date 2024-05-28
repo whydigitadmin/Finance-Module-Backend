@@ -15,11 +15,11 @@ public interface CurrencyRepo extends JpaRepository<CurrencyVO, Long> {
 	@Query(nativeQuery = true, value = "select * from currency where orgid=?1")
 	List<CurrencyVO> findCurrencyByOrgId(Long orgId);
 
-	boolean existsBySubCurrencyAndOrgId(String subCurrency, Long orgId);
+	@Query(nativeQuery = true, value = "select * from currency where active=1")
+	List<CurrencyVO> findCurrencyByActive();
+
+	boolean existsByCurrencyAndOrgIdAndIdNot(String currency, Long orgId, Long id);
 
 	boolean existsByCurrencyAndOrgId(String currency, Long orgId);
-
-	@Query(nativeQuery = true, value="select * from currency where active=1")
-	List<CurrencyVO> findCurrencyByActive();
 
 }

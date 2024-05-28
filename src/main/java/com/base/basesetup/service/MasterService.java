@@ -38,7 +38,7 @@ public interface MasterService {
 
 	List<SetTaxRateVO> getAllSetTaxRateById(Long id);
 
-	SetTaxRateVO updateCreateSetTaxRate(@Valid SetTaxRateDTO setTaxRateDTO) throws ApplicationException;
+	SetTaxRateVO updateCreateSetTaxRate(@Valid SetTaxRateDTO setTaxRateDTO) throws Exception;
 
 	List<SetTaxRateVO> getSetTaxRateByActive();
 

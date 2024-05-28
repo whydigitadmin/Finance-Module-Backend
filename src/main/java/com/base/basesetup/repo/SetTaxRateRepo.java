@@ -20,6 +20,10 @@ public interface SetTaxRateRepo extends JpaRepository<SetTaxRateVO, Long>{
 
 	@Query(nativeQuery = true,value = "select * from settaxrate where active=1")
 	List<SetTaxRateVO> findSetTaxRateByActive();
+
+	boolean existsByChapterAndOrgId(String chapter, Long orgId);
+
+	boolean existsByChapterAndOrgIdAndIdNot(String chapter, Long orgId, Long id);
     
 	
 }
