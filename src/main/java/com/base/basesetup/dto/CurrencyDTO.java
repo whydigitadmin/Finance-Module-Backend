@@ -20,4 +20,6 @@ public class CurrencyDTO {
 	private Long orgId;
 	private boolean active;
 	private String baseCurrency;
+	private String createdBy;
+	private String updatedBy;
 }

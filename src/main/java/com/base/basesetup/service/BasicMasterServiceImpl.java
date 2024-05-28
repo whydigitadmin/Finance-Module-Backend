@@ -139,6 +139,8 @@ public class BasicMasterServiceImpl implements BasicMasterService {
 			if (currencyRepo.existsByCurrencyAndOrgId(currencyDTO.getCurrency(), currencyDTO.getOrgId())) {
 				throw new ApplicationException("Currency already exists");
 			}
+			if (currencyRepo.existsByCountryAndOrgId(currencyDTO.getCountry(), currencyDTO.getOrgId()))
+				throw new ApplicationException("Country already exists");
 		}
 
 		getCurrencyVOFromCurrencyDTO(currencyDTO, currencyVO);
@@ -152,8 +154,7 @@ public class BasicMasterServiceImpl implements BasicMasterService {
 		return currencyRepo.save(currencyVO);
 	}
 
-	private void getCurrencyVOFromCurrencyDTO(@Valid CurrencyDTO currencyDTO, CurrencyVO currencyVO)
-			throws Exception {
+	private void getCurrencyVOFromCurrencyDTO(@Valid CurrencyDTO currencyDTO, CurrencyVO currencyVO) throws Exception {
 		currencyVO.setOrgId(currencyDTO.getOrgId());
 		currencyVO.setActive(currencyDTO.isActive());
 		currencyVO.setUserId(currencyDTO.getUserid());
@@ -162,10 +163,10 @@ public class BasicMasterServiceImpl implements BasicMasterService {
 		currencyVO.setCurrency(currencyDTO.getCurrency());
 		currencyVO.setSubCurrency(currencyDTO.getSubCurrency());
 		currencyVO.setCurrencySymbol(currencyDTO.getCurrencySymbol());
+		currencyVO.setUpdatedBy(currencyDTO.getUpdatedBy());
+		currencyVO.setCreatedBy(currencyDTO.getCreatedBy());
 	}
 
-
-	
 	@Override
 	public List<CurrencyVO> getCurrencyByActive() {
 		return currencyRepo.findCurrencyByActive();
