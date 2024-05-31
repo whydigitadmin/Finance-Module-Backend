@@ -22,7 +22,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ChequeBoxVO {
+public class ChequeBookVO {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "chequeboxmastergen")
 	@SequenceGenerator(name = "chequeboxmastergen", sequenceName = "chequeboxmasterVO", initialValue = 1000000001, allocationSize = 1)

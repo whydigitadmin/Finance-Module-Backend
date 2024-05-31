@@ -20,6 +20,8 @@ public interface RoleRepo extends JpaRepository<RoleMasterVO, Long> {
 
 	boolean existsByRoleAndOrgId(String role, Long orgId);
 
+	boolean existsByRoleAndOrgIdAndId(String role, Long orgId, Long id);
+
 
 
 }

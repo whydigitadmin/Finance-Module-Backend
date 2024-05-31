@@ -99,7 +99,7 @@ public class BasicMasterServiceImpl implements BasicMasterService {
 	@Autowired
 	ScreenRepo screenRepo;
 
-// Currency-----------------------------------------------------------------------------------
+	// Currency-----------------------------------------------------------------------------------
 
 	@Override
 	public List<CurrencyVO> getCurrencyById(Long id) {
@@ -172,7 +172,7 @@ public class BasicMasterServiceImpl implements BasicMasterService {
 		return currencyRepo.findCurrencyByActive();
 	}
 
-// Company-----------------------------------------------------------------------------------
+	// Company-----------------------------------------------------------------------------------
 
 	@Override
 	public List<CompanyVO> getCompanyById(Long id) {
@@ -206,102 +206,70 @@ public class BasicMasterServiceImpl implements BasicMasterService {
 		if (ObjectUtils.isNotEmpty(companyDTO.getId())) {
 			companyVO = companyRepo.findById(companyDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid Company Details"));
-		}
-		getCompanyVOFromCompanyDTO(companyDTO, companyVO);
+		} else {
+			if (companyRepo.existsByCompanyCodeAndOrgId(companyDTO.getCompanyCode(), companyDTO.getOrgId())) {
+				throw new ApplicationException("Company Code already exists");
+			}
+			if (companyRepo.existsByCompanyNameAndOrgId(companyDTO.getCompanyName(), companyDTO.getOrgId())) {
+				throw new ApplicationException("Company Name already exists");
+			}
 
-		companyRepo.save(companyVO);
-		EmployeeVO emp = new EmployeeVO();
-		emp.setEmployeeCode(companyVO.getEmployeeCode());
-		emp.setEmployeeName(companyVO.getEmployeeName());
-		emp.setOrgId(companyVO.getOrgId());
-		emp.setActive(companyVO.isActive());
-		employeeRepo.save(emp);
-		UserVO userVO = new UserVO();
-		userVO.setEmail(companyVO.getEmail());
-		userVO.setRole(Role.ROLE_ADMIN);
-		userVO.setEmployeeName(companyDTO.getEmployeeName());
-		if (userRepo.existsByUserName(companyDTO.getEmployeeCode())) {
-			throw new ApplicationException("Employee code already existes");
+			getCompanyVOFromCompanyDTO(companyDTO, companyVO);
+
+			if (ObjectUtils.isNotEmpty(companyDTO.getId())
+					&& companyRepo.existsByCompanyNameAndCompanyCodeAndOrgIdAndId(companyDTO.getCompanyName(),
+							companyDTO.getCompanyCode(), companyDTO.getOrgId(), companyDTO.getId())) {
+				throw new ApplicationException("The given Company Name And Company Code already exists");
+			}
+
+			companyRepo.save(companyVO);
+			EmployeeVO emp = new EmployeeVO();
+			emp.setEmployeeCode(companyVO.getEmployeeCode());
+			emp.setEmployeeName(companyVO.getEmployeeName());
+			emp.setOrgId(companyVO.getOrgId());
+			emp.setActive(companyVO.isActive());
+			employeeRepo.save(emp);
+			UserVO userVO = new UserVO();
+			userVO.setEmail(companyVO.getEmail());
+			userVO.setRole(Role.ROLE_ADMIN);
+			userVO.setEmployeeName(companyDTO.getEmployeeName());
+			if (userRepo.existsByUserName(companyDTO.getEmployeeCode())) {
+				throw new ApplicationException("Employee code already existes");
+			}
+			userVO.setUserName(companyVO.getEmployeeCode());
+			userVO.setOrgId(companyVO.getId());
+			userVO.setActive(companyVO.isActive());
+			userVO.setPassword(encoder.encode(CryptoUtils.getDecrypt(companyVO.getPassword())));
+			userRepo.save(userVO);
+
 		}
-		userVO.setUserName(companyVO.getEmployeeCode());
-		userVO.setOrgId(companyVO.getId());
-		userVO.setActive(companyVO.isActive());
-		userVO.setPassword(encoder.encode(CryptoUtils.getDecrypt(companyVO.getPassword())));
-		userRepo.save(userVO);
 		return companyVO;
 
 	}
 
 	private void getCompanyVOFromCompanyDTO(@Valid CompanyDTO companyDTO, CompanyVO companyVO) throws Exception {
-		if (ObjectUtils.isNotEmpty(companyDTO.getId())) {
-			CompanyVO existingCompany = companyRepo.findById(companyDTO.getId()).orElseThrow(
-					() -> new ApplicationException("Company with ID " + companyDTO.getId() + " not found"));
-			if (!existingCompany.getCompanyName().equals(companyDTO.getCompanyName())) {
-				// Check if there's already an entry with the same Entity Legal Name and orgId
-				if (companyRepo.existsByCompanyNameAndOrgId(companyDTO.getCompanyName(), existingCompany.getOrgId())) {
-					throw new ApplicationException("CompanyName already exists");
-				}
-				// Update Entity Legal Name if there's no duplicate
-				companyVO.setCompanyName(companyDTO.getCompanyName());
-			}
-			if (!existingCompany.getCompanyCode().equals(companyDTO.getCompanyCode())) {
-				// Check if there's already an entry with the same Entity Legal Name and orgId
-				if (companyRepo.existsByCompanyCodeAndOrgId(companyDTO.getCompanyCode(), existingCompany.getOrgId())) {
-					throw new ApplicationException("CompanyCode already exists");
-				}
-				// Update Entity Legal Name if there's no duplicate
-				companyVO.setCompanyCode(companyDTO.getCompanyCode());
-			}
-			companyVO.setCompanyCode(companyDTO.getCompanyCode());
-			companyVO.setActive(companyDTO.isActive());
-			companyVO.setCompanyName(companyDTO.getCompanyName());
-			companyVO.setCountry(companyDTO.getCountry());
-			companyVO.setCurrency(companyDTO.getCurrency());
-			companyVO.setMainCurrency(companyDTO.getMainCurrency());
-			companyVO.setAddress(companyDTO.getAddress());
-			companyVO.setZip(companyDTO.getZip());
-			companyVO.setCity(companyDTO.getCity());
-			companyVO.setState(companyDTO.getState());
-			companyVO.setPhone(companyDTO.getPhone());
-			companyVO.setEmail(companyDTO.getEmail());
-			companyVO.setWebSite(companyDTO.getWebSite());
-			companyVO.setNote(companyDTO.getNote());
-			companyVO.setEmployeeCode(companyDTO.getEmployeeCode());
-			companyVO.setEmployeeName(companyDTO.getEmployeeName());
-			companyVO.setPassword(companyDTO.getPassword());
-			companyVO.setCreatedBy(companyDTO.getCreatedBy());
-			companyVO.setUpdatedBy(companyDTO.getUpdatedBy());
-			companyVO.setOrgId(companyDTO.getOrgId());
-		} else {
-			if (companyRepo.existsByCompanyNameAndOrgId(companyDTO.getCompanyName(), companyDTO.getOrgId())) {
-				throw new ApplicationException("Company already exists");
-			}
-			if (companyRepo.existsByCompanyCodeAndOrgId(companyDTO.getCompanyCode(), companyDTO.getOrgId())) {
-				throw new ApplicationException("CompanyCode already exists");
-			}
 
-			companyVO.setCompanyCode(companyDTO.getCompanyCode());
-			companyVO.setActive(companyDTO.isActive());
-			companyVO.setCompanyName(companyDTO.getCompanyName());
-			companyVO.setCountry(companyDTO.getCountry());
-			companyVO.setCurrency(companyDTO.getCurrency());
-			companyVO.setMainCurrency(companyDTO.getMainCurrency());
-			companyVO.setAddress(companyDTO.getAddress());
-			companyVO.setZip(companyDTO.getZip());
-			companyVO.setCity(companyDTO.getCity());
-			companyVO.setState(companyDTO.getState());
-			companyVO.setPhone(companyDTO.getPhone());
-			companyVO.setEmail(companyDTO.getEmail());
-			companyVO.setWebSite(companyDTO.getWebSite());
-			companyVO.setNote(companyDTO.getNote());
-			companyVO.setEmployeeCode(companyDTO.getEmployeeCode());
-			companyVO.setEmployeeName(companyDTO.getEmployeeName());
-			companyVO.setPassword(companyDTO.getPassword());
-			companyVO.setCreatedBy(companyDTO.getCreatedBy());
-			companyVO.setUpdatedBy(companyDTO.getUpdatedBy());
-			companyVO.setOrgId(companyDTO.getOrgId());
+		companyVO.setCompanyCode(companyDTO.getCompanyCode());
+		companyVO.setActive(companyDTO.isActive());
+		companyVO.setCompanyName(companyDTO.getCompanyName());
+		companyVO.setCountry(companyDTO.getCountry());
+		companyVO.setCurrency(companyDTO.getCurrency());
+		companyVO.setMainCurrency(companyDTO.getMainCurrency());
+		companyVO.setAddress(companyDTO.getAddress());
+		companyVO.setZip(companyDTO.getZip());
+		companyVO.setCity(companyDTO.getCity());
+		companyVO.setState(companyDTO.getState());
+		companyVO.setPhone(companyDTO.getPhone());
+		companyVO.setEmail(companyDTO.getEmail());
+		companyVO.setWebSite(companyDTO.getWebSite());
+		companyVO.setNote(companyDTO.getNote());
+		companyVO.setEmployeeCode(companyDTO.getEmployeeCode());
+		companyVO.setEmployeeName(companyDTO.getEmployeeName());
+		companyVO.setPassword(companyDTO.getPassword());
+		companyVO.setCreatedBy(companyDTO.getCreatedBy());
+		companyVO.setUpdatedBy(companyDTO.getUpdatedBy());
+		companyVO.setOrgId(companyDTO.getOrgId());
 
-		}
 	}
 
 	@Override
@@ -362,8 +330,17 @@ public class BasicMasterServiceImpl implements BasicMasterService {
 		if (ObjectUtils.isNotEmpty(employeeDTO.getId())) {
 			employeeVO = employeeRepo.findById(employeeDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid Employee Details"));
+		} else {
+			if (employeeRepo.existsByEmployeeCodeAndOrgId(employeeDTO.getEmployeeCode(), employeeDTO.getOrgId())) {
+				throw new ApplicationException("Employee Code already exixts.");
+			}
 		}
 		getEmployeeVOFromEmployeeDTO(employeeDTO, employeeVO);
+		if (ObjectUtils.isNotEmpty(employeeDTO.getId()) && employeeRepo.existsByEmployeeCodeAndOrgIdAndId(
+				employeeDTO.getEmployeeCode(), employeeDTO.getOrgId(), employeeDTO.getId())) {
+			throw new ApplicationException("The given Employee Code already exits");
+		}
+
 		employeeRepo.save(employeeVO);
 		UserVO userVO = new UserVO();
 		userVO.setEmployeeName(employeeDTO.getEmployeeName());
@@ -390,56 +367,23 @@ public class BasicMasterServiceImpl implements BasicMasterService {
 
 	private void getEmployeeVOFromEmployeeDTO(@Valid EmployeeDTO employeeDTO, EmployeeVO employeeVO)
 			throws ApplicationException {
-		if (ObjectUtils.isNotEmpty(employeeDTO.getId())) {
-			EmployeeVO existingEmployee = employeeRepo.findById(employeeDTO.getId()).orElseThrow(
-					() -> new ApplicationException("Employee with ID " + employeeDTO.getId() + " not found"));
 
-			if (!existingEmployee.getEmployeeCode().equals(employeeDTO.getEmployeeCode())) {
-				// Check if there's already an entry with the same Entity Legal Name and orgId
-				if (employeeRepo.existsByEmployeeCodeAndOrgId(employeeDTO.getEmployeeCode(),
-						existingEmployee.getOrgId())) {
-					throw new ApplicationException("EmployeeCode already exists");
-				}
-				// Update Entity Legal Name if there's no duplicate
-				employeeVO.setEmployeeCode(employeeDTO.getEmployeeCode());
-			}
-			employeeVO.setOrgId(employeeDTO.getOrgId());
-			employeeVO.setActive(employeeDTO.isActive());
-			employeeVO.setEmployeeCode(employeeDTO.getEmployeeCode());
-			employeeVO.setGender(employeeDTO.getGender());
-			employeeVO.setPassword(employeeDTO.getPassword());
-			employeeVO.setRole(employeeDTO.getRole());
-			employeeVO.setEmployeeName(employeeDTO.getEmployeeName());
-			employeeVO.setBranch(employeeDTO.getBranch());
-			employeeVO.setBranchCode(employeeDTO.getBranchCode());
-			employeeVO.setDepartment(employeeDTO.getDepartment());
-			employeeVO.setDesignation(employeeDTO.getDesignation());
-			employeeVO.setJoiningDate(employeeDTO.getJoiningDate());
-			employeeVO.setDateOfBirth(employeeDTO.getDateOfBirth());
-			employeeVO.setCreatedBy(employeeDTO.getCreatedBy());
-			employeeVO.setUpdateBy(employeeDTO.getUpdatedBy());
-			employeeVO.setActive(employeeDTO.isActive());
-		} else {
-			if (employeeRepo.existsByEmployeeCodeAndOrgId(employeeDTO.getEmployeeCode(), employeeVO.getOrgId())) {
-				throw new ApplicationException("EmployeeCode already exists");
-			}
-			employeeVO.setOrgId(employeeDTO.getOrgId());
-			employeeVO.setActive(employeeDTO.isActive());
-			employeeVO.setEmployeeCode(employeeDTO.getEmployeeCode());
-			employeeVO.setGender(employeeDTO.getGender());
-			employeeVO.setPassword(employeeDTO.getPassword());
-			employeeVO.setRole(employeeDTO.getRole());
-			employeeVO.setEmployeeName(employeeDTO.getEmployeeName());
-			employeeVO.setBranch(employeeDTO.getBranch());
-			employeeVO.setBranchCode(employeeDTO.getBranchCode());
-			employeeVO.setDepartment(employeeDTO.getDepartment());
-			employeeVO.setDesignation(employeeDTO.getDesignation());
-			employeeVO.setJoiningDate(employeeDTO.getJoiningDate());
-			employeeVO.setDateOfBirth(employeeDTO.getDateOfBirth());
-			employeeVO.setCreatedBy(employeeDTO.getCreatedBy());
-			employeeVO.setUpdateBy(employeeDTO.getUpdatedBy());
-
-		}
+		employeeVO.setOrgId(employeeDTO.getOrgId());
+		employeeVO.setActive(employeeDTO.isActive());
+		employeeVO.setEmployeeCode(employeeDTO.getEmployeeCode());
+		employeeVO.setGender(employeeDTO.getGender());
+		employeeVO.setPassword(employeeDTO.getPassword());
+		employeeVO.setRole(employeeDTO.getRole());
+		employeeVO.setEmployeeName(employeeDTO.getEmployeeName());
+		employeeVO.setBranch(employeeDTO.getBranch());
+		employeeVO.setBranchCode(employeeDTO.getBranchCode());
+		employeeVO.setDepartment(employeeDTO.getDepartment());
+		employeeVO.setDesignation(employeeDTO.getDesignation());
+		employeeVO.setJoiningDate(employeeDTO.getJoiningDate());
+		employeeVO.setDateOfBirth(employeeDTO.getDateOfBirth());
+		employeeVO.setCreatedBy(employeeDTO.getCreatedBy());
+		employeeVO.setUpdateBy(employeeDTO.getUpdatedBy());
+		employeeVO.setActive(employeeDTO.isActive());
 
 	}
 
@@ -481,52 +425,31 @@ public class BasicMasterServiceImpl implements BasicMasterService {
 		if (ObjectUtils.isNotEmpty(countryDTO.getId())) {
 			countryVO = countryRepo.findById(countryDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid Country Details"));
+		} else {
+			if (countryRepo.existsByCountryNameAndOrgId(countryDTO.getCountryName(), countryDTO.getOrgId())) {
+				throw new ApplicationException("The given Country Name already exists.");
+			}
+			if (countryRepo.existsByCountryCodeAndOrgId(countryDTO.getCountryCode(), countryDTO.getOrgId())) {
+				throw new ApplicationException("The given Country Code already exists.");
+			}
 		}
 		getCountryVOFromCountryDTO(countryDTO, countryVO);
+
+		if (ObjectUtils.isNotEmpty(countryDTO.getId()) && countryRepo.existsByCountryCodeAndCountryNameAndOrgIdAndId(
+				countryDTO.getCountryCode(), countryDTO.getCountryName(), countryDTO.getOrgId(), countryDTO.getId())) {
+			throw new ApplicationException("The given Country Name and Country Code already exists.");
+		}
 		return countryRepo.save(countryVO);
 	}
 
 	private void getCountryVOFromCountryDTO(@Valid CountryDTO countryDTO, CountryVO countryVO)
 			throws ApplicationException {
-		if (ObjectUtils.isNotEmpty(countryDTO.getId())) {
-			CountryVO existingCountry = countryRepo.findById(countryDTO.getId()).orElseThrow(
-					() -> new ApplicationException("Country with ID " + countryDTO.getId() + " not found"));
-			if (!existingCountry.getCountryName().equals(countryDTO.getCountryName())) {
-				// Check if there's already an entry with the same Entity Legal Name and orgId
-				if (countryRepo.existsByCountryNameAndOrgId(countryDTO.getCountryName(), existingCountry.getOrgId())) {
-					throw new ApplicationException("Country already exists");
-				}
-				// Update Entity Legal Name if there's no duplicate
-				countryVO.setCountryName(countryDTO.getCountryName());
-			}
-			if (!existingCountry.getCountryCode().equals(countryDTO.getCountryCode())) {
-				// Check if there's already an entry with the same Entity Legal Name and orgId
-				if (countryRepo.existsByCountryCodeAndOrgId(countryDTO.getCountryCode(), existingCountry.getOrgId())) {
-					throw new ApplicationException("CountryCode already exists");
-				}
-				// Update Entity Legal Name if there's no duplicate
-				countryVO.setCountryCode(countryDTO.getCountryCode());
-			}
-			countryVO.setOrgId(countryDTO.getOrgId());
-			countryVO.setActive(countryDTO.isActive());
-			countryVO.setCountryCode(countryDTO.getCountryCode());
-			countryVO.setCountryName(countryDTO.getCountryName());
-			countryVO.setUserId(countryDTO.getUserId());
-		} else {
-			if (countryRepo.existsByCountryNameAndOrgId(countryDTO.getCountryName(), countryDTO.getOrgId())) {
-				throw new ApplicationException("Country already exists");
-			}
-			if (countryRepo.existsByCountryCodeAndOrgId(countryDTO.getCountryCode(), countryDTO.getOrgId())) {
-				throw new ApplicationException("CountryCode already exists");
-			}
-			countryVO.setOrgId(countryDTO.getOrgId());
-			countryVO.setActive(countryDTO.isActive());
-			countryVO.setCountryCode(countryDTO.getCountryCode());
-			countryVO.setCountryName(countryDTO.getCountryName());
-			countryVO.setUserId(countryDTO.getUserId());
 
-		}
-
+		countryVO.setOrgId(countryDTO.getOrgId());
+		countryVO.setActive(countryDTO.isActive());
+		countryVO.setCountryCode(countryDTO.getCountryCode());
+		countryVO.setCountryName(countryDTO.getCountryName());
+		countryVO.setUserId(countryDTO.getUserId());
 	}
 
 	@Override
@@ -567,56 +490,33 @@ public class BasicMasterServiceImpl implements BasicMasterService {
 		if (ObjectUtils.isNotEmpty(stateDTO.getId())) {
 			stateVO = stateRepo.findById(stateDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid State Details"));
+		} else {
+			if (stateRepo.existsByStateCodeAndOrgId(stateDTO.getStateCode(), stateDTO.getOrgId())) {
+				throw new ApplicationException("The given State Code already exists.");
+			}
+			if (stateRepo.existsByStateNameAndOrgId(stateDTO.getStateName(), stateDTO.getOrgId())) {
+				throw new ApplicationException("The given state name already exists.");
+			}
 		}
 		getStateVOFromStateDTO(stateDTO, stateVO);
+
+		if (ObjectUtils.isNotEmpty(stateDTO.getId()) && stateRepo.existsByStateNameAndStateCodeAndOrgIdAndId(
+				stateDTO.getStateCode(), stateDTO.getStateName(), stateDTO.getOrgId(), stateDTO.getId())) {
+			throw new ApplicationException("The given State details are already exists.");
+		}
 		return stateRepo.save(stateVO);
 	}
 
 	private void getStateVOFromStateDTO(@Valid StateDTO stateDTO, StateVO stateVO) throws ApplicationException {
-		if (ObjectUtils.isNotEmpty(stateDTO.getId())) {
-			StateVO existingState = stateRepo.findById(stateDTO.getId())
-					.orElseThrow(() -> new ApplicationException("State with ID " + stateDTO.getId() + " not found"));
-			if (!existingState.getStateName().equals(stateDTO.getStateName())) {
-				// Check if there's already an entry with the same Entity Legal Name and orgId
-				if (stateRepo.existsByStateNameAndOrgId(stateDTO.getStateName(), existingState.getOrgId())) {
-					throw new ApplicationException("State already exists");
-				}
-				// Update Entity Legal Name if there's no duplicate
-				stateVO.setStateName(stateDTO.getStateName());
-			}
-			if (!existingState.getStateCode().equals(stateDTO.getStateCode())) {
-				// Check if there's already an entry with the same Entity Legal Name and orgId
-				if (stateRepo.existsByStateCodeAndOrgId(stateDTO.getStateCode(), existingState.getOrgId())) {
-					throw new ApplicationException("StateCode already exists");
-				}
-				// Update Entity Legal Name if there's no duplicate
-				stateVO.setStateCode(stateDTO.getStateCode());
-			}
-			stateVO.setOrgId(stateDTO.getOrgId());
-			stateVO.setActive(stateDTO.isActive());
-			stateVO.setStateCode(stateDTO.getStateCode());
-			stateVO.setStateName(stateDTO.getStateName());
-			stateVO.setUserId(stateDTO.getUserId());
-			stateVO.setCountry(stateDTO.getCountry());
-			stateVO.setRegion(stateDTO.getRegion());
-			stateVO.setStateNumber(stateDTO.getStateNumber());
-		} else {
-			if (stateRepo.existsByStateNameAndOrgId(stateDTO.getStateName(), stateVO.getOrgId())) {
-				throw new ApplicationException("State already exists");
-			}
-			if (stateRepo.existsByStateCodeAndOrgId(stateDTO.getStateCode(), stateVO.getOrgId())) {
-				throw new ApplicationException("StateCode already exists");
-			}
-			stateVO.setOrgId(stateDTO.getOrgId());
-			stateVO.setActive(stateDTO.isActive());
-			stateVO.setStateCode(stateDTO.getStateCode());
-			stateVO.setStateName(stateDTO.getStateName());
-			stateVO.setUserId(stateDTO.getUserId());
-			stateVO.setCountry(stateDTO.getCountry());
-			stateVO.setRegion(stateDTO.getRegion());
-			stateVO.setStateNumber(stateDTO.getStateNumber());
 
-		}
+		stateVO.setOrgId(stateDTO.getOrgId());
+		stateVO.setActive(stateDTO.isActive());
+		stateVO.setStateCode(stateDTO.getStateCode());
+		stateVO.setStateName(stateDTO.getStateName());
+		stateVO.setUserId(stateDTO.getUserId());
+		stateVO.setCountry(stateDTO.getCountry());
+		stateVO.setRegion(stateDTO.getRegion());
+		stateVO.setStateNumber(stateDTO.getStateNumber());
 
 	}
 
@@ -663,54 +563,31 @@ public class BasicMasterServiceImpl implements BasicMasterService {
 		if (ObjectUtils.isNotEmpty(cityDTO.getId())) {
 			cityVO = cityRepo.findById(cityDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid City Details"));
+		} else {
+			if (cityRepo.existsByCityNameAndOrgId(cityDTO.getCityName(), cityDTO.getOrgId())) {
+				throw new ApplicationException("The given city name already exists.");
+			}
+			if (cityRepo.existsByCityCodeAndOrgId(cityDTO.getCityCode(), cityDTO.getOrgId())) {
+				throw new ApplicationException("The given city code already exists.");
+			}
 		}
 		getCityVOFromCityDTO(cityDTO, cityVO);
+		if (ObjectUtils.isNotEmpty(cityDTO.getId()) && cityRepo.existsByCityNameAndCityCodeAndOrgIdAndId(
+				cityDTO.getCityName(), cityDTO.getCityCode(), cityDTO.getOrgId(), cityDTO.getId())) {
+			throw new ApplicationException("The give city code and city name already exists.");
+		}
 		return cityRepo.save(cityVO);
 	}
 
 	private void getCityVOFromCityDTO(@Valid CityDTO cityDTO, CityVO cityVO) throws ApplicationException {
-		if (ObjectUtils.isNotEmpty(cityDTO.getId())) {
-			CityVO existingCity = cityRepo.findById(cityDTO.getId())
-					.orElseThrow(() -> new ApplicationException("City with ID " + cityDTO.getId() + " not found"));
-			if (!existingCity.getCityName().equals(cityDTO.getCityName())) {
-				// Check if there's already an entry with the same Entity Legal Name and orgId
-				if (cityRepo.existsByCityNameAndOrgId(cityDTO.getCityName(), existingCity.getOrgId())) {
-					throw new ApplicationException("City already exists");
-				}
-				// Update Entity Legal Name if there's no duplicate
-				cityVO.setCityName(cityDTO.getCityName());
-			}
-			if (!existingCity.getCityCode().equals(cityDTO.getCityCode())) {
-				// Check if there's already an entry with the same Entity Legal Name and orgId
-				if (cityRepo.existsByCityCodeAndOrgId(cityDTO.getCityCode(), existingCity.getOrgId())) {
-					throw new ApplicationException("CityCode already exists");
-				}
-				// Update Entity Legal Name if there's no duplicate
-				cityVO.setCityCode(cityDTO.getCityCode());
-			}
-			cityVO.setOrgId(cityDTO.getOrgId());
-			cityVO.setActive(cityDTO.isActive());
-			cityVO.setCityCode(cityDTO.getCityCode());
-			cityVO.setCityName(cityDTO.getCityName());
-			cityVO.setCountry(cityDTO.getCountry());
-			cityVO.setUserId(cityDTO.getUserId());
-			cityVO.setState(cityDTO.getState());
-		} else {
-			if (cityRepo.existsByCityNameAndOrgId(cityDTO.getCityName(), cityVO.getOrgId())) {
-				throw new ApplicationException("City already exists");
-			}
-			if (cityRepo.existsByCityCodeAndOrgId(cityDTO.getCityCode(), cityVO.getOrgId())) {
-				throw new ApplicationException("CityCode already exists");
-			}
-			cityVO.setOrgId(cityDTO.getOrgId());
-			cityVO.setActive(cityDTO.isActive());
-			cityVO.setCityCode(cityDTO.getCityCode());
-			cityVO.setCityName(cityDTO.getCityName());
-			cityVO.setCountry(cityDTO.getCountry());
-			cityVO.setUserId(cityDTO.getUserId());
-			cityVO.setState(cityDTO.getState());
 
-		}
+		cityVO.setOrgId(cityDTO.getOrgId());
+		cityVO.setActive(cityDTO.isActive());
+		cityVO.setCityCode(cityDTO.getCityCode());
+		cityVO.setCityName(cityDTO.getCityName());
+		cityVO.setCountry(cityDTO.getCountry());
+		cityVO.setUserId(cityDTO.getUserId());
+		cityVO.setState(cityDTO.getState());
 
 	}
 
@@ -799,86 +676,52 @@ public class BasicMasterServiceImpl implements BasicMasterService {
 		if (ObjectUtils.isNotEmpty(branchDTO.getId())) {
 			branchVO = branchRepo.findById(branchDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid Branch Details"));
+		} else {
+			if (branchRepo.existsByBranchCodeAndOrgId(branchDTO.getBranchCode(), branchDTO.getOrgId())) {
+				throw new ApplicationException("The given branch code already exists.");
+			}
+			if (branchRepo.existsByBranchAndOrgId(branchDTO.getBranch(), branchDTO.getOrgId())) {
+				throw new ApplicationException("The given branch name already exists");
+			}
 		}
+
 		getBranchVOFromBranchDTO(branchDTO, branchVO);
+		if (ObjectUtils.isNotEmpty(branchDTO.getId()) && branchRepo.existsByBranchAndBranchCodeAndOrgIdAndId(
+				branchDTO.getBranchCode(), branchDTO.getBranch(), branchDTO.getOrgId(), branchDTO.getId())) {
+			throw new ApplicationException("The given Branch Name and Branch Code already exists.");
+		}
 		return branchRepo.save(branchVO);
 	}
 
 	private void getBranchVOFromBranchDTO(@Valid BranchDTO branchDTO, BranchVO branchVO) throws ApplicationException {
-		if (ObjectUtils.isNotEmpty(branchDTO.getId())) {
-			BranchVO existingBranch = branchRepo.findById(branchDTO.getId())
-					.orElseThrow(() -> new ApplicationException("Branch with ID " + branchDTO.getId() + " not found"));
-			if (!existingBranch.getBranch().equals(branchDTO.getBranch())) {
-				// Check if there's already an entry with the same Entity Legal Name and orgId
-				if (branchRepo.existsByBranchAndOrgId(branchDTO.getBranch(), existingBranch.getOrgId())) {
-					throw new ApplicationException("Branch already exists");
-				}
-				// Update Entity Legal Name if there's no duplicate
-				branchVO.setBranch(branchDTO.getBranch());
-			}
-			if (!existingBranch.getBranchCode().equals(branchDTO.getBranchCode())) {
-				// Check if there's already an entry with the same Entity Legal Name and orgId
-				if (branchRepo.existsByBranchCodeAndOrgId(branchDTO.getBranchCode(), existingBranch.getOrgId())) {
-					throw new ApplicationException("BranchCode already exists");
-				}
-				// Update Entity Legal Name if there's no duplicate
-				branchVO.setBranchCode(branchDTO.getBranchCode());
-			}
-			branchVO.setOrgId(branchDTO.getOrgId());
-			branchVO.setActive(branchDTO.isActive());
-			branchVO.setBranch(branchDTO.getBranch());
-			branchVO.setBranchCode(branchDTO.getBranchCode());
-			branchVO.setAddressLine1(branchDTO.getAddressLine1());
-			branchVO.setAddressLine2(branchDTO.getAddressLine2());
-			branchVO.setPan(branchDTO.getPan());
-			branchVO.setGstIn(branchDTO.getGstIn());
-			branchVO.setPhone(branchDTO.getPhone());
-			branchVO.setState(branchDTO.getState());
-			branchVO.setCity(branchDTO.getCity());
-			branchVO.setPinCode(branchDTO.getPinCode());
-			branchVO.setCountry(branchDTO.getCountry());
-			branchVO.setStateNo(branchDTO.getStateNo());
-			branchVO.setStateCode(branchDTO.getStateCode());
-			branchVO.setRegion(branchDTO.getRegion());
-			branchVO.setLccurrency(branchDTO.getLccurrency());
-			branchVO.setCreatedBy(branchDTO.getCreatedBy());
-			branchVO.setUpdatedBy(branchDTO.getUpdatedBy());
-			branchVO.setUserId(branchDTO.getUserId());
-		} else {
-			if (branchRepo.existsByBranchAndOrgId(branchDTO.getBranch(), branchVO.getOrgId())) {
-				throw new ApplicationException("Branch already exists");
-			}
-			if (branchRepo.existsByBranchCodeAndOrgId(branchDTO.getBranchCode(), branchVO.getOrgId())) {
-				throw new ApplicationException("BranchCode already exists");
-			}
-			branchVO.setOrgId(branchDTO.getOrgId());
-			branchVO.setActive(branchDTO.isActive());
-			branchVO.setBranch(branchDTO.getBranch());
-			branchVO.setBranchCode(branchDTO.getBranchCode());
-			branchVO.setAddressLine1(branchDTO.getAddressLine1());
-			branchVO.setAddressLine2(branchDTO.getAddressLine2());
-			branchVO.setPan(branchDTO.getPan());
-			branchVO.setGstIn(branchDTO.getGstIn());
-			branchVO.setPhone(branchDTO.getPhone());
-			branchVO.setState(branchDTO.getState());
-			branchVO.setCity(branchDTO.getCity());
-			branchVO.setPinCode(branchDTO.getPinCode());
-			branchVO.setCountry(branchDTO.getCountry());
-			branchVO.setStateNo(branchDTO.getStateNo());
-			branchVO.setStateCode(branchDTO.getStateCode());
-			branchVO.setRegion(branchDTO.getRegion());
-			branchVO.setLccurrency(branchDTO.getLccurrency());
-			branchVO.setCreatedBy(branchDTO.getCreatedBy());
-			branchVO.setUpdatedBy(branchDTO.getUpdatedBy());
-			branchVO.setUserId(branchDTO.getUserId());
-		}
+
+		branchVO.setOrgId(branchDTO.getOrgId());
+		branchVO.setActive(branchDTO.isActive());
+		branchVO.setBranch(branchDTO.getBranch());
+		branchVO.setBranchCode(branchDTO.getBranchCode());
+		branchVO.setAddressLine1(branchDTO.getAddressLine1());
+		branchVO.setAddressLine2(branchDTO.getAddressLine2());
+		branchVO.setPan(branchDTO.getPan());
+		branchVO.setGstIn(branchDTO.getGstIn());
+		branchVO.setPhone(branchDTO.getPhone());
+		branchVO.setState(branchDTO.getState());
+		branchVO.setCity(branchDTO.getCity());
+		branchVO.setPinCode(branchDTO.getPinCode());
+		branchVO.setCountry(branchDTO.getCountry());
+		branchVO.setStateNo(branchDTO.getStateNo());
+		branchVO.setStateCode(branchDTO.getStateCode());
+		branchVO.setRegion(branchDTO.getRegion());
+		branchVO.setLccurrency(branchDTO.getLccurrency());
+		branchVO.setCreatedBy(branchDTO.getCreatedBy());
+		branchVO.setUpdatedBy(branchDTO.getUpdatedBy());
+		branchVO.setUserId(branchDTO.getUserId());
 	}
 
 	@Override
 	public List<BranchVO> getBranchByActive() {
 		return branchRepo.findBranchByActive();
 	}
-//	Role------------------------------------------------------------------------------------------------
+	// Role------------------------------------------------------------------------------------------------
 
 	@Override
 	public List<RoleMasterVO> getRoleById(Long id) {
@@ -912,41 +755,27 @@ public class BasicMasterServiceImpl implements BasicMasterService {
 		if (ObjectUtils.isNotEmpty(roleMasterDTO.getId())) {
 			roleMasterVO = roleRepo.findById(roleMasterDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid Role Details"));
+		} else {
+			if (roleRepo.existsByRoleAndOrgId(roleMasterDTO.getRole(), roleMasterDTO.getOrgId())) {
+				throw new ApplicationException("The given role already exists.");
+			}
 		}
+
 		getRoleMasterVOFromRoleMasterDTO(roleMasterDTO, roleMasterVO);
+		if (ObjectUtils.isNotEmpty(roleMasterDTO.getId()) && roleRepo.existsByRoleAndOrgIdAndId(roleMasterDTO.getRole(),
+				roleMasterDTO.getOrgId(), roleMasterDTO.getId())) {
+			throw new ApplicationException("The given Role already exists .");
+		}
 		return roleRepo.save(roleMasterVO);
 	}
 
 	private void getRoleMasterVOFromRoleMasterDTO(@Valid RoleMasterDTO roleMasterDTO, RoleMasterVO roleMasterVO)
 			throws ApplicationException {
-		if (ObjectUtils.isNotEmpty(roleMasterDTO.getId())) {
-			RoleMasterVO existingRoleMaster = roleRepo.findById(roleMasterDTO.getId()).orElseThrow(
-					() -> new ApplicationException("Role with ID " + roleMasterDTO.getId() + " not found"));
-			if (!existingRoleMaster.getRole().equals(roleMasterDTO.getRole())) {
-				// Check if there's already an entry with the same Entity Legal Name and orgId
-				if (roleRepo.existsByRoleAndOrgId(roleMasterDTO.getRole(), existingRoleMaster.getOrgId())) {
-					throw new ApplicationException("Role already exists");
-				}
-				// Update Entity Legal Name if there's no duplicate
-				roleMasterVO.setRole(roleMasterDTO.getRole());
-			}
-			roleMasterVO.setOrgId(roleMasterDTO.getOrgId());
-			roleMasterVO.setActive(roleMasterDTO.isActive());
-			roleMasterVO.setRole(roleMasterDTO.getRole());
-			roleMasterVO.setCreatedBy(roleMasterDTO.getCreatedBy());
-			roleMasterVO.setUpdatedBy(roleMasterDTO.getUpdatedBy());
-		} else {
-			if (roleRepo.existsByRoleAndOrgId(roleMasterDTO.getRole(), roleMasterVO.getOrgId())) {
-				throw new ApplicationException("Role already exists");
-			}
-			roleMasterVO.setOrgId(roleMasterDTO.getOrgId());
-			roleMasterVO.setActive(roleMasterDTO.isActive());
-			roleMasterVO.setRole(roleMasterDTO.getRole());
-			roleMasterVO.setCreatedBy(roleMasterDTO.getCreatedBy());
-			roleMasterVO.setUpdatedBy(roleMasterDTO.getUpdatedBy());
-
-		}
-
+		roleMasterVO.setOrgId(roleMasterDTO.getOrgId());
+		roleMasterVO.setActive(roleMasterDTO.isActive());
+		roleMasterVO.setRole(roleMasterDTO.getRole());
+		roleMasterVO.setCreatedBy(roleMasterDTO.getCreatedBy());
+		roleMasterVO.setUpdatedBy(roleMasterDTO.getUpdatedBy());
 	}
 
 	@Override
@@ -954,7 +783,7 @@ public class BasicMasterServiceImpl implements BasicMasterService {
 		return roleRepo.findRoleByActive();
 	}
 
-//	Responsibilities-----------------------------------------------------------------------------------------
+	// Responsibilities-----------------------------------------------------------------------------------------
 	@Override
 	public List<ResponsibilitiesVO> getResponsibilitiesById(Long id) {
 		List<ResponsibilitiesVO> responsibilitiesVO = new ArrayList<>();

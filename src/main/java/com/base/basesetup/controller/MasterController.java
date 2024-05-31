@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.base.basesetup.common.CommonConstant;
 import com.base.basesetup.common.UserConstants;
 import com.base.basesetup.dto.AccountDTO;
+import com.base.basesetup.dto.ChargeTypeRequestDTO;
 import com.base.basesetup.dto.ChequeBoxDTO;
 import com.base.basesetup.dto.ExRatesDTO;
 import com.base.basesetup.dto.GroupLedgerDTO;
@@ -34,7 +35,8 @@ import com.base.basesetup.dto.TaxMasterDTO;
 import com.base.basesetup.dto.TcsMasterDTO;
 import com.base.basesetup.dto.TdsMasterDTO;
 import com.base.basesetup.entity.AccountVO;
-import com.base.basesetup.entity.ChequeBoxVO;
+import com.base.basesetup.entity.ChargeTypeRequestVO;
+import com.base.basesetup.entity.ChequeBookVO;
 import com.base.basesetup.entity.ExRatesVO;
 import com.base.basesetup.entity.GroupLedgerVO;
 import com.base.basesetup.entity.HsnSacCodeVO;
@@ -1053,16 +1055,16 @@ public class MasterController extends BaseController {
 
 	}
 
-	// ChequeBox
+	// ChequeBook
 
-	@GetMapping("/getAllChequeBoxByOrgId")
+	@GetMapping("/getAllChequeBookByOrgId")
 	public ResponseEntity<ResponseDTO> getAllChequeBoxByOrgId(@RequestParam(required = false) Long orgId) {
 		String methodName = "getAllChequeBoxByOrgId()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
 		String errorMsg = null;
 		Map<String, Object> responseObjectsMap = new HashMap<>();
 		ResponseDTO responseDTO = null;
-		List<ChequeBoxVO> chequeBoxVO = new ArrayList<>();
+		List<ChequeBookVO> chequeBoxVO = new ArrayList<>();
 		try {
 			chequeBoxVO = masterService.getAllChequeBoxByOrgId(orgId);
 		} catch (Exception e) {
@@ -1082,14 +1084,14 @@ public class MasterController extends BaseController {
 
 	}
 
-	@GetMapping("/getAllChequeBoxById")
+	@GetMapping("/getAllChequeBookById")
 	public ResponseEntity<ResponseDTO> getAllChequeBoxById(@RequestParam(required = false) Long id) {
 		String methodName = "getAllChequeBoxById()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
 		String errorMsg = null;
 		Map<String, Object> responseObjectsMap = new HashMap<>();
 		ResponseDTO responseDTO = null;
-		List<ChequeBoxVO> chequeBoxVO = new ArrayList<>();
+		List<ChequeBookVO> chequeBoxVO = new ArrayList<>();
 		try {
 			chequeBoxVO = masterService.getAllChequeBoxById(id);
 		} catch (Exception e) {
@@ -1108,7 +1110,7 @@ public class MasterController extends BaseController {
 		return ResponseEntity.ok().body(responseDTO);
 	}
 
-	@PutMapping("/updateCreateChequeBox")
+	@PutMapping("/updateCreateChequeBook")
 	public ResponseEntity<ResponseDTO> updateCreateChequeBox(@Valid @RequestBody ChequeBoxDTO chequeBoxDTO) {
 		String methodName = "updateCreateChequeBox()";
 
@@ -1118,7 +1120,7 @@ public class MasterController extends BaseController {
 		ResponseDTO responseDTO = null;
 
 		try {
-			ChequeBoxVO chequeBoxVO = masterService.updateCreateChequeBox(chequeBoxDTO);
+			ChequeBookVO chequeBoxVO = masterService.updateCreateChequeBox(chequeBoxDTO);
 			if (chequeBoxVO != null) {
 				responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "ChequeBox updated successfully");
 				responseObjectsMap.put("chequeBoxVO", chequeBoxVO);
@@ -1136,14 +1138,14 @@ public class MasterController extends BaseController {
 		return ResponseEntity.ok().body(responseDTO);
 	}
 
-	@GetMapping("/getChequeBoxByActive")
+	@GetMapping("/getChequeBookByActive")
 	public ResponseEntity<ResponseDTO> getChequeBoxByActive() {
 		String methodName = "getChequeBoxByActive()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
 		String errorMsg = null;
 		Map<String, Object> responseObjectsMap = new HashMap<>();
 		ResponseDTO responseDTO = null;
-		List<ChequeBoxVO> chequeBoxVO = new ArrayList<>();
+		List<ChequeBookVO> chequeBoxVO = new ArrayList<>();
 		try {
 			chequeBoxVO = masterService.getChequeBoxByActive();
 		} catch (Exception e) {
@@ -1163,4 +1165,114 @@ public class MasterController extends BaseController {
 
 	}
 
+
+	// ChargeTypeRequest
+
+	@GetMapping("/getAllChargeTypeRequestByOrgId")
+	public ResponseEntity<ResponseDTO> getAllChargeTypeRequestByOrgId(@RequestParam(required = false) Long orgId) {
+		String methodName = "getAllChargeTypeRequestByOrgId()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		List<ChargeTypeRequestVO> chargeTypeRequestVO = new ArrayList<>();
+		try {
+			chargeTypeRequestVO = masterService.getAllChargeTypeRequestByOrgId(orgId);
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "ChargeTypeRequest information get successfully ByOrgId");
+			responseObjectsMap.put("chargeTypeRequestVO", chargeTypeRequestVO);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap, "ChargeTypeRequest information receive failedByOrgId",
+					errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+
+	}
+
+	@GetMapping("/getAllChargeTypeRequestById")
+	public ResponseEntity<ResponseDTO> getAllChargeTypeRequestById(@RequestParam(required = false) Long id) {
+		String methodName = "getAllChargeTypeRequestById()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		List<ChargeTypeRequestVO> chargeTypeRequestVO = new ArrayList<>();
+		try {
+			chargeTypeRequestVO = masterService.getAllChargeTypeRequestById(id);
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "ChargeTypeRequest information get successfully By id");
+			responseObjectsMap.put("chargeTypeRequestVO", chargeTypeRequestVO);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap, "ChargeTypeRequest information receive failedByOrgId",
+					errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+	}
+
+	@PutMapping("/updateCreateChargeTypeRequest")
+	public ResponseEntity<ResponseDTO> updateCreateChargeTypeRequest(@Valid @RequestBody ChargeTypeRequestDTO chargeTypeRequestDTO) {
+		String methodName = "updateCreateChargeTypeRequest()";
+
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+
+		try {
+			ChargeTypeRequestVO chargeTypeRequestVO = masterService.updateCreateChargeTypeRequest(chargeTypeRequestDTO);
+			if (chargeTypeRequestVO != null) {
+				responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "ChargeTypeRequest updated successfully");
+				responseObjectsMap.put("chargeTypeRequestVO", chargeTypeRequestVO);
+				responseDTO = createServiceResponse(responseObjectsMap);
+			} else {
+				errorMsg = "ChargeTypeRequest not found for ID: " + chargeTypeRequestDTO.getId();
+				responseDTO = createServiceResponseError(responseObjectsMap, "ChargeTypeRequest update failed", errorMsg);
+			}
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+			responseDTO = createServiceResponseError(responseObjectsMap, "ChargeTypeRequest update failed", errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+	}
+
+	@GetMapping("/getChargeTypeRequestByActive")
+	public ResponseEntity<ResponseDTO> getChargeTypeRequestByActive() {
+		String methodName = "getChargeTypeRequestByActive()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		List<ChargeTypeRequestVO> chargeTypeRequestVO = new ArrayList<>();
+		try {
+			chargeTypeRequestVO = masterService.getChargeTypeRequestByActive();
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "ChargeTypeRequest information get successfully By Active");
+			responseObjectsMap.put("chargeTypeRequestVO", chargeTypeRequestVO);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					"ChargeTypeRequest information receive failed By Active", errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+
+	}
 }
