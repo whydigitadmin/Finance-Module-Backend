@@ -22,6 +22,8 @@ public interface CompanyRepo extends JpaRepository<CompanyVO , Long>{
 	@Query(nativeQuery = true,value = "select * from company where active=1;")
 	List<CompanyVO> findCompanyByActive();
 
-	boolean existsByCompanyNameAndCompanyCodeAndOrgIdAndId(String companyName, String companyCode, Long orgId, Long id);
+	boolean existsByCompanyCodeAndOrgIdAndId(String companyCode, Long orgId, Long id);
+
+	boolean existsByCompanyNameAndOrgIdAndId(String companyName, Long orgId, Long id);
 
 }

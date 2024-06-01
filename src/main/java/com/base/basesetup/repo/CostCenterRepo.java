@@ -18,4 +18,12 @@ public interface CostCenterRepo extends JpaRepository<CostCenterVO, Long> {
 	@Query(nativeQuery = true,value = "select * from costcenter where active=1")
 	List<CostCenterVO> findCostCenterByActive();
 
+	boolean existsByValueCodeAndOrgId(String valueCode, Long orgId);
+
+	boolean existsByValueDescripitionAndOrgId(String valueDescripition, Long orgId);
+
+	boolean existsByValueCodeAndOrgIdAndId(String valueCode, Long orgId, Long id);
+
+	boolean existsByValueDescripitionAndOrgIdAndId(String valueDescripition, Long orgId, Long id);
+
 }

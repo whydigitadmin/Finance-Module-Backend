@@ -21,9 +21,11 @@ public interface CurrencyRepo extends JpaRepository<CurrencyVO, Long> {
 
 	boolean existsByCurrencyAndOrgId(String currency, Long orgId);
 
-	boolean existsByCurrencyAndOrgIdAndIdNot(String currency, Long orgId, Long id);
-
 	boolean existsByCountryAndOrgId(String country, Long orgId);
+
+	boolean existsByCurrencyAndOrgIdAndId(String currency, Long orgId, Long id);
+
+	boolean existsByCountryAndOrgIdAndId(String country, Long orgId, Long id);
 
 
 

@@ -22,6 +22,8 @@ public interface CountryRepo extends JpaRepository<CountryVO, Long> {
 	@Query(nativeQuery = true, value = "select * from country where active=1")
 	List<CountryVO> findCountryByActive();
 
-	boolean existsByCountryCodeAndCountryNameAndOrgIdAndId(String countryCode, String countryName, Long orgId, Long id);
+	boolean existsByCountryNameAndOrgIdAndId(String countryName, Long orgId, Long id);
+
+	boolean existsByCountryCodeAndOrgIdAndId(String countryCode, Long orgId, Long id);
 
 }

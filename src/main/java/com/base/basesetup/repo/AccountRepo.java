@@ -21,7 +21,9 @@ boolean existsByAccountNameAndOrgId(String accountName, Long orgId);
 
 boolean existsByAccountCodeAndOrgId(String accountCode, Long orgId);
 
-boolean existsByAccountNameAndAccountCodeAndOrgIdAndId(String accountName, String accountCode, Long orgId, Long id);
+boolean existsByAccountNameAndOrgIdAndId(String accountName, Long orgId, Long id);
+
+boolean existsByAccountCodeAndOrgIdAndId(String accountCode, Long orgId, Long id);
 
 
 }
