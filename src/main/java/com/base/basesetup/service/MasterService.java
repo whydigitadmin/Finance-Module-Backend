@@ -110,12 +110,13 @@ public interface MasterService {
 //	SubLedgerAccount
 	List<SubLedgerAccountVO> getAllSubLedgerAccountByOrgId(Long orgId);
 
-	SubLedgerAccountVO updateCreateSubLedgerAccount(@Valid SubLedgerAccountDTO subLedgerAccountDTO) throws ApplicationException;
+	SubLedgerAccountVO updateCreateSubLedgerAccount(@Valid SubLedgerAccountDTO subLedgerAccountDTO)
+			throws ApplicationException;
 
 	List<SubLedgerAccountVO> getAllSubLedgerAccountById(Long id);
 
 	List<SubLedgerAccountVO> getSubLedgerAccountByActive();
-	
+
 //	CostCenterVO
 	List<CostCenterVO> getAllCostCenterByOrgId(Long orgId);
 
@@ -124,7 +125,7 @@ public interface MasterService {
 	List<CostCenterVO> getAllCostCenterById(Long id);
 
 	List<CostCenterVO> getCostCenterByActive();
-	
+
 //	ChequeBox
 	List<ChequeBookVO> getAllChequeBoxByOrgId(Long orgId);
 
@@ -133,14 +134,16 @@ public interface MasterService {
 	List<ChequeBookVO> getAllChequeBoxById(Long id);
 
 	List<ChequeBookVO> getChequeBoxByActive();
-	
+
 //	ChargeTypeRequest
 	List<ChargeTypeRequestVO> getAllChargeTypeRequestByOrgId(Long orgId);
 
-	ChargeTypeRequestVO updateCreateChargeTypeRequest(@Valid ChargeTypeRequestDTO chargeTypeRequestDTO) throws ApplicationException;
+	ChargeTypeRequestVO updateCreateChargeTypeRequest(@Valid ChargeTypeRequestDTO chargeTypeRequestDTO)
+			throws ApplicationException;
 
 	List<ChargeTypeRequestVO> getAllChargeTypeRequestById(Long id);
 
 	List<ChargeTypeRequestVO> getChargeTypeRequestByActive();
+
 
 }

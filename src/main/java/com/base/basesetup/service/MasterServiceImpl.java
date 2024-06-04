@@ -1175,5 +1175,5 @@ public class MasterServiceImpl implements MasterService {
 		return chargeTypeRequestRepo.findChargeTypeRequestByActive();
 
 	}
-
+	
 }

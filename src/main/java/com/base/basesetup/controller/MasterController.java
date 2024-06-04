@@ -1165,7 +1165,6 @@ public class MasterController extends BaseController {
 
 	}
 
-
 	// ChargeTypeRequest
 
 	@GetMapping("/getAllChargeTypeRequestByOrgId")
@@ -1183,12 +1182,13 @@ public class MasterController extends BaseController {
 			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
 		}
 		if (StringUtils.isBlank(errorMsg)) {
-			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "ChargeTypeRequest information get successfully ByOrgId");
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+					"ChargeTypeRequest information get successfully ByOrgId");
 			responseObjectsMap.put("chargeTypeRequestVO", chargeTypeRequestVO);
 			responseDTO = createServiceResponse(responseObjectsMap);
 		} else {
-			responseDTO = createServiceResponseError(responseObjectsMap, "ChargeTypeRequest information receive failedByOrgId",
-					errorMsg);
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					"ChargeTypeRequest information receive failedByOrgId", errorMsg);
 		}
 		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
 		return ResponseEntity.ok().body(responseDTO);
@@ -1210,19 +1210,21 @@ public class MasterController extends BaseController {
 			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
 		}
 		if (StringUtils.isBlank(errorMsg)) {
-			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "ChargeTypeRequest information get successfully By id");
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+					"ChargeTypeRequest information get successfully By id");
 			responseObjectsMap.put("chargeTypeRequestVO", chargeTypeRequestVO);
 			responseDTO = createServiceResponse(responseObjectsMap);
 		} else {
-			responseDTO = createServiceResponseError(responseObjectsMap, "ChargeTypeRequest information receive failedByOrgId",
-					errorMsg);
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					"ChargeTypeRequest information receive failedByOrgId", errorMsg);
 		}
 		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
 		return ResponseEntity.ok().body(responseDTO);
 	}
 
 	@PutMapping("/updateCreateChargeTypeRequest")
-	public ResponseEntity<ResponseDTO> updateCreateChargeTypeRequest(@Valid @RequestBody ChargeTypeRequestDTO chargeTypeRequestDTO) {
+	public ResponseEntity<ResponseDTO> updateCreateChargeTypeRequest(
+			@Valid @RequestBody ChargeTypeRequestDTO chargeTypeRequestDTO) {
 		String methodName = "updateCreateChargeTypeRequest()";
 
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
@@ -1238,7 +1240,8 @@ public class MasterController extends BaseController {
 				responseDTO = createServiceResponse(responseObjectsMap);
 			} else {
 				errorMsg = "ChargeTypeRequest not found for ID: " + chargeTypeRequestDTO.getId();
-				responseDTO = createServiceResponseError(responseObjectsMap, "ChargeTypeRequest update failed", errorMsg);
+				responseDTO = createServiceResponseError(responseObjectsMap, "ChargeTypeRequest update failed",
+						errorMsg);
 			}
 		} catch (Exception e) {
 			errorMsg = e.getMessage();
@@ -1264,7 +1267,8 @@ public class MasterController extends BaseController {
 			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
 		}
 		if (StringUtils.isBlank(errorMsg)) {
-			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "ChargeTypeRequest information get successfully By Active");
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+					"ChargeTypeRequest information get successfully By Active");
 			responseObjectsMap.put("chargeTypeRequestVO", chargeTypeRequestVO);
 			responseDTO = createServiceResponse(responseObjectsMap);
 		} else {
