@@ -32,9 +32,7 @@ public class TaxInvoiceDTO {
 	private boolean active;
 	private String updatedBy;
 	private String createdBy;
-	private String docId;
 	private LocalDateTime docDate;
-	private String invoiceNo;
 	private LocalDateTime invoiceDate;
 	
 	List<ChargerTaxInvoiceDTO> chargerTaxInvoiceDTO;

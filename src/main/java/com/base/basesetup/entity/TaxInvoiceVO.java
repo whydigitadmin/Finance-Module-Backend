@@ -1,6 +1,8 @@
 package com.base.basesetup.entity;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -11,6 +13,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -82,6 +85,24 @@ public class TaxInvoiceVO {
 	private String invoiceNo;
 	@Column(name = "invoicedate")
 	private LocalDateTime invoiceDate;
+	@Column(name = "finyr")
+	private String finyr;
+
+	@PrePersist
+	private void setDefaultFinyr() {
+		// Execute the logic to set the default value for finyr
+		String fyFull = calculateFinyr();
+		this.finyr = fyFull;
+	}
+
+	private String calculateFinyr() {
+		// Logic to calculate finyr based on the provided SQL query
+		String currentMonthDay = LocalDate.now().format(DateTimeFormatter.ofPattern("MMdd"));
+		String fyFull = (currentMonthDay.compareTo("0331") > 0)
+				? LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy"))
+				: LocalDate.now().minusYears(1).format(DateTimeFormatter.ofPattern("yyyy"));
+		return fyFull;
+	}
 
 	@OneToMany(mappedBy = "taxInvoiceVO", cascade = CascadeType.ALL)
 	@JsonManagedReference

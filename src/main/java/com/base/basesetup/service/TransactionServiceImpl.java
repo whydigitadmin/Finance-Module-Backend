@@ -75,20 +75,20 @@ public class TransactionServiceImpl implements TransactionService {
 			taxInvoiceVO = taxInvoiceRepo.findById(taxInvoiceDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid TaxInvoice details"));
 		} else {
-			if (taxInvoiceRepo.existsByDocIdAndOrgId(taxInvoiceDTO.getDocId(), taxInvoiceDTO.getOrgId())) {
+			if (taxInvoiceRepo.existsByDocIdAndOrgId(taxInvoiceVO.getDocId(), taxInvoiceVO.getOrgId())) {
 				throw new ApplicationException("The given doc id already exists.");
 			}
-			if (taxInvoiceRepo.existsByInvoiceNoAndOrgId(taxInvoiceDTO.getInvoiceNo(), taxInvoiceDTO.getOrgId())) {
+			if (taxInvoiceRepo.existsByInvoiceNoAndOrgId(taxInvoiceVO.getInvoiceNo(), taxInvoiceVO.getOrgId())) {
 				throw new ApplicationException("The given invoice number already exists.");
 			}
 		}
-		if (ObjectUtils.isNotEmpty(taxInvoiceDTO.getId())) {
-			if (taxInvoiceRepo.existsByDocIdAndOrgIdAndId(taxInvoiceDTO.getDocId(), taxInvoiceDTO.getOrgId(),
-					taxInvoiceDTO.getId())) {
+		if (ObjectUtils.isNotEmpty(taxInvoiceVO.getId())) {
+			if (taxInvoiceRepo.existsByDocIdAndOrgIdAndId(taxInvoiceVO.getDocId(), taxInvoiceVO.getOrgId(),
+					taxInvoiceVO.getId())) {
 				throw new ApplicationException("The given doc id already exists.");
 			}
-			if (taxInvoiceRepo.existsByInvoiceNoAndOrgIdAndId(taxInvoiceDTO.getInvoiceNo(), taxInvoiceDTO.getOrgId(),
-					taxInvoiceDTO.getId())) {
+			if (taxInvoiceRepo.existsByInvoiceNoAndOrgIdAndId(taxInvoiceVO.getInvoiceNo(), taxInvoiceVO.getOrgId(),
+					taxInvoiceVO.getId())) {
 				throw new ApplicationException("The given invoice number already exists.");
 			}
 		}
@@ -171,7 +171,6 @@ public class TransactionServiceImpl implements TransactionService {
 		}
 
 		getTaxInvoiceVOFromTaxInvoiceDTO(taxInvoiceDTO, taxInvoiceVO);
-
 		taxInvoiceVO.setChargerTaxInvoiceVO(chargerTaxInvoiceVOs);
 		taxInvoiceVO.setSummaryTaxInvoiceVO(summaryTaxInvoiceVOs);
 		taxInvoiceVO.setGstTaxInvoiceVO(gstTaxInvoiceVOs);
@@ -179,6 +178,16 @@ public class TransactionServiceImpl implements TransactionService {
 	}
 
 	private void getTaxInvoiceVOFromTaxInvoiceDTO(@Valid TaxInvoiceDTO taxInvoiceDTO, TaxInvoiceVO taxInvoiceVO) {
+		// Finyr
+		int finyr = taxInvoiceRepo.findFinyr();
+		// DocId
+		String taxInvoice = "AI" + finyr + taxInvoiceRepo.findDocId();
+		taxInvoiceVO.setDocId(taxInvoice);
+		taxInvoiceRepo.nextSeq();
+		// InvoiceNo
+		String invoiceNo = "AI" + finyr + "INV" + taxInvoiceRepo.findInvoiceNo();
+		taxInvoiceVO.setInvoiceNo(invoiceNo);
+		taxInvoiceRepo.nextSeqInvoice();
 		taxInvoiceVO.setOrgId(taxInvoiceDTO.getOrgId());
 		taxInvoiceVO.setAddress(taxInvoiceDTO.getAddress());
 		taxInvoiceVO.setAddressType(taxInvoiceDTO.getAddressType());
@@ -196,10 +205,8 @@ public class TransactionServiceImpl implements TransactionService {
 		taxInvoiceVO.setSalesType(taxInvoiceDTO.getSalesType());
 		taxInvoiceVO.setStatus(taxInvoiceDTO.getStatus());
 		taxInvoiceVO.setUpdatedBy(taxInvoiceDTO.getUpdatedBy());
-		taxInvoiceVO.setDocId(taxInvoiceDTO.getDocId());
 		taxInvoiceVO.setDocDate(taxInvoiceDTO.getDocDate());
 		taxInvoiceVO.setInvoiceDate(taxInvoiceDTO.getInvoiceDate());
-		taxInvoiceVO.setInvoiceNo(taxInvoiceDTO.getInvoiceNo());
 	}
 
 	@Override
@@ -207,5 +214,4 @@ public class TransactionServiceImpl implements TransactionService {
 		return taxInvoiceRepo.findTaxInvoiceByActive();
 
 	}
-
 }
