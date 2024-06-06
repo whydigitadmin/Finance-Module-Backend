@@ -41,7 +41,13 @@ public interface TaxInvocieRepo extends JpaRepository<TaxInvoiceVO, Long> {
 	@Query(nativeQuery = true, value = "select sequence_value from taxinvoicenoseq")
 	String findInvoiceNo();
 
-	@Query(nativeQuery = true, value = "CALL next_taxinvoiceno_sequence_value();")
+	@Query(nativeQuery = true, value = "CALL next_taxinvoiceno_sequence_value()")
 	void nextSeqInvoice();
+
+	@Query(nativeQuery = true, value = "SELECT * FROM taxinvoice where orgid=?1")
+	List<TaxInvoiceVO> findAllTaxInvoiceDocIdByOrgId(Long orgId);
+
+	@Query(nativeQuery = true, value = "select * from taxinvoice where orgid=?1 and docid=?2")
+	List<TaxInvoiceVO> findAllTaxInvoiceByDocId(Long orgId, String docId);
 
 }

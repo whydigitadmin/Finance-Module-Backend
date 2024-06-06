@@ -18,16 +18,16 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "gsttaxinvoice")
+@Table(name = "gstirncredit")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class GstTaxInvoiceVO {
+public class GstIrnCreditVO {
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "gsttaxinvoicegen")
-	@SequenceGenerator(name = "gsttaxinvoicegen", sequenceName = "gsttaxinvoiceVO", initialValue = 1000000001, allocationSize = 1)
-	@Column(name = "gsttaxinvoiceid")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "gstirncreditgen")
+	@SequenceGenerator(name = "gstirncreditgen", sequenceName = "gstirncreditVO", initialValue = 1000000001, allocationSize = 1)
+	@Column(name = "gstirncreditid")
 	private Long id;
 	@Column(name = "gstchargeacc")
 	private String gstChargeAcc;
@@ -44,7 +44,8 @@ public class GstTaxInvoiceVO {
 
 	@ManyToOne
 	@JsonBackReference
-	@JoinColumn(name = "taxinvoiceid")
-	TaxInvoiceVO taxInvoiceVO;
+	@JoinColumn(name = "irncreditid")
+	IrnCreditVO irnCreditVO;
 
 }
+
