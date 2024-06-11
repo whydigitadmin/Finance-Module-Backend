@@ -22,9 +22,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.base.basesetup.common.CommonConstant;
 import com.base.basesetup.common.UserConstants;
+import com.base.basesetup.dto.BrsOpeningDTO;
+import com.base.basesetup.dto.ChartCostCenterDTO;
+import com.base.basesetup.dto.DailyMonthlyExRatesDTO;
 import com.base.basesetup.dto.IrnCreditDTO;
 import com.base.basesetup.dto.ResponseDTO;
 import com.base.basesetup.dto.TaxInvoiceDTO;
+import com.base.basesetup.entity.BrsOpeningVO;
+import com.base.basesetup.entity.ChartCostCenterVO;
+import com.base.basesetup.entity.DailyMonthlyExRatesVO;
 import com.base.basesetup.entity.IrnCreditVO;
 import com.base.basesetup.entity.TaxInvoiceVO;
 import com.base.basesetup.service.TransactionService;
@@ -148,6 +154,7 @@ public class TransactionController extends BaseController {
 		return ResponseEntity.ok().body(responseDTO);
 
 	}
+
 	@GetMapping("/getAllTaxInvoiceDocIdByOrgId")
 	public ResponseEntity<ResponseDTO> getAllTaxInvoiceDocIdByOrgId(@RequestParam Long orgId) {
 		String methodName = "getAllTaxInvoiceDocIdByOrgId()";
@@ -174,8 +181,9 @@ public class TransactionController extends BaseController {
 		return ResponseEntity.ok().body(responseDTO);
 
 	}
+
 	@GetMapping("/getAllTaxInvoiceByDocIdAndOrgId")
-	public ResponseEntity<ResponseDTO> getAllTaxInvoiceByDocId(@RequestParam Long orgId,@RequestParam String docId) {
+	public ResponseEntity<ResponseDTO> getAllTaxInvoiceByDocId(@RequestParam Long orgId, @RequestParam String docId) {
 		String methodName = "getAllTaxInvoiceByDocId()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
 		String errorMsg = null;
@@ -183,7 +191,7 @@ public class TransactionController extends BaseController {
 		ResponseDTO responseDTO = null;
 		List<TaxInvoiceVO> taxInvoiceVO = new ArrayList<>();
 		try {
-			taxInvoiceVO = transactionService.getAllTaxInvoiceByDocId(orgId,docId);
+			taxInvoiceVO = transactionService.getAllTaxInvoiceByDocId(orgId, docId);
 		} catch (Exception e) {
 			errorMsg = e.getMessage();
 			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
@@ -310,4 +318,304 @@ public class TransactionController extends BaseController {
 
 	}
 
+//	DailyMonthlyExRatesVO
+	@GetMapping("/getAllDailyMonthlyExRatesByOrgId")
+	public ResponseEntity<ResponseDTO> getAllDailyMonthlyExRatesByOrgId(@RequestParam(required = false) Long orgId) {
+		String methodName = "getAllDailyMonthlyExRatesByOrgId()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		List<DailyMonthlyExRatesVO> dailyMonthlyExRatesVO = new ArrayList<>();
+		try {
+			dailyMonthlyExRatesVO = transactionService.getAllDailyMonthlyExRatesByOrgId(orgId);
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+					"DailyMonthlyExRates information get successfully ByOrgId");
+			responseObjectsMap.put("dailyMonthlyExRatesVO", dailyMonthlyExRatesVO);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					"DailyMonthlyExRates information receive failedByOrgId", errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+
+	}
+
+	@GetMapping("/getAllDailyMonthlyExRatesById")
+	public ResponseEntity<ResponseDTO> getAllDailyMonthlyExRatesById(@RequestParam(required = false) Long id) {
+		String methodName = "getAllDailyMonthlyExRatesById()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		List<DailyMonthlyExRatesVO> dailyMonthlyExRatesVO = new ArrayList<>();
+		try {
+			dailyMonthlyExRatesVO = transactionService.getAllDailyMonthlyExRatesById(id);
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+					"DailyMonthlyExRates information get successfully By id");
+			responseObjectsMap.put("dailyMonthlyExRatesVO", dailyMonthlyExRatesVO);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					"DailyMonthlyExRates information receive failedByOrgId", errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+	}
+
+	@PutMapping("/updateCreateDailyMonthlyExRates")
+	public ResponseEntity<ResponseDTO> updateCreateDailyMonthlyExRates(
+			@Valid @RequestBody DailyMonthlyExRatesDTO dailyMonthlyExRatesDTO) {
+		String methodName = "updateCreateDailyMonthlyExRates()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		try {
+			DailyMonthlyExRatesVO dailyMonthlyExRatesVO = transactionService
+					.updateCreateDailyMonthlyExRates(dailyMonthlyExRatesDTO);
+			if (dailyMonthlyExRatesVO != null) {
+				responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "DailyMonthlyExRates updated successfully");
+				responseObjectsMap.put("dailyMonthlyExRatesVO", dailyMonthlyExRatesVO);
+				responseDTO = createServiceResponse(responseObjectsMap);
+			} else {
+				errorMsg = "DailyMonthlyExRates not found for ID: " + dailyMonthlyExRatesDTO.getId();
+				responseDTO = createServiceResponseError(responseObjectsMap, "DailyMonthlyExRates update failed",
+						errorMsg);
+			}
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+			responseDTO = createServiceResponseError(responseObjectsMap, "DailyMonthlyExRates update failed", errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+	}
+
+//	BrsOpening
+	@GetMapping("/getAllBrsOpeningByOrgId")
+	public ResponseEntity<ResponseDTO> getAllBrsOpeningByOrgId(@RequestParam(required = false) Long orgId) {
+		String methodName = "getAllBrsOpeningByOrgId()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		List<BrsOpeningVO> brsOpeningVO = new ArrayList<>();
+		try {
+			brsOpeningVO = transactionService.getAllBrsOpeningByOrgId(orgId);
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "BrsOpening information get successfully ByOrgId");
+			responseObjectsMap.put("brsOpeningVO", brsOpeningVO);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap, "BrsOpening information receive failedByOrgId",
+					errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+
+	}
+
+	@GetMapping("/getAllBrsOpeningById")
+	public ResponseEntity<ResponseDTO> getAllBrsOpeningById(@RequestParam(required = false) Long id) {
+		String methodName = "getAllBrsOpeningById()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		List<BrsOpeningVO> brsOpeningVO = new ArrayList<>();
+		try {
+			brsOpeningVO = transactionService.getAllBrsOpeningById(id);
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "BrsOpening information get successfully By id");
+			responseObjectsMap.put("brsOpeningVO", brsOpeningVO);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap, "BrsOpening information receive failedByOrgId",
+					errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+	}
+
+	@PutMapping("/updateCreateBrsOpening")
+	public ResponseEntity<ResponseDTO> updateCreateBrsOpening(@Valid @RequestBody BrsOpeningDTO brsOpeningDTO) {
+		String methodName = "updateCreateBrsOpening()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		try {
+			BrsOpeningVO brsOpeningVO = transactionService.updateCreateBrsOpening(brsOpeningDTO);
+			if (brsOpeningVO != null) {
+				responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "BrsOpening updated successfully");
+				responseObjectsMap.put("brsOpeningVO", brsOpeningVO);
+				responseDTO = createServiceResponse(responseObjectsMap);
+			} else {
+				errorMsg = "BrsOpening not found for ID: " + brsOpeningDTO.getId();
+				responseDTO = createServiceResponseError(responseObjectsMap, "BrsOpening update failed", errorMsg);
+			}
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+			responseDTO = createServiceResponseError(responseObjectsMap, "BrsOpening update failed", errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+	}
+
+	@GetMapping("/getBrsOpeningByActive")
+	public ResponseEntity<ResponseDTO> getBrsOpeningByActive() {
+		String methodName = "getBrsOpeningByActive()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		List<BrsOpeningVO> brsOpeningVO = new ArrayList<>();
+		try {
+			brsOpeningVO = transactionService.getBrsOpeningByActive();
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "BrsOpening information get successfully By Active");
+			responseObjectsMap.put("brsOpeningVO", brsOpeningVO);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					"BrsOpening information receive failed By Active", errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+
+	}
+
+//	ChartCostCenter
+	@GetMapping("/getAllChartCostCenterByOrgId")
+	public ResponseEntity<ResponseDTO> getAllChartCostCenterByOrgId(@RequestParam(required = false) Long orgId) {
+		String methodName = "getAllChartCostCenterByOrgId()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		List<ChartCostCenterVO> chartCostCenterVO = new ArrayList<>();
+		try {
+			chartCostCenterVO = transactionService.getAllChartCostCenterByOrgId(orgId);
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+					"ChartCostCenter information get successfully ByOrgId");
+			responseObjectsMap.put("chartCostCenterVO", chartCostCenterVO);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					"ChartCostCenter information receive failedByOrgId", errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+	}
+
+	@GetMapping("/getAllChartCostCenterById")
+	public ResponseEntity<ResponseDTO> getAllChartCostCenterById(@RequestParam(required = false) Long id) {
+		String methodName = "getAllChartCostCenterById()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		List<ChartCostCenterVO> chartCostCenterVO = new ArrayList<>();
+		try {
+			chartCostCenterVO = transactionService.getAllChartCostCenterById(id);
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "ChartCostCenter information get successfully By id");
+			responseObjectsMap.put("chartCostCenterVO", chartCostCenterVO);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					"ChartCostCenter information receive failedByOrgId", errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+	}
+
+	@PutMapping("/updateCreateChartCostCenter")
+	public ResponseEntity<ResponseDTO> updateChartCostCenter(
+			@Valid @RequestBody ChartCostCenterDTO chartCostCenterDTO) {
+		String methodName = "updateCreateChartCostCenter()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+
+		try {
+			ChartCostCenterVO chartCostCenterVO = transactionService.updateCreateChartCostCenter(chartCostCenterDTO);
+			if (chartCostCenterVO != null) {
+				responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "ChartCostCenter updated successfully");
+				responseObjectsMap.put("chartCostCenterVO", chartCostCenterVO);
+				responseDTO = createServiceResponse(responseObjectsMap);
+			} else {
+				errorMsg = "ChartCostCenter not found for ID: " + chartCostCenterDTO.getId();
+				responseDTO = createServiceResponseError(responseObjectsMap, "ChartCostCenter update failed", errorMsg);
+			}
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+			responseDTO = createServiceResponseError(responseObjectsMap, "ChartCostCenter update failed", errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+	}
+
+	@GetMapping("/getChartCostCenterByActive")
+	public ResponseEntity<ResponseDTO> getChartCostCenterByActive() {
+		String methodName = "getChartCostCenterByActive()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		List<ChartCostCenterVO> chartCostCenterVO = new ArrayList<>();
+		try {
+			chartCostCenterVO = transactionService.getChartCostCenterByActive();
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+					"ChartCostCenter information get successfully By Active");
+			responseObjectsMap.put("chartCostCenterVO", chartCostCenterVO);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					"ChartCostCenter information receive failed By Active", errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+	}
 }

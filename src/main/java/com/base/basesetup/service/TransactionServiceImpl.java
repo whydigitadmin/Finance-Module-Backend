@@ -11,16 +11,24 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.base.basesetup.dto.BrsOpeningDTO;
 import com.base.basesetup.dto.ChargerIrnCreditDTO;
 import com.base.basesetup.dto.ChargerTaxInvoiceDTO;
+import com.base.basesetup.dto.ChartCostCenterDTO;
+import com.base.basesetup.dto.DailyMonthlyExRatesDTO;
+import com.base.basesetup.dto.DailyMonthlyExRatesDtlDTO;
 import com.base.basesetup.dto.GstIrnCreditDTO;
 import com.base.basesetup.dto.GstTaxInvoiceDTO;
 import com.base.basesetup.dto.IrnCreditDTO;
 import com.base.basesetup.dto.SummaryIrnCreditDTO;
 import com.base.basesetup.dto.SummaryTaxInvoiceDTO;
 import com.base.basesetup.dto.TaxInvoiceDTO;
+import com.base.basesetup.entity.BrsOpeningVO;
 import com.base.basesetup.entity.ChargerIrnCreditVO;
 import com.base.basesetup.entity.ChargerTaxInvoiceVO;
+import com.base.basesetup.entity.ChartCostCenterVO;
+import com.base.basesetup.entity.DailyMonthlyExRatesDtlVO;
+import com.base.basesetup.entity.DailyMonthlyExRatesVO;
 import com.base.basesetup.entity.GstIrnCreditVO;
 import com.base.basesetup.entity.GstTaxInvoiceVO;
 import com.base.basesetup.entity.IrnCreditVO;
@@ -28,8 +36,12 @@ import com.base.basesetup.entity.SummaryIrnCreditVO;
 import com.base.basesetup.entity.SummaryTaxInvoiceVO;
 import com.base.basesetup.entity.TaxInvoiceVO;
 import com.base.basesetup.exception.ApplicationException;
+import com.base.basesetup.repo.BrsOpeningRepo;
 import com.base.basesetup.repo.ChargerIrnCreditRepo;
 import com.base.basesetup.repo.ChargerTaxInvoiceRepo;
+import com.base.basesetup.repo.ChartCostCenterRepo;
+import com.base.basesetup.repo.DailyMonthlyExRatesDtlRepo;
+import com.base.basesetup.repo.DailyMonthlyExRatesRepo;
 import com.base.basesetup.repo.GstIrnCreditRepo;
 import com.base.basesetup.repo.GstTaxInvoiceRepo;
 import com.base.basesetup.repo.IrnCreditRepo;
@@ -63,6 +75,18 @@ public class TransactionServiceImpl implements TransactionService {
 
 	@Autowired
 	SummaryIrnCreditRepo summaryIrnCreditRepo;
+
+	@Autowired
+	DailyMonthlyExRatesRepo dailyMonthlyExRatesRepo;
+
+	@Autowired
+	DailyMonthlyExRatesDtlRepo dailyMonthlyExRatesDtlRepo;
+
+	@Autowired
+	BrsOpeningRepo brsOpeningRepo;
+
+	@Autowired
+	ChartCostCenterRepo chartCostCenterRepo;
 
 	// TaxInvoice
 
@@ -245,7 +269,7 @@ public class TransactionServiceImpl implements TransactionService {
 
 	@Override
 	public List<TaxInvoiceVO> getAllTaxInvoiceByDocId(Long orgId, String docId) {
-		return taxInvoiceRepo.findAllTaxInvoiceByDocId(orgId,docId);
+		return taxInvoiceRepo.findAllTaxInvoiceByDocId(orgId, docId);
 	}
 	// IrnCredit
 
@@ -421,5 +445,190 @@ public class TransactionServiceImpl implements TransactionService {
 
 	}
 
+//	DailyMonthlyExRates
+	@Override
+	public List<DailyMonthlyExRatesVO> getAllDailyMonthlyExRatesById(Long id) {
+		List<DailyMonthlyExRatesVO> dailyMonthlyExRatesVO = new ArrayList<>();
+		if (ObjectUtils.isNotEmpty(id)) {
+			LOGGER.info("Successfully Received DailyMonthlyExRates BY Id : {}", id);
+			dailyMonthlyExRatesVO = dailyMonthlyExRatesRepo.findDailyMonthlyExRatesById(id);
+		} else {
+			LOGGER.info("Successfully Received DailyMonthlyExRates For All Id.");
+			dailyMonthlyExRatesVO = dailyMonthlyExRatesRepo.findAll();
+		}
+		return dailyMonthlyExRatesVO;
+	}
+
+	@Override
+	public List<DailyMonthlyExRatesVO> getAllDailyMonthlyExRatesByOrgId(Long orgId) {
+		List<DailyMonthlyExRatesVO> dailyMonthlyExRatesVO = new ArrayList<>();
+		if (ObjectUtils.isNotEmpty(orgId)) {
+			LOGGER.info("Successfully Received DailyMonthlyExRates BY OrgId : {}", orgId);
+			dailyMonthlyExRatesVO = dailyMonthlyExRatesRepo.findDailyMonthlyExRatesByOrgId(orgId);
+		} else {
+			LOGGER.info("Successfully Received DailyMonthlyExRates For All OrgId.");
+			dailyMonthlyExRatesVO = dailyMonthlyExRatesRepo.findAll();
+		}
+		return dailyMonthlyExRatesVO;
+	}
+
+
+
+	
+	// BrsOpening
+
+	@Override
+	public List<BrsOpeningVO> getAllBrsOpeningByOrgId(Long orgId) {
+		List<BrsOpeningVO> brsOpeningVO = new ArrayList<>();
+		if (ObjectUtils.isNotEmpty(orgId)) {
+			LOGGER.info("Successfully Received  BrsOpening BY OrgId : {}", orgId);
+			brsOpeningVO = brsOpeningRepo.getAllBrsOpeningByOrgId(orgId);
+		} else {
+			LOGGER.info("Successfully Received  BrsOpening For All OrgId.");
+			brsOpeningVO = brsOpeningRepo.findAll();
+		}
+		return brsOpeningVO;
+	}
+
+	@Override
+	public List<BrsOpeningVO> getAllBrsOpeningById(Long id) {
+		List<BrsOpeningVO> brsOpeningVO = new ArrayList<>();
+		if (ObjectUtils.isNotEmpty(id)) {
+			LOGGER.info("Successfully Received BrsOpening BY Id : {}", id);
+			brsOpeningVO = brsOpeningRepo.getAllBrsOpeningById(id);
+		} else {
+			LOGGER.info("Successfully Received BrsOpening For All Id.");
+			brsOpeningVO = brsOpeningRepo.findAll();
+		}
+		return brsOpeningVO;
+	}
+
+	@Override
+	public BrsOpeningVO updateCreateBrsOpening(@Valid BrsOpeningDTO brsOpeningDTO) throws ApplicationException {
+		BrsOpeningVO brsOpeningVO = new BrsOpeningVO();
+		if (ObjectUtils.isNotEmpty(brsOpeningDTO.getId())) {
+			brsOpeningVO = brsOpeningRepo.findById(brsOpeningDTO.getId())
+					.orElseThrow(() -> new ApplicationException("Invalid BrsOpening details"));
+		}
+//		else {
+//			if (taxInvoiceRepo.existsByDocIdAndOrgId(taxInvoiceVO.getDocId(), taxInvoiceVO.getOrgId())) {
+//				throw new ApplicationException("The given doc id already exists.");
+//			}
+//			if (taxInvoiceRepo.existsByInvoiceNoAndOrgId(taxInvoiceVO.getInvoiceNo(), taxInvoiceVO.getOrgId())) {
+//				throw new ApplicationException("The given invoice number already exists.");
+//			}
+//		}
+//		if (ObjectUtils.isNotEmpty(taxInvoiceVO.getId())) {
+//			if (taxInvoiceRepo.existsByDocIdAndOrgIdAndId(taxInvoiceVO.getDocId(), taxInvoiceVO.getOrgId(),
+//					taxInvoiceVO.getId())) {
+//				throw new ApplicationException("The given doc id already exists.");
+//			}
+//			if (taxInvoiceRepo.existsByInvoiceNoAndOrgIdAndId(taxInvoiceVO.getInvoiceNo(), taxInvoiceVO.getOrgId(),
+//					taxInvoiceVO.getId())) {
+//				throw new ApplicationException("The given invoice number already exists.");
+//			}
+//		}
+
+		getBrsOpeningVOFromBrsOpeningDTO(brsOpeningDTO, brsOpeningVO);
+		return brsOpeningRepo.save(brsOpeningVO);
+	}
+
+	private void getBrsOpeningVOFromBrsOpeningDTO(@Valid BrsOpeningDTO brsOpeningDTO, BrsOpeningVO brsOpeningVO) {
+		brsOpeningVO.setBillno(brsOpeningDTO.getBillNo());
+		brsOpeningVO.setBillDate(brsOpeningDTO.getBillDate());
+		brsOpeningVO.setChqNo(brsOpeningDTO.getChqNo());
+		brsOpeningVO.setChqDate(brsOpeningDTO.getChqDate());
+		brsOpeningVO.setBank(brsOpeningDTO.getBank());
+		brsOpeningVO.setCurrency(brsOpeningDTO.getCurrency());
+		brsOpeningVO.setExRate(brsOpeningDTO.getExRate());
+		brsOpeningVO.setReceiptAmount(brsOpeningDTO.getReceiptAmount());
+		brsOpeningVO.setPaymentAmount(brsOpeningDTO.getPaymentAmount());
+		brsOpeningVO.setReconcile(brsOpeningDTO.isReconcile());
+		brsOpeningVO.setOrgId(brsOpeningDTO.getOrgId());
+		brsOpeningVO.setActive(brsOpeningDTO.isActive());
+		brsOpeningVO.setUpdatedBy(brsOpeningDTO.getUpdatedBy());
+		brsOpeningVO.setCreatedBy(brsOpeningDTO.getCreatedBy());
+	}
+
+	@Override
+	public List<BrsOpeningVO> getBrsOpeningByActive() {
+		return brsOpeningRepo.findBrsOpeningByActive();
+	}
+	// ChartCostCenter
+
+	@Override
+	public List<ChartCostCenterVO> getAllChartCostCenterByOrgId(Long orgId) {
+		List<ChartCostCenterVO> chartCostCenterVO = new ArrayList<>();
+		if (ObjectUtils.isNotEmpty(orgId)) {
+			LOGGER.info("Successfully Received ChartCostCenter BY OrgId : {}", orgId);
+			chartCostCenterVO = chartCostCenterRepo.getAllChartCostCenterByOrgId(orgId);
+		} else {
+			LOGGER.info("Successfully Received  ChartCostCenter For All OrgId.");
+			chartCostCenterVO = chartCostCenterRepo.findAll();
+		}
+		return chartCostCenterVO;
+	}
+
+	@Override
+	public List<ChartCostCenterVO> getAllChartCostCenterById(Long id) {
+		List<ChartCostCenterVO> chartCostCenterVO = new ArrayList<>();
+		if (ObjectUtils.isNotEmpty(id)) {
+			LOGGER.info("Successfully Received ChartCostCenter BY Id : {}", id);
+			chartCostCenterVO = chartCostCenterRepo.getAllChartCostCenterById(id);
+		} else {
+			LOGGER.info("Successfully Received ChartCostCenter For All Id.");
+			chartCostCenterVO = chartCostCenterRepo.findAll();
+		}
+		return chartCostCenterVO;
+	}
+
+	@Override
+	public ChartCostCenterVO updateCreateChartCostCenter(@Valid ChartCostCenterDTO chartCostCenterDTO)
+			throws ApplicationException {
+		ChartCostCenterVO chartCostCenterVO = new ChartCostCenterVO();
+		if (ObjectUtils.isNotEmpty(chartCostCenterDTO.getId())) {
+			chartCostCenterVO = chartCostCenterRepo.findById(chartCostCenterDTO.getId())
+					.orElseThrow(() -> new ApplicationException("Invalid ChartCostCenter details"));
+		}
+//			else {
+//				if (taxInvoiceRepo.existsByDocIdAndOrgId(taxInvoiceVO.getDocId(), taxInvoiceVO.getOrgId())) {
+//					throw new ApplicationException("The given doc id already exists.");
+//				}
+//				if (taxInvoiceRepo.existsByInvoiceNoAndOrgId(taxInvoiceVO.getInvoiceNo(), taxInvoiceVO.getOrgId())) {
+//					throw new ApplicationException("The given invoice number already exists.");
+//				}
+//			}
+//			if (ObjectUtils.isNotEmpty(taxInvoiceVO.getId())) {
+//				if (taxInvoiceRepo.existsByDocIdAndOrgIdAndId(taxInvoiceVO.getDocId(), taxInvoiceVO.getOrgId(),
+//						taxInvoiceVO.getId())) {
+//					throw new ApplicationException("The given doc id already exists.");
+//				}
+//				if (taxInvoiceRepo.existsByInvoiceNoAndOrgIdAndId(taxInvoiceVO.getInvoiceNo(), taxInvoiceVO.getOrgId(),
+//						taxInvoiceVO.getId())) {
+//					throw new ApplicationException("The given invoice number already exists.");
+//				}
+//			}
+
+		getChartCostCenterVOFromChartCostCenterDTO(chartCostCenterDTO, chartCostCenterVO);
+		return chartCostCenterRepo.save(chartCostCenterVO);
+	}
+
+	private void getChartCostCenterVOFromChartCostCenterDTO(@Valid ChartCostCenterDTO chartCostCenterDTO,
+			ChartCostCenterVO chartCostCenterVO) {
+		chartCostCenterVO.setCostCenterCode(chartCostCenterDTO.getCostCenterCode());
+		chartCostCenterVO.setCostCenterName(chartCostCenterDTO.getCostCenterName());
+		chartCostCenterVO.setCredit(chartCostCenterDTO.getCredit());
+		chartCostCenterVO.setDebit(chartCostCenterDTO.getDebit());
+		chartCostCenterVO.setOrgId(chartCostCenterDTO.getOrgId());
+		chartCostCenterVO.setUpdatedBy(chartCostCenterDTO.getUpdatedBy());
+		chartCostCenterVO.setCreatedBy(chartCostCenterDTO.getCreatedBy());
+		chartCostCenterVO.setActive(chartCostCenterDTO.isActive());
+
+	}
+
+	@Override
+	public List<ChartCostCenterVO> getChartCostCenterByActive() {
+		return chartCostCenterRepo.findChartCostCenterByActive();
+	}
 
 }

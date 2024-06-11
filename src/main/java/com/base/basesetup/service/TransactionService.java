@@ -6,8 +6,14 @@ import javax.validation.Valid;
 
 import org.springframework.stereotype.Service;
 
+import com.base.basesetup.dto.BrsOpeningDTO;
+import com.base.basesetup.dto.ChartCostCenterDTO;
+import com.base.basesetup.dto.DailyMonthlyExRatesDTO;
 import com.base.basesetup.dto.IrnCreditDTO;
 import com.base.basesetup.dto.TaxInvoiceDTO;
+import com.base.basesetup.entity.BrsOpeningVO;
+import com.base.basesetup.entity.ChartCostCenterVO;
+import com.base.basesetup.entity.DailyMonthlyExRatesVO;
 import com.base.basesetup.entity.IrnCreditVO;
 import com.base.basesetup.entity.TaxInvoiceVO;
 import com.base.basesetup.exception.ApplicationException;
@@ -37,4 +43,32 @@ public interface TransactionService {
 
 	List<IrnCreditVO> getIrnCreditByActive();
 
+//	DailyMonthlyExRatesVO
+	List<DailyMonthlyExRatesVO> getAllDailyMonthlyExRatesByOrgId(Long orgId);
+
+	DailyMonthlyExRatesVO updateCreateDailyMonthlyExRates(@Valid DailyMonthlyExRatesDTO irnCreditDTO)
+			throws ApplicationException;
+
+	List<DailyMonthlyExRatesVO> getAllDailyMonthlyExRatesById(Long id);
+
+	List<DailyMonthlyExRatesVO> getDailyMonthlyExRatesByActive();
+
+//	BrsOpening
+	List<BrsOpeningVO> getAllBrsOpeningByOrgId(Long orgId);
+
+	BrsOpeningVO updateCreateBrsOpening(@Valid BrsOpeningDTO brsOpeningDTO) throws ApplicationException;
+
+	List<BrsOpeningVO> getAllBrsOpeningById(Long id);
+
+	List<BrsOpeningVO> getBrsOpeningByActive();
+
+//	ChartCostCenter
+	List<ChartCostCenterVO> getAllChartCostCenterByOrgId(Long orgId);
+
+	ChartCostCenterVO updateCreateChartCostCenter(@Valid ChartCostCenterDTO chartCostCenterDTO)
+			throws ApplicationException;
+
+	List<ChartCostCenterVO> getAllChartCostCenterById(Long id);
+
+	List<ChartCostCenterVO> getChartCostCenterByActive();
 }
