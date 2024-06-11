@@ -472,9 +472,54 @@ public class TransactionServiceImpl implements TransactionService {
 		return dailyMonthlyExRatesVO;
 	}
 
+	@Override
+	public DailyMonthlyExRatesVO updateCreateDailyMonthlyExRates(@Valid DailyMonthlyExRatesDTO dailyMonthlyExRatesDTO)
+			throws ApplicationException {
+		DailyMonthlyExRatesVO dailyMonthlyExRatesVO = new DailyMonthlyExRatesVO();
+		if (ObjectUtils.isNotEmpty(dailyMonthlyExRatesDTO.getId())) {
+			dailyMonthlyExRatesVO = dailyMonthlyExRatesRepo.findById(dailyMonthlyExRatesDTO.getId())
+					.orElseThrow(() -> new ApplicationException("Invalid DailyMonthlyExRates details"));
+		}
+		List<DailyMonthlyExRatesDtlVO> dailyMonthlyExRatesDtlVOs = new ArrayList<>();
+		if (dailyMonthlyExRatesDTO.getDailyMonthlyExRatesDtlDTO() != null) {
+			for (DailyMonthlyExRatesDtlDTO dailyMonthlyExRatesDtlDTO : dailyMonthlyExRatesDTO
+					.getDailyMonthlyExRatesDtlDTO()) {
+				DailyMonthlyExRatesDtlVO dailyMonthlyExRatesDtlVO;
+				if (dailyMonthlyExRatesDtlDTO.getId() != null
+						&& ObjectUtils.isNotEmpty(dailyMonthlyExRatesDtlDTO.getId())) {
+					dailyMonthlyExRatesDtlVO = dailyMonthlyExRatesDtlRepo.findById(dailyMonthlyExRatesDtlDTO.getId())
+							.orElse(new DailyMonthlyExRatesDtlVO());
+				} else {
+					dailyMonthlyExRatesDtlVO = new DailyMonthlyExRatesDtlVO();
+				}
+				dailyMonthlyExRatesDtlVO.setBuyingExrate(dailyMonthlyExRatesDtlDTO.getBuyingExrate());
+				dailyMonthlyExRatesDtlVO.setCurrency(dailyMonthlyExRatesDtlDTO.getCurrency());
+				dailyMonthlyExRatesDtlVO.setCurrencyDescripition(dailyMonthlyExRatesDtlDTO.getCurrencyDescripition());
+				dailyMonthlyExRatesDtlVO.setSellingExRate(dailyMonthlyExRatesDtlDTO.getSellingExRate());
+				dailyMonthlyExRatesDtlVO.setDailyMonthlyExRatesVO(dailyMonthlyExRatesVO);
+				dailyMonthlyExRatesDtlVOs.add(dailyMonthlyExRatesDtlVO);
+			}
+		}
+		dailyMonthlyExRatesVO.setDailyMonthlyExRatesDtlVO(dailyMonthlyExRatesDtlVOs); // Assuming you have this setter
+		getDailyMonthlyExRatesVOFromDailyMonthlyExRatesDTO(dailyMonthlyExRatesDTO, dailyMonthlyExRatesVO);
+		return dailyMonthlyExRatesRepo.save(dailyMonthlyExRatesVO);
+	}
 
+	private void getDailyMonthlyExRatesVOFromDailyMonthlyExRatesDTO(
+			@Valid DailyMonthlyExRatesDTO dailyMonthlyExRatesDTO, DailyMonthlyExRatesVO dailyMonthlyExRatesVO) {
+		dailyMonthlyExRatesVO.setDate(dailyMonthlyExRatesDTO.getDate());
+		dailyMonthlyExRatesVO.setMonth(dailyMonthlyExRatesDTO.getMonth());
+		dailyMonthlyExRatesVO.setActive(dailyMonthlyExRatesDTO.isActive());
+		dailyMonthlyExRatesVO.setOrgId(dailyMonthlyExRatesDTO.getOrgId());
+		dailyMonthlyExRatesVO.setCreatedBy(dailyMonthlyExRatesDTO.getCreatedBy());
+		dailyMonthlyExRatesVO.setUpdatedBy(dailyMonthlyExRatesDTO.getUpdatedBy());
+	}
 
-	
+	@Override
+	public List<DailyMonthlyExRatesVO> getDailyMonthlyExRatesByActive() {
+		return dailyMonthlyExRatesRepo.findDailyMonthlyExRatesByActive();
+
+	}
 	// BrsOpening
 
 	@Override
