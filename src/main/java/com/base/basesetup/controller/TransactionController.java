@@ -25,12 +25,14 @@ import com.base.basesetup.common.UserConstants;
 import com.base.basesetup.dto.BrsOpeningDTO;
 import com.base.basesetup.dto.ChartCostCenterDTO;
 import com.base.basesetup.dto.DailyMonthlyExRatesDTO;
+import com.base.basesetup.dto.FundTransferDTO;
 import com.base.basesetup.dto.IrnCreditDTO;
 import com.base.basesetup.dto.ResponseDTO;
 import com.base.basesetup.dto.TaxInvoiceDTO;
 import com.base.basesetup.entity.BrsOpeningVO;
 import com.base.basesetup.entity.ChartCostCenterVO;
 import com.base.basesetup.entity.DailyMonthlyExRatesVO;
+import com.base.basesetup.entity.FundTransferVO;
 import com.base.basesetup.entity.IrnCreditVO;
 import com.base.basesetup.entity.TaxInvoiceVO;
 import com.base.basesetup.service.TransactionService;
@@ -614,6 +616,113 @@ public class TransactionController extends BaseController {
 		} else {
 			responseDTO = createServiceResponseError(responseObjectsMap,
 					"ChartCostCenter information receive failed By Active", errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+	}
+
+//	FundTransfer
+	@GetMapping("/getAllFundTransferByOrgId")
+	public ResponseEntity<ResponseDTO> getAllFundTransferByOrgId(@RequestParam(required = false) Long orgId) {
+		String methodName = "getAllFundTransferByOrgId()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		List<FundTransferVO> fundTransferVO = new ArrayList<>();
+		try {
+			fundTransferVO = transactionService.getAllFundTransferByOrgId(orgId);
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "FundTransfer information get successfully ByOrgId");
+			responseObjectsMap.put("fundTransferVO", fundTransferVO);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					"FundTransfer information receive failedByOrgId", errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+
+	}
+
+	@GetMapping("/getAllFundTransferById")
+	public ResponseEntity<ResponseDTO> getAllFundTransferById(@RequestParam(required = false) Long id) {
+		String methodName = "getAllFundTransferById()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		List<FundTransferVO> fundTransferVO = new ArrayList<>();
+		try {
+			fundTransferVO = transactionService.getAllFundTransferById(id);
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "FundTransfer information get successfully By id");
+			responseObjectsMap.put("fundTransferVO", fundTransferVO);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					"FundTransfer information receive failedByOrgId", errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+	}
+
+	@PutMapping("/updateCreateFundTransfer")
+	public ResponseEntity<ResponseDTO> updateCreateFundTransfer(@Valid @RequestBody FundTransferDTO fundTransferDTO) {
+		String methodName = "updateCreateFundTransfer()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		try {
+			FundTransferVO fundTransferVO = transactionService.updateCreateFundTransfer(fundTransferDTO);
+			if (fundTransferVO != null) {
+				responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "FundTransfer updated successfully");
+				responseObjectsMap.put("fundTransferVO", fundTransferVO);
+				responseDTO = createServiceResponse(responseObjectsMap);
+			} else {
+				errorMsg = "FundTransfer not found for ID: " + fundTransferDTO.getId();
+				responseDTO = createServiceResponseError(responseObjectsMap, "FundTransfer update failed", errorMsg);
+			}
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+			responseDTO = createServiceResponseError(responseObjectsMap, "FundTransfer update failed", errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+	}
+
+	@GetMapping("/getFundTransferByActive")
+	public ResponseEntity<ResponseDTO> getFundTransferByActive() {
+		String methodName = "getFundTransferByActive()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		List<FundTransferVO> fundTransferVO = new ArrayList<>();
+		try {
+			fundTransferVO = transactionService.getFundTransferByActive();
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+					"FundTransfer information get successfully By Active");
+			responseObjectsMap.put("fundTransferVO", fundTransferVO);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					"FundTransfer information receive failed By Active", errorMsg);
 		}
 		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
 		return ResponseEntity.ok().body(responseDTO);

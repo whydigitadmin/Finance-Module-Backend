@@ -17,6 +17,7 @@ import com.base.basesetup.dto.ChargerTaxInvoiceDTO;
 import com.base.basesetup.dto.ChartCostCenterDTO;
 import com.base.basesetup.dto.DailyMonthlyExRatesDTO;
 import com.base.basesetup.dto.DailyMonthlyExRatesDtlDTO;
+import com.base.basesetup.dto.FundTransferDTO;
 import com.base.basesetup.dto.GstIrnCreditDTO;
 import com.base.basesetup.dto.GstTaxInvoiceDTO;
 import com.base.basesetup.dto.IrnCreditDTO;
@@ -29,6 +30,7 @@ import com.base.basesetup.entity.ChargerTaxInvoiceVO;
 import com.base.basesetup.entity.ChartCostCenterVO;
 import com.base.basesetup.entity.DailyMonthlyExRatesDtlVO;
 import com.base.basesetup.entity.DailyMonthlyExRatesVO;
+import com.base.basesetup.entity.FundTransferVO;
 import com.base.basesetup.entity.GstIrnCreditVO;
 import com.base.basesetup.entity.GstTaxInvoiceVO;
 import com.base.basesetup.entity.IrnCreditVO;
@@ -42,6 +44,7 @@ import com.base.basesetup.repo.ChargerTaxInvoiceRepo;
 import com.base.basesetup.repo.ChartCostCenterRepo;
 import com.base.basesetup.repo.DailyMonthlyExRatesDtlRepo;
 import com.base.basesetup.repo.DailyMonthlyExRatesRepo;
+import com.base.basesetup.repo.FundTransferRepo;
 import com.base.basesetup.repo.GstIrnCreditRepo;
 import com.base.basesetup.repo.GstTaxInvoiceRepo;
 import com.base.basesetup.repo.IrnCreditRepo;
@@ -87,6 +90,9 @@ public class TransactionServiceImpl implements TransactionService {
 
 	@Autowired
 	ChartCostCenterRepo chartCostCenterRepo;
+
+	@Autowired
+	FundTransferRepo fundTransferRepo;
 
 	// TaxInvoice
 
@@ -668,12 +674,103 @@ public class TransactionServiceImpl implements TransactionService {
 		chartCostCenterVO.setUpdatedBy(chartCostCenterDTO.getUpdatedBy());
 		chartCostCenterVO.setCreatedBy(chartCostCenterDTO.getCreatedBy());
 		chartCostCenterVO.setActive(chartCostCenterDTO.isActive());
-
 	}
 
 	@Override
 	public List<ChartCostCenterVO> getChartCostCenterByActive() {
 		return chartCostCenterRepo.findChartCostCenterByActive();
+	}
+
+	// FundTransfer
+
+	@Override
+	public List<FundTransferVO> getAllFundTransferByOrgId(Long orgId) {
+		List<FundTransferVO> fundTransferVO = new ArrayList<>();
+		if (ObjectUtils.isNotEmpty(orgId)) {
+			LOGGER.info("Successfully Received  FundTransfer BY OrgId : {}", orgId);
+			fundTransferVO = fundTransferRepo.getAllFundTransferByOrgId(orgId);
+		} else {
+			LOGGER.info("Successfully Received  FundTransfer For All OrgId.");
+			fundTransferVO = fundTransferRepo.findAll();
+		}
+		return fundTransferVO;
+	}
+
+	@Override
+	public List<FundTransferVO> getAllFundTransferById(Long id) {
+		List<FundTransferVO> fundTransferVO = new ArrayList<>();
+		if (ObjectUtils.isNotEmpty(id)) {
+			LOGGER.info("Successfully Received FundTransfer BY Id : {}", id);
+			fundTransferVO = fundTransferRepo.getAllFundTransferById(id);
+		} else {
+			LOGGER.info("Successfully Received FundTransfer For All Id.");
+			fundTransferVO = fundTransferRepo.findAll();
+		}
+		return fundTransferVO;
+	}
+
+	@Override
+	public FundTransferVO updateCreateFundTransfer(@Valid FundTransferDTO fundTransferDTO) throws ApplicationException {
+		FundTransferVO fundTransferVO = new FundTransferVO();
+		if (ObjectUtils.isNotEmpty(fundTransferDTO.getId())) {
+			fundTransferVO = fundTransferRepo.findById(fundTransferDTO.getId())
+					.orElseThrow(() -> new ApplicationException("Invalid FundTransfer details"));
+		}
+//			else {
+//				if (taxInvoiceRepo.existsByDocIdAndOrgId(taxInvoiceVO.getDocId(), taxInvoiceVO.getOrgId())) {
+//					throw new ApplicationException("The given doc id already exists.");
+//				}
+//				if (taxInvoiceRepo.existsByInvoiceNoAndOrgId(taxInvoiceVO.getInvoiceNo(), taxInvoiceVO.getOrgId())) {
+//					throw new ApplicationException("The given invoice number already exists.");
+//				}
+//			}
+//			if (ObjectUtils.isNotEmpty(taxInvoiceVO.getId())) {
+//				if (taxInvoiceRepo.existsByDocIdAndOrgIdAndId(taxInvoiceVO.getDocId(), taxInvoiceVO.getOrgId(),
+//						taxInvoiceVO.getId())) {
+//					throw new ApplicationException("The given doc id already exists.");
+//				}
+//				if (taxInvoiceRepo.existsByInvoiceNoAndOrgIdAndId(taxInvoiceVO.getInvoiceNo(), taxInvoiceVO.getOrgId(),
+//						taxInvoiceVO.getId())) {
+//					throw new ApplicationException("The given invoice number already exists.");
+//				}
+//			}
+
+		getFundTransferVOFromFundTransferDTO(fundTransferDTO, fundTransferVO);
+		return fundTransferRepo.save(fundTransferVO);
+	}
+
+	private void getFundTransferVOFromFundTransferDTO(@Valid FundTransferDTO fundTransferDTO,
+			FundTransferVO fundTransferVO) {
+		fundTransferVO.setBranch(fundTransferDTO.getBranch());
+		fundTransferVO.setDocId(fundTransferDTO.getDocId());
+		fundTransferVO.setPaymentType(fundTransferDTO.getPaymentType());
+		fundTransferVO.setDocDate(fundTransferDTO.getDocDate());
+		fundTransferVO.setReferenceNo(fundTransferDTO.getReferenceNo());
+		fundTransferVO.setReferenceDate(fundTransferDTO.getReferenceDate());
+		fundTransferVO.setFromAccount(fundTransferDTO.getFromAccount());
+		fundTransferVO.setBalance(fundTransferDTO.getBalance());
+		fundTransferVO.setCurrency(fundTransferDTO.getCurrency());
+		fundTransferVO.setExRate(fundTransferDTO.getExRate());
+		fundTransferVO.setToBranch(fundTransferDTO.getToBranch());
+		fundTransferVO.setToBank(fundTransferDTO.getToBank());
+		fundTransferVO.setChequeBook(fundTransferDTO.getChequeBook());
+		fundTransferVO.setChequeNo(fundTransferDTO.getChequeNo());
+		fundTransferVO.setChequeDate(fundTransferDTO.getChequeDate());
+		fundTransferVO.setPaymentAmount(fundTransferDTO.getPaymentAmount());
+		fundTransferVO.setConversionRate(fundTransferDTO.getConversionRate());
+		fundTransferVO.setReceiptAmount(fundTransferDTO.getReceiptAmount());
+		fundTransferVO.setGainLoss(fundTransferDTO.getGainLoss());
+		fundTransferVO.setRemarks(fundTransferDTO.getRemarks());
+		fundTransferVO.setActive(fundTransferDTO.isActive());
+		fundTransferVO.setOrgId(fundTransferDTO.getOrgId());
+		fundTransferVO.setCreatedBy(fundTransferDTO.getCreatedBy());
+		fundTransferVO.setUpdatedBy(fundTransferDTO.getUpdatedBy());
+
+	}
+
+	@Override
+	public List<FundTransferVO> getFundTransferByActive() {
+		return fundTransferRepo.findFundTransferByActive();
 	}
 
 }

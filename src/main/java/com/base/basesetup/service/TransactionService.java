@@ -9,11 +9,13 @@ import org.springframework.stereotype.Service;
 import com.base.basesetup.dto.BrsOpeningDTO;
 import com.base.basesetup.dto.ChartCostCenterDTO;
 import com.base.basesetup.dto.DailyMonthlyExRatesDTO;
+import com.base.basesetup.dto.FundTransferDTO;
 import com.base.basesetup.dto.IrnCreditDTO;
 import com.base.basesetup.dto.TaxInvoiceDTO;
 import com.base.basesetup.entity.BrsOpeningVO;
 import com.base.basesetup.entity.ChartCostCenterVO;
 import com.base.basesetup.entity.DailyMonthlyExRatesVO;
+import com.base.basesetup.entity.FundTransferVO;
 import com.base.basesetup.entity.IrnCreditVO;
 import com.base.basesetup.entity.TaxInvoiceVO;
 import com.base.basesetup.exception.ApplicationException;
@@ -71,4 +73,13 @@ public interface TransactionService {
 	List<ChartCostCenterVO> getAllChartCostCenterById(Long id);
 
 	List<ChartCostCenterVO> getChartCostCenterByActive();
+
+//	FundTransfer
+	List<FundTransferVO> getAllFundTransferByOrgId(Long orgId);
+
+	FundTransferVO updateCreateFundTransfer(@Valid FundTransferDTO fundTransferDTO) throws ApplicationException;
+
+	List<FundTransferVO> getAllFundTransferById(Long id);
+
+	List<FundTransferVO> getFundTransferByActive();
 }

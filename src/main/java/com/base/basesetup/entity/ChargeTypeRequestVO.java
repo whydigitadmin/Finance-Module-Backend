@@ -78,7 +78,7 @@ public class ChargeTypeRequestVO {
 	private LocalDateTime effromDate;
 	@Column(name = "eftodate")
 	private LocalDateTime eftoDate;
-	
+
 	@Column(name = "active")
 	private boolean active;
 	@Column(name = "orgid")
@@ -91,8 +91,6 @@ public class ChargeTypeRequestVO {
 	private Long cancel;
 	@Column(name = "cancelremarks")
 	private Long cancelRemarks;
-	
-	
 
 	@Embedded
 	@Builder.Default
