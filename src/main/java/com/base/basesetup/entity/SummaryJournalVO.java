@@ -27,6 +27,6 @@ public class SummaryJournalVO {
 
 	@ManyToOne
 	@JsonBackReference
-	@JoinColumn(name = "generaljournalid")
+	@JoinColumn(name = "")
 	GeneralJournalVO generalJournalVO;
 }
