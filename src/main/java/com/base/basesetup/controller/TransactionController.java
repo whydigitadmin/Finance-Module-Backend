@@ -26,6 +26,7 @@ import com.base.basesetup.dto.BrsOpeningDTO;
 import com.base.basesetup.dto.ChartCostCenterDTO;
 import com.base.basesetup.dto.DailyMonthlyExRatesDTO;
 import com.base.basesetup.dto.FundTransferDTO;
+import com.base.basesetup.dto.GeneralJournalDTO;
 import com.base.basesetup.dto.IrnCreditDTO;
 import com.base.basesetup.dto.ResponseDTO;
 import com.base.basesetup.dto.TaxInvoiceDTO;
@@ -33,6 +34,7 @@ import com.base.basesetup.entity.BrsOpeningVO;
 import com.base.basesetup.entity.ChartCostCenterVO;
 import com.base.basesetup.entity.DailyMonthlyExRatesVO;
 import com.base.basesetup.entity.FundTransferVO;
+import com.base.basesetup.entity.GeneralJournalVO;
 import com.base.basesetup.entity.IrnCreditVO;
 import com.base.basesetup.entity.TaxInvoiceVO;
 import com.base.basesetup.service.TransactionService;
@@ -723,6 +725,115 @@ public class TransactionController extends BaseController {
 		} else {
 			responseDTO = createServiceResponseError(responseObjectsMap,
 					"FundTransfer information receive failed By Active", errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+	}
+
+//	GeneralJournal
+	@GetMapping("/getAllGeneralJournalByOrgId")
+	public ResponseEntity<ResponseDTO> getAllGeneralJournalByOrgId(@RequestParam(required = false) Long orgId) {
+		String methodName = "getAllGeneralJournalByOrgId()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		List<GeneralJournalVO> generalJournalVO = new ArrayList<>();
+		try {
+			generalJournalVO = transactionService.getAllGeneralJournalByOrgId(orgId);
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+					"GeneralJournal information get successfully ByOrgId");
+			responseObjectsMap.put("generalJournalVO", generalJournalVO);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					"GeneralJournal information receive failedByOrgId", errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+
+	}
+
+	@GetMapping("/getAllGeneralJournalById")
+	public ResponseEntity<ResponseDTO> getAllGeneralJournalById(@RequestParam(required = false) Long id) {
+		String methodName = "getAllGeneralJournalById()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		List<GeneralJournalVO> generalJournalVO = new ArrayList<>();
+		try {
+			generalJournalVO = transactionService.getAllGeneralJournalById(id);
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "GeneralJournal information get successfully By id");
+			responseObjectsMap.put("generalJournalVO", generalJournalVO);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					"GeneralJournal information receive failedByOrgId", errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+	}
+
+	@PutMapping("/updateCreateGeneralJournal")
+	public ResponseEntity<ResponseDTO> updateCreateGeneralJournal(
+			@Valid @RequestBody GeneralJournalDTO generalJournalDTO) {
+		String methodName = "updateCreateGeneralJournal()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		try {
+			GeneralJournalVO generalJournalVO = transactionService.updateCreateGeneralJournal(generalJournalDTO);
+			if (generalJournalVO != null) {
+				responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "GeneralJournal updated successfully");
+				responseObjectsMap.put("generalJournalVO", generalJournalVO);
+				responseDTO = createServiceResponse(responseObjectsMap);
+			} else {
+				errorMsg = "GeneralJournal not found for ID: " + generalJournalDTO.getId();
+				responseDTO = createServiceResponseError(responseObjectsMap, "GeneralJournal update failed", errorMsg);
+			}
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+			responseDTO = createServiceResponseError(responseObjectsMap, "GeneralJournal update failed", errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+	}
+
+	@GetMapping("/getGeneralJournalByActive")
+	public ResponseEntity<ResponseDTO> getGeneralJournalByActive() {
+		String methodName = "getGeneralJournalByActive()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		List<GeneralJournalVO> generalJournalVO = new ArrayList<>();
+		try {
+			generalJournalVO = transactionService.getGeneralJournalByActive();
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+					"GeneralJournal information get successfully By Active");
+			responseObjectsMap.put("generalJournalVO", generalJournalVO);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					"GeneralJournal information receive failed By Active", errorMsg);
 		}
 		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
 		return ResponseEntity.ok().body(responseDTO);

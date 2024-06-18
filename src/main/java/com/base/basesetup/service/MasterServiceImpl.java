@@ -9,6 +9,7 @@ import org.apache.commons.lang3.ObjectUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.stereotype.Service;
 
 import com.base.basesetup.dto.Account1DTO;
@@ -37,6 +38,7 @@ import com.base.basesetup.entity.ChargeTypeRequestVO;
 import com.base.basesetup.entity.ChequeBookVO;
 import com.base.basesetup.entity.CostCenterVO;
 import com.base.basesetup.entity.ExRatesVO;
+import com.base.basesetup.entity.GeneralJournalVO;
 import com.base.basesetup.entity.GroupLedgerVO;
 import com.base.basesetup.entity.HsnSacCodeVO;
 import com.base.basesetup.entity.SetTaxRateVO;
@@ -56,8 +58,10 @@ import com.base.basesetup.repo.ChargeTypeRequestRepo;
 import com.base.basesetup.repo.ChequeBoxRepo;
 import com.base.basesetup.repo.CostCenterRepo;
 import com.base.basesetup.repo.ExRatesRepo;
+import com.base.basesetup.repo.GeneralJournalRepo;
 import com.base.basesetup.repo.GroupLedgerRepo;
 import com.base.basesetup.repo.HsnSacCodeRepo;
+import com.base.basesetup.repo.ParticularsJournalRepo;
 import com.base.basesetup.repo.SetTaxRateRepo;
 import com.base.basesetup.repo.SubLedgerAccountRepo;
 import com.base.basesetup.repo.TaxMaster2Repo;
@@ -123,7 +127,8 @@ public class MasterServiceImpl implements MasterService {
 
 	@Autowired
 	ChargeTypeRequestRepo chargeTypeRequestRepo;
-
+	
+	
 	// setTaxesRate
 	@Override
 	public List<SetTaxRateVO> getAllSetTaxRateByOrgId(Long orgId) {

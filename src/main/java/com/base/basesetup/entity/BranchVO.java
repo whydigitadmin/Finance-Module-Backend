@@ -1,4 +1,4 @@
-package com.base.basesetup.entity;
+  package com.base.basesetup.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Embedded;

@@ -18,6 +18,7 @@ import com.base.basesetup.dto.ChartCostCenterDTO;
 import com.base.basesetup.dto.DailyMonthlyExRatesDTO;
 import com.base.basesetup.dto.DailyMonthlyExRatesDtlDTO;
 import com.base.basesetup.dto.FundTransferDTO;
+import com.base.basesetup.dto.GeneralJournalDTO;
 import com.base.basesetup.dto.GstIrnCreditDTO;
 import com.base.basesetup.dto.GstTaxInvoiceDTO;
 import com.base.basesetup.dto.IrnCreditDTO;
@@ -31,6 +32,7 @@ import com.base.basesetup.entity.ChartCostCenterVO;
 import com.base.basesetup.entity.DailyMonthlyExRatesDtlVO;
 import com.base.basesetup.entity.DailyMonthlyExRatesVO;
 import com.base.basesetup.entity.FundTransferVO;
+import com.base.basesetup.entity.GeneralJournalVO;
 import com.base.basesetup.entity.GstIrnCreditVO;
 import com.base.basesetup.entity.GstTaxInvoiceVO;
 import com.base.basesetup.entity.IrnCreditVO;
@@ -45,9 +47,11 @@ import com.base.basesetup.repo.ChartCostCenterRepo;
 import com.base.basesetup.repo.DailyMonthlyExRatesDtlRepo;
 import com.base.basesetup.repo.DailyMonthlyExRatesRepo;
 import com.base.basesetup.repo.FundTransferRepo;
+import com.base.basesetup.repo.GeneralJournalRepo;
 import com.base.basesetup.repo.GstIrnCreditRepo;
 import com.base.basesetup.repo.GstTaxInvoiceRepo;
 import com.base.basesetup.repo.IrnCreditRepo;
+import com.base.basesetup.repo.ParticularsJournalRepo;
 import com.base.basesetup.repo.SummaryIrnCreditRepo;
 import com.base.basesetup.repo.SummaryTaxInvoiceRepo;
 import com.base.basesetup.repo.TaxInvocieRepo;
@@ -93,6 +97,15 @@ public class TransactionServiceImpl implements TransactionService {
 
 	@Autowired
 	FundTransferRepo fundTransferRepo;
+
+	@Autowired
+	GeneralJournalRepo generalJournalRepo;
+
+	@Autowired
+	ParticularsJournalRepo particularsJournalRepo;
+
+	@Autowired
+	SummaryJournalRepo summaryJournalRepo;
 
 	// TaxInvoice
 
@@ -771,6 +784,91 @@ public class TransactionServiceImpl implements TransactionService {
 	@Override
 	public List<FundTransferVO> getFundTransferByActive() {
 		return fundTransferRepo.findFundTransferByActive();
+	}
+
+	// GeneralJournal
+
+	@Override
+	public List<GeneralJournalVO> getAllGeneralJournalByOrgId(Long orgId) {
+		List<GeneralJournalVO> generalJournalVO = new ArrayList<>();
+		if (ObjectUtils.isNotEmpty(orgId)) {
+			LOGGER.info("Successfully Received  GeneralJournal BY OrgId : {}", orgId);
+			generalJournalVO = generalJournalRepo.getAllGeneralJournalByOrgId(orgId);
+		} else {
+			LOGGER.info("Successfully Received  GeneralJournal For All OrgId.");
+			generalJournalVO = generalJournalRepo.findAll();
+		}
+		return generalJournalVO;
+	}
+
+	@Override
+	public List<GeneralJournalVO> getAllGeneralJournalById(Long id) {
+		List<GeneralJournalVO> generalJournalVO = new ArrayList<>();
+		if (ObjectUtils.isNotEmpty(id)) {
+			LOGGER.info("Successfully Received GeneralJournal BY Id : {}", id);
+			generalJournalVO = generalJournalRepo.getAllGeneralJournalById(id);
+		} else {
+			LOGGER.info("Successfully Received GeneralJournal For All Id.");
+			generalJournalVO = generalJournalRepo.findAll();
+		}
+		return generalJournalVO;
+	}
+
+	@Override
+	public GeneralJournalVO updateCreateGeneralJournal(@Valid GeneralJournalDTO generalJournalDTO)
+			throws ApplicationException {
+		GeneralJournalVO generalJournalVO = new GeneralJournalVO();
+		if (ObjectUtils.isNotEmpty(generalJournalDTO.getId())) {
+			generalJournalVO = generalJournalRepo.findById(generalJournalDTO.getId())
+					.orElseThrow(() -> new ApplicationException("Invalid GeneralJournal details"));
+		}
+//				else {
+//					if (taxInvoiceRepo.existsByDocIdAndOrgId(taxInvoiceVO.getDocId(), taxInvoiceVO.getOrgId())) {
+//						throw new ApplicationException("The given doc id already exists.");
+//					}
+//					if (taxInvoiceRepo.existsByInvoiceNoAndOrgId(taxInvoiceVO.getInvoiceNo(), taxInvoiceVO.getOrgId())) {
+//						throw new ApplicationException("The given invoice number already exists.");
+//					}
+//				}
+//				if (ObjectUtils.isNotEmpty(taxInvoiceVO.getId())) {
+//					if (taxInvoiceRepo.existsByDocIdAndOrgIdAndId(taxInvoiceVO.getDocId(), taxInvoiceVO.getOrgId(),
+//							taxInvoiceVO.getId())) {
+//						throw new ApplicationException("The given doc id already exists.");
+//					}
+//					if (taxInvoiceRepo.existsByInvoiceNoAndOrgIdAndId(taxInvoiceVO.getInvoiceNo(), taxInvoiceVO.getOrgId(),
+//							taxInvoiceVO.getId())) {
+//						throw new ApplicationException("The given invoice number already exists.");
+//					}
+//				}
+
+		getGeneralJournalVOFromGeneralJournalDTO(generalJournalDTO, generalJournalVO);
+		return generalJournalRepo.save(generalJournalVO);
+	}
+
+	private void getGeneralJournalVOFromGeneralJournalDTO(@Valid GeneralJournalDTO generalJournalDTO,
+			GeneralJournalVO generalJournalVO) {
+		generalJournalVO.setBranch(generalJournalDTO.getBranch());
+		generalJournalVO.setVoucherType(generalJournalDTO.getVoucherType());
+		generalJournalVO.setDocDate(generalJournalDTO.getDocDate());
+		generalJournalVO.setDocId(generalJournalDTO.getDocId());
+		generalJournalVO.setTemplate(generalJournalDTO.getTemplate());
+		generalJournalVO.setCurrency(generalJournalDTO.getCurrency());
+		generalJournalVO.setExRate(generalJournalDTO.getExRate());
+		generalJournalVO.setRefNo(generalJournalDTO.getRefNo());
+		generalJournalVO.setRefDate(generalJournalDTO.getRefDate());
+		generalJournalVO.setReverseOn(generalJournalDTO.getReverseOn());
+		generalJournalVO.setNarration(generalJournalDTO.getNarration());
+		generalJournalVO.setOrgId(generalJournalDTO.getOrgId());
+		generalJournalVO.setCreatedBy(generalJournalDTO.getCreatedBy());
+		generalJournalVO.setUpdatedBy(generalJournalDTO.getUpdatedBy());
+		generalJournalVO.setActive(generalJournalDTO.isActive());
+
+	}
+
+	@Override
+	public List<GeneralJournalVO> getGeneralJournalByActive() {
+		return generalJournalRepo.findGeneralJournalByActive();
+
 	}
 
 }
