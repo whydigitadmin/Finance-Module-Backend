@@ -35,8 +35,8 @@ public class HsnSacCodeVO {
 	private String type;
 	@Column(name = "code")
 	private String code;
-	@Column(name = "description")
-	private String description;
+	@Column(name = "descripition")
+	private String descripition;
 	@Column(name = "chapter")
 	private String chapter;
 	@Column(name = "chaptercode")

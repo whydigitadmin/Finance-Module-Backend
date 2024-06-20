@@ -12,34 +12,30 @@ import javax.persistence.Table;
 import com.base.basesetup.dto.CreatedUpdatedDate;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "chequeboxmaster")
+@Table(name = "chartcostcenter")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-public class ChequeBoxVO {
+public class ChartCostCenterVO {
+
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "chequeboxmastergen")
-	@SequenceGenerator(name = "chequeboxmastergen", sequenceName = "chequeboxmasterVO", initialValue = 1000000001, allocationSize = 1)
-	@Column(name = "chequeboxmasterid")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "chartcostcentergen")
+	@SequenceGenerator(name = "chartcostcentergen",sequenceName = "chartcostcenterVO",initialValue = 1000000001,allocationSize = 1)
+	@Column(name="chartcostcenterid")
 	private Long id;
-	@Column(name = "branch")
-	private String branch;
-	@Column(name = "chequeboxid")
-	private String chequeBoxId;
-	@Column(name = "bank")
-	private String bank;
-	@Column(name = "checkprefix")
-	private String checkPrefix;
-	@Column(name = "checkstartno")
-	private String checkStartNo;
-	@Column(name = "noofchequeleaves")
-	private String noOfChequeLeaves;
+	
+	@Column(name = "costcentercode")
+	private String costCenterCode;
+	@Column(name = "costcentername")
+	private String costCenterName;
+	@Column(name = "credit")
+	private String credit;
+	@Column(name = "debit")
+	private String debit;
 	@Column(name = "orgid")
 	private Long orgId;
 	@Column(name = "active")
@@ -52,7 +48,7 @@ public class ChequeBoxVO {
 	private String createdBy;
 	@Column(name = "modifiedby")
 	private String updatedBy;
+
 	@Embedded
-	@Builder.Default
 	private CreatedUpdatedDate commonDate = new CreatedUpdatedDate();
 }

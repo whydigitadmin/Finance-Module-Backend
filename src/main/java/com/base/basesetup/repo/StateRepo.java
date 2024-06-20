@@ -27,4 +27,8 @@ public interface StateRepo extends JpaRepository<StateVO, Long> {
 	@Query(nativeQuery = true, value = "select * from state where active=1")
 	List<StateVO> findStateByActive();
 
+	boolean existsByStateCodeAndOrgIdAndId(String stateCode, Long orgId, Long id);
+
+	boolean existsByStateNameAndOrgIdAndId(String stateCode, Long orgId, Long id);
+
 }

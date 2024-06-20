@@ -12,7 +12,7 @@ public class HsnSacCodeDTO {
 	private boolean active;
 	private String type;
 	private String code;
-	private String description;
+	private String descripition;
 	private String chapter;
 	private String chapterCode;
 	private String subChapter;

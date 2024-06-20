@@ -18,4 +18,16 @@ public interface SubLedgerAccountRepo extends JpaRepository<SubLedgerAccountVO, 
 	@Query(nativeQuery = true,value = "select * from subledgeraccount where active=1")
 	List<SubLedgerAccountVO> findSubLedgerAccountByActive();
 
+	boolean existsByNewCodeAndOrgId(String newCode, Long orgId);
+
+	boolean existsByOldCodeAndOrgId(String oldCode, Long orgId);
+
+	boolean existsBySubLedgerNameAndOrgId(String subLedgerName, Long orgId);
+
+	boolean existsByNewCodeAndOrgIdAndId(String newCode, Long orgId, Long id);
+
+	boolean existsByOldCodeAndOrgIdAndId(String oldCode, Long orgId, Long id);
+
+	boolean existsBySubLedgerNameAndOrgIdAndId(String subLedgerName, Long orgId, Long id);
+
 }

@@ -33,7 +33,7 @@ public class CostCenterVO {
 	@Column(name = "valuecode")
 	private String valueCode;
 	@Column(name = "valuedescripition")
-	private String valueDescriopition;
+	private String valueDescripition;
 	@Column(name = "orgid")
 	private Long orgId;
 	@Column(name = "active")

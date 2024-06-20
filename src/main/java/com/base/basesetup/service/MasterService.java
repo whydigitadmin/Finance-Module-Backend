@@ -7,9 +7,11 @@ import javax.validation.Valid;
 import org.springframework.stereotype.Service;
 
 import com.base.basesetup.dto.AccountDTO;
+import com.base.basesetup.dto.ChargeTypeRequestDTO;
 import com.base.basesetup.dto.ChequeBoxDTO;
 import com.base.basesetup.dto.CostCenterDTO;
 import com.base.basesetup.dto.ExRatesDTO;
+import com.base.basesetup.dto.GeneralJournalDTO;
 import com.base.basesetup.dto.GroupLedgerDTO;
 import com.base.basesetup.dto.HsnSacCodeDTO;
 import com.base.basesetup.dto.SetTaxRateDTO;
@@ -18,9 +20,11 @@ import com.base.basesetup.dto.TaxMasterDTO;
 import com.base.basesetup.dto.TcsMasterDTO;
 import com.base.basesetup.dto.TdsMasterDTO;
 import com.base.basesetup.entity.AccountVO;
-import com.base.basesetup.entity.ChequeBoxVO;
+import com.base.basesetup.entity.ChargeTypeRequestVO;
+import com.base.basesetup.entity.ChequeBookVO;
 import com.base.basesetup.entity.CostCenterVO;
 import com.base.basesetup.entity.ExRatesVO;
+import com.base.basesetup.entity.GeneralJournalVO;
 import com.base.basesetup.entity.GroupLedgerVO;
 import com.base.basesetup.entity.HsnSacCodeVO;
 import com.base.basesetup.entity.SetTaxRateVO;
@@ -108,12 +112,13 @@ public interface MasterService {
 //	SubLedgerAccount
 	List<SubLedgerAccountVO> getAllSubLedgerAccountByOrgId(Long orgId);
 
-	SubLedgerAccountVO updateCreateSubLedgerAccount(@Valid SubLedgerAccountDTO subLedgerAccountDTO) throws ApplicationException;
+	SubLedgerAccountVO updateCreateSubLedgerAccount(@Valid SubLedgerAccountDTO subLedgerAccountDTO)
+			throws ApplicationException;
 
 	List<SubLedgerAccountVO> getAllSubLedgerAccountById(Long id);
 
 	List<SubLedgerAccountVO> getSubLedgerAccountByActive();
-	
+
 //	CostCenterVO
 	List<CostCenterVO> getAllCostCenterByOrgId(Long orgId);
 
@@ -122,13 +127,25 @@ public interface MasterService {
 	List<CostCenterVO> getAllCostCenterById(Long id);
 
 	List<CostCenterVO> getCostCenterByActive();
-	
+
 //	ChequeBox
-	List<ChequeBoxVO> getAllChequeBoxByOrgId(Long orgId);
+	List<ChequeBookVO> getAllChequeBoxByOrgId(Long orgId);
 
-	ChequeBoxVO updateCreateChequeBox(@Valid ChequeBoxDTO chequeBoxDTO) throws ApplicationException;
+	ChequeBookVO updateCreateChequeBox(@Valid ChequeBoxDTO chequeBoxDTO) throws ApplicationException;
 
-	List<ChequeBoxVO> getAllChequeBoxById(Long id);
+	List<ChequeBookVO> getAllChequeBoxById(Long id);
 
-	List<ChequeBoxVO> getChequeBoxByActive();
+	List<ChequeBookVO> getChequeBoxByActive();
+
+//	ChargeTypeRequest
+	List<ChargeTypeRequestVO> getAllChargeTypeRequestByOrgId(Long orgId);
+
+	ChargeTypeRequestVO updateCreateChargeTypeRequest(@Valid ChargeTypeRequestDTO chargeTypeRequestDTO)
+			throws ApplicationException;
+
+	List<ChargeTypeRequestVO> getAllChargeTypeRequestById(Long id);
+
+	List<ChargeTypeRequestVO> getChargeTypeRequestByActive();
+
+
 }

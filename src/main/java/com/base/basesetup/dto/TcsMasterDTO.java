@@ -15,6 +15,8 @@ public class TcsMasterDTO {
 	private String section;
 	private String sectionName;
 	private boolean active;
+	private String createdBy;
+	private String updatedBy;
 
 	private List<TcsMaster2DTO>  tcsMaster2DTO;
 }

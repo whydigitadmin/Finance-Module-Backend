@@ -17,5 +17,13 @@ List<AccountVO> getAllAccountById(Long accountId);
 @Query(nativeQuery = true,value = "select * from account where active=1")
 List<AccountVO> findAccountByActive();
 
+boolean existsByAccountNameAndOrgId(String accountName, Long orgId);
+
+boolean existsByAccountCodeAndOrgId(String accountCode, Long orgId);
+
+boolean existsByAccountNameAndOrgIdAndId(String accountName, Long orgId, Long id);
+
+boolean existsByAccountCodeAndOrgIdAndId(String accountCode, Long orgId, Long id);
+
 
 }
