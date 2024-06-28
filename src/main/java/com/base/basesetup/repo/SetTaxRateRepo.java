@@ -25,9 +25,6 @@ public interface SetTaxRateRepo extends JpaRepository<SetTaxRateVO, Long>{
 
 	boolean existsByHsnCodeAndOrgId(String hsnCode, Long orgId);
 
-	boolean existsByHsnCodeAndOrgIdAndId(String hsnCode, Long orgId, Long id);
-
-	boolean existsByChapterAndOrgIdAndId(String chapter, Long orgId, Long id);
     
 	
 }

@@ -98,7 +98,7 @@ public interface MasterService {
 
 	HsnSacCodeVO updateCreateHsnSacCode(@Valid HsnSacCodeDTO hsnSacCodeDTO) throws ApplicationException;
 
-	List<HsnSacCodeVO> getHsnSacCodeByActive();
+//	List<HsnSacCodeVO> getHsnSacCodeByActive();
 
 //	ExRates
 	List<ExRatesVO> getAllExRatesByOrgId(Long orgId);

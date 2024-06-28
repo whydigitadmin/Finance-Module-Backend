@@ -1,4 +1,4 @@
-package com.base.basesetup.dto;
+ package com.base.basesetup.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -25,8 +25,5 @@ public interface CityRepo extends JpaRepository<CityVO, Long> {
 	@Query(nativeQuery = true, value = "select * from city where active=1")
 	List<CityVO> findCityByActive();
 
-	boolean existsByCityNameAndOrgIdAndId(String cityName, Long orgId, Long id);
-
-	boolean existsByCityCodeAndOrgIdAndId(String cityCode, Long orgId, Long id);
 
 }

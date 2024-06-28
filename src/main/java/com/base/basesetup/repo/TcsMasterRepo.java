@@ -23,8 +23,5 @@ public interface TcsMasterRepo extends JpaRepository<TcsMasterVO, Long> {
 
 	boolean existsBySectionNameAndOrgId(String sectionName, Long orgId);
 
-	boolean existsBySectionNameAndOrgIdAndId(String sectionName, Long orgId, Long id);
-
-	boolean existsBySectionAndOrgIdAndId(String section, Long orgId, Long id);
 
 }
