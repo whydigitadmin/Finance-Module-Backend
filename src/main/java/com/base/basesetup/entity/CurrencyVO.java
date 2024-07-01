@@ -24,38 +24,37 @@ import lombok.NoArgsConstructor;
 @Builder
 public class CurrencyVO {
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "currencygen")
-	@SequenceGenerator(name = "currencygen",sequenceName = "currencyVO",initialValue = 1000000001,allocationSize = 1)
-	@Column(name="currencyid")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "currencygen")
+	@SequenceGenerator(name = "currencygen", sequenceName = "currencyVO", initialValue = 1000000001, allocationSize = 1)
+	@Column(name = "currencyid")
 	private Long id;
-	
-	@Column(name="userid")
+
+	@Column(name = "userid")
 	private String userId;
-	@Column(name="country")
+	@Column(name = "country")
 	private String country;
-	@Column(name="currency")
+	@Column(name = "currency")
 	private String currency;
-	@Column(name="subcurrency")
-    private String subCurrency;
-	@Column(name="currencysymbol")
-    private String currencySymbol;
-	@Column(name="orgid")
-    private Long orgId;
-	
-	@Column(name="active")
-    private boolean active;
-	@Column(unique = true)
-	private String dupchk;
-	@Column(name="createdby")
+	@Column(name = "subcurrency")
+	private String subCurrency;
+	@Column(name = "currencysymbol")
+	private String currencySymbol;
+	@Column(name = "orgid")
+	private Long orgId;
+	@Column(name = "basecurrency")
+	private String baseCurrency;
+
+	@Column(name = "active")
+	private boolean active;
+	@Column(name = "createdby")
 	private String createdBy;
-	@Column(name="modifiedby")
+	@Column(name = "modifiedby")
 	private String updatedBy;
-	@Column(name="cancel")
+	@Column(name = "cancel")
 	private boolean cancel;
-	
+
 	@Embedded
 	@Builder.Default
 	private CreatedUpdatedDate commonDate = new CreatedUpdatedDate();
-	
 
 }

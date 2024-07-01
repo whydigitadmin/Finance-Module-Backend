@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -58,8 +59,6 @@ public class CompanyVO {
 	private String note;
 	@Column(name = "active")
 	private boolean active;
-	@Column(unique = true)
-	private String dupchk;
 	@Column(name = "employeename")
 	private String employeeName;
 	@Column(name = "employeecode")
@@ -72,8 +71,11 @@ public class CompanyVO {
 	private String updatedBy;
 	@Column(name = "cancel")
 	private boolean cancel;
-	@Column(name = "fileupload")
-	private String fileUpload;
+	@Column(name = "imagename")
+	private String imageName;
+	@Lob
+	@Column(name = "data", columnDefinition = "LONGBLOB")
+	private byte[] data;
 
 	@Embedded
 	@Builder.Default

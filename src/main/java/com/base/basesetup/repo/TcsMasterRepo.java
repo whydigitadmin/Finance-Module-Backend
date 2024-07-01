@@ -16,4 +16,12 @@ public interface TcsMasterRepo extends JpaRepository<TcsMasterVO, Long> {
 	@Query(value="Select * from tcsmaster where tcsmasterid=?1",nativeQuery = true)
 	List<TcsMasterVO> getAllTcsMasterById(Long id);
 
+	@Query(nativeQuery = true,value = "select * from tcsmaster where active=1")
+	List<TcsMasterVO> findTcsMasterByActive();
+
+	boolean existsBySectionAndOrgId(String section, Long orgId);
+
+	boolean existsBySectionNameAndOrgId(String sectionName, Long orgId);
+
+
 }

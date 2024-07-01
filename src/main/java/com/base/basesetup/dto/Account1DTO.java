@@ -1,4 +1,4 @@
-package com.base.basesetup.dto;
+ package com.base.basesetup.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class Account1DTO {
-	private Long account1Id;
+	private Long Id;
 	private String balanceSheet;
 	private String cashFlowStatement;
 	private String incomeStatement;

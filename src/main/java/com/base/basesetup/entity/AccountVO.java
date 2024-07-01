@@ -45,8 +45,8 @@ public class AccountVO {
 	private String groupName;
 	@Column(name = "accountcode")
 	private String accountCode;
-	@Column(name = "accountgroupname")
-	private String accountGroupName;
+	@Column(name = "accountname")
+	private String accountName;
 	@Column(name = "currency")
 	private String currency;
 	@Column(name = "category")
@@ -55,6 +55,25 @@ public class AccountVO {
 	private boolean block;
 	@Column(name = "isitcapplicable")
 	private boolean isItcApplicable;
+
+	@Column(name = "companyname")
+	private String companyName;
+	@Column(name = "atype")
+	private String aType;
+	@Column(name = "acategory")
+	private String aCategory;
+	@Column(name = "acurrency")
+	private String aCurrency;
+	@Column(name = "transid")
+	private String transId;
+	@Column(name = "acatcode")
+	private String aCatCode;
+	@Column(name = "bp")
+	private String bp;
+	@Column(name = "groupcode")
+	private String groupCode;
+	@Column(name = "gst")
+	private String gst;
 
 	@Column(name = "createdby")
 	private String createdBy;

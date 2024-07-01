@@ -48,8 +48,10 @@ public class EmployeeVO {
 	private String dateOfBirth;
 	@Column(name = "joiningdate")
 	private LocalDate joiningDate;
-	@Column(unique = true)
-	private String dupchk;
+	@Column(name = "role")
+	private String role;
+	@Column(name = "password")
+	private String password;
 	@Column(name = "createdby")
 	private String createdBy;
 	@Column(name = "modifiedby")
@@ -58,12 +60,16 @@ public class EmployeeVO {
 	private Long orgId;
 	@Column(name = "cancel")
 	private boolean cancel;
-	@Column(name = "userid")
-	private String userId;
 	@Column(name = "cancelremarks")
 	private String cancelRemark;
 	@Column(name = "active")
 	private boolean active;
+	
+	
+//	@JsonManagedReference
+//	@OneToOne(mappedBy = "employeeVO", cascade = CascadeType.ALL)
+//	private UserVO userVO;
+//	
 
 	@Embedded
 	private CreatedUpdatedDate commonDate = new CreatedUpdatedDate();

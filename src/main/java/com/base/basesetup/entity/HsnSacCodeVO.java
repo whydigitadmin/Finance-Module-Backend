@@ -23,7 +23,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class HsnSacCodeVO {
- 
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY, generator = "hsnsaccodegen")
 	@SequenceGenerator(name = "hsnsaccodegen", sequenceName = "hsnsaccodeseq", initialValue = 1000000001, allocationSize = 1)
@@ -35,8 +35,8 @@ public class HsnSacCodeVO {
 	private String type;
 	@Column(name = "code")
 	private String code;
-	@Column(name = "description")
-	private String description;
+	@Column(name = "descripition")
+	private String descripition;
 	@Column(name = "chapter")
 	private String chapter;
 	@Column(name = "chaptercode")
@@ -48,23 +48,18 @@ public class HsnSacCodeVO {
 	@Column(name = "rate")
 	private float rate;
 	private boolean excempted;
-	
+
 	@Column(name = "createdby")
 	private String createdBy;
 	@Column(name = "modifiedby")
 	private String updatedBy;
 	@Column(name = "cancelremarks")
 	private String cancelRemarks;
+	@Column(name = "cancel")
 	private boolean cancel;
+	@Column(name = "active")
 	private boolean active;
 
-	
-	
-	
-	
-	
-	
-	
 	@Embedded
 	@Builder.Default
 	private CreatedUpdatedDate commonDate = new CreatedUpdatedDate();

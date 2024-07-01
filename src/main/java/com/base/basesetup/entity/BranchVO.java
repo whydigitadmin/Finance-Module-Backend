@@ -1,4 +1,4 @@
-package com.base.basesetup.entity;
+  package com.base.basesetup.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Embedded;
@@ -68,8 +68,6 @@ public class BranchVO {
 	private String createdBy;
 	@Column(name = "modifiedby")
 	private String updatedBy;
-	@Column(unique = true)
-	private String dupchk;
 	@Column(name = "active")
 	private boolean active;
 	@Column(name = "userid")

@@ -30,4 +30,6 @@ public class CompanyDTO {
 	private String createdBy;
 	private String updatedBy;
 	private boolean active;
+	private Long orgId;
+	
 }

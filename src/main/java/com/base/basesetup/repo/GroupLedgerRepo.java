@@ -15,4 +15,12 @@ public interface GroupLedgerRepo extends JpaRepository<GroupLedgerVO, Long>{
 @Query(nativeQuery =true,value = "select * from groupledger where groupledgerid=?1")
 List<GroupLedgerVO> getAllGroupLedgerById(Long id);
 
+@Query(nativeQuery = true,value = "select * from groupledger where active=1")
+List<GroupLedgerVO> findGroupLedgerByActive();
+
+boolean existsByAccountCodeAndOrgId(String accountCode, Long orgId);
+
+boolean existsByAccountGroupNameAndOrgId(String accountGroupName, Long orgId);
+
+
 }
