@@ -1,5 +1,7 @@
 package com.base.basesetup.dto;
 
+import java.math.BigDecimal;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,14 +19,14 @@ public class ChargerTaxInvoiceDTO {
 	private String chargeName;
 	private String taxable;
 	private int qty;
-	private String rate;
+	private BigDecimal rate;
 	private String currency;
-	private String exRate;
-	private String fcAmount;
-	private String lcAmount;
-	private String billAmount;
+	private BigDecimal exRate;
+	private BigDecimal fcAmount;
+	private BigDecimal lcAmount;
+	private BigDecimal billAmount;
 	private String sac;
-	private String GSTPercent;
-	private String GST;
+	private BigDecimal GSTPercent;
+	private BigDecimal GST;
 
 }

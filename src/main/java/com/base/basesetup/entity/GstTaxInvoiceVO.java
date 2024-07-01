@@ -1,5 +1,7 @@
 package com.base.basesetup.entity;
 
+import java.math.BigDecimal;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -34,13 +36,13 @@ public class GstTaxInvoiceVO {
 	@Column(name = "gstsubledgecode")
 	private String gstSubledgerCode;
 	@Column(name = "gstbdbillamount")
-	private double gstBdBillAmount;
+	private BigDecimal gstBdBillAmount;
 	@Column(name = "gstcrbillamount")
-	private double gstCrBillAmount;
+	private BigDecimal gstCrBillAmount;
 	@Column(name = "gstdblcamount")
-	private double gstDbLcAmount;
+	private BigDecimal gstDbLcAmount;
 	@Column(name = "gstcrlcamount")
-	private double gstCrLcAmount;
+	private BigDecimal gstCrLcAmount;
 
 	@ManyToOne
 	@JsonBackReference
