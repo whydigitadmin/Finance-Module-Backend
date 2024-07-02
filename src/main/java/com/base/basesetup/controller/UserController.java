@@ -30,6 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.base.basesetup.common.CommonConstant;
 import com.base.basesetup.common.UserConstants;
 import com.base.basesetup.dto.ChangePasswordFormDTO;
+import com.base.basesetup.dto.CreateUserFormDTO;
 import com.base.basesetup.dto.LoginFormDTO;
 import com.base.basesetup.dto.ResetPasswordFormDTO;
 import com.base.basesetup.dto.ResponseDTO;
@@ -58,6 +59,31 @@ public class UserController extends BaseController {
 		} catch (Exception e) {
 			errorMsg = e.getMessage();
 			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME_WITH_USER_NAME, methodName, signUpRequest.getEmail(),
+					errorMsg);
+		}
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, UserConstants.SIGNUP_REGISTERED_SUCCESS_MESSAGE);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap, UserConstants.SIGNUP_REGISTERED_FAILED_MESSAGE,
+					errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+	}
+	
+	@PostMapping("/createuser")
+	public ResponseEntity<ResponseDTO> createUser(@Valid @RequestBody CreateUserFormDTO createUserFormDTO) {
+		String methodName = "createUser()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		try {
+			userService.createUser(createUserFormDTO);
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME_WITH_USER_NAME, methodName, createUserFormDTO.getUserName(),
 					errorMsg);
 		}
 		if (StringUtils.isBlank(errorMsg)) {

@@ -29,7 +29,7 @@ public class ResponsibilitiesVO {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "responsibilitiesgen")
-	@SequenceGenerator(name = "responsibilitiesgen", sequenceName = "responsibilitiesVO", initialValue = 1000000001, allocationSize = 1)
+	@SequenceGenerator(name = "responsibilitiesgen", sequenceName = "responsibilitiesseq", initialValue = 1000000001, allocationSize = 1)
 	@Column(name = "responsibilitiesid")
 	private Long id;
 	@Column(name = "role")

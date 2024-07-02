@@ -3,11 +3,13 @@ package com.base.basesetup.service;
 import org.springframework.stereotype.Service;
 
 import com.base.basesetup.dto.ChangePasswordFormDTO;
+import com.base.basesetup.dto.CreateUserFormDTO;
 import com.base.basesetup.dto.LoginFormDTO;
 import com.base.basesetup.dto.ResetPasswordFormDTO;
 import com.base.basesetup.dto.SignUpFormDTO;
 import com.base.basesetup.dto.UserResponseDTO;
 import com.base.basesetup.entity.UserVO;
+import com.base.basesetup.exception.ApplicationException;
 
 @Service
 public interface UserService {
@@ -29,5 +31,7 @@ public interface UserService {
 	public void createUserAction(String userName, long userId, String actionType);
 
 	public void removeUser(String userName);
+
+	void createUser(CreateUserFormDTO createUserFormDTO) throws ApplicationException;
 
 }

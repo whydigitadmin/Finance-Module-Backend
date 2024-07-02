@@ -1,6 +1,9 @@
 package com.base.basesetup.service;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -13,15 +16,20 @@ import org.springframework.stereotype.Service;
 
 import com.base.basesetup.common.CommonConstant;
 import com.base.basesetup.common.UserConstants;
+import com.base.basesetup.dto.BranchAccessDTO;
 import com.base.basesetup.dto.ChangePasswordFormDTO;
+import com.base.basesetup.dto.CreateUserFormDTO;
 import com.base.basesetup.dto.LoginFormDTO;
 import com.base.basesetup.dto.ResetPasswordFormDTO;
-import com.base.basesetup.dto.Role;
 import com.base.basesetup.dto.SignUpFormDTO;
 import com.base.basesetup.dto.UserResponseDTO;
+import com.base.basesetup.dto.UserRoleDTO;
+import com.base.basesetup.entity.BranchAccessVO;
 import com.base.basesetup.entity.TokenVO;
 import com.base.basesetup.entity.UserActionVO;
+import com.base.basesetup.entity.UserRolesVO;
 import com.base.basesetup.entity.UserVO;
+import com.base.basesetup.exception.ApplicationException;
 import com.base.basesetup.repo.UserActionRepo;
 import com.base.basesetup.repo.UserRepo;
 import com.base.basesetup.security.TokenProvider;
@@ -70,7 +78,6 @@ public class UserServiceImpl implements UserService {
 			LOGGER.error(e.getMessage());
 			throw new ApplicationContextException(UserConstants.ERRROR_MSG_UNABLE_TO_ENCODE_USER_PASSWORD);
 		}
-		userVO.setRole(Role.ROLE_USER);
 		userVO.setActive(true);
 		return userVO;
 	}
@@ -117,9 +124,10 @@ public class UserServiceImpl implements UserService {
 		userDTO.setUserName(userVO.getUserName());
 		userDTO.setLoginStatus(userVO.isLoginStatus());
 		userDTO.setActive(userVO.isActive());
-		userDTO.setRole(userVO.getRole());
-		userDTO.setOrgId(userVO.getOrgId());
+		userDTO.setLastLogin(userVO.getLastLogin());
 		userDTO.setAccountRemovedDate(userVO.getAccountRemovedDate());
+		userDTO.setOrgId(userVO.getOrgId());
+		userDTO.setAccountRemovedDate(userVO.getAccountRemovedDate());		
 		return userDTO;
 	}
 
@@ -144,7 +152,11 @@ public class UserServiceImpl implements UserService {
 	 */
 	private void updateUserLoginInformation(UserVO userVO) {
 		try {
+			Date currentDate = new Date();
+			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss a");
+			userVO.setLastLogin(dateFormat.format(currentDate));
 			userVO.setLoginStatus(true);
+			
 			userRepo.save(userVO);
 			createUserAction(userVO.getUserName(), userVO.getUserId(), UserConstants.USER_ACTION_TYPE_LOGIN);
 		} catch (Exception e) {
@@ -292,5 +304,75 @@ public class UserServiceImpl implements UserService {
 		} else {
 			throw new ApplicationContextException(UserConstants.ERRROR_MSG_INVALID_USER_NAME);
 		}
+	}
+	
+	@Override
+	public void createUser(CreateUserFormDTO createUserFormDTO) throws ApplicationException {
+		String methodName = "createUser()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		if (ObjectUtils.isEmpty(createUserFormDTO) || StringUtils.isBlank(createUserFormDTO.getEmail())) {
+			throw new ApplicationContextException(UserConstants.ERRROR_MSG_INVALID_USER_REGISTER_INFORMATION);
+		} else if (userRepo.existsByUserName(createUserFormDTO.getUserName())) {
+			throw new ApplicationContextException(UserConstants.ERRROR_MSG_USER_INFORMATION_ALREADY_REGISTERED);
+		}
+		UserVO userVO = getUserVOFromCreateUserFormDTO(createUserFormDTO);  
+		userRepo.save(userVO);
+		createUserAction(userVO.getEmail(), userVO.getUserId(), UserConstants.USER_ACTION_ADD_ACCOUNT);
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+	}
+
+	private UserVO getUserVOFromCreateUserFormDTO(CreateUserFormDTO createUserFormDTO) {
+		UserVO userVO = new UserVO();
+		userVO.setUserName(createUserFormDTO.getUserName());
+		userVO.setEmail(createUserFormDTO.getEmail());
+		userVO.setUserType(createUserFormDTO.getUserType());
+		userVO.setAllIndiaAccess(createUserFormDTO.isAllIndiaAccess());
+		userVO.setEmployeeCode(createUserFormDTO.getEmployeeCode());
+		userVO.setEmployeeName(createUserFormDTO.getEmployeeName());
+		userVO.setReportingTO(createUserFormDTO.getReportingTO());
+		userVO.setLocation(createUserFormDTO.getLocation());
+		userVO.setDeactivatedOn(createUserFormDTO.getDeactivatedOn());
+		userVO.setOrgId(createUserFormDTO.getOrgId());
+
+		try {
+			userVO.setPassword(encoder.encode(CryptoUtils.getDecrypt(createUserFormDTO.getPassword())));
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage());
+			throw new ApplicationContextException(UserConstants.ERRROR_MSG_UNABLE_TO_ENCODE_USER_PASSWORD);
+		}
+		userVO.setActive(true);
+		
+		
+		List<UserRolesVO> userRolesVO = new ArrayList<>();
+		if (createUserFormDTO.getUserRoleDTO()!= null) {
+
+			for (UserRoleDTO userRolesDTO : createUserFormDTO.getUserRoleDTO()) {
+
+				UserRolesVO userRoles = new UserRolesVO();
+				userRoles.setRole(userRolesDTO.getRole());
+				userRoles.setStartdate(userRolesDTO.getStartdate());
+				userRoles.setEnddate(userRolesDTO.getEnddate());
+				userRoles.setUserVO(userVO);
+				userRolesVO.add(userRoles);
+				
+			}
+		}
+		userVO.setUserRoleVO(userRolesVO);
+		
+		List<BranchAccessVO> BranchAccessVO = new ArrayList<>();
+		if (createUserFormDTO.getBranchAccessDTO()!= null) {
+
+			for (BranchAccessDTO BranchAccessDTO : createUserFormDTO.getBranchAccessDTO()) {
+
+				BranchAccessVO branchesAccessible = new BranchAccessVO();
+				branchesAccessible.setBranch(BranchAccessDTO.getBranch());
+				branchesAccessible.setUserVO(userVO);
+				BranchAccessVO.add(branchesAccessible);
+			}
+		}
+		userVO.setBranchAccessVO(BranchAccessVO);
+		
+		
+		return userVO;
 	}
 }
