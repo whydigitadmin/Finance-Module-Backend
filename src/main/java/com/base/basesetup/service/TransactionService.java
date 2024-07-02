@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.base.basesetup.dto.BrsOpeningDTO;
 import com.base.basesetup.dto.ChartCostCenterDTO;
+import com.base.basesetup.dto.CostInvoiceDTO;
 import com.base.basesetup.dto.DailyMonthlyExRatesDTO;
 import com.base.basesetup.dto.FundTransferDTO;
 import com.base.basesetup.dto.GeneralJournalDTO;
@@ -15,6 +16,7 @@ import com.base.basesetup.dto.IrnCreditDTO;
 import com.base.basesetup.dto.TaxInvoiceDTO;
 import com.base.basesetup.entity.BrsOpeningVO;
 import com.base.basesetup.entity.ChartCostCenterVO;
+import com.base.basesetup.entity.CostInvoiceVO;
 import com.base.basesetup.entity.DailyMonthlyExRatesVO;
 import com.base.basesetup.entity.FundTransferVO;
 import com.base.basesetup.entity.GeneralJournalVO;
@@ -84,7 +86,7 @@ public interface TransactionService {
 	List<FundTransferVO> getAllFundTransferById(Long id);
 
 	List<FundTransferVO> getFundTransferByActive();
-	
+
 	// GeneralJournal
 
 	List<GeneralJournalVO> getAllGeneralJournalByOrgId(Long orgId);
@@ -94,5 +96,14 @@ public interface TransactionService {
 	List<GeneralJournalVO> getAllGeneralJournalById(Long id);
 
 	List<GeneralJournalVO> getGeneralJournalByActive();
+
+	// CostInvoice
+	List<CostInvoiceVO> getAllCostInvoiceByOrgId(Long orgId);
+
+	CostInvoiceVO updateCreateCostInvoice(@Valid CostInvoiceDTO costInvoiceDTO) throws ApplicationException;
+
+	List<CostInvoiceVO> getAllCostInvoiceById(Long id);
+
+	List<CostInvoiceVO> getCostInvoiceByActive();
 
 }

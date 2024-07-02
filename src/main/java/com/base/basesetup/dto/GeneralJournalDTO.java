@@ -3,8 +3,6 @@ package com.base.basesetup.dto;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.base.basesetup.entity.ParticularsJournalVO;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

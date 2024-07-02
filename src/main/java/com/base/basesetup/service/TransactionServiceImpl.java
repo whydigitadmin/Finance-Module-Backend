@@ -12,9 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.base.basesetup.dto.BrsOpeningDTO;
+import com.base.basesetup.dto.ChargerCostInvoiceDTO;
 import com.base.basesetup.dto.ChargerIrnCreditDTO;
 import com.base.basesetup.dto.ChargerTaxInvoiceDTO;
 import com.base.basesetup.dto.ChartCostCenterDTO;
+import com.base.basesetup.dto.CostInvoiceDTO;
 import com.base.basesetup.dto.DailyMonthlyExRatesDTO;
 import com.base.basesetup.dto.DailyMonthlyExRatesDtlDTO;
 import com.base.basesetup.dto.FundTransferDTO;
@@ -22,13 +24,17 @@ import com.base.basesetup.dto.GeneralJournalDTO;
 import com.base.basesetup.dto.GstIrnCreditDTO;
 import com.base.basesetup.dto.GstTaxInvoiceDTO;
 import com.base.basesetup.dto.IrnCreditDTO;
+import com.base.basesetup.dto.SummaryCostInvoiceDTO;
 import com.base.basesetup.dto.SummaryIrnCreditDTO;
 import com.base.basesetup.dto.SummaryTaxInvoiceDTO;
 import com.base.basesetup.dto.TaxInvoiceDTO;
+import com.base.basesetup.dto.TdsCostInvoiceDTO;
 import com.base.basesetup.entity.BrsOpeningVO;
+import com.base.basesetup.entity.ChargerCostInvoiceVO;
 import com.base.basesetup.entity.ChargerIrnCreditVO;
 import com.base.basesetup.entity.ChargerTaxInvoiceVO;
 import com.base.basesetup.entity.ChartCostCenterVO;
+import com.base.basesetup.entity.CostInvoiceVO;
 import com.base.basesetup.entity.DailyMonthlyExRatesDtlVO;
 import com.base.basesetup.entity.DailyMonthlyExRatesVO;
 import com.base.basesetup.entity.FundTransferVO;
@@ -36,14 +42,18 @@ import com.base.basesetup.entity.GeneralJournalVO;
 import com.base.basesetup.entity.GstIrnCreditVO;
 import com.base.basesetup.entity.GstTaxInvoiceVO;
 import com.base.basesetup.entity.IrnCreditVO;
+import com.base.basesetup.entity.SummaryCostInvoiceVO;
 import com.base.basesetup.entity.SummaryIrnCreditVO;
 import com.base.basesetup.entity.SummaryTaxInvoiceVO;
 import com.base.basesetup.entity.TaxInvoiceVO;
+import com.base.basesetup.entity.TdsCostInvoiceVO;
 import com.base.basesetup.exception.ApplicationException;
 import com.base.basesetup.repo.BrsOpeningRepo;
+import com.base.basesetup.repo.ChargerCostInvoiceRepo;
 import com.base.basesetup.repo.ChargerIrnCreditRepo;
 import com.base.basesetup.repo.ChargerTaxInvoiceRepo;
 import com.base.basesetup.repo.ChartCostCenterRepo;
+import com.base.basesetup.repo.CostInvoiceRepo;
 import com.base.basesetup.repo.DailyMonthlyExRatesDtlRepo;
 import com.base.basesetup.repo.DailyMonthlyExRatesRepo;
 import com.base.basesetup.repo.FundTransferRepo;
@@ -52,9 +62,12 @@ import com.base.basesetup.repo.GstIrnCreditRepo;
 import com.base.basesetup.repo.GstTaxInvoiceRepo;
 import com.base.basesetup.repo.IrnCreditRepo;
 import com.base.basesetup.repo.ParticularsJournalRepo;
+import com.base.basesetup.repo.SummaryCostInvoiceRepo;
 import com.base.basesetup.repo.SummaryIrnCreditRepo;
+import com.base.basesetup.repo.SummaryJournalRepo;
 import com.base.basesetup.repo.SummaryTaxInvoiceRepo;
 import com.base.basesetup.repo.TaxInvocieRepo;
+import com.base.basesetup.repo.TdsCostInvoiceRepo;
 
 @Service
 public class TransactionServiceImpl implements TransactionService {
@@ -106,6 +119,18 @@ public class TransactionServiceImpl implements TransactionService {
 
 	@Autowired
 	SummaryJournalRepo summaryJournalRepo;
+	
+	@Autowired
+	CostInvoiceRepo costInvoiceRepo;
+	
+	@Autowired
+	SummaryCostInvoiceRepo summaryCostInvoiceRepo;
+	
+	@Autowired
+	TdsCostInvoiceRepo tdsCostInvoiceRepo;
+	
+	@Autowired
+	ChargerCostInvoiceRepo chargerCostInvoiceRepo;
 
 	// TaxInvoice
 
@@ -138,27 +163,27 @@ public class TransactionServiceImpl implements TransactionService {
 	@Override
 	public TaxInvoiceVO updateCreateTaxInvoice(@Valid TaxInvoiceDTO taxInvoiceDTO) throws ApplicationException {
 		TaxInvoiceVO taxInvoiceVO = new TaxInvoiceVO();
-		if (ObjectUtils.isNotEmpty(taxInvoiceDTO.getId())) {
-			taxInvoiceVO = taxInvoiceRepo.findById(taxInvoiceDTO.getId())
-					.orElseThrow(() -> new ApplicationException("Invalid TaxInvoice details"));
-		} else {
-			if (taxInvoiceRepo.existsByDocIdAndOrgId(taxInvoiceVO.getDocId(), taxInvoiceVO.getOrgId())) {
-				throw new ApplicationException("The given doc id already exists.");
-			}
-			if (taxInvoiceRepo.existsByInvoiceNoAndOrgId(taxInvoiceVO.getInvoiceNo(), taxInvoiceVO.getOrgId())) {
-				throw new ApplicationException("The given invoice number already exists.");
-			}
-		}
-		if (ObjectUtils.isNotEmpty(taxInvoiceVO.getId())) {
-			if (taxInvoiceRepo.existsByDocIdAndOrgIdAndId(taxInvoiceVO.getDocId(), taxInvoiceVO.getOrgId(),
-					taxInvoiceVO.getId())) {
-				throw new ApplicationException("The given doc id already exists.");
-			}
-			if (taxInvoiceRepo.existsByInvoiceNoAndOrgIdAndId(taxInvoiceVO.getInvoiceNo(), taxInvoiceVO.getOrgId(),
-					taxInvoiceVO.getId())) {
-				throw new ApplicationException("The given invoice number already exists.");
-			}
-		}
+//		if (ObjectUtils.isNotEmpty(taxInvoiceDTO.getId())) {
+//			taxInvoiceVO = taxInvoiceRepo.findById(taxInvoiceDTO.getId())
+//					.orElseThrow(() -> new ApplicationException("Invalid TaxInvoice details"));
+//		} else {
+//			if (taxInvoiceRepo.existsByDocIdAndOrgId(taxInvoiceVO.getDocId(), taxInvoiceVO.getOrgId())) {
+//				throw new ApplicationException("The given doc id already exists.");
+//			}
+//			if (taxInvoiceRepo.existsByInvoiceNoAndOrgId(taxInvoiceVO.getInvoiceNo(), taxInvoiceVO.getOrgId())) {
+//				throw new ApplicationException("The given invoice number already exists.");
+//			}
+//		}
+//		if (ObjectUtils.isNotEmpty(taxInvoiceVO.getId())) {
+//			if (taxInvoiceRepo.existsByDocIdAndOrgIdAndId(taxInvoiceVO.getDocId(), taxInvoiceVO.getOrgId(),
+//					taxInvoiceVO.getId())) {
+//				throw new ApplicationException("The given doc id already exists.");
+//			}
+//			if (taxInvoiceRepo.existsByInvoiceNoAndOrgIdAndId(taxInvoiceVO.getInvoiceNo(), taxInvoiceVO.getOrgId(),
+//					taxInvoiceVO.getId())) {
+//				throw new ApplicationException("The given invoice number already exists.");
+//			}
+//		}
 
 		List<ChargerTaxInvoiceVO> chargerTaxInvoiceVOs = new ArrayList<>();
 		if (taxInvoiceDTO.getChargerTaxInvoiceDTO() != null) {
@@ -215,7 +240,7 @@ public class TransactionServiceImpl implements TransactionService {
 				summaryTaxInvoiceVOs.add(summaryTaxInvoiceVO);
 			}
 		}
-
+ 
 		List<GstTaxInvoiceVO> gstTaxInvoiceVOs = new ArrayList<>();
 		if (taxInvoiceDTO.getGstTaxInvoiceDTO() != null) {
 			for (GstTaxInvoiceDTO gstTaxInvoiceDTO : taxInvoiceDTO.getGstTaxInvoiceDTO()) {
@@ -870,5 +895,181 @@ public class TransactionServiceImpl implements TransactionService {
 		return generalJournalRepo.findGeneralJournalByActive();
 
 	}
+
+	//CostInvoice
+
+		@Override
+		public List<CostInvoiceVO> getAllCostInvoiceByOrgId(Long orgId) {
+			List<CostInvoiceVO> costInvoiceVO = new ArrayList<>();
+			if (ObjectUtils.isNotEmpty(orgId)) {
+				LOGGER.info("Successfully Received  CostInvoice BY OrgId : {}", orgId);
+				costInvoiceVO = costInvoiceRepo.getAllCostInvoiceByOrgId(orgId);
+			} else {
+				LOGGER.info("Successfully Received  CostInvoice For All OrgId.");
+				costInvoiceVO = costInvoiceRepo.findAll();
+			}
+			return costInvoiceVO;
+		}
+
+		@Override
+		public List<CostInvoiceVO> getAllCostInvoiceById(Long id) {
+			List<CostInvoiceVO> costInvoiceVO = new ArrayList<>();
+			if (ObjectUtils.isNotEmpty(id)) {
+				LOGGER.info("Successfully Received  CostInvoice BY Id : {}", id);
+				costInvoiceVO =costInvoiceRepo.getAllCostInvoiceById(id);
+			} else {
+				LOGGER.info("Successfully Received CostInvoice For All Id.");
+				costInvoiceVO = costInvoiceRepo.findAll();
+			}
+			return costInvoiceVO;
+		}
+
+		@Override
+		public CostInvoiceVO updateCreateCostInvoice(@Valid CostInvoiceDTO costInvoiceDTO) throws ApplicationException {
+			CostInvoiceVO costInvoiceVO = new CostInvoiceVO();
+//			if (ObjectUtils.isNotEmpty(taxInvoiceDTO.getId())) {
+//				taxInvoiceVO = taxInvoiceRepo.findById(taxInvoiceDTO.getId())
+//						.orElseThrow(() -> new ApplicationException("Invalid TaxInvoice details"));
+//			} else {
+//				if (taxInvoiceRepo.existsByDocIdAndOrgId(taxInvoiceVO.getDocId(), taxInvoiceVO.getOrgId())) {
+//					throw new ApplicationException("The given doc id already exists.");
+//				}
+//				if (taxInvoiceRepo.existsByInvoiceNoAndOrgId(taxInvoiceVO.getInvoiceNo(), taxInvoiceVO.getOrgId())) {
+//					throw new ApplicationException("The given invoice number already exists.");
+//				}
+//			}
+//			if (ObjectUtils.isNotEmpty(taxInvoiceVO.getId())) {
+//				if (taxInvoiceRepo.existsByDocIdAndOrgIdAndId(taxInvoiceVO.getDocId(), taxInvoiceVO.getOrgId(),
+//						taxInvoiceVO.getId())) {
+//					throw new ApplicationException("The given doc id already exists.");
+//				}
+//				if (taxInvoiceRepo.existsByInvoiceNoAndOrgIdAndId(taxInvoiceVO.getInvoiceNo(), taxInvoiceVO.getOrgId(),
+//						taxInvoiceVO.getId())) {
+//					throw new ApplicationException("The given invoice number already exists.");
+//				}
+//			}
+
+			List<ChargerCostInvoiceVO> chargerCostInvoiceVOs = new ArrayList<>();
+			if (costInvoiceDTO.getChargerCostInvoiceDTO() != null) {
+				for (ChargerCostInvoiceDTO chargerCostInvoiceDTO : costInvoiceDTO.getChargerCostInvoiceDTO()) {
+					ChargerCostInvoiceVO chargerCostInvoiceVO;
+					if (chargerCostInvoiceDTO.getId() != null && ObjectUtils.isNotEmpty(chargerCostInvoiceDTO.getId())) {
+						chargerCostInvoiceVO = chargerCostInvoiceRepo.findById(chargerCostInvoiceDTO.getId())
+								.orElse(new ChargerCostInvoiceVO());
+					} else {
+						chargerCostInvoiceVO = new ChargerCostInvoiceVO();
+					}
+					chargerCostInvoiceVO.setChargeName(chargerCostInvoiceDTO.getChargeName());
+					chargerCostInvoiceVO.setChargeCode(chargerCostInvoiceDTO.getChargeCode());
+					chargerCostInvoiceVO.setChargeLedger(chargerCostInvoiceDTO.getChargeLedger());
+					chargerCostInvoiceVO.setGsac(chargerCostInvoiceDTO.getGsac());
+					chargerCostInvoiceVO.setContType(chargerCostInvoiceDTO.getContType());
+					chargerCostInvoiceVO.setCurrency(chargerCostInvoiceDTO.getCurrency());
+					chargerCostInvoiceVO.setRate(chargerCostInvoiceDTO.getRate());
+					chargerCostInvoiceVO.setGstPercentage(chargerCostInvoiceDTO.getGstPercentage());
+					chargerCostInvoiceVO.setExRate(chargerCostInvoiceDTO.getExRate());
+					chargerCostInvoiceVO.setFcAmount(chargerCostInvoiceDTO.getFcAmount());
+					chargerCostInvoiceVO.setLcAmount(chargerCostInvoiceDTO.getLcAmount());
+					chargerCostInvoiceVO.setBillAmount(chargerCostInvoiceDTO.getBillAmount());
+					chargerCostInvoiceVO.setCostInvoiceVO(costInvoiceVO);
+					chargerCostInvoiceVOs.add(chargerCostInvoiceVO);
+				}
+			}
+
+			List<SummaryCostInvoiceVO> summaryCostInvoiceVOs = new ArrayList<>();
+			if (costInvoiceDTO.getSummaryCostInvoiceDTO() != null) {
+				for (SummaryCostInvoiceDTO summaryCostInvoiceDTO : costInvoiceDTO.getSummaryCostInvoiceDTO()) {
+					SummaryCostInvoiceVO summaryCostInvoiceVO;
+					if (summaryCostInvoiceDTO.getId() != null & ObjectUtils.isNotEmpty(summaryCostInvoiceDTO.getId())) {
+						summaryCostInvoiceVO = summaryCostInvoiceRepo.findById(summaryCostInvoiceDTO.getId())
+								.orElse(new SummaryCostInvoiceVO());
+					} else {
+						summaryCostInvoiceVO = new SummaryCostInvoiceVO();
+					}
+					summaryCostInvoiceVO.setBillCurrTotChargeAmt(summaryCostInvoiceDTO.getBillCurrTotChargeAmt());
+					summaryCostInvoiceVO.setBillCurrActBillAmt(summaryCostInvoiceDTO.getBillCurrActBillAmt());
+					summaryCostInvoiceVO.setBillCurrNetAmt(summaryCostInvoiceDTO.getBillCurrNetAmt());
+					summaryCostInvoiceVO.setLcTotChargeAmt(summaryCostInvoiceDTO.getLcTotChargeAmt());
+					summaryCostInvoiceVO.setLcActBillAmt(summaryCostInvoiceDTO.getLcActBillAmt());
+					summaryCostInvoiceVO.setLcNetAmt(summaryCostInvoiceDTO.getLcNetAmt());
+					summaryCostInvoiceVO.setRoundOff(summaryCostInvoiceDTO.getRoundOff());
+					summaryCostInvoiceVO.setLcGstInputAmt(summaryCostInvoiceDTO.getLcGstInputAmt());
+					summaryCostInvoiceVO.setCostInvoiceVO(costInvoiceVO);
+					summaryCostInvoiceVOs.add(summaryCostInvoiceVO);
+				}
+			}
+	 
+			List<TdsCostInvoiceVO> tdsCostInvoiceVOs = new ArrayList<>();
+			if (costInvoiceDTO.getTdsCostInvoiceDTO() != null) {
+				for (TdsCostInvoiceDTO tdsCostInvoiceDTO : costInvoiceDTO.getTdsCostInvoiceDTO()) {
+					TdsCostInvoiceVO tdsCostInvoiceVO;
+					if (tdsCostInvoiceDTO.getId() != null & ObjectUtils.isEmpty(tdsCostInvoiceDTO.getId())) {
+					tdsCostInvoiceVO = tdsCostInvoiceRepo.findById(tdsCostInvoiceDTO.getId())
+								.orElse(new TdsCostInvoiceVO());
+					} else {
+						tdsCostInvoiceVO = new TdsCostInvoiceVO();
+					}
+					tdsCostInvoiceVO.setTdsWh(tdsCostInvoiceDTO.getTdsWh());
+					tdsCostInvoiceVO.setTdsWhPercent(tdsCostInvoiceDTO.getTdsWhPercent());
+					tdsCostInvoiceVO.setSection(tdsCostInvoiceDTO.getSection());
+					tdsCostInvoiceVO.setTotalTds(tdsCostInvoiceDTO.getTotalTds());
+					tdsCostInvoiceVO.setCostInvoiceVO(costInvoiceVO);
+					tdsCostInvoiceVOs.add(tdsCostInvoiceVO);
+				}
+			}
+
+			getCostInvoiceVOFromCostInvoiceDTO(costInvoiceDTO, costInvoiceVO);
+			costInvoiceVO.setChargerCostInvoiceVO(chargerCostInvoiceVOs);
+			costInvoiceVO.setSummaryCostInvoiceVO(summaryCostInvoiceVOs);
+			costInvoiceVO.setTdsCostInvoiceVO(tdsCostInvoiceVOs);
+			return costInvoiceRepo.save(costInvoiceVO);
+		}
+
+		private void getCostInvoiceVOFromCostInvoiceDTO(@Valid CostInvoiceDTO costInvoiceDTO, CostInvoiceVO costInvoiceVO) {
+//			// Finyr
+//			int finyr = taxInvoiceRepo.findFinyr();
+//			// DocId
+//			String taxInvoice = "AI" + finyr + taxInvoiceRepo.findDocId();
+//			taxInvoiceVO.setDocId(taxInvoice);
+//			taxInvoiceRepo.nextSeq();
+//			// InvoiceNo
+//			String invoiceNo = "AI" + finyr + "INV" + taxInvoiceRepo.findInvoiceNo();
+//			taxInvoiceVO.setInvoiceNo(invoiceNo);
+//			taxInvoiceRepo.nextSeqInvoice();
+			costInvoiceVO.setMode(costInvoiceDTO.getMode());
+			costInvoiceVO.setProduct(costInvoiceDTO.getProduct());
+			costInvoiceVO.setPurVchNo(costInvoiceDTO.getPurVchNo());
+			costInvoiceVO.setPurVchDt(costInvoiceDTO.getPurVchDt());
+			costInvoiceVO.setCostInvoiceNo(costInvoiceDTO.getCostInvoiceNo());
+			costInvoiceVO.setDate(costInvoiceDTO.getDate());
+			costInvoiceVO.setSupplierBillNo(costInvoiceDTO.getSupplierBillNo());
+			costInvoiceVO.setSuppliertType(costInvoiceDTO.getSuppliertType());
+			costInvoiceVO.setSupplierCode(costInvoiceDTO.getSupplierCode());
+			costInvoiceVO.setCreditDays(costInvoiceDTO.getCreditDays());
+			costInvoiceVO.setDueDate(costInvoiceDTO.getDueDate());
+			costInvoiceVO.setSupplierName(costInvoiceDTO.getSupplierName());
+			costInvoiceVO.setCurrency(costInvoiceDTO.getCurrency());
+			costInvoiceVO.setExRate(costInvoiceDTO.getExRate());
+			costInvoiceVO.setSupplierGstIn(costInvoiceDTO.getSupplierGstIn());
+			costInvoiceVO.setRemarks(costInvoiceDTO.getRemarks());
+			costInvoiceVO.setAddress(costInvoiceDTO.getAddress());
+			costInvoiceVO.setOtherInfo(costInvoiceDTO.getOtherInfo());
+			costInvoiceVO.setShipperRefNo(costInvoiceDTO.getShipperRefNo());
+			costInvoiceVO.setGstType(costInvoiceDTO.getGstType());
+			costInvoiceVO.setPayment(costInvoiceDTO.getPayment());
+			costInvoiceVO.setAccrualId(costInvoiceDTO.getAccrualId());
+			costInvoiceVO.setUtrReference(costInvoiceDTO.getUtrReference());
+			costInvoiceVO.setCostType(costInvoiceDTO.getCostType());
+			costInvoiceVO.setJobStatus(costInvoiceDTO.getJobStatus());
+			costInvoiceVO.setOrgId(costInvoiceDTO.getOrgId());
+			costInvoiceVO.setActive(costInvoiceDTO.isActive());
+			costInvoiceVO.setUpdatedBy(costInvoiceDTO.getUpdatedBy());
+			costInvoiceVO.setCreatedBy(costInvoiceDTO.getCreatedBy());
+		}
+
+		@Override
+		public List<CostInvoiceVO> getCostInvoiceByActive() {
+			return costInvoiceRepo.findCostInvoiceByActive();
+		}
 
 }
