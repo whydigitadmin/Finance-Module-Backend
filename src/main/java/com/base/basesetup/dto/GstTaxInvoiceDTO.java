@@ -13,9 +13,9 @@ public class GstTaxInvoiceDTO {
 	private Long id;
 	private String gstChargeAcc;
 	private String gstSubledgerCode;
-	private double gstBdBillAmount;
-	private double gstCrBillAmount;
-	private double gstDbLcAmount;
-	private double gstCrLcAmount;
+	private String gstBdBillAmount;
+	private String gstCrBillAmount;
+	private String gstDbLcAmount;
+	private String gstCrLcAmount;
 
 }

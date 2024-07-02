@@ -1,5 +1,7 @@
 package com.base.basesetup.entity;
 
+import java.math.BigDecimal;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -32,7 +34,7 @@ public class TdsCostInvoiceVO {
 	@Column(name = "tdswh")
 	private String tdsWh;
 	@Column(name = "tdsWpercent")
-	private double tdsWhPercent;
+	private BigDecimal tdsWhPercent;
 	@Column(name = "section")
 	private String section;
 	@Column(name = "totaltds")

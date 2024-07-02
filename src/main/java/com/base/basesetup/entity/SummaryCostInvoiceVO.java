@@ -1,5 +1,7 @@
 package com.base.basesetup.entity;
 
+import java.math.BigDecimal;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -30,21 +32,21 @@ public class SummaryCostInvoiceVO {
 	@Column(name = "summarycostinvoiceid")
 	private Long id;
 	@Column(name = "billcurrtotchargeamt")
-	private double billCurrTotChargeAmt;
+	private BigDecimal billCurrTotChargeAmt;
 	@Column(name = "billcurractbillamt")
-	private double billCurrActBillAmt;
+	private BigDecimal billCurrActBillAmt;
 	@Column(name = "billcurrnetamt")
-	private double billCurrNetAmt;
+	private BigDecimal billCurrNetAmt;
 	@Column(name = "lctotchargeamt")
-	private double lcTotChargeAmt;
+	private BigDecimal lcTotChargeAmt;
 	@Column(name = "lcactbillamt")
-	private double lcActBillAmt;
+	private BigDecimal lcActBillAmt;
 	@Column(name = "lcnetamt")
-	private double lcNetAmt;
+	private BigDecimal lcNetAmt;
 	@Column(name = "roundoff")
 	private String roundOff;
 	@Column(name = "lcgstinputamt")
-	private double lcGstInputAmt;
+	private BigDecimal lcGstInputAmt;
 	
 	@ManyToOne
 	@JsonBackReference

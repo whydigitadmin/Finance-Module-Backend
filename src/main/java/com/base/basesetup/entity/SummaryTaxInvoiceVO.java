@@ -30,21 +30,21 @@ public class SummaryTaxInvoiceVO {
 	@Column(name = "summarytaxinvoiceid")
 	private Long id;
 	@Column(name = "lcchargeamount")
-	private double lcChargeAmount;
+	private String lcChargeAmount;
 	@Column(name = "lctaxamount")
-	private double lcTaxAmount;
+	private String lcTaxAmount;
 	@Column(name = "lcinvamount")
-	private double lcInvAmount;
+	private String lcInvAmount;
 	@Column(name = "lcroundoffamount")
-	private double lcRoundOffAmount;
+	private String lcRoundOffAmount;
 	@Column(name = "billchargeamount")
-	private double billlcChargeAmount;
+	private String billlcChargeAmount;
 	@Column(name = "billtaxamount")
-	private double billTaxAmount;
+	private String billTaxAmount;
 	@Column(name = "billinvamount")
-	private double billInvAmount;
+	private String billInvAmount;
 	@Column(name = "lctaxableamount")
-	private double lcTaxableAmount;
+	private String lcTaxableAmount;
 	@Column(name = "amountinwords")
 	private String amountInwords;
 	@Column(name = "billingremarks")

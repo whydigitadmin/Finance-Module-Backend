@@ -1,5 +1,7 @@
 package com.base.basesetup.entity;
 
+import java.math.BigDecimal;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -46,13 +48,13 @@ public class ChargerCostInvoiceVO {
 	@Column(name = "rate")
 	private String rate;
 	@Column(name = "gstpercentage")
-	private double gstPercentage;
+	private BigDecimal gstPercentage;
 	@Column(name = "fcamount")
-	private double fcAmount;
+	private BigDecimal fcAmount;
 	@Column(name = "lcAmount")
-	private double lcAmount;
+	private BigDecimal lcAmount;
 	@Column(name = "billamount")
-	private double billAmount;
+	private BigDecimal billAmount;
 
 	@ManyToOne
 	@JsonBackReference

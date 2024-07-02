@@ -1,5 +1,7 @@
 package com.base.basesetup.dto;
 
+import java.math.BigDecimal;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,7 +14,7 @@ import lombok.NoArgsConstructor;
 public class TdsCostInvoiceDTO {
 	private Long id;
 	private String tdsWh;
-	private double tdsWhPercent;
+	private BigDecimal tdsWhPercent;
 	private String section;
 	private String totalTds;
 

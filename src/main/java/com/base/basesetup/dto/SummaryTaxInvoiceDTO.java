@@ -11,14 +11,14 @@ import lombok.NoArgsConstructor;
 @Builder
 public class SummaryTaxInvoiceDTO {
 	private Long id;
-	private double lcChargeAmount;
-	private double lcTaxAmount;
-	private double lcInvAmount;
-	private double lcRoundOffAmount;
-	private double billlcChargeAmount;
-	private double billTaxAmount;
-	private double billInvAmount;
-	private double lcTaxableAmount;
+	private String lcChargeAmount;
+	private String lcTaxAmount;
+	private String lcInvAmount;
+	private String lcRoundOffAmount;
+	private String billlcChargeAmount;
+	private String billTaxAmount;
+	private String billInvAmount;
+	private String lcTaxableAmount;
 	private String amountInwords;
 	private String billingRemarks;
 }

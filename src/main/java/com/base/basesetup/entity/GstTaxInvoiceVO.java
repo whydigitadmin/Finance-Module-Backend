@@ -34,13 +34,13 @@ public class GstTaxInvoiceVO {
 	@Column(name = "gstsubledgecode")
 	private String gstSubledgerCode;
 	@Column(name = "gstbdbillamount")
-	private double gstBdBillAmount;
+	private String gstBdBillAmount;
 	@Column(name = "gstcrbillamount")
-	private double gstCrBillAmount;
+	private String gstCrBillAmount;
 	@Column(name = "gstdblcamount")
-	private double gstDbLcAmount;
+	private String gstDbLcAmount;
 	@Column(name = "gstcrlcamount")
-	private double gstCrLcAmount;
+	private String gstCrLcAmount;
 
 	@ManyToOne
 	@JsonBackReference
