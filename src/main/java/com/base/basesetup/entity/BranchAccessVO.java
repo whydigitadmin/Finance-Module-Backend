@@ -34,7 +34,7 @@ public class BranchAccessVO {
 	
 	
 	@ManyToOne
-	@JoinColumn(name = "usersid")
+	@JoinColumn(name = "userid")
 	@JsonBackReference
 	private UserVO userVO;
 	

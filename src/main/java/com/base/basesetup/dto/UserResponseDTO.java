@@ -1,6 +1,7 @@
 package com.base.basesetup.dto;
 
 import java.util.Date;
+import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,4 +22,6 @@ public class UserResponseDTO {
 	private String token;
 	private String tokenId;
 	private String lastLogin;
+	private List<UserRoleDTO> userRoles;
+    private List<BranchAccessDTO> branchAccess;
 }

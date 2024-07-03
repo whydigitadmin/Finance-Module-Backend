@@ -41,7 +41,7 @@ public class UserRolesVO {
 	private LocalDate enddate;
 	
 	@ManyToOne
-	@JoinColumn(name = "usersid")
+	@JoinColumn(name = "userid")
 	@JsonBackReference
 	private UserVO userVO;
 	

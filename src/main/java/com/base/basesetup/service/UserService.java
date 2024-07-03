@@ -1,5 +1,7 @@
 package com.base.basesetup.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.base.basesetup.dto.ChangePasswordFormDTO;
@@ -33,5 +35,7 @@ public interface UserService {
 	public void removeUser(String userName);
 
 	void createUser(CreateUserFormDTO createUserFormDTO) throws ApplicationException;
+
+	public List<UserVO> getUserByOrgId(Long orgId);
 
 }

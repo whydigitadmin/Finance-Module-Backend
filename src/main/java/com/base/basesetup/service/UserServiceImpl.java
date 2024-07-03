@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -127,9 +128,32 @@ public class UserServiceImpl implements UserService {
 		userDTO.setLastLogin(userVO.getLastLogin());
 		userDTO.setAccountRemovedDate(userVO.getAccountRemovedDate());
 		userDTO.setOrgId(userVO.getOrgId());
-		userDTO.setAccountRemovedDate(userVO.getAccountRemovedDate());		
+		userDTO.setAccountRemovedDate(userVO.getAccountRemovedDate());	
+		userDTO.setUserRoles(mapUserRolesVOToDTO(userVO.getUserRoleVO()));
+	    userDTO.setBranchAccess(mapBranchAccessVOToDTO(userVO.getBranchAccessVO()));
 		return userDTO;
 	}
+	private static List<UserRoleDTO> mapUserRolesVOToDTO(List<UserRolesVO> userRolesVOList) {
+        return userRolesVOList.stream()
+                .map(roleVO -> {
+                    UserRoleDTO roleDTO = new UserRoleDTO();
+                    roleDTO.setId(roleVO.getId());
+                    roleDTO.setRole(roleVO.getRole());
+                    return roleDTO;
+                })
+                .collect(Collectors.toList());
+    }
+
+    private static List<BranchAccessDTO> mapBranchAccessVOToDTO(List<BranchAccessVO> branchAccessVOList) {
+        return branchAccessVOList.stream()
+                .map(accessVO -> {
+                    BranchAccessDTO accessDTO = new BranchAccessDTO();
+                    accessDTO.setId(accessVO.getId());
+                    accessDTO.setBranch(accessVO.getBranch());
+                    return accessDTO;
+                })
+                .collect(Collectors.toList());
+    }
 
 	/**
 	 * @param encryptedPassword -> Data from user;
@@ -374,5 +398,11 @@ public class UserServiceImpl implements UserService {
 		
 		
 		return userVO;
+	}
+
+	@Override
+	public List<UserVO> getUserByOrgId(Long orgId) {
+		
+		return userRepo.findByOrgId(orgId);
 	}
 }
