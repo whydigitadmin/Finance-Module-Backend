@@ -139,6 +139,8 @@ public class UserServiceImpl implements UserService {
                     UserRoleDTO roleDTO = new UserRoleDTO();
                     roleDTO.setId(roleVO.getId());
                     roleDTO.setRole(roleVO.getRole());
+                    roleDTO.setStartdate(roleVO.getStartdate());
+                    roleDTO.setEnddate(roleVO.getEnddate());
                     return roleDTO;
                 })
                 .collect(Collectors.toList());
