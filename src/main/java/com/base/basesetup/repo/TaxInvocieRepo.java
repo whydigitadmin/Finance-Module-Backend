@@ -22,7 +22,7 @@ public interface TaxInvocieRepo extends JpaRepository<TaxInvoiceVO, Long> {
 
 	@Query(nativeQuery = true, value = "select * from taxinvoice where taxinvoiceid=>?1")
 	List<TaxInvoiceVO> getAllTaxInvoiceById(Long id);
-
+																																										
 	@Query(nativeQuery = true, value = "select * from taxinvoice where active =1")
 	List<TaxInvoiceVO> findTaxInvoiceByActive();
 
@@ -38,7 +38,7 @@ public interface TaxInvocieRepo extends JpaRepository<TaxInvoiceVO, Long> {
 	@Query(nativeQuery = true, value = "select sequence_value from taxinvoiceseq")
 	String findDocId();
 
-	@Query(nativeQuery = true, value = "select sequence_value from taxinvoicenoseq")
+	@Query(nativeQuery = true, value = "select from taxinvoicenoseq")
 	String findInvoiceNo();
 
 	@Query(nativeQuery = true, value = "CALL next_taxinvoiceno_sequence_value()")

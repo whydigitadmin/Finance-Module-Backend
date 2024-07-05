@@ -10,6 +10,7 @@ import com.base.basesetup.dto.BrsOpeningDTO;
 import com.base.basesetup.dto.ChartCostCenterDTO;
 import com.base.basesetup.dto.CostInvoiceDTO;
 import com.base.basesetup.dto.DailyMonthlyExRatesDTO;
+import com.base.basesetup.dto.DebitNoteDTO;
 import com.base.basesetup.dto.FundTransferDTO;
 import com.base.basesetup.dto.GeneralJournalDTO;
 import com.base.basesetup.dto.IrnCreditDTO;
@@ -18,6 +19,7 @@ import com.base.basesetup.entity.BrsOpeningVO;
 import com.base.basesetup.entity.ChartCostCenterVO;
 import com.base.basesetup.entity.CostInvoiceVO;
 import com.base.basesetup.entity.DailyMonthlyExRatesVO;
+import com.base.basesetup.entity.DebitNoteVO;
 import com.base.basesetup.entity.FundTransferVO;
 import com.base.basesetup.entity.GeneralJournalVO;
 import com.base.basesetup.entity.IrnCreditVO;
@@ -105,5 +107,14 @@ public interface TransactionService {
 	List<CostInvoiceVO> getAllCostInvoiceById(Long id);
 
 	List<CostInvoiceVO> getCostInvoiceByActive();
+
+	// DebitNote
+	List<DebitNoteVO> getAllDebitNoteByOrgId(Long orgId);
+
+	DebitNoteVO updateCreateDebitNote(@Valid DebitNoteDTO debitNoteDTO) throws ApplicationException;
+
+	List<DebitNoteVO> getAllDebitNoteById(Long id);
+
+	List<DebitNoteVO> getDebitNoteByActive();
 
 }

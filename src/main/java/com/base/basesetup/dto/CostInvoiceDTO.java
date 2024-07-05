@@ -45,7 +45,6 @@ public class CostInvoiceDTO {
 
 	List<ChargerCostInvoiceDTO> chargerCostInvoiceDTO;
 
-	
 	List<TdsCostInvoiceDTO> tdsCostInvoiceDTO;
 
 	List<SummaryCostInvoiceDTO> summaryCostInvoiceDTO;
