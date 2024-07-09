@@ -34,7 +34,7 @@ public interface UserService {
 
 	public void removeUser(String userName);
 
-	void createUser(CreateUserFormDTO createUserFormDTO) throws ApplicationException;
+	String createUser(CreateUserFormDTO createUserFormDTO) throws ApplicationException;
 
 	public List<UserVO> getUserByOrgId(Long orgId);
 

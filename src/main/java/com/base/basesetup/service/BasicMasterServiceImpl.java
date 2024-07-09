@@ -24,7 +24,6 @@ import com.base.basesetup.dto.CountryDTO;
 import com.base.basesetup.dto.CurrencyDTO;
 import com.base.basesetup.dto.EmployeeDTO;
 import com.base.basesetup.dto.ResponsibilitiesDTO;
-import com.base.basesetup.dto.Role;
 import com.base.basesetup.dto.RoleMasterDTO;
 import com.base.basesetup.dto.ScreenDTO;
 import com.base.basesetup.dto.StateDTO;
@@ -679,15 +678,8 @@ public class BasicMasterServiceImpl implements BasicMasterService {
 
 	@Override
 	public List<BranchVO> getBranchByOrgId(Long orgId) {
-		List<BranchVO> branchVO = new ArrayList<>();
-		if (ObjectUtils.isNotEmpty(orgId)) {
-			LOGGER.info("Successfully Received Branch BY OrgId : {}", orgId);
-			branchVO = branchRepo.findBranchByOrgId(orgId);
-		} else {
-			LOGGER.info("Successfully Received Branch For All OrgId.");
-			branchVO = branchRepo.findAll();
-		}
-		return branchVO;
+			
+		return branchRepo.findBranchByOrgId(orgId);
 	}
 
 	@Override

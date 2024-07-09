@@ -31,8 +31,10 @@ import com.base.basesetup.entity.UserActionVO;
 import com.base.basesetup.entity.UserRolesVO;
 import com.base.basesetup.entity.UserVO;
 import com.base.basesetup.exception.ApplicationException;
+import com.base.basesetup.repo.BranchAccessRepo;
 import com.base.basesetup.repo.UserActionRepo;
 import com.base.basesetup.repo.UserRepo;
+import com.base.basesetup.repo.UserRoleRepo;
 import com.base.basesetup.security.TokenProvider;
 import com.base.basesetup.util.CryptoUtils;
 
@@ -51,6 +53,13 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	UserActionRepo userActionRepo;
+	
+	@Autowired
+	UserRoleRepo userRoleRepo;
+	
+	@Autowired
+	BranchAccessRepo branchAccessRepo;	
+	
 
 	@Override
 	public void signup(SignUpFormDTO signUpRequest) {
@@ -333,41 +342,30 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	@Override
-	public void createUser(CreateUserFormDTO createUserFormDTO) throws ApplicationException {
+	public String createUser(CreateUserFormDTO createUserFormDTO) throws ApplicationException {
 		String methodName = "createUser()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
-		if (ObjectUtils.isEmpty(createUserFormDTO) || StringUtils.isBlank(createUserFormDTO.getEmail())) {
-			throw new ApplicationContextException(UserConstants.ERRROR_MSG_INVALID_USER_REGISTER_INFORMATION);
-		} else if (userRepo.existsByUserName(createUserFormDTO.getUserName())) {
-			throw new ApplicationContextException(UserConstants.ERRROR_MSG_USER_INFORMATION_ALREADY_REGISTERED);
+		boolean isNewUser = ObjectUtils.isEmpty(createUserFormDTO.getUserId());
+		if (isNewUser) {
+		if(ObjectUtils.isEmpty(createUserFormDTO.getUserId()))
+		{
+			if (ObjectUtils.isEmpty(createUserFormDTO) || StringUtils.isBlank(createUserFormDTO.getEmail())) {
+				throw new ApplicationContextException(UserConstants.ERRROR_MSG_INVALID_USER_REGISTER_INFORMATION);
+				} else if (userRepo.existsByUserName(createUserFormDTO.getUserName())) {
+					throw new ApplicationContextException(UserConstants.ERRROR_MSG_USER_INFORMATION_ALREADY_REGISTERED);
+				}
+		}
 		}
 		UserVO userVO = getUserVOFromCreateUserFormDTO(createUserFormDTO);  
-		userRepo.save(userVO);
-		createUserAction(userVO.getEmail(), userVO.getUserId(), UserConstants.USER_ACTION_ADD_ACCOUNT);
-		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
-	}
 
-	private UserVO getUserVOFromCreateUserFormDTO(CreateUserFormDTO createUserFormDTO) {
-		UserVO userVO = new UserVO();
-		userVO.setUserName(createUserFormDTO.getUserName());
-		userVO.setEmail(createUserFormDTO.getEmail());
-		userVO.setUserType(createUserFormDTO.getUserType());
-		userVO.setAllIndiaAccess(createUserFormDTO.isAllIndiaAccess());
-		userVO.setEmployeeCode(createUserFormDTO.getEmployeeCode());
-		userVO.setEmployeeName(createUserFormDTO.getEmployeeName());
-		userVO.setReportingTO(createUserFormDTO.getReportingTO());
-		userVO.setLocation(createUserFormDTO.getLocation());
-		userVO.setDeactivatedOn(createUserFormDTO.getDeactivatedOn());
-		userVO.setOrgId(createUserFormDTO.getOrgId());
-
-		try {
-			userVO.setPassword(encoder.encode(CryptoUtils.getDecrypt(createUserFormDTO.getPassword())));
-		} catch (Exception e) {
-			LOGGER.error(e.getMessage());
-			throw new ApplicationContextException(UserConstants.ERRROR_MSG_UNABLE_TO_ENCODE_USER_PASSWORD);
-		}
-		userVO.setActive(true);
+		if(ObjectUtils.isNotEmpty(userVO.getUserId()))
+		{
+		List<UserRolesVO> userRole=userRoleRepo.findByUserVO(userVO);
+		userRoleRepo.deleteAll(userRole);
 		
+		List<BranchAccessVO> branchaccess=branchAccessRepo.findByUserVO(userVO);
+		branchAccessRepo.deleteAll(branchaccess);
+		}
 		
 		List<UserRolesVO> userRolesVO = new ArrayList<>();
 		if (createUserFormDTO.getUserRoleDTO()!= null) {
@@ -387,9 +385,7 @@ public class UserServiceImpl implements UserService {
 		
 		List<BranchAccessVO> BranchAccessVO = new ArrayList<>();
 		if (createUserFormDTO.getBranchAccessDTO()!= null) {
-
 			for (BranchAccessDTO BranchAccessDTO : createUserFormDTO.getBranchAccessDTO()) {
-
 				BranchAccessVO branchesAccessible = new BranchAccessVO();
 				branchesAccessible.setBranch(BranchAccessDTO.getBranch());
 				branchesAccessible.setUserVO(userVO);
@@ -397,6 +393,67 @@ public class UserServiceImpl implements UserService {
 			}
 		}
 		userVO.setBranchAccessVO(BranchAccessVO);
+		
+		userRepo.save(userVO);
+		createUserAction(userVO.getEmail(), userVO.getUserId(), UserConstants.USER_ACTION_ADD_ACCOUNT);
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return isNewUser ? "New User Created Successfully" : "User Details Updated Successfully";
+	}
+
+	private UserVO getUserVOFromCreateUserFormDTO(CreateUserFormDTO createUserFormDTO) {
+		
+		UserVO userVO = new UserVO();
+		
+		if(ObjectUtils.isEmpty(createUserFormDTO.getUserId()))
+		{
+			userVO.setUserName(createUserFormDTO.getUserName());
+			userVO.setEmail(createUserFormDTO.getEmail());
+			userVO.setUserType(createUserFormDTO.getUserType());
+			userVO.setAllIndiaAccess(createUserFormDTO.isAllIndiaAccess());
+			userVO.setEmployeeCode(createUserFormDTO.getEmployeeCode());
+			userVO.setEmployeeName(createUserFormDTO.getEmployeeName());
+			userVO.setReportingTO(createUserFormDTO.getReportingTO());
+			userVO.setLocation(createUserFormDTO.getLocation());
+			userVO.setDeactivatedOn(createUserFormDTO.getDeactivatedOn());
+			userVO.setOrgId(createUserFormDTO.getOrgId());
+
+		try {
+			userVO.setPassword(encoder.encode(CryptoUtils.getDecrypt(createUserFormDTO.getPassword())));
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage());
+			throw new ApplicationContextException(UserConstants.ERRROR_MSG_UNABLE_TO_ENCODE_USER_PASSWORD);
+		}
+		userVO.setActive(true);
+		
+		}
+		else
+		{
+			userVO=userRepo.findById(createUserFormDTO.getUserId()).get();
+			if(!userVO.getUserName().equals(createUserFormDTO.getUserName()))
+			{
+			 if (userRepo.existsByUserName(createUserFormDTO.getUserName())) {
+				throw new ApplicationContextException(UserConstants.ERRROR_MSG_USER_INFORMATION_ALREADY_REGISTERED);
+			 }
+			}
+			userVO.setUserName(createUserFormDTO.getUserName());
+			userVO.setEmail(createUserFormDTO.getEmail());
+			userVO.setUserType(createUserFormDTO.getUserType());
+			userVO.setAllIndiaAccess(createUserFormDTO.isAllIndiaAccess());
+			userVO.setEmployeeCode(createUserFormDTO.getEmployeeCode());
+			userVO.setEmployeeName(createUserFormDTO.getEmployeeName());
+			userVO.setReportingTO(createUserFormDTO.getReportingTO());
+			userVO.setLocation(createUserFormDTO.getLocation());
+			userVO.setDeactivatedOn(createUserFormDTO.getDeactivatedOn());
+			userVO.setOrgId(createUserFormDTO.getOrgId());
+
+		try {
+			userVO.setPassword(encoder.encode(CryptoUtils.getDecrypt(createUserFormDTO.getPassword())));
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage());
+			throw new ApplicationContextException(UserConstants.ERRROR_MSG_UNABLE_TO_ENCODE_USER_PASSWORD);
+		}
+		userVO.setActive(true);
+		}
 		
 		
 		return userVO;
