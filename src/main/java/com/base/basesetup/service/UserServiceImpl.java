@@ -26,12 +26,14 @@ import com.base.basesetup.dto.SignUpFormDTO;
 import com.base.basesetup.dto.UserResponseDTO;
 import com.base.basesetup.dto.UserRoleDTO;
 import com.base.basesetup.entity.BranchAccessVO;
+import com.base.basesetup.entity.GlobalParameterVO;
 import com.base.basesetup.entity.TokenVO;
 import com.base.basesetup.entity.UserActionVO;
 import com.base.basesetup.entity.UserRolesVO;
 import com.base.basesetup.entity.UserVO;
 import com.base.basesetup.exception.ApplicationException;
 import com.base.basesetup.repo.BranchAccessRepo;
+import com.base.basesetup.repo.GlobalParameterRepo;
 import com.base.basesetup.repo.UserActionRepo;
 import com.base.basesetup.repo.UserRepo;
 import com.base.basesetup.repo.UserRoleRepo;
@@ -55,6 +57,9 @@ public class UserServiceImpl implements UserService {
 	UserActionRepo userActionRepo;
 	
 	@Autowired
+	GlobalParameterRepo globalParameterRepo;
+	
+	@Autowired
 	UserRoleRepo userRoleRepo;
 	
 	@Autowired
@@ -72,7 +77,10 @@ public class UserServiceImpl implements UserService {
 			throw new ApplicationContextException(UserConstants.ERRROR_MSG_USER_INFORMATION_ALREADY_REGISTERED);
 		}
 		UserVO userVO = getUserVOFromSignUpFormDTO(signUpRequest);
-		userRepo.save(userVO);
+		UserVO userVO1= userRepo.save(userVO);
+		GlobalParameterVO globalParameterVO=new GlobalParameterVO();
+		globalParameterVO.setUserId(userVO1.getUserId());
+		globalParameterRepo.save(globalParameterVO);
 		createUserAction(userVO.getUserName(), userVO.getUserId(), UserConstants.USER_ACTION_ADD_ACCOUNT);
 		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
 	}
@@ -139,6 +147,7 @@ public class UserServiceImpl implements UserService {
 		userDTO.setOrgId(userVO.getOrgId());
 		userDTO.setAccountRemovedDate(userVO.getAccountRemovedDate());	
 		userDTO.setUserRoles(mapUserRolesVOToDTO(userVO.getUserRoleVO()));
+		
 	    userDTO.setBranchAccess(mapBranchAccessVOToDTO(userVO.getBranchAccessVO()));
 		return userDTO;
 	}

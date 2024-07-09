@@ -110,6 +110,22 @@ public class GlobalParameterServiceImpl implements GlobalParameterService {
 	    return finyrList;
 	}
 
+	@Override
+	public List<Map<String, Object>> getUserCompanyByUserId(Long userId) {
+		Set<Object[]>getUserCompanyByOrgid=userRepo.getUserCompany(userId);
+		return getCompany(getUserCompanyByOrgid);
+	}
+
+	private List<Map<String, Object>> getCompany(Set<Object[]> getUserCompanyByOrgid) {
+		List<Map<String, Object>> companyDetails = new ArrayList<>();
+		 for (Object[] company : getUserCompanyByOrgid) {
+		        Map<String, Object> comp = new HashMap<>();
+		        comp.put("companyName", company[0] != null ? company[0].toString() : "");
+		        companyDetails.add(comp);
+		    }
+		    return companyDetails;
+	}
+
 	
 
 }

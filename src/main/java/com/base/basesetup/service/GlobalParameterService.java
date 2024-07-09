@@ -17,6 +17,7 @@ public interface GlobalParameterService {
 	
 	List<Map<String,Object>> getUserAccessBranchByUserId(Long userId);
 	
+	List<Map<String,Object>> getUserCompanyByUserId(Long userId);
 
 	List<Map<String, Object>> getFinYearforGlobalParam(Long orgId);
 

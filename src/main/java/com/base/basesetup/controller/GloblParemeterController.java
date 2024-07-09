@@ -146,4 +146,30 @@ public class GloblParemeterController extends BaseController {
 		return ResponseEntity.ok().body(responseDTO);
   }
 	
+	@GetMapping("/getCompanyByUserID")
+	public ResponseEntity<ResponseDTO> getCompanyByUserID(@RequestParam(required = false) Long userId) {
+		String methodName = "getCompanyByUserID()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		List<Map<String,Object>> company=new ArrayList<>();
+		try {
+			company = globalParameterService.getUserCompanyByUserId(userId);
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "Company information get successfully By userId");
+			responseObjectsMap.put("company", company);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap, "Company information receive failed By userId",
+					errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+  }
+	
 }
