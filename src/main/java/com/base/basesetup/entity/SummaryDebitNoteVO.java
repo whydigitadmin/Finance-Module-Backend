@@ -26,7 +26,7 @@ import lombok.NoArgsConstructor;
 public class SummaryDebitNoteVO {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "summarydebitnotegen")
-	@SequenceGenerator(name = "summarydebitnotegen", sequenceName = "summarydebitnoteVO", initialValue = 1000000001, allocationSize = 1)
+	@SequenceGenerator(name = "summarydebitnotegen", sequenceName = "summarydebitnoteseq", initialValue = 1000000001, allocationSize = 1)
 	@Column(name = "summarydebitnoteid")
 	private Long id;
 	@Column(name = "billcurrtotchargeamount")

@@ -25,7 +25,7 @@ import lombok.NoArgsConstructor;
 public class CurrencyVO {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "currencygen")
-	@SequenceGenerator(name = "currencygen", sequenceName = "currencyVO", initialValue = 1000000001, allocationSize = 1)
+	@SequenceGenerator(name = "currencygen", sequenceName = "currencyseq", initialValue = 1000000001, allocationSize = 1)
 	@Column(name = "currencyid")
 	private Long id;
 

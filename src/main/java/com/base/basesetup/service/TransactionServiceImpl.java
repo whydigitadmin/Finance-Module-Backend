@@ -11,6 +11,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.base.basesetup.dto.ArapAdjustmentsDTO;
+import com.base.basesetup.dto.ArapDetailsDTO;
 import com.base.basesetup.dto.BrsOpeningDTO;
 import com.base.basesetup.dto.ChargerCostInvoiceDTO;
 import com.base.basesetup.dto.ChargerDebitNoteDTO;
@@ -25,15 +27,23 @@ import com.base.basesetup.dto.FundTransferDTO;
 import com.base.basesetup.dto.GeneralJournalDTO;
 import com.base.basesetup.dto.GstDebitNoteDTO;
 import com.base.basesetup.dto.GstIrnCreditDTO;
+import com.base.basesetup.dto.GstSalesVoucherDTO;
 import com.base.basesetup.dto.GstTaxInvoiceDTO;
 import com.base.basesetup.dto.IrnCreditDTO;
 import com.base.basesetup.dto.ParticularsDebitNoteDTO;
+import com.base.basesetup.dto.ParticularsGstVoucherDTO;
+import com.base.basesetup.dto.ParticularsPaymentVoucherDTO;
+import com.base.basesetup.dto.PaymentVoucherDTO;
 import com.base.basesetup.dto.SummaryCostInvoiceDTO;
 import com.base.basesetup.dto.SummaryDebitNoteDTO;
+import com.base.basesetup.dto.SummaryGstVoucherDTO;
 import com.base.basesetup.dto.SummaryIrnCreditDTO;
+import com.base.basesetup.dto.SummaryPaymentVoucherDTO;
 import com.base.basesetup.dto.SummaryTaxInvoiceDTO;
 import com.base.basesetup.dto.TaxInvoiceDTO;
 import com.base.basesetup.dto.TdsCostInvoiceDTO;
+import com.base.basesetup.entity.ArapAdjustmentsVO;
+import com.base.basesetup.entity.ArapDetailsVO;
 import com.base.basesetup.entity.BrsOpeningVO;
 import com.base.basesetup.entity.ChargerCostInvoiceVO;
 import com.base.basesetup.entity.ChargerDebitNoteVO;
@@ -48,16 +58,24 @@ import com.base.basesetup.entity.FundTransferVO;
 import com.base.basesetup.entity.GeneralJournalVO;
 import com.base.basesetup.entity.GstDebitNoteVO;
 import com.base.basesetup.entity.GstIrnCreditVO;
+import com.base.basesetup.entity.GstSalesVoucherVO;
 import com.base.basesetup.entity.GstTaxInvoiceVO;
 import com.base.basesetup.entity.IrnCreditVO;
 import com.base.basesetup.entity.ParticularsDebitNoteVO;
+import com.base.basesetup.entity.ParticularsGstVoucherVO;
+import com.base.basesetup.entity.ParticularsPaymentVoucherVO;
+import com.base.basesetup.entity.PaymentVoucherVO;
 import com.base.basesetup.entity.SummaryCostInvoiceVO;
 import com.base.basesetup.entity.SummaryDebitNoteVO;
+import com.base.basesetup.entity.SummaryGstVoucherVO;
 import com.base.basesetup.entity.SummaryIrnCreditVO;
+import com.base.basesetup.entity.SummaryPaymentVoucherVO;
 import com.base.basesetup.entity.SummaryTaxInvoiceVO;
 import com.base.basesetup.entity.TaxInvoiceVO;
 import com.base.basesetup.entity.TdsCostInvoiceVO;
 import com.base.basesetup.exception.ApplicationException;
+import com.base.basesetup.repo.ArapAdjustmentsRepo;
+import com.base.basesetup.repo.ArapDetailsRepo;
 import com.base.basesetup.repo.BrsOpeningRepo;
 import com.base.basesetup.repo.ChargerCostInvoiceRepo;
 import com.base.basesetup.repo.ChargerDebitNoteRepo;
@@ -72,14 +90,20 @@ import com.base.basesetup.repo.FundTransferRepo;
 import com.base.basesetup.repo.GeneralJournalRepo;
 import com.base.basesetup.repo.GstDebitNoteRepo;
 import com.base.basesetup.repo.GstIrnCreditRepo;
+import com.base.basesetup.repo.GstSalesVoucherRepo;
 import com.base.basesetup.repo.GstTaxInvoiceRepo;
 import com.base.basesetup.repo.IrnCreditRepo;
 import com.base.basesetup.repo.ParticularsDebitNoteRepo;
+import com.base.basesetup.repo.ParticularsGstVoucherRepo;
 import com.base.basesetup.repo.ParticularsJournalRepo;
+import com.base.basesetup.repo.ParticularsPaymentVoucherRepo;
+import com.base.basesetup.repo.PaymentVoucherRepo;
 import com.base.basesetup.repo.SummaryCostInvoiceRepo;
 import com.base.basesetup.repo.SummaryDebitNoteRepo;
+import com.base.basesetup.repo.SummaryGstVoucherRepo;
 import com.base.basesetup.repo.SummaryIrnCreditRepo;
 import com.base.basesetup.repo.SummaryJournalRepo;
+import com.base.basesetup.repo.SummaryPaymentVoucherRepo;
 import com.base.basesetup.repo.SummaryTaxInvoiceRepo;
 import com.base.basesetup.repo.TaxInvocieRepo;
 import com.base.basesetup.repo.TdsCostInvoiceRepo;
@@ -162,8 +186,31 @@ public class TransactionServiceImpl implements TransactionService {
 	@Autowired
 	SummaryDebitNoteRepo summaryDebitNoteRepo;
 
-	// TaxInvoice
+	@Autowired
+	GstSalesVoucherRepo gstSalesVoucherRepo;
 
+	@Autowired
+	ParticularsGstVoucherRepo particularsGstVoucherRepo;
+
+	@Autowired
+	SummaryGstVoucherRepo summaryGstVoucherRepo;
+
+	@Autowired
+	PaymentVoucherRepo paymentVoucherRepo;
+
+	@Autowired
+	SummaryPaymentVoucherRepo summaryPaymentVoucherRepo;
+
+	@Autowired
+	ParticularsPaymentVoucherRepo particularsPaymentVoucherRepo;
+
+	@Autowired
+	ArapDetailsRepo arapDetailsRepo;
+	
+	@Autowired
+	ArapAdjustmentsRepo arapAdjustmentsRepo;
+
+// TaxInvoice
 	@Override
 	public List<TaxInvoiceVO> getAllTaxInvoiceByOrgId(Long orgId) {
 		List<TaxInvoiceVO> taxInvoiceVO = new ArrayList<>();
@@ -1214,8 +1261,7 @@ public class TransactionServiceImpl implements TransactionService {
 			for (GstDebitNoteDTO gstDebitNoteDTO : debitNoteDTO.getGstDebitNoteDTO()) {
 				GstDebitNoteVO gstDebitNoteVO;
 				if (gstDebitNoteDTO.getId() != null & ObjectUtils.isNotEmpty(gstDebitNoteDTO.getId())) {
-					gstDebitNoteVO = gstDebitNoteRepo.findById(gstDebitNoteDTO.getId())
-							.orElse(new GstDebitNoteVO());
+					gstDebitNoteVO = gstDebitNoteRepo.findById(gstDebitNoteDTO.getId()).orElse(new GstDebitNoteVO());
 				} else {
 					gstDebitNoteVO = new GstDebitNoteVO();
 				}
@@ -1269,8 +1315,7 @@ public class TransactionServiceImpl implements TransactionService {
 //					taxInvoiceVO.setInvoiceNo(invoiceNo);
 //					taxInvoiceRepo.nextSeqInvoice();
 		debitNoteVO.setDocNo(debitNoteDTO.getDocNo());
-		debitNoteVO.setSubType(debitNoteDTO.getSubType
-				());
+		debitNoteVO.setSubType(debitNoteDTO.getSubType());
 		debitNoteVO.setProduct(debitNoteDTO.getProduct());
 		debitNoteVO.setDocDate(debitNoteDTO.getDocDate());
 		debitNoteVO.setPartyType(debitNoteDTO.getPartyType());
@@ -1298,11 +1343,419 @@ public class TransactionServiceImpl implements TransactionService {
 		debitNoteVO.setUpdatedBy(debitNoteDTO.getUpdatedBy());
 		debitNoteVO.setCreatedBy(debitNoteDTO.getCreatedBy());
 	}
-	
 
 	@Override
 	public List<DebitNoteVO> getDebitNoteByActive() {
 		return debitNoteRepo.findDebitNoteByActive();
+	}
+
+//	GstSalesVoucher
+
+	@Override
+	public List<GstSalesVoucherVO> getAllGstSalesVoucherByOrgId(Long orgId) {
+		List<GstSalesVoucherVO> gstSalesVoucherVO = new ArrayList<>();
+		if (ObjectUtils.isNotEmpty(orgId)) {
+			LOGGER.info("Successfully Received GstSalesVoucher BY OrgId : {}", orgId);
+			gstSalesVoucherVO = gstSalesVoucherRepo.getAllGstSalesVoucherByOrgId(orgId);
+		} else {
+			LOGGER.info("Successfully Received GstSalesVoucher For All OrgId.");
+			gstSalesVoucherVO = gstSalesVoucherRepo.findAll();
+		}
+		return gstSalesVoucherVO;
+	}
+
+	@Override
+	public List<GstSalesVoucherVO> getAllGstSalesVoucherById(Long id) {
+		List<GstSalesVoucherVO> gstSalesVoucherVO = new ArrayList<>();
+		if (ObjectUtils.isNotEmpty(id)) {
+			LOGGER.info("Successfully Received GstSalesVoucher BY Id : {}", id);
+			gstSalesVoucherVO = gstSalesVoucherRepo.getAllGstSalesVoucherById(id);
+		} else {
+			LOGGER.info("Successfully Received GstSalesVoucher For All Id.");
+			gstSalesVoucherVO = gstSalesVoucherRepo.findAll();
+		}
+		return gstSalesVoucherVO;
+	}
+
+	@Override
+	public GstSalesVoucherVO updateCreateGstSalesVoucher(@Valid GstSalesVoucherDTO gstSalesVoucherDTO)
+			throws ApplicationException {
+		GstSalesVoucherVO gstSalesVoucherVO = new GstSalesVoucherVO();
+//					if (ObjectUtils.isNotEmpty(taxInvoiceDTO.getId())) {
+//						taxInvoiceVO = taxInvoiceRepo.findById(taxInvoiceDTO.getId())
+//								.orElseThrow(() -> new ApplicationException("Invalid TaxInvoice details"));
+//					} else {
+//						if (taxInvoiceRepo.existsByDocIdAndOrgId(taxInvoiceVO.getDocId(), taxInvoiceVO.getOrgId())) {
+//							throw new ApplicationException("The given doc id already exists.");
+//						}
+//						if (taxInvoiceRepo.existsByInvoiceNoAndOrgId(taxInvoiceVO.getInvoiceNo(), taxInvoiceVO.getOrgId())) {
+//							throw new ApplicationException("The given invoice number already exists.");
+//						}
+//					}
+//					if (ObjectUtils.isNotEmpty(taxInvoiceVO.getId())) {
+//						if (taxInvoiceRepo.existsByDocIdAndOrgIdAndId(taxInvoiceVO.getDocId(), taxInvoiceVO.getOrgId(),
+//								taxInvoiceVO.getId())) {
+//							throw new ApplicationException("The given doc id already exists.");
+//						}
+//						if (taxInvoiceRepo.existsByInvoiceNoAndOrgIdAndId(taxInvoiceVO.getInvoiceNo(), taxInvoiceVO.getOrgId(),
+//								taxInvoiceVO.getId())) {
+//							throw new ApplicationException("The given invoice number already exists.");
+//						}
+//					}
+
+		List<SummaryGstVoucherVO> summaryGstVoucherVOs = new ArrayList<>();
+		if (gstSalesVoucherDTO.getSummaryGstVoucherDTO() != null) {
+			for (SummaryGstVoucherDTO summaryGstVoucherDTO : gstSalesVoucherDTO.getSummaryGstVoucherDTO()) {
+				SummaryGstVoucherVO summaryGstVoucherVO;
+				if (summaryGstVoucherDTO.getId() != null & ObjectUtils.isNotEmpty(summaryGstVoucherDTO.getId())) {
+					summaryGstVoucherVO = summaryGstVoucherRepo.findById(summaryGstVoucherDTO.getId())
+							.orElse(new SummaryGstVoucherVO());
+				} else {
+					summaryGstVoucherVO = new SummaryGstVoucherVO();
+				}
+				summaryGstVoucherVO.setTotalDebitAmount(summaryGstVoucherDTO.getTotalDebitAmount());
+				summaryGstVoucherVO.setTotalCreditAmount(summaryGstVoucherDTO.getTotalCreditAmount());
+				summaryGstVoucherVO.setStTaxAmount(summaryGstVoucherDTO.getStTaxAmount());
+				summaryGstVoucherVO.setBasAmount(summaryGstVoucherDTO.getBasAmount());
+				summaryGstVoucherVO.setBssAmount(summaryGstVoucherDTO.getBssAmount());
+				summaryGstVoucherVO.setChaAmount(summaryGstVoucherDTO.getChaAmount());
+				summaryGstVoucherVO.setGstSalesVoucherVO(gstSalesVoucherVO);
+				summaryGstVoucherVOs.add(summaryGstVoucherVO);
+			}
+		}
+
+		List<ParticularsGstVoucherVO> particularsGstVoucherVOs = new ArrayList<>();
+		if (gstSalesVoucherDTO.getParticularsGstVoucherDTO() != null) {
+			for (ParticularsGstVoucherDTO particularsGstVoucherDTO : gstSalesVoucherDTO.getParticularsGstVoucherDTO()) {
+				ParticularsGstVoucherVO particularsGstVoucherVO;
+				if (particularsGstVoucherDTO.getId() != null & ObjectUtils.isEmpty(particularsGstVoucherDTO.getId())) {
+					particularsGstVoucherVO = particularsGstVoucherRepo.findById(particularsGstVoucherDTO.getId())
+							.orElse(new ParticularsGstVoucherVO());
+				} else {
+					particularsGstVoucherVO = new ParticularsGstVoucherVO();
+				}
+				particularsGstVoucherVO.setAccountName(particularsGstVoucherDTO.getAccountName());
+				particularsGstVoucherVO.setSubLedgerCode(particularsGstVoucherDTO.getSubLedgerCode());
+				particularsGstVoucherVO.setSubLedgerName(particularsGstVoucherDTO.getSubLedgerName());
+				particularsGstVoucherVO.setDebit(particularsGstVoucherDTO.getDebit());
+				particularsGstVoucherVO.setBaseDbAmount(particularsGstVoucherDTO.getBaseDbAmount());
+				particularsGstVoucherVO.setCredit(particularsGstVoucherDTO.getCredit());
+				particularsGstVoucherVO.setBaseCrAmount(particularsGstVoucherDTO.getBaseCrAmount());
+				particularsGstVoucherVO.setNarration(particularsGstVoucherDTO.getNarration());
+				particularsGstVoucherVO.setGstSalesVoucherVO(gstSalesVoucherVO);
+				particularsGstVoucherVOs.add(particularsGstVoucherVO);
+			}
+		}
+
+		getGstSalesVoucherVOFromGstSalesVoucherDTO(gstSalesVoucherDTO, gstSalesVoucherVO);
+		gstSalesVoucherVO.setParticularsGstVoucherVO(particularsGstVoucherVOs);
+		gstSalesVoucherVO.setSummaryGstVoucherVO(summaryGstVoucherVOs);
+		return gstSalesVoucherRepo.save(gstSalesVoucherVO);
+	}
+
+	private void getGstSalesVoucherVOFromGstSalesVoucherDTO(@Valid GstSalesVoucherDTO gstSalesVoucherDTO,
+			GstSalesVoucherVO gstSalesVoucherVO) {
+		// Finyr
+		int finyr = gstSalesVoucherRepo.findFinyr();
+		// DocId
+		String salesVoucher = "SV" + finyr + gstSalesVoucherRepo.findDocId();
+		gstSalesVoucherVO.setDocId(salesVoucher);
+		gstSalesVoucherRepo.nextSeq();
+		// InvoiceNo
+		gstSalesVoucherVO.setDocId(gstSalesVoucherDTO.getDocId());
+		gstSalesVoucherVO.setReferenceNo(gstSalesVoucherDTO.getReferenceNo());
+		gstSalesVoucherVO.setCurrency(gstSalesVoucherDTO.getCurrency());
+		gstSalesVoucherVO.setDocDate(gstSalesVoucherDTO.getDocDate());
+		gstSalesVoucherVO.setReferenceDate(gstSalesVoucherDTO.getReferenceDate());
+		gstSalesVoucherVO.setExRate(gstSalesVoucherDTO.getExRate());
+		gstSalesVoucherVO.setRemarks(gstSalesVoucherDTO.getRemarks());
+	}
+
+	@Override
+	public List<GstSalesVoucherVO> getGstSalesVoucherByActive() {
+		return gstSalesVoucherRepo.findGstSalesVoucherByActive();
+	}
+
+//	PaymentVoucher
+
+	@Override
+	public List<PaymentVoucherVO> getAllPaymentVoucherByOrgId(Long orgId) {
+		List<PaymentVoucherVO> paymentVoucherVO = new ArrayList<>();
+		if (ObjectUtils.isNotEmpty(orgId)) {
+			LOGGER.info("Successfully Received PaymentVoucher BY OrgId : {}", orgId);
+			paymentVoucherVO = paymentVoucherRepo.getAllPaymentVoucherByOrgId(orgId);
+		} else {
+			LOGGER.info("Successfully Received PaymentVoucher For All OrgId.");
+			paymentVoucherVO = paymentVoucherRepo.findAll();
+		}
+		return paymentVoucherVO;
+	}
+
+	@Override
+	public List<PaymentVoucherVO> getAllPaymentVoucherById(Long id) {
+		List<PaymentVoucherVO> paymentVoucherVO = new ArrayList<>();
+		if (ObjectUtils.isNotEmpty(id)) {
+			LOGGER.info("Successfully Received PaymentVoucher BY Id : {}", id);
+			paymentVoucherVO = paymentVoucherRepo.getAllPaymentVoucherById(id);
+		} else {
+			LOGGER.info("Successfully Received PaymentVoucher For All Id.");
+			paymentVoucherVO = paymentVoucherRepo.findAll();
+		}
+		return paymentVoucherVO;
+	}
+
+	@Override
+	public PaymentVoucherVO updateCreatePaymentVoucher(@Valid PaymentVoucherDTO paymentVoucherDTO)
+			throws ApplicationException {
+		PaymentVoucherVO paymentVoucherVO = new PaymentVoucherVO();
+//					if (ObjectUtils.isNotEmpty(taxInvoiceDTO.getId())) {
+//						taxInvoiceVO = taxInvoiceRepo.findById(taxInvoiceDTO.getId())
+//								.orElseThrow(() -> new ApplicationException("Invalid TaxInvoice details"));
+//					} else {
+//						if (taxInvoiceRepo.existsByDocIdAndOrgId(taxInvoiceVO.getDocId(), taxInvoiceVO.getOrgId())) {
+//							throw new ApplicationException("The given doc id already exists.");
+//						}
+//						if (taxInvoiceRepo.existsByInvoiceNoAndOrgId(taxInvoiceVO.getInvoiceNo(), taxInvoiceVO.getOrgId())) {
+//							throw new ApplicationException("The given invoice number already exists.");
+//						}
+//					}
+//					if (ObjectUtils.isNotEmpty(taxInvoiceVO.getId())) {
+//						if (taxInvoiceRepo.existsByDocIdAndOrgIdAndId(taxInvoiceVO.getDocId(), taxInvoiceVO.getOrgId(),
+//								taxInvoiceVO.getId())) {
+//							throw new ApplicationException("The given doc id already exists.");
+//						}
+//						if (taxInvoiceRepo.existsByInvoiceNoAndOrgIdAndId(taxInvoiceVO.getInvoiceNo(), taxInvoiceVO.getOrgId(),
+//								taxInvoiceVO.getId())) {
+//							throw new ApplicationException("The given invoice number already exists.");
+//						}
+//					}
+
+		List<SummaryPaymentVoucherVO> summaryPaymentVoucherVOs = new ArrayList<>();
+		if (paymentVoucherDTO.getSummaryPaymentVoucherDTO() != null) {
+			for (SummaryPaymentVoucherDTO summaryPaymentVoucherDTO : paymentVoucherDTO.getSummaryPaymentVoucherDTO()) {
+				SummaryPaymentVoucherVO summaryPaymentVoucherVO;
+				if (summaryPaymentVoucherDTO.getId() != null
+						& ObjectUtils.isNotEmpty(summaryPaymentVoucherDTO.getId())) {
+					summaryPaymentVoucherVO = summaryPaymentVoucherRepo.findById(summaryPaymentVoucherDTO.getId())
+							.orElse(new SummaryPaymentVoucherVO());
+				} else {
+					summaryPaymentVoucherVO = new SummaryPaymentVoucherVO();
+				}
+				summaryPaymentVoucherVO.setTotalDebitAmount(summaryPaymentVoucherDTO.getTotalDebitAmount());
+				summaryPaymentVoucherVO.setTotalCreditAmount(summaryPaymentVoucherDTO.getTotalCreditAmount());
+				summaryPaymentVoucherVO.setPaymentVoucherVO(paymentVoucherVO);
+				summaryPaymentVoucherVOs.add(summaryPaymentVoucherVO);
+			}
+		}
+
+		List<ParticularsPaymentVoucherVO> particularsPaymentVoucherVOs = new ArrayList<>();
+		if (paymentVoucherDTO.getParticularsPaymentVoucherDTO() != null) {
+			for (ParticularsPaymentVoucherDTO particularsPaymentVoucherDTO : paymentVoucherDTO
+					.getParticularsPaymentVoucherDTO()) {
+				ParticularsPaymentVoucherVO particularsPaymentVoucherVO;
+				if (particularsPaymentVoucherDTO.getId() != null
+						& ObjectUtils.isEmpty(particularsPaymentVoucherDTO.getId())) {
+					particularsPaymentVoucherVO = particularsPaymentVoucherRepo
+							.findById(particularsPaymentVoucherDTO.getId()).orElse(new ParticularsPaymentVoucherVO());
+				} else {
+					particularsPaymentVoucherVO = new ParticularsPaymentVoucherVO();
+				}
+				particularsPaymentVoucherVO.setAccountName(particularsPaymentVoucherDTO.getAccountName());
+				particularsPaymentVoucherVO.setSubLedgerName(particularsPaymentVoucherDTO.getSubLedgerCode());
+				particularsPaymentVoucherVO.setSubLedgerName(particularsPaymentVoucherDTO.getSubLedgerName());
+				particularsPaymentVoucherVO.setDebit(particularsPaymentVoucherDTO.getDebit());
+				particularsPaymentVoucherVO.setCredit(particularsPaymentVoucherDTO.getCredit());
+				particularsPaymentVoucherVO.setNarration(particularsPaymentVoucherDTO.getNarration());
+				particularsPaymentVoucherVO.setPaymentVoucherVO(paymentVoucherVO);
+				particularsPaymentVoucherVOs.add(particularsPaymentVoucherVO);
+			}
+		}
+
+		getPaymentVoucherVOFromPaymentVoucherDTO(paymentVoucherDTO, paymentVoucherVO);
+		paymentVoucherVO.setParticularsPaymentVoucherVO(particularsPaymentVoucherVOs);
+		paymentVoucherVO.setSummaryPaymentVoucherVO(summaryPaymentVoucherVOs);
+		return paymentVoucherRepo.save(paymentVoucherVO);
+	}
+
+	private void getPaymentVoucherVOFromPaymentVoucherDTO(@Valid PaymentVoucherDTO paymentVoucherDTO,
+			PaymentVoucherVO paymentVoucherVO) {
+//		// Finyr
+		int finyr = paymentVoucherRepo.findFinyr();
+		// DocId
+		String paymentVoucher = "PV" + finyr + paymentVoucherRepo.findDocId();
+		paymentVoucherVO.setDocid(paymentVoucher);
+		paymentVoucherRepo.nextSeq();
+		paymentVoucherVO.setDocid(paymentVoucherDTO.getDocid());
+		paymentVoucherVO.setVehicleSubType(paymentVoucherDTO.getVehicleSubType());
+		paymentVoucherVO.setReferenceNo(paymentVoucherDTO.getReferenceNo());
+		paymentVoucherVO.setCurrency(paymentVoucherDTO.getCurrency());
+		paymentVoucherVO.setDocDate(paymentVoucherDTO.getDocDate());
+		paymentVoucherVO.setReferenceDate(paymentVoucherDTO.getReferenceDate());
+		paymentVoucherVO.setExRate(paymentVoucherDTO.getExRate());
+		paymentVoucherVO.setRemarks(paymentVoucherDTO.getRemarks());
+	}
+
+	@Override
+
+	public List<PaymentVoucherVO> getPaymentVoucherByActive() {
+		return paymentVoucherRepo.findPaymentVoucherByActive();
+	}
+
+//	ArapDetails
+
+	@Override
+	public List<ArapDetailsVO> getAllArapDetailsByOrgId(Long orgId) {
+		List<ArapDetailsVO> arapDetailsVO = new ArrayList<>();
+		if (ObjectUtils.isNotEmpty(orgId)) {
+			LOGGER.info("Successfully Received ArapDetails BY OrgId : {}", orgId);
+			arapDetailsVO = arapDetailsRepo.getAllArapDetailsByOrgId(orgId);
+		} else {
+			LOGGER.info("Successfully Received ArapDetails For All OrgId.");
+			arapDetailsVO = arapDetailsRepo.findAll();
+		}
+		return arapDetailsVO;
+	}
+
+	@Override
+	public List<ArapDetailsVO> getAllArapDetailsById(Long id) {
+		List<ArapDetailsVO> arapDetailsVO = new ArrayList<>();
+		if (ObjectUtils.isNotEmpty(id)) {
+			LOGGER.info("Successfully Received ArapDetails BY Id : {}", id);
+			arapDetailsVO = arapDetailsRepo.getAllArapDetailsById(id);
+		} else {
+			LOGGER.info("Successfully Received ArapDetails For All Id.");
+			arapDetailsVO = arapDetailsRepo.findAll();
+		}
+		return arapDetailsVO;
+	}
+
+	@Override
+	public ArapDetailsVO updateCreateArapDetails(@Valid ArapDetailsDTO arapDetailsDTO) throws ApplicationException {
+		ArapDetailsVO arapDetailsVO = new ArapDetailsVO();
+
+		getArapDetailsVOFromArapDetailsDTO(arapDetailsDTO, arapDetailsVO);
+		return arapDetailsRepo.save(arapDetailsVO);
+	}
+
+	private void getArapDetailsVOFromArapDetailsDTO(@Valid ArapDetailsDTO arapDetailsDTO, ArapDetailsVO arapDetailsVO) {
+//		// Finyr
+//		int finyr = paymentVoucherRepo.findFinyr();
+//		// DocId
+//		String paymentVoucher = "PV" + finyr + paymentVoucherRepo.findDocId();
+//		paymentVoucherRepo.setDocId(paymentVoucher);
+//		paymentVoucherRepo.nextSeq();
+		arapDetailsVO.setBranch(arapDetailsDTO.getBranch());
+		arapDetailsVO.setFinyr(arapDetailsDTO.getFinyr());
+		arapDetailsVO.setSourceTransid(arapDetailsDTO.getSourceTransid());
+		arapDetailsVO.setDocId(arapDetailsDTO.getDocId());
+		arapDetailsVO.setRefNo(arapDetailsDTO.getRefNo());
+		arapDetailsVO.setAccountName(arapDetailsDTO.getAccountName());
+		arapDetailsVO.setCurrency(arapDetailsDTO.getCurrency());
+		arapDetailsVO.setAccountCurrency(arapDetailsDTO.getAccountCurrency());
+		arapDetailsVO.setAccount(arapDetailsDTO.getAccount());
+		arapDetailsVO.setExRate(arapDetailsDTO.getExRate());
+		arapDetailsVO.setAmount(arapDetailsDTO.getAmount());
+		arapDetailsVO.setBaseAmount(arapDetailsDTO.getBaseAmount());
+		arapDetailsVO.setNativeAmount(arapDetailsDTO.getNativeAmount());
+		arapDetailsVO.setMno(arapDetailsDTO.getMno());
+		arapDetailsVO.setChargableAmount(arapDetailsDTO.getChargableAmount());
+		arapDetailsVO.setGstFlag(arapDetailsDTO.getGstFlag());
+		arapDetailsVO.setDocTypeCode(arapDetailsDTO.getDocTypeCode());
+		arapDetailsVO.setSubTypeCode(arapDetailsDTO.getSubTypeCode());
+		arapDetailsVO.setSubLedgerDivision(arapDetailsDTO.getSubLedgerDivision());
+		arapDetailsVO.setDocDate(arapDetailsDTO.getDocDate());
+		arapDetailsVO.setSuppRefNo(arapDetailsDTO.getSuppRefNo());
+		arapDetailsVO.setRefDate(arapDetailsDTO.getRefDate());
+		arapDetailsVO.setSuppRefDate(arapDetailsDTO.getSuppRefDate());
+		arapDetailsVO.setSubLedgerCode(arapDetailsDTO.getSubLedgerCode());
+		arapDetailsVO.setCreditDays(arapDetailsDTO.getCreditDays());
+		arapDetailsVO.setDueDate(arapDetailsDTO.getDueDate());
+		arapDetailsVO.setTdsAmount(arapDetailsDTO.getTdsAmount());
+		arapDetailsVO.setHno(arapDetailsDTO.getHno());
+		arapDetailsVO.setOrgId(arapDetailsDTO.getOrgId());
+		arapDetailsVO.setActive(arapDetailsDTO.isActive());
+		arapDetailsVO.setCreatedBy(arapDetailsDTO.getCreatedBy());
+		arapDetailsVO.setUpdatedBy(arapDetailsDTO.getUpdatedBy());
+	}
+
+	@Override
+	public List<ArapDetailsVO> getArapDetailsByActive() {
+		return arapDetailsRepo.findArapDetailsByActive();
+	}
+	
+//	ArapAdjustments
+
+	@Override
+	public List<ArapAdjustmentsVO> getAllArapAdjustmentsByOrgId(Long orgId) {
+		List<ArapAdjustmentsVO> arapAdjustmentsVO = new ArrayList<>();
+		if (ObjectUtils.isNotEmpty(orgId)) {
+			LOGGER.info("Successfully Received ArapAdjustments BY OrgId : {}", orgId);
+			arapAdjustmentsVO = arapAdjustmentsRepo.getAllArapAdjustmentsByOrgId(orgId);
+		} else {
+			LOGGER.info("Successfully Received ArapAdjustments For All OrgId.");
+			arapAdjustmentsVO = arapAdjustmentsRepo.findAll();
+		}
+		return arapAdjustmentsVO;
+	}
+
+	@Override
+	public List<ArapAdjustmentsVO> getAllArapAdjustmentsById(Long id) {
+		List<ArapAdjustmentsVO> arapAdjustmentsVO = new ArrayList<>();
+		if (ObjectUtils.isNotEmpty(id)) {
+			LOGGER.info("Successfully Received ArapAdjustments BY Id : {}", id);
+			arapAdjustmentsVO = arapAdjustmentsRepo.getAllArapAdjustmentsById(id);
+		} else {
+			LOGGER.info("Successfully Received ArapAdjustments For All Id.");
+			arapAdjustmentsVO = arapAdjustmentsRepo.findAll();
+		}
+		return arapAdjustmentsVO;
+	}
+
+	@Override
+	public ArapAdjustmentsVO updateCreateArapAdjustments(@Valid ArapAdjustmentsDTO arapAdjustmentsDTO) throws ApplicationException {
+		ArapAdjustmentsVO arapAdjustmentsVO = new ArapAdjustmentsVO();
+
+		getArapAdjustmentsVOFromArapAdjustmentsDTO(arapAdjustmentsDTO, arapAdjustmentsVO);
+		return arapAdjustmentsRepo.save(arapAdjustmentsVO);
+	}
+
+	private void getArapAdjustmentsVOFromArapAdjustmentsDTO(@Valid ArapAdjustmentsDTO arapAdjustmentsDTO, ArapAdjustmentsVO arapAdjustmentsVO) {
+//		// Finyr
+//		int finyr = paymentVoucherRepo.findFinyr();
+//		// DocId
+//		String paymentVoucher = "PV" + finyr + paymentVoucherRepo.findDocId();
+//		paymentVoucherRepo.setDocId(paymentVoucher);
+//		paymentVoucherRepo.nextSeq();
+		arapAdjustmentsVO.setBranch(arapAdjustmentsDTO.getBranch());
+		arapAdjustmentsVO.setFinyr(arapAdjustmentsDTO.getFinyr());
+		arapAdjustmentsVO.setSourceTransId(arapAdjustmentsDTO.getSourceTransId());
+		arapAdjustmentsVO.setDocId(arapAdjustmentsDTO.getDocId());
+		arapAdjustmentsVO.setRefNo(arapAdjustmentsDTO.getRefNo());
+		arapAdjustmentsVO.setAccountName(arapAdjustmentsDTO.getAccountName());
+		arapAdjustmentsVO.setCurrency(arapAdjustmentsDTO.getCurrency());
+		arapAdjustmentsVO.setAccountCurrency(arapAdjustmentsDTO.getAccountCurrency());
+		arapAdjustmentsVO.setExRate(arapAdjustmentsDTO.getExRate());
+		arapAdjustmentsVO.setAmount(arapAdjustmentsDTO.getAmount());
+		arapAdjustmentsVO.setBaseAmount(arapAdjustmentsDTO.getBaseAmount());
+		arapAdjustmentsVO.setNativeAmount(arapAdjustmentsDTO.getNativeAmount());
+		arapAdjustmentsVO.setOffDocId(arapAdjustmentsDTO.getOffDocId());
+		arapAdjustmentsVO.setVoucherType(arapAdjustmentsDTO.getVoucherType());
+		arapAdjustmentsVO.setSubTypeCode(arapAdjustmentsDTO.getSubTypeCode());
+		arapAdjustmentsVO.setDocDate(arapAdjustmentsDTO.getDocDate());
+		arapAdjustmentsVO.setRefDate(arapAdjustmentsDTO.getRefDate());
+		arapAdjustmentsVO.setSubLedgerCode(arapAdjustmentsDTO.getSubLedgerCode());
+		arapAdjustmentsVO.setCreditDays(arapAdjustmentsDTO.getCreditDays());
+		arapAdjustmentsVO.setDueDate(arapAdjustmentsDTO.getDueDate());
+		arapAdjustmentsVO.setAexRate(arapAdjustmentsDTO.getAexRate());
+		arapAdjustmentsVO.setOrgId(arapAdjustmentsDTO.getOrgId());
+		arapAdjustmentsVO.setActive(arapAdjustmentsDTO.isActive());
+		arapAdjustmentsVO.setCreatedBy(arapAdjustmentsDTO.getCreatedBy());
+		arapAdjustmentsVO.setUpdatedBy(arapAdjustmentsDTO.getUpdatedBy());
+	}
+
+	@Override
+	public List<ArapAdjustmentsVO> getArapAdjustmentsByActive() {
+		return arapAdjustmentsRepo.findArapAdjustmentsByActive();
 	}
 
 }

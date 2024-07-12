@@ -1,3 +1,4 @@
+
 package com.base.basesetup.entity;
 
 import java.util.Date;

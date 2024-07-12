@@ -25,7 +25,7 @@ import lombok.NoArgsConstructor;
 public class SubLedgerAccountVO {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "subledgeraccountgen")
-	@SequenceGenerator(name = "subledgeraccountgen", sequenceName = "subledgeraccountVO", initialValue = 1000000001, allocationSize = 1)
+	@SequenceGenerator(name = "subledgeraccountgen", sequenceName = "subledgeraccountseq", initialValue = 1000000001, allocationSize = 1)
 	@Column(name = "subledgeraccountid")
 	private Long id;
 	

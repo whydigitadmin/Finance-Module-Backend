@@ -26,7 +26,7 @@ public class BrsOpeningVO {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "brsopeninggen")
-	@SequenceGenerator(name = "brsopeninggen", sequenceName = "brsopeningVO", initialValue = 1000000001, allocationSize = 1)
+	@SequenceGenerator(name = "brsopeninggen", sequenceName = "brsopeningseq", initialValue = 1000000001, allocationSize = 1)
 	@Column(name = "brsopeningid")
 	private Long id;
 	@Column(name = "branch")

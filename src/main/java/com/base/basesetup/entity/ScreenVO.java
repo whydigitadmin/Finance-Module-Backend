@@ -25,7 +25,7 @@ public class ScreenVO {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "screengen")
-	@SequenceGenerator(name = "screengen", sequenceName = "screenVO", initialValue = 1000000001, allocationSize = 1)
+	@SequenceGenerator(name = "screengen", sequenceName = "screenseq", initialValue = 1000000001, allocationSize = 1)
 	@Column(name = "screenid")
 	private Long id;
 	@Column(name = "screenname")

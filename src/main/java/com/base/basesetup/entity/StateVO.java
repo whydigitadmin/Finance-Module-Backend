@@ -24,7 +24,7 @@ public class StateVO {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "stategen")
-	@SequenceGenerator(name = "stategen",sequenceName = "stateVO",initialValue = 1000000001,allocationSize = 1)
+	@SequenceGenerator(name = "stategen",sequenceName = "stateseq",initialValue = 1000000001,allocationSize = 1)
 	@Column(name="stateid")
 	private Long id;
 	

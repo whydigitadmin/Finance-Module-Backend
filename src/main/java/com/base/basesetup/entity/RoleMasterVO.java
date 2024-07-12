@@ -24,7 +24,7 @@ public class RoleMasterVO {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "rolegen")
-	@SequenceGenerator(name = "rolegen", sequenceName = "roleVO", initialValue = 1000000001, allocationSize = 1)
+	@SequenceGenerator(name = "rolegen", sequenceName = "roleseq", initialValue = 1000000001, allocationSize = 1)
 	@Column(name = "roleid")
 	private Long id;
 	@Column(name = "role")

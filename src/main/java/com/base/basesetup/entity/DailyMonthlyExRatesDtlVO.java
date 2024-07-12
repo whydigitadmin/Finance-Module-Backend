@@ -28,7 +28,7 @@ import lombok.NoArgsConstructor;
 public class DailyMonthlyExRatesDtlVO {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "dailymonthlyexratedtlsgen")
-	@SequenceGenerator(name = "dailymonthlyexratesdtlgen", sequenceName = "dailymonthlyexratesdtlVO", initialValue = 1000000001, allocationSize = 1)
+	@SequenceGenerator(name = "dailymonthlyexratesdtlgen", sequenceName = "dailymonthlyexratesdtlseq", initialValue = 1000000001, allocationSize = 1)
 	@Column(name = "dailymonthlyexratesdtlid")
 	private Long id;
 

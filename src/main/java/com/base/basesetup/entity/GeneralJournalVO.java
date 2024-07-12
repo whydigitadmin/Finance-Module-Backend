@@ -31,7 +31,7 @@ import lombok.NoArgsConstructor;
 public class GeneralJournalVO {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "generaljournalgen")
-	@SequenceGenerator(name = "generaljournalgen", sequenceName = "generaljournalVO", initialValue = 1000000001, allocationSize = 1)
+	@SequenceGenerator(name = "generaljournalgen", sequenceName = "generaljournalseq", initialValue = 1000000001, allocationSize = 1)
 	@Column(name = "generaljournalid")
 	private Long id;
 	@Column(name = "branch")

@@ -63,8 +63,6 @@ public class BasicMasterController extends BaseController {
 	public static final Logger LOGGER = LoggerFactory.getLogger(BasicMasterController.class);
 
 	// Currency
-	// -----------------------------------------------------------------------------------
-
 	@GetMapping("/getCurrencyById")
 	public ResponseEntity<ResponseDTO> getCurrencyById(@RequestParam(required = false) Long id) {
 		String methodName = "getCurrenctById()";
@@ -403,7 +401,6 @@ public class BasicMasterController extends BaseController {
 	}
 
 	// Country
-	// -----------------------------------------------------------------------------------
 	@GetMapping("/getCountryById")
 	public ResponseEntity<ResponseDTO> getCountryById(@RequestParam(required = false) Long id) {
 		String methodName = "getCountryById()";
@@ -510,7 +507,6 @@ public class BasicMasterController extends BaseController {
 	}
 
 	// State
-	// -----------------------------------------------------------------------------------
 	@GetMapping("/getStateById")
 	public ResponseEntity<ResponseDTO> getStateById(@RequestParam(required = false) Long id) {
 		String methodName = "getStateById()";
@@ -644,7 +640,6 @@ public class BasicMasterController extends BaseController {
 	}
 
 	// City
-	// -----------------------------------------------------------------------------------
 	@GetMapping("/getCityById")
 	public ResponseEntity<ResponseDTO> getCityById(@RequestParam(required = false) Long id) {
 		String methodName = "getCityById()";
@@ -777,8 +772,7 @@ public class BasicMasterController extends BaseController {
 		return ResponseEntity.ok().body(responseDTO);
 	}
 
-	// Finacial
-	// Year--------------------------------------------------------------------------
+	// FinacialYear
 	@GetMapping("/getFinancialYearById")
 	public ResponseEntity<ResponseDTO> getFinancialYearById(@RequestParam(required = false) Long id) {
 		String methodName = "getFinancialYearById()";

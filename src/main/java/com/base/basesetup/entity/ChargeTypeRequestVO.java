@@ -27,7 +27,7 @@ import lombok.NoArgsConstructor;
 public class ChargeTypeRequestVO {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "chargetyperequestgen")
-	@SequenceGenerator(name = "chargetyperequestgen", sequenceName = "chargetyperequestVO", initialValue = 1000000001, allocationSize = 1)
+	@SequenceGenerator(name = "chargetyperequestgen", sequenceName = "chargetyperequestseq", initialValue = 1000000001, allocationSize = 1)
 	@Column(name = "chargetyperequestid")
 	private Long id;
 	@Column(name = "chargetype")

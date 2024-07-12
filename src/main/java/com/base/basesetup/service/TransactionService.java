@@ -6,6 +6,8 @@ import javax.validation.Valid;
 
 import org.springframework.stereotype.Service;
 
+import com.base.basesetup.dto.ArapAdjustmentsDTO;
+import com.base.basesetup.dto.ArapDetailsDTO;
 import com.base.basesetup.dto.BrsOpeningDTO;
 import com.base.basesetup.dto.ChartCostCenterDTO;
 import com.base.basesetup.dto.CostInvoiceDTO;
@@ -13,8 +15,12 @@ import com.base.basesetup.dto.DailyMonthlyExRatesDTO;
 import com.base.basesetup.dto.DebitNoteDTO;
 import com.base.basesetup.dto.FundTransferDTO;
 import com.base.basesetup.dto.GeneralJournalDTO;
+import com.base.basesetup.dto.GstSalesVoucherDTO;
 import com.base.basesetup.dto.IrnCreditDTO;
+import com.base.basesetup.dto.PaymentVoucherDTO;
 import com.base.basesetup.dto.TaxInvoiceDTO;
+import com.base.basesetup.entity.ArapAdjustmentsVO;
+import com.base.basesetup.entity.ArapDetailsVO;
 import com.base.basesetup.entity.BrsOpeningVO;
 import com.base.basesetup.entity.ChartCostCenterVO;
 import com.base.basesetup.entity.CostInvoiceVO;
@@ -22,7 +28,9 @@ import com.base.basesetup.entity.DailyMonthlyExRatesVO;
 import com.base.basesetup.entity.DebitNoteVO;
 import com.base.basesetup.entity.FundTransferVO;
 import com.base.basesetup.entity.GeneralJournalVO;
+import com.base.basesetup.entity.GstSalesVoucherVO;
 import com.base.basesetup.entity.IrnCreditVO;
+import com.base.basesetup.entity.PaymentVoucherVO;
 import com.base.basesetup.entity.TaxInvoiceVO;
 import com.base.basesetup.exception.ApplicationException;
 
@@ -89,8 +97,7 @@ public interface TransactionService {
 
 	List<FundTransferVO> getFundTransferByActive();
 
-	// GeneralJournal
-
+// GeneralJournal
 	List<GeneralJournalVO> getAllGeneralJournalByOrgId(Long orgId);
 
 	GeneralJournalVO updateCreateGeneralJournal(@Valid GeneralJournalDTO generalJournalDTO) throws ApplicationException;
@@ -99,7 +106,7 @@ public interface TransactionService {
 
 	List<GeneralJournalVO> getGeneralJournalByActive();
 
-	// CostInvoice
+// CostInvoice
 	List<CostInvoiceVO> getAllCostInvoiceByOrgId(Long orgId);
 
 	CostInvoiceVO updateCreateCostInvoice(@Valid CostInvoiceDTO costInvoiceDTO) throws ApplicationException;
@@ -108,7 +115,7 @@ public interface TransactionService {
 
 	List<CostInvoiceVO> getCostInvoiceByActive();
 
-	// DebitNote
+// DebitNote
 	List<DebitNoteVO> getAllDebitNoteByOrgId(Long orgId);
 
 	DebitNoteVO updateCreateDebitNote(@Valid DebitNoteDTO debitNoteDTO) throws ApplicationException;
@@ -117,4 +124,40 @@ public interface TransactionService {
 
 	List<DebitNoteVO> getDebitNoteByActive();
 
+// GstSalesVoucher
+	List<GstSalesVoucherVO> getAllGstSalesVoucherByOrgId(Long orgId);
+
+	GstSalesVoucherVO updateCreateGstSalesVoucher(@Valid GstSalesVoucherDTO gstSalesVoucherDTO)
+			throws ApplicationException;
+
+	List<GstSalesVoucherVO> getAllGstSalesVoucherById(Long id);
+
+	List<GstSalesVoucherVO> getGstSalesVoucherByActive();
+
+// PaymentVoucher
+	List<PaymentVoucherVO> getAllPaymentVoucherByOrgId(Long orgId);
+
+	PaymentVoucherVO updateCreatePaymentVoucher(@Valid PaymentVoucherDTO paymentVoucherDTO) throws ApplicationException;
+
+	List<PaymentVoucherVO> getAllPaymentVoucherById(Long id);
+
+	List<PaymentVoucherVO> getPaymentVoucherByActive();
+	
+//	ArapDetails
+	List<ArapDetailsVO> getAllArapDetailsByOrgId(Long orgId);
+
+	ArapDetailsVO updateCreateArapDetails(@Valid ArapDetailsDTO arapDetailsDTO) throws ApplicationException;
+
+	List<ArapDetailsVO> getAllArapDetailsById(Long id);
+
+	List<ArapDetailsVO> getArapDetailsByActive();
+
+//	ArapAdjustments
+	List<ArapAdjustmentsVO> getAllArapAdjustmentsByOrgId(Long orgId);
+
+	ArapAdjustmentsVO updateCreateArapAdjustments(@Valid ArapAdjustmentsDTO arapAdjustmentsDTO) throws ApplicationException;
+
+	List<ArapAdjustmentsVO> getAllArapAdjustmentsById(Long id);
+
+	List<ArapAdjustmentsVO> getArapAdjustmentsByActive();
 }

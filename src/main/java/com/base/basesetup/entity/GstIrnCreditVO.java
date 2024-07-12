@@ -26,7 +26,7 @@ import lombok.NoArgsConstructor;
 public class GstIrnCreditVO {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "gstirncreditgen")
-	@SequenceGenerator(name = "gstirncreditgen", sequenceName = "gstirncreditVO", initialValue = 1000000001, allocationSize = 1)
+	@SequenceGenerator(name = "gstirncreditgen", sequenceName = "gstirncreditseq", initialValue = 1000000001, allocationSize = 1)
 	@Column(name = "gstirncreditid")
 	private Long id;
 	@Column(name = "gstchargeacc")

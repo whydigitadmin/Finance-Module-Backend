@@ -26,7 +26,7 @@ public class ExRatesVO {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "exratesgen")
-	@SequenceGenerator(name = "exratesgen", sequenceName = "exratesVO", initialValue = 1000000001, allocationSize = 1)
+	@SequenceGenerator(name = "exratesgen", sequenceName = "exratesseq", initialValue = 1000000001, allocationSize = 1)
 	@Column(name = "exratesid")
 	private Long id;
 	@Column(name = "docdate")

@@ -26,7 +26,7 @@ import lombok.NoArgsConstructor;
 public class CompanyVO {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "companygen")
-	@SequenceGenerator(name = "companygen", sequenceName = "companyVO", initialValue = 1000000001, allocationSize = 1)
+	@SequenceGenerator(name = "companygen", sequenceName = "companyseq", initialValue = 1000000001, allocationSize = 1)
 	@Column(name = "companyid")
 	private Long id;
 	@Column(name = "orgid")

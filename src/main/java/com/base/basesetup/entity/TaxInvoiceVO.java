@@ -34,7 +34,7 @@ import lombok.NoArgsConstructor;
 public class TaxInvoiceVO {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "taxinvoicegen")
-	@SequenceGenerator(name = "taxinvoicegen", sequenceName = "taxinvoiceVO", initialValue = 1000000001, allocationSize = 1)
+	@SequenceGenerator(name = "taxinvoicegen", sequenceName = "taxinvoiceseq", initialValue = 1000000001, allocationSize = 1)
 	@Column(name = "taxinvoiceid")
 	private Long id;
 	@Column(name = "headercolumns")

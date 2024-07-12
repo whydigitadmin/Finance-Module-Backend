@@ -26,7 +26,7 @@ import lombok.NoArgsConstructor;
 public class GstTaxInvoiceVO {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "gsttaxinvoicegen")
-	@SequenceGenerator(name = "gsttaxinvoicegen", sequenceName = "gsttaxinvoiceVO", initialValue = 1000000001, allocationSize = 1)
+	@SequenceGenerator(name = "gsttaxinvoicegen", sequenceName = "gsttaxinvoiceseq", initialValue = 1000000001, allocationSize = 1)
 	@Column(name = "gsttaxinvoiceid")
 	private Long id;
 	@Column(name = "gstchargeacc")

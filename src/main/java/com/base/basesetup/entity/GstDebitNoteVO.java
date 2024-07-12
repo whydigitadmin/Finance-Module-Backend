@@ -26,7 +26,7 @@ import lombok.NoArgsConstructor;
 public class GstDebitNoteVO {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "gstdebitnotegen")
-	@SequenceGenerator(name = "gstdebitnotegen", sequenceName = "gstdebitnoteVO", initialValue = 1000000001, allocationSize = 1)
+	@SequenceGenerator(name = "gstdebitnotegen", sequenceName = "gstdebitnoteseq", initialValue = 1000000001, allocationSize = 1)
 	@Column(name = "gstdebitnoteid")
 	private Long id;
 	@Column(name = "chargeaccount")

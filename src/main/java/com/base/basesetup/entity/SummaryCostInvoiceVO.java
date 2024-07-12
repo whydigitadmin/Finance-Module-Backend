@@ -28,7 +28,7 @@ import lombok.NoArgsConstructor;
 public class SummaryCostInvoiceVO {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "summarycostinvoicegen")
-	@SequenceGenerator(name = "summarycostinvoicegen", sequenceName = "summarycostinvoiceVO", initialValue = 1000000001, allocationSize = 1)
+	@SequenceGenerator(name = "summarycostinvoicegen", sequenceName = "summarycostinvoiceseq", initialValue = 1000000001, allocationSize = 1)
 	@Column(name = "summarycostinvoiceid")
 	private Long id;
 	@Column(name = "billcurrtotchargeamt")

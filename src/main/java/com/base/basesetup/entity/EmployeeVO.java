@@ -26,7 +26,7 @@ public class EmployeeVO {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "employeegen")
-	@SequenceGenerator(name = "employeegen", sequenceName = "employeeVO", initialValue = 1000000001, allocationSize = 1)
+	@SequenceGenerator(name = "employeegen", sequenceName = "employeeseq", initialValue = 1000000001, allocationSize = 1)
 	@Column(name = "employeeid")
 	private Long id;
 

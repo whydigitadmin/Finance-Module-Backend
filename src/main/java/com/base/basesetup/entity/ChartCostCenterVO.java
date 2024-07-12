@@ -24,7 +24,7 @@ public class ChartCostCenterVO {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "chartcostcentergen")
-	@SequenceGenerator(name = "chartcostcentergen",sequenceName = "chartcostcenterVO",initialValue = 1000000001,allocationSize = 1)
+	@SequenceGenerator(name = "chartcostcentergen",sequenceName = "chartcostcenterseq",initialValue = 1000000001,allocationSize = 1)
 	@Column(name="chartcostcenterid")
 	private Long id;
 	

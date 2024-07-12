@@ -34,7 +34,7 @@ import lombok.NoArgsConstructor;
 public class IrnCreditVO {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "irncreditgen")
-	@SequenceGenerator(name = "irncreditgen", sequenceName = "irncreditVO", initialValue = 1000000001, allocationSize = 1)
+	@SequenceGenerator(name = "irncreditgen", sequenceName = "irncreditseq", initialValue = 1000000001, allocationSize = 1)
 	@Column(name = "irncreditid")
 	private Long id;
 	@Column(name = "headercolumns")
@@ -88,13 +88,13 @@ public class IrnCreditVO {
 	@Column(name = "finyr")
 	private String finyr;
 	@Column(name = "originbill")
-	private String originBill;
+	private String originBill;		
 
 	@PrePersist
 	private void setDefaultFinyr() {
 		// Execute the logic to set the default value for finyr
 		String fyFull = calculateFinyr();
-		this.finyr = fyFull;
+		this.finyr = fyFull; 
 	}
 
 	private String calculateFinyr() {
@@ -109,7 +109,7 @@ public class IrnCreditVO {
 	@OneToMany(mappedBy = "irnCreditVO", cascade = CascadeType.ALL)
 	@JsonManagedReference
 	List<ChargerIrnCreditVO> chargerIrnCreditVO;
-
+ 
 	@OneToMany(mappedBy = "irnCreditVO", cascade = CascadeType.ALL)
 	@JsonManagedReference
 	List<SummaryIrnCreditVO> summaryIrnCreditVO;

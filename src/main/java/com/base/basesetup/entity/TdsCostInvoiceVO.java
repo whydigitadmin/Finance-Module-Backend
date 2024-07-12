@@ -28,7 +28,7 @@ import lombok.NoArgsConstructor;
 public class TdsCostInvoiceVO {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "tdscostinvoicegen")
-	@SequenceGenerator(name = "tdscostinvoicegen", sequenceName = "tdscostinvoiceVO", initialValue = 1000000001, allocationSize = 1)
+	@SequenceGenerator(name = "tdscostinvoicegen", sequenceName = "tdscostinvoiceseq", initialValue = 1000000001, allocationSize = 1)
 	@Column(name = "tdscostinvoiceid")
 	private Long id;
 	@Column(name = "tdswh")

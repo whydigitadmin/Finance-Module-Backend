@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.base.basesetup.common.CommonConstant;
 import com.base.basesetup.common.UserConstants;
+import com.base.basesetup.dto.ArapAdjustmentsDTO;
+import com.base.basesetup.dto.ArapDetailsDTO;
 import com.base.basesetup.dto.BrsOpeningDTO;
 import com.base.basesetup.dto.ChartCostCenterDTO;
 import com.base.basesetup.dto.CostInvoiceDTO;
@@ -29,9 +31,13 @@ import com.base.basesetup.dto.DailyMonthlyExRatesDTO;
 import com.base.basesetup.dto.DebitNoteDTO;
 import com.base.basesetup.dto.FundTransferDTO;
 import com.base.basesetup.dto.GeneralJournalDTO;
+import com.base.basesetup.dto.GstSalesVoucherDTO;
 import com.base.basesetup.dto.IrnCreditDTO;
+import com.base.basesetup.dto.PaymentVoucherDTO;
 import com.base.basesetup.dto.ResponseDTO;
 import com.base.basesetup.dto.TaxInvoiceDTO;
+import com.base.basesetup.entity.ArapAdjustmentsVO;
+import com.base.basesetup.entity.ArapDetailsVO;
 import com.base.basesetup.entity.BrsOpeningVO;
 import com.base.basesetup.entity.ChartCostCenterVO;
 import com.base.basesetup.entity.CostInvoiceVO;
@@ -39,7 +45,9 @@ import com.base.basesetup.entity.DailyMonthlyExRatesVO;
 import com.base.basesetup.entity.DebitNoteVO;
 import com.base.basesetup.entity.FundTransferVO;
 import com.base.basesetup.entity.GeneralJournalVO;
+import com.base.basesetup.entity.GstSalesVoucherVO;
 import com.base.basesetup.entity.IrnCreditVO;
+import com.base.basesetup.entity.PaymentVoucherVO;
 import com.base.basesetup.entity.TaxInvoiceVO;
 import com.base.basesetup.service.TransactionService;
 
@@ -326,7 +334,7 @@ public class TransactionController extends BaseController {
 
 	}
 
-//	DailyMonthlyExRatesVO
+//	DailyMonthlyExRates
 	@GetMapping("/getAllDailyMonthlyExRatesByOrgId")
 	public ResponseEntity<ResponseDTO> getAllDailyMonthlyExRatesByOrgId(@RequestParam(required = false) Long orgId) {
 		String methodName = "getAllDailyMonthlyExRatesByOrgId()";
@@ -955,112 +963,563 @@ public class TransactionController extends BaseController {
 
 	// DebitNote
 
-		@GetMapping("/getAllDebitNoteByOrgId")
-		public ResponseEntity<ResponseDTO> getAllDebitNoteByOrgId(@RequestParam(required = false) Long orgId) {
-			String methodName = "getAllDebitNoteByOrgId()";
-			LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
-			String errorMsg = null;
-			Map<String, Object> responseObjectsMap = new HashMap<>();
-			ResponseDTO responseDTO = null;
-			List<DebitNoteVO> debitNoteVO = new ArrayList<>();
-			try {
-				debitNoteVO = transactionService.getAllDebitNoteByOrgId(orgId);
-			} catch (Exception e) {
-				errorMsg = e.getMessage();
-				LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
-			}
-			if (StringUtils.isBlank(errorMsg)) {
-				responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "DebitNote information get successfully By OrgId");
+	@GetMapping("/getAllDebitNoteByOrgId")
+	public ResponseEntity<ResponseDTO> getAllDebitNoteByOrgId(@RequestParam(required = false) Long orgId) {
+		String methodName = "getAllDebitNoteByOrgId()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		List<DebitNoteVO> debitNoteVO = new ArrayList<>();
+		try {
+			debitNoteVO = transactionService.getAllDebitNoteByOrgId(orgId);
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "DebitNote information get successfully By OrgId");
+			responseObjectsMap.put("debitNoteVO", debitNoteVO);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					"DebitNote information receive failed By OrgId", errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+
+	}
+
+	@GetMapping("/getAllDebitNoteById")
+	public ResponseEntity<ResponseDTO> getAllDebitNoteById(@RequestParam(required = false) Long id) {
+		String methodName = "getAllDebitNoteById()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		List<DebitNoteVO> debitNoteVO = new ArrayList<>();
+		try {
+			debitNoteVO = transactionService.getAllDebitNoteById(id);
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "DebitNote information get successfully By id");
+			responseObjectsMap.put("debitNoteVO", debitNoteVO);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					"DebitNote information receive failed By OrgId", errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+	}
+
+	@PutMapping("/updateCreateDebitNote")
+	public ResponseEntity<ResponseDTO> updateCreateDebitNote(@Valid @RequestBody DebitNoteDTO debitNoteDTO) {
+		String methodName = "updateCreateDebitNote()";
+
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+
+		try {
+			DebitNoteVO debitNoteVO = transactionService.updateCreateDebitNote(debitNoteDTO);
+			if (debitNoteVO != null) {
+				responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "DebitNote updated successfully");
 				responseObjectsMap.put("debitNoteVO", debitNoteVO);
 				responseDTO = createServiceResponse(responseObjectsMap);
 			} else {
-				responseDTO = createServiceResponseError(responseObjectsMap,
-						"DebitNote information receive failed By OrgId", errorMsg);
-			}
-			LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
-			return ResponseEntity.ok().body(responseDTO);
-
-		}
-
-		@GetMapping("/getAllDebitNoteById")
-		public ResponseEntity<ResponseDTO> getAllDebitNoteById(@RequestParam(required = false) Long id) {
-			String methodName = "getAllDebitNoteById()";
-			LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
-			String errorMsg = null;
-			Map<String, Object> responseObjectsMap = new HashMap<>();
-			ResponseDTO responseDTO = null;
-			List<DebitNoteVO> debitNoteVO = new ArrayList<>();
-			try {
-				debitNoteVO = transactionService.getAllDebitNoteById(id);
-			} catch (Exception e) {
-				errorMsg = e.getMessage();
-				LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
-			}
-			if (StringUtils.isBlank(errorMsg)) {
-				responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "DebitNote information get successfully By id");
-				responseObjectsMap.put("debitNoteVO", debitNoteVO);
-				responseDTO = createServiceResponse(responseObjectsMap);
-			} else {
-				responseDTO = createServiceResponseError(responseObjectsMap,
-						"DebitNote information receive failed By OrgId", errorMsg);
-			}
-			LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
-			return ResponseEntity.ok().body(responseDTO);
-		}
-
-		@PutMapping("/updateCreateDebitNote")
-		public ResponseEntity<ResponseDTO> updateCreateDebitNote(@Valid @RequestBody DebitNoteDTO debitNoteDTO) {
-			String methodName = "updateCreateDebitNote()";
-
-			LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
-			String errorMsg = null;
-			Map<String, Object> responseObjectsMap = new HashMap<>();
-			ResponseDTO responseDTO = null;
-
-			try {
-				DebitNoteVO debitNoteVO = transactionService.updateCreateDebitNote(debitNoteDTO);
-				if (debitNoteVO != null) {
-					responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "DebitNote updated successfully");
-					responseObjectsMap.put("debitNoteVO", debitNoteVO);
-					responseDTO = createServiceResponse(responseObjectsMap);
-				} else {
-					errorMsg = "DebitNote not found for ID: " + debitNoteDTO.getId();
-					responseDTO = createServiceResponseError(responseObjectsMap, "DebitNote update failed", errorMsg);
-				}
-			} catch (Exception e) {
-				errorMsg = e.getMessage();
-				LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+				errorMsg = "DebitNote not found for ID: " + debitNoteDTO.getId();
 				responseDTO = createServiceResponseError(responseObjectsMap, "DebitNote update failed", errorMsg);
 			}
-			LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
-			return ResponseEntity.ok().body(responseDTO);
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+			responseDTO = createServiceResponseError(responseObjectsMap, "DebitNote update failed", errorMsg);
 		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+	}
 
-		@GetMapping("/getDebitNoteByActive")
-		public ResponseEntity<ResponseDTO> getDebitNoteByActive() {
-			String methodName = "getDebitNoteByActive()";
-			LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
-			String errorMsg = null;
-			Map<String, Object> responseObjectsMap = new HashMap<>();
-			ResponseDTO responseDTO = null;
-			List<DebitNoteVO> debitNoteVO = new ArrayList<>();
-			try {
-				debitNoteVO = transactionService.getDebitNoteByActive();
-			} catch (Exception e) {
-				errorMsg = e.getMessage();
-				LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
-			}
-			if (StringUtils.isBlank(errorMsg)) {
-				responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "DebitNote information get successfully By Active");
-				responseObjectsMap.put("debitNoteVO", debitNoteVO);
+	@GetMapping("/getDebitNoteByActive")
+	public ResponseEntity<ResponseDTO> getDebitNoteByActive() {
+		String methodName = "getDebitNoteByActive()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		List<DebitNoteVO> debitNoteVO = new ArrayList<>();
+		try {
+			debitNoteVO = transactionService.getDebitNoteByActive();
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "DebitNote information get successfully By Active");
+			responseObjectsMap.put("debitNoteVO", debitNoteVO);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					"DebitNote information receive failed By Active", errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+
+	}
+
+	// GstSalesVoucher
+
+	@GetMapping("/getAllGstSalesVoucherByOrgId")
+	public ResponseEntity<ResponseDTO> getAllGstSalesVoucherByOrgId(@RequestParam(required = false) Long orgId) {
+		String methodName = "getAllGstSalesVoucherByOrgId()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		List<GstSalesVoucherVO> gstSalesVoucherVO = new ArrayList<>();
+		try {
+			gstSalesVoucherVO = transactionService.getAllGstSalesVoucherByOrgId(orgId);
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+					"GstSalesVoucher information get successfully By OrgId");
+			responseObjectsMap.put("gstSalesVoucherVO", gstSalesVoucherVO);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					"GstSalesVoucher information receive failed By OrgId", errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+
+	}
+
+	@GetMapping("/getAllGstSalesVoucherById")
+	public ResponseEntity<ResponseDTO> getAllGstSalesVoucherById(@RequestParam(required = false) Long id) {
+		String methodName = "getAllGstSalesVoucherById()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		List<GstSalesVoucherVO> gstSalesVoucherVO = new ArrayList<>();
+		try {
+			gstSalesVoucherVO = transactionService.getAllGstSalesVoucherById(id);
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "GstSalesVoucher information get successfully By id");
+			responseObjectsMap.put("gstSalesVoucherVO", gstSalesVoucherVO);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					"GstSalesVoucher information receive failed By OrgId", errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+	}
+
+	@PutMapping("/updateCreateGstSalesVoucher")
+	public ResponseEntity<ResponseDTO> updateCreateGstSalesVoucher(
+			@Valid @RequestBody GstSalesVoucherDTO gstSalesVoucherDTO) {
+		String methodName = "updateCreateGstSalesVoucher()";
+
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+
+		try {
+			GstSalesVoucherVO gstSalesVoucherVO = transactionService.updateCreateGstSalesVoucher(gstSalesVoucherDTO);
+			if (gstSalesVoucherVO != null) {
+				responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "GstSalesVoucher updated successfully");
+				responseObjectsMap.put("gstSalesVoucherVO", gstSalesVoucherVO);
 				responseDTO = createServiceResponse(responseObjectsMap);
 			} else {
-				responseDTO = createServiceResponseError(responseObjectsMap,
-						"DebitNote information receive failed By Active", errorMsg);
+				errorMsg = "GstSalesVoucher not found for ID: " + gstSalesVoucherDTO.getId();
+				responseDTO = createServiceResponseError(responseObjectsMap, "GstSalesVoucher update failed", errorMsg);
 			}
-			LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
-			return ResponseEntity.ok().body(responseDTO);
-
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+			responseDTO = createServiceResponseError(responseObjectsMap, "GstSalesVoucher update failed", errorMsg);
 		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+	}
 
+	@GetMapping("/getGstSalesVoucherByActive")
+	public ResponseEntity<ResponseDTO> getGstSalesVoucherByActive() {
+		String methodName = "getGstSalesVoucherByActive()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		List<GstSalesVoucherVO> gstSalesVoucherVO = new ArrayList<>();
+		try {
+			gstSalesVoucherVO = transactionService.getGstSalesVoucherByActive();
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+					"GstSalesVoucher information get successfully By Active");
+			responseObjectsMap.put("gstSalesVoucherVO", gstSalesVoucherVO);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					"GstSalesVoucher information receive failed By Active", errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+
+	}
+
+	// PaymentVoucher
+
+	@GetMapping("/getAllPaymentVoucherByOrgId")
+	public ResponseEntity<ResponseDTO> getAllPaymentVoucherByOrgId(@RequestParam(required = false) Long orgId) {
+		String methodName = "getAllPaymentVoucherByOrgId()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		List<PaymentVoucherVO> paymentVoucherVO = new ArrayList<>();
+		try {
+			paymentVoucherVO = transactionService.getAllPaymentVoucherByOrgId(orgId);
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+					"PaymentVoucher information get successfully By OrgId");
+			responseObjectsMap.put("paymentVoucherVO", paymentVoucherVO);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					"PaymentVoucher information receive failed By OrgId", errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+
+	}
+
+	@GetMapping("/getAllPaymentVoucherById")
+	public ResponseEntity<ResponseDTO> getAllPaymentVoucherById(@RequestParam(required = false) Long id) {
+		String methodName = "getAllPaymentVoucherById()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		List<PaymentVoucherVO> paymentVoucherVO = new ArrayList<>();
+		try {
+			paymentVoucherVO = transactionService.getAllPaymentVoucherById(id);
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "PaymentVoucher information get successfully By id");
+			responseObjectsMap.put("paymentVoucherVO", paymentVoucherVO);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					"PaymentVoucher information receive failed By OrgId", errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+	}
+
+	@PutMapping("/updateCreatePaymentVoucher")
+	public ResponseEntity<ResponseDTO> updateCreatePaymentVoucher(
+			@Valid @RequestBody PaymentVoucherDTO paymentVoucherDTO) {
+		String methodName = "updateCreatePaymentVoucher()";
+
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+
+		try {
+			PaymentVoucherVO paymentVoucherVO = transactionService.updateCreatePaymentVoucher(paymentVoucherDTO);
+			if (paymentVoucherVO != null) {
+				responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "PaymentVoucher updated successfully");
+				responseObjectsMap.put("paymentVoucherVO", paymentVoucherVO);
+				responseDTO = createServiceResponse(responseObjectsMap);
+			} else {
+				errorMsg = "PaymentVoucher not found for ID: " + paymentVoucherDTO.getId();
+				responseDTO = createServiceResponseError(responseObjectsMap, "PaymentVoucher update failed", errorMsg);
+			}
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+			responseDTO = createServiceResponseError(responseObjectsMap, "PaymentVoucher update failed", errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+	}
+
+	@GetMapping("/getPaymentVoucherByActive")
+	public ResponseEntity<ResponseDTO> getPaymentVoucherByActive() {
+		String methodName = "getPaymentVoucherByActive()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		List<PaymentVoucherVO> paymentVoucherVO = new ArrayList<>();
+		try {
+			paymentVoucherVO = transactionService.getPaymentVoucherByActive();
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+					"PaymentVoucher information get successfully By Active");
+			responseObjectsMap.put("paymentVoucherVO", paymentVoucherVO);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					"PaymentVoucher information receive failed By Active", errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+
+	}
+
+	// ArapDetails
+
+	@GetMapping("/getAllArapDetailsByOrgId")
+	public ResponseEntity<ResponseDTO> getAllArapDetailsByOrgId(@RequestParam(required = false) Long orgId) {
+		String methodName = "getAllArapDetailsByOrgId()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		List<ArapDetailsVO> arapDetailsVO = new ArrayList<>();
+		try {
+			arapDetailsVO = transactionService.getAllArapDetailsByOrgId(orgId);
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+					"ArapDetails information get successfully By OrgId");
+			responseObjectsMap.put("arapDetailsVO", arapDetailsVO);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					"ArapDetails information receive failed By OrgId", errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+
+	}
+
+	@GetMapping("/getAllArapDetailsById")
+	public ResponseEntity<ResponseDTO> getAllArapDetailsById(@RequestParam(required = false) Long id) {
+		String methodName = "getAllArapDetailsById()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		List<ArapDetailsVO> arapDetailsVO = new ArrayList<>();
+		try {
+			arapDetailsVO = transactionService.getAllArapDetailsById(id);
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "ArapDetails information get successfully By id");
+			responseObjectsMap.put("arapDetailsVO", arapDetailsVO);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					"ArapDetails information receive failed By OrgId", errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+	}
+
+	@PutMapping("/updateCreateArapDetails")
+	public ResponseEntity<ResponseDTO> updateCreateArapDetails(
+			@Valid @RequestBody ArapDetailsDTO arapDetailsDTO) {
+		String methodName = "updateCreateArapDetails()";
+
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+
+		try {
+			ArapDetailsVO arapDetailsVO = transactionService.updateCreateArapDetails(arapDetailsDTO);
+			if (arapDetailsVO != null) {
+				responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "ArapDetails updated successfully");
+				responseObjectsMap.put("arapDetailsVO", arapDetailsVO);
+				responseDTO = createServiceResponse(responseObjectsMap);
+			} else {
+				errorMsg = "ArapDetails not found for ID: " + arapDetailsDTO.getId();
+				responseDTO = createServiceResponseError(responseObjectsMap, "ArapDetails update failed", errorMsg);
+			}
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+			responseDTO = createServiceResponseError(responseObjectsMap, "ArapDetails update failed", errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+	}
+
+	@GetMapping("/getArapDetailsByActive")
+	public ResponseEntity<ResponseDTO> getArapDetailsByActive() {
+		String methodName = "getArapDetailsByActive()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		List<ArapDetailsVO> arapDetailsVO = new ArrayList<>();
+		try {
+			arapDetailsVO = transactionService.getArapDetailsByActive();
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+					"ArapDetails information get successfully By Active");
+			responseObjectsMap.put("arapDetailsVO", arapDetailsVO);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					"ArapDetails information receive failed By Active", errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+
+	}
+	
+	// ArapAdjustments
+
+	@GetMapping("/getAllArapAdjustmentsByOrgId")
+	public ResponseEntity<ResponseDTO> getAllArapAdjustmentsByOrgId(@RequestParam(required = false) Long orgId) {
+		String methodName = "getAllArapAdjustmentsByOrgId()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		List<ArapAdjustmentsVO> arapAdjustmentsVO = new ArrayList<>();
+		try {
+			arapAdjustmentsVO = transactionService.getAllArapAdjustmentsByOrgId(orgId);
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+					"ArapAdjustments information get successfully By OrgId");
+			responseObjectsMap.put("arapAdjustmentsVO", arapAdjustmentsVO);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					"ArapAdjustments information receive failed By OrgId", errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+
+	}
+
+	@GetMapping("/getAllArapAdjustmentsById")
+	public ResponseEntity<ResponseDTO> getAllArapAdjustmentsById(@RequestParam(required = false) Long id) {
+		String methodName = "getAllArapAdjustmentsById()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		List<ArapAdjustmentsVO> arapAdjustmentsVO = new ArrayList<>();
+		try {
+			arapAdjustmentsVO = transactionService.getAllArapAdjustmentsById(id);
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "ArapAdjustments information get successfully By id");
+			responseObjectsMap.put("arapAdjustmentsVO", arapAdjustmentsVO);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					"ArapAdjustments information receive failed By OrgId", errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+	}
+
+	@PutMapping("/updateCreateArapAdjustments")
+	public ResponseEntity<ResponseDTO> updateCreateArapAdjustments(
+			@Valid @RequestBody ArapAdjustmentsDTO arapAdjustmentsDTO) {
+		String methodName = "updateCreateArapAdjustments()";
+
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+
+		try {
+			ArapAdjustmentsVO arapAdjustmentsVO = transactionService.updateCreateArapAdjustments(arapAdjustmentsDTO);
+			if (arapAdjustmentsVO != null) {
+				responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "ArapAdjustments updated successfully");
+				responseObjectsMap.put("arapAdjustmentsVO", arapAdjustmentsVO);
+				responseDTO = createServiceResponse(responseObjectsMap);
+			} else {
+				errorMsg = "ArapAdjustments not found for ID: " + arapAdjustmentsDTO.getId();
+				responseDTO = createServiceResponseError(responseObjectsMap, "ArapAdjustments update failed", errorMsg);
+			}
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+			responseDTO = createServiceResponseError(responseObjectsMap, "ArapAdjustments update failed", errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+	}
+
+	@GetMapping("/getArapAdjustmentsByActive")
+	public ResponseEntity<ResponseDTO> getArapAdjustmentsByActive() {
+		String methodName = "getArapAdjustmentsByActive()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		List<ArapAdjustmentsVO> arapAdjustmentsVO = new ArrayList<>();
+		try {
+			arapAdjustmentsVO = transactionService.getArapAdjustmentsByActive();
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+					"ArapAdjustments information get successfully By Active");
+			responseObjectsMap.put("arapAdjustmentsVO", arapAdjustmentsVO);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					"ArapAdjustments information receive failed By Active", errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+
+	}
 }

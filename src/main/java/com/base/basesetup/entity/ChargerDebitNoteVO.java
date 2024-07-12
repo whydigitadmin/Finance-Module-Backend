@@ -28,7 +28,7 @@ import lombok.NoArgsConstructor;
 public class ChargerDebitNoteVO {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "chargerdebitnotegen")
-	@SequenceGenerator(name = "chargerdebitnotegen", sequenceName = "chargerdebitnoteVO", initialValue = 1000000001, allocationSize = 1)
+	@SequenceGenerator(name = "chargerdebitnotegen", sequenceName = "chargerdebitnoteseq", initialValue = 1000000001, allocationSize = 1)
 	@Column(name = "chargerdebitnoteid")
 	private Long id;
 	@Column(name = "gchargecode")

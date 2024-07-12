@@ -27,7 +27,7 @@ import lombok.NoArgsConstructor;
 public class FundTransferVO {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "fundtransfergen")
-	@SequenceGenerator(name = "fundtransfergen", sequenceName = "fundtransferVO", initialValue = 1000000001, allocationSize = 1)
+	@SequenceGenerator(name = "fundtransfergen", sequenceName = "fundtransferseq", initialValue = 1000000001, allocationSize = 1)
 	@Column(name = "fundtransferid")
 	private Long id;
 	@Column(name = "branch")
