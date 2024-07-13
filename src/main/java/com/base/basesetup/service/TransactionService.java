@@ -18,6 +18,7 @@ import com.base.basesetup.dto.GeneralJournalDTO;
 import com.base.basesetup.dto.GstSalesVoucherDTO;
 import com.base.basesetup.dto.IrnCreditDTO;
 import com.base.basesetup.dto.PaymentVoucherDTO;
+import com.base.basesetup.dto.ReceiptReversalDTO;
 import com.base.basesetup.dto.TaxInvoiceDTO;
 import com.base.basesetup.entity.ArapAdjustmentsVO;
 import com.base.basesetup.entity.ArapDetailsVO;
@@ -31,6 +32,7 @@ import com.base.basesetup.entity.GeneralJournalVO;
 import com.base.basesetup.entity.GstSalesVoucherVO;
 import com.base.basesetup.entity.IrnCreditVO;
 import com.base.basesetup.entity.PaymentVoucherVO;
+import com.base.basesetup.entity.ReceiptReversalVO;
 import com.base.basesetup.entity.TaxInvoiceVO;
 import com.base.basesetup.exception.ApplicationException;
 
@@ -160,4 +162,13 @@ public interface TransactionService {
 	List<ArapAdjustmentsVO> getAllArapAdjustmentsById(Long id);
 
 	List<ArapAdjustmentsVO> getArapAdjustmentsByActive();
+
+//	ReceiptReversal
+	List<ReceiptReversalVO> getAllReceiptReversalByOrgId(Long orgId);
+
+	ReceiptReversalVO updateCreateReceiptReversal(@Valid ReceiptReversalDTO receiptReversalDTO) throws ApplicationException;
+
+	List<ReceiptReversalVO> getAllReceiptReversalById(Long id);
+
+	List<ReceiptReversalVO> getReceiptReversalByActive();
 }

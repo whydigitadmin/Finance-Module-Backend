@@ -34,6 +34,7 @@ import com.base.basesetup.dto.GeneralJournalDTO;
 import com.base.basesetup.dto.GstSalesVoucherDTO;
 import com.base.basesetup.dto.IrnCreditDTO;
 import com.base.basesetup.dto.PaymentVoucherDTO;
+import com.base.basesetup.dto.ReceiptReversalDTO;
 import com.base.basesetup.dto.ResponseDTO;
 import com.base.basesetup.dto.TaxInvoiceDTO;
 import com.base.basesetup.entity.ArapAdjustmentsVO;
@@ -48,6 +49,7 @@ import com.base.basesetup.entity.GeneralJournalVO;
 import com.base.basesetup.entity.GstSalesVoucherVO;
 import com.base.basesetup.entity.IrnCreditVO;
 import com.base.basesetup.entity.PaymentVoucherVO;
+import com.base.basesetup.entity.ReceiptReversalVO;
 import com.base.basesetup.entity.TaxInvoiceVO;
 import com.base.basesetup.service.TransactionService;
 
@@ -1314,8 +1316,7 @@ public class TransactionController extends BaseController {
 			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
 		}
 		if (StringUtils.isBlank(errorMsg)) {
-			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
-					"ArapDetails information get successfully By OrgId");
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "ArapDetails information get successfully By OrgId");
 			responseObjectsMap.put("arapDetailsVO", arapDetailsVO);
 			responseDTO = createServiceResponse(responseObjectsMap);
 		} else {
@@ -1354,8 +1355,7 @@ public class TransactionController extends BaseController {
 	}
 
 	@PutMapping("/updateCreateArapDetails")
-	public ResponseEntity<ResponseDTO> updateCreateArapDetails(
-			@Valid @RequestBody ArapDetailsDTO arapDetailsDTO) {
+	public ResponseEntity<ResponseDTO> updateCreateArapDetails(@Valid @RequestBody ArapDetailsDTO arapDetailsDTO) {
 		String methodName = "updateCreateArapDetails()";
 
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
@@ -1397,8 +1397,7 @@ public class TransactionController extends BaseController {
 			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
 		}
 		if (StringUtils.isBlank(errorMsg)) {
-			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
-					"ArapDetails information get successfully By Active");
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "ArapDetails information get successfully By Active");
 			responseObjectsMap.put("arapDetailsVO", arapDetailsVO);
 			responseDTO = createServiceResponse(responseObjectsMap);
 		} else {
@@ -1409,7 +1408,7 @@ public class TransactionController extends BaseController {
 		return ResponseEntity.ok().body(responseDTO);
 
 	}
-	
+
 	// ArapAdjustments
 
 	@GetMapping("/getAllArapAdjustmentsByOrgId")
@@ -1517,6 +1516,119 @@ public class TransactionController extends BaseController {
 		} else {
 			responseDTO = createServiceResponseError(responseObjectsMap,
 					"ArapAdjustments information receive failed By Active", errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+
+	}
+
+	// ReceiptReversal
+
+	@GetMapping("/getAllReceiptReversalByOrgId")
+	public ResponseEntity<ResponseDTO> getAllReceiptReversalByOrgId(@RequestParam(required = false) Long orgId) {
+		String methodName = "getAllReceiptReversalByOrgId()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		List<ReceiptReversalVO> receiptReversalVO = new ArrayList<>();
+		try {
+			receiptReversalVO = transactionService.getAllReceiptReversalByOrgId(orgId);
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+					"ReceiptReversal information get successfully By OrgId");
+			responseObjectsMap.put("receiptReversalVO", receiptReversalVO);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					"ReceiptReversal information receive failed By OrgId", errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+
+	}
+
+	@GetMapping("/getAllReceiptReversalById")
+	public ResponseEntity<ResponseDTO> getAllReceiptReversalById(@RequestParam(required = false) Long id) {
+		String methodName = "getAllReceiptReversalById()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		List<ReceiptReversalVO> receiptReversalVO = new ArrayList<>();
+		try {
+			receiptReversalVO = transactionService.getAllReceiptReversalById(id);
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "ReceiptReversal information get successfully By id");
+			responseObjectsMap.put("receiptReversalVO", receiptReversalVO);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					"ReceiptReversal information receive failed By OrgId", errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+	}
+
+	@PutMapping("/updateCreateReceiptReversal")
+	public ResponseEntity<ResponseDTO> updateCreateReceiptReversal(
+			@Valid @RequestBody ReceiptReversalDTO receiptReversalDTO) {
+		String methodName = "updateCreateReceiptReversal()";
+
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+
+		try {
+			ReceiptReversalVO receiptReversalVO = transactionService.updateCreateReceiptReversal(receiptReversalDTO);
+			if (receiptReversalVO != null) {
+				responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "ReceiptReversal updated successfully");
+				responseObjectsMap.put("receiptReversalVO", receiptReversalVO);
+				responseDTO = createServiceResponse(responseObjectsMap);
+			} else {
+				errorMsg = "ReceiptReversal not found for ID: " + receiptReversalDTO.getId();
+				responseDTO = createServiceResponseError(responseObjectsMap, "ReceiptReversal update failed", errorMsg);
+			}
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+			responseDTO = createServiceResponseError(responseObjectsMap, "ReceiptReversal update failed", errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+	}
+
+	@GetMapping("/getReceiptReversalByActive")
+	public ResponseEntity<ResponseDTO> getReceiptReversalByActive() {
+		String methodName = "getReceiptReversalByActive()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		List<ReceiptReversalVO> receiptReversalVO = new ArrayList<>();
+		try {
+			receiptReversalVO = transactionService.getReceiptReversalByActive();
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+					"ReceiptReversal information get successfully By Active");
+			responseObjectsMap.put("receiptReversalVO", receiptReversalVO);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					"ReceiptReversal information receive failed By Active", errorMsg);
 		}
 		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
 		return ResponseEntity.ok().body(responseDTO);

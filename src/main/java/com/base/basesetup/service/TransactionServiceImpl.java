@@ -34,6 +34,10 @@ import com.base.basesetup.dto.ParticularsDebitNoteDTO;
 import com.base.basesetup.dto.ParticularsGstVoucherDTO;
 import com.base.basesetup.dto.ParticularsPaymentVoucherDTO;
 import com.base.basesetup.dto.PaymentVoucherDTO;
+import com.base.basesetup.dto.ReceiptInvoiceDTO;
+import com.base.basesetup.dto.ReceiptOtherAccountDTO;
+import com.base.basesetup.dto.ReceiptReversalDTO;
+import com.base.basesetup.dto.ReceiptSummaryDTO;
 import com.base.basesetup.dto.SummaryCostInvoiceDTO;
 import com.base.basesetup.dto.SummaryDebitNoteDTO;
 import com.base.basesetup.dto.SummaryGstVoucherDTO;
@@ -65,6 +69,10 @@ import com.base.basesetup.entity.ParticularsDebitNoteVO;
 import com.base.basesetup.entity.ParticularsGstVoucherVO;
 import com.base.basesetup.entity.ParticularsPaymentVoucherVO;
 import com.base.basesetup.entity.PaymentVoucherVO;
+import com.base.basesetup.entity.ReceiptInvoiceVO;
+import com.base.basesetup.entity.ReceiptOtherAccountVO;
+import com.base.basesetup.entity.ReceiptReversalVO;
+import com.base.basesetup.entity.ReceiptSummaryVO;
 import com.base.basesetup.entity.SummaryCostInvoiceVO;
 import com.base.basesetup.entity.SummaryDebitNoteVO;
 import com.base.basesetup.entity.SummaryGstVoucherVO;
@@ -98,6 +106,10 @@ import com.base.basesetup.repo.ParticularsGstVoucherRepo;
 import com.base.basesetup.repo.ParticularsJournalRepo;
 import com.base.basesetup.repo.ParticularsPaymentVoucherRepo;
 import com.base.basesetup.repo.PaymentVoucherRepo;
+import com.base.basesetup.repo.ReceiptInvoiceRepo;
+import com.base.basesetup.repo.ReceiptOtherAccountRepo;
+import com.base.basesetup.repo.ReceiptReversalRepo;
+import com.base.basesetup.repo.ReceiptSummaryRepo;
 import com.base.basesetup.repo.SummaryCostInvoiceRepo;
 import com.base.basesetup.repo.SummaryDebitNoteRepo;
 import com.base.basesetup.repo.SummaryGstVoucherRepo;
@@ -105,14 +117,14 @@ import com.base.basesetup.repo.SummaryIrnCreditRepo;
 import com.base.basesetup.repo.SummaryJournalRepo;
 import com.base.basesetup.repo.SummaryPaymentVoucherRepo;
 import com.base.basesetup.repo.SummaryTaxInvoiceRepo;
-import com.base.basesetup.repo.TaxInvocieRepo;
+import com.base.basesetup.repo.TaxInvoiceRepo;
 import com.base.basesetup.repo.TdsCostInvoiceRepo;
 
 @Service
 public class TransactionServiceImpl implements TransactionService {
 	public static final Logger LOGGER = LoggerFactory.getLogger(TransactionServiceImpl.class);
 	@Autowired
-	TaxInvocieRepo taxInvoiceRepo;
+	TaxInvoiceRepo taxInvoiceRepo;
 
 	@Autowired
 	ChargerTaxInvoiceRepo chargerTaxInvoiceRepo;
@@ -206,9 +218,21 @@ public class TransactionServiceImpl implements TransactionService {
 
 	@Autowired
 	ArapDetailsRepo arapDetailsRepo;
-	
+
 	@Autowired
 	ArapAdjustmentsRepo arapAdjustmentsRepo;
+
+	@Autowired
+	ReceiptReversalRepo receiptReversalRepo;
+
+	@Autowired
+	ReceiptInvoiceRepo receiptInvoiceRepo;
+
+	@Autowired
+	ReceiptOtherAccountRepo receiptOtherAccountRepo;
+
+	@Autowired
+	ReceiptSummaryRepo receiptSummaryRepo;
 
 // TaxInvoice
 	@Override
@@ -240,10 +264,12 @@ public class TransactionServiceImpl implements TransactionService {
 	@Override
 	public TaxInvoiceVO updateCreateTaxInvoice(@Valid TaxInvoiceDTO taxInvoiceDTO) throws ApplicationException {
 		TaxInvoiceVO taxInvoiceVO = new TaxInvoiceVO();
-//		if (ObjectUtils.isNotEmpty(taxInvoiceDTO.getId())) {
-//			taxInvoiceVO = taxInvoiceRepo.findById(taxInvoiceDTO.getId())
-//					.orElseThrow(() -> new ApplicationException("Invalid TaxInvoice details"));
-//		} else {
+
+		if (ObjectUtils.isNotEmpty(taxInvoiceDTO.getId())) {
+			taxInvoiceVO = taxInvoiceRepo.findById(taxInvoiceDTO.getId())
+					.orElseThrow(() -> new ApplicationException("Invalid TaxInvoice details"));
+		}
+//		else {
 //			if (taxInvoiceRepo.existsByDocIdAndOrgId(taxInvoiceVO.getDocId(), taxInvoiceVO.getOrgId())) {
 //				throw new ApplicationException("The given doc id already exists.");
 //			}
@@ -1004,10 +1030,11 @@ public class TransactionServiceImpl implements TransactionService {
 	@Override
 	public CostInvoiceVO updateCreateCostInvoice(@Valid CostInvoiceDTO costInvoiceDTO) throws ApplicationException {
 		CostInvoiceVO costInvoiceVO = new CostInvoiceVO();
-//			if (ObjectUtils.isNotEmpty(taxInvoiceDTO.getId())) {
-//				taxInvoiceVO = taxInvoiceRepo.findById(taxInvoiceDTO.getId())
-//						.orElseThrow(() -> new ApplicationException("Invalid TaxInvoice details"));
-//			} else {
+		if (ObjectUtils.isNotEmpty(costInvoiceDTO.getId())) {
+			costInvoiceVO = costInvoiceRepo.findById(costInvoiceDTO.getId())
+					.orElseThrow(() -> new ApplicationException("Invalid CostInvoice details"));
+		}
+//			else {
 //				if (taxInvoiceRepo.existsByDocIdAndOrgId(taxInvoiceVO.getDocId(), taxInvoiceVO.getOrgId())) {
 //					throw new ApplicationException("The given doc id already exists.");
 //				}
@@ -1180,10 +1207,11 @@ public class TransactionServiceImpl implements TransactionService {
 	@Override
 	public DebitNoteVO updateCreateDebitNote(@Valid DebitNoteDTO debitNoteDTO) throws ApplicationException {
 		DebitNoteVO debitNoteVO = new DebitNoteVO();
-//					if (ObjectUtils.isNotEmpty(taxInvoiceDTO.getId())) {
-//						taxInvoiceVO = taxInvoiceRepo.findById(taxInvoiceDTO.getId())
-//								.orElseThrow(() -> new ApplicationException("Invalid TaxInvoice details"));
-//					} else {
+		if (ObjectUtils.isNotEmpty(debitNoteDTO.getId())) {
+			debitNoteVO = debitNoteRepo.findById(debitNoteDTO.getId())
+					.orElseThrow(() -> new ApplicationException("Invalid DebitNote details"));
+		}
+//					else {
 //						if (taxInvoiceRepo.existsByDocIdAndOrgId(taxInvoiceVO.getDocId(), taxInvoiceVO.getOrgId())) {
 //							throw new ApplicationException("The given doc id already exists.");
 //						}
@@ -1381,10 +1409,11 @@ public class TransactionServiceImpl implements TransactionService {
 	public GstSalesVoucherVO updateCreateGstSalesVoucher(@Valid GstSalesVoucherDTO gstSalesVoucherDTO)
 			throws ApplicationException {
 		GstSalesVoucherVO gstSalesVoucherVO = new GstSalesVoucherVO();
-//					if (ObjectUtils.isNotEmpty(taxInvoiceDTO.getId())) {
-//						taxInvoiceVO = taxInvoiceRepo.findById(taxInvoiceDTO.getId())
-//								.orElseThrow(() -> new ApplicationException("Invalid TaxInvoice details"));
-//					} else {
+		if (ObjectUtils.isNotEmpty(gstSalesVoucherDTO.getId())) {
+			gstSalesVoucherVO = gstSalesVoucherRepo.findById(gstSalesVoucherDTO.getId())
+					.orElseThrow(() -> new ApplicationException("Invalid GstSalesVoucher details"));
+		}
+//					else {
 //						if (taxInvoiceRepo.existsByDocIdAndOrgId(taxInvoiceVO.getDocId(), taxInvoiceVO.getOrgId())) {
 //							throw new ApplicationException("The given doc id already exists.");
 //						}
@@ -1508,10 +1537,11 @@ public class TransactionServiceImpl implements TransactionService {
 	public PaymentVoucherVO updateCreatePaymentVoucher(@Valid PaymentVoucherDTO paymentVoucherDTO)
 			throws ApplicationException {
 		PaymentVoucherVO paymentVoucherVO = new PaymentVoucherVO();
-//					if (ObjectUtils.isNotEmpty(taxInvoiceDTO.getId())) {
-//						taxInvoiceVO = taxInvoiceRepo.findById(taxInvoiceDTO.getId())
-//								.orElseThrow(() -> new ApplicationException("Invalid TaxInvoice details"));
-//					} else {
+		if (ObjectUtils.isNotEmpty(paymentVoucherDTO.getId())) {
+			paymentVoucherVO = paymentVoucherRepo.findById(paymentVoucherDTO.getId())
+					.orElseThrow(() -> new ApplicationException("Invalid PaymentVoucher details"));
+		}
+//					else {
 //						if (taxInvoiceRepo.existsByDocIdAndOrgId(taxInvoiceVO.getDocId(), taxInvoiceVO.getOrgId())) {
 //							throw new ApplicationException("The given doc id already exists.");
 //						}
@@ -1632,7 +1662,10 @@ public class TransactionServiceImpl implements TransactionService {
 	@Override
 	public ArapDetailsVO updateCreateArapDetails(@Valid ArapDetailsDTO arapDetailsDTO) throws ApplicationException {
 		ArapDetailsVO arapDetailsVO = new ArapDetailsVO();
-
+		if (ObjectUtils.isNotEmpty(arapDetailsDTO.getId())) {
+			arapDetailsVO = arapDetailsRepo.findById(arapDetailsDTO.getId())
+					.orElseThrow(() -> new ApplicationException("Invalid ARAP Details details"));
+		}
 		getArapDetailsVOFromArapDetailsDTO(arapDetailsDTO, arapDetailsVO);
 		return arapDetailsRepo.save(arapDetailsVO);
 	}
@@ -1682,7 +1715,7 @@ public class TransactionServiceImpl implements TransactionService {
 	public List<ArapDetailsVO> getArapDetailsByActive() {
 		return arapDetailsRepo.findArapDetailsByActive();
 	}
-	
+
 //	ArapAdjustments
 
 	@Override
@@ -1712,14 +1745,20 @@ public class TransactionServiceImpl implements TransactionService {
 	}
 
 	@Override
-	public ArapAdjustmentsVO updateCreateArapAdjustments(@Valid ArapAdjustmentsDTO arapAdjustmentsDTO) throws ApplicationException {
+	public ArapAdjustmentsVO updateCreateArapAdjustments(@Valid ArapAdjustmentsDTO arapAdjustmentsDTO)
+			throws ApplicationException {
 		ArapAdjustmentsVO arapAdjustmentsVO = new ArapAdjustmentsVO();
+		if (ObjectUtils.isNotEmpty(arapAdjustmentsDTO.getId())) {
+			arapAdjustmentsVO = arapAdjustmentsRepo.findById(arapAdjustmentsDTO.getId())
+					.orElseThrow(() -> new ApplicationException("Invalid ARAP adjustments details"));
+		}
 
 		getArapAdjustmentsVOFromArapAdjustmentsDTO(arapAdjustmentsDTO, arapAdjustmentsVO);
 		return arapAdjustmentsRepo.save(arapAdjustmentsVO);
 	}
 
-	private void getArapAdjustmentsVOFromArapAdjustmentsDTO(@Valid ArapAdjustmentsDTO arapAdjustmentsDTO, ArapAdjustmentsVO arapAdjustmentsVO) {
+	private void getArapAdjustmentsVOFromArapAdjustmentsDTO(@Valid ArapAdjustmentsDTO arapAdjustmentsDTO,
+			ArapAdjustmentsVO arapAdjustmentsVO) {
 //		// Finyr
 //		int finyr = paymentVoucherRepo.findFinyr();
 //		// DocId
@@ -1756,6 +1795,183 @@ public class TransactionServiceImpl implements TransactionService {
 	@Override
 	public List<ArapAdjustmentsVO> getArapAdjustmentsByActive() {
 		return arapAdjustmentsRepo.findArapAdjustmentsByActive();
+	}
+
+	// ReceiptReversal
+
+	@Override
+	public List<ReceiptReversalVO> getAllReceiptReversalByOrgId(Long orgId) {
+		List<ReceiptReversalVO> receiptReversalVO = new ArrayList<>();
+		if (ObjectUtils.isNotEmpty(orgId)) {
+			LOGGER.info("Successfully Received  ReceiptReversal BY OrgId : {}", orgId);
+			receiptReversalVO = receiptReversalRepo.getAllReceiptReversalByOrgId(orgId);
+		} else {
+			LOGGER.info("Successfully Received  ReceiptReversal For All OrgId.");
+			receiptReversalVO = receiptReversalRepo.findAll();
+		}
+		return receiptReversalVO;
+	}
+
+	@Override
+	public List<ReceiptReversalVO> getAllReceiptReversalById(Long id) {
+		List<ReceiptReversalVO> receiptReversalVO = new ArrayList<>();
+		if (ObjectUtils.isNotEmpty(id)) {
+			LOGGER.info("Successfully Received ReceiptReversal BY Id : {}", id);
+			receiptReversalVO = receiptReversalRepo.getAllReceiptReversalById(id);
+		} else {
+			LOGGER.info("Successfully Received ReceiptReversal For All Id.");
+			receiptReversalVO = receiptReversalRepo.findAll();
+		}
+		return receiptReversalVO;
+	}
+
+	@Override
+	public ReceiptReversalVO updateCreateReceiptReversal(@Valid ReceiptReversalDTO receiptReversalDTO)
+			throws ApplicationException {
+		ReceiptReversalVO receiptReversalVO = new ReceiptReversalVO();
+				if (ObjectUtils.isNotEmpty(receiptReversalDTO.getId())) {
+					receiptReversalVO = receiptReversalRepo.findById(receiptReversalDTO.getId())
+							.orElseThrow(() -> new ApplicationException("Invalid ReceiptReversal details"));
+				} 
+//				else {
+//					if (taxInvoiceRepo.existsByDocIdAndOrgId(taxInvoiceVO.getDocId(), taxInvoiceVO.getOrgId())) {
+//						throw new ApplicationException("The given doc id already exists.");
+//					}
+//					if (taxInvoiceRepo.existsByInvoiceNoAndOrgId(taxInvoiceVO.getInvoiceNo(), taxInvoiceVO.getOrgId())) {
+//						throw new ApplicationException("The given invoice number already exists.");
+//					}
+//				}
+//				if (ObjectUtils.isNotEmpty(taxInvoiceVO.getId())) {
+//					if (taxInvoiceRepo.existsByDocIdAndOrgIdAndId(taxInvoiceVO.getDocId(), taxInvoiceVO.getOrgId(),
+//							taxInvoiceVO.getId())) {
+//						throw new ApplicationException("The given doc id already exists.");
+//					}
+//					if (taxInvoiceRepo.existsByInvoiceNoAndOrgIdAndId(taxInvoiceVO.getInvoiceNo(), taxInvoiceVO.getOrgId(),
+//							taxInvoiceVO.getId())) {
+//						throw new ApplicationException("The given invoice number already exists.");
+//					}
+//				}
+
+		List<ReceiptInvoiceVO> receiptInvoiceVOs = new ArrayList<>();
+		if (receiptReversalDTO.getReceiptInvoiceDTO() != null) {
+			for (ReceiptInvoiceDTO receiptInvoiceDTO : receiptReversalDTO.getReceiptInvoiceDTO()) {
+				ReceiptInvoiceVO receiptInvoiceVO;
+				if (receiptInvoiceDTO.getId() != null && ObjectUtils.isNotEmpty(receiptInvoiceDTO.getId())) {
+					receiptInvoiceVO = receiptInvoiceRepo.findById(receiptInvoiceDTO.getId())
+							.orElse(new ReceiptInvoiceVO());
+				} else {
+					receiptInvoiceVO = new ReceiptInvoiceVO();
+				}
+				receiptInvoiceVO.setInvoiceNo(receiptInvoiceDTO.getInvoiceNo());
+				receiptInvoiceVO.setInvoiceDt(receiptInvoiceDTO.getInvoiceDt());
+				receiptInvoiceVO.setRefNo(receiptInvoiceDTO.getRefNo());
+				receiptInvoiceVO.setRefDate(receiptInvoiceDTO.getRefDate());
+				receiptInvoiceVO.setMasterRef(receiptInvoiceDTO.getMasterRef());
+				receiptInvoiceVO.setHouseRef(receiptInvoiceDTO.getHouseRef());
+				receiptInvoiceVO.setCurr(receiptInvoiceDTO.getCurr());
+				receiptInvoiceVO.setExRate(receiptInvoiceDTO.getExRate());
+				receiptInvoiceVO.setAmount(receiptInvoiceDTO.getAmount());
+				receiptInvoiceVO.setChargableAmount(receiptInvoiceDTO.getChargableAmount());
+				receiptInvoiceVO.setOutStanding(receiptInvoiceDTO.getOutStanding());
+				receiptInvoiceVO.setSettled(receiptInvoiceDTO.getSettled());
+				receiptInvoiceVO.setRecExRate(receiptInvoiceDTO.getRecExRate());
+				receiptInvoiceVO.setTxnSettled(receiptInvoiceDTO.getTxnSettled());
+				receiptInvoiceVO.setGainOrLoss(receiptInvoiceDTO.getGainOrLoss());
+				receiptInvoiceVO.setReceiptReversalVO(receiptReversalVO);
+				receiptInvoiceVOs.add(receiptInvoiceVO);
+			}
+		}
+
+		List<ReceiptOtherAccountVO> receiptOtherAccountVOs = new ArrayList<>();
+		if (receiptReversalDTO.getReceiptOtherAccountDTO() != null) {
+			for (ReceiptOtherAccountDTO receiptOtherAccountDTO : receiptReversalDTO.getReceiptOtherAccountDTO()) {
+				ReceiptOtherAccountVO receiptOtherAccountVO;
+				if (receiptOtherAccountDTO.getId() != null & ObjectUtils.isNotEmpty(receiptOtherAccountDTO.getId())) {
+					receiptOtherAccountVO = receiptOtherAccountRepo.findById(receiptOtherAccountDTO.getId())
+							.orElse(new ReceiptOtherAccountVO());
+				} else {
+					receiptOtherAccountVO = new ReceiptOtherAccountVO();
+				}
+				receiptOtherAccountVO.setAccountName(receiptOtherAccountDTO.getAccountName());
+				receiptOtherAccountVO.setSubLedgerName(receiptOtherAccountDTO.getSubLedgerName());
+				receiptOtherAccountVO.setCredit(receiptOtherAccountDTO.getCredit());
+				receiptOtherAccountVO.setRemarks(receiptOtherAccountDTO.getRemarks());
+				receiptOtherAccountVO.setReceiptReversalVO(receiptReversalVO);
+				receiptOtherAccountVOs.add(receiptOtherAccountVO);
+			}
+		}
+
+		List<ReceiptSummaryVO> receiptSummaryVOs = new ArrayList<>();
+		if (receiptReversalDTO.getReceiptSummaryDTO() != null) {
+			for (ReceiptSummaryDTO receiptSummaryDTO : receiptReversalDTO.getReceiptSummaryDTO()) {
+				ReceiptSummaryVO receiptSummaryVO;
+				if (receiptSummaryDTO.getId() != null & ObjectUtils.isEmpty(receiptSummaryDTO.getId())) {
+					receiptSummaryVO = receiptSummaryRepo.findById(receiptSummaryDTO.getId())
+							.orElse(new ReceiptSummaryVO());
+				} else {
+					receiptSummaryVO = new ReceiptSummaryVO();
+				}
+				receiptSummaryVO.setFoxenGainOrLoss(receiptSummaryDTO.getFoxenGainOrLoss());
+				receiptSummaryVO.setRoundOffAmount(receiptSummaryDTO.getRoundOffAmount());
+				receiptSummaryVO.setTotalSettled(receiptSummaryDTO.getTotalSettled());
+				receiptSummaryVO.setOtherAccNetAmt(receiptSummaryDTO.getOtherAccNetAmt());
+				receiptSummaryVO.setOnAccount(receiptSummaryDTO.getOnAccount());
+				receiptSummaryVO.setNarration(receiptSummaryDTO.getNarration());
+				receiptSummaryVO.setReceiptReversalVO(receiptReversalVO);
+				receiptSummaryVOs.add(receiptSummaryVO);
+			}
+		}
+
+		getReceiptReversalVOFromReceiptReversalDTO(receiptReversalDTO, receiptReversalVO);
+		receiptReversalVO.setReceiptOtherAccountVO(receiptOtherAccountVOs);
+		receiptReversalVO.setReceiptInvoiceVO(receiptInvoiceVOs);
+		receiptReversalVO.setReceiptSummaryVO(receiptSummaryVOs);
+		return receiptReversalRepo.save(receiptReversalVO);
+	}
+
+	private void getReceiptReversalVOFromReceiptReversalDTO(@Valid ReceiptReversalDTO receiptReversalDTO,
+			ReceiptReversalVO receiptReversalVO) {
+//				// Finyr
+//				int finyr = taxInvoiceRepo.findFinyr();
+//				// DocId
+//				String taxInvoice = "AI" + finyr + taxInvoiceRepo.findDocId();
+//				taxInvoiceVO.setDocId(taxInvoice);
+//				taxInvoiceRepo.nextSeq();
+//				// InvoiceNo
+//				String invoiceNo = "AI" + finyr + "INV" + taxInvoiceRepo.findInvoiceNo();
+//				taxInvoiceVO.setInvoiceNo(invoiceNo);
+//				taxInvoiceRepo.nextSeqInvoice();
+		receiptReversalVO.setDocId(receiptReversalDTO.getDocId());
+		receiptReversalVO.setDocDate(receiptReversalDTO.getDocDate());
+		receiptReversalVO.setOriginBill(receiptReversalDTO.getOriginBill());
+		receiptReversalVO.setOriginDate(receiptReversalDTO.getOriginDate());
+		receiptReversalVO.setType(receiptReversalDTO.getType());
+		receiptReversalVO.setReceiptType(receiptReversalDTO.getReceiptType());
+		receiptReversalVO.setCustomerName(receiptReversalDTO.getCustomerName());
+		receiptReversalVO.setCustomerCode(receiptReversalDTO.getCustomerCode());
+		receiptReversalVO.setBankCash(receiptReversalDTO.getBankCash());
+		receiptReversalVO.setReceiptAmount(receiptReversalDTO.getReceiptAmount());
+		receiptReversalVO.setCurrency(receiptReversalDTO.getCurrency());
+		receiptReversalVO.setBankChargesAc(receiptReversalDTO.getBankChargesAc());
+		receiptReversalVO.setBankCharges(receiptReversalDTO.getBankCharges());
+		receiptReversalVO.setBcInCurrency(receiptReversalDTO.getBcInCurrency());
+		receiptReversalVO.setTdsAmount(receiptReversalDTO.getTdsAmount());
+		receiptReversalVO.setTdsInCurrency(receiptReversalDTO.getTdsInCurrency());
+		receiptReversalVO.setChequeBank(receiptReversalDTO.getChequeBank());
+		receiptReversalVO.setReceiptType2(receiptReversalDTO.getReceiptType2());
+		receiptReversalVO.setChqNo(receiptReversalDTO.getChqNo());
+		receiptReversalVO.setChqDt(receiptReversalDTO.getChqDt());
+		receiptReversalVO.setReceivedFrom(receiptReversalDTO.getReceivedFrom());
+		receiptReversalVO.setOffSetStatus(receiptReversalDTO.getOffSetStatus());
+		receiptReversalVO.setOrgId(receiptReversalDTO.getOrgId());
+		receiptReversalVO.setActive(receiptReversalDTO.isActive());
+		receiptReversalVO.setCreatedBy(receiptReversalDTO.getCreatedBy());
+		receiptReversalVO.setUpdatedBy(receiptReversalDTO.getUpdatedBy());
+	}
+
+	@Override
+	public List<ReceiptReversalVO> getReceiptReversalByActive() {
+		return receiptReversalRepo.findReceiptReversalByActive();
 	}
 
 }

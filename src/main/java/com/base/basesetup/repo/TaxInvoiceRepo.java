@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.base.basesetup.entity.TaxInvoiceVO;
 
-public interface TaxInvocieRepo extends JpaRepository<TaxInvoiceVO, Long> {
+public interface TaxInvoiceRepo extends JpaRepository<TaxInvoiceVO, Long> {
 
 	boolean existsByDocIdAndOrgId(String docId, Long orgId);
 
