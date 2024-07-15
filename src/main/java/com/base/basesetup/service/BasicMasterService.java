@@ -108,6 +108,7 @@ public interface BasicMasterService {
 	List<BranchVO> getBranchById(Long id);
 
 	List<BranchVO> getBranchByOrgId(Long orgid);
+	
 
 	BranchVO updateCreateBranch(@Valid BranchDTO branchDTO) throws ApplicationException;
 

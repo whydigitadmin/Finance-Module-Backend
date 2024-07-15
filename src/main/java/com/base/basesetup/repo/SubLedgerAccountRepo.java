@@ -24,10 +24,5 @@ public interface SubLedgerAccountRepo extends JpaRepository<SubLedgerAccountVO, 
 
 	boolean existsBySubLedgerNameAndOrgId(String subLedgerName, Long orgId);
 
-	boolean existsByNewCodeAndOrgIdAndId(String newCode, Long orgId, Long id);
-
-	boolean existsByOldCodeAndOrgIdAndId(String oldCode, Long orgId, Long id);
-
-	boolean existsBySubLedgerNameAndOrgIdAndId(String subLedgerName, Long orgId, Long id);
 
 }

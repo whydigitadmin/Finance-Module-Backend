@@ -21,9 +21,4 @@ public interface ChargeTypeRequestRepo extends JpaRepository<ChargeTypeRequestVO
 	boolean existsByChargeDescripitionAndOrgId(String chargeDescripiton, Long orgId);
 
 	boolean existsByChargeCodeAndOrgId(String chargeCode, Long orgId);
-
-	boolean existsByChargeDescripitionAndOrgIdAndId(String chargeDescripition, Long orgId, Long id);
-
-	boolean existsByChargeCodeAndOrgIdAndId(String chargeCode, Long orgId, Long id);
-
 }

@@ -1,6 +1,10 @@
 package com.base.basesetup.service;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -13,17 +17,26 @@ import org.springframework.stereotype.Service;
 
 import com.base.basesetup.common.CommonConstant;
 import com.base.basesetup.common.UserConstants;
+import com.base.basesetup.dto.BranchAccessDTO;
 import com.base.basesetup.dto.ChangePasswordFormDTO;
+import com.base.basesetup.dto.CreateUserFormDTO;
 import com.base.basesetup.dto.LoginFormDTO;
 import com.base.basesetup.dto.ResetPasswordFormDTO;
-import com.base.basesetup.dto.Role;
 import com.base.basesetup.dto.SignUpFormDTO;
 import com.base.basesetup.dto.UserResponseDTO;
+import com.base.basesetup.dto.UserRoleDTO;
+import com.base.basesetup.entity.BranchAccessVO;
+import com.base.basesetup.entity.GlobalParameterVO;
 import com.base.basesetup.entity.TokenVO;
 import com.base.basesetup.entity.UserActionVO;
+import com.base.basesetup.entity.UserRolesVO;
 import com.base.basesetup.entity.UserVO;
+import com.base.basesetup.exception.ApplicationException;
+import com.base.basesetup.repo.BranchAccessRepo;
+import com.base.basesetup.repo.GlobalParameterRepo;
 import com.base.basesetup.repo.UserActionRepo;
 import com.base.basesetup.repo.UserRepo;
+import com.base.basesetup.repo.UserRoleRepo;
 import com.base.basesetup.security.TokenProvider;
 import com.base.basesetup.util.CryptoUtils;
 
@@ -42,6 +55,16 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	UserActionRepo userActionRepo;
+	
+	@Autowired
+	GlobalParameterRepo globalParameterRepo;
+	
+	@Autowired
+	UserRoleRepo userRoleRepo;
+	
+	@Autowired
+	BranchAccessRepo branchAccessRepo;	
+	
 
 	@Override
 	public void signup(SignUpFormDTO signUpRequest) {
@@ -54,7 +77,10 @@ public class UserServiceImpl implements UserService {
 			throw new ApplicationContextException(UserConstants.ERRROR_MSG_USER_INFORMATION_ALREADY_REGISTERED);
 		}
 		UserVO userVO = getUserVOFromSignUpFormDTO(signUpRequest);
-		userRepo.save(userVO);
+		UserVO userVO1= userRepo.save(userVO);
+		GlobalParameterVO globalParameterVO=new GlobalParameterVO();
+		globalParameterVO.setUserId(userVO1.getUserId());
+		globalParameterRepo.save(globalParameterVO);
 		createUserAction(userVO.getUserName(), userVO.getUserId(), UserConstants.USER_ACTION_ADD_ACCOUNT);
 		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
 	}
@@ -70,7 +96,6 @@ public class UserServiceImpl implements UserService {
 			LOGGER.error(e.getMessage());
 			throw new ApplicationContextException(UserConstants.ERRROR_MSG_UNABLE_TO_ENCODE_USER_PASSWORD);
 		}
-		userVO.setRole(Role.ROLE_USER);
 		userVO.setActive(true);
 		return userVO;
 	}
@@ -117,11 +142,38 @@ public class UserServiceImpl implements UserService {
 		userDTO.setUserName(userVO.getUserName());
 		userDTO.setLoginStatus(userVO.isLoginStatus());
 		userDTO.setActive(userVO.isActive());
-		userDTO.setRole(userVO.getRole());
-		userDTO.setOrgId(userVO.getOrgId());
+		userDTO.setLastLogin(userVO.getLastLogin());
 		userDTO.setAccountRemovedDate(userVO.getAccountRemovedDate());
+		userDTO.setOrgId(userVO.getOrgId());
+		userDTO.setAccountRemovedDate(userVO.getAccountRemovedDate());	
+		userDTO.setUserRoles(mapUserRolesVOToDTO(userVO.getUserRoleVO()));
+		
+	    userDTO.setBranchAccess(mapBranchAccessVOToDTO(userVO.getBranchAccessVO()));
 		return userDTO;
 	}
+	private static List<UserRoleDTO> mapUserRolesVOToDTO(List<UserRolesVO> userRolesVOList) {
+        return userRolesVOList.stream()
+                .map(roleVO -> {
+                    UserRoleDTO roleDTO = new UserRoleDTO();
+                    roleDTO.setId(roleVO.getId());
+                    roleDTO.setRole(roleVO.getRole());
+                    roleDTO.setStartdate(roleVO.getStartdate());
+                    roleDTO.setEnddate(roleVO.getEnddate());
+                    return roleDTO;
+                })
+                .collect(Collectors.toList());
+    }
+
+    private static List<BranchAccessDTO> mapBranchAccessVOToDTO(List<BranchAccessVO> branchAccessVOList) {
+        return branchAccessVOList.stream()
+                .map(accessVO -> {
+                    BranchAccessDTO accessDTO = new BranchAccessDTO();
+                    accessDTO.setId(accessVO.getId());
+                    accessDTO.setBranch(accessVO.getBranch());
+                    return accessDTO;
+                })
+                .collect(Collectors.toList());
+    }
 
 	/**
 	 * @param encryptedPassword -> Data from user;
@@ -144,7 +196,11 @@ public class UserServiceImpl implements UserService {
 	 */
 	private void updateUserLoginInformation(UserVO userVO) {
 		try {
+			Date currentDate = new Date();
+			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss a");
+			userVO.setLastLogin(dateFormat.format(currentDate));
 			userVO.setLoginStatus(true);
+			
 			userRepo.save(userVO);
 			createUserAction(userVO.getUserName(), userVO.getUserId(), UserConstants.USER_ACTION_TYPE_LOGIN);
 		} catch (Exception e) {
@@ -292,5 +348,129 @@ public class UserServiceImpl implements UserService {
 		} else {
 			throw new ApplicationContextException(UserConstants.ERRROR_MSG_INVALID_USER_NAME);
 		}
+	}
+	
+	@Override
+	public String createUser(CreateUserFormDTO createUserFormDTO) throws ApplicationException {
+		String methodName = "createUser()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		boolean isNewUser = ObjectUtils.isEmpty(createUserFormDTO.getUserId());
+		if (isNewUser) {
+		if(ObjectUtils.isEmpty(createUserFormDTO.getUserId()))
+		{
+			if (ObjectUtils.isEmpty(createUserFormDTO) || StringUtils.isBlank(createUserFormDTO.getEmail())) {
+				throw new ApplicationContextException(UserConstants.ERRROR_MSG_INVALID_USER_REGISTER_INFORMATION);
+				} else if (userRepo.existsByUserName(createUserFormDTO.getUserName())) {
+					throw new ApplicationContextException(UserConstants.ERRROR_MSG_USER_INFORMATION_ALREADY_REGISTERED);
+				}
+		}
+		}
+		UserVO userVO = getUserVOFromCreateUserFormDTO(createUserFormDTO);  
+
+		if(ObjectUtils.isNotEmpty(userVO.getUserId()))
+		{
+		List<UserRolesVO> userRole=userRoleRepo.findByUserVO(userVO);
+		userRoleRepo.deleteAll(userRole);
+		
+		List<BranchAccessVO> branchaccess=branchAccessRepo.findByUserVO(userVO);
+		branchAccessRepo.deleteAll(branchaccess);
+		}
+		
+		List<UserRolesVO> userRolesVO = new ArrayList<>();
+		if (createUserFormDTO.getUserRoleDTO()!= null) {
+
+			for (UserRoleDTO userRolesDTO : createUserFormDTO.getUserRoleDTO()) {
+
+				UserRolesVO userRoles = new UserRolesVO();
+				userRoles.setRole(userRolesDTO.getRole());
+				userRoles.setStartdate(userRolesDTO.getStartdate());
+				userRoles.setEnddate(userRolesDTO.getEnddate());
+				userRoles.setUserVO(userVO);
+				userRolesVO.add(userRoles);
+				
+			}
+		}
+		userVO.setUserRoleVO(userRolesVO);
+		
+		List<BranchAccessVO> BranchAccessVO = new ArrayList<>();
+		if (createUserFormDTO.getBranchAccessDTO()!= null) {
+			for (BranchAccessDTO BranchAccessDTO : createUserFormDTO.getBranchAccessDTO()) {
+				BranchAccessVO branchesAccessible = new BranchAccessVO();
+				branchesAccessible.setBranch(BranchAccessDTO.getBranch());
+				branchesAccessible.setUserVO(userVO);
+				BranchAccessVO.add(branchesAccessible);
+			}
+		}
+		userVO.setBranchAccessVO(BranchAccessVO);
+		
+		userRepo.save(userVO);
+		createUserAction(userVO.getEmail(), userVO.getUserId(), UserConstants.USER_ACTION_ADD_ACCOUNT);
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return isNewUser ? "New User Created Successfully" : "User Details Updated Successfully";
+	}
+
+	private UserVO getUserVOFromCreateUserFormDTO(CreateUserFormDTO createUserFormDTO) {
+		
+		UserVO userVO = new UserVO();
+		
+		if(ObjectUtils.isEmpty(createUserFormDTO.getUserId()))
+		{
+			userVO.setUserName(createUserFormDTO.getUserName());
+			userVO.setEmail(createUserFormDTO.getEmail());
+			userVO.setUserType(createUserFormDTO.getUserType());
+			userVO.setAllIndiaAccess(createUserFormDTO.isAllIndiaAccess());
+			userVO.setEmployeeCode(createUserFormDTO.getEmployeeCode());
+			userVO.setEmployeeName(createUserFormDTO.getEmployeeName());
+			userVO.setReportingTO(createUserFormDTO.getReportingTO());
+			userVO.setLocation(createUserFormDTO.getLocation());
+			userVO.setDeactivatedOn(createUserFormDTO.getDeactivatedOn());
+			userVO.setOrgId(createUserFormDTO.getOrgId());
+
+		try {
+			userVO.setPassword(encoder.encode(CryptoUtils.getDecrypt(createUserFormDTO.getPassword())));
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage());
+			throw new ApplicationContextException(UserConstants.ERRROR_MSG_UNABLE_TO_ENCODE_USER_PASSWORD);
+		}
+		userVO.setActive(true);
+		
+		}
+		else
+		{
+			userVO=userRepo.findById(createUserFormDTO.getUserId()).get();
+			if(!userVO.getUserName().equals(createUserFormDTO.getUserName()))
+			{
+			 if (userRepo.existsByUserName(createUserFormDTO.getUserName())) {
+				throw new ApplicationContextException(UserConstants.ERRROR_MSG_USER_INFORMATION_ALREADY_REGISTERED);
+			 }
+			}
+			userVO.setUserName(createUserFormDTO.getUserName());
+			userVO.setEmail(createUserFormDTO.getEmail());
+			userVO.setUserType(createUserFormDTO.getUserType());
+			userVO.setAllIndiaAccess(createUserFormDTO.isAllIndiaAccess());
+			userVO.setEmployeeCode(createUserFormDTO.getEmployeeCode());
+			userVO.setEmployeeName(createUserFormDTO.getEmployeeName());
+			userVO.setReportingTO(createUserFormDTO.getReportingTO());
+			userVO.setLocation(createUserFormDTO.getLocation());
+			userVO.setDeactivatedOn(createUserFormDTO.getDeactivatedOn());
+			userVO.setOrgId(createUserFormDTO.getOrgId());
+
+		try {
+			userVO.setPassword(encoder.encode(CryptoUtils.getDecrypt(createUserFormDTO.getPassword())));
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage());
+			throw new ApplicationContextException(UserConstants.ERRROR_MSG_UNABLE_TO_ENCODE_USER_PASSWORD);
+		}
+		userVO.setActive(true);
+		}
+		
+		
+		return userVO;
+	}
+
+	@Override
+	public List<UserVO> getUserByOrgId(Long orgId) {
+		
+		return userRepo.findByOrgId(orgId);
 	}
 }

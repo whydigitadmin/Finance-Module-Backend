@@ -1,5 +1,7 @@
 package com.base.basesetup.dto;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -25,7 +27,7 @@ public class TaxInvoiceDTO {
 	private String pincode;
 	private String status;
 	private String GSTType;
-	private LocalDateTime dueDate;
+	private LocalDate dueDate;
 	private String billCurr;
 	private String salesType;
 	private Long orgId;
@@ -35,9 +37,18 @@ public class TaxInvoiceDTO {
 	private LocalDateTime docDate;
 	private LocalDateTime invoiceDate;
 	
+	private BigDecimal lcChargeAmount;
+	private BigDecimal lcTaxAmount;
+	private BigDecimal lcInvAmount;
+	private BigDecimal lcRoundOffAmount;
+	private BigDecimal billlcChargeAmount;
+	private BigDecimal billTaxAmount;
+	private BigDecimal billInvAmount;
+	private BigDecimal lcTaxableAmount;
+	private String amountInwords;
+	private String billingRemarks;
+	
 	List<ChargerTaxInvoiceDTO> chargerTaxInvoiceDTO;
-
-	List<SummaryTaxInvoiceDTO> summaryTaxInvoiceDTO;
 
 	List<GstTaxInvoiceDTO> gstTaxInvoiceDTO;
 }

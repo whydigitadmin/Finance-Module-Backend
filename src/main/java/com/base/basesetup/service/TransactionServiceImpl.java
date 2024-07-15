@@ -37,7 +37,6 @@ import com.base.basesetup.entity.GstIrnCreditVO;
 import com.base.basesetup.entity.GstTaxInvoiceVO;
 import com.base.basesetup.entity.IrnCreditVO;
 import com.base.basesetup.entity.SummaryIrnCreditVO;
-import com.base.basesetup.entity.SummaryTaxInvoiceVO;
 import com.base.basesetup.entity.TaxInvoiceVO;
 import com.base.basesetup.exception.ApplicationException;
 import com.base.basesetup.repo.BrsOpeningRepo;
@@ -53,7 +52,6 @@ import com.base.basesetup.repo.GstTaxInvoiceRepo;
 import com.base.basesetup.repo.IrnCreditRepo;
 import com.base.basesetup.repo.ParticularsJournalRepo;
 import com.base.basesetup.repo.SummaryIrnCreditRepo;
-import com.base.basesetup.repo.SummaryTaxInvoiceRepo;
 import com.base.basesetup.repo.TaxInvocieRepo;
 
 @Service
@@ -68,8 +66,7 @@ public class TransactionServiceImpl implements TransactionService {
 	@Autowired
 	GstTaxInvoiceRepo gstTaxInvoiceRepo;
 
-	@Autowired
-	SummaryTaxInvoiceRepo summaryTaxInvoiceRepo;
+	
 
 	@Autowired
 	IrnCreditRepo irnCreditRepo;
@@ -190,32 +187,6 @@ public class TransactionServiceImpl implements TransactionService {
 				chargerTaxInvoiceVOs.add(chargerTaxInvoiceVO);
 			}
 		}
-
-		List<SummaryTaxInvoiceVO> summaryTaxInvoiceVOs = new ArrayList<>();
-		if (taxInvoiceDTO.getSummaryTaxInvoiceDTO() != null) {
-			for (SummaryTaxInvoiceDTO summaryTaxInvoiceDTO : taxInvoiceDTO.getSummaryTaxInvoiceDTO()) {
-				SummaryTaxInvoiceVO summaryTaxInvoiceVO;
-				if (summaryTaxInvoiceDTO.getId() != null & ObjectUtils.isNotEmpty(summaryTaxInvoiceDTO.getId())) {
-					summaryTaxInvoiceVO = summaryTaxInvoiceRepo.findById(summaryTaxInvoiceDTO.getId())
-							.orElse(new SummaryTaxInvoiceVO());
-				} else {
-					summaryTaxInvoiceVO = new SummaryTaxInvoiceVO();
-				}
-				summaryTaxInvoiceVO.setAmountInwords(summaryTaxInvoiceDTO.getAmountInwords());
-				summaryTaxInvoiceVO.setBillingRemarks(summaryTaxInvoiceDTO.getBillingRemarks());
-				summaryTaxInvoiceVO.setBillInvAmount(summaryTaxInvoiceDTO.getBillInvAmount());
-				summaryTaxInvoiceVO.setBilllcChargeAmount(summaryTaxInvoiceDTO.getBilllcChargeAmount());
-				summaryTaxInvoiceVO.setBillTaxAmount(summaryTaxInvoiceDTO.getBillTaxAmount());
-				summaryTaxInvoiceVO.setLcChargeAmount(summaryTaxInvoiceDTO.getLcChargeAmount());
-				summaryTaxInvoiceVO.setLcInvAmount(summaryTaxInvoiceDTO.getLcInvAmount());
-				summaryTaxInvoiceVO.setLcRoundOffAmount(summaryTaxInvoiceDTO.getLcRoundOffAmount());
-				summaryTaxInvoiceVO.setLcTaxableAmount(summaryTaxInvoiceDTO.getLcTaxableAmount());
-				summaryTaxInvoiceVO.setLcTaxAmount(summaryTaxInvoiceDTO.getLcTaxAmount());
-				summaryTaxInvoiceVO.setTaxInvoiceVO(taxInvoiceVO);
-				summaryTaxInvoiceVOs.add(summaryTaxInvoiceVO);
-			}
-		}
-
 		List<GstTaxInvoiceVO> gstTaxInvoiceVOs = new ArrayList<>();
 		if (taxInvoiceDTO.getGstTaxInvoiceDTO() != null) {
 			for (GstTaxInvoiceDTO gstTaxInvoiceDTO : taxInvoiceDTO.getGstTaxInvoiceDTO()) {
@@ -239,7 +210,6 @@ public class TransactionServiceImpl implements TransactionService {
 
 		getTaxInvoiceVOFromTaxInvoiceDTO(taxInvoiceDTO, taxInvoiceVO);
 		taxInvoiceVO.setChargerTaxInvoiceVO(chargerTaxInvoiceVOs);
-		taxInvoiceVO.setSummaryTaxInvoiceVO(summaryTaxInvoiceVOs);
 		taxInvoiceVO.setGstTaxInvoiceVO(gstTaxInvoiceVOs);
 		return taxInvoiceRepo.save(taxInvoiceVO);
 	}
@@ -274,6 +244,16 @@ public class TransactionServiceImpl implements TransactionService {
 		taxInvoiceVO.setUpdatedBy(taxInvoiceDTO.getUpdatedBy());
 		taxInvoiceVO.setDocDate(taxInvoiceDTO.getDocDate());
 		taxInvoiceVO.setInvoiceDate(taxInvoiceDTO.getInvoiceDate());
+		taxInvoiceVO.setAmountInwords(taxInvoiceDTO.getAmountInwords());
+		taxInvoiceVO.setBillingRemarks(taxInvoiceDTO.getBillingRemarks());
+		taxInvoiceVO.setBillInvAmount(taxInvoiceDTO.getBillInvAmount());
+		taxInvoiceVO.setBilllcChargeAmount(taxInvoiceDTO.getBilllcChargeAmount());
+		taxInvoiceVO.setBillTaxAmount(taxInvoiceDTO.getBillTaxAmount());
+		taxInvoiceVO.setLcChargeAmount(taxInvoiceDTO.getLcChargeAmount());
+		taxInvoiceVO.setLcInvAmount(taxInvoiceDTO.getLcInvAmount());
+		taxInvoiceVO.setLcRoundOffAmount(taxInvoiceDTO.getLcRoundOffAmount());
+		taxInvoiceVO.setLcTaxableAmount(taxInvoiceDTO.getLcTaxableAmount());
+		taxInvoiceVO.setLcTaxAmount(taxInvoiceDTO.getLcTaxAmount());
 	}
 
 	@Override

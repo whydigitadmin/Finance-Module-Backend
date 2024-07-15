@@ -22,8 +22,4 @@ public interface CostCenterRepo extends JpaRepository<CostCenterVO, Long> {
 
 	boolean existsByValueDescripitionAndOrgId(String valueDescripition, Long orgId);
 
-	boolean existsByValueCodeAndOrgIdAndId(String valueCode, Long orgId, Long id);
-
-	boolean existsByValueDescripitionAndOrgIdAndId(String valueDescripition, Long orgId, Long id);
-
 }

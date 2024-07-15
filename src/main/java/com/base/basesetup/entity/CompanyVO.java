@@ -76,6 +76,7 @@ public class CompanyVO {
 	@Lob
 	@Column(name = "data", columnDefinition = "LONGBLOB")
 	private byte[] data;
+	
 
 	@Embedded
 	@Builder.Default

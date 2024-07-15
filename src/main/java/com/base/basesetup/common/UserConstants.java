@@ -2,8 +2,8 @@ package com.base.basesetup.common;
 
 public class UserConstants {
 
-	public static final String SIGNUP_REGISTERED_SUCCESS_MESSAGE = "User registered successfully.";
-	public static final String SIGNUP_REGISTERED_FAILED_MESSAGE = "User register failed.";
+	public static final String SIGNUP_REGISTERED_SUCCESS_MESSAGE = "User Created successfully.";
+	public static final String SIGNUP_REGISTERED_FAILED_MESSAGE = "User Creation failed.";
 	public static final String ERRROR_MSG_INVALID_USER_REGISTER_INFORMATION = "Invalid user register information.";
 	public static final String ERRROR_MSG_USER_INFORMATION_ALREADY_REGISTERED = "User information already registered.";
 	public static final String ERRROR_MSG_UNABLE_TO_ENCODE_USER_PASSWORD = "Unable  to encode the password.";

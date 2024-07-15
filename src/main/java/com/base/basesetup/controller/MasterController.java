@@ -804,32 +804,32 @@ public class MasterController extends BaseController {
 		return ResponseEntity.ok().body(responseDTO);
 	}
 
-	@GetMapping("/getHsnSacCodeByActive")
-	public ResponseEntity<ResponseDTO> getHsnSacCodeByActive() {
-		String methodName = "getHsnSacCodeByActive()";
-		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
-		String errorMsg = null;
-		Map<String, Object> responseObjectsMap = new HashMap<>();
-		ResponseDTO responseDTO = null;
-		List<HsnSacCodeVO> hsnSacCodeVO = new ArrayList<>();
-		try {
-			hsnSacCodeVO = masterService.getHsnSacCodeByActive();
-		} catch (Exception e) {
-			errorMsg = e.getMessage();
-			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
-		}
-		if (StringUtils.isBlank(errorMsg)) {
-			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "HsnSacCode information get successfully By Active");
-			responseObjectsMap.put("hsnSacCodeVO", hsnSacCodeVO);
-			responseDTO = createServiceResponse(responseObjectsMap);
-		} else {
-			responseDTO = createServiceResponseError(responseObjectsMap,
-					"HsnSacCode information receive failed By Active", errorMsg);
-		}
-		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
-		return ResponseEntity.ok().body(responseDTO);
-
-	}
+//	@GetMapping("/getHsnSacCodeByActive")
+//	public ResponseEntity<ResponseDTO> getHsnSacCodeByActive() {
+//		String methodName = "getHsnSacCodeByActive()";
+//		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+//		String errorMsg = null;
+//		Map<String, Object> responseObjectsMap = new HashMap<>();
+//		ResponseDTO responseDTO = null;
+//		List<HsnSacCodeVO> hsnSacCodeVO = new ArrayList<>();
+//		try {
+//			hsnSacCodeVO = masterService.getHsnSacCodeByActive();
+//		} catch (Exception e) {
+//			errorMsg = e.getMessage();
+//			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+//		}
+//		if (StringUtils.isBlank(errorMsg)) {
+//			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "HsnSacCode information get successfully By Active");
+//			responseObjectsMap.put("hsnSacCodeVO", hsnSacCodeVO);
+//			responseDTO = createServiceResponse(responseObjectsMap);
+//		} else {
+//			responseDTO = createServiceResponseError(responseObjectsMap,
+//					"HsnSacCode information receive failed By Active", errorMsg);
+//		}
+//		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+//		return ResponseEntity.ok().body(responseDTO);
+//
+//	}
 
 	// ExRates
 	@GetMapping("/getAllExRatesByOrgId")

@@ -1,5 +1,6 @@
 package com.base.basesetup.entity;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -60,7 +61,7 @@ public class TaxInvoiceVO {
 	@Column(name = "gsttype")
 	private String GSTType;
 	@Column(name = "duedate")
-	private LocalDateTime dueDate;
+	private LocalDate dueDate;
 	@Column(name = "billcurr")
 	private String billCurr;
 	@Column(name = "salestype")
@@ -87,6 +88,27 @@ public class TaxInvoiceVO {
 	private LocalDateTime invoiceDate;
 	@Column(name = "finyr")
 	private String finyr;
+	
+	@Column(name = "lcchargeamount")
+	private BigDecimal lcChargeAmount;
+	@Column(name = "lctaxamount")
+	private BigDecimal lcTaxAmount;
+	@Column(name = "lcinvamount")
+	private BigDecimal lcInvAmount;
+	@Column(name = "lcroundoffamount")
+	private BigDecimal lcRoundOffAmount;
+	@Column(name = "billchargeamount")
+	private BigDecimal billlcChargeAmount;
+	@Column(name = "billtaxamount")
+	private BigDecimal billTaxAmount;
+	@Column(name = "billinvamount")
+	private BigDecimal billInvAmount;
+	@Column(name = "lctaxableamount")
+	private BigDecimal lcTaxableAmount;
+	@Column(name = "amountinwords")
+	private String amountInwords;
+	@Column(name = "billingremarks")
+	private String billingRemarks;
 
 	@PrePersist
 	private void setDefaultFinyr() {
@@ -107,10 +129,7 @@ public class TaxInvoiceVO {
 	@OneToMany(mappedBy = "taxInvoiceVO", cascade = CascadeType.ALL)
 	@JsonManagedReference
 	List<ChargerTaxInvoiceVO> chargerTaxInvoiceVO;
-
-	@OneToMany(mappedBy = "taxInvoiceVO", cascade = CascadeType.ALL)
-	@JsonManagedReference
-	List<SummaryTaxInvoiceVO> summaryTaxInvoiceVO;
+	
 
 	@OneToMany(mappedBy = "taxInvoiceVO", cascade = CascadeType.ALL)
 	@JsonManagedReference
