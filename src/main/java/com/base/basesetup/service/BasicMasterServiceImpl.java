@@ -236,7 +236,6 @@ public class BasicMasterServiceImpl implements BasicMasterService {
 			employeeRepo.save(emp);
 			UserVO userVO = new UserVO();
 			userVO.setEmail(companyVO.getEmail());
-			userVO.setRole(Role.ROLE_ADMIN);
 			userVO.setEmployeeName(companyDTO.getEmployeeName());
 			if (userRepo.existsByUserName(companyDTO.getEmployeeCode())) {
 				throw new ApplicationException("Employee code already existes");
@@ -362,10 +361,8 @@ public class BasicMasterServiceImpl implements BasicMasterService {
 			LOGGER.error(e.getMessage());
 			throw new ApplicationContextException(UserConstants.ERRROR_MSG_UNABLE_TO_ENCODE_USER_PASSWORD);
 		}
-		userVO.setRole(Role.ROLE_USER);
 		userVO.setActive(true);
 		userVO.setLoginStatus(false);
-		userVO.setEmployeeVO(employeeVO);
 
 		userRepo.save(userVO);
 		return employeeVO;
@@ -683,15 +680,7 @@ public class BasicMasterServiceImpl implements BasicMasterService {
 
 	@Override
 	public List<BranchVO> getBranchByOrgId(Long orgId) {
-		List<BranchVO> branchVO = new ArrayList<>();
-		if (ObjectUtils.isNotEmpty(orgId)) {
-			LOGGER.info("Successfully Received Branch BY OrgId : {}", orgId);
-			branchVO = branchRepo.findBranchByOrgId(orgId);
-		} else {
-			LOGGER.info("Successfully Received Branch For All OrgId.");
-			branchVO = branchRepo.findAll();
-		}
-		return branchVO;
+		return branchRepo.findBranchByOrgId(orgId);
 	}
 
 	@Override

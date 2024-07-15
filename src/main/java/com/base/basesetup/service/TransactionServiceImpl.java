@@ -47,7 +47,6 @@ import com.base.basesetup.dto.SummaryDebitNoteDTO;
 import com.base.basesetup.dto.SummaryGstVoucherDTO;
 import com.base.basesetup.dto.SummaryIrnCreditDTO;
 import com.base.basesetup.dto.SummaryPaymentVoucherDTO;
-import com.base.basesetup.dto.SummaryTaxInvoiceDTO;
 import com.base.basesetup.dto.TaxInvoiceDTO;
 import com.base.basesetup.dto.TdsCostInvoiceDTO;
 import com.base.basesetup.entity.ArapAdjustmentsVO;
@@ -86,7 +85,6 @@ import com.base.basesetup.entity.SummaryDebitNoteVO;
 import com.base.basesetup.entity.SummaryGstVoucherVO;
 import com.base.basesetup.entity.SummaryIrnCreditVO;
 import com.base.basesetup.entity.SummaryPaymentVoucherVO;
-import com.base.basesetup.entity.SummaryTaxInvoiceVO;
 import com.base.basesetup.entity.TaxInvoiceVO;
 import com.base.basesetup.entity.TdsCostInvoiceVO;
 import com.base.basesetup.exception.ApplicationException;
@@ -128,7 +126,6 @@ import com.base.basesetup.repo.SummaryGstVoucherRepo;
 import com.base.basesetup.repo.SummaryIrnCreditRepo;
 import com.base.basesetup.repo.SummaryJournalRepo;
 import com.base.basesetup.repo.SummaryPaymentVoucherRepo;
-import com.base.basesetup.repo.SummaryTaxInvoiceRepo;
 import com.base.basesetup.repo.TaxInvoiceRepo;
 import com.base.basesetup.repo.TdsCostInvoiceRepo;
 
@@ -143,7 +140,6 @@ public class TransactionServiceImpl implements TransactionService {
 
 	@Autowired
 	GstTaxInvoiceRepo gstTaxInvoiceRepo;
-
 
 	@Autowired
 	IrnCreditRepo irnCreditRepo;
@@ -243,7 +239,7 @@ public class TransactionServiceImpl implements TransactionService {
 
 	@Autowired
 	ReceiptSummaryRepo receiptSummaryRepo;
-	
+
 	@Autowired
 	PaymentReversalRepo paymentReversalRepo;
 
@@ -340,7 +336,6 @@ public class TransactionServiceImpl implements TransactionService {
 				chargerTaxInvoiceVOs.add(chargerTaxInvoiceVO);
 			}
 		}
-
 
 		List<GstTaxInvoiceVO> gstTaxInvoiceVOs = new ArrayList<>();
 		if (taxInvoiceDTO.getGstTaxInvoiceDTO() != null) {
@@ -2143,7 +2138,7 @@ public class TransactionServiceImpl implements TransactionService {
 		paymentReversalVO.setBankCharges(paymentReversalDTO.getBankCharges());
 		paymentReversalVO.setBcInCurrency(paymentReversalDTO.getBcInCurrency());
 		paymentReversalVO.setTdsAmount(paymentReversalDTO.getTdsAmount());
-		paymentReversalVO.setTdsPaymentTime(paymentReversalDTO.getPaymentTime());
+		paymentReversalVO.setPaymentTime(paymentReversalDTO.getPaymentTime());
 		paymentReversalVO.setTaInCurrency(paymentReversalDTO.getTaInCurrency());
 		paymentReversalVO.setChequeBank(paymentReversalDTO.getChequeBank());
 		paymentReversalVO.setPayTo(paymentReversalDTO.getPayTo());
