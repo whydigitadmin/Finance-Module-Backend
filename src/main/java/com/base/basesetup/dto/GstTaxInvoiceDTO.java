@@ -1,5 +1,7 @@
 package com.base.basesetup.dto;
 
+import java.math.BigDecimal;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,9 +15,9 @@ public class GstTaxInvoiceDTO {
 	private Long id;
 	private String gstChargeAcc;
 	private String gstSubledgerCode;
-	private String gstBdBillAmount;
-	private String gstCrBillAmount;
-	private String gstDbLcAmount;
-	private String gstCrLcAmount;
+	private BigDecimal gstBdBillAmount;
+	private BigDecimal gstCrBillAmount;
+	private BigDecimal gstDbLcAmount;
+	private BigDecimal gstCrLcAmount;
 
 }
