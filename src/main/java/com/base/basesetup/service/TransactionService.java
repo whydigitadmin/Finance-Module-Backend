@@ -17,6 +17,7 @@ import com.base.basesetup.dto.FundTransferDTO;
 import com.base.basesetup.dto.GeneralJournalDTO;
 import com.base.basesetup.dto.GstSalesVoucherDTO;
 import com.base.basesetup.dto.IrnCreditDTO;
+import com.base.basesetup.dto.PaymentReversalDTO;
 import com.base.basesetup.dto.PaymentVoucherDTO;
 import com.base.basesetup.dto.ReceiptReversalDTO;
 import com.base.basesetup.dto.TaxInvoiceDTO;
@@ -31,6 +32,7 @@ import com.base.basesetup.entity.FundTransferVO;
 import com.base.basesetup.entity.GeneralJournalVO;
 import com.base.basesetup.entity.GstSalesVoucherVO;
 import com.base.basesetup.entity.IrnCreditVO;
+import com.base.basesetup.entity.PaymentReversalVO;
 import com.base.basesetup.entity.PaymentVoucherVO;
 import com.base.basesetup.entity.ReceiptReversalVO;
 import com.base.basesetup.entity.TaxInvoiceVO;
@@ -171,4 +173,13 @@ public interface TransactionService {
 	List<ReceiptReversalVO> getAllReceiptReversalById(Long id);
 
 	List<ReceiptReversalVO> getReceiptReversalByActive();
+	
+//	PaymentReversal
+	List<PaymentReversalVO> getAllPaymentReversalByOrgId(Long orgId);
+
+	PaymentReversalVO updateCreatePaymentReversal(@Valid PaymentReversalDTO paymentReversalDTO) throws ApplicationException;
+
+	List<PaymentReversalVO> getAllPaymentReversalById(Long id);
+
+	List<PaymentReversalVO> getPaymentReversalByActive();
 }

@@ -33,6 +33,10 @@ import com.base.basesetup.dto.IrnCreditDTO;
 import com.base.basesetup.dto.ParticularsDebitNoteDTO;
 import com.base.basesetup.dto.ParticularsGstVoucherDTO;
 import com.base.basesetup.dto.ParticularsPaymentVoucherDTO;
+import com.base.basesetup.dto.PaymentInvoiceDTO;
+import com.base.basesetup.dto.PaymentOtherAccountDTO;
+import com.base.basesetup.dto.PaymentReversalDTO;
+import com.base.basesetup.dto.PaymentSummaryDTO;
 import com.base.basesetup.dto.PaymentVoucherDTO;
 import com.base.basesetup.dto.ReceiptInvoiceDTO;
 import com.base.basesetup.dto.ReceiptOtherAccountDTO;
@@ -68,6 +72,10 @@ import com.base.basesetup.entity.IrnCreditVO;
 import com.base.basesetup.entity.ParticularsDebitNoteVO;
 import com.base.basesetup.entity.ParticularsGstVoucherVO;
 import com.base.basesetup.entity.ParticularsPaymentVoucherVO;
+import com.base.basesetup.entity.PaymentInvoiceVO;
+import com.base.basesetup.entity.PaymentOtherAccountVO;
+import com.base.basesetup.entity.PaymentReversalVO;
+import com.base.basesetup.entity.PaymentSummaryVO;
 import com.base.basesetup.entity.PaymentVoucherVO;
 import com.base.basesetup.entity.ReceiptInvoiceVO;
 import com.base.basesetup.entity.ReceiptOtherAccountVO;
@@ -105,6 +113,10 @@ import com.base.basesetup.repo.ParticularsDebitNoteRepo;
 import com.base.basesetup.repo.ParticularsGstVoucherRepo;
 import com.base.basesetup.repo.ParticularsJournalRepo;
 import com.base.basesetup.repo.ParticularsPaymentVoucherRepo;
+import com.base.basesetup.repo.PaymentInvoiceRepo;
+import com.base.basesetup.repo.PaymentOtherAccountRepo;
+import com.base.basesetup.repo.PaymentReversalRepo;
+import com.base.basesetup.repo.PaymentSummaryRepo;
 import com.base.basesetup.repo.PaymentVoucherRepo;
 import com.base.basesetup.repo.ReceiptInvoiceRepo;
 import com.base.basesetup.repo.ReceiptOtherAccountRepo;
@@ -233,6 +245,18 @@ public class TransactionServiceImpl implements TransactionService {
 
 	@Autowired
 	ReceiptSummaryRepo receiptSummaryRepo;
+	
+	@Autowired
+	PaymentReversalRepo paymentReversalRepo;
+
+	@Autowired
+	PaymentInvoiceRepo paymentInvoiceRepo;
+
+	@Autowired
+	PaymentOtherAccountRepo paymentOtherAccountRepo;
+
+	@Autowired
+	PaymentSummaryRepo paymentSummaryRepo;
 
 // TaxInvoice
 	@Override
@@ -1829,10 +1853,10 @@ public class TransactionServiceImpl implements TransactionService {
 	public ReceiptReversalVO updateCreateReceiptReversal(@Valid ReceiptReversalDTO receiptReversalDTO)
 			throws ApplicationException {
 		ReceiptReversalVO receiptReversalVO = new ReceiptReversalVO();
-				if (ObjectUtils.isNotEmpty(receiptReversalDTO.getId())) {
-					receiptReversalVO = receiptReversalRepo.findById(receiptReversalDTO.getId())
-							.orElseThrow(() -> new ApplicationException("Invalid ReceiptReversal details"));
-				} 
+		if (ObjectUtils.isNotEmpty(receiptReversalDTO.getId())) {
+			receiptReversalVO = receiptReversalRepo.findById(receiptReversalDTO.getId())
+					.orElseThrow(() -> new ApplicationException("Invalid ReceiptReversal details"));
+		}
 //				else {
 //					if (taxInvoiceRepo.existsByDocIdAndOrgId(taxInvoiceVO.getDocId(), taxInvoiceVO.getOrgId())) {
 //						throw new ApplicationException("The given doc id already exists.");
@@ -1972,6 +1996,185 @@ public class TransactionServiceImpl implements TransactionService {
 	@Override
 	public List<ReceiptReversalVO> getReceiptReversalByActive() {
 		return receiptReversalRepo.findReceiptReversalByActive();
+	}
+
+	// PaymentReversal
+
+	@Override
+	public List<PaymentReversalVO> getAllPaymentReversalByOrgId(Long orgId) {
+		List<PaymentReversalVO> paymentReversalVO = new ArrayList<>();
+		if (ObjectUtils.isNotEmpty(orgId)) {
+			LOGGER.info("Successfully Received  PaymentReversal BY OrgId : {}", orgId);
+			paymentReversalVO = paymentReversalRepo.getAllPaymentReversalByOrgId(orgId);
+		} else {
+			LOGGER.info("Successfully Received  PaymentReversal For All OrgId.");
+			paymentReversalVO = paymentReversalRepo.findAll();
+		}
+		return paymentReversalVO;
+	}
+
+	@Override
+	public List<PaymentReversalVO> getAllPaymentReversalById(Long id) {
+		List<PaymentReversalVO> paymentReversalVO = new ArrayList<>();
+		if (ObjectUtils.isNotEmpty(id)) {
+			LOGGER.info("Successfully Received PaymentReversal BY Id : {}", id);
+			paymentReversalVO = paymentReversalRepo.getAllPaymentReversalById(id);
+		} else {
+			LOGGER.info("Successfully Received PaymentReversal For All Id.");
+			paymentReversalVO = paymentReversalRepo.findAll();
+		}
+		return paymentReversalVO;
+	}
+
+	@Override
+	public PaymentReversalVO updateCreatePaymentReversal(@Valid PaymentReversalDTO paymentReversalDTO)
+			throws ApplicationException {
+		PaymentReversalVO paymentReversalVO = new PaymentReversalVO();
+		if (ObjectUtils.isNotEmpty(paymentReversalDTO.getId())) {
+			paymentReversalVO = paymentReversalRepo.findById(paymentReversalDTO.getId())
+					.orElseThrow(() -> new ApplicationException("Invalid PaymentReversal details"));
+		}
+//				else {
+//					if (taxInvoiceRepo.existsByDocIdAndOrgId(taxInvoiceVO.getDocId(), taxInvoiceVO.getOrgId())) {
+//						throw new ApplicationException("The given doc id already exists.");
+//					}
+//					if (taxInvoiceRepo.existsByInvoiceNoAndOrgId(taxInvoiceVO.getInvoiceNo(), taxInvoiceVO.getOrgId())) {
+//						throw new ApplicationException("The given invoice number already exists.");
+//					}
+//				}
+//				if (ObjectUtils.isNotEmpty(taxInvoiceVO.getId())) {
+//					if (taxInvoiceRepo.existsByDocIdAndOrgIdAndId(taxInvoiceVO.getDocId(), taxInvoiceVO.getOrgId(),
+//							taxInvoiceVO.getId())) {
+//						throw new ApplicationException("The given doc id already exists.");
+//					}
+//					if (taxInvoiceRepo.existsByInvoiceNoAndOrgIdAndId(taxInvoiceVO.getInvoiceNo(), taxInvoiceVO.getOrgId(),
+//							taxInvoiceVO.getId())) {
+//						throw new ApplicationException("The given invoice number already exists.");
+//					}
+//				}
+
+		List<PaymentInvoiceVO> paymentInvoiceVOs = new ArrayList<>();
+		if (paymentReversalDTO.getPaymentInvoiceDTO() != null) {
+			for (PaymentInvoiceDTO paymentInvoiceDTO : paymentReversalDTO.getPaymentInvoiceDTO()) {
+				PaymentInvoiceVO paymentInvoiceVO;
+				if (paymentInvoiceDTO.getId() != null && ObjectUtils.isNotEmpty(paymentInvoiceDTO.getId())) {
+					paymentInvoiceVO = paymentInvoiceRepo.findById(paymentInvoiceDTO.getId())
+							.orElse(new PaymentInvoiceVO());
+				} else {
+					paymentInvoiceVO = new PaymentInvoiceVO();
+				}
+				paymentInvoiceVO.setInvoiceNumber(paymentInvoiceDTO.getInvoiceNumber());
+				paymentInvoiceVO.setInvoiceDate(paymentInvoiceDTO.getInvoiceDate());
+				paymentInvoiceVO.setRefNo(paymentInvoiceDTO.getRefNo());
+				paymentInvoiceVO.setRefDate(paymentInvoiceDTO.getRefDate());
+				paymentInvoiceVO.setSuppRefNo(paymentInvoiceDTO.getSuppRefNo());
+				paymentInvoiceVO.setSuppRefDate(paymentInvoiceDTO.getSuppRefDate());
+				paymentInvoiceVO.setCurr(paymentInvoiceDTO.getCurr());
+				paymentInvoiceVO.setExRate(paymentInvoiceDTO.getExRate());
+				paymentInvoiceVO.setAmount(paymentInvoiceDTO.getAmount());
+				paymentInvoiceVO.setOutStanding(paymentInvoiceDTO.getOutStanding());
+				paymentInvoiceVO.setSettled(paymentInvoiceDTO.getSettled());
+				paymentInvoiceVO.setPayExRate(paymentInvoiceDTO.getPayExRate());
+				paymentInvoiceVO.setTxnSettled(paymentInvoiceDTO.getTxnSettled());
+				paymentInvoiceVO.setGainOrLoss(paymentInvoiceDTO.getGainOrLoss());
+				paymentInvoiceVO.setRemarks(paymentInvoiceDTO.getRemarks());
+				paymentInvoiceVO.setPaymentReversalVO(paymentReversalVO);
+				paymentInvoiceVOs.add(paymentInvoiceVO);
+			}
+		}
+
+		List<PaymentOtherAccountVO> paymentOtherAccountVOs = new ArrayList<>();
+		if (paymentReversalDTO.getPaymentOtherAccountDTO() != null) {
+			for (PaymentOtherAccountDTO paymentOtherAccountDTO : paymentReversalDTO.getPaymentOtherAccountDTO()) {
+				PaymentOtherAccountVO paymentOtherAccountVO;
+				if (paymentOtherAccountDTO.getId() != null & ObjectUtils.isNotEmpty(paymentOtherAccountDTO.getId())) {
+					paymentOtherAccountVO = paymentOtherAccountRepo.findById(paymentOtherAccountDTO.getId())
+							.orElse(new PaymentOtherAccountVO());
+				} else {
+					paymentOtherAccountVO = new PaymentOtherAccountVO();
+				}
+				paymentOtherAccountVO.setAccountName(paymentOtherAccountDTO.getAccountName());
+				paymentOtherAccountVO.setSubLedgerName(paymentOtherAccountDTO.getSubLedgerName());
+				paymentOtherAccountVO.setDebitAmount(paymentOtherAccountDTO.getDebitAmount());
+				paymentOtherAccountVO.setRemarks(paymentOtherAccountDTO.getRemarks());
+				paymentOtherAccountVO.setPaymentReversalVO(paymentReversalVO);
+				paymentOtherAccountVOs.add(paymentOtherAccountVO);
+			}
+		}
+
+		List<PaymentSummaryVO> paymentSummaryVOs = new ArrayList<>();
+		if (paymentReversalDTO.getPaymentSummaryDTO() != null) {
+			for (PaymentSummaryDTO paymentSummaryDTO : paymentReversalDTO.getPaymentSummaryDTO()) {
+				PaymentSummaryVO paymentSummaryVO;
+				if (paymentSummaryDTO.getId() != null & ObjectUtils.isEmpty(paymentSummaryDTO.getId())) {
+					paymentSummaryVO = paymentSummaryRepo.findById(paymentSummaryDTO.getId())
+							.orElse(new PaymentSummaryVO());
+				} else {
+					paymentSummaryVO = new PaymentSummaryVO();
+				}
+				paymentSummaryVO.setFoxenGainOrLoss(paymentSummaryDTO.getFoxenGainOrLoss());
+				paymentSummaryVO.setRoundOffAmount(paymentSummaryDTO.getRoundOffAmount());
+				paymentSummaryVO.setTotalSettled(paymentSummaryDTO.getTotalSettled());
+				paymentSummaryVO.setOtherAccNetAmt(paymentSummaryDTO.getOtherAccNetAmt());
+				paymentSummaryVO.setOnAccount(paymentSummaryDTO.getOnAccount());
+				paymentSummaryVO.setNarration(paymentSummaryDTO.getNarration());
+				paymentSummaryVO.setPaymentReversalVO(paymentReversalVO);
+				paymentSummaryVOs.add(paymentSummaryVO);
+			}
+		}
+
+		getPaymentReversalVOFromPaymentReversalDTO(paymentReversalDTO, paymentReversalVO);
+		paymentReversalVO.setPaymentOtherAccountVO(paymentOtherAccountVOs);
+		paymentReversalVO.setPaymentInvoiceVO(paymentInvoiceVOs);
+		paymentReversalVO.setPaymentSummaryVO(paymentSummaryVOs);
+		return paymentReversalRepo.save(paymentReversalVO);
+	}
+
+	private void getPaymentReversalVOFromPaymentReversalDTO(@Valid PaymentReversalDTO paymentReversalDTO,
+			PaymentReversalVO paymentReversalVO) {
+//				// Finyr
+//				int finyr = taxInvoiceRepo.findFinyr();
+//				// DocId
+//				String taxInvoice = "AI" + finyr + taxInvoiceRepo.findDocId();
+//				taxInvoiceVO.setDocId(taxInvoice);
+//				taxInvoiceRepo.nextSeq();
+//				// InvoiceNo
+//				String invoiceNo = "AI" + finyr + "INV" + taxInvoiceRepo.findInvoiceNo();
+//				taxInvoiceVO.setInvoiceNo(invoiceNo);
+//				taxInvoiceRepo.nextSeqInvoice();
+		paymentReversalVO.setDocId(paymentReversalDTO.getDocId());
+		paymentReversalVO.setDocDate(paymentReversalDTO.getDocDate());
+		paymentReversalVO.setOriginBill(paymentReversalDTO.getOriginBill());
+		paymentReversalVO.setOrigin(paymentReversalDTO.getOrigin());
+		paymentReversalVO.setType(paymentReversalDTO.getType());
+		paymentReversalVO.setPartyCode(paymentReversalDTO.getPartyCode());
+		paymentReversalVO.setPartyName(paymentReversalDTO.getPartyName());
+		paymentReversalVO.setGstState(paymentReversalDTO.getGstState());
+		paymentReversalVO.setGstIn(paymentReversalDTO.getGstIn());
+		paymentReversalVO.setBankCash(paymentReversalDTO.getBankCash());
+		paymentReversalVO.setPaymentAmount(paymentReversalDTO.getPaymentAmount());
+		paymentReversalVO.setTdsAc(paymentReversalDTO.getTdsAc());
+		paymentReversalVO.setSTaxAmount(paymentReversalDTO.getSTaxAmount());
+		paymentReversalVO.setCurrency(paymentReversalDTO.getCurrency());
+		paymentReversalVO.setBankChargesAc(paymentReversalDTO.getBankChargesAc());
+		paymentReversalVO.setBankCharges(paymentReversalDTO.getBankCharges());
+		paymentReversalVO.setBcInCurrency(paymentReversalDTO.getBcInCurrency());
+		paymentReversalVO.setTdsAmount(paymentReversalDTO.getTdsAmount());
+		paymentReversalVO.setTdsPaymentTime(paymentReversalDTO.getPaymentTime());
+		paymentReversalVO.setTaInCurrency(paymentReversalDTO.getTaInCurrency());
+		paymentReversalVO.setChequeBank(paymentReversalDTO.getChequeBank());
+		paymentReversalVO.setPayTo(paymentReversalDTO.getPayTo());
+		paymentReversalVO.setChqDt(paymentReversalDTO.getChqDt());
+		paymentReversalVO.setOffSetStatus(paymentReversalDTO.getOffSetStatus());
+		paymentReversalVO.setOrgId(paymentReversalDTO.getOrgId());
+		paymentReversalVO.setActive(paymentReversalDTO.isActive());
+		paymentReversalVO.setCreatedBy(paymentReversalDTO.getCreatedBy());
+		paymentReversalVO.setUpdatedBy(paymentReversalDTO.getUpdatedBy());
+	}
+
+	@Override
+	public List<PaymentReversalVO> getPaymentReversalByActive() {
+		return paymentReversalRepo.findPaymentReversalByActive();
 	}
 
 }

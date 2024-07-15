@@ -1,8 +1,8 @@
 package com.base.basesetup.util;
 import java.io.UnsupportedEncodingException;
-
-import java.security.spec.AlgorithmParameterSpec;
 import java.nio.charset.StandardCharsets;
+import java.security.spec.AlgorithmParameterSpec;
+
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;

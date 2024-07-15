@@ -33,6 +33,7 @@ import com.base.basesetup.dto.FundTransferDTO;
 import com.base.basesetup.dto.GeneralJournalDTO;
 import com.base.basesetup.dto.GstSalesVoucherDTO;
 import com.base.basesetup.dto.IrnCreditDTO;
+import com.base.basesetup.dto.PaymentReversalDTO;
 import com.base.basesetup.dto.PaymentVoucherDTO;
 import com.base.basesetup.dto.ReceiptReversalDTO;
 import com.base.basesetup.dto.ResponseDTO;
@@ -48,6 +49,7 @@ import com.base.basesetup.entity.FundTransferVO;
 import com.base.basesetup.entity.GeneralJournalVO;
 import com.base.basesetup.entity.GstSalesVoucherVO;
 import com.base.basesetup.entity.IrnCreditVO;
+import com.base.basesetup.entity.PaymentReversalVO;
 import com.base.basesetup.entity.PaymentVoucherVO;
 import com.base.basesetup.entity.ReceiptReversalVO;
 import com.base.basesetup.entity.TaxInvoiceVO;
@@ -1629,6 +1631,119 @@ public class TransactionController extends BaseController {
 		} else {
 			responseDTO = createServiceResponseError(responseObjectsMap,
 					"ReceiptReversal information receive failed By Active", errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+
+	}
+
+	// PaymentReversal
+
+	@GetMapping("/getAllPaymentReversalByOrgId")
+	public ResponseEntity<ResponseDTO> getAllPaymentReversalByOrgId(@RequestParam(required = false) Long orgId) {
+		String methodName = "getAllPaymentReversalByOrgId()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		List<PaymentReversalVO> paymentReversalVO = new ArrayList<>();
+		try {
+			paymentReversalVO = transactionService.getAllPaymentReversalByOrgId(orgId);
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+					"PaymentReversal information get successfully By OrgId");
+			responseObjectsMap.put("PaymentReversalVO", paymentReversalVO);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					"PaymentReversal information receive failed By OrgId", errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+
+	}
+
+	@GetMapping("/getAllPaymentReversalById")
+	public ResponseEntity<ResponseDTO> getAllPaymentReversalById(@RequestParam(required = false) Long id) {
+		String methodName = "getAllPaymentReversalById()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		List<PaymentReversalVO> paymentReversalVO = new ArrayList<>();
+		try {
+			paymentReversalVO = transactionService.getAllPaymentReversalById(id);
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "PaymentReversal information get successfully By id");
+			responseObjectsMap.put("paymentReversalVO", paymentReversalVO);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					"PaymentReversal information receive failed By OrgId", errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+	}
+
+	@PutMapping("/updateCreatePaymentReversal")
+	public ResponseEntity<ResponseDTO> updateCreatePaymentReversal(
+			@Valid @RequestBody PaymentReversalDTO paymentReversalDTO) {
+		String methodName = "updateCreatePaymentReversal()";
+
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+
+		try {
+			PaymentReversalVO paymentReversalVO = transactionService.updateCreatePaymentReversal(paymentReversalDTO);
+			if (paymentReversalVO != null) {
+				responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "PaymentReversal updated successfully");
+				responseObjectsMap.put("paymentReversalVO", paymentReversalVO);
+				responseDTO = createServiceResponse(responseObjectsMap);
+			} else {
+				errorMsg = "PaymentReversal not found for ID: " + paymentReversalDTO.getId();
+				responseDTO = createServiceResponseError(responseObjectsMap, "PaymentReversal update failed", errorMsg);
+			}
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+			responseDTO = createServiceResponseError(responseObjectsMap, "PaymentReversal update failed", errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+	}
+
+	@GetMapping("/getPaymentReversalByActive")
+	public ResponseEntity<ResponseDTO> getPaymentReversalByActive() {
+		String methodName = "getPaymentReversalByActive()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		List<PaymentReversalVO> paymentReversalVO = new ArrayList<>();
+		try {
+			paymentReversalVO = transactionService.getPaymentReversalByActive();
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+					"PaymentReversal information get successfully By Active");
+			responseObjectsMap.put("paymentReversalVO", paymentReversalVO);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					"PaymentReversal information receive failed By Active", errorMsg);
 		}
 		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
 		return ResponseEntity.ok().body(responseDTO);

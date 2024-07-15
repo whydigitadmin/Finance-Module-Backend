@@ -10,21 +10,21 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ReceiptInvoiceDTO {
+public class PaymentInvoiceDTO {
 	private Long id;
-	private String invoiceNo;
-	private LocalDateTime invoiceDt;
+	private String invoiceNumber;
+	private LocalDateTime invoiceDate;
 	private String refNo;
 	private LocalDateTime refDate;
-	private String masterRef;
-	private String houseRef;
+	private String suppRefNo;
+	private LocalDateTime suppRefDate;
 	private String curr;
 	private BigDecimal exRate;
-	private BigDecimal amount;
-	private BigDecimal chargableAmount;
+	private String amount;
 	private String outStanding;
 	private String settled;
-	private BigDecimal recExRate;
-	private BigDecimal txnSettled;
-	private BigDecimal gainOrLoss;
+	private BigDecimal payExRate;
+	private String txnSettled;
+	private String gainOrLoss;
+	private String remarks;
 }

@@ -2,8 +2,6 @@ package com.base.basesetup.dto;
 
 import java.math.BigDecimal;
 
-import java.math.BigDecimal;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
