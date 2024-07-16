@@ -18,7 +18,7 @@ public interface ChargeTypeRequestRepo extends JpaRepository<ChargeTypeRequestVO
 	@Query(nativeQuery = true, value = "select * from chargetyperequest where active=1")
 	List<ChargeTypeRequestVO> findChargeTypeRequestByActive();
 
-	boolean existsByChargeDescripitionAndOrgId(String chargeDescripiton, Long orgId);
-
 	boolean existsByChargeCodeAndOrgId(String chargeCode, Long orgId);
+
+	boolean existsByChargeDescriptionAndOrgId(String chargeDescription, Long orgId);
 }

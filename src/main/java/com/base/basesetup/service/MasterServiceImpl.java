@@ -1106,9 +1106,9 @@ public class MasterServiceImpl implements MasterService {
 			chargeTypeRequestVO = chargeTypeRequestRepo.findById(chargeTypeRequestDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid ChargeTypeRequest details"));
 		} else {
-			if (chargeTypeRequestRepo.existsByChargeDescripitionAndOrgId(chargeTypeRequestDTO.getChargeDescripition(),
+			if (chargeTypeRequestRepo.existsByChargeDescriptionAndOrgId(chargeTypeRequestDTO.getChargeDescription(),
 					chargeTypeRequestDTO.getOrgId())) {
-				throw new ApplicationException("The given charge descripition already exists.");
+				throw new ApplicationException("The given charge description already exists.");
 			}
 			if (chargeTypeRequestRepo.existsByChargeCodeAndOrgId(chargeTypeRequestDTO.getChargeCode(),
 					chargeTypeRequestDTO.getOrgId())) {
@@ -1117,7 +1117,7 @@ public class MasterServiceImpl implements MasterService {
 		}
 
 		if (ObjectUtils.isNotEmpty(chargeTypeRequestDTO.getId())) {
-			if (chargeTypeRequestRepo.existsByChargeDescripitionAndOrgId(chargeTypeRequestDTO.getChargeDescripition(),
+			if (chargeTypeRequestRepo.existsByChargeDescriptionAndOrgId(chargeTypeRequestDTO.getChargeDescription(),
 					chargeTypeRequestDTO.getOrgId())) {
 				throw new ApplicationException("The given charge descripition already exists.");
 			}
@@ -1135,7 +1135,7 @@ public class MasterServiceImpl implements MasterService {
 			ChargeTypeRequestVO chargeTypeRequestVO) {
 		chargeTypeRequestVO.setChargeType(chargeTypeRequestDTO.getChargeType());
 		chargeTypeRequestVO.setChargeCode(chargeTypeRequestDTO.getChargeCode());
-		chargeTypeRequestVO.setChargeDescripition(chargeTypeRequestDTO.getChargeDescripition());
+		chargeTypeRequestVO.setChargeDescription(chargeTypeRequestDTO.getChargeDescription());
 		chargeTypeRequestVO.setProduct(chargeTypeRequestDTO.getProduct());
 		chargeTypeRequestVO.setLocalChargeDescripition(chargeTypeRequestDTO.getLocalChargeDescripition());
 		chargeTypeRequestVO.setServiceAccountCode(chargeTypeRequestDTO.getServiceAccountCode());

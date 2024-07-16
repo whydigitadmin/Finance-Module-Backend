@@ -13,7 +13,7 @@ public class ChargeTypeRequestDTO {
 	private Long id;
 	private String chargeType;
 	private String chargeCode;
-	private String chargeDescripition;
+	private String chargeDescription;
 	private String product;
 	private String localChargeDescripition;
 	private String serviceAccountCode;
