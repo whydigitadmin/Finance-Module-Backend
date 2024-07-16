@@ -21,6 +21,8 @@ import com.base.basesetup.dto.CostCenterDTO;
 import com.base.basesetup.dto.ExRatesDTO;
 import com.base.basesetup.dto.GroupLedgerDTO;
 import com.base.basesetup.dto.HsnSacCodeDTO;
+import com.base.basesetup.dto.ListOfValues1DTO;
+import com.base.basesetup.dto.ListOfValuesDTO;
 import com.base.basesetup.dto.SetTaxRateDTO;
 import com.base.basesetup.dto.SubLedgerAccountDTO;
 import com.base.basesetup.dto.TaxMaster2DTO;
@@ -39,6 +41,8 @@ import com.base.basesetup.entity.CostCenterVO;
 import com.base.basesetup.entity.ExRatesVO;
 import com.base.basesetup.entity.GroupLedgerVO;
 import com.base.basesetup.entity.HsnSacCodeVO;
+import com.base.basesetup.entity.ListOfValues1VO;
+import com.base.basesetup.entity.ListOfValuesVO;
 import com.base.basesetup.entity.SetTaxRateVO;
 import com.base.basesetup.entity.SubLedgerAccountVO;
 import com.base.basesetup.entity.TaxMaster2VO;
@@ -58,6 +62,8 @@ import com.base.basesetup.repo.CostCenterRepo;
 import com.base.basesetup.repo.ExRatesRepo;
 import com.base.basesetup.repo.GroupLedgerRepo;
 import com.base.basesetup.repo.HsnSacCodeRepo;
+import com.base.basesetup.repo.ListOfValues1Repo;
+import com.base.basesetup.repo.ListOfValuesRepo;
 import com.base.basesetup.repo.SetTaxRateRepo;
 import com.base.basesetup.repo.SubLedgerAccountRepo;
 import com.base.basesetup.repo.TaxMaster2Repo;
@@ -123,6 +129,12 @@ public class MasterServiceImpl implements MasterService {
 
 	@Autowired
 	ChargeTypeRequestRepo chargeTypeRequestRepo;
+
+	@Autowired
+	ListOfValuesRepo listOfValuesRepo;
+
+	@Autowired
+	ListOfValues1Repo listOfValues1Repo;
 
 	// setTaxesRate
 	@Override
@@ -1167,6 +1179,106 @@ public class MasterServiceImpl implements MasterService {
 	@Override
 	public List<ChargeTypeRequestVO> getChargeTypeRequestByActive() {
 		return chargeTypeRequestRepo.findChargeTypeRequestByActive();
+
+	}
+
+	// ListOfValues
+
+	@Override
+	public List<ListOfValuesVO> getListOfValuesById(Long id) {
+		List<ListOfValuesVO> listOfValuesVO = new ArrayList<>();
+		if (ObjectUtils.isNotEmpty(id)) {
+			LOGGER.info("Successfully Received  ListOfValues BY Id : {}", id);
+			listOfValuesVO = listOfValuesRepo.getListOfValuesById(id);
+		} else {
+			LOGGER.info("Successfully Received  ListOfValues For All Id.");
+			listOfValuesVO = listOfValuesRepo.findAll();
+		}
+		return listOfValuesVO;
+	}
+
+	@Override
+	public List<ListOfValuesVO> getListOfValuesByOrgId(Long orgid) {
+		List<ListOfValuesVO> listOfValuesVO = new ArrayList<>();
+		if (ObjectUtils.isNotEmpty(orgid)) {
+			LOGGER.info("Successfully Received  ListOfValues BY OrgId : {}", orgid);
+			listOfValuesVO = listOfValuesRepo.getListOfValuesByOrgId(orgid);
+		} else {
+			LOGGER.info("Successfully Received  ListOfValues For All OrgId.");
+			listOfValuesVO = listOfValuesRepo.findAll();
+		}
+		return listOfValuesVO;
+	}
+
+	@Override
+	public ListOfValuesVO updateCreateListOfValues(@Valid ListOfValuesDTO listOfValuesDTO) throws ApplicationException {
+		ListOfValuesVO listOfValuesVO = new ListOfValuesVO();
+		if (ObjectUtils.isNotEmpty(listOfValuesDTO.getId())) {
+			listOfValuesVO = listOfValuesRepo.findById(listOfValuesDTO.getId())
+					.orElseThrow(() -> new ApplicationException("Invalid ListOfValues details"));
+		}
+
+		else {
+			if (listOfValuesRepo.existsByListCodeAndOrgId(listOfValuesDTO.getListCode(), listOfValuesDTO.getOrgId())) {
+				throw new ApplicationException("ListCode already Exists");
+			}
+			if (listOfValuesRepo.existsByListDescriptionAndOrgId(listOfValuesDTO.getListDescription(),
+					listOfValuesDTO.getOrgId())) {
+				throw new ApplicationException("ListDescription already Exists");
+			}
+
+		}
+
+		if (ObjectUtils.isNotEmpty(listOfValuesDTO.getId())) {
+			ListOfValuesVO listOfValues = listOfValuesRepo.findById(listOfValuesDTO.getId()).orElse(null);
+			if (!listOfValues.getListCode().equals(listOfValuesDTO.getListCode())) {
+				if (listOfValuesRepo.existsByListCodeAndOrgId(listOfValuesDTO.getListCode(),
+						listOfValuesDTO.getOrgId())) {
+					throw new ApplicationException("ListCode already Exists");
+				}
+				if (!listOfValues.getListDescription().equals(listOfValuesDTO.getListDescription())) {
+					if (listOfValuesRepo.existsByListDescriptionAndOrgId(listOfValuesDTO.getListDescription(),
+							listOfValuesDTO.getOrgId())) {
+						throw new ApplicationException("ListDescription already Exists");
+					}
+
+				}
+			}
+		}
+		getListOfValuesVOFromTypesOfValuesDTO(listOfValuesDTO, listOfValuesVO);
+		listOfValuesVO = listOfValuesRepo.save(listOfValuesVO);
+
+		List<ListOfValues1VO> listOfValues1VOList = listOfValues1Repo.findBylistOfValuesVO(listOfValuesVO);
+		listOfValues1Repo.deleteAll(listOfValues1VOList);
+
+		List<ListOfValues1VO> listOfValues1VOs = new ArrayList<>();
+		if (listOfValuesDTO.getListOfValues1DTO() != null) {
+			for (ListOfValues1DTO listOfValues1DTO : listOfValuesDTO.getListOfValues1DTO()) {
+
+				ListOfValues1VO listOfValues1VO = new ListOfValues1VO();
+				listOfValues1VO.setValueCode(listOfValues1DTO.getValueCode());
+				listOfValues1VO.setSNo(listOfValues1DTO.getSNo());
+				listOfValues1VO.setValueDescription(listOfValues1DTO.getValueDescription());
+				listOfValues1VO.setActive(listOfValues1DTO.isActive());
+				listOfValues1VO.setListOfValuesVO(listOfValuesVO);
+				listOfValues1VOs.add(listOfValues1VO);
+
+			}
+		}
+
+		listOfValuesVO.setListOfValues1VO(listOfValues1VOs);
+		return listOfValuesRepo.save(listOfValuesVO);
+
+	}
+
+	private void getListOfValuesVOFromTypesOfValuesDTO(@Valid ListOfValuesDTO listOfValuesDTO,
+			ListOfValuesVO listOfValuesVO) {
+		listOfValuesVO.setListCode(listOfValuesDTO.getListCode());
+		listOfValuesVO.setOrgId(listOfValuesDTO.getOrgId());
+		listOfValuesVO.setListDescription(listOfValuesDTO.getListDescription());
+		listOfValuesVO.setActive(listOfValuesDTO.isActive());
+		listOfValuesVO.setUpdatedBy(listOfValuesDTO.getUpdatedBy());
+		listOfValuesVO.setCreatedBy(listOfValuesDTO.getCreatedBy());
 
 	}
 

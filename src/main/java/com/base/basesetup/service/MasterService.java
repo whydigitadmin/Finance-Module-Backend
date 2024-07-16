@@ -13,6 +13,7 @@ import com.base.basesetup.dto.CostCenterDTO;
 import com.base.basesetup.dto.ExRatesDTO;
 import com.base.basesetup.dto.GroupLedgerDTO;
 import com.base.basesetup.dto.HsnSacCodeDTO;
+import com.base.basesetup.dto.ListOfValuesDTO;
 import com.base.basesetup.dto.SetTaxRateDTO;
 import com.base.basesetup.dto.SubLedgerAccountDTO;
 import com.base.basesetup.dto.TaxMasterDTO;
@@ -25,6 +26,7 @@ import com.base.basesetup.entity.CostCenterVO;
 import com.base.basesetup.entity.ExRatesVO;
 import com.base.basesetup.entity.GroupLedgerVO;
 import com.base.basesetup.entity.HsnSacCodeVO;
+import com.base.basesetup.entity.ListOfValuesVO;
 import com.base.basesetup.entity.SetTaxRateVO;
 import com.base.basesetup.entity.SubLedgerAccountVO;
 import com.base.basesetup.entity.TaxMasterVO;
@@ -145,5 +147,12 @@ public interface MasterService {
 
 	List<ChargeTypeRequestVO> getChargeTypeRequestByActive();
 
+//	ListOfValues
+
+	List<ListOfValuesVO> getListOfValuesById(Long id);
+
+	List<ListOfValuesVO> getListOfValuesByOrgId(Long orgid);
+
+	ListOfValuesVO updateCreateListOfValues(@Valid ListOfValuesDTO listOfValuesDTO) throws ApplicationException;
 
 }
