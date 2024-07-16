@@ -1,5 +1,6 @@
 package com.base.basesetup.entity;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -96,6 +97,22 @@ public class CostInvoiceVO {
 	private boolean cancel;
 	@Column(name = "cancelremarks")
 	private String cancelRemarks;
+	@Column(name = "billcurrtotchargeamt")
+	private BigDecimal billCurrTotChargeAmt;
+	@Column(name = "billcurractbillamt")
+	private BigDecimal billCurrActBillAmt;
+	@Column(name = "billcurrnetamt")
+	private BigDecimal billCurrNetAmt;
+	@Column(name = "lctotchargeamt")
+	private BigDecimal lcTotChargeAmt;
+	@Column(name = "lcactbillamt")
+	private BigDecimal lcActBillAmt;
+	@Column(name = "lcnetamt")
+	private BigDecimal lcNetAmt;
+	@Column(name = "roundoff")
+	private String roundOff;
+	@Column(name = "lcgstinputamt")
+	private BigDecimal lcGstInputAmt;
 
 	@OneToMany(mappedBy = "costInvoiceVO", cascade = CascadeType.ALL)
 	@JsonManagedReference
@@ -104,10 +121,6 @@ public class CostInvoiceVO {
 	@OneToMany(mappedBy = "costInvoiceVO", cascade = CascadeType.ALL)
 	@JsonManagedReference
 	List<TdsCostInvoiceVO> tdsCostInvoiceVO;
-
-	@OneToMany(mappedBy = "costInvoiceVO", cascade = CascadeType.ALL)
-	@JsonManagedReference
-	List<SummaryCostInvoiceVO> summaryCostInvoiceVO;
 
 	@Embedded
 	@Builder.Default

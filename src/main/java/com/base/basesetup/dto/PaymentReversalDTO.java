@@ -42,10 +42,15 @@ public class PaymentReversalDTO {
 	private boolean active;
 	private String createdBy;
 	private String updatedBy;
+	private BigDecimal foxenGainOrLoss;
+	private BigDecimal roundOffAmount;
+	private BigDecimal totalSettled;
+	private BigDecimal otherAccNetAmt;
+	private BigDecimal onAccount;
+	private String narration;
 
 	List<PaymentInvoiceDTO> paymentInvoiceDTO;
 
 	List<PaymentOtherAccountDTO> paymentOtherAccountDTO;
 
-	List<PaymentSummaryDTO> paymentSummaryDTO;
 }

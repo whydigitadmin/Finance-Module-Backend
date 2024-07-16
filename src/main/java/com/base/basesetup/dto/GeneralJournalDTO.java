@@ -1,5 +1,6 @@
 package com.base.basesetup.dto;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -29,7 +30,9 @@ public class GeneralJournalDTO {
 	private boolean active;
 	private String createdBy;
 	private String updatedBy;
+	private BigDecimal totalCreditAmount;
+	private BigDecimal totalDebitAmount;
 
-	List<ParticularsJournalDTO> particularJournalDTO;
+	List<ParticularsJournalDTO> particularsJournalDTO;
 
 }

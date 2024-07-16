@@ -1,5 +1,7 @@
 package com.base.basesetup.entity;
 
+import java.math.BigDecimal;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -30,13 +32,13 @@ public class ParticularsJournalVO {
 	@Column(name = "particularsjournalid")
 	private Long id;
 	@Column(name = "currency")
-	private String currecy;
+	private BigDecimal currency;
 	@Column(name = "subledgercode")
-	private String subLedgerCode;
+	private BigDecimal subLedgerCode;
 	@Column(name = "debitamount")
-	private String debitAmount;
+	private BigDecimal debitAmount;
 	@Column(name = "creditamount")
-	private String creditAmount;
+	private BigDecimal creditAmount;
 	@Column(name = "narration")
 	private String narration;
 

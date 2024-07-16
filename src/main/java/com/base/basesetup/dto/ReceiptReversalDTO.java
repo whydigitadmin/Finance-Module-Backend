@@ -1,5 +1,6 @@
 package com.base.basesetup.dto;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -38,11 +39,15 @@ public class ReceiptReversalDTO {
 	private boolean active;
 	private String createdBy;
 	private String updatedBy;
+	private BigDecimal foxenGainOrLoss;
+	private BigDecimal roundOffAmount;
+	private BigDecimal totalSettled;
+	private BigDecimal otherAccNetAmt;
+	private BigDecimal onAccount;
+	private String narration;
 
 	List<ReceiptInvoiceDTO> receiptInvoiceDTO;
 	
 	List<ReceiptOtherAccountDTO> receiptOtherAccountDTO;
 
-	List<ReceiptSummaryDTO> receiptSummaryDTO;
-	
 }

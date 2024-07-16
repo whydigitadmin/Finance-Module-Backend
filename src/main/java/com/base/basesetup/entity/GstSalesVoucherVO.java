@@ -65,6 +65,18 @@ public class GstSalesVoucherVO {
 	private String createdBy;
 	@Column(name = "modifiedby")
 	private String updatedBy;
+	@Column(name = "totaldebitamount")
+	private BigDecimal totalDebitAmount;
+	@Column(name = "totalcreditamount")
+	private BigDecimal totalCreditAmount;
+	@Column(name = "sttaxamount")
+	private BigDecimal stTaxAmount;
+	@Column(name = "basamount")
+	private BigDecimal basAmount;
+	@Column(name = "bssamount")
+	private BigDecimal bssAmount;
+	@Column(name = "chaamount")
+	private BigDecimal chaAmount;
 
 	@OneToMany(mappedBy = "gstSalesVoucherVO", cascade = CascadeType.ALL)
 	@JsonManagedReference
@@ -85,10 +97,6 @@ public class GstSalesVoucherVO {
 				: LocalDate.now().minusYears(1).format(DateTimeFormatter.ofPattern("yyyy"));
 		return fyFull;
 	}
-
-	@OneToMany(mappedBy = "gstSalesVoucherVO", cascade = CascadeType.ALL)
-	@JsonManagedReference
-	List<SummaryGstVoucherVO> summaryGstVoucherVO;
 
 	@Embedded
 	@Builder.Default

@@ -1,5 +1,6 @@
 package com.base.basesetup.dto;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -42,11 +43,17 @@ public class CostInvoiceDTO {
 	private boolean active;
 	private String updatedBy;
 	private String createdBy;
+	private BigDecimal billCurrTotChargeAmt;
+	private BigDecimal billCurrActBillAmt;
+	private BigDecimal billCurrNetAmt;
+	private BigDecimal lcTotChargeAmt;
+	private BigDecimal lcActBillAmt;
+	private BigDecimal lcNetAmt;
+	private String roundOff;
+	private BigDecimal lcGstInputAmt;
 
 	List<ChargerCostInvoiceDTO> chargerCostInvoiceDTO;
 
 	List<TdsCostInvoiceDTO> tdsCostInvoiceDTO;
-
-	List<SummaryCostInvoiceDTO> summaryCostInvoiceDTO;
 
 }

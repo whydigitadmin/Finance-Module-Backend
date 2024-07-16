@@ -95,6 +95,22 @@ public class DebitNoteVO {
 	private boolean cancel;
 	@Column(name = "cancelremarks")
 	private String cancelRemarks;
+	@Column(name = "billcurrtotchargeamount")
+	private String billCurrTotChargeAmount;
+	@Column(name = "billcurrtotgrossamount")
+	private String billCurrTotGrossAmount;
+	@Column(name = "billcurrnetamount")
+	private String billCurrNetAmount;
+	@Column(name = "amountinwords")
+	private String amountInWords;
+	@Column(name = "roundoff")
+	private String roundOff;
+	@Column(name = "lctotchargeamount")
+	private String lctotChargeAmount;
+	@Column(name = "lctotgrossamount")
+	private String lctotGrossAmount;
+	@Column(name = "lcnetamount")
+	private String lcNetAmount;
 	
 	@OneToMany(mappedBy = "debitNoteVO", cascade = CascadeType.ALL)
 	@JsonManagedReference
@@ -104,10 +120,6 @@ public class DebitNoteVO {
 	@JsonManagedReference
 	List<ParticularsDebitNoteVO> particularsDebitNoteVO;
 
-	@OneToMany(mappedBy = "debitNoteVO", cascade = CascadeType.ALL)
-	@JsonManagedReference
-	List<SummaryDebitNoteVO> summaryDebitNoteVO;
-	
 	@OneToMany(mappedBy = "debitNoteVO", cascade = CascadeType.ALL)
 	@JsonManagedReference
 	List<GstDebitNoteVO> gstDebitNoteVO;

@@ -1,5 +1,6 @@
 package com.base.basesetup.entity;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -88,7 +89,27 @@ public class IrnCreditVO {
 	@Column(name = "finyr")
 	private String finyr;
 	@Column(name = "originbill")
-	private String originBill;		
+	private String originBill;
+	@Column(name = "lcchargeamount")
+	private BigDecimal lcChargeAmount;
+	@Column(name = "lctaxamount")
+	private BigDecimal lcTaxAmount;
+	@Column(name = "lcinvamount")
+	private BigDecimal lcInvAmount;
+	@Column(name = "lcroundoffamount")
+	private BigDecimal lcRoundOffAmount;
+	@Column(name = "billchargeamount")
+	private BigDecimal billlcChargeAmount;
+	@Column(name = "billtaxamount")
+	private BigDecimal billTaxAmount;
+	@Column(name = "billinvamount")
+	private BigDecimal billInvAmount;
+	@Column(name = "lctaxableamount")
+	private BigDecimal lcTaxableAmount;
+	@Column(name = "amountinwords")
+	private String amountInwords;
+	@Column(name = "billingremarks")
+	private String billingRemarks;
 
 	@PrePersist
 	private void setDefaultFinyr() {
@@ -110,10 +131,6 @@ public class IrnCreditVO {
 	@JsonManagedReference
 	List<ChargerIrnCreditVO> chargerIrnCreditVO;
  
-	@OneToMany(mappedBy = "irnCreditVO", cascade = CascadeType.ALL)
-	@JsonManagedReference
-	List<SummaryIrnCreditVO> summaryIrnCreditVO;
-
 	@OneToMany(mappedBy = "irnCreditVO", cascade = CascadeType.ALL)
 	@JsonManagedReference
 	List<GstIrnCreditVO> gstIrnCreditVO;

@@ -32,21 +32,15 @@ import com.base.basesetup.dto.GstTaxInvoiceDTO;
 import com.base.basesetup.dto.IrnCreditDTO;
 import com.base.basesetup.dto.ParticularsDebitNoteDTO;
 import com.base.basesetup.dto.ParticularsGstVoucherDTO;
+import com.base.basesetup.dto.ParticularsJournalDTO;
 import com.base.basesetup.dto.ParticularsPaymentVoucherDTO;
 import com.base.basesetup.dto.PaymentInvoiceDTO;
 import com.base.basesetup.dto.PaymentOtherAccountDTO;
 import com.base.basesetup.dto.PaymentReversalDTO;
-import com.base.basesetup.dto.PaymentSummaryDTO;
 import com.base.basesetup.dto.PaymentVoucherDTO;
 import com.base.basesetup.dto.ReceiptInvoiceDTO;
 import com.base.basesetup.dto.ReceiptOtherAccountDTO;
 import com.base.basesetup.dto.ReceiptReversalDTO;
-import com.base.basesetup.dto.ReceiptSummaryDTO;
-import com.base.basesetup.dto.SummaryCostInvoiceDTO;
-import com.base.basesetup.dto.SummaryDebitNoteDTO;
-import com.base.basesetup.dto.SummaryGstVoucherDTO;
-import com.base.basesetup.dto.SummaryIrnCreditDTO;
-import com.base.basesetup.dto.SummaryPaymentVoucherDTO;
 import com.base.basesetup.dto.TaxInvoiceDTO;
 import com.base.basesetup.dto.TdsCostInvoiceDTO;
 import com.base.basesetup.entity.ArapAdjustmentsVO;
@@ -70,21 +64,15 @@ import com.base.basesetup.entity.GstTaxInvoiceVO;
 import com.base.basesetup.entity.IrnCreditVO;
 import com.base.basesetup.entity.ParticularsDebitNoteVO;
 import com.base.basesetup.entity.ParticularsGstVoucherVO;
+import com.base.basesetup.entity.ParticularsJournalVO;
 import com.base.basesetup.entity.ParticularsPaymentVoucherVO;
 import com.base.basesetup.entity.PaymentInvoiceVO;
 import com.base.basesetup.entity.PaymentOtherAccountVO;
 import com.base.basesetup.entity.PaymentReversalVO;
-import com.base.basesetup.entity.PaymentSummaryVO;
 import com.base.basesetup.entity.PaymentVoucherVO;
 import com.base.basesetup.entity.ReceiptInvoiceVO;
 import com.base.basesetup.entity.ReceiptOtherAccountVO;
 import com.base.basesetup.entity.ReceiptReversalVO;
-import com.base.basesetup.entity.ReceiptSummaryVO;
-import com.base.basesetup.entity.SummaryCostInvoiceVO;
-import com.base.basesetup.entity.SummaryDebitNoteVO;
-import com.base.basesetup.entity.SummaryGstVoucherVO;
-import com.base.basesetup.entity.SummaryIrnCreditVO;
-import com.base.basesetup.entity.SummaryPaymentVoucherVO;
 import com.base.basesetup.entity.TaxInvoiceVO;
 import com.base.basesetup.entity.TdsCostInvoiceVO;
 import com.base.basesetup.exception.ApplicationException;
@@ -114,18 +102,10 @@ import com.base.basesetup.repo.ParticularsPaymentVoucherRepo;
 import com.base.basesetup.repo.PaymentInvoiceRepo;
 import com.base.basesetup.repo.PaymentOtherAccountRepo;
 import com.base.basesetup.repo.PaymentReversalRepo;
-import com.base.basesetup.repo.PaymentSummaryRepo;
 import com.base.basesetup.repo.PaymentVoucherRepo;
 import com.base.basesetup.repo.ReceiptInvoiceRepo;
 import com.base.basesetup.repo.ReceiptOtherAccountRepo;
 import com.base.basesetup.repo.ReceiptReversalRepo;
-import com.base.basesetup.repo.ReceiptSummaryRepo;
-import com.base.basesetup.repo.SummaryCostInvoiceRepo;
-import com.base.basesetup.repo.SummaryDebitNoteRepo;
-import com.base.basesetup.repo.SummaryGstVoucherRepo;
-import com.base.basesetup.repo.SummaryIrnCreditRepo;
-import com.base.basesetup.repo.SummaryJournalRepo;
-import com.base.basesetup.repo.SummaryPaymentVoucherRepo;
 import com.base.basesetup.repo.TaxInvoiceRepo;
 import com.base.basesetup.repo.TdsCostInvoiceRepo;
 
@@ -151,9 +131,6 @@ public class TransactionServiceImpl implements TransactionService {
 	GstIrnCreditRepo gstIrnCreditRepo;
 
 	@Autowired
-	SummaryIrnCreditRepo summaryIrnCreditRepo;
-
-	@Autowired
 	DailyMonthlyExRatesRepo dailyMonthlyExRatesRepo;
 
 	@Autowired
@@ -175,13 +152,7 @@ public class TransactionServiceImpl implements TransactionService {
 	ParticularsJournalRepo particularsJournalRepo;
 
 	@Autowired
-	SummaryJournalRepo summaryJournalRepo;
-
-	@Autowired
 	CostInvoiceRepo costInvoiceRepo;
-
-	@Autowired
-	SummaryCostInvoiceRepo summaryCostInvoiceRepo;
 
 	@Autowired
 	TdsCostInvoiceRepo tdsCostInvoiceRepo;
@@ -202,22 +173,13 @@ public class TransactionServiceImpl implements TransactionService {
 	GstDebitNoteRepo gstDebitNoteRepo;
 
 	@Autowired
-	SummaryDebitNoteRepo summaryDebitNoteRepo;
-
-	@Autowired
 	GstSalesVoucherRepo gstSalesVoucherRepo;
 
 	@Autowired
 	ParticularsGstVoucherRepo particularsGstVoucherRepo;
 
 	@Autowired
-	SummaryGstVoucherRepo summaryGstVoucherRepo;
-
-	@Autowired
 	PaymentVoucherRepo paymentVoucherRepo;
-
-	@Autowired
-	SummaryPaymentVoucherRepo summaryPaymentVoucherRepo;
 
 	@Autowired
 	ParticularsPaymentVoucherRepo particularsPaymentVoucherRepo;
@@ -238,9 +200,6 @@ public class TransactionServiceImpl implements TransactionService {
 	ReceiptOtherAccountRepo receiptOtherAccountRepo;
 
 	@Autowired
-	ReceiptSummaryRepo receiptSummaryRepo;
-
-	@Autowired
 	PaymentReversalRepo paymentReversalRepo;
 
 	@Autowired
@@ -248,9 +207,6 @@ public class TransactionServiceImpl implements TransactionService {
 
 	@Autowired
 	PaymentOtherAccountRepo paymentOtherAccountRepo;
-
-	@Autowired
-	PaymentSummaryRepo paymentSummaryRepo;
 
 // TaxInvoice
 	@Override
@@ -504,30 +460,6 @@ public class TransactionServiceImpl implements TransactionService {
 			}
 		}
 
-		List<SummaryIrnCreditVO> summaryIrnCreditVOs = new ArrayList<>();
-		if (irnCreditDTO.getSummaryIrnCreditDTO() != null) {
-			for (SummaryIrnCreditDTO summaryIrnCreditDTO : irnCreditDTO.getSummaryIrnCreditDTO()) {
-				SummaryIrnCreditVO summaryIrnCreditVO;
-				if (summaryIrnCreditDTO.getId() != null & ObjectUtils.isNotEmpty(summaryIrnCreditDTO.getId())) {
-					summaryIrnCreditVO = summaryIrnCreditRepo.findById(summaryIrnCreditDTO.getId())
-							.orElse(new SummaryIrnCreditVO());
-				} else {
-					summaryIrnCreditVO = new SummaryIrnCreditVO();
-				}
-				summaryIrnCreditVO.setAmountInwords(summaryIrnCreditDTO.getAmountInwords());
-				summaryIrnCreditVO.setBillingRemarks(summaryIrnCreditDTO.getBillingRemarks());
-				summaryIrnCreditVO.setBillInvAmount(summaryIrnCreditDTO.getBillInvAmount());
-				summaryIrnCreditVO.setBilllcChargeAmount(summaryIrnCreditDTO.getBilllcChargeAmount());
-				summaryIrnCreditVO.setBillTaxAmount(summaryIrnCreditDTO.getBillTaxAmount());
-				summaryIrnCreditVO.setLcChargeAmount(summaryIrnCreditDTO.getLcChargeAmount());
-				summaryIrnCreditVO.setLcInvAmount(summaryIrnCreditDTO.getLcInvAmount());
-				summaryIrnCreditVO.setLcRoundOffAmount(summaryIrnCreditDTO.getLcRoundOffAmount());
-				summaryIrnCreditVO.setLcTaxableAmount(summaryIrnCreditDTO.getLcTaxableAmount());
-				summaryIrnCreditVO.setLcTaxAmount(summaryIrnCreditDTO.getLcTaxAmount());
-				summaryIrnCreditVO.setIrnCreditVO(irnCreditVO);
-				summaryIrnCreditVOs.add(summaryIrnCreditVO);
-			}
-		}
 
 		List<GstIrnCreditVO> gstIrnCreditVOs = new ArrayList<>();
 		if (irnCreditDTO.getGstIrnCreditDTO() != null) {
@@ -550,7 +482,6 @@ public class TransactionServiceImpl implements TransactionService {
 		}
 		getIrnCreditVOFromIrnCreditDTO(irnCreditDTO, irnCreditVO);
 		irnCreditVO.setChargerIrnCreditVO(chargerIrnCreditVOs);
-		irnCreditVO.setSummaryIrnCreditVO(summaryIrnCreditVOs);
 		irnCreditVO.setGstIrnCreditVO(gstIrnCreditVOs);
 		return irnCreditRepo.save(irnCreditVO);
 	}
@@ -586,6 +517,16 @@ public class TransactionServiceImpl implements TransactionService {
 		irnCreditVO.setUpdatedBy(irnCreditDTO.getUpdatedBy());
 		irnCreditVO.setDocDate(irnCreditDTO.getDocDate());
 		irnCreditVO.setInvoiceDate(irnCreditDTO.getInvoiceDate());
+		irnCreditVO.setAmountInwords(irnCreditDTO.getAmountInwords());
+		irnCreditVO.setBillingRemarks(irnCreditDTO.getBillingRemarks());
+		irnCreditVO.setBillInvAmount(irnCreditDTO.getBillInvAmount());
+		irnCreditVO.setBilllcChargeAmount(irnCreditDTO.getBilllcChargeAmount());
+		irnCreditVO.setBillTaxAmount(irnCreditDTO.getBillTaxAmount());
+		irnCreditVO.setLcChargeAmount(irnCreditDTO.getLcChargeAmount());
+		irnCreditVO.setLcInvAmount(irnCreditDTO.getLcInvAmount());
+		irnCreditVO.setLcRoundOffAmount(irnCreditDTO.getLcRoundOffAmount());
+		irnCreditVO.setLcTaxableAmount(irnCreditDTO.getLcTaxableAmount());
+		irnCreditVO.setLcTaxAmount(irnCreditDTO.getLcTaxAmount());
 	}
 
 	@Override
@@ -971,6 +912,25 @@ public class TransactionServiceImpl implements TransactionService {
 //					}
 //				}
 
+		List<ParticularsJournalVO> particularsJournalVOs = new ArrayList<>();
+		if (generalJournalDTO.getParticularsJournalDTO() != null) {
+			for (ParticularsJournalDTO particularsJournalDTO : generalJournalDTO.getParticularsJournalDTO()) {
+				ParticularsJournalVO particularsJournalVO;
+				if (particularsJournalDTO.getId() != null & ObjectUtils.isEmpty(particularsJournalDTO.getId())) {
+					particularsJournalVO = particularsJournalRepo.findById(particularsJournalDTO.getId())
+							.orElse(new ParticularsJournalVO());
+				} else {
+					particularsJournalVO = new ParticularsJournalVO();
+				}
+				particularsJournalVO.setCurrency(particularsJournalDTO.getCurrency());
+				particularsJournalVO.setSubLedgerCode(particularsJournalDTO.getSubLedgerCode());
+				particularsJournalVO.setDebitAmount(particularsJournalDTO.getDebitAmount());
+				particularsJournalVO.setCreditAmount(particularsJournalDTO.getCreditAmount());
+				particularsJournalVO.setGeneralJournalVO(generalJournalVO);
+				particularsJournalVOs.add(particularsJournalVO);
+			}
+		}
+		generalJournalVO.setParticularsJournalVO(particularsJournalVOs);
 		getGeneralJournalVOFromGeneralJournalDTO(generalJournalDTO, generalJournalVO);
 		return generalJournalRepo.save(generalJournalVO);
 	}
@@ -992,16 +952,17 @@ public class TransactionServiceImpl implements TransactionService {
 		generalJournalVO.setCreatedBy(generalJournalDTO.getCreatedBy());
 		generalJournalVO.setUpdatedBy(generalJournalDTO.getUpdatedBy());
 		generalJournalVO.setActive(generalJournalDTO.isActive());
-
+		generalJournalVO.setTotalCreditAmount(generalJournalDTO.getTotalCreditAmount());
+		generalJournalVO.setTotalDebitAmount(generalJournalDTO.getTotalDebitAmount());
 	}
-
+	
 	@Override
 	public List<GeneralJournalVO> getGeneralJournalByActive() {
 		return generalJournalRepo.findGeneralJournalByActive();
 
 	}
 
-	// CostInvoice
+	// costInvoice
 
 	@Override
 	public List<CostInvoiceVO> getAllCostInvoiceByOrgId(Long orgId) {
@@ -1082,29 +1043,6 @@ public class TransactionServiceImpl implements TransactionService {
 			}
 		}
 
-		List<SummaryCostInvoiceVO> summaryCostInvoiceVOs = new ArrayList<>();
-		if (costInvoiceDTO.getSummaryCostInvoiceDTO() != null) {
-			for (SummaryCostInvoiceDTO summaryCostInvoiceDTO : costInvoiceDTO.getSummaryCostInvoiceDTO()) {
-				SummaryCostInvoiceVO summaryCostInvoiceVO;
-				if (summaryCostInvoiceDTO.getId() != null & ObjectUtils.isNotEmpty(summaryCostInvoiceDTO.getId())) {
-					summaryCostInvoiceVO = summaryCostInvoiceRepo.findById(summaryCostInvoiceDTO.getId())
-							.orElse(new SummaryCostInvoiceVO());
-				} else {
-					summaryCostInvoiceVO = new SummaryCostInvoiceVO();
-				}
-				summaryCostInvoiceVO.setBillCurrTotChargeAmt(summaryCostInvoiceDTO.getBillCurrTotChargeAmt());
-				summaryCostInvoiceVO.setBillCurrActBillAmt(summaryCostInvoiceDTO.getBillCurrActBillAmt());
-				summaryCostInvoiceVO.setBillCurrNetAmt(summaryCostInvoiceDTO.getBillCurrNetAmt());
-				summaryCostInvoiceVO.setLcTotChargeAmt(summaryCostInvoiceDTO.getLcTotChargeAmt());
-				summaryCostInvoiceVO.setLcActBillAmt(summaryCostInvoiceDTO.getLcActBillAmt());
-				summaryCostInvoiceVO.setLcNetAmt(summaryCostInvoiceDTO.getLcNetAmt());
-				summaryCostInvoiceVO.setRoundOff(summaryCostInvoiceDTO.getRoundOff());
-				summaryCostInvoiceVO.setLcGstInputAmt(summaryCostInvoiceDTO.getLcGstInputAmt());
-				summaryCostInvoiceVO.setCostInvoiceVO(costInvoiceVO);
-				summaryCostInvoiceVOs.add(summaryCostInvoiceVO);
-			}
-		}
-
 		List<TdsCostInvoiceVO> tdsCostInvoiceVOs = new ArrayList<>();
 		if (costInvoiceDTO.getTdsCostInvoiceDTO() != null) {
 			for (TdsCostInvoiceDTO tdsCostInvoiceDTO : costInvoiceDTO.getTdsCostInvoiceDTO()) {
@@ -1126,7 +1064,6 @@ public class TransactionServiceImpl implements TransactionService {
 
 		getCostInvoiceVOFromCostInvoiceDTO(costInvoiceDTO, costInvoiceVO);
 		costInvoiceVO.setChargerCostInvoiceVO(chargerCostInvoiceVOs);
-		costInvoiceVO.setSummaryCostInvoiceVO(summaryCostInvoiceVOs);
 		costInvoiceVO.setTdsCostInvoiceVO(tdsCostInvoiceVOs);
 		return costInvoiceRepo.save(costInvoiceVO);
 	}
@@ -1171,6 +1108,14 @@ public class TransactionServiceImpl implements TransactionService {
 		costInvoiceVO.setActive(costInvoiceDTO.isActive());
 		costInvoiceVO.setUpdatedBy(costInvoiceDTO.getUpdatedBy());
 		costInvoiceVO.setCreatedBy(costInvoiceDTO.getCreatedBy());
+		costInvoiceVO.setBillCurrTotChargeAmt(costInvoiceDTO.getBillCurrTotChargeAmt());
+		costInvoiceVO.setBillCurrActBillAmt(costInvoiceDTO.getBillCurrActBillAmt());
+		costInvoiceVO.setBillCurrNetAmt(costInvoiceDTO.getBillCurrNetAmt());
+		costInvoiceVO.setLcTotChargeAmt(costInvoiceDTO.getLcTotChargeAmt());
+		costInvoiceVO.setLcActBillAmt(costInvoiceDTO.getLcActBillAmt());
+		costInvoiceVO.setLcNetAmt(costInvoiceDTO.getLcNetAmt());
+		costInvoiceVO.setRoundOff(costInvoiceDTO.getRoundOff());
+		costInvoiceVO.setLcGstInputAmt(costInvoiceDTO.getLcGstInputAmt());
 	}
 
 	@Override
@@ -1263,28 +1208,6 @@ public class TransactionServiceImpl implements TransactionService {
 			}
 		}
 
-		List<SummaryDebitNoteVO> summaryDebitNoteVOs = new ArrayList<>();
-		if (debitNoteDTO.getSummaryDebitNoteDTO() != null) {
-			for (SummaryDebitNoteDTO summaryDebitNoteDTO : debitNoteDTO.getSummaryDebitNoteDTO()) {
-				SummaryDebitNoteVO summaryDebitNoteVO;
-				if (summaryDebitNoteDTO.getId() != null & ObjectUtils.isNotEmpty(summaryDebitNoteDTO.getId())) {
-					summaryDebitNoteVO = summaryDebitNoteRepo.findById(summaryDebitNoteDTO.getId())
-							.orElse(new SummaryDebitNoteVO());
-				} else {
-					summaryDebitNoteVO = new SummaryDebitNoteVO();
-				}
-				summaryDebitNoteVO.setBillCurrTotChargeAmount(summaryDebitNoteDTO.getBillCurrTotChargeAmount());
-				summaryDebitNoteVO.setBillCurrTotGrossAmount(summaryDebitNoteDTO.getBillCurrTotGrossAmount());
-				summaryDebitNoteVO.setBillCurrNetAmount(summaryDebitNoteDTO.getBillCurrNetAmount());
-				summaryDebitNoteVO.setAmountInWords(summaryDebitNoteDTO.getAmountInWords());
-				summaryDebitNoteVO.setRoundOff(summaryDebitNoteDTO.getRoundOff());
-				summaryDebitNoteVO.setLctotChargeAmount(summaryDebitNoteDTO.getLctotChargeAmount());
-				summaryDebitNoteVO.setLctotGrossAmount(summaryDebitNoteDTO.getLctotGrossAmount());
-				summaryDebitNoteVO.setLcNetAmount(summaryDebitNoteDTO.getLcNetAmount());
-				summaryDebitNoteVO.setDebitNoteVO(debitNoteVO);
-				summaryDebitNoteVOs.add(summaryDebitNoteVO);
-			}
-		}
 
 		List<GstDebitNoteVO> gstDebitNoteVOs = new ArrayList<>();
 		if (debitNoteDTO.getGstDebitNoteDTO() != null) {
@@ -1328,7 +1251,6 @@ public class TransactionServiceImpl implements TransactionService {
 		getDebitNoteVOFromDebitNoteDTO(debitNoteDTO, debitNoteVO);
 		debitNoteVO.setChargerDebitNoteVO(chargerDebitNoteVOs);
 		debitNoteVO.setParticularsDebitNoteVO(particularsDebitNoteVOs);
-		debitNoteVO.setSummaryDebitNoteVO(summaryDebitNoteVOs);
 		debitNoteVO.setGstDebitNoteVO(gstDebitNoteVOs);
 		return debitNoteRepo.save(debitNoteVO);
 	}
@@ -1372,6 +1294,14 @@ public class TransactionServiceImpl implements TransactionService {
 		debitNoteVO.setActive(debitNoteDTO.isActive());
 		debitNoteVO.setUpdatedBy(debitNoteDTO.getUpdatedBy());
 		debitNoteVO.setCreatedBy(debitNoteDTO.getCreatedBy());
+		debitNoteVO.setBillCurrTotChargeAmount(debitNoteDTO.getBillCurrTotChargeAmount());
+		debitNoteVO.setBillCurrTotGrossAmount(debitNoteDTO.getBillCurrTotGrossAmount());
+		debitNoteVO.setBillCurrNetAmount(debitNoteDTO.getBillCurrNetAmount());
+		debitNoteVO.setAmountInWords(debitNoteDTO.getAmountInWords());
+		debitNoteVO.setRoundOff(debitNoteDTO.getRoundOff());
+		debitNoteVO.setLctotChargeAmount(debitNoteDTO.getLctotChargeAmount());
+		debitNoteVO.setLctotGrossAmount(debitNoteDTO.getLctotGrossAmount());
+		debitNoteVO.setLcNetAmount(debitNoteDTO.getLcNetAmount());
 	}
 
 	@Override
@@ -1434,26 +1364,6 @@ public class TransactionServiceImpl implements TransactionService {
 //						}
 //					}
 
-		List<SummaryGstVoucherVO> summaryGstVoucherVOs = new ArrayList<>();
-		if (gstSalesVoucherDTO.getSummaryGstVoucherDTO() != null) {
-			for (SummaryGstVoucherDTO summaryGstVoucherDTO : gstSalesVoucherDTO.getSummaryGstVoucherDTO()) {
-				SummaryGstVoucherVO summaryGstVoucherVO;
-				if (summaryGstVoucherDTO.getId() != null & ObjectUtils.isNotEmpty(summaryGstVoucherDTO.getId())) {
-					summaryGstVoucherVO = summaryGstVoucherRepo.findById(summaryGstVoucherDTO.getId())
-							.orElse(new SummaryGstVoucherVO());
-				} else {
-					summaryGstVoucherVO = new SummaryGstVoucherVO();
-				}
-				summaryGstVoucherVO.setTotalDebitAmount(summaryGstVoucherDTO.getTotalDebitAmount());
-				summaryGstVoucherVO.setTotalCreditAmount(summaryGstVoucherDTO.getTotalCreditAmount());
-				summaryGstVoucherVO.setStTaxAmount(summaryGstVoucherDTO.getStTaxAmount());
-				summaryGstVoucherVO.setBasAmount(summaryGstVoucherDTO.getBasAmount());
-				summaryGstVoucherVO.setBssAmount(summaryGstVoucherDTO.getBssAmount());
-				summaryGstVoucherVO.setChaAmount(summaryGstVoucherDTO.getChaAmount());
-				summaryGstVoucherVO.setGstSalesVoucherVO(gstSalesVoucherVO);
-				summaryGstVoucherVOs.add(summaryGstVoucherVO);
-			}
-		}
 
 		List<ParticularsGstVoucherVO> particularsGstVoucherVOs = new ArrayList<>();
 		if (gstSalesVoucherDTO.getParticularsGstVoucherDTO() != null) {
@@ -1480,7 +1390,6 @@ public class TransactionServiceImpl implements TransactionService {
 
 		getGstSalesVoucherVOFromGstSalesVoucherDTO(gstSalesVoucherDTO, gstSalesVoucherVO);
 		gstSalesVoucherVO.setParticularsGstVoucherVO(particularsGstVoucherVOs);
-		gstSalesVoucherVO.setSummaryGstVoucherVO(summaryGstVoucherVOs);
 		return gstSalesVoucherRepo.save(gstSalesVoucherVO);
 	}
 
@@ -1500,6 +1409,12 @@ public class TransactionServiceImpl implements TransactionService {
 		gstSalesVoucherVO.setReferenceDate(gstSalesVoucherDTO.getReferenceDate());
 		gstSalesVoucherVO.setExRate(gstSalesVoucherDTO.getExRate());
 		gstSalesVoucherVO.setRemarks(gstSalesVoucherDTO.getRemarks());
+		gstSalesVoucherVO.setTotalDebitAmount(gstSalesVoucherDTO.getTotalDebitAmount());
+		gstSalesVoucherVO.setTotalCreditAmount(gstSalesVoucherDTO.getTotalCreditAmount());
+		gstSalesVoucherVO.setStTaxAmount(gstSalesVoucherDTO.getStTaxAmount());
+		gstSalesVoucherVO.setBasAmount(gstSalesVoucherDTO.getBasAmount());
+		gstSalesVoucherVO.setBssAmount(gstSalesVoucherDTO.getBssAmount());
+		gstSalesVoucherVO.setChaAmount(gstSalesVoucherDTO.getChaAmount());
 	}
 
 	@Override
@@ -1562,23 +1477,6 @@ public class TransactionServiceImpl implements TransactionService {
 //						}
 //					}
 
-		List<SummaryPaymentVoucherVO> summaryPaymentVoucherVOs = new ArrayList<>();
-		if (paymentVoucherDTO.getSummaryPaymentVoucherDTO() != null) {
-			for (SummaryPaymentVoucherDTO summaryPaymentVoucherDTO : paymentVoucherDTO.getSummaryPaymentVoucherDTO()) {
-				SummaryPaymentVoucherVO summaryPaymentVoucherVO;
-				if (summaryPaymentVoucherDTO.getId() != null
-						& ObjectUtils.isNotEmpty(summaryPaymentVoucherDTO.getId())) {
-					summaryPaymentVoucherVO = summaryPaymentVoucherRepo.findById(summaryPaymentVoucherDTO.getId())
-							.orElse(new SummaryPaymentVoucherVO());
-				} else {
-					summaryPaymentVoucherVO = new SummaryPaymentVoucherVO();
-				}
-				summaryPaymentVoucherVO.setTotalDebitAmount(summaryPaymentVoucherDTO.getTotalDebitAmount());
-				summaryPaymentVoucherVO.setTotalCreditAmount(summaryPaymentVoucherDTO.getTotalCreditAmount());
-				summaryPaymentVoucherVO.setPaymentVoucherVO(paymentVoucherVO);
-				summaryPaymentVoucherVOs.add(summaryPaymentVoucherVO);
-			}
-		}
 
 		List<ParticularsPaymentVoucherVO> particularsPaymentVoucherVOs = new ArrayList<>();
 		if (paymentVoucherDTO.getParticularsPaymentVoucherDTO() != null) {
@@ -1605,7 +1503,6 @@ public class TransactionServiceImpl implements TransactionService {
 
 		getPaymentVoucherVOFromPaymentVoucherDTO(paymentVoucherDTO, paymentVoucherVO);
 		paymentVoucherVO.setParticularsPaymentVoucherVO(particularsPaymentVoucherVOs);
-		paymentVoucherVO.setSummaryPaymentVoucherVO(summaryPaymentVoucherVOs);
 		return paymentVoucherRepo.save(paymentVoucherVO);
 	}
 
@@ -1625,6 +1522,8 @@ public class TransactionServiceImpl implements TransactionService {
 		paymentVoucherVO.setReferenceDate(paymentVoucherDTO.getReferenceDate());
 		paymentVoucherVO.setExRate(paymentVoucherDTO.getExRate());
 		paymentVoucherVO.setRemarks(paymentVoucherDTO.getRemarks());
+		paymentVoucherVO.setTotalDebitAmount(paymentVoucherDTO.getTotalDebitAmount());
+		paymentVoucherVO.setTotalCreditAmount(paymentVoucherDTO.getTotalCreditAmount());
 	}
 
 	@Override
@@ -1903,31 +1802,10 @@ public class TransactionServiceImpl implements TransactionService {
 			}
 		}
 
-		List<ReceiptSummaryVO> receiptSummaryVOs = new ArrayList<>();
-		if (receiptReversalDTO.getReceiptSummaryDTO() != null) {
-			for (ReceiptSummaryDTO receiptSummaryDTO : receiptReversalDTO.getReceiptSummaryDTO()) {
-				ReceiptSummaryVO receiptSummaryVO;
-				if (receiptSummaryDTO.getId() != null & ObjectUtils.isEmpty(receiptSummaryDTO.getId())) {
-					receiptSummaryVO = receiptSummaryRepo.findById(receiptSummaryDTO.getId())
-							.orElse(new ReceiptSummaryVO());
-				} else {
-					receiptSummaryVO = new ReceiptSummaryVO();
-				}
-				receiptSummaryVO.setFoxenGainOrLoss(receiptSummaryDTO.getFoxenGainOrLoss());
-				receiptSummaryVO.setRoundOffAmount(receiptSummaryDTO.getRoundOffAmount());
-				receiptSummaryVO.setTotalSettled(receiptSummaryDTO.getTotalSettled());
-				receiptSummaryVO.setOtherAccNetAmt(receiptSummaryDTO.getOtherAccNetAmt());
-				receiptSummaryVO.setOnAccount(receiptSummaryDTO.getOnAccount());
-				receiptSummaryVO.setNarration(receiptSummaryDTO.getNarration());
-				receiptSummaryVO.setReceiptReversalVO(receiptReversalVO);
-				receiptSummaryVOs.add(receiptSummaryVO);
-			}
-		}
 
 		getReceiptReversalVOFromReceiptReversalDTO(receiptReversalDTO, receiptReversalVO);
 		receiptReversalVO.setReceiptOtherAccountVO(receiptOtherAccountVOs);
 		receiptReversalVO.setReceiptInvoiceVO(receiptInvoiceVOs);
-		receiptReversalVO.setReceiptSummaryVO(receiptSummaryVOs);
 		return receiptReversalRepo.save(receiptReversalVO);
 	}
 
@@ -1969,6 +1847,12 @@ public class TransactionServiceImpl implements TransactionService {
 		receiptReversalVO.setActive(receiptReversalDTO.isActive());
 		receiptReversalVO.setCreatedBy(receiptReversalDTO.getCreatedBy());
 		receiptReversalVO.setUpdatedBy(receiptReversalDTO.getUpdatedBy());
+		receiptReversalVO.setFoxenGainOrLoss(receiptReversalDTO.getFoxenGainOrLoss());
+		receiptReversalVO.setRoundOffAmount(receiptReversalDTO.getRoundOffAmount());
+		receiptReversalVO.setTotalSettled(receiptReversalDTO.getTotalSettled());
+		receiptReversalVO.setOtherAccNetAmt(receiptReversalDTO.getOtherAccNetAmt());
+		receiptReversalVO.setOnAccount(receiptReversalDTO.getOnAccount());
+		receiptReversalVO.setNarration(receiptReversalDTO.getNarration());
 	}
 
 	@Override
@@ -2080,31 +1964,10 @@ public class TransactionServiceImpl implements TransactionService {
 			}
 		}
 
-		List<PaymentSummaryVO> paymentSummaryVOs = new ArrayList<>();
-		if (paymentReversalDTO.getPaymentSummaryDTO() != null) {
-			for (PaymentSummaryDTO paymentSummaryDTO : paymentReversalDTO.getPaymentSummaryDTO()) {
-				PaymentSummaryVO paymentSummaryVO;
-				if (paymentSummaryDTO.getId() != null & ObjectUtils.isEmpty(paymentSummaryDTO.getId())) {
-					paymentSummaryVO = paymentSummaryRepo.findById(paymentSummaryDTO.getId())
-							.orElse(new PaymentSummaryVO());
-				} else {
-					paymentSummaryVO = new PaymentSummaryVO();
-				}
-				paymentSummaryVO.setFoxenGainOrLoss(paymentSummaryDTO.getFoxenGainOrLoss());
-				paymentSummaryVO.setRoundOffAmount(paymentSummaryDTO.getRoundOffAmount());
-				paymentSummaryVO.setTotalSettled(paymentSummaryDTO.getTotalSettled());
-				paymentSummaryVO.setOtherAccNetAmt(paymentSummaryDTO.getOtherAccNetAmt());
-				paymentSummaryVO.setOnAccount(paymentSummaryDTO.getOnAccount());
-				paymentSummaryVO.setNarration(paymentSummaryDTO.getNarration());
-				paymentSummaryVO.setPaymentReversalVO(paymentReversalVO);
-				paymentSummaryVOs.add(paymentSummaryVO);
-			}
-		}
 
 		getPaymentReversalVOFromPaymentReversalDTO(paymentReversalDTO, paymentReversalVO);
 		paymentReversalVO.setPaymentOtherAccountVO(paymentOtherAccountVOs);
 		paymentReversalVO.setPaymentInvoiceVO(paymentInvoiceVOs);
-		paymentReversalVO.setPaymentSummaryVO(paymentSummaryVOs);
 		return paymentReversalRepo.save(paymentReversalVO);
 	}
 
@@ -2148,6 +2011,12 @@ public class TransactionServiceImpl implements TransactionService {
 		paymentReversalVO.setActive(paymentReversalDTO.isActive());
 		paymentReversalVO.setCreatedBy(paymentReversalDTO.getCreatedBy());
 		paymentReversalVO.setUpdatedBy(paymentReversalDTO.getUpdatedBy());
+		paymentReversalVO.setFoxenGainOrLoss(paymentReversalDTO.getFoxenGainOrLoss());
+		paymentReversalVO.setRoundOffAmount(paymentReversalDTO.getRoundOffAmount());
+		paymentReversalVO.setTotalSettled(paymentReversalDTO.getTotalSettled());
+		paymentReversalVO.setOtherAccNetAmt(paymentReversalDTO.getOtherAccNetAmt());
+		paymentReversalVO.setOnAccount(paymentReversalDTO.getOnAccount());
+		paymentReversalVO.setNarration(paymentReversalDTO.getNarration());
 	}
 
 	@Override

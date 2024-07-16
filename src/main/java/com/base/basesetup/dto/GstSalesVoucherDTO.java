@@ -20,9 +20,13 @@ public class GstSalesVoucherDTO {
 	private LocalDateTime referenceDate;
 	private BigDecimal exRate;
 	private String remarks;
+	private BigDecimal totalDebitAmount;
+	private BigDecimal totalCreditAmount;
+	private BigDecimal stTaxAmount;
+	private BigDecimal basAmount;
+	private BigDecimal bssAmount;
+	private BigDecimal chaAmount;
 
 	List<ParticularsGstVoucherDTO> particularsGstVoucherDTO;
-
-	List<SummaryGstVoucherDTO> summaryGstVoucherDTO;
 
 }

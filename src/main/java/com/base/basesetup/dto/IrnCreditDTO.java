@@ -1,7 +1,10 @@
 package com.base.basesetup.dto;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+
+import javax.persistence.Column;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -35,10 +38,19 @@ public class IrnCreditDTO {
 	private LocalDateTime docDate;
 	private LocalDateTime invoiceDate;
 	private String originBill;
+	private BigDecimal lcChargeAmount;
+	private BigDecimal lcTaxAmount;
+	private BigDecimal InvAmount;
+	private BigDecimal lcRoundOffAmount;
+	private BigDecimal billlcChargeAmount;
+	private BigDecimal billTaxAmount;
+	private BigDecimal billInvAmount;
+	private BigDecimal lcTaxableAmount;
+	private String amountInwords;
+	private String billingRemarks;
+	private BigDecimal lcInvAmount;
 	
 	List<ChargerIrnCreditDTO> chargerIrnCreditDTO;
-
-	List<SummaryIrnCreditDTO> summaryIrnCreditDTO;
 
 	List<GstIrnCreditDTO> gstIrnCreditDTO;
 

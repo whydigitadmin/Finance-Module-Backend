@@ -1,5 +1,6 @@
 package com.base.basesetup.entity;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -68,15 +69,15 @@ public class GeneralJournalVO {
 	private String createdBy;
 	@Column(name = "modifiedby")
 	private String updatedBy;
+	@Column(name = "totaldebitamount")
+	private BigDecimal totalDebitAmount;
+	@Column(name = "totalcreditamount")
+	private BigDecimal totalCreditAmount;
 
 	@OneToMany(mappedBy = "generalJournalVO", cascade = CascadeType.ALL)
 	@JsonManagedReference
-	List<ParticularsJournalVO> particularJournalVO;
+	List<ParticularsJournalVO> particularsJournalVO;
 	
-	@OneToMany(mappedBy="generalJournalVO",cascade=CascadeType.ALL)
-	@JsonManagedReference
-	List<SummaryJournalVO> summaryJournalVO;
-
 	@Embedded
 	@Builder.Default
 	private CreatedUpdatedDate commonDate = new CreatedUpdatedDate();

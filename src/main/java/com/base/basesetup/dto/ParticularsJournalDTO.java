@@ -1,5 +1,9 @@
 package com.base.basesetup.dto;
 
+import java.math.BigDecimal;
+
+import javax.persistence.Column;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,10 +15,12 @@ import lombok.NoArgsConstructor;
 @Builder
 public class ParticularsJournalDTO {
 	private Long id;
-	private String currecy;
-	private String subLedgerCode;
-	private String debitAmount;
-	private String creditAmount;
+	private BigDecimal currency;
+	private BigDecimal subLedgerCode;
+	private BigDecimal debitAmount;
+	private BigDecimal creditAmount;
 	private String narration;
+	
+	
 
 }

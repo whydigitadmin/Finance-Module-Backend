@@ -97,6 +97,18 @@ public class PaymentReversalVO {
 	private String createdBy;
 	@Column(name = "modifiedby")
 	private String updatedBy;
+	@Column(name = "foxengainorloss")
+	private BigDecimal foxenGainOrLoss;
+	@Column(name = "roundoffamount")
+	private BigDecimal roundOffAmount;
+	@Column(name = "totalsettled")
+	private BigDecimal totalSettled;
+	@Column(name = "otheraccnetamt")
+	private BigDecimal otherAccNetAmt;
+	@Column(name = "onaccount")
+	private BigDecimal onAccount;
+	@Column(name = "narration")
+	private String narration;
 
 	@OneToMany(mappedBy = "paymentReversalVO", cascade = CascadeType.ALL)
 	@JsonManagedReference
@@ -105,10 +117,6 @@ public class PaymentReversalVO {
 	@OneToMany(mappedBy = "paymentReversalVO", cascade = CascadeType.ALL)
 	@JsonBackReference
 	List<PaymentOtherAccountVO> paymentOtherAccountVO;
-
-	@OneToMany(mappedBy = "paymentReversalVO", cascade = CascadeType.ALL)
-	@JsonBackReference
-	List<PaymentSummaryVO> paymentSummaryVO;
 
 	@Embedded
 	@Builder.Default

@@ -42,12 +42,18 @@ public class DebitNoteDTO {
 	private boolean active;
 	private String updatedBy;
 	private String createdBy;
+	private String billCurrTotChargeAmount;
+	private String billCurrTotGrossAmount;
+	private String billCurrNetAmount;
+	private String amountInWords;
+	private String roundOff;
+	private String lctotChargeAmount;
+	private String lctotGrossAmount;
+	private String lcNetAmount;
 
 	List<ChargerDebitNoteDTO> chargerDebitNoteDTO;
 
 	List<ParticularsDebitNoteDTO> particularsDebitNoteDTO;
-
-	List<SummaryDebitNoteDTO> summaryDebitNoteDTO;
 
 	List<GstDebitNoteDTO> gstDebitNoteDTO;
 

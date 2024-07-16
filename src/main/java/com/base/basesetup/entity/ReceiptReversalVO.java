@@ -1,5 +1,6 @@
 package com.base.basesetup.entity;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -92,6 +93,18 @@ public class ReceiptReversalVO {
 	private String createdBy;
 	@Column(name = "modifiedby")
 	private String updatedBy;
+	@Column(name = "foxengainorloss")
+	private BigDecimal foxenGainOrLoss;
+	@Column(name = "roundoffamount")
+	private BigDecimal roundOffAmount;
+	@Column(name = "totalsettled")
+	private BigDecimal totalSettled;
+	@Column(name = "otheraccnetamt")
+	private BigDecimal otherAccNetAmt;
+	@Column(name = "onaccount")
+	private BigDecimal onAccount;
+	@Column(name = "narration")
+	private String narration;
 
 	@OneToMany(mappedBy = "receiptReversalVO",cascade = CascadeType.ALL)
 	@JsonManagedReference
@@ -100,10 +113,6 @@ public class ReceiptReversalVO {
 	@OneToMany(mappedBy = "receiptReversalVO",cascade = CascadeType.ALL)
 	@JsonBackReference
 	List<ReceiptOtherAccountVO> receiptOtherAccountVO;
-	
-	@OneToMany(mappedBy = "receiptReversalVO",cascade = CascadeType.ALL)
-	@JsonBackReference
-	List<ReceiptSummaryVO> receiptSummaryVO;
 	
 	@Embedded
 	@Builder.Default

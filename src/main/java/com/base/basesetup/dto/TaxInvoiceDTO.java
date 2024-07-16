@@ -5,6 +5,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import javax.persistence.Column;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -36,7 +38,6 @@ public class TaxInvoiceDTO {
 	private String createdBy;
 	private LocalDateTime docDate;
 	private LocalDateTime invoiceDate;
-
 	private BigDecimal lcChargeAmount;
 	private BigDecimal lcTaxAmount;
 	private BigDecimal lcInvAmount;
@@ -47,7 +48,7 @@ public class TaxInvoiceDTO {
 	private BigDecimal lcTaxableAmount;
 	private String amountInwords;
 	private String billingRemarks;
-
+	
 	List<ChargerTaxInvoiceDTO> chargerTaxInvoiceDTO;
 
 	List<GstTaxInvoiceDTO> gstTaxInvoiceDTO;

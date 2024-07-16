@@ -67,14 +67,14 @@ public class PaymentVoucherVO {
 	private String createdBy;
 	@Column(name = "modifiedby")
 	private String updatedBy;
+	@Column(name = "totaldebitamount")
+	private BigDecimal totalDebitAmount;
+	@Column(name = "totalcreditamount")
+	private BigDecimal totalCreditAmount;
 
 	@OneToMany(mappedBy = "paymentVoucherVO", cascade = CascadeType.ALL)
 	@JsonManagedReference
 	List<ParticularsPaymentVoucherVO> particularsPaymentVoucherVO;
-
-	@OneToMany(mappedBy = "paymentVoucherVO", cascade = CascadeType.ALL)
-	@JsonManagedReference
-	List<SummaryPaymentVoucherVO> summaryPaymentVoucherVO;
 
 	@Embedded
 	@Builder.Default

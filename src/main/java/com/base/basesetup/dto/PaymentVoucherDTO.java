@@ -21,8 +21,8 @@ public class PaymentVoucherDTO {
 	private BigDecimal exRate;
 	private LocalDateTime docDate;
 	private String remarks;
-
-	List<SummaryPaymentVoucherDTO> summaryPaymentVoucherDTO;
+	private BigDecimal totalDebitAmount;
+	private BigDecimal totalCreditAmount;
 
 	List<ParticularsPaymentVoucherDTO> particularsPaymentVoucherDTO;
 }
