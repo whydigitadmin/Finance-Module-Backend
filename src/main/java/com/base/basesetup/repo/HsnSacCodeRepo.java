@@ -19,7 +19,7 @@ public interface HsnSacCodeRepo extends JpaRepository<HsnSacCodeVO, Long> {
 
 	boolean existsByCodeAndOrgId(String code, Long orgId);
 
-	boolean existsByDescripitionAndOrgId(String descripition, Long orgId);
+	boolean existsByDescriptionAndOrgId(String description, Long orgId);
 
 //	@Query(nativeQuery = true,name = "select * from hsnsaccode where active=1")
 //	List<HsnSacCodeVO> findHsnSacCodeByActive();

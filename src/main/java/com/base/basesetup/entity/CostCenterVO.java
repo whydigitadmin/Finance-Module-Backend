@@ -32,8 +32,8 @@ public class CostCenterVO {
 	private String dimensionType;
 	@Column(name = "valuecode")
 	private String valueCode;
-	@Column(name = "valuedescripition")
-	private String valueDescripition;
+	@Column(name = "valuedescription")
+	private String valueDescription;
 	@Column(name = "orgid")
 	private Long orgId;
 	@Column(name = "active")

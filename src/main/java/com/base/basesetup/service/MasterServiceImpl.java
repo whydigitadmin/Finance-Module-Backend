@@ -330,20 +330,24 @@ public class MasterServiceImpl implements MasterService {
 			tcsMasterVO = tcsMasterRepo.findById(tcsMasterDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid Tcs Master details"));
 		} else {
-			if (tcsMasterRepo.existsBySectionAndOrgId(tcsMasterDTO.getSection(), tcsMasterDTO.getOrgId())) {
-				throw new ApplicationException("The given section already exists.");
-			}
-			if (tcsMasterRepo.existsBySectionNameAndOrgId(tcsMasterDTO.getSectionName(), tcsMasterDTO.getOrgId())) {
-				throw new ApplicationException("The given Section name already exists.");
-			}
-		}
-
-		if (ObjectUtils.isNotEmpty(tcsMasterDTO.getId())) {
 			if (tcsMasterRepo.existsBySectionNameAndOrgId(tcsMasterDTO.getSectionName(), tcsMasterDTO.getOrgId())) {
 				throw new ApplicationException("The given section name already exists.");
 			}
 			if (tcsMasterRepo.existsBySectionAndOrgId(tcsMasterDTO.getSection(), tcsMasterDTO.getOrgId())) {
 				throw new ApplicationException("The given Section already exists.");
+			}
+		}
+		if (ObjectUtils.isNotEmpty(tcsMasterDTO.getId())) {
+			TcsMasterVO tcsMaster = tcsMasterRepo.findById(tcsMasterDTO.getId()).orElse(null);
+			if (!tcsMaster.getSection().equals(tcsMasterDTO.getSection())) {
+				if (tcsMasterRepo.existsBySectionAndOrgId(tcsMasterDTO.getSection(), tcsMasterDTO.getOrgId())) {
+					throw new ApplicationException("The given section already exists.");
+				}
+			}
+			if (!tcsMaster.getSectionName().equals(tcsMasterDTO.getSectionName())) {
+				if (tcsMasterRepo.existsBySectionNameAndOrgId(tcsMasterDTO.getSectionName(), tcsMasterDTO.getOrgId())) {
+					throw new ApplicationException("The given Section name already exists.");
+				}
 			}
 		}
 
@@ -428,20 +432,25 @@ public class MasterServiceImpl implements MasterService {
 			tdsMasterVO = tdsMasterRepo.findById(tdsMasterDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid Tds Master details"));
 		} else {
-			if (tdsMasterRepo.existsBySectionAndOrgId(tdsMasterDTO.getSection(), tdsMasterDTO.getOrgId())) {
-				throw new ApplicationException("The given section already exists.");
-			}
-			if (tdsMasterRepo.existsBySectionNameAndOrgId(tdsMasterDTO.getSectionName(), tdsMasterDTO.getOrgId())) {
-				throw new ApplicationException("The given Section name already exists.");
-			}
-		}
-
-		if (ObjectUtils.isNotEmpty(tdsMasterDTO.getId())) {
 			if (tdsMasterRepo.existsBySectionNameAndOrgId(tdsMasterDTO.getSectionName(), tdsMasterDTO.getOrgId())) {
 				throw new ApplicationException("The given section name already exists.");
 			}
 			if (tdsMasterRepo.existsBySectionAndOrgId(tdsMasterDTO.getSection(), tdsMasterDTO.getOrgId())) {
 				throw new ApplicationException("The given Section already exists.");
+			}
+		}
+
+		if (ObjectUtils.isNotEmpty(tdsMasterDTO.getId())) {
+			TdsMasterVO tdsMaster = tdsMasterRepo.findById(tdsMasterDTO.getId()).orElse(null);
+			if (!tdsMaster.getSection().equals(tdsMasterDTO.getSection())) {
+				if (tdsMasterRepo.existsBySectionAndOrgId(tdsMasterDTO.getSection(), tdsMasterDTO.getOrgId())) {
+					throw new ApplicationException("The given section already exists.");
+				}
+			}
+			if (!tdsMaster.getSectionName().equals(tdsMasterDTO.getSectionName())) {
+				if (tdsMasterRepo.existsBySectionNameAndOrgId(tdsMasterDTO.getSectionName(), tdsMasterDTO.getOrgId())) {
+					throw new ApplicationException("The given Section name already exists.");
+				}
 			}
 		}
 
@@ -534,11 +543,16 @@ public class MasterServiceImpl implements MasterService {
 			}
 		}
 		if (ObjectUtils.isNotEmpty(accountDTO.getId())) {
-			if (accountRepo.existsByAccountNameAndOrgId(accountDTO.getAccountName(), accountDTO.getOrgId())) {
-				throw new ApplicationException("The given Account name already exists.");
+			AccountVO account = accountRepo.findById(accountDTO.getId()).orElse(null);
+			if (!account.getAccountName().equals(accountDTO.getAccountName())) {
+				if (accountRepo.existsByAccountNameAndOrgId(accountDTO.getAccountName(), accountDTO.getOrgId())) {
+					throw new ApplicationException("The given Account name already exists.");
+				}
 			}
-			if (accountRepo.existsByAccountCodeAndOrgId(accountDTO.getAccountCode(), accountDTO.getOrgId())) {
-				throw new ApplicationException("The given Account Code already exists.");
+			if (!account.getAccountCode().equals(accountDTO.getAccountCode())) {
+				if (accountRepo.existsByAccountCodeAndOrgId(accountDTO.getAccountCode(), accountDTO.getOrgId())) {
+					throw new ApplicationException("The given Account Code already exists.");
+				}
 			}
 		}
 
@@ -681,21 +695,26 @@ public class MasterServiceImpl implements MasterService {
 		} else {
 			if (groupLedgerRepo.existsByAccountCodeAndOrgId(groupLedgerDTO.getAccountCode(),
 					groupLedgerDTO.getOrgId())) {
-				throw new ApplicationException("The given Account name already exists.");
-			}
-			if (groupLedgerRepo.existsByAccountGroupNameAndOrgId(groupLedgerDTO.getAccountGroupName(),
-					groupLedgerDTO.getOrgId())) {
-				throw new ApplicationException("The given Account Code already exists.");
-			}
-		}
-		if (ObjectUtils.isNotEmpty(groupLedgerDTO.getId())) {
-			if (groupLedgerRepo.existsByAccountCodeAndOrgId(groupLedgerDTO.getAccountCode(),
-					groupLedgerDTO.getOrgId())) {
 				throw new ApplicationException("The given Account Code already exists.");
 			}
 			if (groupLedgerRepo.existsByAccountGroupNameAndOrgId(groupLedgerDTO.getAccountGroupName(),
 					groupLedgerDTO.getOrgId())) {
 				throw new ApplicationException("The given Account Group Name already exists.");
+			}
+		}
+		if (ObjectUtils.isNotEmpty(groupLedgerDTO.getId())) {
+			GroupLedgerVO groupLedger = groupLedgerRepo.findById(groupLedgerDTO.getId()).orElse(null);
+			if (!groupLedger.getAccountCode().equals(groupLedgerDTO.getAccountCode())) {
+				if (groupLedgerRepo.existsByAccountCodeAndOrgId(groupLedgerDTO.getAccountCode(),
+						groupLedgerDTO.getOrgId())) {
+					throw new ApplicationException("The given Account name already exists.");
+				}
+			}
+			if (!groupLedger.getGroupName().equals(groupLedgerDTO.getGroupName())) {
+				if (groupLedgerRepo.existsByAccountGroupNameAndOrgId(groupLedgerDTO.getAccountGroupName(),
+						groupLedgerDTO.getOrgId())) {
+					throw new ApplicationException("The given Account Code already exists.");
+				}
 			}
 		}
 		getGroupLedgerVOFromGroupLedgerDTO(groupLedgerDTO, groupLedgerVO);
@@ -759,23 +778,30 @@ public class MasterServiceImpl implements MasterService {
 			hsnSacCodeVO = hsnSacCodeRepo.findById(hsnSacCodeDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid HsnSacCode details"));
 		} else {
+
 			if (hsnSacCodeRepo.existsByCodeAndOrgId(hsnSacCodeDTO.getCode(), hsnSacCodeDTO.getOrgId())) {
 				throw new ApplicationException("The given code already exists.");
 			}
-			if (hsnSacCodeRepo.existsByDescripitionAndOrgId(hsnSacCodeDTO.getDescripition(),
-					hsnSacCodeDTO.getOrgId())) {
+			if (hsnSacCodeRepo.existsByDescriptionAndOrgId(hsnSacCodeDTO.getDescription(), hsnSacCodeDTO.getOrgId())) {
 				throw new ApplicationException("The given Descipition exists.");
 			}
 		}
+
 		if (ObjectUtils.isNotEmpty(hsnSacCodeDTO.getId())) {
-			if (hsnSacCodeRepo.existsByCodeAndOrgId(hsnSacCodeDTO.getCode(), hsnSacCodeDTO.getOrgId())) {
-				throw new ApplicationException("The given code already exists.");
+			HsnSacCodeVO hsn = hsnSacCodeRepo.findById(hsnSacCodeDTO.getId()).orElse(null);
+			if (!hsn.getCode().equals(hsnSacCodeDTO.getCode())) {
+				if (hsnSacCodeRepo.existsByCodeAndOrgId(hsnSacCodeDTO.getCode(), hsnSacCodeDTO.getOrgId())) {
+					throw new ApplicationException("The given code already exists.");
+				}
 			}
-			if (hsnSacCodeRepo.existsByDescripitionAndOrgId(hsnSacCodeDTO.getDescripition(),
-					hsnSacCodeDTO.getOrgId())) {
-				throw new ApplicationException("The given Descipition exists.");
+			if (!hsn.getDescription().equals(hsnSacCodeDTO.getDescription())) {
+				if (hsnSacCodeRepo.existsByDescriptionAndOrgId(hsnSacCodeDTO.getDescription(),
+						hsnSacCodeDTO.getOrgId())) {
+					throw new ApplicationException("The given Descipition exists.");
+				}
 			}
 		}
+
 		getHsnSacCodeVOFromHsnSacCodeDTO(hsnSacCodeDTO, hsnSacCodeVO);
 		return hsnSacCodeRepo.save(hsnSacCodeVO);
 	}
@@ -785,7 +811,7 @@ public class MasterServiceImpl implements MasterService {
 		hsnSacCodeVO.setType(hsnSacCodeDTO.getType());
 		hsnSacCodeVO.setActive(hsnSacCodeDTO.isActive());
 		hsnSacCodeVO.setCode(hsnSacCodeDTO.getCode());
-		hsnSacCodeVO.setDescripition(hsnSacCodeDTO.getDescripition());
+		hsnSacCodeVO.setDescription(hsnSacCodeDTO.getDescription());
 		hsnSacCodeVO.setChapter(hsnSacCodeDTO.getChapter());
 		hsnSacCodeVO.setChapterCode(hsnSacCodeDTO.getChapterCode());
 		hsnSacCodeVO.setSubChapter(hsnSacCodeDTO.getSubChapter());
@@ -897,7 +923,7 @@ public class MasterServiceImpl implements MasterService {
 		} else {
 			if (subLedgerAccountRepo.existsByNewCodeAndOrgId(subLedgerAccountDTO.getNewCode(),
 					subLedgerAccountDTO.getOrgId())) {
-				throw new ApplicationException("The given new code already exists.");
+				throw new ApplicationException("The given code already exists.");
 			}
 			if (subLedgerAccountRepo.existsByOldCodeAndOrgId(subLedgerAccountDTO.getOldCode(),
 					subLedgerAccountDTO.getOrgId())) {
@@ -908,18 +934,26 @@ public class MasterServiceImpl implements MasterService {
 				throw new ApplicationException("The given sub ledger name exists.");
 			}
 		}
+
 		if (ObjectUtils.isNotEmpty(subLedgerAccountDTO.getId())) {
-			if (subLedgerAccountRepo.existsByNewCodeAndOrgId(subLedgerAccountDTO.getNewCode(),
-					subLedgerAccountDTO.getOrgId())) {
-				throw new ApplicationException("The given code already exists.");
+			SubLedgerAccountVO sub = subLedgerAccountRepo.findById(subLedgerAccountDTO.getId()).orElse(null);
+			if (!sub.getNewCode().equals(subLedgerAccountDTO.getNewCode())) {
+				if (subLedgerAccountRepo.existsByNewCodeAndOrgId(subLedgerAccountDTO.getNewCode(),
+						subLedgerAccountDTO.getOrgId())) {
+					throw new ApplicationException("The given new code already exists.");
+				}
 			}
-			if (subLedgerAccountRepo.existsByOldCodeAndOrgId(subLedgerAccountDTO.getOldCode(),
-					subLedgerAccountDTO.getOrgId())) {
-				throw new ApplicationException("The given old code exists.");
+			if (!sub.getOldCode().equals(subLedgerAccountDTO.getOldCode())) {
+				if (subLedgerAccountRepo.existsByOldCodeAndOrgId(subLedgerAccountDTO.getOldCode(),
+						subLedgerAccountDTO.getOrgId())) {
+					throw new ApplicationException("The given old code exists.");
+				}
 			}
-			if (subLedgerAccountRepo.existsBySubLedgerNameAndOrgId(subLedgerAccountDTO.getSubLedgerName(),
-					subLedgerAccountDTO.getOrgId())) {
-				throw new ApplicationException("The given sub ledger name exists.");
+			if (!sub.getSubLedgerName().equals(subLedgerAccountDTO.getSubLedgerName())) {
+				if (subLedgerAccountRepo.existsBySubLedgerNameAndOrgId(subLedgerAccountDTO.getSubLedgerName(),
+						subLedgerAccountDTO.getOrgId())) {
+					throw new ApplicationException("The given sub ledger name exists.");
+				}
 			}
 		}
 		getSubLedgerAccountVOFromSubLedgerAccountDTO(subLedgerAccountDTO, subLedgerAccountVO);
@@ -990,18 +1024,23 @@ public class MasterServiceImpl implements MasterService {
 			if (costCenterRepo.existsByValueCodeAndOrgId(costCenterDTO.getValueCode(), costCenterDTO.getOrgId())) {
 				throw new ApplicationException("The given value code already exists.");
 			}
-			if (costCenterRepo.existsByValueDescripitionAndOrgId(costCenterDTO.getValueDescripition(),
+			if (costCenterRepo.existsByValueDescriptionAndOrgId(costCenterDTO.getValueDescription(),
 					costCenterDTO.getOrgId())) {
 				throw new ApplicationException("The given value descripition already exists.");
 			}
 		}
 		if (ObjectUtils.isNotEmpty(costCenterDTO.getId())) {
-			if (costCenterRepo.existsByValueCodeAndOrgId(costCenterDTO.getValueCode(), costCenterDTO.getOrgId())) {
-				throw new ApplicationException("The given value code already exists.");
+			CostCenterVO cost= costCenterRepo.findById(costCenterDTO.getId()).orElse(null);
+			if (!cost.getValueCode().equals(costCenterDTO.getValueCode())) {
+				if (costCenterRepo.existsByValueCodeAndOrgId(costCenterDTO.getValueCode(), costCenterDTO.getOrgId())) {
+					throw new ApplicationException("The given value code already exists.");
+				}
 			}
-			if (costCenterRepo.existsByValueDescripitionAndOrgId(costCenterDTO.getValueDescripition(),
-					costCenterDTO.getOrgId())) {
-				throw new ApplicationException("The given value descripition already exists.");
+			if (!cost.getValueDescription().equals(costCenterDTO.getValueDescription())) {
+				if (costCenterRepo.existsByValueDescriptionAndOrgId(costCenterDTO.getValueDescription(),
+						costCenterDTO.getOrgId())) {
+					throw new ApplicationException("The given value descripition already exists.");
+				}
 			}
 		}
 		getCostCenterVOFromCostCenterDTO(costCenterDTO, costCenterVO);
@@ -1011,7 +1050,7 @@ public class MasterServiceImpl implements MasterService {
 	private void getCostCenterVOFromCostCenterDTO(@Valid CostCenterDTO costCenterDTO, CostCenterVO costCenterVO) {
 		costCenterVO.setDimensionType(costCenterDTO.getDimensionType());
 		costCenterVO.setValueCode(costCenterDTO.getValueCode());
-		costCenterVO.setValueDescripition(costCenterDTO.getValueDescripition());
+		costCenterVO.setValueDescription(costCenterDTO.getValueDescription());
 		costCenterVO.setOrgId(costCenterDTO.getOrgId());
 		costCenterVO.setCreatedBy(costCenterDTO.getCreatedBy());
 		costCenterVO.setUpdatedBy(costCenterDTO.getUpdatedBy());
@@ -1129,14 +1168,17 @@ public class MasterServiceImpl implements MasterService {
 		}
 
 		if (ObjectUtils.isNotEmpty(chargeTypeRequestDTO.getId())) {
+			ChargeTypeRequestVO charge= chargeTypeRequestRepo.findById(chargeTypeRequestDTO.getId()).orElse(null);
+			if (!charge.getChargeDescription().equals(chargeTypeRequestDTO.getChargeDescription())) {
 			if (chargeTypeRequestRepo.existsByChargeDescriptionAndOrgId(chargeTypeRequestDTO.getChargeDescription(),
 					chargeTypeRequestDTO.getOrgId())) {
 				throw new ApplicationException("The given charge descripition already exists.");
-			}
+			}}
+			if (!charge.getChargeCode().equals(chargeTypeRequestDTO.getChargeCode())) {
 			if (chargeTypeRequestRepo.existsByChargeCodeAndOrgId(chargeTypeRequestDTO.getChargeCode(),
 					chargeTypeRequestDTO.getOrgId())) {
 				throw new ApplicationException("The given charge code already exists.");
-			}
+			}}
 		}
 
 		getChargeTypeRequestVOFromChargeTypeRequestDTO(chargeTypeRequestDTO, chargeTypeRequestVO);

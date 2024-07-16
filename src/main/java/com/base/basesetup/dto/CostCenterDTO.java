@@ -11,7 +11,7 @@ public class CostCenterDTO {
 private Long id;
 private String dimensionType;
 private String valueCode;
-private String valueDescripition;
+private String valueDescription;
 private String createdBy;
 private String updatedBy;
 private Long orgId;
