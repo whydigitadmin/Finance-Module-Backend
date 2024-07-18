@@ -35,7 +35,7 @@ public class ReceiptReversalDTO {
 	private String chqDt;
 	private String receivedFrom;
 	private String offSetStatus;
-	private String orgId;
+	private Long orgId;
 	private boolean active;
 	private String createdBy;
 	private String updatedBy;

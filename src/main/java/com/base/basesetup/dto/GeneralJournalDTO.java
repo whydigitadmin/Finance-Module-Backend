@@ -26,7 +26,7 @@ public class GeneralJournalDTO {
 	private LocalDateTime refDate;
 	private LocalDateTime reverseOn;
 	private String narration;
-	private String orgId;
+	private Long orgId;
 	private boolean active;
 	private String createdBy;
 	private String updatedBy;

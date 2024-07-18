@@ -86,7 +86,7 @@ public class PaymentReversalVO {
 	@Column(name = "offsetstatus")
 	private String offSetStatus;
 	@Column(name = "orgid")
-	private String orgId;
+	private Long orgId;
 	@Column(name = "active")
 	private boolean active;
 	@Column(name = "cancel")

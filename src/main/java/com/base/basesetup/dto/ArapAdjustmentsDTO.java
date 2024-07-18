@@ -35,7 +35,7 @@ public class ArapAdjustmentsDTO {
 	private BigDecimal exRate;
 	private String creditDays;
 	private LocalDateTime dueDate;
-	private String orgId;
+	private Long orgId;
 	private boolean active;
 	private String createdBy;
 	private String updatedBy;

@@ -2,14 +2,21 @@ package com.base.basesetup.entity;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+
+import com.base.basesetup.dto.CreatedUpdatedDate;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,12 +24,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "adjustmentoffset")
+@Table(name = "arapadjustmentoffset")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class AdjustmentOffSetVO {
+public class ArApAdjustmentOffSetVO {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "adjustmentoffsetgen")
@@ -51,4 +58,34 @@ public class AdjustmentOffSetVO {
 	private String amount;
 	@Column(name = "supplierRefNo")
 	private String supplierRefNo;
+	@Column(name = "forexgainorloss")
+	private BigDecimal forexGainOrLoss;
+	@Column(name = "totalsettled")
+	private BigDecimal totalSettled;
+	@Column(name = "roundoffamount")
+	private BigDecimal roundOffAmount;
+	@Column(name = "onaccount")
+	private BigDecimal onAccount;
+	@Column(name = "narration")
+	private String narration;
+	@Column(name = "orgid")
+	private Long orgId;
+	@Column(name = "active")
+	private boolean active;
+	@Column(name = "cancel")
+	private boolean cancel;
+	@Column(name = "cancelremarks")
+	private String cancelRemarks;
+	@Column(name = "createdby")
+	private String createdBy;
+	@Column(name = "modifiedby")
+	private String updatedBy;
+	
+	@OneToMany(mappedBy = "arapadjustmentoffsetVO",cascade = CascadeType.ALL)
+	@JsonManagedReference
+	List<ArApOffSetInvoiceDetailsVO> arApAdjustmentInvoiceDetailsVO;
+	
+	@Embedded
+	@Builder.Default
+	private CreatedUpdatedDate commonDate = new CreatedUpdatedDate();
 }

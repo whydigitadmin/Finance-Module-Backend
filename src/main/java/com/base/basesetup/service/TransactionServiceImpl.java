@@ -11,6 +11,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.base.basesetup.dto.ArApAdjustmentOffSetDTO;
+import com.base.basesetup.dto.ArApOffSetInvoiceDetailsDTO;
 import com.base.basesetup.dto.ArapAdjustmentsDTO;
 import com.base.basesetup.dto.ArapDetailsDTO;
 import com.base.basesetup.dto.BrsOpeningDTO;
@@ -43,6 +45,8 @@ import com.base.basesetup.dto.ReceiptOtherAccountDTO;
 import com.base.basesetup.dto.ReceiptReversalDTO;
 import com.base.basesetup.dto.TaxInvoiceDTO;
 import com.base.basesetup.dto.TdsCostInvoiceDTO;
+import com.base.basesetup.entity.ArApAdjustmentOffSetVO;
+import com.base.basesetup.entity.ArApOffSetInvoiceDetailsVO;
 import com.base.basesetup.entity.ArapAdjustmentsVO;
 import com.base.basesetup.entity.ArapDetailsVO;
 import com.base.basesetup.entity.BrsOpeningVO;
@@ -76,6 +80,8 @@ import com.base.basesetup.entity.ReceiptReversalVO;
 import com.base.basesetup.entity.TaxInvoiceVO;
 import com.base.basesetup.entity.TdsCostInvoiceVO;
 import com.base.basesetup.exception.ApplicationException;
+import com.base.basesetup.repo.ArApAdjustmentOffSetRepo;
+import com.base.basesetup.repo.ArApOffSetInvoiceDetailsRepo;
 import com.base.basesetup.repo.ArapAdjustmentsRepo;
 import com.base.basesetup.repo.ArapDetailsRepo;
 import com.base.basesetup.repo.BrsOpeningRepo;
@@ -208,6 +214,12 @@ public class TransactionServiceImpl implements TransactionService {
 	@Autowired
 	PaymentOtherAccountRepo paymentOtherAccountRepo;
 
+	@Autowired
+	ArApAdjustmentOffSetRepo arApAdjustmentOffSetRepo;
+	
+	@Autowired
+	ArApOffSetInvoiceDetailsRepo arApOffSetInvoiceDetailsRepo;
+	
 // TaxInvoice
 	@Override
 	public List<TaxInvoiceVO> getAllTaxInvoiceByOrgId(Long orgId) {
@@ -1816,7 +1828,7 @@ public class TransactionServiceImpl implements TransactionService {
 //				// DocId
 //				String taxInvoice = "AI" + finyr + taxInvoiceRepo.findDocId();
 //				taxInvoiceVO.setDocId(taxInvoice);
-//				taxInvoiceRepo.nextSeq();
+//				taxInvoiceRepo.nextSeq();bbbbb 
 //				// InvoiceNo
 //				String invoiceNo = "AI" + finyr + "INV" + taxInvoiceRepo.findInvoiceNo();
 //				taxInvoiceVO.setInvoiceNo(invoiceNo);
@@ -2023,5 +2035,132 @@ public class TransactionServiceImpl implements TransactionService {
 	public List<PaymentReversalVO> getPaymentReversalByActive() {
 		return paymentReversalRepo.findPaymentReversalByActive();
 	}
+
+	// ArApAdjustmentOffSet
+
+		@Override
+		public List<ArApAdjustmentOffSetVO> getAllArApAdjustmentOffSetByOrgId(Long orgId) {
+			List<ArApAdjustmentOffSetVO> arApAdjustmentOffSetVO = new ArrayList<>();
+			if (ObjectUtils.isNotEmpty(orgId)) {
+				LOGGER.info("Successfully Received ArApAdjustmentOffSet BY OrgId : {}", orgId);
+				arApAdjustmentOffSetVO = arApAdjustmentOffSetRepo.getAllArApAdjustmentOffSetByOrgId(orgId);
+			} else {
+				LOGGER.info("Successfully Received  ArApAdjustmentOffSet For All OrgId.");
+				arApAdjustmentOffSetVO = arApAdjustmentOffSetRepo.findAll();
+			}
+			return arApAdjustmentOffSetVO;
+		}
+
+		@Override
+		public List<ArApAdjustmentOffSetVO> getAllArApAdjustmentOffSetById(Long id) {
+			List<ArApAdjustmentOffSetVO> arApAdjustmentOffSetVO = new ArrayList<>();
+			if (ObjectUtils.isNotEmpty(id)) {
+				LOGGER.info("Successfully Received ArApAdjustmentOffSet BY Id : {}", id);
+				arApAdjustmentOffSetVO = arApAdjustmentOffSetRepo.getAllArApAdjustmentOffSetById(id);
+			} else {
+				LOGGER.info("Successfully Received ArApAdjustmentOffSet For All Id.");
+				arApAdjustmentOffSetVO = arApAdjustmentOffSetRepo.findAll();
+			}
+			return arApAdjustmentOffSetVO;
+		}
+
+		@Override
+		public ArApAdjustmentOffSetVO updateCreateArApAdjustmentOffSet(@Valid ArApAdjustmentOffSetDTO arApAdjustmentOffSetDTO)
+				throws ApplicationException {
+			ArApAdjustmentOffSetVO arApAdjustmentOffSetVO = new ArApAdjustmentOffSetVO();
+			if (ObjectUtils.isNotEmpty(arApAdjustmentOffSetDTO.getId())) {
+				arApAdjustmentOffSetVO = arApAdjustmentOffSetRepo.findById(arApAdjustmentOffSetDTO.getId())
+						.orElseThrow(() -> new ApplicationException("Invalid ArApAdjustmentOffSet details"));
+			}
+//					else {
+//						if (taxInvoiceRepo.existsByDocIdAndOrgId(taxInvoiceVO.getDocId(), taxInvoiceVO.getOrgId())) {
+//							throw new ApplicationException("The given doc id already exists.");
+//						}
+//						if (taxInvoiceRepo.existsByInvoiceNoAndOrgId(taxInvoiceVO.getInvoiceNo(), taxInvoiceVO.getOrgId())) {
+//							throw new ApplicationException("The given invoice number already exists.");
+//						}
+//					}
+//					if (ObjectUtils.isNotEmpty(taxInvoiceVO.getId())) {
+//						if (taxInvoiceRepo.existsByDocIdAndOrgIdAndId(taxInvoiceVO.getDocId(), taxInvoiceVO.getOrgId(),
+//								taxInvoiceVO.getId())) {
+//							throw new ApplicationException("The given doc id already exists.");
+//						}
+//						if (taxInvoiceRepo.existsByInvoiceNoAndOrgIdAndId(taxInvoiceVO.getInvoiceNo(), taxInvoiceVO.getOrgId(),
+//								taxInvoiceVO.getId())) {
+//							throw new ApplicationException("The given invoice number already exists.");
+//						}
+//					}
+
+			List<ArApOffSetInvoiceDetailsVO> arApOffSetInvoiceDetailsVOs = new ArrayList<>();
+			if (arApAdjustmentOffSetDTO.getArApOffSetInvoiceDetailsDTO() != null) {
+				for (ArApOffSetInvoiceDetailsDTO arApOffSetInvoiceDetailsDTO : arApAdjustmentOffSetDTO.getArApOffSetInvoiceDetailsDTO()) {
+					ArApOffSetInvoiceDetailsVO arApOffSetInvoiceDetailsVO;
+					if (arApOffSetInvoiceDetailsDTO.getId() != null && ObjectUtils.isNotEmpty(arApOffSetInvoiceDetailsDTO.getId())) {
+						arApOffSetInvoiceDetailsVO = arApOffSetInvoiceDetailsRepo.findById(arApOffSetInvoiceDetailsDTO.getId())
+								.orElse(new ArApOffSetInvoiceDetailsVO());
+					} else {
+						arApOffSetInvoiceDetailsVO = new ArApOffSetInvoiceDetailsVO();
+					}
+					arApOffSetInvoiceDetailsVO.setInvoiceNo(arApOffSetInvoiceDetailsDTO.getInvoiceNo());
+					arApOffSetInvoiceDetailsVO.setInvoiceDate(arApOffSetInvoiceDetailsDTO.getInvoiceDate());
+					arApOffSetInvoiceDetailsVO.setRefNo(arApOffSetInvoiceDetailsDTO.getRefNo());
+					arApOffSetInvoiceDetailsVO.setRefDate(arApOffSetInvoiceDetailsDTO.getRefDate());
+					arApOffSetInvoiceDetailsVO.setCurr(arApOffSetInvoiceDetailsDTO.getCurr());
+					arApOffSetInvoiceDetailsVO.setExRate(arApOffSetInvoiceDetailsDTO.getExRate());
+					arApOffSetInvoiceDetailsVO.setSetExRate(arApOffSetInvoiceDetailsDTO.getSetExRate());
+					arApOffSetInvoiceDetailsVO.setInvAmount(arApOffSetInvoiceDetailsDTO.getInvAmount());
+					arApOffSetInvoiceDetailsVO.setOutStanding(arApOffSetInvoiceDetailsDTO.getOutStanding());
+					arApOffSetInvoiceDetailsVO.setSettled(arApOffSetInvoiceDetailsDTO.getSettled());
+					arApOffSetInvoiceDetailsVO.setTnxSettled(arApOffSetInvoiceDetailsDTO.getTnxSettled());
+					arApOffSetInvoiceDetailsVO.setGainOrLoss(arApOffSetInvoiceDetailsDTO.getGainOrLoss());
+					arApOffSetInvoiceDetailsVO.setRemarks(arApOffSetInvoiceDetailsDTO.getRemarks());
+					arApOffSetInvoiceDetailsVO.setArapadjustmentoffsetVO(arApAdjustmentOffSetVO);
+					arApOffSetInvoiceDetailsVOs.add(arApOffSetInvoiceDetailsVO);
+				}
+			}
+
+			getArApAdjustmentOffSetVOFromArApAdjustmentOffSetDTO(arApAdjustmentOffSetDTO, arApAdjustmentOffSetVO);
+			arApAdjustmentOffSetVO.setArApAdjustmentInvoiceDetailsVO(arApOffSetInvoiceDetailsVOs);
+			return arApAdjustmentOffSetRepo.save(arApAdjustmentOffSetVO);
+		}
+
+		private void getArApAdjustmentOffSetVOFromArApAdjustmentOffSetDTO(@Valid ArApAdjustmentOffSetDTO arApAdjustmentOffSetDTO,
+				ArApAdjustmentOffSetVO arApAdjustmentOffSetVO) {
+//					// Finyr
+//					int finyr = taxInvoiceRepo.findFinyr();
+//					// DocId
+//					String taxInvoice = "AI" + finyr + taxInvoiceRepo.findDocId();
+//					taxInvoiceVO.setDocId(taxInvoice);
+//					taxInvoiceRepo.nextSeq();
+//					// InvoiceNo
+//					String invoiceNo = "AI" + finyr + "INV" + taxInvoiceRepo.findInvoiceNo();
+//					taxInvoiceVO.setInvoiceNo(invoiceNo);
+//					taxInvoiceRepo.nextSeqInvoice();
+			arApAdjustmentOffSetVO.setDocId(arApAdjustmentOffSetDTO.getDocId());
+			arApAdjustmentOffSetVO.setDocDate(arApAdjustmentOffSetDTO.getDocDate());
+			arApAdjustmentOffSetVO.setSubLedgerType(arApAdjustmentOffSetDTO.getSubLedgerType());
+			arApAdjustmentOffSetVO.setSubLedgerName(arApAdjustmentOffSetDTO.getSubLedgerName());
+			arApAdjustmentOffSetVO.setSubLedgerCode(arApAdjustmentOffSetDTO.getSubLedgerCode());
+			arApAdjustmentOffSetVO.setReceiptPaymentDocId(arApAdjustmentOffSetDTO.getReceiptPaymentDocId());
+			arApAdjustmentOffSetVO.setReceiptPaymentDocDate(arApAdjustmentOffSetDTO.getReceiptPaymentDocDate());
+			arApAdjustmentOffSetVO.setCurrency(arApAdjustmentOffSetDTO.getCurrency());
+			arApAdjustmentOffSetVO.setExRate(arApAdjustmentOffSetDTO.getExRate());
+			arApAdjustmentOffSetVO.setAmount(arApAdjustmentOffSetDTO.getAmount());
+			arApAdjustmentOffSetVO.setSupplierRefNo(arApAdjustmentOffSetDTO.getSupplierRefNo());
+			arApAdjustmentOffSetVO.setForexGainOrLoss(arApAdjustmentOffSetDTO.getForexGainOrLoss());
+			arApAdjustmentOffSetVO.setTotalSettled(arApAdjustmentOffSetDTO.getTotalSettled());
+			arApAdjustmentOffSetVO.setRoundOffAmount(arApAdjustmentOffSetDTO.getRoundOffAmount());
+			arApAdjustmentOffSetVO.setOnAccount(arApAdjustmentOffSetDTO.getOnAccount());
+			arApAdjustmentOffSetVO.setOrgId(arApAdjustmentOffSetDTO.getOrgId());
+			arApAdjustmentOffSetVO.setActive(arApAdjustmentOffSetDTO.isActive());
+			arApAdjustmentOffSetVO.setCreatedBy(arApAdjustmentOffSetDTO.getCreatedBy());
+			arApAdjustmentOffSetVO.setUpdatedBy(arApAdjustmentOffSetDTO.getUpdatedBy());
+			arApAdjustmentOffSetVO.setNarration(arApAdjustmentOffSetDTO.getNarration());
+		}
+
+		@Override
+		public List<ArApAdjustmentOffSetVO> getArApAdjustmentOffSetByActive() {
+			return arApAdjustmentOffSetRepo.findArApAdjustmentOffSetByActive();
+		}
 
 }

@@ -6,6 +6,7 @@ import javax.validation.Valid;
 
 import org.springframework.stereotype.Service;
 
+import com.base.basesetup.dto.ArApAdjustmentOffSetDTO;
 import com.base.basesetup.dto.ArapAdjustmentsDTO;
 import com.base.basesetup.dto.ArapDetailsDTO;
 import com.base.basesetup.dto.BrsOpeningDTO;
@@ -21,6 +22,7 @@ import com.base.basesetup.dto.PaymentReversalDTO;
 import com.base.basesetup.dto.PaymentVoucherDTO;
 import com.base.basesetup.dto.ReceiptReversalDTO;
 import com.base.basesetup.dto.TaxInvoiceDTO;
+import com.base.basesetup.entity.ArApAdjustmentOffSetVO;
 import com.base.basesetup.entity.ArapAdjustmentsVO;
 import com.base.basesetup.entity.ArapDetailsVO;
 import com.base.basesetup.entity.BrsOpeningVO;
@@ -146,7 +148,7 @@ public interface TransactionService {
 	List<PaymentVoucherVO> getAllPaymentVoucherById(Long id);
 
 	List<PaymentVoucherVO> getPaymentVoucherByActive();
-	
+
 //	ArapDetails
 	List<ArapDetailsVO> getAllArapDetailsByOrgId(Long orgId);
 
@@ -159,7 +161,8 @@ public interface TransactionService {
 //	ArapAdjustments
 	List<ArapAdjustmentsVO> getAllArapAdjustmentsByOrgId(Long orgId);
 
-	ArapAdjustmentsVO updateCreateArapAdjustments(@Valid ArapAdjustmentsDTO arapAdjustmentsDTO) throws ApplicationException;
+	ArapAdjustmentsVO updateCreateArapAdjustments(@Valid ArapAdjustmentsDTO arapAdjustmentsDTO)
+			throws ApplicationException;
 
 	List<ArapAdjustmentsVO> getAllArapAdjustmentsById(Long id);
 
@@ -168,18 +171,30 @@ public interface TransactionService {
 //	ReceiptReversal
 	List<ReceiptReversalVO> getAllReceiptReversalByOrgId(Long orgId);
 
-	ReceiptReversalVO updateCreateReceiptReversal(@Valid ReceiptReversalDTO receiptReversalDTO) throws ApplicationException;
+	ReceiptReversalVO updateCreateReceiptReversal(@Valid ReceiptReversalDTO receiptReversalDTO)
+			throws ApplicationException;
 
 	List<ReceiptReversalVO> getAllReceiptReversalById(Long id);
 
 	List<ReceiptReversalVO> getReceiptReversalByActive();
-	
+
 //	PaymentReversal
 	List<PaymentReversalVO> getAllPaymentReversalByOrgId(Long orgId);
 
-	PaymentReversalVO updateCreatePaymentReversal(@Valid PaymentReversalDTO paymentReversalDTO) throws ApplicationException;
+	PaymentReversalVO updateCreatePaymentReversal(@Valid PaymentReversalDTO paymentReversalDTO)
+			throws ApplicationException;
 
 	List<PaymentReversalVO> getAllPaymentReversalById(Long id);
 
 	List<PaymentReversalVO> getPaymentReversalByActive();
+
+//	ArApAdjustmentOffSet
+	List<ArApAdjustmentOffSetVO> getAllArApAdjustmentOffSetByOrgId(Long orgId);
+
+	ArApAdjustmentOffSetVO updateCreateArApAdjustmentOffSet(@Valid ArApAdjustmentOffSetDTO arApAdjustmentOffSetDTO)
+			throws ApplicationException;
+
+	List<ArApAdjustmentOffSetVO> getAllArApAdjustmentOffSetById(Long id);
+
+	List<ArApAdjustmentOffSetVO> getArApAdjustmentOffSetByActive();
 }

@@ -88,7 +88,7 @@ public class ArapDetailsVO {
 	@Column(name = "hno")
 	private String hno;
 	@Column(name = "orgid")
-	private String orgId;
+	private Long orgId;
 	@Column(name = "active")
 	private boolean active;
 	@Column(name = "cancel")

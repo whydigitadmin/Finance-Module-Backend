@@ -38,7 +38,7 @@ public class PaymentReversalDTO {
 	private String payTo;
 	private BigDecimal currency;
 	private String offSetStatus;
-	private String orgId;
+	private Long orgId;
 	private boolean active;
 	private String createdBy;
 	private String updatedBy;

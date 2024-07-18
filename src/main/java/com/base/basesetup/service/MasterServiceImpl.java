@@ -25,7 +25,6 @@ import com.base.basesetup.dto.ListOfValues1DTO;
 import com.base.basesetup.dto.ListOfValuesDTO;
 import com.base.basesetup.dto.SetTaxRateDTO;
 import com.base.basesetup.dto.SubLedgerAccountDTO;
-import com.base.basesetup.dto.TaxMaster2DTO;
 import com.base.basesetup.dto.TaxMasterDTO;
 import com.base.basesetup.dto.TcsMaster2DTO;
 import com.base.basesetup.dto.TcsMasterDTO;
@@ -45,7 +44,6 @@ import com.base.basesetup.entity.ListOfValues1VO;
 import com.base.basesetup.entity.ListOfValuesVO;
 import com.base.basesetup.entity.SetTaxRateVO;
 import com.base.basesetup.entity.SubLedgerAccountVO;
-import com.base.basesetup.entity.TaxMaster2VO;
 import com.base.basesetup.entity.TaxMasterVO;
 import com.base.basesetup.entity.TcsMaster2VO;
 import com.base.basesetup.entity.TcsMasterVO;
@@ -66,7 +64,6 @@ import com.base.basesetup.repo.ListOfValues1Repo;
 import com.base.basesetup.repo.ListOfValuesRepo;
 import com.base.basesetup.repo.SetTaxRateRepo;
 import com.base.basesetup.repo.SubLedgerAccountRepo;
-import com.base.basesetup.repo.TaxMaster2Repo;
 import com.base.basesetup.repo.TaxMasterRepo;
 import com.base.basesetup.repo.TcsMaster2Repo;
 import com.base.basesetup.repo.TcsMasterRepo;
@@ -81,9 +78,6 @@ public class MasterServiceImpl implements MasterService {
 
 	@Autowired
 	TaxMasterRepo taxMasterRepo;
-
-	@Autowired
-	TaxMaster2Repo taxMaster2Repo;
 
 	@Autowired
 	TcsMasterRepo tcsMasterRepo;
@@ -226,30 +220,7 @@ public class MasterServiceImpl implements MasterService {
 					.orElseThrow(() -> new ApplicationException("Invalid Tax Master details"));
 		}
 
-		List<TaxMaster2VO> taxMaster2VOs = new ArrayList<>();
-		if (taxMasterDTO.getTaxMaster2DTO() != null) {
-			for (TaxMaster2DTO taxMaster2DTO : taxMasterDTO.getTaxMaster2DTO()) {
-				if (taxMaster2DTO.getId() != null & ObjectUtils.isNotEmpty(taxMaster2DTO.getId())) {
-					TaxMaster2VO taxMaster2VO = taxMaster2Repo.findById(taxMaster2DTO.getId()).get();
-					taxMaster2VO.setInputAccount(taxMaster2DTO.getInputAccount());
-					taxMaster2VO.setOutputAccount(taxMaster2DTO.getOutputAccount());
-					taxMaster2VO.setSgstRcmPayable(true);
-					taxMaster2VO.setTaxMasterVO(taxMasterVO);
-					taxMaster2VOs.add(taxMaster2VO);
-
-				} else {
-					TaxMaster2VO taxMaster2VO = new TaxMaster2VO();
-					taxMaster2VO.setInputAccount(taxMaster2DTO.getInputAccount());
-					taxMaster2VO.setOutputAccount(taxMaster2DTO.getOutputAccount());
-					taxMaster2VO.setSgstRcmPayable(true);
-					taxMaster2VO.setTaxMasterVO(taxMasterVO);
-					taxMaster2VOs.add(taxMaster2VO);
-				}
-			}
-		}
-
 		getTaxMasterVOFromTaxMasterDTO(taxMasterDTO, taxMasterVO);
-		taxMasterVO.setTaxMaster2VO(taxMaster2VOs);
 		return taxMasterRepo.save(taxMasterVO);
 
 	}
@@ -260,7 +231,9 @@ public class MasterServiceImpl implements MasterService {
 		taxMasterVO.setTaxPercentage(taxMasterDTO.getTaxPercentage());
 		taxMasterVO.setTaxDescription(taxMasterDTO.getTaxDescription());
 		taxMasterVO.setActive(taxMasterDTO.isActive());
-
+		taxMasterVO.setInputAccount(taxMasterDTO.getInputAccount());
+		taxMasterVO.setOutputAccount(taxMasterDTO.getOutputAccount());
+		taxMasterVO.setSgstRcmPayable(taxMasterDTO.isActive());
 	}
 
 	@Override
@@ -1030,7 +1003,7 @@ public class MasterServiceImpl implements MasterService {
 			}
 		}
 		if (ObjectUtils.isNotEmpty(costCenterDTO.getId())) {
-			CostCenterVO cost= costCenterRepo.findById(costCenterDTO.getId()).orElse(null);
+			CostCenterVO cost = costCenterRepo.findById(costCenterDTO.getId()).orElse(null);
 			if (!cost.getValueCode().equals(costCenterDTO.getValueCode())) {
 				if (costCenterRepo.existsByValueCodeAndOrgId(costCenterDTO.getValueCode(), costCenterDTO.getOrgId())) {
 					throw new ApplicationException("The given value code already exists.");
@@ -1168,17 +1141,19 @@ public class MasterServiceImpl implements MasterService {
 		}
 
 		if (ObjectUtils.isNotEmpty(chargeTypeRequestDTO.getId())) {
-			ChargeTypeRequestVO charge= chargeTypeRequestRepo.findById(chargeTypeRequestDTO.getId()).orElse(null);
+			ChargeTypeRequestVO charge = chargeTypeRequestRepo.findById(chargeTypeRequestDTO.getId()).orElse(null);
 			if (!charge.getChargeDescription().equals(chargeTypeRequestDTO.getChargeDescription())) {
-			if (chargeTypeRequestRepo.existsByChargeDescriptionAndOrgId(chargeTypeRequestDTO.getChargeDescription(),
-					chargeTypeRequestDTO.getOrgId())) {
-				throw new ApplicationException("The given charge descripition already exists.");
-			}}
+				if (chargeTypeRequestRepo.existsByChargeDescriptionAndOrgId(chargeTypeRequestDTO.getChargeDescription(),
+						chargeTypeRequestDTO.getOrgId())) {
+					throw new ApplicationException("The given charge descripition already exists.");
+				}
+			}
 			if (!charge.getChargeCode().equals(chargeTypeRequestDTO.getChargeCode())) {
-			if (chargeTypeRequestRepo.existsByChargeCodeAndOrgId(chargeTypeRequestDTO.getChargeCode(),
-					chargeTypeRequestDTO.getOrgId())) {
-				throw new ApplicationException("The given charge code already exists.");
-			}}
+				if (chargeTypeRequestRepo.existsByChargeCodeAndOrgId(chargeTypeRequestDTO.getChargeCode(),
+						chargeTypeRequestDTO.getOrgId())) {
+					throw new ApplicationException("The given charge code already exists.");
+				}
+			}
 		}
 
 		getChargeTypeRequestVOFromChargeTypeRequestDTO(chargeTypeRequestDTO, chargeTypeRequestVO);
@@ -1320,6 +1295,7 @@ public class MasterServiceImpl implements MasterService {
 		listOfValuesVO.setListDescription(listOfValuesDTO.getListDescription());
 		listOfValuesVO.setActive(listOfValuesDTO.isActive());
 		listOfValuesVO.setUpdatedBy(listOfValuesDTO.getUpdatedBy());
+
 		listOfValuesVO.setCreatedBy(listOfValuesDTO.getCreatedBy());
 
 	}

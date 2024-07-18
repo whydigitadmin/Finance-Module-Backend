@@ -74,7 +74,7 @@ public class ArapAdjustmentsVO {
 	@Column(name = "duedate")
 	private LocalDateTime dueDate;
 	@Column(name = "orgid")
-	private String orgId;
+	private Long orgId;
 	@Column(name = "active")
 	private boolean active;
 	@Column(name = "cancel")

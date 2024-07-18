@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.base.basesetup.common.CommonConstant;
 import com.base.basesetup.common.UserConstants;
+import com.base.basesetup.dto.ArApAdjustmentOffSetDTO;
 import com.base.basesetup.dto.ArapAdjustmentsDTO;
 import com.base.basesetup.dto.ArapDetailsDTO;
 import com.base.basesetup.dto.BrsOpeningDTO;
@@ -38,6 +39,7 @@ import com.base.basesetup.dto.PaymentVoucherDTO;
 import com.base.basesetup.dto.ReceiptReversalDTO;
 import com.base.basesetup.dto.ResponseDTO;
 import com.base.basesetup.dto.TaxInvoiceDTO;
+import com.base.basesetup.entity.ArApAdjustmentOffSetVO;
 import com.base.basesetup.entity.ArapAdjustmentsVO;
 import com.base.basesetup.entity.ArapDetailsVO;
 import com.base.basesetup.entity.BrsOpeningVO;
@@ -1744,6 +1746,123 @@ public class TransactionController extends BaseController {
 		} else {
 			responseDTO = createServiceResponseError(responseObjectsMap,
 					"PaymentReversal information receive failed By Active", errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+
+	}
+
+	// ArApAdjustmentOffSet
+
+	@GetMapping("/getAllArApAdjustmentOffSetByOrgId")
+	public ResponseEntity<ResponseDTO> getAllArApAdjustmentOffSetByOrgId(@RequestParam(required = false) Long orgId) {
+		String methodName = "getAllArApAdjustmentOffSetByOrgId()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		List<ArApAdjustmentOffSetVO> arApAdjustmentOffSetVO = new ArrayList<>();
+		try {
+			arApAdjustmentOffSetVO = transactionService.getAllArApAdjustmentOffSetByOrgId(orgId);
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+					"ArApAdjustmentOffSet information get successfully By OrgId");
+			responseObjectsMap.put("ArApAdjustmentOffSetVO", arApAdjustmentOffSetVO);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					"ArApAdjustmentOffSet information receive failed By OrgId", errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+
+	}
+
+	@GetMapping("/getAllArApAdjustmentOffSetById")
+	public ResponseEntity<ResponseDTO> getAllArApAdjustmentOffSetById(@RequestParam(required = false) Long id) {
+		String methodName = "getAllArApAdjustmentOffSetById()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		List<ArApAdjustmentOffSetVO> arApAdjustmentOffSetVO = new ArrayList<>();
+		try {
+			arApAdjustmentOffSetVO = transactionService.getAllArApAdjustmentOffSetById(id);
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+					"ArApAdjustmentOffSet information get successfully By id");
+			responseObjectsMap.put("arApAdjustmentOffSetVO", arApAdjustmentOffSetVO);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					"ArApAdjustmentOffSet information receive failed By OrgId", errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+	}
+
+	@PutMapping("/updateCreateArApAdjustmentOffSet")
+	public ResponseEntity<ResponseDTO> updateCreateArApAdjustmentOffSet(
+			@Valid @RequestBody ArApAdjustmentOffSetDTO arApAdjustmentOffSetDTO) {
+		String methodName = "updateCreateArApAdjustmentOffSet()";
+
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+
+		try {
+			ArApAdjustmentOffSetVO arApAdjustmentOffSetVO = transactionService
+					.updateCreateArApAdjustmentOffSet(arApAdjustmentOffSetDTO);
+			if (arApAdjustmentOffSetVO != null) {
+				responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "ArApAdjustmentOffSet updated successfully");
+				responseObjectsMap.put("arApAdjustmentOffSetVO", arApAdjustmentOffSetVO);
+				responseDTO = createServiceResponse(responseObjectsMap);
+			} else {
+				errorMsg = "ArApAdjustmentOffSet not found for ID: " + arApAdjustmentOffSetDTO.getId();
+				responseDTO = createServiceResponseError(responseObjectsMap, "ArApAdjustmentOffSet update failed",
+						errorMsg);
+			}
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+			responseDTO = createServiceResponseError(responseObjectsMap, "ArApAdjustmentOffSet update failed",
+					errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+	}
+
+	@GetMapping("/getArApAdjustmentOffSetByActive")
+	public ResponseEntity<ResponseDTO> getArApAdjustmentOffSetByActive() {
+		String methodName = "getArApAdjustmentOffSetByActive()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		List<ArApAdjustmentOffSetVO> arApAdjustmentOffSetVO = new ArrayList<>();
+		try {
+			arApAdjustmentOffSetVO = transactionService.getArApAdjustmentOffSetByActive();
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+					"ArApAdjustmentOffSet information get successfully By Active");
+			responseObjectsMap.put("arApAdjustmentOffSetVO", arApAdjustmentOffSetVO);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					"ArApAdjustmentOffSet information receive failed By Active", errorMsg);
 		}
 		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
 		return ResponseEntity.ok().body(responseDTO);

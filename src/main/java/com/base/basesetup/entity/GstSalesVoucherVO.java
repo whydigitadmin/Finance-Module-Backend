@@ -54,7 +54,7 @@ public class GstSalesVoucherVO {
 	private String remarks;
 	private String finyr;
 	@Column(name = "orgid")
-	private String orgId;
+	private Long orgId;
 	@Column(name = "active")
 	private boolean active;
 	@Column(name = "cancel")

@@ -42,7 +42,7 @@ public class ArapDetailsDTO {
 	private LocalDateTime dueDate;
 	private String tdsAmount;
 	private String hno;
-	private String orgId;
+	private Long orgId;
 	private boolean active;
 	private String createdBy;
 	private String updatedBy;
