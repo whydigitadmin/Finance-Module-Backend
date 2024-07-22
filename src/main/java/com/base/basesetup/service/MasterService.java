@@ -55,12 +55,12 @@ public interface MasterService {
 
 	List<TaxMasterVO> getTaxMasterByActive();
 
-//	TcsMasterVO
+//	TcsMasterVO 
 	List<TcsMasterVO> getAllTcsMasterByOrgId(Long orgId);
 
 	List<TcsMasterVO> getAllTcsMasterById(Long id);
 
-	TcsMasterVO updateCreateTcsMaster(@Valid TcsMasterDTO tcsMasterDTO) throws ApplicationException;
+	TcsMasterVO updateCreateTcsMaster(@ Valid TcsMasterDTO tcsMasterDTO) throws ApplicationException;
 
 	List<TcsMasterVO> getTcsMasterByActive();
 
