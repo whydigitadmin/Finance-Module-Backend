@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.base.basesetup.dto.AccountDTO;
 import com.base.basesetup.dto.ChargeTypeRequestDTO;
-import com.base.basesetup.dto.ChequeBoxDTO;
+import com.base.basesetup.dto.ChequeBookDTO;
 import com.base.basesetup.dto.CostCenterDTO;
 import com.base.basesetup.dto.ExRatesDTO;
 import com.base.basesetup.dto.GroupLedgerDTO;
@@ -128,10 +128,10 @@ public interface MasterService {
 
 	List<CostCenterVO> getCostCenterByActive();
 
-//	ChequeBox
+//	ChequeBook
 	List<ChequeBookVO> getAllChequeBoxByOrgId(Long orgId);
 
-	ChequeBookVO updateCreateChequeBox(@Valid ChequeBoxDTO chequeBoxDTO) throws ApplicationException;
+	ChequeBookVO updateCreateChequeBook(@Valid ChequeBookDTO chequeBookDTO) throws ApplicationException;
 
 	List<ChequeBookVO> getAllChequeBoxById(Long id);
 

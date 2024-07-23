@@ -1,5 +1,7 @@
 package com.base.basesetup.dto;
 
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -7,11 +9,11 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ChequeBoxDTO {
+public class ChequeBookDTO {
 
 	private Long id;
 	private String branch;
-	private String chequeBoxId;
+	private String chequeBookId;
 	private String bank;
 	private String checkPrefix;
 	private String checkStartNo;
@@ -20,5 +22,7 @@ public class ChequeBoxDTO {
 	private boolean active;
 	private String createdBy;
 	private String updatedBy;
+	
+	List<ChequeBookDetailsDTO> chequeBookDetailsDTO;
 }
  

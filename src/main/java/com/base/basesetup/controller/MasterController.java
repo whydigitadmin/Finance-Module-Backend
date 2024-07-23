@@ -24,7 +24,6 @@ import com.base.basesetup.common.CommonConstant;
 import com.base.basesetup.common.UserConstants;
 import com.base.basesetup.dto.AccountDTO;
 import com.base.basesetup.dto.ChargeTypeRequestDTO;
-import com.base.basesetup.dto.ChequeBoxDTO;
 import com.base.basesetup.dto.CostCenterDTO;
 import com.base.basesetup.dto.ExRatesDTO;
 import com.base.basesetup.dto.GroupLedgerDTO;
@@ -1114,34 +1113,34 @@ public class MasterController extends BaseController {
 		return ResponseEntity.ok().body(responseDTO);
 	}
 
-	@PutMapping("/updateCreateChequeBook")
-	public ResponseEntity<ResponseDTO> updateCreateChequeBox(@Valid @RequestBody ChequeBoxDTO chequeBoxDTO) {
-		String methodName = "updateCreateChequeBox()";
-
-		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
-		String errorMsg = null;
-		Map<String, Object> responseObjectsMap = new HashMap<>();
-		ResponseDTO responseDTO = null;
-
-		try {
-			ChequeBookVO chequeBoxVO = masterService.updateCreateChequeBox(chequeBoxDTO);
-			if (chequeBoxVO != null) {
-				responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "ChequeBox updated successfully");
-				responseObjectsMap.put("chequeBoxVO", chequeBoxVO);
-				responseDTO = createServiceResponse(responseObjectsMap);
-			} else {
-				errorMsg = "ChequeBox not found for ID: " + chequeBoxDTO.getId();
-				responseDTO = createServiceResponseError(responseObjectsMap, "ChequeBox update failed", errorMsg);
-			}
-		} catch (Exception e) {
-			errorMsg = e.getMessage();
-			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
-			responseDTO = createServiceResponseError(responseObjectsMap, "ChequeBox update failed", errorMsg);
-		}
-		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
-		return ResponseEntity.ok().body(responseDTO);
-	}
-
+//	@PutMapping("/updateCreateChequeBook")
+//	public ResponseEntity<ResponseDTO> updateCreateChequeBox(@Valid @RequestBody ChequeBoxDTO chequeBoxDTO) {
+//		String methodName = "updateCreateChequeBox()";
+//
+//		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+//		String errorMsg = null;
+//		Map<String, Object> responseObjectsMap = new HashMap<>();
+//		ResponseDTO responseDTO = null;
+//
+//		try {
+//			ChequeBookVO chequeBoxVO = masterService.updateCreateChequeBox(chequeBoxDTO);
+//			if (chequeBoxVO != null) {
+//				responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "ChequeBox updated successfully");
+//				responseObjectsMap.put("chequeBoxVO", chequeBoxVO);
+//				responseDTO = createServiceResponse(responseObjectsMap);
+//			} else {
+//				errorMsg = "ChequeBox not found for ID: " + chequeBoxDTO.getId();
+//				responseDTO = createServiceResponseError(responseObjectsMap, "ChequeBox update failed", errorMsg);
+//			}
+//		} catch (Exception e) {
+//			errorMsg = e.getMessage();
+//			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+//			responseDTO = createServiceResponseError(responseObjectsMap, "ChequeBox update failed", errorMsg);
+//		}
+//		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+//		return ResponseEntity.ok().body(responseDTO);
+//	}
+//
 	@GetMapping("/getChequeBookByActive")
 	public ResponseEntity<ResponseDTO> getChequeBoxByActive() {
 		String methodName = "getChequeBoxByActive()";
@@ -1393,31 +1392,32 @@ public class MasterController extends BaseController {
 		return ResponseEntity.ok().body(responseDTO);
 	}
 
-	@GetMapping("/getCostCenterByOrgId")
-	public ResponseEntity<ResponseDTO> getCostCenterByOrgId(@RequestParam(required = false) Long orgid) {
-		String methodName = "getCostCenterByOrgId()";
-		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
-		String errorMsg = null;
-		Map<String, Object> responseObjectsMap = new HashMap<>();
-		ResponseDTO responseDTO = null;
-		List<CostCenterVO> costCenterVO = new ArrayList<>();
-		try {
-			costCenterVO = masterService.getAllCostCenterByOrgId(orgid);
-		} catch (Exception e) {
-			errorMsg = e.getMessage();
-			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
-		}
-		if (StringUtils.isBlank(errorMsg)) {
-			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "CostCenter information get successfully By OrgId");
-			responseObjectsMap.put("costCenterVO", costCenterVO);
-			responseDTO = createServiceResponse(responseObjectsMap);
-		} else {
-			responseDTO = createServiceResponseError(responseObjectsMap,
-					"CostCenter information receive failed By OrgId", errorMsg);
-		}
-		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
-		return ResponseEntity.ok().body(responseDTO);
-	}
+//	@GetMapping("/getCostCenterByOrgId")
+//	public ResponseEntity<ResponseDTO> getCostCenterByOrgId(@RequestParam(required = false) Long orgid) {
+//		String methodName = "getCostCenterByOrgId()";
+//		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+//		String errorMsg = null;
+//		Map<String, Object> responseObjectsMap = new HashMap<>();
+//		ResponseDTO responseDTO = null;
+//		List<CostCenterVO> costCenterVO = new ArrayList<>();
+//		try {
+//			costCenterVO = masterService.getAllCostCenterByOrgId(orgid);
+//		} catch (Exception e) {
+//			errorMsg = e.getMessage();
+//			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+//
+//
+//		if (StringUtils.isBlank(errorMsg)) {
+//			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "CostCenter information get successfully By OrgId");
+//			responseObjectsMap.put("costCenterVO", costCenterVO);
+//			responseDTO = createServiceResponse(responseObjectsMap);
+//		} else {
+//			responseDTO = createServiceResponseError(responseObjectsMap,
+//					"CostCenter information receive failed By OrgId", errorMsg);
+//		}
+//		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+//		return ResponseEntity.ok().body(responseDTO);
+//	}
 
 	@PutMapping("/updateCreateCostCenter")
 	public ResponseEntity<ResponseDTO> updateCreateCostCenter(@Valid @RequestBody CostCenterDTO costCenterDTO) {

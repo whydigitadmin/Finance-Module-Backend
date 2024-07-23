@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.base.basesetup.entity.ChequeBookVO;
 
-public interface ChequeBoxRepo extends JpaRepository<ChequeBookVO, Long> {
+public interface ChequeBookRepo extends JpaRepository<ChequeBookVO, Long> {
 
 	@Query(nativeQuery = true, value = "select * from chequebox where chequeboxid=?1")
 	List<ChequeBookVO> getAllChequeBoxById(Long id);
