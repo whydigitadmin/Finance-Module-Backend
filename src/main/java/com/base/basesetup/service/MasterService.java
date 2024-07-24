@@ -129,13 +129,13 @@ public interface MasterService {
 	List<CostCenterVO> getCostCenterByActive();
 
 //	ChequeBook
-	List<ChequeBookVO> getAllChequeBoxByOrgId(Long orgId);
+	List<ChequeBookVO> getAllChequeBookByOrgId(Long orgId);
 
 	ChequeBookVO updateCreateChequeBook(@Valid ChequeBookDTO chequeBookDTO) throws ApplicationException;
 
-	List<ChequeBookVO> getAllChequeBoxById(Long id);
+	List<ChequeBookVO> getAllChequeBookById(Long id);
 
-	List<ChequeBookVO> getChequeBoxByActive();
+	List<ChequeBookVO> getChequeBookByActive();
 
 //	ChargeTypeRequest
 	List<ChargeTypeRequestVO> getAllChargeTypeRequestByOrgId(Long orgId);

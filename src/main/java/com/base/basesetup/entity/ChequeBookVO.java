@@ -14,6 +14,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.base.basesetup.dto.CreatedUpdatedDate;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.AllArgsConstructor;
@@ -22,21 +23,22 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "chequebookmaster")
+@Table(name = "chequebook")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+//@JsonIgnoreProperties({"chequeBookDetailsVO"})
 public class ChequeBookVO {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "chequeboxmastergen")
 	@SequenceGenerator(name = "chequeboxmastergen", sequenceName = "chequeboxmasterseq", initialValue = 1000000001, allocationSize = 1)
-	@Column(name = "chequebookmasterid")
+	@Column(name = "chequebookid")
 	private Long id;
 	@Column(name = "branch")
 	private String branch;
-	@Column(name = "chequebookid")
-	private String chequeBookId;
+	@Column(name = "chequeid")
+	private String chequeId;
 	@Column(name = "bank")
 	private String bank;
 	@Column(name = "checkprefix")
@@ -58,9 +60,9 @@ public class ChequeBookVO {
 	@Column(name = "modifiedby")
 	private String updatedBy;
 
-	@OneToMany(mappedBy = "ChequeBookMasterVO", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "chequeBookVO", cascade = CascadeType.ALL ,orphanRemoval = true)
 	@JsonManagedReference
-	List<ChequeBookDetailsVO> chequeMasterDetailsVO;
+	private List<ChequeBookDetailsVO> chequeBookDetailsVO;
 
 	@Embedded
 	@Builder.Default

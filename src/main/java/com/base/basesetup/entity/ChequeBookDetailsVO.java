@@ -11,6 +11,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,6 +24,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+//@JsonIgnoreProperties({"chequeBookVO"})
 public class ChequeBookDetailsVO {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "chequebookdetailsgen")
@@ -36,9 +38,10 @@ public class ChequeBookDetailsVO {
 	@Column(name = "cancelled")
 	private String cancelled;
 
+	
 	@ManyToOne
+	@JoinColumn(name = "chequebookid")
 	@JsonBackReference
-	@JoinColumn(name = "chequebookmasterid")
-	ChequeBookVO ChequeBookMasterVO;
+	private ChequeBookVO chequeBookVO;
 
 }

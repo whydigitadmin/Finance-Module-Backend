@@ -2,6 +2,8 @@ package com.base.basesetup.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
@@ -17,11 +19,9 @@ import com.base.basesetup.dto.Account3DTO;
 import com.base.basesetup.dto.AccountDTO;
 import com.base.basesetup.dto.ChargeTypeRequestDTO;
 import com.base.basesetup.dto.ChequeBookDTO;
-import com.base.basesetup.dto.ChequeBookDetailsDTO;
 import com.base.basesetup.dto.CostCenterDTO;
 import com.base.basesetup.dto.ExRatesDTO;
 import com.base.basesetup.dto.GroupLedgerDTO;
-import com.base.basesetup.dto.GstIrnCreditDTO;
 import com.base.basesetup.dto.HsnSacCodeDTO;
 import com.base.basesetup.dto.ListOfValues1DTO;
 import com.base.basesetup.dto.ListOfValuesDTO;
@@ -42,7 +42,6 @@ import com.base.basesetup.entity.ChequeBookVO;
 import com.base.basesetup.entity.CostCenterVO;
 import com.base.basesetup.entity.ExRatesVO;
 import com.base.basesetup.entity.GroupLedgerVO;
-import com.base.basesetup.entity.GstIrnCreditVO;
 import com.base.basesetup.entity.HsnSacCodeVO;
 import com.base.basesetup.entity.ListOfValues1VO;
 import com.base.basesetup.entity.ListOfValuesVO;
@@ -1047,29 +1046,29 @@ public class MasterServiceImpl implements MasterService {
 
 	// ChequeBook
 	@Override
-	public List<ChequeBookVO> getAllChequeBoxById(Long id) {
-		List<ChequeBookVO> chequeBoxVO = new ArrayList<>();
+	public List<ChequeBookVO> getAllChequeBookById(Long id) {
+		List<ChequeBookVO> chequeBookVO = new ArrayList<>();
 		if (ObjectUtils.isNotEmpty(id)) {
-			LOGGER.info("Successfully Received  ChequeBox Information BY Id : {}", id);
-			chequeBoxVO = chequeBookRepo.getAllChequeBoxById(id);
+			LOGGER.info("Successfully Received  ChequeBook Information BY Id : {}", id);
+			chequeBookVO = chequeBookRepo.getAllChequeBookById(id);
 		} else {
-			LOGGER.info("Successfully Received  ChequeBox Information For All Id.");
-			chequeBoxVO = chequeBookRepo.findAll();
+			LOGGER.info("Successfully Received  ChequeBook Information For All Id.");
+			chequeBookVO = chequeBookRepo.findAll();
 		}
-		return chequeBoxVO;
+		return chequeBookVO;
 	}
 
 	@Override
-	public List<ChequeBookVO> getAllChequeBoxByOrgId(Long orgId) {
-		List<ChequeBookVO> chequeBoxVO = new ArrayList<>();
+	public List<ChequeBookVO> getAllChequeBookByOrgId(Long orgId) {
+		List<ChequeBookVO> chequeBookVO = new ArrayList<>();
 		if (ObjectUtils.isNotEmpty(orgId)) {
-			LOGGER.info("Successfully Received  ChequeBox Information BY OrgId : {}", orgId);
-			chequeBoxVO = chequeBookRepo.getAllChequeBoxByOrgId(orgId);
+			LOGGER.info("Successfully Received  ChequeBook Information BY OrgId : {}", orgId);
+			chequeBookVO = chequeBookRepo.getAllChequeBookByOrgId(orgId);
 		} else {
-			LOGGER.info("Successfully Received ChequeBox Information For All OrgId.");
-			chequeBoxVO = chequeBookRepo.findAll();
+			LOGGER.info("Successfully Received ChequeBook Information For All OrgId.");
+			chequeBookVO = chequeBookRepo.findAll();
 		}
-		return chequeBoxVO;
+		return chequeBookVO;
 	}
 
 //	@Override
@@ -1082,7 +1081,8 @@ public class MasterServiceImpl implements MasterService {
 //
 //		List<ChequeBookDetailsVO> chequeBookDetailsVOs = new ArrayList<>();
 //		if (chequeBookDTO.getChequeBookDetailsDTO() != null) {
-//			for (ChequeBookDetailsDTO chequeBookDetailsDTO : chequeBookDTO.getChequeBookDetailsDTO()) {
+//			for (ChequeBookDetailsDTO chequeBookDetailsDTO : chequeBookDTO.getChequeBookDetailsDTO()) 
+//			{
 //				ChequeBookDetailsVO chequeBookDetailsVO;
 //				if (chequeBookDetailsDTO.getId() != null & ObjectUtils.isEmpty(chequeBookDetailsDTO.getId())) {
 //					chequeBookDetailsVO = chequeBookDetailsRepo.findById(chequeBookDetailsDTO.getId()).orElse(new ChequeBookDetailsVO());
@@ -1092,19 +1092,19 @@ public class MasterServiceImpl implements MasterService {
 //				chequeBookDetailsVO.setChequeNo(chequeBookDetailsDTO.getChequeNo());
 //				chequeBookDetailsVO.setStatus(chequeBookDetailsDTO.getStatus());
 //				chequeBookDetailsVO.setCancelled(chequeBookDetailsDTO.getCancelled());
-//				chequeBookDetailsVO.setChequeBookMasterVO(chequeBookVO);
+//				chequeBookDetailsVO.setChequeBookVO(chequeBookVO);
 //				chequeBookDetailsVOs.add(chequeBookDetailsVO);
 //			}
+//			chequeBookVO.setChequeBookDetailsVO(chequeBookDetailsVOs);
 //		}
-//
+//		
 //		getChequeBookVOFromChequeBookDTO(chequeBookDTO, chequeBookVO);
-//		chequeBookVO.setChequeMasterDetailsVO(chequeBookDetailsVOs);
 //		return chequeBookRepo.save(chequeBookVO);
 //	}
 //
 //	private void getChequeBookVOFromChequeBookDTO(@Valid ChequeBookDTO chequeBookDTO, ChequeBookVO chequeBookVO) {
 //		chequeBookVO.setBranch(chequeBookDTO.getBranch());
-//		chequeBookVO.setChequeBookId(chequeBookDTO.getChequeBookId());
+//		chequeBookVO.setChequeId(chequeBookDTO.getChequeId());
 //		chequeBookVO.setBank(chequeBookDTO.getBank());
 //		chequeBookVO.setCheckPrefix(chequeBookDTO.getCheckPrefix());
 //		chequeBookVO.setCheckStartNo(chequeBookDTO.getCheckStartNo());
@@ -1115,10 +1115,58 @@ public class MasterServiceImpl implements MasterService {
 //		chequeBookVO.setUpdatedBy(chequeBookDTO.getUpdatedBy());
 //
 //	}
+	
+	@Override
+	public ChequeBookVO updateCreateChequeBook(@Valid ChequeBookDTO chequeBookDTO) throws ApplicationException {
+	    // Fetch existing ChequeBookVO if an ID is provided
+	    ChequeBookVO chequeBookVO = Optional.ofNullable(chequeBookDTO.getId())
+	            .flatMap(id -> chequeBookRepo.findById(id))
+	            .orElseGet(ChequeBookVO::new);
+
+	    // Process and convert ChequeBookDetailsDTO to ChequeBookDetailsVO
+	    List<ChequeBookDetailsVO> chequeBookDetailsVOs = chequeBookDTO.getChequeBookDetailsDTO().stream()
+	            .map(dto -> {
+	                // Find existing ChequeBookDetailsVO if ID is provided, else create a new one
+	                ChequeBookDetailsVO detailsVO = Optional.ofNullable(dto.getId())
+	                        .flatMap(id -> chequeBookDetailsRepo.findById(id))
+	                        .orElse(new ChequeBookDetailsVO());
+
+	                // Update detailsVO properties
+	                detailsVO.setChequeNo(dto.getChequeNo());
+	                detailsVO.setStatus(dto.getStatus());
+	                detailsVO.setCancelled(dto.getCancelled());
+	                detailsVO.setChequeBookVO(chequeBookVO);
+
+	                return detailsVO;
+	            })
+	            .collect(Collectors.toList());
+
+	    // Update ChequeBookVO properties
+	    getChequeBookVOFromChequeBookDTO(chequeBookDTO, chequeBookVO);
+	    chequeBookVO.setChequeBookDetailsVO(chequeBookDetailsVOs);
+
+	    // Save and return updated ChequeBookVO
+	    return chequeBookRepo.save(chequeBookVO);
+	}
+
+	private void getChequeBookVOFromChequeBookDTO(@Valid ChequeBookDTO chequeBookDTO, ChequeBookVO chequeBookVO) {
+	    chequeBookVO.setBranch(chequeBookDTO.getBranch());
+	    chequeBookVO.setChequeId(chequeBookDTO.getChequeId());
+	    chequeBookVO.setBank(chequeBookDTO.getBank());
+	    chequeBookVO.setCheckPrefix(chequeBookDTO.getCheckPrefix());
+	    chequeBookVO.setCheckStartNo(chequeBookDTO.getCheckStartNo());
+	    chequeBookVO.setNoOfChequeLeaves(chequeBookDTO.getNoOfChequeLeaves());
+	    chequeBookVO.setOrgId(chequeBookDTO.getOrgId());
+	    chequeBookVO.setActive(chequeBookDTO.isActive());
+	    chequeBookVO.setCreatedBy(chequeBookDTO.getCreatedBy());
+	    chequeBookVO.setUpdatedBy(chequeBookDTO.getUpdatedBy());
+	}
+
+
 
 	@Override
-	public List<ChequeBookVO> getChequeBoxByActive() {
-		return chequeBookRepo.findChequeBoxByActive();
+	public List<ChequeBookVO> getChequeBookByActive() {
+		return chequeBookRepo.findChequeBookByActive();
 
 	}
 

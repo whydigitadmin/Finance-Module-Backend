@@ -13,7 +13,7 @@ public class ChequeBookDTO {
 
 	private Long id;
 	private String branch;
-	private String chequeBookId;
+	private String chequeId;
 	private String bank;
 	private String checkPrefix;
 	private String checkStartNo;

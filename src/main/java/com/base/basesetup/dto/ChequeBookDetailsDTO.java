@@ -11,10 +11,9 @@ import lombok.NoArgsConstructor;
 @Builder
 public class ChequeBookDetailsDTO {
 
-	private String id;
+	private Long id;
 	private Long chequeNo;
 	private String status;
 	private String cancelled;
-	
 	
 }

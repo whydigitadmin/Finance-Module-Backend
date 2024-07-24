@@ -9,13 +9,13 @@ import com.base.basesetup.entity.ChequeBookVO;
 
 public interface ChequeBookRepo extends JpaRepository<ChequeBookVO, Long> {
 
-	@Query(nativeQuery = true, value = "select * from chequebox where chequeboxid=?1")
-	List<ChequeBookVO> getAllChequeBoxById(Long id);
+	@Query(nativeQuery = true, value = "select * from chequebook where chequebookid=?1")
+	List<ChequeBookVO> getAllChequeBookById(Long id);
 
-	@Query(nativeQuery = true, value = "select * from chequebox where orgid=?1")
-	List<ChequeBookVO> getAllChequeBoxByOrgId(Long orgId);
+	@Query(nativeQuery = true, value = "select * from chequebook where orgid=?1")
+	List<ChequeBookVO> getAllChequeBookByOrgId(Long orgId);
 
-	@Query(nativeQuery = true, value = "select * from chequebox where active=1")
-	List<ChequeBookVO> findChequeBoxByActive();
+	@Query(nativeQuery = true, value = "select * from chequebook where active=1")
+	List<ChequeBookVO> findChequeBookByActive();
 
 }
