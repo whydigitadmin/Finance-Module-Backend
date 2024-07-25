@@ -24,4 +24,3 @@ public interface SacCodeRepo extends JpaRepository<SacCodeVO, Long> {
 //	@Query(nativeQuery = true,name = "select * from saccode where active=1")
 //	List<SacCodeVO> findSacCodeByActive();
 }
-
