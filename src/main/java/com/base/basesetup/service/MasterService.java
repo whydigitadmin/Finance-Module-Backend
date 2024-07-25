@@ -12,7 +12,7 @@ import com.base.basesetup.dto.ChequeBookDTO;
 import com.base.basesetup.dto.CostCenterDTO;
 import com.base.basesetup.dto.ExRatesDTO;
 import com.base.basesetup.dto.GroupLedgerDTO;
-import com.base.basesetup.dto.HsnSacCodeDTO;
+import com.base.basesetup.dto.SacCodeDTO;
 import com.base.basesetup.dto.ListOfValuesDTO;
 import com.base.basesetup.dto.SetTaxRateDTO;
 import com.base.basesetup.dto.SubLedgerAccountDTO;
@@ -25,7 +25,7 @@ import com.base.basesetup.entity.ChequeBookVO;
 import com.base.basesetup.entity.CostCenterVO;
 import com.base.basesetup.entity.ExRatesVO;
 import com.base.basesetup.entity.GroupLedgerVO;
-import com.base.basesetup.entity.HsnSacCodeVO;
+import com.base.basesetup.entity.SacCodeVO;
 import com.base.basesetup.entity.ListOfValuesVO;
 import com.base.basesetup.entity.SetTaxRateVO;
 import com.base.basesetup.entity.SubLedgerAccountVO;
@@ -91,14 +91,14 @@ public interface MasterService {
 
 	List<GroupLedgerVO> getGroupLedgerByActive();
 
-//	HsnSacCode
-	List<HsnSacCodeVO> getAllHsnSacCodeById(Long id);
+//	SacCode
+	List<SacCodeVO> getAllSacCodeById(Long id);
 
-	List<HsnSacCodeVO> getAllHsnSacCodeByOrgId(Long orgId);
+	List<SacCodeVO> getAllSacCodeByOrgId(Long orgId);
 
-	HsnSacCodeVO updateCreateHsnSacCode(@Valid HsnSacCodeDTO hsnSacCodeDTO) throws ApplicationException;
+	SacCodeVO updateCreateSacCode(@Valid SacCodeDTO sacCodeDTO) throws ApplicationException;
 
-//	List<HsnSacCodeVO> getHsnSacCodeByActive();
+//	List<SacCodeVO> getSacCodeByActive();
 
 //	ExRates
 	List<ExRatesVO> getAllExRatesByOrgId(Long orgId);

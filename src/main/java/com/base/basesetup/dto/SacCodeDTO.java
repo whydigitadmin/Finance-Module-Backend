@@ -3,22 +3,20 @@ package com.base.basesetup.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class HsnSacCodeDTO {
+public class SacCodeDTO {
 	private Long id;
 	private Long orgId;
-	private boolean active;
-	private String type;
-	private String code;
-	private String description;
+	private String serviceAccountCode;
+	private String sacDescription;
 	private String chapter;
-	private String chapterCode;
-	private String subChapter;
-	private String subChapterCode;
-	private float rate;
-	private boolean excempted;
+	private String product;
 	private String createdBy;
 	private String updatedBy;
+	private String cancelRemarks;
+	private boolean cancel;
+	private boolean active;
 }

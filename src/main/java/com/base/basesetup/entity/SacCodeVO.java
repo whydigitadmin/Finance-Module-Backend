@@ -17,38 +17,28 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "hsnsaccode")
+@Table(name = "saccode")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class HsnSacCodeVO {
+public class SacCodeVO {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY, generator = "hsnsaccodegen")
-	@SequenceGenerator(name = "hsnsaccodegen", sequenceName = "hsnsaccodeseq", initialValue = 1000000001, allocationSize = 1)
-	@Column(name = "hsnsaccodeid")
+	@GeneratedValue(strategy = GenerationType.IDENTITY, generator = "saccodegen")
+	@SequenceGenerator(name = "saccodegen", sequenceName = "saccodeseq", initialValue = 1000000001, allocationSize = 1)
+	@Column(name = "saccodeid")
 	private Long id;
 	@Column(name = "orgid")
 	private Long orgId;
-	@Column(name = "type")
-	private String type;
-	@Column(name = "code")
-	private String code;
-	@Column(name = "description")
-	private String description;
+	@Column(name = "serviceaccountcode")
+	private String serviceAccountCode;
+	@Column(name = "sacdescription")
+	private String sacDescription;
 	@Column(name = "chapter")
 	private String chapter;
-	@Column(name = "chaptercode")
-	private String chapterCode;
-	@Column(name = "subchapter")
-	private String subChapter;
-	@Column(name = "subchaptercode")
-	private String subChapterCode;
-	@Column(name = "rate")
-	private float rate;
-	private boolean excempted;
-
+	@Column(name = "product")
+	private String product;
 	@Column(name = "createdby")
 	private String createdBy;
 	@Column(name = "modifiedby")

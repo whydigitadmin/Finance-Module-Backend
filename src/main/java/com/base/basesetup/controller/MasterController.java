@@ -28,7 +28,7 @@ import com.base.basesetup.dto.ChequeBookDTO;
 import com.base.basesetup.dto.CostCenterDTO;
 import com.base.basesetup.dto.ExRatesDTO;
 import com.base.basesetup.dto.GroupLedgerDTO;
-import com.base.basesetup.dto.HsnSacCodeDTO;
+import com.base.basesetup.dto.SacCodeDTO;
 import com.base.basesetup.dto.ListOfValuesDTO;
 import com.base.basesetup.dto.ResponseDTO;
 import com.base.basesetup.dto.SetTaxRateDTO;
@@ -42,7 +42,7 @@ import com.base.basesetup.entity.ChequeBookVO;
 import com.base.basesetup.entity.CostCenterVO;
 import com.base.basesetup.entity.ExRatesVO;
 import com.base.basesetup.entity.GroupLedgerVO;
-import com.base.basesetup.entity.HsnSacCodeVO;
+import com.base.basesetup.entity.SacCodeVO;
 import com.base.basesetup.entity.ListOfValuesVO;
 import com.base.basesetup.entity.SetTaxRateVO;
 import com.base.basesetup.entity.SubLedgerAccountVO;
@@ -725,27 +725,27 @@ public class MasterController extends BaseController {
 
 	}
 
-	// HsnSacCode
-	@GetMapping("/getAllHsnSacCodeByOrgId")
-	public ResponseEntity<ResponseDTO> getAllHsnSapCodeByOrgId(@RequestParam(required = false) Long orgId) {
-		String methodName = "getAllHsnSacCodeByOrgId()";
+	// SacCode
+	@GetMapping("/getAllSacCodeByOrgId")
+	public ResponseEntity<ResponseDTO> getAllSapCodeByOrgId(@RequestParam(required = false) Long orgId) {
+		String methodName = "getAllSacCodeByOrgId()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
 		String errorMsg = null;
 		Map<String, Object> responseObjectsMap = new HashMap<>();
 		ResponseDTO responseDTO = null;
-		List<HsnSacCodeVO> hsnSacCodeVO = new ArrayList<>();
+		List<SacCodeVO> sacCodeVO = new ArrayList<>();
 		try {
-			hsnSacCodeVO = masterService.getAllHsnSacCodeByOrgId(orgId);
+			sacCodeVO = masterService.getAllSacCodeByOrgId(orgId);
 		} catch (Exception e) {
 			errorMsg = e.getMessage();
 			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
 		}
 		if (StringUtils.isBlank(errorMsg)) {
-			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "HsnSacCode information get successfully ByOrgId");
-			responseObjectsMap.put("hsnSacCodeVO", hsnSacCodeVO);
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "SacCode information get successfully ByOrgId");
+			responseObjectsMap.put("sacCodeVO", sacCodeVO);
 			responseDTO = createServiceResponse(responseObjectsMap);
 		} else {
-			responseDTO = createServiceResponseError(responseObjectsMap, "HsnSacCode information receive failedByOrgId",
+			responseDTO = createServiceResponseError(responseObjectsMap, "SacCode information receive failedByOrgId",
 					errorMsg);
 		}
 		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
@@ -753,36 +753,36 @@ public class MasterController extends BaseController {
 
 	}
 
-	@GetMapping("/getAllHsnSacCodeById")
-	public ResponseEntity<ResponseDTO> getAllHsnSacCodeById(@RequestParam(required = false) Long id) {
-		String methodName = "getAllHsnSacCodeById()";
+	@GetMapping("/getAllSacCodeById")
+	public ResponseEntity<ResponseDTO> getAllSacCodeById(@RequestParam(required = false) Long id) {
+		String methodName = "getAllSacCodeById()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
 		String errorMsg = null;
 		Map<String, Object> responseObjectsMap = new HashMap<>();
 		ResponseDTO responseDTO = null;
-		List<HsnSacCodeVO> hsnSacCodeVO = new ArrayList<>();
+		List<SacCodeVO> sacCodeVO = new ArrayList<>();
 		try {
-			hsnSacCodeVO = masterService.getAllHsnSacCodeById(id);
+			sacCodeVO = masterService.getAllSacCodeById(id);
 		} catch (Exception e) {
 			errorMsg = e.getMessage();
 			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
 		}
 		if (StringUtils.isBlank(errorMsg)) {
-			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "HsnSacCode information get successfully By OrgId");
-			responseObjectsMap.put("hsnSacCodeVO", hsnSacCodeVO);
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "SacCode information get successfully By OrgId");
+			responseObjectsMap.put("sacCodeVO", sacCodeVO);
 			responseDTO = createServiceResponse(responseObjectsMap);
 		} else {
 			responseDTO = createServiceResponseError(responseObjectsMap,
-					"HsnSacCode information receive failed By OrgId", errorMsg);
+					"SacCode information receive failed By OrgId", errorMsg);
 		}
 		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
 		return ResponseEntity.ok().body(responseDTO);
 
 	}
 
-	@PutMapping("/updateCreateHsnSacCode")
-	public ResponseEntity<ResponseDTO> updateCreateHsnSacCode(@Valid @RequestBody HsnSacCodeDTO hsnSacCodeDTO) {
-		String methodName = "updateCreateHsnSacCode()";
+	@PutMapping("/updateCreateSacCode")
+	public ResponseEntity<ResponseDTO> updateCreateSacCode(@Valid @RequestBody SacCodeDTO sacCodeDTO) {
+		String methodName = "updateCreateSacCode()";
 
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
 		String errorMsg = null;
@@ -790,45 +790,45 @@ public class MasterController extends BaseController {
 		ResponseDTO responseDTO = null;
 
 		try {
-			HsnSacCodeVO hsnSacCodeVO = masterService.updateCreateHsnSacCode(hsnSacCodeDTO);
-			if (hsnSacCodeVO != null) {
-				responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "HsnSacCode updated successfully");
-				responseObjectsMap.put("hsnSacCodeVO", hsnSacCodeVO);
+			SacCodeVO sacCodeVO = masterService.updateCreateSacCode(sacCodeDTO);
+			if (sacCodeVO != null) {
+				responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "SacCode updated successfully");
+				responseObjectsMap.put("sacCodeVO", sacCodeVO);
 				responseDTO = createServiceResponse(responseObjectsMap);
 			} else {
-				errorMsg = "HsnSacCode not found for ID: " + hsnSacCodeDTO.getId();
-				responseDTO = createServiceResponseError(responseObjectsMap, "HsnSacCode update failed", errorMsg);
+				errorMsg = "SacCode not found for ID: " + sacCodeDTO.getId();
+				responseDTO = createServiceResponseError(responseObjectsMap, "SacCode update failed", errorMsg);
 			}
 		} catch (Exception e) {
 			errorMsg = e.getMessage();
 			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
-			responseDTO = createServiceResponseError(responseObjectsMap, "HsnSacCode update failed", errorMsg);
+			responseDTO = createServiceResponseError(responseObjectsMap, "SacCode update failed", errorMsg);
 		}
 		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
 		return ResponseEntity.ok().body(responseDTO);
 	}
 
-//	@GetMapping("/getHsnSacCodeByActive")
-//	public ResponseEntity<ResponseDTO> getHsnSacCodeByActive() {
-//		String methodName = "getHsnSacCodeByActive()";
+//	@GetMapping("/getSacCodeByActive")
+//	public ResponseEntity<ResponseDTO> getSacCodeByActive() {
+//		String methodName = "getSacCodeByActive()";
 //		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
 //		String errorMsg = null;
 //		Map<String, Object> responseObjectsMap = new HashMap<>();
 //		ResponseDTO responseDTO = null;
-//		List<HsnSacCodeVO> hsnSacCodeVO = new ArrayList<>();
+//		List<SacCodeVO> sacCodeVO = new ArrayList<>();
 //		try {
-//			hsnSacCodeVO = masterService.getHsnSacCodeByActive();
+//			sacCodeVO = masterService.getSacCodeByActive();
 //		} catch (Exception e) {
 //			errorMsg = e.getMessage();
 //			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
 //		}
 //		if (StringUtils.isBlank(errorMsg)) {
-//			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "HsnSacCode information get successfully By Active");
-//			responseObjectsMap.put("hsnSacCodeVO", hsnSacCodeVO);
+//			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "SacCode information get successfully By Active");
+//			responseObjectsMap.put("sacCodeVO", sacCodeVO);
 //			responseDTO = createServiceResponse(responseObjectsMap);
 //		} else {
 //			responseDTO = createServiceResponseError(responseObjectsMap,
-//					"HsnSacCode information receive failed By Active", errorMsg);
+//					"SacCode information receive failed By Active", errorMsg);
 //		}
 //		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
 //		return ResponseEntity.ok().body(responseDTO);
@@ -1445,5 +1445,6 @@ public class MasterController extends BaseController {
 		}
 		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
 		return ResponseEntity.ok().body(responseDTO);
+
 	}
 }

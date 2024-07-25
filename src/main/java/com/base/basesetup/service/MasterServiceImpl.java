@@ -22,7 +22,7 @@ import com.base.basesetup.dto.ChequeBookDTO;
 import com.base.basesetup.dto.CostCenterDTO;
 import com.base.basesetup.dto.ExRatesDTO;
 import com.base.basesetup.dto.GroupLedgerDTO;
-import com.base.basesetup.dto.HsnSacCodeDTO;
+import com.base.basesetup.dto.SacCodeDTO;
 import com.base.basesetup.dto.ListOfValues1DTO;
 import com.base.basesetup.dto.ListOfValuesDTO;
 import com.base.basesetup.dto.SetTaxRateDTO;
@@ -42,7 +42,7 @@ import com.base.basesetup.entity.ChequeBookVO;
 import com.base.basesetup.entity.CostCenterVO;
 import com.base.basesetup.entity.ExRatesVO;
 import com.base.basesetup.entity.GroupLedgerVO;
-import com.base.basesetup.entity.HsnSacCodeVO;
+import com.base.basesetup.entity.SacCodeVO;
 import com.base.basesetup.entity.ListOfValues1VO;
 import com.base.basesetup.entity.ListOfValuesVO;
 import com.base.basesetup.entity.SetTaxRateVO;
@@ -64,7 +64,7 @@ import com.base.basesetup.repo.ChequeBookRepo;
 import com.base.basesetup.repo.CostCenterRepo;
 import com.base.basesetup.repo.ExRatesRepo;
 import com.base.basesetup.repo.GroupLedgerRepo;
-import com.base.basesetup.repo.HsnSacCodeRepo;
+import com.base.basesetup.repo.SacCodeRepo;
 import com.base.basesetup.repo.ListOfValues1Repo;
 import com.base.basesetup.repo.ListOfValuesRepo;
 import com.base.basesetup.repo.SetTaxRateRepo;
@@ -116,7 +116,7 @@ public class MasterServiceImpl implements MasterService {
 	GroupLedgerRepo groupLedgerRepo;
 
 	@Autowired
-	HsnSacCodeRepo hsnSacCodeRepo;
+	SacCodeRepo sacCodeRepo;
 
 	@Autowired
 	ExRatesRepo exRatesRepo;
@@ -748,88 +748,85 @@ public class MasterServiceImpl implements MasterService {
 
 	}
 
-	// HsnSacCode
+	// SacCode
 
 	@Override
-	public List<HsnSacCodeVO> getAllHsnSacCodeById(Long id) {
-		List<HsnSacCodeVO> hsnSacCodeVO = new ArrayList<>();
+	public List<SacCodeVO> getAllSacCodeById(Long id) {
+		List<SacCodeVO> sacCodeVO = new ArrayList<>();
 		if (ObjectUtils.isNotEmpty(id)) {
-			LOGGER.info("Successfully Received  HsnSacCode Information BY Id : {}", id);
-			hsnSacCodeVO = hsnSacCodeRepo.getAllHsnSacCodeById(id);
+			LOGGER.info("Successfully Received  sacCode Information BY Id : {}", id);
+			sacCodeVO = sacCodeRepo.getAllSacCodeById(id);
 		} else {
-			LOGGER.info("Successfully Received  HsnSacCode Information For All Id.");
-			hsnSacCodeVO = hsnSacCodeRepo.findAll();
+			LOGGER.info("Successfully Received  SacCode Information For All Id.");
+			sacCodeVO = sacCodeRepo.findAll();
 		}
-		return hsnSacCodeVO;
+		return sacCodeVO;
 	}
 
 	@Override
-	public List<HsnSacCodeVO> getAllHsnSacCodeByOrgId(Long orgId) {
-		List<HsnSacCodeVO> hsnSacCodeVO = new ArrayList<>();
+	public List<SacCodeVO> getAllSacCodeByOrgId(Long orgId) {
+		List<SacCodeVO> sacCodeVO = new ArrayList<>();
 		if (ObjectUtils.isNotEmpty(orgId)) {
-			LOGGER.info("Successfully Received  HsnSacCode Information BY OrgId : {}", orgId);
-			hsnSacCodeVO = hsnSacCodeRepo.getAllHsnSacCodeByOrgId(orgId);
+			LOGGER.info("Successfully Received  SacCode Information BY OrgId : {}", orgId);
+			sacCodeVO = sacCodeRepo.getAllSacCodeByOrgId(orgId);
 		} else {
 			LOGGER.info("Successfully Received  HsnSacCode Information For All OrgId.");
-			hsnSacCodeVO = hsnSacCodeRepo.findAll();
+			sacCodeVO = sacCodeRepo.findAll();
 		}
-		return hsnSacCodeVO;
+		return sacCodeVO;
 	}
 
 	@Override
-	public HsnSacCodeVO updateCreateHsnSacCode(@Valid HsnSacCodeDTO hsnSacCodeDTO) throws ApplicationException {
-		HsnSacCodeVO hsnSacCodeVO = new HsnSacCodeVO();
-		if (ObjectUtils.isNotEmpty(hsnSacCodeDTO.getId())) {
-			hsnSacCodeVO = hsnSacCodeRepo.findById(hsnSacCodeDTO.getId())
-					.orElseThrow(() -> new ApplicationException("Invalid HsnSacCode details"));
-		} else {
-
-			if (hsnSacCodeRepo.existsByCodeAndOrgId(hsnSacCodeDTO.getCode(), hsnSacCodeDTO.getOrgId())) {
-				throw new ApplicationException("The given code already exists.");
-			}
-			if (hsnSacCodeRepo.existsByDescriptionAndOrgId(hsnSacCodeDTO.getDescription(), hsnSacCodeDTO.getOrgId())) {
-				throw new ApplicationException("The given Descipition exists.");
-			}
+	public SacCodeVO updateCreateSacCode(@Valid SacCodeDTO sacCodeDTO) throws ApplicationException {
+		SacCodeVO sacCodeVO = new SacCodeVO();
+		if (ObjectUtils.isNotEmpty(sacCodeDTO.getId())) {
+			sacCodeVO = sacCodeRepo.findById(sacCodeDTO.getId())
+					.orElseThrow(() -> new ApplicationException("Invalid SacCode details"));
 		}
+			//		} else {
+//
+//			if (sacCodeRepo.existsByCodeAndOrgId(sacCodeDTO.getCode(), sacCodeDTO.getOrgId())) {
+//				throw new ApplicationException("The given code already exists.");
+//			}
+//			if (hsnSacCodeRepo.existsByDescriptionAndOrgId(hsnSacCodeDTO.getDescription(), hsnSacCodeDTO.getOrgId())) {
+//				throw new ApplicationException("The given Descipition exists.");
+//			}
+//		}
+//
+//		if (ObjectUtils.isNotEmpty(hsnSacCodeDTO.getId())) {
+//			SacCodeVO hsn = hsnSacCodeRepo.findById(hsnSacCodeDTO.getId()).orElse(null);
+//			if (!hsn.getCode().equals(hsnSacCodeDTO.getCode())) {
+//				if (hsnSacCodeRepo.existsByCodeAndOrgId(hsnSacCodeDTO.getCode(), hsnSacCodeDTO.getOrgId())) {
+//					throw new ApplicationException("The given code already exists.");
+//				}
+//			}
+//			if (!hsn.getDescription().equals(hsnSacCodeDTO.getDescription())) {
+//				if (hsnSacCodeRepo.existsByDescriptionAndOrgId(hsnSacCodeDTO.getDescription(),
+//						hsnSacCodeDTO.getOrgId())) {
+//					throw new ApplicationException("The given Descipition exists.");
+//				}
+//			}
+//		}
 
-		if (ObjectUtils.isNotEmpty(hsnSacCodeDTO.getId())) {
-			HsnSacCodeVO hsn = hsnSacCodeRepo.findById(hsnSacCodeDTO.getId()).orElse(null);
-			if (!hsn.getCode().equals(hsnSacCodeDTO.getCode())) {
-				if (hsnSacCodeRepo.existsByCodeAndOrgId(hsnSacCodeDTO.getCode(), hsnSacCodeDTO.getOrgId())) {
-					throw new ApplicationException("The given code already exists.");
-				}
-			}
-			if (!hsn.getDescription().equals(hsnSacCodeDTO.getDescription())) {
-				if (hsnSacCodeRepo.existsByDescriptionAndOrgId(hsnSacCodeDTO.getDescription(),
-						hsnSacCodeDTO.getOrgId())) {
-					throw new ApplicationException("The given Descipition exists.");
-				}
-			}
-		}
-
-		getHsnSacCodeVOFromHsnSacCodeDTO(hsnSacCodeDTO, hsnSacCodeVO);
-		return hsnSacCodeRepo.save(hsnSacCodeVO);
+		getSacCodeVOFromSacCodeDTO(sacCodeDTO, sacCodeVO);
+		return sacCodeRepo.save(sacCodeVO);
 	}
 
-	private void getHsnSacCodeVOFromHsnSacCodeDTO(@Valid HsnSacCodeDTO hsnSacCodeDTO, HsnSacCodeVO hsnSacCodeVO) {
-		hsnSacCodeVO.setOrgId(hsnSacCodeDTO.getOrgId());
-		hsnSacCodeVO.setType(hsnSacCodeDTO.getType());
-		hsnSacCodeVO.setActive(hsnSacCodeDTO.isActive());
-		hsnSacCodeVO.setCode(hsnSacCodeDTO.getCode());
-		hsnSacCodeVO.setDescription(hsnSacCodeDTO.getDescription());
-		hsnSacCodeVO.setChapter(hsnSacCodeDTO.getChapter());
-		hsnSacCodeVO.setChapterCode(hsnSacCodeDTO.getChapterCode());
-		hsnSacCodeVO.setSubChapter(hsnSacCodeDTO.getSubChapter());
-		hsnSacCodeVO.setSubChapterCode(hsnSacCodeDTO.getSubChapterCode());
-		hsnSacCodeVO.setRate(hsnSacCodeDTO.getRate());
-		hsnSacCodeVO.setExcempted(hsnSacCodeDTO.isExcempted());
-		hsnSacCodeVO.setCreatedBy(hsnSacCodeDTO.getCreatedBy());
-		hsnSacCodeVO.setUpdatedBy(hsnSacCodeDTO.getUpdatedBy());
+	private void getSacCodeVOFromSacCodeDTO(@Valid SacCodeDTO sacCodeDTO, SacCodeVO sacCodeVO) {
+		sacCodeVO.setOrgId(sacCodeDTO.getOrgId());
+		sacCodeVO.setServiceAccountCode(sacCodeDTO.getServiceAccountCode());
+		sacCodeVO.setActive(sacCodeDTO.isActive());
+		sacCodeVO.setSacDescription(sacCodeDTO.getSacDescription());
+		sacCodeVO.setChapter(sacCodeDTO.getChapter());
+		sacCodeVO.setChapter(sacCodeDTO.getChapter());
+		sacCodeVO.setProduct(sacCodeDTO.getProduct());
+		sacCodeVO.setCreatedBy(sacCodeDTO.getCreatedBy());
+		sacCodeVO.setUpdatedBy(sacCodeDTO.getUpdatedBy());
 	}
 
 //	@Override
-//	public List<HsnSacCodeVO> getHsnSacCodeByActive() {
-//		return hsnSacCodeRepo.findHsnSacCodeByActive();
+//	public List<SacCodeVO> getSacCodeByActive() {
+//		return sacCodeRepo.findsacCodeByActive();
 //
 //	}
 	// ExRates
