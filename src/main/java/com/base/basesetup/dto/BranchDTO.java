@@ -28,7 +28,6 @@ public class BranchDTO {
 	private String region;
 	private String lccurrency;
 	private String createdBy;
-	private String updatedBy;
 	private String userId;
 	private boolean active;
 }

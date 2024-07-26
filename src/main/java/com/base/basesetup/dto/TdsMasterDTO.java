@@ -15,6 +15,7 @@ public class TdsMasterDTO {
 	private String section;
 	private String sectionName;
 	private boolean active;
+	private String createdBy;
 	
 	private List<TdsMaster2DTO>  tdsMaster2DTO;
 

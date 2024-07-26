@@ -16,4 +16,5 @@ public class CityDTO {
 	private String userId;
 	private Long orgId;
 	private boolean active;
+	private String createdBy;
 }

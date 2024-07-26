@@ -41,7 +41,6 @@ public class PaymentReversalDTO {
 	private Long orgId;
 	private boolean active;
 	private String createdBy;
-	private String updatedBy;
 	private BigDecimal foxenGainOrLoss;
 	private BigDecimal roundOffAmount;
 	private BigDecimal totalSettled;

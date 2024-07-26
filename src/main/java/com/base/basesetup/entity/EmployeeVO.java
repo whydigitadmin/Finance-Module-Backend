@@ -55,7 +55,7 @@ public class EmployeeVO {
 	@Column(name = "createdby")
 	private String createdBy;
 	@Column(name = "modifiedby")
-	private String updateBy;
+	private String updatedBy;
 	@Column(name = "orgid")
 	private Long orgId;
 	@Column(name = "cancel")

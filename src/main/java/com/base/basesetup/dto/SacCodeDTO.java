@@ -15,7 +15,6 @@ public class SacCodeDTO {
 	private String chapter;
 	private String product;
 	private String createdBy;
-	private String updatedBy;
 	private String cancelRemarks;
 	private boolean cancel;
 	private boolean active;

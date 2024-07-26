@@ -38,7 +38,6 @@ public class ReceiptReversalDTO {
 	private Long orgId;
 	private boolean active;
 	private String createdBy;
-	private String updatedBy;
 	private BigDecimal foxenGainOrLoss;
 	private BigDecimal roundOffAmount;
 	private BigDecimal totalSettled;

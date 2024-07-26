@@ -216,10 +216,10 @@ public class TransactionServiceImpl implements TransactionService {
 
 	@Autowired
 	ArApAdjustmentOffSetRepo arApAdjustmentOffSetRepo;
-	
+
 	@Autowired
 	ArApOffSetInvoiceDetailsRepo arApOffSetInvoiceDetailsRepo;
-	
+
 // TaxInvoice
 	@Override
 	public List<TaxInvoiceVO> getAllTaxInvoiceByOrgId(Long orgId) {
@@ -254,25 +254,11 @@ public class TransactionServiceImpl implements TransactionService {
 		if (ObjectUtils.isNotEmpty(taxInvoiceDTO.getId())) {
 			taxInvoiceVO = taxInvoiceRepo.findById(taxInvoiceDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid TaxInvoice details"));
+			taxInvoiceVO.setUpdatedBy(taxInvoiceDTO.getCreatedBy());
+		} else {
+			taxInvoiceVO.setUpdatedBy(taxInvoiceDTO.getCreatedBy());
+			taxInvoiceVO.setCreatedBy(taxInvoiceDTO.getCreatedBy());
 		}
-//		else {
-//			if (taxInvoiceRepo.existsByDocIdAndOrgId(taxInvoiceVO.getDocId(), taxInvoiceVO.getOrgId())) {
-//				throw new ApplicationException("The given doc id already exists.");
-//			}
-//			if (taxInvoiceRepo.existsByInvoiceNoAndOrgId(taxInvoiceVO.getInvoiceNo(), taxInvoiceVO.getOrgId())) {
-//				throw new ApplicationException("The given invoice number already exists.");
-//			}
-//		}
-//		if (ObjectUtils.isNotEmpty(taxInvoiceVO.getId())) {
-//			if (taxInvoiceRepo.existsByDocIdAndOrgIdAndId(taxInvoiceVO.getDocId(), taxInvoiceVO.getOrgId(),
-//					taxInvoiceVO.getId())) {
-//				throw new ApplicationException("The given doc id already exists.");
-//			}
-//			if (taxInvoiceRepo.existsByInvoiceNoAndOrgIdAndId(taxInvoiceVO.getInvoiceNo(), taxInvoiceVO.getOrgId(),
-//					taxInvoiceVO.getId())) {
-//				throw new ApplicationException("The given invoice number already exists.");
-//			}
-//		}
 
 		List<ChargerTaxInvoiceVO> chargerTaxInvoiceVOs = new ArrayList<>();
 		if (taxInvoiceDTO.getChargerTaxInvoiceDTO() != null) {
@@ -347,7 +333,6 @@ public class TransactionServiceImpl implements TransactionService {
 		taxInvoiceVO.setAddress(taxInvoiceDTO.getAddress());
 		taxInvoiceVO.setAddressType(taxInvoiceDTO.getAddressType());
 		taxInvoiceVO.setBillCurr(taxInvoiceDTO.getBillCurr());
-		taxInvoiceVO.setCreatedBy(taxInvoiceDTO.getCreatedBy());
 		taxInvoiceVO.setDueDate(taxInvoiceDTO.getDueDate());
 		taxInvoiceVO.setGSTType(taxInvoiceDTO.getGSTType());
 		taxInvoiceVO.setHeaderColumns(taxInvoiceDTO.getHeaderColumns());
@@ -359,7 +344,6 @@ public class TransactionServiceImpl implements TransactionService {
 		taxInvoiceVO.setRecipientGSTIN(taxInvoiceDTO.getRecipientGSTIN());
 		taxInvoiceVO.setSalesType(taxInvoiceDTO.getSalesType());
 		taxInvoiceVO.setStatus(taxInvoiceDTO.getStatus());
-		taxInvoiceVO.setUpdatedBy(taxInvoiceDTO.getUpdatedBy());
 		taxInvoiceVO.setDocDate(taxInvoiceDTO.getDocDate());
 		taxInvoiceVO.setInvoiceDate(taxInvoiceDTO.getInvoiceDate());
 		taxInvoiceVO.setAmountInwords(taxInvoiceDTO.getAmountInwords());
@@ -422,6 +406,7 @@ public class TransactionServiceImpl implements TransactionService {
 		if (ObjectUtils.isNotEmpty(irnCreditDTO.getId())) {
 			irnCreditVO = irnCreditRepo.findById(irnCreditDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid IrnCredit details"));
+			irnCreditVO.setUpdatedBy(irnCreditDTO.getCreatedBy());
 		} else {
 			if (irnCreditRepo.existsByDocIdAndOrgId(irnCreditVO.getDocId(), irnCreditVO.getOrgId())) {
 				throw new ApplicationException("The given doc id already exists.");
@@ -429,6 +414,8 @@ public class TransactionServiceImpl implements TransactionService {
 			if (irnCreditRepo.existsByInvoiceNoAndOrgId(irnCreditVO.getInvoiceNo(), irnCreditVO.getOrgId())) {
 				throw new ApplicationException("The given invoice number already exists.");
 			}
+			irnCreditVO.setUpdatedBy(irnCreditDTO.getCreatedBy());
+			irnCreditVO.setCreatedBy(irnCreditDTO.getCreatedBy());
 		}
 		if (ObjectUtils.isNotEmpty(irnCreditVO.getId())) {
 			if (irnCreditRepo.existsByDocIdAndOrgIdAndId(irnCreditVO.getDocId(), irnCreditVO.getOrgId(),
@@ -439,6 +426,7 @@ public class TransactionServiceImpl implements TransactionService {
 					irnCreditVO.getId())) {
 				throw new ApplicationException("The given invoice number already exists.");
 			}
+
 		}
 
 		List<ChargerIrnCreditVO> chargerIrnCreditVOs = new ArrayList<>();
@@ -471,7 +459,6 @@ public class TransactionServiceImpl implements TransactionService {
 				chargerIrnCreditVOs.add(chargerIrnCreditVO);
 			}
 		}
-
 
 		List<GstIrnCreditVO> gstIrnCreditVOs = new ArrayList<>();
 		if (irnCreditDTO.getGstIrnCreditDTO() != null) {
@@ -514,7 +501,6 @@ public class TransactionServiceImpl implements TransactionService {
 		irnCreditVO.setAddress(irnCreditDTO.getAddress());
 		irnCreditVO.setAddressType(irnCreditDTO.getAddressType());
 		irnCreditVO.setBillCurr(irnCreditDTO.getBillCurr());
-		irnCreditVO.setCreatedBy(irnCreditDTO.getCreatedBy());
 		irnCreditVO.setDueDate(irnCreditDTO.getDueDate());
 		irnCreditVO.setGSTType(irnCreditDTO.getGSTType());
 		irnCreditVO.setHeaderColumns(irnCreditDTO.getHeaderColumns());
@@ -526,7 +512,6 @@ public class TransactionServiceImpl implements TransactionService {
 		irnCreditVO.setRecipientGSTIN(irnCreditDTO.getRecipientGSTIN());
 		irnCreditVO.setSalesType(irnCreditDTO.getSalesType());
 		irnCreditVO.setStatus(irnCreditDTO.getStatus());
-		irnCreditVO.setUpdatedBy(irnCreditDTO.getUpdatedBy());
 		irnCreditVO.setDocDate(irnCreditDTO.getDocDate());
 		irnCreditVO.setInvoiceDate(irnCreditDTO.getInvoiceDate());
 		irnCreditVO.setAmountInwords(irnCreditDTO.getAmountInwords());
@@ -581,7 +566,12 @@ public class TransactionServiceImpl implements TransactionService {
 		if (ObjectUtils.isNotEmpty(dailyMonthlyExRatesDTO.getId())) {
 			dailyMonthlyExRatesVO = dailyMonthlyExRatesRepo.findById(dailyMonthlyExRatesDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid DailyMonthlyExRates details"));
+			dailyMonthlyExRatesVO.setUpdatedBy(dailyMonthlyExRatesDTO.getCreatedBy());
+		} else {
+			dailyMonthlyExRatesVO.setUpdatedBy(dailyMonthlyExRatesDTO.getCreatedBy());
+			dailyMonthlyExRatesVO.setCreatedBy(dailyMonthlyExRatesDTO.getCreatedBy());
 		}
+
 		List<DailyMonthlyExRatesDtlVO> dailyMonthlyExRatesDtlVOs = new ArrayList<>();
 		if (dailyMonthlyExRatesDTO.getDailyMonthlyExRatesDtlDTO() != null) {
 			for (DailyMonthlyExRatesDtlDTO dailyMonthlyExRatesDtlDTO : dailyMonthlyExRatesDTO
@@ -613,8 +603,6 @@ public class TransactionServiceImpl implements TransactionService {
 		dailyMonthlyExRatesVO.setMonth(dailyMonthlyExRatesDTO.getMonth());
 		dailyMonthlyExRatesVO.setActive(dailyMonthlyExRatesDTO.isActive());
 		dailyMonthlyExRatesVO.setOrgId(dailyMonthlyExRatesDTO.getOrgId());
-		dailyMonthlyExRatesVO.setCreatedBy(dailyMonthlyExRatesDTO.getCreatedBy());
-		dailyMonthlyExRatesVO.setUpdatedBy(dailyMonthlyExRatesDTO.getUpdatedBy());
 	}
 
 	@Override
@@ -656,25 +644,11 @@ public class TransactionServiceImpl implements TransactionService {
 		if (ObjectUtils.isNotEmpty(brsOpeningDTO.getId())) {
 			brsOpeningVO = brsOpeningRepo.findById(brsOpeningDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid BrsOpening details"));
+			brsOpeningVO.setUpdatedBy(brsOpeningDTO.getCreatedBy());
+		} else {
+			brsOpeningVO.setUpdatedBy(brsOpeningDTO.getCreatedBy());
+			brsOpeningVO.setCreatedBy(brsOpeningDTO.getCreatedBy());
 		}
-//		else {
-//			if (taxInvoiceRepo.existsByDocIdAndOrgId(taxInvoiceVO.getDocId(), taxInvoiceVO.getOrgId())) {
-//				throw new ApplicationException("The given doc id already exists.");
-//			}
-//			if (taxInvoiceRepo.existsByInvoiceNoAndOrgId(taxInvoiceVO.getInvoiceNo(), taxInvoiceVO.getOrgId())) {
-//				throw new ApplicationException("The given invoice number already exists.");
-//			}
-//		}
-//		if (ObjectUtils.isNotEmpty(taxInvoiceVO.getId())) {
-//			if (taxInvoiceRepo.existsByDocIdAndOrgIdAndId(taxInvoiceVO.getDocId(), taxInvoiceVO.getOrgId(),
-//					taxInvoiceVO.getId())) {
-//				throw new ApplicationException("The given doc id already exists.");
-//			}
-//			if (taxInvoiceRepo.existsByInvoiceNoAndOrgIdAndId(taxInvoiceVO.getInvoiceNo(), taxInvoiceVO.getOrgId(),
-//					taxInvoiceVO.getId())) {
-//				throw new ApplicationException("The given invoice number already exists.");
-//			}
-//		}
 
 		getBrsOpeningVOFromBrsOpeningDTO(brsOpeningDTO, brsOpeningVO);
 		return brsOpeningRepo.save(brsOpeningVO);
@@ -693,8 +667,6 @@ public class TransactionServiceImpl implements TransactionService {
 		brsOpeningVO.setReconcile(brsOpeningDTO.isReconcile());
 		brsOpeningVO.setOrgId(brsOpeningDTO.getOrgId());
 		brsOpeningVO.setActive(brsOpeningDTO.isActive());
-		brsOpeningVO.setUpdatedBy(brsOpeningDTO.getUpdatedBy());
-		brsOpeningVO.setCreatedBy(brsOpeningDTO.getCreatedBy());
 	}
 
 	@Override
@@ -736,25 +708,11 @@ public class TransactionServiceImpl implements TransactionService {
 		if (ObjectUtils.isNotEmpty(chartCostCenterDTO.getId())) {
 			chartCostCenterVO = chartCostCenterRepo.findById(chartCostCenterDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid ChartCostCenter details"));
+			chartCostCenterVO.setUpdatedBy(chartCostCenterDTO.getCreatedBy());
+		} else {
+			chartCostCenterVO.setUpdatedBy(chartCostCenterDTO.getCreatedBy());
+			chartCostCenterVO.setCreatedBy(chartCostCenterDTO.getCreatedBy());
 		}
-//			else {
-//				if (taxInvoiceRepo.existsByDocIdAndOrgId(taxInvoiceVO.getDocId(), taxInvoiceVO.getOrgId())) {
-//					throw new ApplicationException("The given doc id already exists.");
-//				}
-//				if (taxInvoiceRepo.existsByInvoiceNoAndOrgId(taxInvoiceVO.getInvoiceNo(), taxInvoiceVO.getOrgId())) {
-//					throw new ApplicationException("The given invoice number already exists.");
-//				}
-//			}
-//			if (ObjectUtils.isNotEmpty(taxInvoiceVO.getId())) {
-//				if (taxInvoiceRepo.existsByDocIdAndOrgIdAndId(taxInvoiceVO.getDocId(), taxInvoiceVO.getOrgId(),
-//						taxInvoiceVO.getId())) {
-//					throw new ApplicationException("The given doc id already exists.");
-//				}
-//				if (taxInvoiceRepo.existsByInvoiceNoAndOrgIdAndId(taxInvoiceVO.getInvoiceNo(), taxInvoiceVO.getOrgId(),
-//						taxInvoiceVO.getId())) {
-//					throw new ApplicationException("The given invoice number already exists.");
-//				}
-//			}
 
 		getChartCostCenterVOFromChartCostCenterDTO(chartCostCenterDTO, chartCostCenterVO);
 		return chartCostCenterRepo.save(chartCostCenterVO);
@@ -767,8 +725,6 @@ public class TransactionServiceImpl implements TransactionService {
 		chartCostCenterVO.setCredit(chartCostCenterDTO.getCredit());
 		chartCostCenterVO.setDebit(chartCostCenterDTO.getDebit());
 		chartCostCenterVO.setOrgId(chartCostCenterDTO.getOrgId());
-		chartCostCenterVO.setUpdatedBy(chartCostCenterDTO.getUpdatedBy());
-		chartCostCenterVO.setCreatedBy(chartCostCenterDTO.getCreatedBy());
 		chartCostCenterVO.setActive(chartCostCenterDTO.isActive());
 	}
 
@@ -811,25 +767,11 @@ public class TransactionServiceImpl implements TransactionService {
 		if (ObjectUtils.isNotEmpty(fundTransferDTO.getId())) {
 			fundTransferVO = fundTransferRepo.findById(fundTransferDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid FundTransfer details"));
+			fundTransferVO.setUpdatedBy(fundTransferDTO.getCreatedBy());
+		} else {
+			fundTransferVO.setUpdatedBy(fundTransferDTO.getCreatedBy());
+			fundTransferVO.setCreatedBy(fundTransferDTO.getCreatedBy());
 		}
-//			else {
-//				if (taxInvoiceRepo.existsByDocIdAndOrgId(taxInvoiceVO.getDocId(), taxInvoiceVO.getOrgId())) {
-//					throw new ApplicationException("The given doc id already exists.");
-//				}
-//				if (taxInvoiceRepo.existsByInvoiceNoAndOrgId(taxInvoiceVO.getInvoiceNo(), taxInvoiceVO.getOrgId())) {
-//					throw new ApplicationException("The given invoice number already exists.");
-//				}
-//			}
-//			if (ObjectUtils.isNotEmpty(taxInvoiceVO.getId())) {
-//				if (taxInvoiceRepo.existsByDocIdAndOrgIdAndId(taxInvoiceVO.getDocId(), taxInvoiceVO.getOrgId(),
-//						taxInvoiceVO.getId())) {
-//					throw new ApplicationException("The given doc id already exists.");
-//				}
-//				if (taxInvoiceRepo.existsByInvoiceNoAndOrgIdAndId(taxInvoiceVO.getInvoiceNo(), taxInvoiceVO.getOrgId(),
-//						taxInvoiceVO.getId())) {
-//					throw new ApplicationException("The given invoice number already exists.");
-//				}
-//			}
 
 		getFundTransferVOFromFundTransferDTO(fundTransferDTO, fundTransferVO);
 		return fundTransferRepo.save(fundTransferVO);
@@ -859,8 +801,6 @@ public class TransactionServiceImpl implements TransactionService {
 		fundTransferVO.setRemarks(fundTransferDTO.getRemarks());
 		fundTransferVO.setActive(fundTransferDTO.isActive());
 		fundTransferVO.setOrgId(fundTransferDTO.getOrgId());
-		fundTransferVO.setCreatedBy(fundTransferDTO.getCreatedBy());
-		fundTransferVO.setUpdatedBy(fundTransferDTO.getUpdatedBy());
 
 	}
 
@@ -904,25 +844,11 @@ public class TransactionServiceImpl implements TransactionService {
 		if (ObjectUtils.isNotEmpty(generalJournalDTO.getId())) {
 			generalJournalVO = generalJournalRepo.findById(generalJournalDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid GeneralJournal details"));
+			generalJournalVO.setUpdatedBy(generalJournalDTO.getCreatedBy());
+		} else {
+			generalJournalVO.setUpdatedBy(generalJournalDTO.getCreatedBy());
+			generalJournalVO.setCreatedBy(generalJournalDTO.getCreatedBy());
 		}
-//				else {
-//					if (taxInvoiceRepo.existsByDocIdAndOrgId(taxInvoiceVO.getDocId(), taxInvoiceVO.getOrgId())) {
-//						throw new ApplicationException("The given doc id already exists.");
-//					}
-//					if (taxInvoiceRepo.existsByInvoiceNoAndOrgId(taxInvoiceVO.getInvoiceNo(), taxInvoiceVO.getOrgId())) {
-//						throw new ApplicationException("The given invoice number already exists.");
-//					}
-//				}
-//				if (ObjectUtils.isNotEmpty(taxInvoiceVO.getId())) {
-//					if (taxInvoiceRepo.existsByDocIdAndOrgIdAndId(taxInvoiceVO.getDocId(), taxInvoiceVO.getOrgId(),
-//							taxInvoiceVO.getId())) {
-//						throw new ApplicationException("The given doc id already exists.");
-//					}
-//					if (taxInvoiceRepo.existsByInvoiceNoAndOrgIdAndId(taxInvoiceVO.getInvoiceNo(), taxInvoiceVO.getOrgId(),
-//							taxInvoiceVO.getId())) {
-//						throw new ApplicationException("The given invoice number already exists.");
-//					}
-//				}
 
 		List<ParticularsJournalVO> particularsJournalVOs = new ArrayList<>();
 		if (generalJournalDTO.getParticularsJournalDTO() != null) {
@@ -961,13 +887,11 @@ public class TransactionServiceImpl implements TransactionService {
 		generalJournalVO.setReverseOn(generalJournalDTO.getReverseOn());
 		generalJournalVO.setNarration(generalJournalDTO.getNarration());
 		generalJournalVO.setOrgId(generalJournalDTO.getOrgId());
-		generalJournalVO.setCreatedBy(generalJournalDTO.getCreatedBy());
-		generalJournalVO.setUpdatedBy(generalJournalDTO.getUpdatedBy());
 		generalJournalVO.setActive(generalJournalDTO.isActive());
 		generalJournalVO.setTotalCreditAmount(generalJournalDTO.getTotalCreditAmount());
 		generalJournalVO.setTotalDebitAmount(generalJournalDTO.getTotalDebitAmount());
 	}
-	
+
 	@Override
 	public List<GeneralJournalVO> getGeneralJournalByActive() {
 		return generalJournalRepo.findGeneralJournalByActive();
@@ -1008,25 +932,11 @@ public class TransactionServiceImpl implements TransactionService {
 		if (ObjectUtils.isNotEmpty(costInvoiceDTO.getId())) {
 			costInvoiceVO = costInvoiceRepo.findById(costInvoiceDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid CostInvoice details"));
+			costInvoiceVO.setUpdatedBy(costInvoiceDTO.getCreatedBy());
+		} else {
+			costInvoiceVO.setUpdatedBy(costInvoiceDTO.getCreatedBy());
+			costInvoiceVO.setCreatedBy(costInvoiceDTO.getCreatedBy());
 		}
-//			else {
-//				if (taxInvoiceRepo.existsByDocIdAndOrgId(taxInvoiceVO.getDocId(), taxInvoiceVO.getOrgId())) {
-//					throw new ApplicationException("The given doc id already exists.");
-//				}
-//				if (taxInvoiceRepo.existsByInvoiceNoAndOrgId(taxInvoiceVO.getInvoiceNo(), taxInvoiceVO.getOrgId())) {
-//					throw new ApplicationException("The given invoice number already exists.");
-//				}
-//			}
-//			if (ObjectUtils.isNotEmpty(taxInvoiceVO.getId())) {
-//				if (taxInvoiceRepo.existsByDocIdAndOrgIdAndId(taxInvoiceVO.getDocId(), taxInvoiceVO.getOrgId(),
-//						taxInvoiceVO.getId())) {
-//					throw new ApplicationException("The given doc id already exists.");
-//				}
-//				if (taxInvoiceRepo.existsByInvoiceNoAndOrgIdAndId(taxInvoiceVO.getInvoiceNo(), taxInvoiceVO.getOrgId(),
-//						taxInvoiceVO.getId())) {
-//					throw new ApplicationException("The given invoice number already exists.");
-//				}
-//			}
 
 		List<ChargerCostInvoiceVO> chargerCostInvoiceVOs = new ArrayList<>();
 		if (costInvoiceDTO.getChargerCostInvoiceDTO() != null) {
@@ -1118,8 +1028,6 @@ public class TransactionServiceImpl implements TransactionService {
 		costInvoiceVO.setJobStatus(costInvoiceDTO.getJobStatus());
 		costInvoiceVO.setOrgId(costInvoiceDTO.getOrgId());
 		costInvoiceVO.setActive(costInvoiceDTO.isActive());
-		costInvoiceVO.setUpdatedBy(costInvoiceDTO.getUpdatedBy());
-		costInvoiceVO.setCreatedBy(costInvoiceDTO.getCreatedBy());
 		costInvoiceVO.setBillCurrTotChargeAmt(costInvoiceDTO.getBillCurrTotChargeAmt());
 		costInvoiceVO.setBillCurrActBillAmt(costInvoiceDTO.getBillCurrActBillAmt());
 		costInvoiceVO.setBillCurrNetAmt(costInvoiceDTO.getBillCurrNetAmt());
@@ -1169,25 +1077,11 @@ public class TransactionServiceImpl implements TransactionService {
 		if (ObjectUtils.isNotEmpty(debitNoteDTO.getId())) {
 			debitNoteVO = debitNoteRepo.findById(debitNoteDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid DebitNote details"));
+			debitNoteVO.setUpdatedBy(debitNoteDTO.getCreatedBy());
+		} else {
+			debitNoteVO.setUpdatedBy(debitNoteDTO.getCreatedBy());
+			debitNoteVO.setCreatedBy(debitNoteDTO.getCreatedBy());
 		}
-//					else {
-//						if (taxInvoiceRepo.existsByDocIdAndOrgId(taxInvoiceVO.getDocId(), taxInvoiceVO.getOrgId())) {
-//							throw new ApplicationException("The given doc id already exists.");
-//						}
-//						if (taxInvoiceRepo.existsByInvoiceNoAndOrgId(taxInvoiceVO.getInvoiceNo(), taxInvoiceVO.getOrgId())) {
-//							throw new ApplicationException("The given invoice number already exists.");
-//						}
-//					}
-//					if (ObjectUtils.isNotEmpty(taxInvoiceVO.getId())) {
-//						if (taxInvoiceRepo.existsByDocIdAndOrgIdAndId(taxInvoiceVO.getDocId(), taxInvoiceVO.getOrgId(),
-//								taxInvoiceVO.getId())) {
-//							throw new ApplicationException("The given doc id already exists.");
-//						}
-//						if (taxInvoiceRepo.existsByInvoiceNoAndOrgIdAndId(taxInvoiceVO.getInvoiceNo(), taxInvoiceVO.getOrgId(),
-//								taxInvoiceVO.getId())) {
-//							throw new ApplicationException("The given invoice number already exists.");
-//						}
-//					}
 
 		List<ChargerDebitNoteVO> chargerDebitNoteVOs = new ArrayList<>();
 		if (debitNoteDTO.getChargerDebitNoteDTO() != null) {
@@ -1219,7 +1113,6 @@ public class TransactionServiceImpl implements TransactionService {
 				chargerDebitNoteVOs.add(chargerDebitNoteVO);
 			}
 		}
-
 
 		List<GstDebitNoteVO> gstDebitNoteVOs = new ArrayList<>();
 		if (debitNoteDTO.getGstDebitNoteDTO() != null) {
@@ -1304,8 +1197,6 @@ public class TransactionServiceImpl implements TransactionService {
 		debitNoteVO.setMode(debitNoteDTO.getMode());
 		debitNoteVO.setOrgId(debitNoteDTO.getOrgId());
 		debitNoteVO.setActive(debitNoteDTO.isActive());
-		debitNoteVO.setUpdatedBy(debitNoteDTO.getUpdatedBy());
-		debitNoteVO.setCreatedBy(debitNoteDTO.getCreatedBy());
 		debitNoteVO.setBillCurrTotChargeAmount(debitNoteDTO.getBillCurrTotChargeAmount());
 		debitNoteVO.setBillCurrTotGrossAmount(debitNoteDTO.getBillCurrTotGrossAmount());
 		debitNoteVO.setBillCurrNetAmount(debitNoteDTO.getBillCurrNetAmount());
@@ -1356,26 +1247,11 @@ public class TransactionServiceImpl implements TransactionService {
 		if (ObjectUtils.isNotEmpty(gstSalesVoucherDTO.getId())) {
 			gstSalesVoucherVO = gstSalesVoucherRepo.findById(gstSalesVoucherDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid GstSalesVoucher details"));
+			gstSalesVoucherVO.setUpdatedBy(gstSalesVoucherDTO.getCreatedBy());
+		} else {
+			gstSalesVoucherVO.setUpdatedBy(gstSalesVoucherDTO.getCreatedBy());
+			gstSalesVoucherVO.setCreatedBy(gstSalesVoucherDTO.getCreatedBy());
 		}
-//					else {
-//						if (taxInvoiceRepo.existsByDocIdAndOrgId(taxInvoiceVO.getDocId(), taxInvoiceVO.getOrgId())) {
-//							throw new ApplicationException("The given doc id already exists.");
-//						}
-//						if (taxInvoiceRepo.existsByInvoiceNoAndOrgId(taxInvoiceVO.getInvoiceNo(), taxInvoiceVO.getOrgId())) {
-//							throw new ApplicationException("The given invoice number already exists.");
-//						}
-//					}
-//					if (ObjectUtils.isNotEmpty(taxInvoiceVO.getId())) {
-//						if (taxInvoiceRepo.existsByDocIdAndOrgIdAndId(taxInvoiceVO.getDocId(), taxInvoiceVO.getOrgId(),
-//								taxInvoiceVO.getId())) {
-//							throw new ApplicationException("The given doc id already exists.");
-//						}
-//						if (taxInvoiceRepo.existsByInvoiceNoAndOrgIdAndId(taxInvoiceVO.getInvoiceNo(), taxInvoiceVO.getOrgId(),
-//								taxInvoiceVO.getId())) {
-//							throw new ApplicationException("The given invoice number already exists.");
-//						}
-//					}
-
 
 		List<ParticularsGstVoucherVO> particularsGstVoucherVOs = new ArrayList<>();
 		if (gstSalesVoucherDTO.getParticularsGstVoucherDTO() != null) {
@@ -1469,26 +1345,11 @@ public class TransactionServiceImpl implements TransactionService {
 		if (ObjectUtils.isNotEmpty(paymentVoucherDTO.getId())) {
 			paymentVoucherVO = paymentVoucherRepo.findById(paymentVoucherDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid PaymentVoucher details"));
+			paymentVoucherVO.setUpdatedBy(paymentVoucherDTO.getCreatedBy());
+		} else {
+			paymentVoucherVO.setUpdatedBy(paymentVoucherDTO.getCreatedBy());
+			paymentVoucherVO.setCreatedBy(paymentVoucherDTO.getCreatedBy());
 		}
-//					else {
-//						if (taxInvoiceRepo.existsByDocIdAndOrgId(taxInvoiceVO.getDocId(), taxInvoiceVO.getOrgId())) {
-//							throw new ApplicationException("The given doc id already exists.");
-//						}
-//						if (taxInvoiceRepo.existsByInvoiceNoAndOrgId(taxInvoiceVO.getInvoiceNo(), taxInvoiceVO.getOrgId())) {
-//							throw new ApplicationException("The given invoice number already exists.");
-//						}
-//					}
-//					if (ObjectUtils.isNotEmpty(taxInvoiceVO.getId())) {
-//						if (taxInvoiceRepo.existsByDocIdAndOrgIdAndId(taxInvoiceVO.getDocId(), taxInvoiceVO.getOrgId(),
-//								taxInvoiceVO.getId())) {
-//							throw new ApplicationException("The given doc id already exists.");
-//						}
-//						if (taxInvoiceRepo.existsByInvoiceNoAndOrgIdAndId(taxInvoiceVO.getInvoiceNo(), taxInvoiceVO.getOrgId(),
-//								taxInvoiceVO.getId())) {
-//							throw new ApplicationException("The given invoice number already exists.");
-//						}
-//					}
-
 
 		List<ParticularsPaymentVoucherVO> particularsPaymentVoucherVOs = new ArrayList<>();
 		if (paymentVoucherDTO.getParticularsPaymentVoucherDTO() != null) {
@@ -1578,7 +1439,12 @@ public class TransactionServiceImpl implements TransactionService {
 		if (ObjectUtils.isNotEmpty(arapDetailsDTO.getId())) {
 			arapDetailsVO = arapDetailsRepo.findById(arapDetailsDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid ARAP Details details"));
+			arapDetailsVO.setUpdatedBy(arapDetailsDTO.getCreatedBy());
+		} else {
+			arapDetailsVO.setUpdatedBy(arapDetailsDTO.getCreatedBy());
+			arapDetailsVO.setCreatedBy(arapDetailsDTO.getCreatedBy());
 		}
+
 		getArapDetailsVOFromArapDetailsDTO(arapDetailsDTO, arapDetailsVO);
 		return arapDetailsRepo.save(arapDetailsVO);
 	}
@@ -1620,8 +1486,6 @@ public class TransactionServiceImpl implements TransactionService {
 		arapDetailsVO.setHno(arapDetailsDTO.getHno());
 		arapDetailsVO.setOrgId(arapDetailsDTO.getOrgId());
 		arapDetailsVO.setActive(arapDetailsDTO.isActive());
-		arapDetailsVO.setCreatedBy(arapDetailsDTO.getCreatedBy());
-		arapDetailsVO.setUpdatedBy(arapDetailsDTO.getUpdatedBy());
 	}
 
 	@Override
@@ -1664,6 +1528,10 @@ public class TransactionServiceImpl implements TransactionService {
 		if (ObjectUtils.isNotEmpty(arapAdjustmentsDTO.getId())) {
 			arapAdjustmentsVO = arapAdjustmentsRepo.findById(arapAdjustmentsDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid ARAP adjustments details"));
+			arapAdjustmentsVO.setUpdatedBy(arapAdjustmentsDTO.getCreatedBy());
+		} else {
+			arapAdjustmentsVO.setUpdatedBy(arapAdjustmentsDTO.getCreatedBy());
+			arapAdjustmentsVO.setCreatedBy(arapAdjustmentsDTO.getCreatedBy());
 		}
 
 		getArapAdjustmentsVOFromArapAdjustmentsDTO(arapAdjustmentsDTO, arapAdjustmentsVO);
@@ -1701,8 +1569,6 @@ public class TransactionServiceImpl implements TransactionService {
 		arapAdjustmentsVO.setAexRate(arapAdjustmentsDTO.getAexRate());
 		arapAdjustmentsVO.setOrgId(arapAdjustmentsDTO.getOrgId());
 		arapAdjustmentsVO.setActive(arapAdjustmentsDTO.isActive());
-		arapAdjustmentsVO.setCreatedBy(arapAdjustmentsDTO.getCreatedBy());
-		arapAdjustmentsVO.setUpdatedBy(arapAdjustmentsDTO.getUpdatedBy());
 	}
 
 	@Override
@@ -1745,25 +1611,11 @@ public class TransactionServiceImpl implements TransactionService {
 		if (ObjectUtils.isNotEmpty(receiptReversalDTO.getId())) {
 			receiptReversalVO = receiptReversalRepo.findById(receiptReversalDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid ReceiptReversal details"));
+			receiptReversalVO.setUpdatedBy(receiptReversalDTO.getCreatedBy());
+		} else {
+			receiptReversalVO.setUpdatedBy(receiptReversalDTO.getCreatedBy());
+			receiptReversalVO.setCreatedBy(receiptReversalDTO.getCreatedBy());
 		}
-//				else {
-//					if (taxInvoiceRepo.existsByDocIdAndOrgId(taxInvoiceVO.getDocId(), taxInvoiceVO.getOrgId())) {
-//						throw new ApplicationException("The given doc id already exists.");
-//					}
-//					if (taxInvoiceRepo.existsByInvoiceNoAndOrgId(taxInvoiceVO.getInvoiceNo(), taxInvoiceVO.getOrgId())) {
-//						throw new ApplicationException("The given invoice number already exists.");
-//					}
-//				}
-//				if (ObjectUtils.isNotEmpty(taxInvoiceVO.getId())) {
-//					if (taxInvoiceRepo.existsByDocIdAndOrgIdAndId(taxInvoiceVO.getDocId(), taxInvoiceVO.getOrgId(),
-//							taxInvoiceVO.getId())) {
-//						throw new ApplicationException("The given doc id already exists.");
-//					}
-//					if (taxInvoiceRepo.existsByInvoiceNoAndOrgIdAndId(taxInvoiceVO.getInvoiceNo(), taxInvoiceVO.getOrgId(),
-//							taxInvoiceVO.getId())) {
-//						throw new ApplicationException("The given invoice number already exists.");
-//					}
-//				}
 
 		List<ReceiptInvoiceVO> receiptInvoiceVOs = new ArrayList<>();
 		if (receiptReversalDTO.getReceiptInvoiceDTO() != null) {
@@ -1814,7 +1666,6 @@ public class TransactionServiceImpl implements TransactionService {
 			}
 		}
 
-
 		getReceiptReversalVOFromReceiptReversalDTO(receiptReversalDTO, receiptReversalVO);
 		receiptReversalVO.setReceiptOtherAccountVO(receiptOtherAccountVOs);
 		receiptReversalVO.setReceiptInvoiceVO(receiptInvoiceVOs);
@@ -1857,8 +1708,6 @@ public class TransactionServiceImpl implements TransactionService {
 		receiptReversalVO.setOffSetStatus(receiptReversalDTO.getOffSetStatus());
 		receiptReversalVO.setOrgId(receiptReversalDTO.getOrgId());
 		receiptReversalVO.setActive(receiptReversalDTO.isActive());
-		receiptReversalVO.setCreatedBy(receiptReversalDTO.getCreatedBy());
-		receiptReversalVO.setUpdatedBy(receiptReversalDTO.getUpdatedBy());
 		receiptReversalVO.setFoxenGainOrLoss(receiptReversalDTO.getFoxenGainOrLoss());
 		receiptReversalVO.setRoundOffAmount(receiptReversalDTO.getRoundOffAmount());
 		receiptReversalVO.setTotalSettled(receiptReversalDTO.getTotalSettled());
@@ -1907,25 +1756,11 @@ public class TransactionServiceImpl implements TransactionService {
 		if (ObjectUtils.isNotEmpty(paymentReversalDTO.getId())) {
 			paymentReversalVO = paymentReversalRepo.findById(paymentReversalDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid PaymentReversal details"));
+			paymentReversalVO.setUpdatedBy(paymentReversalDTO.getCreatedBy());
+		} else {
+			paymentReversalVO.setUpdatedBy(paymentReversalDTO.getCreatedBy());
+			paymentReversalVO.setCreatedBy(paymentReversalDTO.getCreatedBy());
 		}
-//				else {
-//					if (taxInvoiceRepo.existsByDocIdAndOrgId(taxInvoiceVO.getDocId(), taxInvoiceVO.getOrgId())) {
-//						throw new ApplicationException("The given doc id already exists.");
-//					}
-//					if (taxInvoiceRepo.existsByInvoiceNoAndOrgId(taxInvoiceVO.getInvoiceNo(), taxInvoiceVO.getOrgId())) {
-//						throw new ApplicationException("The given invoice number already exists.");
-//					}
-//				}
-//				if (ObjectUtils.isNotEmpty(taxInvoiceVO.getId())) {
-//					if (taxInvoiceRepo.existsByDocIdAndOrgIdAndId(taxInvoiceVO.getDocId(), taxInvoiceVO.getOrgId(),
-//							taxInvoiceVO.getId())) {
-//						throw new ApplicationException("The given doc id already exists.");
-//					}
-//					if (taxInvoiceRepo.existsByInvoiceNoAndOrgIdAndId(taxInvoiceVO.getInvoiceNo(), taxInvoiceVO.getOrgId(),
-//							taxInvoiceVO.getId())) {
-//						throw new ApplicationException("The given invoice number already exists.");
-//					}
-//				}
 
 		List<PaymentInvoiceVO> paymentInvoiceVOs = new ArrayList<>();
 		if (paymentReversalDTO.getPaymentInvoiceDTO() != null) {
@@ -1976,7 +1811,6 @@ public class TransactionServiceImpl implements TransactionService {
 			}
 		}
 
-
 		getPaymentReversalVOFromPaymentReversalDTO(paymentReversalDTO, paymentReversalVO);
 		paymentReversalVO.setPaymentOtherAccountVO(paymentOtherAccountVOs);
 		paymentReversalVO.setPaymentInvoiceVO(paymentInvoiceVOs);
@@ -2021,8 +1855,6 @@ public class TransactionServiceImpl implements TransactionService {
 		paymentReversalVO.setOffSetStatus(paymentReversalDTO.getOffSetStatus());
 		paymentReversalVO.setOrgId(paymentReversalDTO.getOrgId());
 		paymentReversalVO.setActive(paymentReversalDTO.isActive());
-		paymentReversalVO.setCreatedBy(paymentReversalDTO.getCreatedBy());
-		paymentReversalVO.setUpdatedBy(paymentReversalDTO.getUpdatedBy());
 		paymentReversalVO.setFoxenGainOrLoss(paymentReversalDTO.getFoxenGainOrLoss());
 		paymentReversalVO.setRoundOffAmount(paymentReversalDTO.getRoundOffAmount());
 		paymentReversalVO.setTotalSettled(paymentReversalDTO.getTotalSettled());
@@ -2038,94 +1870,82 @@ public class TransactionServiceImpl implements TransactionService {
 
 	// ArApAdjustmentOffSet
 
-		@Override
-		public List<ArApAdjustmentOffSetVO> getAllArApAdjustmentOffSetByOrgId(Long orgId) {
-			List<ArApAdjustmentOffSetVO> arApAdjustmentOffSetVO = new ArrayList<>();
-			if (ObjectUtils.isNotEmpty(orgId)) {
-				LOGGER.info("Successfully Received ArApAdjustmentOffSet BY OrgId : {}", orgId);
-				arApAdjustmentOffSetVO = arApAdjustmentOffSetRepo.getAllArApAdjustmentOffSetByOrgId(orgId);
-			} else {
-				LOGGER.info("Successfully Received  ArApAdjustmentOffSet For All OrgId.");
-				arApAdjustmentOffSetVO = arApAdjustmentOffSetRepo.findAll();
-			}
-			return arApAdjustmentOffSetVO;
+	@Override
+	public List<ArApAdjustmentOffSetVO> getAllArApAdjustmentOffSetByOrgId(Long orgId) {
+		List<ArApAdjustmentOffSetVO> arApAdjustmentOffSetVO = new ArrayList<>();
+		if (ObjectUtils.isNotEmpty(orgId)) {
+			LOGGER.info("Successfully Received ArApAdjustmentOffSet BY OrgId : {}", orgId);
+			arApAdjustmentOffSetVO = arApAdjustmentOffSetRepo.getAllArApAdjustmentOffSetByOrgId(orgId);
+		} else {
+			LOGGER.info("Successfully Received  ArApAdjustmentOffSet For All OrgId.");
+			arApAdjustmentOffSetVO = arApAdjustmentOffSetRepo.findAll();
+		}
+		return arApAdjustmentOffSetVO;
+	}
+
+	@Override
+	public List<ArApAdjustmentOffSetVO> getAllArApAdjustmentOffSetById(Long id) {
+		List<ArApAdjustmentOffSetVO> arApAdjustmentOffSetVO = new ArrayList<>();
+		if (ObjectUtils.isNotEmpty(id)) {
+			LOGGER.info("Successfully Received ArApAdjustmentOffSet BY Id : {}", id);
+			arApAdjustmentOffSetVO = arApAdjustmentOffSetRepo.getAllArApAdjustmentOffSetById(id);
+		} else {
+			LOGGER.info("Successfully Received ArApAdjustmentOffSet For All Id.");
+			arApAdjustmentOffSetVO = arApAdjustmentOffSetRepo.findAll();
+		}
+		return arApAdjustmentOffSetVO;
+	}
+
+	@Override
+	public ArApAdjustmentOffSetVO updateCreateArApAdjustmentOffSet(
+			@Valid ArApAdjustmentOffSetDTO arApAdjustmentOffSetDTO) throws ApplicationException {
+		ArApAdjustmentOffSetVO arApAdjustmentOffSetVO = new ArApAdjustmentOffSetVO();
+		if (ObjectUtils.isNotEmpty(arApAdjustmentOffSetDTO.getId())) {
+			arApAdjustmentOffSetVO = arApAdjustmentOffSetRepo.findById(arApAdjustmentOffSetDTO.getId())
+					.orElseThrow(() -> new ApplicationException("Invalid ArApAdjustmentOffSet details"));
+			arApAdjustmentOffSetVO.setUpdatedBy(arApAdjustmentOffSetDTO.getCreatedBy());
+		} else {
+			arApAdjustmentOffSetVO.setUpdatedBy(arApAdjustmentOffSetDTO.getCreatedBy());
+			arApAdjustmentOffSetVO.setCreatedBy(arApAdjustmentOffSetDTO.getCreatedBy());
 		}
 
-		@Override
-		public List<ArApAdjustmentOffSetVO> getAllArApAdjustmentOffSetById(Long id) {
-			List<ArApAdjustmentOffSetVO> arApAdjustmentOffSetVO = new ArrayList<>();
-			if (ObjectUtils.isNotEmpty(id)) {
-				LOGGER.info("Successfully Received ArApAdjustmentOffSet BY Id : {}", id);
-				arApAdjustmentOffSetVO = arApAdjustmentOffSetRepo.getAllArApAdjustmentOffSetById(id);
-			} else {
-				LOGGER.info("Successfully Received ArApAdjustmentOffSet For All Id.");
-				arApAdjustmentOffSetVO = arApAdjustmentOffSetRepo.findAll();
-			}
-			return arApAdjustmentOffSetVO;
-		}
-
-		@Override
-		public ArApAdjustmentOffSetVO updateCreateArApAdjustmentOffSet(@Valid ArApAdjustmentOffSetDTO arApAdjustmentOffSetDTO)
-				throws ApplicationException {
-			ArApAdjustmentOffSetVO arApAdjustmentOffSetVO = new ArApAdjustmentOffSetVO();
-			if (ObjectUtils.isNotEmpty(arApAdjustmentOffSetDTO.getId())) {
-				arApAdjustmentOffSetVO = arApAdjustmentOffSetRepo.findById(arApAdjustmentOffSetDTO.getId())
-						.orElseThrow(() -> new ApplicationException("Invalid ArApAdjustmentOffSet details"));
-			}
-//					else {
-//						if (taxInvoiceRepo.existsByDocIdAndOrgId(taxInvoiceVO.getDocId(), taxInvoiceVO.getOrgId())) {
-//							throw new ApplicationException("The given doc id already exists.");
-//						}
-//						if (taxInvoiceRepo.existsByInvoiceNoAndOrgId(taxInvoiceVO.getInvoiceNo(), taxInvoiceVO.getOrgId())) {
-//							throw new ApplicationException("The given invoice number already exists.");
-//						}
-//					}
-//					if (ObjectUtils.isNotEmpty(taxInvoiceVO.getId())) {
-//						if (taxInvoiceRepo.existsByDocIdAndOrgIdAndId(taxInvoiceVO.getDocId(), taxInvoiceVO.getOrgId(),
-//								taxInvoiceVO.getId())) {
-//							throw new ApplicationException("The given doc id already exists.");
-//						}
-//						if (taxInvoiceRepo.existsByInvoiceNoAndOrgIdAndId(taxInvoiceVO.getInvoiceNo(), taxInvoiceVO.getOrgId(),
-//								taxInvoiceVO.getId())) {
-//							throw new ApplicationException("The given invoice number already exists.");
-//						}
-//					}
-
-			List<ArApOffSetInvoiceDetailsVO> arApOffSetInvoiceDetailsVOs = new ArrayList<>();
-			if (arApAdjustmentOffSetDTO.getArApOffSetInvoiceDetailsDTO() != null) {
-				for (ArApOffSetInvoiceDetailsDTO arApOffSetInvoiceDetailsDTO : arApAdjustmentOffSetDTO.getArApOffSetInvoiceDetailsDTO()) {
-					ArApOffSetInvoiceDetailsVO arApOffSetInvoiceDetailsVO;
-					if (arApOffSetInvoiceDetailsDTO.getId() != null && ObjectUtils.isNotEmpty(arApOffSetInvoiceDetailsDTO.getId())) {
-						arApOffSetInvoiceDetailsVO = arApOffSetInvoiceDetailsRepo.findById(arApOffSetInvoiceDetailsDTO.getId())
-								.orElse(new ArApOffSetInvoiceDetailsVO());
-					} else {
-						arApOffSetInvoiceDetailsVO = new ArApOffSetInvoiceDetailsVO();
-					}
-					arApOffSetInvoiceDetailsVO.setInvoiceNo(arApOffSetInvoiceDetailsDTO.getInvoiceNo());
-					arApOffSetInvoiceDetailsVO.setInvoiceDate(arApOffSetInvoiceDetailsDTO.getInvoiceDate());
-					arApOffSetInvoiceDetailsVO.setRefNo(arApOffSetInvoiceDetailsDTO.getRefNo());
-					arApOffSetInvoiceDetailsVO.setRefDate(arApOffSetInvoiceDetailsDTO.getRefDate());
-					arApOffSetInvoiceDetailsVO.setCurr(arApOffSetInvoiceDetailsDTO.getCurr());
-					arApOffSetInvoiceDetailsVO.setExRate(arApOffSetInvoiceDetailsDTO.getExRate());
-					arApOffSetInvoiceDetailsVO.setSetExRate(arApOffSetInvoiceDetailsDTO.getSetExRate());
-					arApOffSetInvoiceDetailsVO.setInvAmount(arApOffSetInvoiceDetailsDTO.getInvAmount());
-					arApOffSetInvoiceDetailsVO.setOutStanding(arApOffSetInvoiceDetailsDTO.getOutStanding());
-					arApOffSetInvoiceDetailsVO.setSettled(arApOffSetInvoiceDetailsDTO.getSettled());
-					arApOffSetInvoiceDetailsVO.setTnxSettled(arApOffSetInvoiceDetailsDTO.getTnxSettled());
-					arApOffSetInvoiceDetailsVO.setGainOrLoss(arApOffSetInvoiceDetailsDTO.getGainOrLoss());
-					arApOffSetInvoiceDetailsVO.setRemarks(arApOffSetInvoiceDetailsDTO.getRemarks());
-					arApOffSetInvoiceDetailsVO.setArapadjustmentoffsetVO(arApAdjustmentOffSetVO);
-					arApOffSetInvoiceDetailsVOs.add(arApOffSetInvoiceDetailsVO);
+		List<ArApOffSetInvoiceDetailsVO> arApOffSetInvoiceDetailsVOs = new ArrayList<>();
+		if (arApAdjustmentOffSetDTO.getArApOffSetInvoiceDetailsDTO() != null) {
+			for (ArApOffSetInvoiceDetailsDTO arApOffSetInvoiceDetailsDTO : arApAdjustmentOffSetDTO
+					.getArApOffSetInvoiceDetailsDTO()) {
+				ArApOffSetInvoiceDetailsVO arApOffSetInvoiceDetailsVO;
+				if (arApOffSetInvoiceDetailsDTO.getId() != null
+						&& ObjectUtils.isNotEmpty(arApOffSetInvoiceDetailsDTO.getId())) {
+					arApOffSetInvoiceDetailsVO = arApOffSetInvoiceDetailsRepo
+							.findById(arApOffSetInvoiceDetailsDTO.getId()).orElse(new ArApOffSetInvoiceDetailsVO());
+				} else {
+					arApOffSetInvoiceDetailsVO = new ArApOffSetInvoiceDetailsVO();
 				}
+				arApOffSetInvoiceDetailsVO.setInvoiceNo(arApOffSetInvoiceDetailsDTO.getInvoiceNo());
+				arApOffSetInvoiceDetailsVO.setInvoiceDate(arApOffSetInvoiceDetailsDTO.getInvoiceDate());
+				arApOffSetInvoiceDetailsVO.setRefNo(arApOffSetInvoiceDetailsDTO.getRefNo());
+				arApOffSetInvoiceDetailsVO.setRefDate(arApOffSetInvoiceDetailsDTO.getRefDate());
+				arApOffSetInvoiceDetailsVO.setCurr(arApOffSetInvoiceDetailsDTO.getCurr());
+				arApOffSetInvoiceDetailsVO.setExRate(arApOffSetInvoiceDetailsDTO.getExRate());
+				arApOffSetInvoiceDetailsVO.setSetExRate(arApOffSetInvoiceDetailsDTO.getSetExRate());
+				arApOffSetInvoiceDetailsVO.setInvAmount(arApOffSetInvoiceDetailsDTO.getInvAmount());
+				arApOffSetInvoiceDetailsVO.setOutStanding(arApOffSetInvoiceDetailsDTO.getOutStanding());
+				arApOffSetInvoiceDetailsVO.setSettled(arApOffSetInvoiceDetailsDTO.getSettled());
+				arApOffSetInvoiceDetailsVO.setTnxSettled(arApOffSetInvoiceDetailsDTO.getTnxSettled());
+				arApOffSetInvoiceDetailsVO.setGainOrLoss(arApOffSetInvoiceDetailsDTO.getGainOrLoss());
+				arApOffSetInvoiceDetailsVO.setRemarks(arApOffSetInvoiceDetailsDTO.getRemarks());
+				arApOffSetInvoiceDetailsVO.setArapadjustmentoffsetVO(arApAdjustmentOffSetVO);
+				arApOffSetInvoiceDetailsVOs.add(arApOffSetInvoiceDetailsVO);
 			}
-
-			getArApAdjustmentOffSetVOFromArApAdjustmentOffSetDTO(arApAdjustmentOffSetDTO, arApAdjustmentOffSetVO);
-			arApAdjustmentOffSetVO.setArApAdjustmentInvoiceDetailsVO(arApOffSetInvoiceDetailsVOs);
-			return arApAdjustmentOffSetRepo.save(arApAdjustmentOffSetVO);
 		}
 
-		private void getArApAdjustmentOffSetVOFromArApAdjustmentOffSetDTO(@Valid ArApAdjustmentOffSetDTO arApAdjustmentOffSetDTO,
-				ArApAdjustmentOffSetVO arApAdjustmentOffSetVO) {
+		getArApAdjustmentOffSetVOFromArApAdjustmentOffSetDTO(arApAdjustmentOffSetDTO, arApAdjustmentOffSetVO);
+		arApAdjustmentOffSetVO.setArApAdjustmentInvoiceDetailsVO(arApOffSetInvoiceDetailsVOs);
+		return arApAdjustmentOffSetRepo.save(arApAdjustmentOffSetVO);
+	}
+
+	private void getArApAdjustmentOffSetVOFromArApAdjustmentOffSetDTO(
+			@Valid ArApAdjustmentOffSetDTO arApAdjustmentOffSetDTO, ArApAdjustmentOffSetVO arApAdjustmentOffSetVO) {
 //					// Finyr
 //					int finyr = taxInvoiceRepo.findFinyr();
 //					// DocId
@@ -2136,31 +1956,29 @@ public class TransactionServiceImpl implements TransactionService {
 //					String invoiceNo = "AI" + finyr + "INV" + taxInvoiceRepo.findInvoiceNo();
 //					taxInvoiceVO.setInvoiceNo(invoiceNo);
 //					taxInvoiceRepo.nextSeqInvoice();
-			arApAdjustmentOffSetVO.setDocId(arApAdjustmentOffSetDTO.getDocId());
-			arApAdjustmentOffSetVO.setDocDate(arApAdjustmentOffSetDTO.getDocDate());
-			arApAdjustmentOffSetVO.setSubLedgerType(arApAdjustmentOffSetDTO.getSubLedgerType());
-			arApAdjustmentOffSetVO.setSubLedgerName(arApAdjustmentOffSetDTO.getSubLedgerName());
-			arApAdjustmentOffSetVO.setSubLedgerCode(arApAdjustmentOffSetDTO.getSubLedgerCode());
-			arApAdjustmentOffSetVO.setReceiptPaymentDocId(arApAdjustmentOffSetDTO.getReceiptPaymentDocId());
-			arApAdjustmentOffSetVO.setReceiptPaymentDocDate(arApAdjustmentOffSetDTO.getReceiptPaymentDocDate());
-			arApAdjustmentOffSetVO.setCurrency(arApAdjustmentOffSetDTO.getCurrency());
-			arApAdjustmentOffSetVO.setExRate(arApAdjustmentOffSetDTO.getExRate());
-			arApAdjustmentOffSetVO.setAmount(arApAdjustmentOffSetDTO.getAmount());
-			arApAdjustmentOffSetVO.setSupplierRefNo(arApAdjustmentOffSetDTO.getSupplierRefNo());
-			arApAdjustmentOffSetVO.setForexGainOrLoss(arApAdjustmentOffSetDTO.getForexGainOrLoss());
-			arApAdjustmentOffSetVO.setTotalSettled(arApAdjustmentOffSetDTO.getTotalSettled());
-			arApAdjustmentOffSetVO.setRoundOffAmount(arApAdjustmentOffSetDTO.getRoundOffAmount());
-			arApAdjustmentOffSetVO.setOnAccount(arApAdjustmentOffSetDTO.getOnAccount());
-			arApAdjustmentOffSetVO.setOrgId(arApAdjustmentOffSetDTO.getOrgId());
-			arApAdjustmentOffSetVO.setActive(arApAdjustmentOffSetDTO.isActive());
-			arApAdjustmentOffSetVO.setCreatedBy(arApAdjustmentOffSetDTO.getCreatedBy());
-			arApAdjustmentOffSetVO.setUpdatedBy(arApAdjustmentOffSetDTO.getUpdatedBy());
-			arApAdjustmentOffSetVO.setNarration(arApAdjustmentOffSetDTO.getNarration());
-		}
+		arApAdjustmentOffSetVO.setDocId(arApAdjustmentOffSetDTO.getDocId());
+		arApAdjustmentOffSetVO.setDocDate(arApAdjustmentOffSetDTO.getDocDate());
+		arApAdjustmentOffSetVO.setSubLedgerType(arApAdjustmentOffSetDTO.getSubLedgerType());
+		arApAdjustmentOffSetVO.setSubLedgerName(arApAdjustmentOffSetDTO.getSubLedgerName());
+		arApAdjustmentOffSetVO.setSubLedgerCode(arApAdjustmentOffSetDTO.getSubLedgerCode());
+		arApAdjustmentOffSetVO.setReceiptPaymentDocId(arApAdjustmentOffSetDTO.getReceiptPaymentDocId());
+		arApAdjustmentOffSetVO.setReceiptPaymentDocDate(arApAdjustmentOffSetDTO.getReceiptPaymentDocDate());
+		arApAdjustmentOffSetVO.setCurrency(arApAdjustmentOffSetDTO.getCurrency());
+		arApAdjustmentOffSetVO.setExRate(arApAdjustmentOffSetDTO.getExRate());
+		arApAdjustmentOffSetVO.setAmount(arApAdjustmentOffSetDTO.getAmount());
+		arApAdjustmentOffSetVO.setSupplierRefNo(arApAdjustmentOffSetDTO.getSupplierRefNo());
+		arApAdjustmentOffSetVO.setForexGainOrLoss(arApAdjustmentOffSetDTO.getForexGainOrLoss());
+		arApAdjustmentOffSetVO.setTotalSettled(arApAdjustmentOffSetDTO.getTotalSettled());
+		arApAdjustmentOffSetVO.setRoundOffAmount(arApAdjustmentOffSetDTO.getRoundOffAmount());
+		arApAdjustmentOffSetVO.setOnAccount(arApAdjustmentOffSetDTO.getOnAccount());
+		arApAdjustmentOffSetVO.setOrgId(arApAdjustmentOffSetDTO.getOrgId());
+		arApAdjustmentOffSetVO.setActive(arApAdjustmentOffSetDTO.isActive());
+		arApAdjustmentOffSetVO.setNarration(arApAdjustmentOffSetDTO.getNarration());
+	}
 
-		@Override
-		public List<ArApAdjustmentOffSetVO> getArApAdjustmentOffSetByActive() {
-			return arApAdjustmentOffSetRepo.findArApAdjustmentOffSetByActive();
-		}
+	@Override
+	public List<ArApAdjustmentOffSetVO> getArApAdjustmentOffSetByActive() {
+		return arApAdjustmentOffSetRepo.findArApAdjustmentOffSetByActive();
+	}
 
 }

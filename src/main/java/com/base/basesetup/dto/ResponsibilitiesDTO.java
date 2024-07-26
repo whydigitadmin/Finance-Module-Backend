@@ -16,7 +16,6 @@ public class ResponsibilitiesDTO {
 	private boolean active;
 	private Long orgId;
 	private String createdBy;
-	private String updateBy;	
 	
 	private List<ScreenDTO> screenDTO;
 }

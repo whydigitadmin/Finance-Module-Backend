@@ -21,7 +21,6 @@ public class ChequeBookDTO {
 	private Long orgId;
 	private boolean active;
 	private String createdBy;
-	private String updatedBy;
 	
 	List<ChequeBookDetailsDTO> chequeBookDetailsDTO;
 }

@@ -28,7 +28,6 @@ public class CompanyDTO {
 	private String employeeCode;
 	private String password;
 	private String createdBy;
-	private String updatedBy;
 	private boolean active;
 	private Long orgId;
 	

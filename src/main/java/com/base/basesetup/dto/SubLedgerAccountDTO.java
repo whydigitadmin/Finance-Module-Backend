@@ -25,5 +25,4 @@ public class SubLedgerAccountDTO {
 	private Long orgId;
 	private boolean active;
 	private String createdBy;
-	private String updatedBy;
 }

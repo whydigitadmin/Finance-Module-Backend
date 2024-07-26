@@ -40,7 +40,6 @@ public class DebitNoteDTO {
 	private String mode;
 	private Long orgId;
 	private boolean active;
-	private String updatedBy;
 	private String createdBy;
 	private String billCurrTotChargeAmount;
 	private String billCurrTotGrossAmount;

@@ -21,7 +21,6 @@ public class TaxMasterDTO {
 	private String gst;
 	private Long gstSlab;
 	private String createdBy;
-	private String updatedBy;
 	private String cancelRemarks;
 	private boolean cancel;
 	private boolean active;

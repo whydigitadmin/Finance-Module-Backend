@@ -15,7 +15,6 @@ public class ListOfValuesDTO {
 	private String listDescription;
 	private Long orgId;
 	private String createdBy;
-	private String updatedBy;
 	private boolean active;
 		
 	private List<ListOfValues1DTO> ListOfValues1DTO;

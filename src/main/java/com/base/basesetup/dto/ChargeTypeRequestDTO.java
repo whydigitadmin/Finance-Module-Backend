@@ -39,5 +39,4 @@ public class ChargeTypeRequestDTO {
 	private boolean active;
 	private Long orgId;
 	private Long createdBy;
-	private Long updatedBy;
 }

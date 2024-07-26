@@ -21,6 +21,7 @@ public class PaymentVoucherDTO {
 	private BigDecimal exRate;
 	private LocalDateTime docDate;
 	private String remarks;
+	private String createdBy;
 	private BigDecimal totalDebitAmount;
 	private BigDecimal totalCreditAmount;
 

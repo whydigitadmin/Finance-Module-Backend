@@ -14,6 +14,5 @@ public class RoleMasterDTO {
 	private boolean active;
 	private Long orgId;
 	private String createdBy;
-	private String updatedBy;
 	
 }

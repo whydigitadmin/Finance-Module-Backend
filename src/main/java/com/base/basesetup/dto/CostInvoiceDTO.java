@@ -41,7 +41,6 @@ public class CostInvoiceDTO {
 	private String jobStatus;
 	private Long orgId;
 	private boolean active;
-	private String updatedBy;
 	private String createdBy;
 	private BigDecimal billCurrTotChargeAmt;
 	private BigDecimal billCurrActBillAmt;

@@ -14,31 +14,18 @@ import lombok.NoArgsConstructor;
 public class AccountDTO {
 
 	private Long id;
-
 	private Long orgId;
-
 	private String accountGroup;
-
 	private String branchLocation;
-
 	private String accountType;
-
 	private String groupName;
-
 	private String accountCode;
-
 	private String accountName;
-
 	private String currency;
-
 	private String category;
-
 	private boolean block;
-
 	private boolean isItcApplicable;
-
 	private boolean active;
-
 	private String companyName;
 	private String aType;
 	private String aCategory;
@@ -48,6 +35,8 @@ public class AccountDTO {
 	private String bp;
 	private String groupCode;
 	private String gst;
+	private String createdBy;
+	
 
 	private List<Account1DTO> account1DTO;
 

@@ -32,7 +32,6 @@ public class TaxInvoiceDTO {
 	private String salesType;
 	private Long orgId;
 	private boolean active;
-	private String updatedBy;
 	private String createdBy;
 	private LocalDateTime docDate;
 	private LocalDateTime invoiceDate;

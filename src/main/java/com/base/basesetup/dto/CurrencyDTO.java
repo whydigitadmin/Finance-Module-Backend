@@ -21,5 +21,4 @@ public class CurrencyDTO {
 	private boolean active;
 	private String baseCurrency;
 	private String createdBy;
-	private String updatedBy;
 }

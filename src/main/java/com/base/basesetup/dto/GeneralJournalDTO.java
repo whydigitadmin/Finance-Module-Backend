@@ -29,7 +29,6 @@ public class GeneralJournalDTO {
 	private Long orgId;
 	private boolean active;
 	private String createdBy;
-	private String updatedBy;
 	private BigDecimal totalCreditAmount;
 	private BigDecimal totalDebitAmount;
 

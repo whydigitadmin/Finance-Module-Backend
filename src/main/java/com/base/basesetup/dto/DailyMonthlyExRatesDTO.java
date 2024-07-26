@@ -19,7 +19,6 @@ public class DailyMonthlyExRatesDTO {
 	private Long orgId;
 	private String userId;	
 	private String createdBy;
-	private String updatedBy;
 
 	List<DailyMonthlyExRatesDtlDTO> dailyMonthlyExRatesDtlDTO;
 }

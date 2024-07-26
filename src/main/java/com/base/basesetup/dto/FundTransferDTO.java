@@ -36,5 +36,4 @@ public class FundTransferDTO {
 	private boolean active;
 	private Long orgId;
 	private String createdBy;
-	private String updatedBy;
 }

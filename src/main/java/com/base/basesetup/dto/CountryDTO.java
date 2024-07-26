@@ -16,4 +16,5 @@ public class CountryDTO {
 	private Long orgId;
 	private String userId;
 	private boolean active;
+	private String createdBy;
 }
