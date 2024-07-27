@@ -21,6 +21,7 @@ import com.base.basesetup.dto.BranchAccessDTO;
 import com.base.basesetup.dto.ChangePasswordFormDTO;
 import com.base.basesetup.dto.CreateUserFormDTO;
 import com.base.basesetup.dto.LoginFormDTO;
+import com.base.basesetup.dto.RefreshTokenDTO;
 import com.base.basesetup.dto.ResetPasswordFormDTO;
 import com.base.basesetup.dto.SignUpFormDTO;
 import com.base.basesetup.dto.UserResponseDTO;
@@ -34,6 +35,7 @@ import com.base.basesetup.entity.UserVO;
 import com.base.basesetup.exception.ApplicationException;
 import com.base.basesetup.repo.BranchAccessRepo;
 import com.base.basesetup.repo.GlobalParameterRepo;
+import com.base.basesetup.repo.TokenRepo;
 import com.base.basesetup.repo.UserActionRepo;
 import com.base.basesetup.repo.UserRepo;
 import com.base.basesetup.repo.UserRoleRepo;
@@ -62,6 +64,9 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	UserRoleRepo userRoleRepo;
 
+	@Autowired
+	TokenRepo tokenRepo;
+	
 	@Autowired
 	BranchAccessRepo branchAccessRepo;
 
@@ -449,4 +454,23 @@ public class UserServiceImpl implements UserService {
 
 		return userRepo.findByOrgId(orgId);
 	}
+	
+	@Override
+	public RefreshTokenDTO getRefreshToken(String userName, String tokenId) throws ApplicationException {
+		UserVO userVO = userRepo.findByUserName(userName);
+		RefreshTokenDTO refreshTokenDTO = null;
+		if (ObjectUtils.isEmpty(userVO)) {
+			throw new ApplicationException(UserConstants.ERRROR_MSG_USER_INFORMATION_NOT_FOUND);
+		}
+		TokenVO tokenVO = tokenRepo.findById(tokenId).orElseThrow(() -> new ApplicationException("Invalid Token Id."));
+		if (tokenVO.getExpDate().compareTo(new Date()) > 0) {
+			tokenVO = tokenProvider.createRefreshToken(tokenVO, userVO);
+			refreshTokenDTO = RefreshTokenDTO.builder().token(tokenVO.getToken()).tokenId(tokenVO.getId()).build();
+		} else {
+			tokenRepo.delete(tokenVO);
+			throw new ApplicationException(UserConstants.REFRESH_TOKEN_EXPIRED_MESSAGE);
+		}
+		return refreshTokenDTO;
+	}
+
 }

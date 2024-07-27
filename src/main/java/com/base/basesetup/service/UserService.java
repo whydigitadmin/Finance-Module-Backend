@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import com.base.basesetup.dto.ChangePasswordFormDTO;
 import com.base.basesetup.dto.CreateUserFormDTO;
 import com.base.basesetup.dto.LoginFormDTO;
+import com.base.basesetup.dto.RefreshTokenDTO;
 import com.base.basesetup.dto.ResetPasswordFormDTO;
 import com.base.basesetup.dto.SignUpFormDTO;
 import com.base.basesetup.dto.UserResponseDTO;
@@ -38,4 +39,5 @@ public interface UserService {
 
 	public List<UserVO> getUserByOrgId(Long orgId);
 
+	public RefreshTokenDTO getRefreshToken(String userName, String tokenId) throws ApplicationException;
 }

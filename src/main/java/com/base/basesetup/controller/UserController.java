@@ -35,6 +35,7 @@ import com.base.basesetup.common.UserConstants;
 import com.base.basesetup.dto.ChangePasswordFormDTO;
 import com.base.basesetup.dto.CreateUserFormDTO;
 import com.base.basesetup.dto.LoginFormDTO;
+import com.base.basesetup.dto.RefreshTokenDTO;
 import com.base.basesetup.dto.ResetPasswordFormDTO;
 import com.base.basesetup.dto.ResponseDTO;
 import com.base.basesetup.dto.SignUpFormDTO;
@@ -275,6 +276,32 @@ public class UserController extends BaseController {
 		} else {
 			errorMsg = "User not found for orgID: " + orgId;
 			responseDTO = createServiceResponseError(responseObjectsMap, "User not found", errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+	}
+	
+	@GetMapping("/getRefreshToken")
+	public ResponseEntity<ResponseDTO> getRefreshToken(@RequestParam String userName, @RequestParam String tokenId) {
+		String methodName = "getRefreshToken()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		RefreshTokenDTO refreshTokenDTO = new RefreshTokenDTO();
+		try {
+			refreshTokenDTO = userService.getRefreshToken(userName, tokenId);
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME_WITH_USER_NAME, methodName, userName, errorMsg);
+		}
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, UserConstants.REFRESH_TOKEN_SUCCESS_MESSAGE);
+			responseObjectsMap.put(CommonConstant.REFRESH_TOKEN, refreshTokenDTO);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap, UserConstants.REFRESH_TOKEN_FAILED_MESSAGE,
+					errorMsg);
 		}
 		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
 		return ResponseEntity.ok().body(responseDTO);
