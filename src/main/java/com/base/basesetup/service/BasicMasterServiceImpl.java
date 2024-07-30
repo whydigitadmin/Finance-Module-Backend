@@ -129,8 +129,10 @@ public class BasicMasterServiceImpl implements BasicMasterService {
 	@Override
 	public CurrencyVO updateCreateCurrency(@Valid CurrencyDTO currencyDTO) throws Exception {
 		CurrencyVO currencyVO = new CurrencyVO();
+		boolean isUpdate = false;
 
 		if (ObjectUtils.isNotEmpty(currencyDTO.getId())) {
+			isUpdate = true;
 			currencyVO = currencyRepo.findById(currencyDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid Currency details"));
 			currencyVO.setUpdatedBy(currencyDTO.getCreatedBy());
@@ -146,7 +148,7 @@ public class BasicMasterServiceImpl implements BasicMasterService {
 			currencyVO.setCreatedBy(currencyDTO.getCreatedBy());
 		}
 		// Check for duplicates when updating a record
-		if (ObjectUtils.isNotEmpty(currencyDTO.getId())) {
+		if (isUpdate) {
 			CurrencyVO currency = currencyRepo.findById(currencyDTO.getId()).orElse(null);
 			
 			if (!currency.getCurrency().equals(currencyDTO.getCurrency())) {
@@ -215,7 +217,9 @@ public class BasicMasterServiceImpl implements BasicMasterService {
 	@Override
 	public CompanyVO updateCreateCompany(@Valid CompanyDTO companyDTO) throws Exception {
 		CompanyVO companyVO = new CompanyVO();
+		boolean isUpdate = false;
 		if (ObjectUtils.isNotEmpty(companyDTO.getId())) {
+			isUpdate=true;
 			companyVO = companyRepo.findById(companyDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid Company Details"));
 			companyVO.setUpdatedBy(companyDTO.getCreatedBy());
@@ -231,7 +235,7 @@ public class BasicMasterServiceImpl implements BasicMasterService {
 			companyVO.setCreatedBy(companyDTO.getCreatedBy());
 		}
 			// update check
-			if (ObjectUtils.isNotEmpty(companyDTO.getId())) {
+			if (isUpdate) {
 				CompanyVO company = companyRepo.findById(companyDTO.getId()).orElse(null);
 				if (!company.getCompanyCode().equals(companyDTO.getCompanyCode())) {
 					if (companyRepo.existsByCompanyCodeAndOrgId(companyDTO.getCompanyCode(), companyDTO.getOrgId())) {
@@ -348,7 +352,9 @@ public class BasicMasterServiceImpl implements BasicMasterService {
 	@Override
 	public EmployeeVO updateCreateEmployee(@Valid EmployeeDTO employeeDTO) throws Exception {
 		EmployeeVO employeeVO = new EmployeeVO();
+		boolean isUpdate = false;
 		if (ObjectUtils.isNotEmpty(employeeDTO.getId())) {
+			isUpdate = true;
 			employeeVO = employeeRepo.findById(employeeDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid Employee Details"));
 			employeeVO.setUpdatedBy(employeeDTO.getCreatedBy());
@@ -362,7 +368,7 @@ public class BasicMasterServiceImpl implements BasicMasterService {
 		}
 
 		// update check
-		if (ObjectUtils.isNotEmpty(employeeDTO.getId())) {
+		if (isUpdate) {
 			EmployeeVO employee = employeeRepo.findById(employeeDTO.getId()).orElse(null);
 			if (!employee.getEmployeeCode().equalsIgnoreCase(employeeDTO.getEmployeeCode())) {
 				if (employeeRepo.existsByEmployeeCodeAndOrgId(employeeDTO.getEmployeeCode(), employeeDTO.getOrgId())) {
@@ -527,7 +533,9 @@ public class BasicMasterServiceImpl implements BasicMasterService {
 	@Override
 	public StateVO updateCreateState(@Valid StateDTO stateDTO) throws ApplicationException {
 		StateVO stateVO = new StateVO();
+		boolean isUpdate = false;
 		if (ObjectUtils.isNotEmpty(stateDTO.getId())) {
+			isUpdate = true;
 			stateVO = stateRepo.findById(stateDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid State Details"));
 			stateVO.setUpdatedBy(stateDTO.getCreatedBy());
@@ -543,7 +551,7 @@ public class BasicMasterServiceImpl implements BasicMasterService {
 			stateVO.setCreatedBy(stateDTO.getCreatedBy());
 		}
 		// update check
-		if (ObjectUtils.isNotEmpty(stateDTO.getId())) {
+		if (isUpdate) {
 			StateVO state = stateRepo.findById(stateDTO.getId()).orElse(null);
 			if (!state.getStateCode().equalsIgnoreCase(stateDTO.getStateCode())) {
 				if (stateRepo.existsByStateCodeAndOrgId(stateDTO.getStateCode(), stateDTO.getOrgId())) {
@@ -614,7 +622,9 @@ public class BasicMasterServiceImpl implements BasicMasterService {
 	@Override
 	public CityVO updateCreateCity(@Valid CityDTO cityDTO) throws ApplicationException {
 		CityVO cityVO = new CityVO();
+		boolean isUpdate = false;
 		if (ObjectUtils.isNotEmpty(cityDTO.getId())) {
+			isUpdate = true;
 			cityVO = cityRepo.findById(cityDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid City Details"));
 			cityVO.setUpdatedBy(cityDTO.getCreatedBy());
@@ -631,7 +641,7 @@ public class BasicMasterServiceImpl implements BasicMasterService {
 		}
 
 		// update check
-		if (ObjectUtils.isNotEmpty(cityDTO.getId())) {
+		if (isUpdate) {
 			CityVO city = cityRepo.findById(cityDTO.getId()).orElse(null);
 			if (!city.getCityName().equalsIgnoreCase(cityDTO.getCityName())) {
 				if (cityRepo.existsByCityNameAndOrgId(cityDTO.getCityName(), cityDTO.getOrgId())) {
@@ -734,7 +744,9 @@ public class BasicMasterServiceImpl implements BasicMasterService {
 	@Override
 	public BranchVO updateCreateBranch(@Valid BranchDTO branchDTO) throws ApplicationException {
 		BranchVO branchVO = new BranchVO();
+		boolean isUpdate = false;
 		if (ObjectUtils.isNotEmpty(branchDTO.getId())) {
+			isUpdate = true;
 			branchVO = branchRepo.findById(branchDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid Branch Details"));
 			branchVO.setUpdatedBy(branchDTO.getCreatedBy());
@@ -750,7 +762,7 @@ public class BasicMasterServiceImpl implements BasicMasterService {
 			branchVO.setCreatedBy(branchDTO.getCreatedBy());
 		}
 		// update check
-		if (ObjectUtils.isNotEmpty(branchDTO.getId())) {
+		if (isUpdate) {
 			BranchVO branch = branchRepo.findById(branchDTO.getId()).orElse(null);
 			if (!branch.getBranchCode().equalsIgnoreCase(branchDTO.getBranchCode())) {
 				if (branchRepo.existsByBranchCodeAndOrgId(branchDTO.getBranchCode(), branchDTO.getOrgId())) {
@@ -825,7 +837,9 @@ public class BasicMasterServiceImpl implements BasicMasterService {
 	@Override
 	public RoleMasterVO updateCreateRole(@Valid RoleMasterDTO roleMasterDTO) throws ApplicationException {
 		RoleMasterVO roleMasterVO = new RoleMasterVO();
+		boolean isUpdate = false;
 		if (ObjectUtils.isNotEmpty(roleMasterDTO.getId())) {
+			isUpdate = true;
 			roleMasterVO = roleRepo.findById(roleMasterDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid Role Details"));
 			roleMasterVO.setUpdatedBy(roleMasterDTO.getCreatedBy());
@@ -839,7 +853,7 @@ public class BasicMasterServiceImpl implements BasicMasterService {
 		}
 
 		// update check
-		if (ObjectUtils.isNotEmpty(roleMasterDTO.getId())) {
+		if (isUpdate) {
 			RoleMasterVO role = roleRepo.findById(roleMasterDTO.getId()).orElse(null);
 			if (!role.getRole().equalsIgnoreCase(roleMasterDTO.getRole())) {
 				if (roleRepo.existsByRoleAndOrgId(roleMasterDTO.getRole(), roleMasterDTO.getOrgId())) {
@@ -893,9 +907,10 @@ public class BasicMasterServiceImpl implements BasicMasterService {
 	@Override
 	public ResponsibilitiesVO updateCreateResponsibilities(ResponsibilitiesDTO responsibilitiesDTO)
 			throws ApplicationException {
+		boolean isUpdate = false;
 		ResponsibilitiesVO responsibilitiesVO = new ResponsibilitiesVO();
-		if (ObjectUtils.isNotEmpty(responsibilitiesDTO.getId()))
-		{
+		if (ObjectUtils.isNotEmpty(responsibilitiesDTO.getId())){
+			isUpdate = true;
 			responsibilitiesVO = responsibilitiesRepo.findById(responsibilitiesDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid Responsibilities details"));
 			responsibilitiesVO.setUpdatedBy(responsibilitiesDTO.getCreatedBy());

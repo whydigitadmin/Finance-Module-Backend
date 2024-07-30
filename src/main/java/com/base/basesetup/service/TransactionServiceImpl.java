@@ -999,7 +999,7 @@ public class TransactionServiceImpl implements TransactionService {
 //			taxInvoiceRepo.nextSeq();
 //			// InvoiceNo
 //			String invoiceNo = "AI" + finyr + "INV" + taxInvoiceRepo.findInvoiceNo();
-//			taxInvoiceVO.setInvoiceNo(invoiceNo);
+//			taxInvoiceVO.setInvoiceNo(invoiceNo);	
 //			taxInvoiceRepo.nextSeqInvoice();
 		costInvoiceVO.setMode(costInvoiceDTO.getMode());
 		costInvoiceVO.setProduct(costInvoiceDTO.getProduct());

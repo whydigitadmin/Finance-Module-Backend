@@ -126,18 +126,22 @@ public class BasicMasterController extends BaseController {
 		try {
 			CurrencyVO currencyVO = basicMasterService.updateCreateCurrency(currencyDTO);
 			if (currencyVO != null) {
-				responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "Currency updated successfully");
+				boolean isUpdate = currencyDTO.getId() != null;
+				responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+						isUpdate ? "Currency updated successfully" : "Currency created successfully");
 				responseObjectsMap.put("currencyVO", currencyVO);
-
 				responseDTO = createServiceResponse(responseObjectsMap);
 			} else {
-				errorMsg = "Currency not found for ID: " + currencyDTO.getId();
-				responseDTO = createServiceResponseError(responseObjectsMap, "Currency update failed", errorMsg);
+				boolean isUpdate = currencyDTO.getId() != null;
+				errorMsg = isUpdate ? "Currency not found for ID: " + currencyDTO.getId() : "Country creation failed";
+				responseDTO = createServiceResponseError(responseObjectsMap,
+						isUpdate ? "Currency update failed" : "country creation failed", errorMsg);
 			}
 		} catch (Exception e) {
 			errorMsg = e.getMessage();
+			boolean isUpdate = currencyDTO.getId() != null;
 			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
-			responseDTO = createServiceResponseError(responseObjectsMap, "Currency update failed", errorMsg);
+			responseDTO = createServiceResponseError(responseObjectsMap,isUpdate? "Currency update failed" : "Currency creation failed	", errorMsg);
 		}
 		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
 		return ResponseEntity.ok().body(responseDTO);
@@ -225,28 +229,31 @@ public class BasicMasterController extends BaseController {
 
 	@PutMapping("/updateCreateCompany")
 	public ResponseEntity<ResponseDTO> updateCreateCompany(@Valid @RequestBody CompanyDTO companyDTO) {
-		String methodName = "updateCreateCompany()";
-		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
-		String errorMsg = null;
-		Map<String, Object> responseObjectsMap = new HashMap<>();
-		ResponseDTO responseDTO = null;
-		try {
-			CompanyVO companyVO = basicMasterService.updateCreateCompany(companyDTO);
-			if (companyVO != null) {
-				responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "Company updated successfully");
-				responseObjectsMap.put("companyVO", companyVO);
-				responseDTO = createServiceResponse(responseObjectsMap);
-			} else {
-				errorMsg = "Company not found for ID: " + companyDTO.getId();
-				responseDTO = createServiceResponseError(responseObjectsMap, "Company update failed", errorMsg);
-			}
-		} catch (Exception e) {
-			errorMsg = e.getMessage();
-			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
-			responseDTO = createServiceResponseError(responseObjectsMap, "Company update failed", errorMsg);
-		}
-		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
-		return ResponseEntity.ok().body(responseDTO);
+	    String methodName = "updateCreateCompany()";
+	    LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+	    String errorMsg = null;
+	    Map<String, Object> responseObjectsMap = new HashMap<>();
+	    ResponseDTO responseDTO = null;
+	    try {
+	        CompanyVO companyVO = basicMasterService.updateCreateCompany(companyDTO);
+	        if (companyVO != null) {
+	            boolean isUpdate = companyDTO.getId() != null;
+	            responseObjectsMap.put(CommonConstant.STRING_MESSAGE, isUpdate ? "Company updated successfully" : "Company created successfully");
+	            responseObjectsMap.put("companyVO", companyVO);
+	            responseDTO = createServiceResponse(responseObjectsMap);
+	        } else {
+	            boolean isUpdate = companyDTO.getId() != null;
+	            errorMsg = isUpdate ? "Company not found for ID: " + companyDTO.getId() : "Company creation failed";
+	            responseDTO = createServiceResponseError(responseObjectsMap, isUpdate ? "Company update failed" : "Company creation failed", errorMsg);
+	        }
+	    } catch (Exception e) {
+	        errorMsg = e.getMessage();
+	        boolean isUpdate = companyDTO.getId() != null;
+	        LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+	        responseDTO = createServiceResponseError(responseObjectsMap, isUpdate ? "Company update failed" : "Company creation failed", errorMsg);
+	    }
+	    LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+	    return ResponseEntity.ok().body(responseDTO);
 	}
 
 	@GetMapping("/getCompanyByActive")
@@ -349,29 +356,33 @@ public class BasicMasterController extends BaseController {
 
 	@PutMapping("/updateCreateEmployee")
 	public ResponseEntity<ResponseDTO> updateCreateEmployee(@Valid @RequestBody EmployeeDTO employeeDTO) {
-		String methodName = "updateCreateEmployee()";
-		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
-		String errorMsg = null;
-		Map<String, Object> responseObjectsMap = new HashMap<>();
-		ResponseDTO responseDTO = null;
-		try {
-			EmployeeVO employeeVO = basicMasterService.updateCreateEmployee(employeeDTO);
-			if (employeeVO != null) {
-				responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "Employee updated successfully");
-				responseObjectsMap.put("employeeVO", employeeVO);
-				responseDTO = createServiceResponse(responseObjectsMap);
-			} else {
-				errorMsg = "Employee not found for ID: " + employeeDTO.getId();
-				responseDTO = createServiceResponseError(responseObjectsMap, "Employee update failed", errorMsg);
-			}
-		} catch (Exception e) {
-			errorMsg = e.getMessage();
-			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
-			responseDTO = createServiceResponseError(responseObjectsMap, "Employee update failed", errorMsg);
-		}
-		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
-		return ResponseEntity.ok().body(responseDTO);
+	    String methodName = "updateCreateEmployee()";
+	    LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+	    String errorMsg = null;
+	    Map<String, Object> responseObjectsMap = new HashMap<>();
+	    ResponseDTO responseDTO = null;
+	    try {
+	        EmployeeVO employeeVO = basicMasterService.updateCreateEmployee(employeeDTO);
+	        if (employeeVO != null) {
+	            boolean isUpdate = employeeDTO.getId() != null;
+	            responseObjectsMap.put(CommonConstant.STRING_MESSAGE, isUpdate ? "Employee updated successfully" : "Employee created successfully");
+	            responseObjectsMap.put("employeeVO", employeeVO);
+	            responseDTO = createServiceResponse(responseObjectsMap);
+	        } else {
+	            boolean isUpdate = employeeDTO.getId() != null;
+	            errorMsg = isUpdate ? "Employee not found for ID: " + employeeDTO.getId() : "Employee creation failed";
+	            responseDTO = createServiceResponseError(responseObjectsMap, isUpdate ? "Employee update failed" : "Employee creation failed", errorMsg);
+	        }
+	    } catch (Exception e) {
+	        errorMsg = e.getMessage();
+	        boolean isUpdate = employeeDTO.getId() != null;
+	        LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+	        responseDTO = createServiceResponseError(responseObjectsMap, isUpdate ? "Employee update failed" : "Employee creation failed", errorMsg);
+	    }
+	    LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+	    return ResponseEntity.ok().body(responseDTO);
 	}
+
 
 	@GetMapping("/getEmployeeByActive")
 	public ResponseEntity<ResponseDTO> getEmployeeByActive() {
@@ -456,29 +467,33 @@ public class BasicMasterController extends BaseController {
 
 	@PutMapping("/updateCreateCountry")
 	public ResponseEntity<ResponseDTO> updateCreateCountry(@Valid @RequestBody CountryDTO countryDTO) {
-		String methodName = "updateCreateCountry()";
-		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
-		String errorMsg = null;
-		Map<String, Object> responseObjectsMap = new HashMap<>();
-		ResponseDTO responseDTO = null;
-		try {
-			CountryVO countryVO = basicMasterService.updateCreateCountry(countryDTO);
-			if (countryVO != null) {
-				responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "Country updated successfully");
-				responseObjectsMap.put("countryVO", countryVO);
-				responseDTO = createServiceResponse(responseObjectsMap);
-			} else {
-				errorMsg = "Country not found for ID: " + countryDTO.getId();
-				responseDTO = createServiceResponseError(responseObjectsMap, "Country update failed", errorMsg);
-			}
-		} catch (Exception e) {
-			errorMsg = e.getMessage();
-			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
-			responseDTO = createServiceResponseError(responseObjectsMap, "Country update failed", errorMsg);
-		}
-		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
-		return ResponseEntity.ok().body(responseDTO);
+	    String methodName = "updateCreateCountry()";
+	    LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+	    String errorMsg = null;
+	    Map<String, Object> responseObjectsMap = new HashMap<>();
+	    ResponseDTO responseDTO = null;
+	    try {
+	        CountryVO countryVO = basicMasterService.updateCreateCountry(countryDTO);
+	        if (countryVO != null) {
+	            boolean isUpdate = countryDTO.getId() != null;
+	            responseObjectsMap.put(CommonConstant.STRING_MESSAGE, isUpdate ? "Country updated successfully" : "Country created successfully");
+	            responseObjectsMap.put("countryVO", countryVO);
+	            responseDTO = createServiceResponse(responseObjectsMap);
+	        } else {
+	            boolean isUpdate = countryDTO.getId() != null;
+	            errorMsg = isUpdate ? "Country not found for ID: " + countryDTO.getId() : "Country creation failed";
+	            responseDTO = createServiceResponseError(responseObjectsMap, isUpdate ? "Country update failed" : "Country creation failed", errorMsg);
+	        }
+	    } catch (Exception e) {
+	        errorMsg = e.getMessage();
+	        boolean isUpdate = countryDTO.getId() != null;
+	        LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+	        responseDTO = createServiceResponseError(responseObjectsMap, isUpdate ? "Country update failed" : "Country creation failed", errorMsg);
+	    }
+	    LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+	    return ResponseEntity.ok().body(responseDTO);
 	}
+
 
 	@GetMapping("/getCountryByActive")
 	public ResponseEntity<ResponseDTO> getCountryByActive() {
@@ -615,29 +630,33 @@ public class BasicMasterController extends BaseController {
 
 	@PutMapping("/updateCreateState")
 	public ResponseEntity<ResponseDTO> updateCreateState(@Valid @RequestBody StateDTO stateDTO) {
-		String methodName = "updateCreateState()";
-		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
-		String errorMsg = null;
-		Map<String, Object> responseObjectsMap = new HashMap<>();
-		ResponseDTO responseDTO = null;
-		try {
-			StateVO stateVO = basicMasterService.updateCreateState(stateDTO);
-			if (stateVO != null) {
-				responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "State updated successfully");
-				responseObjectsMap.put("stateVO", stateVO);
-				responseDTO = createServiceResponse(responseObjectsMap);
-			} else {
-				errorMsg = "State not found for ID: " + stateDTO.getId();
-				responseDTO = createServiceResponseError(responseObjectsMap, "State update failed", errorMsg);
-			}
-		} catch (Exception e) {
-			errorMsg = e.getMessage();
-			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
-			responseDTO = createServiceResponseError(responseObjectsMap, "State update failed", errorMsg);
-		}
-		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
-		return ResponseEntity.ok().body(responseDTO);
+	    String methodName = "updateCreateState()";
+	    LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+	    String errorMsg = null;
+	    Map<String, Object> responseObjectsMap = new HashMap<>();
+	    ResponseDTO responseDTO = null;
+	    try {
+	        StateVO stateVO = basicMasterService.updateCreateState(stateDTO);
+	        if (stateVO != null) {
+	            boolean isUpdate = stateDTO.getId() != null;
+	            responseObjectsMap.put(CommonConstant.STRING_MESSAGE, isUpdate ? "State updated successfully" : "State created successfully");
+	            responseObjectsMap.put("stateVO", stateVO);
+	            responseDTO = createServiceResponse(responseObjectsMap);
+	        } else {
+	            boolean isUpdate = stateDTO.getId() != null;
+	            errorMsg = isUpdate ? "State not found for ID: " + stateDTO.getId() : "State creation failed";
+	            responseDTO = createServiceResponseError(responseObjectsMap, isUpdate ? "State update failed" : "State creation failed", errorMsg);
+	        }
+	    } catch (Exception e) {
+	        errorMsg = e.getMessage();
+	        boolean isUpdate = stateDTO.getId() != null;
+	        LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+	        responseDTO = createServiceResponseError(responseObjectsMap, isUpdate ? "State update failed" : "State creation failed", errorMsg);
+	    }
+	    LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+	    return ResponseEntity.ok().body(responseDTO);
 	}
+
 
 	// City
 	@GetMapping("/getCityById")
@@ -722,29 +741,33 @@ public class BasicMasterController extends BaseController {
 
 	@PutMapping("/updateCreateCity")
 	public ResponseEntity<ResponseDTO> updateCreateCity(@Valid @RequestBody CityDTO cityDTO) {
-		String methodName = "updateCreateCity()";
-		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
-		String errorMsg = null;
-		Map<String, Object> responseObjectsMap = new HashMap<>();
-		ResponseDTO responseDTO = null;
-		try {
-			CityVO cityVO = basicMasterService.updateCreateCity(cityDTO);
-			if (cityVO != null) {
-				responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "City updated successfully");
-				responseObjectsMap.put("cityVO", cityVO);
-				responseDTO = createServiceResponse(responseObjectsMap);
-			} else {
-				errorMsg = "City not found for ID: " + cityDTO.getId();
-				responseDTO = createServiceResponseError(responseObjectsMap, "City update failed", errorMsg);
-			}
-		} catch (Exception e) {
-			errorMsg = e.getMessage();
-			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
-			responseDTO = createServiceResponseError(responseObjectsMap, "City update failed", errorMsg);
-		}
-		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
-		return ResponseEntity.ok().body(responseDTO);
+	    String methodName = "updateCreateCity()";
+	    LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+	    String errorMsg = null;
+	    Map<String, Object> responseObjectsMap = new HashMap<>();
+	    ResponseDTO responseDTO = null;
+	    try {
+	        CityVO cityVO = basicMasterService.updateCreateCity(cityDTO);
+	        if (cityVO != null) {
+	            boolean isUpdate = cityDTO.getId() != null;
+	            responseObjectsMap.put(CommonConstant.STRING_MESSAGE, isUpdate ? "City updated successfully" : "City created successfully");
+	            responseObjectsMap.put("cityVO", cityVO);
+	            responseDTO = createServiceResponse(responseObjectsMap);
+	        } else {
+	            boolean isUpdate = cityDTO.getId() != null;
+	            errorMsg = isUpdate ? "City not found for ID: " + cityDTO.getId() : "City creation failed";
+	            responseDTO = createServiceResponseError(responseObjectsMap, isUpdate ? "City update failed" : "City creation failed", errorMsg);
+	        }
+	    } catch (Exception e) {
+	        errorMsg = e.getMessage();
+	        boolean isUpdate = cityDTO.getId() != null;
+	        LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+	        responseDTO = createServiceResponseError(responseObjectsMap, isUpdate ? "City update failed" : "City creation failed", errorMsg);
+	    }
+	    LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+	    return ResponseEntity.ok().body(responseDTO);
 	}
+
 
 	@GetMapping("/getCityByActive")
 	public ResponseEntity<ResponseDTO> getCityByActive() {
@@ -931,28 +954,31 @@ public class BasicMasterController extends BaseController {
 
 	@PutMapping("/updateCreateBranch")
 	public ResponseEntity<ResponseDTO> updateCreateBranch(@Valid @RequestBody BranchDTO branchDTO) {
-		String methodName = "updateCreateBranch()";
-		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
-		String errorMsg = null;
-		Map<String, Object> responseObjectsMap = new HashMap<>();
-		ResponseDTO responseDTO = null;
-		try {
-			BranchVO branchVO = basicMasterService.updateCreateBranch(branchDTO);
-			if (branchVO != null) {
-				responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "Branch updated successfully");
-				responseObjectsMap.put("branchVO", branchVO);
-				responseDTO = createServiceResponse(responseObjectsMap);
-			} else {
-				errorMsg = "Branch not found for ID: " + branchDTO.getId();
-				responseDTO = createServiceResponseError(responseObjectsMap, "Branch update failed", errorMsg);
-			}
-		} catch (Exception e) {
-			errorMsg = e.getMessage();
-			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
-			responseDTO = createServiceResponseError(responseObjectsMap, "Branch update failed", errorMsg);
-		}
-		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
-		return ResponseEntity.ok().body(responseDTO);
+	    String methodName = "updateCreateBranch()";
+	    LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+	    String errorMsg = null;
+	    Map<String, Object> responseObjectsMap = new HashMap<>();
+	    ResponseDTO responseDTO = null;
+	    try {
+	        BranchVO branchVO = basicMasterService.updateCreateBranch(branchDTO);
+	        if (branchVO != null) {
+	            boolean isUpdate = branchDTO.getId() != null;
+	            responseObjectsMap.put(CommonConstant.STRING_MESSAGE, isUpdate ? "Branch updated successfully" : "Branch created successfully");
+	            responseObjectsMap.put("branchVO", branchVO);
+	            responseDTO = createServiceResponse(responseObjectsMap);
+	        } else {
+	            boolean isUpdate = branchDTO.getId() != null;
+	            errorMsg = isUpdate ? "Branch not found for ID: " + branchDTO.getId() : "Branch creation failed";
+	            responseDTO = createServiceResponseError(responseObjectsMap, isUpdate ? "Branch update failed" : "Branch creation failed", errorMsg);
+	        }
+	    } catch (Exception e) {
+	        errorMsg = e.getMessage();
+	        boolean isUpdate = branchDTO.getId() != null;
+	        LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+	        responseDTO = createServiceResponseError(responseObjectsMap, isUpdate ? "Branch update failed" : "Branch creation failed", errorMsg);
+	    }
+	    LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+	    return ResponseEntity.ok().body(responseDTO);
 	}
 
 	@GetMapping("/getBranchByActive")
@@ -1037,29 +1063,33 @@ public class BasicMasterController extends BaseController {
 
 	@PutMapping("/updateCreateRoleMaster")
 	public ResponseEntity<ResponseDTO> updateCreateRole(@Valid @RequestBody RoleMasterDTO roleDTO) {
-		String methodName = "updateCreateRole()";
-		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
-		String errorMsg = null;
-		Map<String, Object> responseObjectsMap = new HashMap<>();
-		ResponseDTO responseDTO = null;
-		try {
-			RoleMasterVO roleVO = basicMasterService.updateCreateRole(roleDTO);
-			if (roleVO != null) {
-				responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "Role updated successfully");
-				responseObjectsMap.put("roleVO", roleVO);
-				responseDTO = createServiceResponse(responseObjectsMap);
-			} else {
-				errorMsg = "Role not found for ID: " + roleDTO.getId();
-				responseDTO = createServiceResponseError(responseObjectsMap, "Role update failed", errorMsg);
-			}
-		} catch (Exception e) {
-			errorMsg = e.getMessage();
-			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
-			responseDTO = createServiceResponseError(responseObjectsMap, "Role update failed", errorMsg);
-		}
-		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
-		return ResponseEntity.ok().body(responseDTO);
+	    String methodName = "updateCreateRole()";
+	    LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+	    String errorMsg = null;
+	    Map<String, Object> responseObjectsMap = new HashMap<>();
+	    ResponseDTO responseDTO = null;
+	    try {
+	        RoleMasterVO roleVO = basicMasterService.updateCreateRole(roleDTO);
+	        if (roleVO != null) {
+	            boolean isUpdate = roleDTO.getId() != null;
+	            responseObjectsMap.put(CommonConstant.STRING_MESSAGE, isUpdate ? "Role updated successfully" : "Role created successfully");
+	            responseObjectsMap.put("roleVO", roleVO);
+	            responseDTO = createServiceResponse(responseObjectsMap);
+	        } else {
+	            boolean isUpdate = roleDTO.getId() != null;
+	            errorMsg = isUpdate ? "Role not found for ID: " + roleDTO.getId() : "Role creation failed";
+	            responseDTO = createServiceResponseError(responseObjectsMap, isUpdate ? "Role update failed" : "Role creation failed", errorMsg);
+	        }
+	    } catch (Exception e) {
+	        errorMsg = e.getMessage();
+	        boolean isUpdate = roleDTO.getId() != null;
+	        LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+	        responseDTO = createServiceResponseError(responseObjectsMap, isUpdate ? "Role update failed" : "Role creation failed", errorMsg);
+	    }
+	    LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+	    return ResponseEntity.ok().body(responseDTO);
 	}
+
 
 	@GetMapping("/getRoleMasterByActive")
 	public ResponseEntity<ResponseDTO> getRoleByActive() {
@@ -1145,32 +1175,38 @@ public class BasicMasterController extends BaseController {
 
 	@PutMapping("/updateCreateResponsibilities")
 	public ResponseEntity<ResponseDTO> updateCreateResponsibilities(
-			@Valid @RequestBody ResponsibilitiesDTO responsibilitiesDTO) {
-		String methodName = "updateCreateResponsibilities()";
-		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
-		String errorMsg = null;
-		Map<String, Object> responseObjectsMap = new HashMap<>();
-		ResponseDTO responseDTO = null;
-		try {
-			ResponsibilitiesVO responsibilitiesVO = basicMasterService
-					.updateCreateResponsibilities(responsibilitiesDTO);
-			if (responsibilitiesVO != null) {
-				responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "Responsibilities updated successfully");
-				responseObjectsMap.put("responsibilitiesVO", responsibilitiesVO);
-				responseDTO = createServiceResponse(responseObjectsMap);
-			} else {
-				errorMsg = "Responsibilities not found for ID: " + responsibilitiesDTO.getId();
-				responseDTO = createServiceResponseError(responseObjectsMap, "Responsibilities update failed",
-						errorMsg);
-			}
-		} catch (Exception e) {
-			errorMsg = e.getMessage();
-			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
-			responseDTO = createServiceResponseError(responseObjectsMap, "Responsibilities update failed", errorMsg);
-		}
-		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
-		return ResponseEntity.ok().body(responseDTO);
+	        @Valid @RequestBody ResponsibilitiesDTO responsibilitiesDTO) {
+	    String methodName = "updateCreateResponsibilities()";
+	    LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+	    String errorMsg = null;
+	    Map<String, Object> responseObjectsMap = new HashMap<>();
+	    ResponseDTO responseDTO = null;
+	    try {
+	        ResponsibilitiesVO responsibilitiesVO = basicMasterService.updateCreateResponsibilities(responsibilitiesDTO);
+	        if (responsibilitiesVO != null) {
+	            boolean isUpdate = responsibilitiesDTO.getId() != null;
+	            responseObjectsMap.put(CommonConstant.STRING_MESSAGE, 
+	                isUpdate ? "Responsibilities updated successfully" : "Responsibilities created successfully");
+	            responseObjectsMap.put("responsibilitiesVO", responsibilitiesVO);
+	            responseDTO = createServiceResponse(responseObjectsMap);
+	        } else {
+	            boolean isUpdate = responsibilitiesDTO.getId() != null;
+	            errorMsg = isUpdate ? "Responsibilities not found for ID: " + responsibilitiesDTO.getId() 
+	                                : "Responsibilities creation failed";
+	            responseDTO = createServiceResponseError(responseObjectsMap, 
+	                isUpdate ? "Responsibilities update failed" : "Responsibilities creation failed", errorMsg);
+	        }
+	    } catch (Exception e) {
+	        errorMsg = e.getMessage();
+	        boolean isUpdate = responsibilitiesDTO.getId() != null;
+	        LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+	        responseDTO = createServiceResponseError(responseObjectsMap, 
+	            isUpdate ? "Responsibilities update failed" : "Responsibilities creation failed", errorMsg);
+	    }
+	    LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+	    return ResponseEntity.ok().body(responseDTO);
 	}
+
 
 	@GetMapping("/getResponsibilitiesByActive")
 	public ResponseEntity<ResponseDTO> getResponsibilitiesByActive() {
