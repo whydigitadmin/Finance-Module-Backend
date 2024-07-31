@@ -172,8 +172,9 @@ public class MasterServiceImpl implements MasterService {
 	@Override
 	public SetTaxRateVO updateCreateSetTaxRate(@Valid SetTaxRateDTO setTaxRateDTO) throws Exception {
 		SetTaxRateVO setTaxRateVO = new SetTaxRateVO();
-
+		boolean isUpdate = false;
 		if (ObjectUtils.isNotEmpty(setTaxRateDTO.getId())) {
+			isUpdate = true;
 			setTaxRateVO = setTaxRateRepo.findById(setTaxRateDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid SetTaxRate details"));
 			setTaxRateVO.setUpdatedBy(setTaxRateDTO.getCreatedBy());
@@ -228,7 +229,9 @@ public class MasterServiceImpl implements MasterService {
 	@Override
 	public TaxMasterVO updateCreateTaxMaster(@Valid TaxMasterDTO taxMasterDTO) throws ApplicationException {
 		TaxMasterVO taxMasterVO = new TaxMasterVO();
+		boolean isUpdate = false;
 		if (ObjectUtils.isNotEmpty(taxMasterDTO.getId())) {
+			isUpdate = true;
 			taxMasterVO = taxMasterRepo.findById(taxMasterDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid TaxMaster details"));
 			taxMasterVO.setUpdatedBy(taxMasterDTO.getCreatedBy());
@@ -340,7 +343,9 @@ public class MasterServiceImpl implements MasterService {
 	@Override
 	public TcsMasterVO updateCreateTcsMaster(@Valid TcsMasterDTO tcsMasterDTO) throws ApplicationException {
 		TcsMasterVO tcsMasterVO = new TcsMasterVO();
+		boolean isUpdate = false;
 		if (ObjectUtils.isNotEmpty(tcsMasterDTO.getId())) {
+			isUpdate = true;
 			tcsMasterVO = tcsMasterRepo.findById(tcsMasterDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid Tcs Master details"));
 			tcsMasterVO.setUpdatedBy(tcsMasterDTO.getCreatedBy());
@@ -354,7 +359,7 @@ public class MasterServiceImpl implements MasterService {
 			tcsMasterVO.setUpdatedBy(tcsMasterDTO.getCreatedBy());
 			tcsMasterVO.setCreatedBy(tcsMasterDTO.getCreatedBy());
 		}
-		if (ObjectUtils.isNotEmpty(tcsMasterDTO.getId())) {
+		if (isUpdate) {
 			TcsMasterVO tcsMaster = tcsMasterRepo.findById(tcsMasterDTO.getId()).orElse(null);
 			if (!tcsMaster.getSection().equals(tcsMasterDTO.getSection())) {
 				if (tcsMasterRepo.existsBySectionAndOrgId(tcsMasterDTO.getSection(), tcsMasterDTO.getOrgId())) {
@@ -443,7 +448,9 @@ public class MasterServiceImpl implements MasterService {
 	@Override
 	public TdsMasterVO updateCreateTdsMaster(@Valid TdsMasterDTO tdsMasterDTO) throws ApplicationException {
 		TdsMasterVO tdsMasterVO = new TdsMasterVO();
+		boolean isUpdate = false;
 		if (ObjectUtils.isNotEmpty(tdsMasterDTO.getId())) {
+			isUpdate = true;
 			tdsMasterVO = tdsMasterRepo.findById(tdsMasterDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid Tds Master details"));
 			tdsMasterVO.setUpdatedBy(tdsMasterDTO.getCreatedBy());
@@ -458,7 +465,7 @@ public class MasterServiceImpl implements MasterService {
 			tdsMasterVO.setCreatedBy(tdsMasterDTO.getCreatedBy());
 		}
 
-		if (ObjectUtils.isNotEmpty(tdsMasterDTO.getId())) {
+		if (isUpdate) {
 			TdsMasterVO tdsMaster = tdsMasterRepo.findById(tdsMasterDTO.getId()).orElse(null);
 			if (!tdsMaster.getSection().equalsIgnoreCase(tdsMasterDTO.getSection())) {
 				if (tdsMasterRepo.existsBySectionAndOrgId(tdsMasterDTO.getSection(), tdsMasterDTO.getOrgId())) {
@@ -549,7 +556,9 @@ public class MasterServiceImpl implements MasterService {
 	@Override
 	public AccountVO updateCreateAccount(@Valid AccountDTO accountDTO) throws ApplicationException {
 		AccountVO accountVO = new AccountVO();
+		boolean isUpdate = false;
 		if (ObjectUtils.isNotEmpty(accountDTO.getId())) {
+			isUpdate = true;
 			accountVO = accountRepo.findById(accountDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid account details"));
 			accountVO.setUpdatedBy(accountDTO.getCreatedBy());
@@ -563,7 +572,7 @@ public class MasterServiceImpl implements MasterService {
 			accountVO.setUpdatedBy(accountDTO.getCreatedBy());
 			accountVO.setCreatedBy(accountDTO.getCreatedBy());
 		}
-		if (ObjectUtils.isNotEmpty(accountDTO.getId())) {
+		if (isUpdate) {
 			AccountVO account = accountRepo.findById(accountDTO.getId()).orElse(null);
 			if (!account.getAccountName().equalsIgnoreCase(accountDTO.getAccountName())) {
 				if (accountRepo.existsByAccountNameAndOrgId(accountDTO.getAccountName(), accountDTO.getOrgId())) {
@@ -710,7 +719,9 @@ public class MasterServiceImpl implements MasterService {
 	@Override
 	public GroupLedgerVO updateCreateGroupLedger(@Valid GroupLedgerDTO groupLedgerDTO) throws ApplicationException {
 		GroupLedgerVO groupLedgerVO = new GroupLedgerVO();
+		boolean isUpdate = false;
 		if (ObjectUtils.isNotEmpty(groupLedgerDTO.getId())) {
+			isUpdate = true;
 			groupLedgerVO = groupLedgerRepo.findById(groupLedgerDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid GroupLedger details"));
 			groupLedgerVO.setUpdatedBy(groupLedgerDTO.getCreatedBy());
@@ -726,7 +737,7 @@ public class MasterServiceImpl implements MasterService {
 			groupLedgerVO.setUpdatedBy(groupLedgerDTO.getCreatedBy());
 			groupLedgerVO.setCreatedBy(groupLedgerDTO.getCreatedBy());
 		}
-		if (ObjectUtils.isNotEmpty(groupLedgerDTO.getId())) {
+		if (isUpdate) {
 			GroupLedgerVO groupLedger = groupLedgerRepo.findById(groupLedgerDTO.getId()).orElse(null);
 			if (!groupLedger.getAccountCode().equalsIgnoreCase(groupLedgerDTO.getAccountCode())) {
 				if (groupLedgerRepo.existsByAccountCodeAndOrgId(groupLedgerDTO.getAccountCode(),
@@ -798,7 +809,9 @@ public class MasterServiceImpl implements MasterService {
 	@Override
 	public SacCodeVO updateCreateSacCode(@Valid SacCodeDTO sacCodeDTO) throws ApplicationException {
 		SacCodeVO sacCodeVO = new SacCodeVO();
+		boolean isUpdate = false;
 		if (ObjectUtils.isNotEmpty(sacCodeDTO.getId())) {
+			isUpdate = true;
 			sacCodeVO = sacCodeRepo.findById(sacCodeDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid SacCode details"));
 			sacCodeVO.setUpdatedBy(sacCodeDTO.getCreatedBy());
@@ -881,7 +894,9 @@ public class MasterServiceImpl implements MasterService {
 	@Override
 	public ExRatesVO updateCreateExRates(@Valid ExRatesDTO exRatesDTO) throws ApplicationException {
 		ExRatesVO exRatesVO = new ExRatesVO();
+		boolean isUpdate = false;
 		if (ObjectUtils.isNotEmpty(exRatesDTO.getId())) {
+			isUpdate = true;
 			exRatesVO = exRatesRepo.findById(exRatesDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid ExRates details"));
 			exRatesVO.setUpdatedBy(exRatesDTO.getCreatedBy());
@@ -942,7 +957,9 @@ public class MasterServiceImpl implements MasterService {
 	public SubLedgerAccountVO updateCreateSubLedgerAccount(@Valid SubLedgerAccountDTO subLedgerAccountDTO)
 			throws ApplicationException {
 		SubLedgerAccountVO subLedgerAccountVO = new SubLedgerAccountVO();
+		boolean isUpdate = false;
 		if (ObjectUtils.isNotEmpty(subLedgerAccountDTO.getId())) {
+			isUpdate = true;
 			subLedgerAccountVO = subLedgerAccountRepo.findById(subLedgerAccountDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid SubLedgerAccount details"));
 			subLedgerAccountVO.setUpdatedBy(subLedgerAccountDTO.getCreatedBy());
@@ -963,7 +980,7 @@ public class MasterServiceImpl implements MasterService {
 			subLedgerAccountVO.setCreatedBy(subLedgerAccountDTO.getCreatedBy());
 		}
 
-		if (ObjectUtils.isNotEmpty(subLedgerAccountDTO.getId())) {
+		if (isUpdate) {
 			SubLedgerAccountVO sub = subLedgerAccountRepo.findById(subLedgerAccountDTO.getId()).orElse(null);
 			if (!sub.getNewCode().equalsIgnoreCase(subLedgerAccountDTO.getNewCode())) {
 				if (subLedgerAccountRepo.existsByNewCodeAndOrgId(subLedgerAccountDTO.getNewCode(),
@@ -1043,7 +1060,9 @@ public class MasterServiceImpl implements MasterService {
 	@Override
 	public CostCenterVO updateCreateCostCenter(@Valid CostCenterDTO costCenterDTO) throws ApplicationException {
 		CostCenterVO costCenterVO = new CostCenterVO();
+		boolean isUpdate = false;
 		if (ObjectUtils.isNotEmpty(costCenterDTO.getId())) {
+			 isUpdate = true;
 			costCenterVO = costCenterRepo.findById(costCenterDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid CostCenter details"));
 			costCenterVO.setUpdatedBy(costCenterDTO.getCreatedBy());
@@ -1058,7 +1077,7 @@ public class MasterServiceImpl implements MasterService {
 			costCenterVO.setUpdatedBy(costCenterDTO.getCreatedBy());
 			costCenterVO.setCreatedBy(costCenterDTO.getCreatedBy());
 		}
-		if (ObjectUtils.isNotEmpty(costCenterDTO.getId())) {
+		if (isUpdate) {
 			CostCenterVO cost = costCenterRepo.findById(costCenterDTO.getId()).orElse(null);
 			if (!cost.getValueCode().equalsIgnoreCase(costCenterDTO.getValueCode())) {
 				if (costCenterRepo.existsByValueCodeAndOrgId(costCenterDTO.getValueCode(), costCenterDTO.getOrgId())) {
@@ -1121,7 +1140,9 @@ public class MasterServiceImpl implements MasterService {
 	@Override
 	public ChequeBookVO updateCreateChequeBook(@Valid ChequeBookDTO chequeBookDTO) throws ApplicationException {
 		ChequeBookVO chequeBookVO = new ChequeBookVO();
+		boolean isUpdate = false;
 		if (ObjectUtils.isNotEmpty(chequeBookDTO.getId())) {
+			isUpdate = true;
 			chequeBookVO = chequeBookRepo.findById(chequeBookDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid ChequeBook details"));
 			chequeBookVO.setUpdatedBy(chequeBookDTO.getCreatedBy());
@@ -1203,7 +1224,9 @@ public class MasterServiceImpl implements MasterService {
 	public ChargeTypeRequestVO updateCreateChargeTypeRequest(@Valid ChargeTypeRequestDTO chargeTypeRequestDTO)
 			throws ApplicationException {
 		ChargeTypeRequestVO chargeTypeRequestVO = new ChargeTypeRequestVO();
+		boolean isUpdate = false;
 		if (ObjectUtils.isNotEmpty(chargeTypeRequestDTO.getId())) {
+			isUpdate = true;
 			chargeTypeRequestVO = chargeTypeRequestRepo.findById(chargeTypeRequestDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid ChargeTypeRequest details"));
 			chargeTypeRequestVO.setUpdatedBy(chargeTypeRequestDTO.getCreatedBy());
@@ -1220,7 +1243,7 @@ public class MasterServiceImpl implements MasterService {
 			chargeTypeRequestVO.setCreatedBy(chargeTypeRequestDTO.getCreatedBy());
 		}
 
-		if (ObjectUtils.isNotEmpty(chargeTypeRequestDTO.getId())) {
+		if (isUpdate) {
 			ChargeTypeRequestVO charge = chargeTypeRequestRepo.findById(chargeTypeRequestDTO.getId()).orElse(null);
 			if (!charge.getChargeDescription().equals(chargeTypeRequestDTO.getChargeDescription())) {
 				if (chargeTypeRequestRepo.existsByChargeDescriptionAndOrgId(chargeTypeRequestDTO.getChargeDescription(),
@@ -1308,7 +1331,9 @@ public class MasterServiceImpl implements MasterService {
 	@Override
 	public ListOfValuesVO updateCreateListOfValues(@Valid ListOfValuesDTO listOfValuesDTO) throws ApplicationException {
 		ListOfValuesVO listOfValuesVO = new ListOfValuesVO();
+		boolean isUpdate = false;
 		if (ObjectUtils.isNotEmpty(listOfValuesDTO.getId())) {
+			isUpdate = true;
 			listOfValuesVO = listOfValuesRepo.findById(listOfValuesDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid ListOfValues details"));
 			listOfValuesVO.setUpdatedBy(listOfValuesDTO.getCreatedBy());
@@ -1326,7 +1351,7 @@ public class MasterServiceImpl implements MasterService {
 			listOfValuesVO.setCreatedBy(listOfValuesDTO.getCreatedBy());
 		}
 
-		if (ObjectUtils.isNotEmpty(listOfValuesDTO.getId())) {
+		if (isUpdate) {
 			ListOfValuesVO listOfValues = listOfValuesRepo.findById(listOfValuesDTO.getId()).orElse(null);
 			if (!listOfValues.getListCode().equals(listOfValuesDTO.getListCode())) {
 				if (listOfValuesRepo.existsByListCodeAndOrgId(listOfValuesDTO.getListCode(),

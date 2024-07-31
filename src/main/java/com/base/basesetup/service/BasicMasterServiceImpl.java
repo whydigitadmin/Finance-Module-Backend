@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 import org.apache.commons.lang3.ObjectUtils;
@@ -904,51 +905,59 @@ public class BasicMasterServiceImpl implements BasicMasterService {
 		return responsibilitiesVO;
 	}
 
+	
+
+	@Transactional
 	@Override
 	public ResponsibilitiesVO updateCreateResponsibilities(ResponsibilitiesDTO responsibilitiesDTO)
-			throws ApplicationException {
-		boolean isUpdate = false;
-		ResponsibilitiesVO responsibilitiesVO = new ResponsibilitiesVO();
-		if (ObjectUtils.isNotEmpty(responsibilitiesDTO.getId())){
-			isUpdate = true;
-			responsibilitiesVO = responsibilitiesRepo.findById(responsibilitiesDTO.getId())
-					.orElseThrow(() -> new ApplicationException("Invalid Responsibilities details"));
-			responsibilitiesVO.setUpdatedBy(responsibilitiesDTO.getCreatedBy());
-		}else {
-			responsibilitiesVO.setUpdatedBy(responsibilitiesDTO.getCreatedBy());
-			responsibilitiesVO.setCreatedBy(responsibilitiesDTO.getCreatedBy());
-		}
-		getResponsibilitiesVOFromResponsibilitiesDTO(responsibilitiesDTO, responsibilitiesVO);
+	        throws ApplicationException {
+	    Logger log = LoggerFactory.getLogger(this.getClass());
+	    log.info("STARTING METHOD :updateCreateResponsibilities()");
+	    boolean isUpdate = false;
+	    ResponsibilitiesVO responsibilitiesVO = new ResponsibilitiesVO();
+	    try {
+	        if (ObjectUtils.isNotEmpty(responsibilitiesDTO.getId())){
+	            isUpdate = true;
+	            responsibilitiesVO = responsibilitiesRepo.findById(responsibilitiesDTO.getId())
+	                    .orElseThrow(() -> new ApplicationException("Invalid Responsibilities details"));
+	            responsibilitiesVO.setUpdatedBy(responsibilitiesDTO.getCreatedBy());
+	        } else {
+	            responsibilitiesVO.setUpdatedBy(responsibilitiesDTO.getCreatedBy());
+	            responsibilitiesVO.setCreatedBy(responsibilitiesDTO.getCreatedBy());
+	        }
+	        getResponsibilitiesVOFromResponsibilitiesDTO(responsibilitiesDTO, responsibilitiesVO);
 
-		List<ScreenVO> screenVO = new ArrayList<>();
-		if (responsibilitiesDTO.getScreenDTO() != null) {
-			for (ScreenDTO screenDTO : responsibilitiesDTO.getScreenDTO()) {
-				if (screenDTO.getId() != null & ObjectUtils.isNotEmpty(screenDTO.getId())) {
-					ScreenVO screenVO1 = screenRepo.findById(screenDTO.getId()).get();
-					screenVO1.setResponsibilities(screenDTO.getResponsibilities());
-					screenVO1.setScreenName(screenDTO.getScreenName());
-					screenVO1.setResponsibilitiesVO(responsibilitiesVO);
-					screenVO.add(screenVO1);
-				} else {
-					ScreenVO screenVO1 = new ScreenVO();
-					screenVO1.setResponsibilities(screenDTO.getResponsibilities());
-					screenVO1.setScreenName(screenDTO.getScreenName());
-					screenVO1.setResponsibilitiesVO(responsibilitiesVO);
-					screenVO.add(screenVO1);
-				}
-			}
-		}
-		responsibilitiesVO.setScreenVO(screenVO);
-		return responsibilitiesRepo.save(responsibilitiesVO);
+	        // Clear existing ScreenVOs and add new ones
+	        responsibilitiesVO.getScreenVO().clear();
+	        if (responsibilitiesDTO.getScreenDTO() != null) {
+	            for (ScreenDTO screenDTO : responsibilitiesDTO.getScreenDTO()) {
+	                ScreenVO screenVO;
+	                if (screenDTO.getId() != null && ObjectUtils.isNotEmpty(screenDTO.getId())) {
+	                    screenVO = screenRepo.findById(screenDTO.getId())
+	                            .orElseThrow(() -> new ApplicationException("Invalid Screen details"));
+	                } else {
+	                    screenVO = new ScreenVO();
+	                }
+	                screenVO.setResponsibilities(screenDTO.getResponsibilities());
+	                screenVO.setScreenName(screenDTO.getScreenName());
+	                screenVO.setResponsibilitiesVO(responsibilitiesVO);
+	                responsibilitiesVO.getScreenVO().add(screenVO);
+	            }
+	        }
+
+	        log.info("ENDING METHOD :updateCreateResponsibilities()");
+	        return responsibilitiesRepo.save(responsibilitiesVO);
+	    } catch (Exception e) {
+	        log.error("Error in method updateCreateResponsibilities: ", e);
+	        throw new ApplicationException("An error occurred while updating responsibilities", e);
+	    }
 	}
 
 	private void getResponsibilitiesVOFromResponsibilitiesDTO(ResponsibilitiesDTO responsibilitiesDTO,
-			ResponsibilitiesVO responsibilitiesVO) {
-
-		responsibilitiesVO.setOrgId(responsibilitiesDTO.getOrgId());
-		responsibilitiesVO.setRole(responsibilitiesDTO.getRole());
-		responsibilitiesVO.setActive(responsibilitiesDTO.isActive());
-
+	                                                          ResponsibilitiesVO responsibilitiesVO) {
+	    responsibilitiesVO.setOrgId(responsibilitiesDTO.getOrgId());
+	    responsibilitiesVO.setRole(responsibilitiesDTO.getRole());
+	    responsibilitiesVO.setActive(responsibilitiesDTO.isActive());
 	}
 
 	@Override

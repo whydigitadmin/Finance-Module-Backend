@@ -250,8 +250,9 @@ public class TransactionServiceImpl implements TransactionService {
 	@Override
 	public TaxInvoiceVO updateCreateTaxInvoice(@Valid TaxInvoiceDTO taxInvoiceDTO) throws ApplicationException {
 		TaxInvoiceVO taxInvoiceVO = new TaxInvoiceVO();
-
+		boolean isUpdate = false;
 		if (ObjectUtils.isNotEmpty(taxInvoiceDTO.getId())) {
+			isUpdate = true;
 			taxInvoiceVO = taxInvoiceRepo.findById(taxInvoiceDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid TaxInvoice details"));
 			taxInvoiceVO.setUpdatedBy(taxInvoiceDTO.getCreatedBy());
@@ -403,7 +404,9 @@ public class TransactionServiceImpl implements TransactionService {
 	@Override
 	public IrnCreditVO updateCreateIrnCredit(@Valid IrnCreditDTO irnCreditDTO) throws ApplicationException {
 		IrnCreditVO irnCreditVO = new IrnCreditVO();
+		boolean isUpdate = false;
 		if (ObjectUtils.isNotEmpty(irnCreditDTO.getId())) {
+			isUpdate = true;
 			irnCreditVO = irnCreditRepo.findById(irnCreditDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid IrnCredit details"));
 			irnCreditVO.setUpdatedBy(irnCreditDTO.getCreatedBy());
@@ -417,7 +420,7 @@ public class TransactionServiceImpl implements TransactionService {
 			irnCreditVO.setUpdatedBy(irnCreditDTO.getCreatedBy());
 			irnCreditVO.setCreatedBy(irnCreditDTO.getCreatedBy());
 		}
-		if (ObjectUtils.isNotEmpty(irnCreditVO.getId())) {
+		if (isUpdate) {
 			if (irnCreditRepo.existsByDocIdAndOrgIdAndId(irnCreditVO.getDocId(), irnCreditVO.getOrgId(),
 					irnCreditVO.getId())) {
 				throw new ApplicationException("The given doc id already exists.");
@@ -563,7 +566,9 @@ public class TransactionServiceImpl implements TransactionService {
 	public DailyMonthlyExRatesVO updateCreateDailyMonthlyExRates(@Valid DailyMonthlyExRatesDTO dailyMonthlyExRatesDTO)
 			throws ApplicationException {
 		DailyMonthlyExRatesVO dailyMonthlyExRatesVO = new DailyMonthlyExRatesVO();
+		boolean isUpdate = false;
 		if (ObjectUtils.isNotEmpty(dailyMonthlyExRatesDTO.getId())) {
+			isUpdate = true;
 			dailyMonthlyExRatesVO = dailyMonthlyExRatesRepo.findById(dailyMonthlyExRatesDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid DailyMonthlyExRates details"));
 			dailyMonthlyExRatesVO.setUpdatedBy(dailyMonthlyExRatesDTO.getCreatedBy());
@@ -641,7 +646,9 @@ public class TransactionServiceImpl implements TransactionService {
 	@Override
 	public BrsOpeningVO updateCreateBrsOpening(@Valid BrsOpeningDTO brsOpeningDTO) throws ApplicationException {
 		BrsOpeningVO brsOpeningVO = new BrsOpeningVO();
+		boolean isUpdate = false;
 		if (ObjectUtils.isNotEmpty(brsOpeningDTO.getId())) {
+			isUpdate = true;
 			brsOpeningVO = brsOpeningRepo.findById(brsOpeningDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid BrsOpening details"));
 			brsOpeningVO.setUpdatedBy(brsOpeningDTO.getCreatedBy());
@@ -705,7 +712,9 @@ public class TransactionServiceImpl implements TransactionService {
 	public ChartCostCenterVO updateCreateChartCostCenter(@Valid ChartCostCenterDTO chartCostCenterDTO)
 			throws ApplicationException {
 		ChartCostCenterVO chartCostCenterVO = new ChartCostCenterVO();
+		boolean isUpdate = false;
 		if (ObjectUtils.isNotEmpty(chartCostCenterDTO.getId())) {
+			isUpdate = true;
 			chartCostCenterVO = chartCostCenterRepo.findById(chartCostCenterDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid ChartCostCenter details"));
 			chartCostCenterVO.setUpdatedBy(chartCostCenterDTO.getCreatedBy());
@@ -764,7 +773,9 @@ public class TransactionServiceImpl implements TransactionService {
 	@Override
 	public FundTransferVO updateCreateFundTransfer(@Valid FundTransferDTO fundTransferDTO) throws ApplicationException {
 		FundTransferVO fundTransferVO = new FundTransferVO();
+		boolean isUpdate = false;
 		if (ObjectUtils.isNotEmpty(fundTransferDTO.getId())) {
+			isUpdate = true;
 			fundTransferVO = fundTransferRepo.findById(fundTransferDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid FundTransfer details"));
 			fundTransferVO.setUpdatedBy(fundTransferDTO.getCreatedBy());
@@ -841,7 +852,9 @@ public class TransactionServiceImpl implements TransactionService {
 	public GeneralJournalVO updateCreateGeneralJournal(@Valid GeneralJournalDTO generalJournalDTO)
 			throws ApplicationException {
 		GeneralJournalVO generalJournalVO = new GeneralJournalVO();
+		boolean isUpdate = false;
 		if (ObjectUtils.isNotEmpty(generalJournalDTO.getId())) {
+			isUpdate = true;
 			generalJournalVO = generalJournalRepo.findById(generalJournalDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid GeneralJournal details"));
 			generalJournalVO.setUpdatedBy(generalJournalDTO.getCreatedBy());
@@ -929,7 +942,9 @@ public class TransactionServiceImpl implements TransactionService {
 	@Override
 	public CostInvoiceVO updateCreateCostInvoice(@Valid CostInvoiceDTO costInvoiceDTO) throws ApplicationException {
 		CostInvoiceVO costInvoiceVO = new CostInvoiceVO();
+//		boolean isUpdate = false;
 		if (ObjectUtils.isNotEmpty(costInvoiceDTO.getId())) {
+			boolean isUpdate = true;
 			costInvoiceVO = costInvoiceRepo.findById(costInvoiceDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid CostInvoice details"));
 			costInvoiceVO.setUpdatedBy(costInvoiceDTO.getCreatedBy());
@@ -1074,7 +1089,9 @@ public class TransactionServiceImpl implements TransactionService {
 	@Override
 	public DebitNoteVO updateCreateDebitNote(@Valid DebitNoteDTO debitNoteDTO) throws ApplicationException {
 		DebitNoteVO debitNoteVO = new DebitNoteVO();
+		boolean isUpdate = false;
 		if (ObjectUtils.isNotEmpty(debitNoteDTO.getId())) {
+			isUpdate = true;
 			debitNoteVO = debitNoteRepo.findById(debitNoteDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid DebitNote details"));
 			debitNoteVO.setUpdatedBy(debitNoteDTO.getCreatedBy());
@@ -1244,7 +1261,9 @@ public class TransactionServiceImpl implements TransactionService {
 	public GstSalesVoucherVO updateCreateGstSalesVoucher(@Valid GstSalesVoucherDTO gstSalesVoucherDTO)
 			throws ApplicationException {
 		GstSalesVoucherVO gstSalesVoucherVO = new GstSalesVoucherVO();
+		boolean isUpdate = false;
 		if (ObjectUtils.isNotEmpty(gstSalesVoucherDTO.getId())) {
+			 isUpdate = true;
 			gstSalesVoucherVO = gstSalesVoucherRepo.findById(gstSalesVoucherDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid GstSalesVoucher details"));
 			gstSalesVoucherVO.setUpdatedBy(gstSalesVoucherDTO.getCreatedBy());
@@ -1342,7 +1361,9 @@ public class TransactionServiceImpl implements TransactionService {
 	public PaymentVoucherVO updateCreatePaymentVoucher(@Valid PaymentVoucherDTO paymentVoucherDTO)
 			throws ApplicationException {
 		PaymentVoucherVO paymentVoucherVO = new PaymentVoucherVO();
+		boolean isUpdate = false;
 		if (ObjectUtils.isNotEmpty(paymentVoucherDTO.getId())) {
+			 isUpdate = true;
 			paymentVoucherVO = paymentVoucherRepo.findById(paymentVoucherDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid PaymentVoucher details"));
 			paymentVoucherVO.setUpdatedBy(paymentVoucherDTO.getCreatedBy());
@@ -1436,7 +1457,9 @@ public class TransactionServiceImpl implements TransactionService {
 	@Override
 	public ArapDetailsVO updateCreateArapDetails(@Valid ArapDetailsDTO arapDetailsDTO) throws ApplicationException {
 		ArapDetailsVO arapDetailsVO = new ArapDetailsVO();
+		boolean isUpdate = false;
 		if (ObjectUtils.isNotEmpty(arapDetailsDTO.getId())) {
+			isUpdate = true;
 			arapDetailsVO = arapDetailsRepo.findById(arapDetailsDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid ARAP Details details"));
 			arapDetailsVO.setUpdatedBy(arapDetailsDTO.getCreatedBy());
@@ -1525,7 +1548,9 @@ public class TransactionServiceImpl implements TransactionService {
 	public ArapAdjustmentsVO updateCreateArapAdjustments(@Valid ArapAdjustmentsDTO arapAdjustmentsDTO)
 			throws ApplicationException {
 		ArapAdjustmentsVO arapAdjustmentsVO = new ArapAdjustmentsVO();
+		boolean isUpdate = false;
 		if (ObjectUtils.isNotEmpty(arapAdjustmentsDTO.getId())) {
+			isUpdate = true;
 			arapAdjustmentsVO = arapAdjustmentsRepo.findById(arapAdjustmentsDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid ARAP adjustments details"));
 			arapAdjustmentsVO.setUpdatedBy(arapAdjustmentsDTO.getCreatedBy());
@@ -1608,7 +1633,9 @@ public class TransactionServiceImpl implements TransactionService {
 	public ReceiptReversalVO updateCreateReceiptReversal(@Valid ReceiptReversalDTO receiptReversalDTO)
 			throws ApplicationException {
 		ReceiptReversalVO receiptReversalVO = new ReceiptReversalVO();
+		boolean isUpdate = false;
 		if (ObjectUtils.isNotEmpty(receiptReversalDTO.getId())) {
+			isUpdate = true;
 			receiptReversalVO = receiptReversalRepo.findById(receiptReversalDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid ReceiptReversal details"));
 			receiptReversalVO.setUpdatedBy(receiptReversalDTO.getCreatedBy());
@@ -1753,7 +1780,9 @@ public class TransactionServiceImpl implements TransactionService {
 	public PaymentReversalVO updateCreatePaymentReversal(@Valid PaymentReversalDTO paymentReversalDTO)
 			throws ApplicationException {
 		PaymentReversalVO paymentReversalVO = new PaymentReversalVO();
+		boolean isUpdate = false;
 		if (ObjectUtils.isNotEmpty(paymentReversalDTO.getId())) {
+		isUpdate = true;
 			paymentReversalVO = paymentReversalRepo.findById(paymentReversalDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid PaymentReversal details"));
 			paymentReversalVO.setUpdatedBy(paymentReversalDTO.getCreatedBy());
@@ -1900,7 +1929,9 @@ public class TransactionServiceImpl implements TransactionService {
 	public ArApAdjustmentOffSetVO updateCreateArApAdjustmentOffSet(
 			@Valid ArApAdjustmentOffSetDTO arApAdjustmentOffSetDTO) throws ApplicationException {
 		ArApAdjustmentOffSetVO arApAdjustmentOffSetVO = new ArApAdjustmentOffSetVO();
+		boolean isUpdate = false;
 		if (ObjectUtils.isNotEmpty(arApAdjustmentOffSetDTO.getId())) {
+			isUpdate = true;
 			arApAdjustmentOffSetVO = arApAdjustmentOffSetRepo.findById(arApAdjustmentOffSetDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid ArApAdjustmentOffSet details"));
 			arApAdjustmentOffSetVO.setUpdatedBy(arApAdjustmentOffSetDTO.getCreatedBy());

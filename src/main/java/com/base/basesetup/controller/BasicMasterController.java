@@ -1194,7 +1194,9 @@ public class BasicMasterController extends BaseController {
 	            errorMsg = isUpdate ? "Responsibilities not found for ID: " + responsibilitiesDTO.getId() 
 	                                : "Responsibilities creation failed";
 	            responseDTO = createServiceResponseError(responseObjectsMap, 
-	                isUpdate ? "Responsibilities update failed" : "Responsibilities creation failed", errorMsg);
+	                isUpdate ? "Responsibilities update failed" : "Responsibilities creation"
+	                		+ ""
+	                		+ "                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          failed", errorMsg);
 	        }
 	    } catch (Exception e) {
 	        errorMsg = e.getMessage();
