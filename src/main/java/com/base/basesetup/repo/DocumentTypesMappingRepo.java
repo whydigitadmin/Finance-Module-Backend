@@ -18,19 +18,9 @@ public interface DocumentTypesMappingRepo extends JpaRepository<DocumentTypesMap
 	@Query(nativeQuery = true, value = "select * from documenttypesmapping where orgid=?1")
 	List<DocumentTypesMappingVO> findDocumentTypesMappingByOrgId(Long orgid);
 
-	@Query(nativeQuery = true, value = "SELECT d.screencode, d.screenname, f.finyr, f.finyrid, b.branch, b.branchcode, d.doccode, CONCAT(b.branchcode, f.finyrid, d.doccode) AS prefix " +
-	        "FROM documenttype d " +
-	        "JOIN financialyear f ON d.orgid = f.orgid " +
-	        "JOIN branch b ON d.orgid = b.orgid " +
-	        "WHERE b.branch = ?1 " +
-	        "AND b.branchcode = ?2 " +
-	        "AND f.finyr = ?3 " +
-	        "AND f.finyrid = ?4 " +
-	        "AND d.orgid=?5"+
-	        "AND CONCAT(d.screencode, f.finyr, b.branch, b.branchcode, f.finyrid, d.orgid, d.doccode) NOT IN (" +
-	        "SELECT CONCAT(m.screencode, m.finyear, m.branch, m.branchcode, m.finyearid, m.orgid, m.doccode) " +
-	        "FROM documenttypesmappingdetails m) WHERE orgid=?5")
-	Set<Object[]> findAllDocumentTypesMappingDetailsByDocumentType(String branch, String branchCode, String finYrId, String finYr, Long  orgId);
-
+	@Query(nativeQuery = true, value = "select screencode,screenname,doccode,?5,?3,?1,?2,concat(?2,?5,doccode)prefixField from documenttype where orgid=?4 and concat(?1,?2,?3,screencode,doccode,orgid) not in(    \r\n"
+			+ " select concat(branch,branchcode,finyear,screencode,doccode,orgid) from documenttypesmappingdetails where orgid=?4)")
+	Set<Object[]> findAllDocumentTypesMappingDetailsByDocumentType(String branch, String branchCode, String finYr,
+			Long orgId, String finyrId);
 
 }

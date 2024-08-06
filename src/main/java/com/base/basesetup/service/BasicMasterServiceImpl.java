@@ -1,7 +1,9 @@
 package com.base.basesetup.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
@@ -768,6 +770,24 @@ public class BasicMasterServiceImpl implements BasicMasterService {
 		financialYearVO.setUserId(financialYearDTO.getUserId());
 	}
 
+	@Override
+	public List<Map<String, Object>> getFinYrAndFinYrIdByOrgId(Long orgId) {
+		Set<Object[]> getFin = finRepo.findFinYrAndFinYrByOrgId(orgId);
+		return getFinyearDetails(getFin);
+	}
+
+	private List<Map<String, Object>> getFinyearDetails(Set<Object[]> getFin) {
+		List<Map<String, Object>> finyrList = new ArrayList<>();
+
+		for (Object[] finyeDate : getFin) {
+			Map<String, Object> branchMap = new HashMap<>();
+			branchMap.put("finYr", finyeDate[0] != null ? finyeDate[0].toString() : "");
+			branchMap.put("finYrId", finyeDate[1] != null ? finyeDate[1].toString() : "");
+			finyrList.add(branchMap);
+		}
+		return finyrList;
+	}
+
 	// Branch-----------------------------------------------------------------------------------
 	@Override
 	public List<BranchVO> getBranchById(Long id) {
@@ -1226,17 +1246,31 @@ public class BasicMasterServiceImpl implements BasicMasterService {
 		documentTypesMappingVO.setActive(documentTypesMappingDTO.isActive());
 	}
 
-	@Transactional
-	public Set<Object[]> getAllDocumentTypesMappingDetailsByDocumentType(String branch, String branchCode, String finYrId,
-			String finYr,Long orgId) {
-		LOGGER.debug("Executing query with parameters: branch={}, branchCode={}, finYr={}, finYrId={}", branch,
-				branchCode, finYrId, finYr,orgId);
+	 @Override
+	    @Transactional
+	    public List<Map<String,Object>> getAllDocumentTypesMappingDetailsByDocumentType(String branch, String branchCode, String finYr, Long orgId,String finyrId) {
 
-		Set<Object[]> result = documentTypesMappingRepo.findAllDocumentTypesMappingDetailsByDocumentType(branch,
-				branchCode, finYrId, finYr,orgId);
-
-		LOGGER.debug("Query executed successfully, result size: {}", result.size());
-
-		return result;
+	        Set<Object[]> result = documentTypesMappingRepo.findAllDocumentTypesMappingDetailsByDocumentType(branch, branchCode, finYr, orgId,finyrId);
+	        return getresult(result);
+	    }
+	
+	private List<Map<String, Object>> getresult(Set<Object[]> result) {
+		 List<Map<String, Object>> details1 = new ArrayList<>();
+	        for (Object[] fs : result) {
+	            Map<String, Object> part = new HashMap<>();
+	            part.put("screenCode", fs[0] != null ? fs[0].toString() : "");
+	            part.put("screenName", fs[1] != null ? fs[1].toString() : "");
+	            part.put("docCode", fs[2] != null ? fs[2].toString() : "");
+	            part.put("finYrIdentifierId", fs[3] != null ? fs[3].toString() : "");
+	            part.put("finyr", fs[4] != null ? fs[4].toString() : "");
+	            part.put("branch", fs[5] != null ? fs[5].toString() : "");
+	            part.put("branchCode", fs[6] != null ? fs[6].toString() : "");
+	            part.put("prefix", fs[7] != null ? fs[7].toString() : "");
+//	            part.put("orgId", fs[6] != null ? fs[6].toString() : "");
+//	            part.put("docCode", fs[7] != null ? fs[7].toString() : "");
+//	            part.put("prefix", fs[8] != null ? fs[8].toString() : "");
+	            details1.add(part);
+	        }
+	        return details1;
 	}
 }

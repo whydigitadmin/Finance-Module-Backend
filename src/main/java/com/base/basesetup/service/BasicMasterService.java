@@ -1,6 +1,7 @@
 package com.base.basesetup.service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
@@ -109,6 +110,8 @@ public interface BasicMasterService {
 	List<FinancialYearVO> getFinancialYearByOrgId(Long orgid);
 
 	FinancialYearVO updateCreateFinancialYear(@Valid FinancialYearDTO financialYearDTO) throws ApplicationException;
+	
+	List<Map<String, Object>> getFinYrAndFinYrIdByOrgId(Long orgId);
 
 
 //	Branch
@@ -162,6 +165,8 @@ public interface BasicMasterService {
 
 	DocumentTypesMappingVO updateCreateDocumentTypesMapping(@Valid DocumentTypesMappingDTO documentTypesMappingDTO) throws ApplicationException;
 
-	Set<Object[]> getAllDocumentTypesMappingDetailsByDocumentType(String branch,String branchCode,String finYrId,String finYr,Long orgId);
-//	
+	List<Map<String, Object>> getAllDocumentTypesMappingDetailsByDocumentType(String branch,String branchCode,String finYr,Long orgId,String finyrId);
+
+
+	
 }
