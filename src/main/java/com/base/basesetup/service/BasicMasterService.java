@@ -149,7 +149,7 @@ public interface BasicMasterService {
 
 	FinScreenVO updateCreateFinScreen(@Valid FinScreenDTO finScreenDTO) throws ApplicationException;
 
-	Set<Object[]> getAllScreenCode();
+	List<Map<String, Object>> getAllScreenCode();
 
 //	DocCode
 	List<DocumentTypeVO> getDocCodeById(Long id);

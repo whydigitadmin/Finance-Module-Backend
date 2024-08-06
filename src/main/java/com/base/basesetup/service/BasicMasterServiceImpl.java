@@ -1104,9 +1104,23 @@ public class BasicMasterServiceImpl implements BasicMasterService {
 		finScreenVO.setScreenName(finScreenDTO.getScreenName());
 	}
 
+
 	@Override
-	public Set<Object[]> getAllScreenCode() {
-		return finScreenRepo.findAllScreenCode();
+	public List<Map<String, Object>> getAllScreenCode() {
+		Set<Object[]> getFinScreen = finScreenRepo.findAllScreenCode();
+		return getScreen(getFinScreen);
+	}
+
+	private List<Map<String, Object>> getScreen(Set<Object[]> getFinScreen) {
+		List<Map<String, Object>> finScreenList = new ArrayList<>();
+
+		for (Object[] finScreen : getFinScreen) {
+			Map<String, Object> branchMap = new HashMap<>();
+			branchMap.put("screenName", finScreen[0] != null ? finScreen[0].toString() : "");
+			branchMap.put("screenCode", finScreen[1] != null ? finScreen[1].toString() : "");
+			finScreenList.add(branchMap);
+		}
+		return finScreenList;
 	}
 
 	// DocumentType-----------------------------------------------------------------------------------

@@ -1369,37 +1369,23 @@ public class BasicMasterController extends BaseController {
 		String errorMsg = null;
 		Map<String, Object> responseObjectsMap = new HashMap<>();
 		ResponseDTO responseDTO = null;
-		Set<Object[]> finScreenVO = new HashSet<>();
+		List<Map<String, Object>> finScreen = new ArrayList<>();
 		try {
-			finScreenVO = basicMasterService.getAllScreenCode();
+			finScreen = basicMasterService.getAllScreenCode();
 		} catch (Exception e) {
 			errorMsg = e.getMessage();
 			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
 		}
 		if (StringUtils.isBlank(errorMsg)) {
-			List<Map<String, Object>> screen = getScreen(finScreenVO);
-			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "All ScreenCode information get successfully");
-			responseObjectsMap.put("finScreenVO", screen);
-//			responseObjectsMap.put("finScreenVO", finScreenVO);
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "Fin Screen information get successfully By userId");
+			responseObjectsMap.put("finScreen", finScreen);
 			responseDTO = createServiceResponse(responseObjectsMap);
 		} else {
-			responseDTO = createServiceResponseError(responseObjectsMap, "All screenCode information receive failed",
-					errorMsg);
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					"Fin Screen information receive failed By userId", errorMsg);
 		}
 		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
 		return ResponseEntity.ok().body(responseDTO);
-
-	}
-
-	private List<Map<String, Object>> getScreen(Set<Object[]> finScreenVO) {
-		List<Map<String, Object>> finScreen = new ArrayList<>();
-		for (Object[] fs : finScreenVO) {
-			Map<String, Object> part = new HashMap<>();
-			part.put("Screen Name", fs[0] != null ? fs[0].toString() : "");
-			part.put("Screen Code", fs[1] != null ? fs[1].toString() : "");
-			finScreen.add(part);
-		}
-		return finScreen;
 	}
 
 //	 DocCode
