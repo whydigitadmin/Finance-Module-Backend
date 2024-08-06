@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import com.base.basesetup.dto.GlobalParameterDTO;
 import com.base.basesetup.entity.GlobalParameterVO;
 import com.base.basesetup.repo.BranchAccessRepo;
-import com.base.basesetup.repo.FinancialRepo;
+import com.base.basesetup.repo.FinancialYearRepo;
 import com.base.basesetup.repo.GlobalParameterRepo;
 import com.base.basesetup.repo.UserRepo;
 import com.base.basesetup.repo.UserRoleRepo;
@@ -38,7 +38,7 @@ public class GlobalParameterServiceImpl implements GlobalParameterService {
 	BranchAccessRepo branchAccessRepo;
 
 	@Autowired
-	FinancialRepo financialRepo;
+	FinancialYearRepo financialRepo;
 
 	@Override
 	public GlobalParameterVO createUpdateGlobalParameter(GlobalParameterDTO globalParameterDTO) {

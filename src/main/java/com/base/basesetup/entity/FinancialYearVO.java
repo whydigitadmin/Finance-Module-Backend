@@ -8,9 +8,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.base.basesetup.dto.CreatedUpdatedDate;
+import com.fasterxml.jackson.annotation.JsonGetter;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,7 +26,8 @@ import lombok.NoArgsConstructor;
 public class FinancialYearVO {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "financialyeargen")
+	@SequenceGenerator(name = "financialyeargen", sequenceName = "financialyearseq", initialValue = 1000000001, allocationSize = 1)
 	@Column(name = "financialyearid")
 	private Long id;
 	@Column(name = "orgid")
@@ -51,11 +54,26 @@ public class FinancialYearVO {
 	private boolean currentFinYr;
 	@Column(name = "closed")
 	private boolean closed;
+	@Column(name = "open")
+	private boolean open;
+	@Column(name="action")
+	private boolean action;
 	@Column(name = "company")
 	private String company;
+	@Column(name = "dupchk")
 	private String dupchk;
 	@Column(name = "userid")
 	private String userId;
+	@Column(name = "createdby")
+	private String createdBy;
+	@Column(name = "modifiedby")
+	private String  updatedBy;
+	
+
+	@JsonGetter("active")
+	public String getActive() {
+		return active ? "Active" : "In-Active";
+	}
 	@Embedded
 	private CreatedUpdatedDate commonDate = new CreatedUpdatedDate();
 }

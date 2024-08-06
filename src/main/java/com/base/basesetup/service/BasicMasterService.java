@@ -2,6 +2,7 @@ package com.base.basesetup.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import javax.validation.Valid;
 
@@ -14,7 +15,11 @@ import com.base.basesetup.dto.CityDTO;
 import com.base.basesetup.dto.CompanyDTO;
 import com.base.basesetup.dto.CountryDTO;
 import com.base.basesetup.dto.CurrencyDTO;
+import com.base.basesetup.dto.DocumentTypeDTO;
+import com.base.basesetup.dto.DocumentTypesMappingDTO;
 import com.base.basesetup.dto.EmployeeDTO;
+import com.base.basesetup.dto.FinScreenDTO;
+import com.base.basesetup.dto.FinancialYearDTO;
 import com.base.basesetup.dto.ResponsibilitiesDTO;
 import com.base.basesetup.dto.RoleMasterDTO;
 import com.base.basesetup.dto.StateDTO;
@@ -23,7 +28,10 @@ import com.base.basesetup.entity.CityVO;
 import com.base.basesetup.entity.CompanyVO;
 import com.base.basesetup.entity.CountryVO;
 import com.base.basesetup.entity.CurrencyVO;
+import com.base.basesetup.entity.DocumentTypeVO;
+import com.base.basesetup.entity.DocumentTypesMappingVO;
 import com.base.basesetup.entity.EmployeeVO;
+import com.base.basesetup.entity.FinScreenVO;
 import com.base.basesetup.entity.FinancialYearVO;
 import com.base.basesetup.entity.ResponsibilitiesVO;
 import com.base.basesetup.entity.RoleMasterVO;
@@ -38,7 +46,7 @@ public interface BasicMasterService {
 
 	List<CurrencyVO> getCurrencyByOrgId(Long orgid);
 
-	CurrencyVO updateCreateCurrency(@Valid CurrencyDTO currencyDTO) throws  Exception;
+	CurrencyVO updateCreateCurrency(@Valid CurrencyDTO currencyDTO) throws Exception;
 
 	List<CurrencyVO> getCurrencyByActive();
 
@@ -51,7 +59,7 @@ public interface BasicMasterService {
 
 	List<CompanyVO> getCompanyByActive();
 
-	CompanyVO saveImage(MultipartFile file,@RequestParam Long id) throws ApplicationException, java.io.IOException;
+	CompanyVO saveImage(MultipartFile file, @RequestParam Long id) throws ApplicationException, java.io.IOException;
 
 	Optional<CompanyVO> getImage(Long id);
 
@@ -100,9 +108,8 @@ public interface BasicMasterService {
 
 	List<FinancialYearVO> getFinancialYearByOrgId(Long orgid);
 
-	FinancialYearVO createFinancial(FinancialYearVO finyr);
+	FinancialYearVO updateCreateFinancialYear(@Valid FinancialYearDTO financialYearDTO) throws ApplicationException;
 
-	Optional<FinancialYearVO> updateFinancial(FinancialYearVO finyr);
 
 //	Branch
 	List<BranchVO> getBranchById(Long id);
@@ -131,4 +138,30 @@ public interface BasicMasterService {
 			throws ApplicationException;
 
 	List<ResponsibilitiesVO> getResponsibilitiesByActive();
+
+//	FinScreen
+	List<FinScreenVO> getFinScreenById(Long id);
+
+	List<FinScreenVO> getFinScreenByOrgId(Long orgid);
+
+	FinScreenVO updateCreateFinScreen(@Valid FinScreenDTO finScreenDTO) throws ApplicationException;
+
+	Set<Object[]> getAllScreenCode();
+
+//	DocCode
+	List<DocumentTypeVO> getDocCodeById(Long id);
+
+	List<DocumentTypeVO> getDocCodeByOrgId(Long orgid);
+
+	DocumentTypeVO updateCreateDocCode(@Valid DocumentTypeDTO docCodeDTO) throws ApplicationException;
+
+//	DocumentTypesMapping
+	List<DocumentTypesMappingVO> getDocumentTypesMappingById(Long id);
+
+	List<DocumentTypesMappingVO> getDocumentTypesMappingByOrgId(Long orgid);
+
+	DocumentTypesMappingVO updateCreateDocumentTypesMapping(@Valid DocumentTypesMappingDTO documentTypesMappingDTO) throws ApplicationException;
+
+	Set<Object[]> getAllDocumentTypesMappingDetailsByDocumentType(String branch,String branchCode,String finYrId,String finYr,Long orgId);
+//	
 }
