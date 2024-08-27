@@ -124,33 +124,37 @@ public class TransactionController extends BaseController {
 
 	@PutMapping("/updateCreateTaxInvoice")
 	public ResponseEntity<ResponseDTO> updateCreateTaxInvoice(@Valid @RequestBody TaxInvoiceDTO taxInvoiceDTO) {
-	    String methodName = "updateCreateTaxInvoice()";
+		String methodName = "updateCreateTaxInvoice()";
 
-	    LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
-	    String errorMsg = null;
-	    Map<String, Object> responseObjectsMap = new HashMap<>();
-	    ResponseDTO responseDTO = null;
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
 
-	    try {
-	        TaxInvoiceVO taxInvoiceVO = transactionService.updateCreateTaxInvoice(taxInvoiceDTO);
-	        boolean isUpdate = taxInvoiceDTO.getId() != null;
-	        
-	        if (taxInvoiceVO != null) {
-	            responseObjectsMap.put(CommonConstant.STRING_MESSAGE, isUpdate ? "TaxInvoice updated successfully" : "TaxInvoice created successfully");
-	            responseObjectsMap.put("taxInvoiceVO", taxInvoiceVO);
-	            responseDTO = createServiceResponse(responseObjectsMap);
-	        } else {
-	            errorMsg = isUpdate ? "TaxInvoice not found for ID: " + taxInvoiceDTO.getId() : "TaxInvoice creation failed";
-	            responseDTO = createServiceResponseError(responseObjectsMap, isUpdate ? "TaxInvoice update failed" : "TaxInvoice creation failed", errorMsg);
-	        }
-	    } catch (Exception e) {
-	        errorMsg = e.getMessage();
-	        boolean isUpdate = taxInvoiceDTO.getId() != null;
-	        LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
-	        responseDTO = createServiceResponseError(responseObjectsMap, isUpdate ? "TaxInvoice update failed" : "TaxInvoice creation failed", errorMsg);
-	    }
-	    LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
-	    return ResponseEntity.ok().body(responseDTO);
+		try {
+			TaxInvoiceVO taxInvoiceVO = transactionService.updateCreateTaxInvoice(taxInvoiceDTO);
+			boolean isUpdate = taxInvoiceDTO.getId() != null;
+
+			if (taxInvoiceVO != null) {
+				responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+						isUpdate ? "TaxInvoice updated successfully" : "TaxInvoice created successfully");
+				responseObjectsMap.put("taxInvoiceVO", taxInvoiceVO);
+				responseDTO = createServiceResponse(responseObjectsMap);
+			} else {
+				errorMsg = isUpdate ? "TaxInvoice not found for ID: " + taxInvoiceDTO.getId()
+						: "TaxInvoice creation failed";
+				responseDTO = createServiceResponseError(responseObjectsMap,
+						isUpdate ? "TaxInvoice update failed" : "TaxInvoice creation failed", errorMsg);
+			}
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			boolean isUpdate = taxInvoiceDTO.getId() != null;
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					isUpdate ? "TaxInvoice update failed" : "TaxInvoice creation failed", errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
 	}
 
 	@GetMapping("/getTaxInvoiceByActive")
@@ -290,33 +294,37 @@ public class TransactionController extends BaseController {
 
 	@PutMapping("/updateCreateIrnCredit")
 	public ResponseEntity<ResponseDTO> updateCreateIrnCredit(@Valid @RequestBody IrnCreditDTO irnCreditDTO) {
-	    String methodName = "updateCreateIrnCredit()";
+		String methodName = "updateCreateIrnCredit()";
 
-	    LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
-	    String errorMsg = null;
-	    Map<String, Object> responseObjectsMap = new HashMap<>();
-	    ResponseDTO responseDTO = null;
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
 
-	    try {
-	        IrnCreditVO irnCreditVO = transactionService.updateCreateIrnCredit(irnCreditDTO);
-	        boolean isUpdate = irnCreditDTO.getId() != null;
-	        
-	        if (irnCreditVO != null) {
-	            responseObjectsMap.put(CommonConstant.STRING_MESSAGE, isUpdate ? "IrnCredit updated successfully" : "IrnCredit created successfully");
-	            responseObjectsMap.put("irnCreditVO", irnCreditVO);
-	            responseDTO = createServiceResponse(responseObjectsMap);
-	        } else {
-	            errorMsg = isUpdate ? "IrnCredit not found for ID: " + irnCreditDTO.getId() : "IrnCredit creation failed";
-	            responseDTO = createServiceResponseError(responseObjectsMap, isUpdate ? "IrnCredit update failed" : "IrnCredit creation failed", errorMsg);
-	        }
-	    } catch (Exception e) {
-	        errorMsg = e.getMessage();
-	        boolean isUpdate = irnCreditDTO.getId() != null;
-	        LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
-	        responseDTO = createServiceResponseError(responseObjectsMap, isUpdate ? "IrnCredit update failed" : "IrnCredit creation failed", errorMsg);
-	    }
-	    LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
-	    return ResponseEntity.ok().body(responseDTO);
+		try {
+			IrnCreditVO irnCreditVO = transactionService.updateCreateIrnCredit(irnCreditDTO);
+			boolean isUpdate = irnCreditDTO.getId() != null;
+
+			if (irnCreditVO != null) {
+				responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+						isUpdate ? "IrnCredit updated successfully" : "IrnCredit created successfully");
+				responseObjectsMap.put("irnCreditVO", irnCreditVO);
+				responseDTO = createServiceResponse(responseObjectsMap);
+			} else {
+				errorMsg = isUpdate ? "IrnCredit not found for ID: " + irnCreditDTO.getId()
+						: "IrnCredit creation failed";
+				responseDTO = createServiceResponseError(responseObjectsMap,
+						isUpdate ? "IrnCredit update failed" : "IrnCredit creation failed", errorMsg);
+			}
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			boolean isUpdate = irnCreditDTO.getId() != null;
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					isUpdate ? "IrnCredit update failed" : "IrnCredit creation failed", errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
 	}
 
 	@GetMapping("/getIrnCreditByActive")
@@ -404,36 +412,41 @@ public class TransactionController extends BaseController {
 
 	@PutMapping("/updateCreateDailyMonthlyExRates")
 	public ResponseEntity<ResponseDTO> updateCreateDailyMonthlyExRates(
-	        @Valid @RequestBody DailyMonthlyExRatesDTO dailyMonthlyExRatesDTO) {
-	    String methodName = "updateCreateDailyMonthlyExRates()";
-	    LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
-	    String errorMsg = null;
-	    Map<String, Object> responseObjectsMap = new HashMap<>();
-	    ResponseDTO responseDTO = null;
+			@Valid @RequestBody DailyMonthlyExRatesDTO dailyMonthlyExRatesDTO) {
+		String methodName = "updateCreateDailyMonthlyExRates()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
 
-	    try {
-	        DailyMonthlyExRatesVO dailyMonthlyExRatesVO = transactionService
-	                .updateCreateDailyMonthlyExRates(dailyMonthlyExRatesDTO);
-	        boolean isUpdate = dailyMonthlyExRatesDTO.getId() != null;
-	        
-	        if (dailyMonthlyExRatesVO != null) {
-	            responseObjectsMap.put(CommonConstant.STRING_MESSAGE, isUpdate ? "DailyMonthlyExRates updated successfully" : "DailyMonthlyExRates created successfully");
-	            responseObjectsMap.put("dailyMonthlyExRatesVO", dailyMonthlyExRatesVO);
-	            responseDTO = createServiceResponse(responseObjectsMap);
-	        } else {
-	            errorMsg = isUpdate ? "DailyMonthlyExRates not found for ID: " + dailyMonthlyExRatesDTO.getId() : "DailyMonthlyExRates creation failed";
-	            responseDTO = createServiceResponseError(responseObjectsMap, isUpdate ? "DailyMonthlyExRates update failed" : "DailyMonthlyExRates creation failed", errorMsg);
-	        }
-	    } catch (Exception e) {
-	        errorMsg = e.getMessage();
-	        boolean isUpdate = dailyMonthlyExRatesDTO.getId() != null;
-	        LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
-	        responseDTO = createServiceResponseError(responseObjectsMap, isUpdate ? "DailyMonthlyExRates update failed" : "DailyMonthlyExRates creation failed", errorMsg);
-	    }
-	    LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
-	    return ResponseEntity.ok().body(responseDTO);
+		try {
+			DailyMonthlyExRatesVO dailyMonthlyExRatesVO = transactionService
+					.updateCreateDailyMonthlyExRates(dailyMonthlyExRatesDTO);
+			boolean isUpdate = dailyMonthlyExRatesDTO.getId() != null;
+
+			if (dailyMonthlyExRatesVO != null) {
+				responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+						isUpdate ? "DailyMonthlyExRates updated successfully"
+								: "DailyMonthlyExRates created successfully");
+				responseObjectsMap.put("dailyMonthlyExRatesVO", dailyMonthlyExRatesVO);
+				responseDTO = createServiceResponse(responseObjectsMap);
+			} else {
+				errorMsg = isUpdate ? "DailyMonthlyExRates not found for ID: " + dailyMonthlyExRatesDTO.getId()
+						: "DailyMonthlyExRates creation failed";
+				responseDTO = createServiceResponseError(responseObjectsMap,
+						isUpdate ? "DailyMonthlyExRates update failed" : "DailyMonthlyExRates creation failed",
+						errorMsg);
+			}
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			boolean isUpdate = dailyMonthlyExRatesDTO.getId() != null;
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					isUpdate ? "DailyMonthlyExRates update failed" : "DailyMonthlyExRates creation failed", errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
 	}
-
 
 //	BrsOpening
 	@GetMapping("/getAllBrsOpeningByOrgId")
@@ -490,36 +503,38 @@ public class TransactionController extends BaseController {
 	}
 
 	@PutMapping("/updateCreateBrsOpening")
-	public ResponseEntity<ResponseDTO> updateCreateBrsOpening(
-	        @Valid @RequestBody BrsOpeningDTO brsOpeningDTO) {
-	    String methodName = "updateCreateBrsOpening()";
-	    LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
-	    String errorMsg = null;
-	    Map<String, Object> responseObjectsMap = new HashMap<>();
-	    ResponseDTO responseDTO = null;
+	public ResponseEntity<ResponseDTO> updateCreateBrsOpening(@Valid @RequestBody BrsOpeningDTO brsOpeningDTO) {
+		String methodName = "updateCreateBrsOpening()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
 
-	    try {
-	        BrsOpeningVO brsOpeningVO = transactionService.updateCreateBrsOpening(brsOpeningDTO);
-	        boolean isUpdate = brsOpeningDTO.getId() != null;
-	        
-	        if (brsOpeningVO != null) {
-	            responseObjectsMap.put(CommonConstant.STRING_MESSAGE, isUpdate ? "BrsOpening updated successfully" : "BrsOpening created successfully");
-	            responseObjectsMap.put("brsOpeningVO", brsOpeningVO);
-	            responseDTO = createServiceResponse(responseObjectsMap);
-	        } else {
-	            errorMsg = isUpdate ? "BrsOpening not found for ID: " + brsOpeningDTO.getId() : "BrsOpening creation failed";
-	            responseDTO = createServiceResponseError(responseObjectsMap, isUpdate ? "BrsOpening update failed" : "BrsOpening creation failed", errorMsg);
-	        }
-	    } catch (Exception e) {
-	        errorMsg = e.getMessage();
-	        boolean isUpdate = brsOpeningDTO.getId() != null;
-	        LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
-	        responseDTO = createServiceResponseError(responseObjectsMap, isUpdate ? "BrsOpening update failed" : "BrsOpening creation failed", errorMsg);
-	    }
-	    LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
-	    return ResponseEntity.ok().body(responseDTO);
+		try {
+			BrsOpeningVO brsOpeningVO = transactionService.updateCreateBrsOpening(brsOpeningDTO);
+			boolean isUpdate = brsOpeningDTO.getId() != null;
+
+			if (brsOpeningVO != null) {
+				responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+						isUpdate ? "BrsOpening updated successfully" : "BrsOpening created successfully");
+				responseObjectsMap.put("brsOpeningVO", brsOpeningVO);
+				responseDTO = createServiceResponse(responseObjectsMap);
+			} else {
+				errorMsg = isUpdate ? "BrsOpening not found for ID: " + brsOpeningDTO.getId()
+						: "BrsOpening creation failed";
+				responseDTO = createServiceResponseError(responseObjectsMap,
+						isUpdate ? "BrsOpening update failed" : "BrsOpening creation failed", errorMsg);
+			}
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			boolean isUpdate = brsOpeningDTO.getId() != null;
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					isUpdate ? "BrsOpening update failed" : "BrsOpening creation failed", errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
 	}
-
 
 	@GetMapping("/getBrsOpeningByActive")
 	public ResponseEntity<ResponseDTO> getBrsOpeningByActive() {
@@ -604,33 +619,37 @@ public class TransactionController extends BaseController {
 
 	@PutMapping("/updateCreateChartCostCenter")
 	public ResponseEntity<ResponseDTO> updateChartCostCenter(
-	        @Valid @RequestBody ChartCostCenterDTO chartCostCenterDTO) {
-	    String methodName = "updateCreateChartCostCenter()";
-	    LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
-	    String errorMsg = null;
-	    Map<String, Object> responseObjectsMap = new HashMap<>();
-	    ResponseDTO responseDTO = null;
+			@Valid @RequestBody ChartCostCenterDTO chartCostCenterDTO) {
+		String methodName = "updateCreateChartCostCenter()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
 
-	    try {
-	        ChartCostCenterVO chartCostCenterVO = transactionService.updateCreateChartCostCenter(chartCostCenterDTO);
-	        boolean isUpdate = chartCostCenterDTO.getId() != null;
+		try {
+			ChartCostCenterVO chartCostCenterVO = transactionService.updateCreateChartCostCenter(chartCostCenterDTO);
+			boolean isUpdate = chartCostCenterDTO.getId() != null;
 
-	        if (chartCostCenterVO != null) {
-	            responseObjectsMap.put(CommonConstant.STRING_MESSAGE, isUpdate ? "ChartCostCenter updated successfully" : "ChartCostCenter created successfully");
-	            responseObjectsMap.put("chartCostCenterVO", chartCostCenterVO);
-	            responseDTO = createServiceResponse(responseObjectsMap);
-	        } else {
-	            errorMsg = isUpdate ? "ChartCostCenter not found for ID: " + chartCostCenterDTO.getId() : "ChartCostCenter creation failed";
-	            responseDTO = createServiceResponseError(responseObjectsMap, isUpdate ? "ChartCostCenter update failed" : "ChartCostCenter creation failed", errorMsg);
-	        }
-	    } catch (Exception e) {
-	        errorMsg = e.getMessage();
-	        boolean isUpdate = chartCostCenterDTO.getId() != null;
-	        LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
-	        responseDTO = createServiceResponseError(responseObjectsMap, isUpdate ? "ChartCostCenter update failed" : "ChartCostCenter creation failed", errorMsg);
-	    }
-	    LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
-	    return ResponseEntity.ok().body(responseDTO);
+			if (chartCostCenterVO != null) {
+				responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+						isUpdate ? "ChartCostCenter updated successfully" : "ChartCostCenter created successfully");
+				responseObjectsMap.put("chartCostCenterVO", chartCostCenterVO);
+				responseDTO = createServiceResponse(responseObjectsMap);
+			} else {
+				errorMsg = isUpdate ? "ChartCostCenter not found for ID: " + chartCostCenterDTO.getId()
+						: "ChartCostCenter creation failed";
+				responseDTO = createServiceResponseError(responseObjectsMap,
+						isUpdate ? "ChartCostCenter update failed" : "ChartCostCenter creation failed", errorMsg);
+			}
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			boolean isUpdate = chartCostCenterDTO.getId() != null;
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					isUpdate ? "ChartCostCenter update failed" : "ChartCostCenter creation failed", errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
 	}
 
 	@GetMapping("/getChartCostCenterByActive")
@@ -716,33 +735,37 @@ public class TransactionController extends BaseController {
 
 	@PutMapping("/updateCreateFundTransfer")
 	public ResponseEntity<ResponseDTO> updateCreateFundTransfer(@Valid @RequestBody FundTransferDTO fundTransferDTO) {
-	    String methodName = "updateCreateFundTransfer()";
-	    LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
-	    String errorMsg = null;
-	    Map<String, Object> responseObjectsMap = new HashMap<>();
-	    ResponseDTO responseDTO = null;
+		String methodName = "updateCreateFundTransfer()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
 
-	    try {
-	        FundTransferVO fundTransferVO = transactionService.updateCreateFundTransfer(fundTransferDTO);
-	        boolean isUpdate = fundTransferDTO.getId() != null;
+		try {
+			FundTransferVO fundTransferVO = transactionService.updateCreateFundTransfer(fundTransferDTO);
+			boolean isUpdate = fundTransferDTO.getId() != null;
 
-	        if (fundTransferVO != null) {
-	            responseObjectsMap.put(CommonConstant.STRING_MESSAGE, isUpdate ? "FundTransfer updated successfully" : "FundTransfer created successfully");
-	            responseObjectsMap.put("fundTransferVO", fundTransferVO);
-	            responseDTO = createServiceResponse(responseObjectsMap);
-	        } else {
-	            errorMsg = isUpdate ? "FundTransfer not found for ID: " + fundTransferDTO.getId() : "FundTransfer creation failed";
-	            responseDTO = createServiceResponseError(responseObjectsMap, isUpdate ? "FundTransfer update failed" : "FundTransfer creation failed", errorMsg);
-	        }
-	    } catch (Exception e) {
-	        errorMsg = e.getMessage();
-	        boolean isUpdate = fundTransferDTO.getId() != null;
-	        LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
-	        responseDTO = createServiceResponseError(responseObjectsMap, isUpdate ? "FundTransfer update failed" : "FundTransfer creation failed", errorMsg);
-	    }
+			if (fundTransferVO != null) {
+				responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+						isUpdate ? "FundTransfer updated successfully" : "FundTransfer created successfully");
+				responseObjectsMap.put("fundTransferVO", fundTransferVO);
+				responseDTO = createServiceResponse(responseObjectsMap);
+			} else {
+				errorMsg = isUpdate ? "FundTransfer not found for ID: " + fundTransferDTO.getId()
+						: "FundTransfer creation failed";
+				responseDTO = createServiceResponseError(responseObjectsMap,
+						isUpdate ? "FundTransfer update failed" : "FundTransfer creation failed", errorMsg);
+			}
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			boolean isUpdate = fundTransferDTO.getId() != null;
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					isUpdate ? "FundTransfer update failed" : "FundTransfer creation failed", errorMsg);
+		}
 
-	    LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
-	    return ResponseEntity.ok().body(responseDTO);
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
 	}
 
 	@GetMapping("/getFundTransferByActive")
@@ -829,34 +852,38 @@ public class TransactionController extends BaseController {
 
 	@PutMapping("/updateCreateGeneralJournal")
 	public ResponseEntity<ResponseDTO> updateCreateGeneralJournal(
-	        @Valid @RequestBody GeneralJournalDTO generalJournalDTO) {
-	    String methodName = "updateCreateGeneralJournal()";
-	    LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
-	    String errorMsg = null;
-	    Map<String, Object> responseObjectsMap = new HashMap<>();
-	    ResponseDTO responseDTO = null;
-	    
-	    try {
-	        GeneralJournalVO generalJournalVO = transactionService.updateCreateGeneralJournal(generalJournalDTO);
-	        boolean isUpdate = generalJournalDTO.getId() != null;
-	        
-	        if (generalJournalVO != null) {
-	            responseObjectsMap.put(CommonConstant.STRING_MESSAGE, isUpdate ? "GeneralJournal updated successfully" : "GeneralJournal created successfully");
-	            responseObjectsMap.put("generalJournalVO", generalJournalVO);
-	            responseDTO = createServiceResponse(responseObjectsMap);
-	        } else {
-	            errorMsg = isUpdate ? "GeneralJournal not found for ID: " + generalJournalDTO.getId() : "GeneralJournal creation failed";
-	            responseDTO = createServiceResponseError(responseObjectsMap, isUpdate ? "GeneralJournal update failed" : "GeneralJournal creation failed", errorMsg);
-	        }
-	    } catch (Exception e) {
-	        errorMsg = e.getMessage();
-	        boolean isUpdate = generalJournalDTO.getId() != null;
-	        LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
-	        responseDTO = createServiceResponseError(responseObjectsMap, isUpdate ? "GeneralJournal update failed" : "GeneralJournal creation failed", errorMsg);
-	    }
-	    
-	    LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
-	    return ResponseEntity.ok().body(responseDTO);
+			@Valid @RequestBody GeneralJournalDTO generalJournalDTO) {
+		String methodName = "updateCreateGeneralJournal()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+
+		try {
+			GeneralJournalVO generalJournalVO = transactionService.updateCreateGeneralJournal(generalJournalDTO);
+			boolean isUpdate = generalJournalDTO.getId() != null;
+
+			if (generalJournalVO != null) {
+				responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+						isUpdate ? "GeneralJournal updated successfully" : "GeneralJournal created successfully");
+				responseObjectsMap.put("generalJournalVO", generalJournalVO);
+				responseDTO = createServiceResponse(responseObjectsMap);
+			} else {
+				errorMsg = isUpdate ? "GeneralJournal not found for ID: " + generalJournalDTO.getId()
+						: "GeneralJournal creation failed";
+				responseDTO = createServiceResponseError(responseObjectsMap,
+						isUpdate ? "GeneralJournal update failed" : "GeneralJournal creation failed", errorMsg);
+			}
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			boolean isUpdate = generalJournalDTO.getId() != null;
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					isUpdate ? "GeneralJournal update failed" : "GeneralJournal creation failed", errorMsg);
+		}
+
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
 	}
 
 	@GetMapping("/getGeneralJournalByActive")
@@ -943,35 +970,38 @@ public class TransactionController extends BaseController {
 
 	@PutMapping("/updateCreateCostInvoice")
 	public ResponseEntity<ResponseDTO> updateCreateCostInvoice(@Valid @RequestBody CostInvoiceDTO costInvoiceDTO) {
-	    String methodName = "updateCreateCostInvoice()";
-	    LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
-	    String errorMsg = null;
-	    Map<String, Object> responseObjectsMap = new HashMap<>();
-	    ResponseDTO responseDTO = null;
-	    
-	    try {
-	        CostInvoiceVO costInvoiceVO = transactionService.updateCreateCostInvoice(costInvoiceDTO);
-	        boolean isUpdate = costInvoiceDTO.getId() != null;
-	        
-	        if (costInvoiceVO != null) {
-	            responseObjectsMap.put(CommonConstant.STRING_MESSAGE, isUpdate ? "CostInvoice updated successfully" : "CostInvoice created successfully");
-	            responseObjectsMap.put("costInvoiceVO", costInvoiceVO);
-	            responseDTO = createServiceResponse(responseObjectsMap);
-	        } else {
-	            errorMsg = isUpdate ? "CostInvoice not found for ID: " + costInvoiceDTO.getId() : "CostInvoice creation failed";
-	            responseDTO = createServiceResponseError(responseObjectsMap, isUpdate ? "CostInvoice update failed" : "CostInvoice creation failed", errorMsg);
-	        }
-	    } catch (Exception e) {
-	        errorMsg = e.getMessage();
-	        boolean isUpdate = costInvoiceDTO.getId() != null;
-	        LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
-	        responseDTO = createServiceResponseError(responseObjectsMap, isUpdate ? "CostInvoice update failed" : "CostInvoice creation failed", errorMsg);
-	    }
-	    
-	    LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
-	    return ResponseEntity.ok().body(responseDTO);
-	}
+		String methodName = "updateCreateCostInvoice()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
 
+		try {
+			CostInvoiceVO costInvoiceVO = transactionService.updateCreateCostInvoice(costInvoiceDTO);
+			boolean isUpdate = costInvoiceDTO.getId() != null;
+
+			if (costInvoiceVO != null) {
+				responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+						isUpdate ? "CostInvoice updated successfully" : "CostInvoice created successfully");
+				responseObjectsMap.put("costInvoiceVO", costInvoiceVO);
+				responseDTO = createServiceResponse(responseObjectsMap);
+			} else {
+				errorMsg = isUpdate ? "CostInvoice not found for ID: " + costInvoiceDTO.getId()
+						: "CostInvoice creation failed";
+				responseDTO = createServiceResponseError(responseObjectsMap,
+						isUpdate ? "CostInvoice update failed" : "CostInvoice creation failed", errorMsg);
+			}
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			boolean isUpdate = costInvoiceDTO.getId() != null;
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					isUpdate ? "CostInvoice update failed" : "CostInvoice creation failed", errorMsg);
+		}
+
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+	}
 
 	@GetMapping("/getCostInvoiceByActive")
 	public ResponseEntity<ResponseDTO> getCostInvoiceByActive() {
@@ -1057,35 +1087,38 @@ public class TransactionController extends BaseController {
 
 	@PutMapping("/updateCreateDebitNote")
 	public ResponseEntity<ResponseDTO> updateCreateDebitNote(@Valid @RequestBody DebitNoteDTO debitNoteDTO) {
-	    String methodName = "updateCreateDebitNote()";
-	    LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
-	    String errorMsg = null;
-	    Map<String, Object> responseObjectsMap = new HashMap<>();
-	    ResponseDTO responseDTO = null;
+		String methodName = "updateCreateDebitNote()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
 
-	    try {
-	        DebitNoteVO debitNoteVO = transactionService.updateCreateDebitNote(debitNoteDTO);
-	        boolean isUpdate = debitNoteDTO.getId() != null;
+		try {
+			DebitNoteVO debitNoteVO = transactionService.updateCreateDebitNote(debitNoteDTO);
+			boolean isUpdate = debitNoteDTO.getId() != null;
 
-	        if (debitNoteVO != null) {
-	            responseObjectsMap.put(CommonConstant.STRING_MESSAGE, isUpdate ? "DebitNote updated successfully" : "DebitNote created successfully");
-	            responseObjectsMap.put("debitNoteVO", debitNoteVO);
-	            responseDTO = createServiceResponse(responseObjectsMap);
-	        } else {
-	            errorMsg = isUpdate ? "DebitNote not found for ID: " + debitNoteDTO.getId() : "DebitNote creation failed";
-	            responseDTO = createServiceResponseError(responseObjectsMap, isUpdate ? "DebitNote update failed" : "DebitNote creation failed", errorMsg);
-	        }
-	    } catch (Exception e) {
-	        errorMsg = e.getMessage();
-	        boolean isUpdate = debitNoteDTO.getId() != null;
-	        LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
-	        responseDTO = createServiceResponseError(responseObjectsMap, isUpdate ? "DebitNote update failed" : "DebitNote creation failed", errorMsg);
-	    }
+			if (debitNoteVO != null) {
+				responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+						isUpdate ? "DebitNote updated successfully" : "DebitNote created successfully");
+				responseObjectsMap.put("debitNoteVO", debitNoteVO);
+				responseDTO = createServiceResponse(responseObjectsMap);
+			} else {
+				errorMsg = isUpdate ? "DebitNote not found for ID: " + debitNoteDTO.getId()
+						: "DebitNote creation failed";
+				responseDTO = createServiceResponseError(responseObjectsMap,
+						isUpdate ? "DebitNote update failed" : "DebitNote creation failed", errorMsg);
+			}
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			boolean isUpdate = debitNoteDTO.getId() != null;
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					isUpdate ? "DebitNote update failed" : "DebitNote creation failed", errorMsg);
+		}
 
-	    LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
-	    return ResponseEntity.ok().body(responseDTO);
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
 	}
-
 
 	@GetMapping("/getDebitNoteByActive")
 	public ResponseEntity<ResponseDTO> getDebitNoteByActive() {
@@ -1172,37 +1205,40 @@ public class TransactionController extends BaseController {
 
 	@PutMapping("/updateCreateGstSalesVoucher")
 	public ResponseEntity<ResponseDTO> updateCreateGstSalesVoucher(
-	        @Valid @RequestBody GstSalesVoucherDTO gstSalesVoucherDTO) {
-	    String methodName = "updateCreateGstSalesVoucher()";
+			@Valid @RequestBody GstSalesVoucherDTO gstSalesVoucherDTO) {
+		String methodName = "updateCreateGstSalesVoucher()";
 
-	    LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
-	    String errorMsg = null;
-	    Map<String, Object> responseObjectsMap = new HashMap<>();
-	    ResponseDTO responseDTO = null;
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
 
-	    try {
-	        GstSalesVoucherVO gstSalesVoucherVO = transactionService.updateCreateGstSalesVoucher(gstSalesVoucherDTO);
-	        boolean isUpdate = gstSalesVoucherDTO.getId() != null;
+		try {
+			GstSalesVoucherVO gstSalesVoucherVO = transactionService.updateCreateGstSalesVoucher(gstSalesVoucherDTO);
+			boolean isUpdate = gstSalesVoucherDTO.getId() != null;
 
-	        if (gstSalesVoucherVO != null) {
-	            responseObjectsMap.put(CommonConstant.STRING_MESSAGE, isUpdate ? "GstSalesVoucher updated successfully" : "GstSalesVoucher created successfully");
-	            responseObjectsMap.put("gstSalesVoucherVO", gstSalesVoucherVO);
-	            responseDTO = createServiceResponse(responseObjectsMap);
-	        } else {
-	            errorMsg = isUpdate ? "GstSalesVoucher not found for ID: " + gstSalesVoucherDTO.getId() : "GstSalesVoucher creation failed";
-	            responseDTO = createServiceResponseError(responseObjectsMap, isUpdate ? "GstSalesVoucher update failed" : "GstSalesVoucher creation failed", errorMsg);
-	        }
-	    } catch (Exception e) {
-	        errorMsg = e.getMessage();
-	        boolean isUpdate = gstSalesVoucherDTO.getId() != null;
-	        LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
-	        responseDTO = createServiceResponseError(responseObjectsMap, isUpdate ? "GstSalesVoucher update failed" : "GstSalesVoucher creation failed", errorMsg);
-	    }
+			if (gstSalesVoucherVO != null) {
+				responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+						isUpdate ? "GstSalesVoucher updated successfully" : "GstSalesVoucher created successfully");
+				responseObjectsMap.put("gstSalesVoucherVO", gstSalesVoucherVO);
+				responseDTO = createServiceResponse(responseObjectsMap);
+			} else {
+				errorMsg = isUpdate ? "GstSalesVoucher not found for ID: " + gstSalesVoucherDTO.getId()
+						: "GstSalesVoucher creation failed";
+				responseDTO = createServiceResponseError(responseObjectsMap,
+						isUpdate ? "GstSalesVoucher update failed" : "GstSalesVoucher creation failed", errorMsg);
+			}
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			boolean isUpdate = gstSalesVoucherDTO.getId() != null;
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					isUpdate ? "GstSalesVoucher update failed" : "GstSalesVoucher creation failed", errorMsg);
+		}
 
-	    LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
-	    return ResponseEntity.ok().body(responseDTO);
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
 	}
-
 
 	@GetMapping("/getGstSalesVoucherByActive")
 	public ResponseEntity<ResponseDTO> getGstSalesVoucherByActive() {
@@ -1290,37 +1326,40 @@ public class TransactionController extends BaseController {
 
 	@PutMapping("/updateCreatePaymentVoucher")
 	public ResponseEntity<ResponseDTO> updateCreatePaymentVoucher(
-	        @Valid @RequestBody PaymentVoucherDTO paymentVoucherDTO) {
-	    String methodName = "updateCreatePaymentVoucher()";
+			@Valid @RequestBody PaymentVoucherDTO paymentVoucherDTO) {
+		String methodName = "updateCreatePaymentVoucher()";
 
-	    LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
-	    String errorMsg = null;
-	    Map<String, Object> responseObjectsMap = new HashMap<>();
-	    ResponseDTO responseDTO = null;
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
 
-	    try {
-	        PaymentVoucherVO paymentVoucherVO = transactionService.updateCreatePaymentVoucher(paymentVoucherDTO);
-	        boolean isUpdate = paymentVoucherDTO.getId() != null;
+		try {
+			PaymentVoucherVO paymentVoucherVO = transactionService.updateCreatePaymentVoucher(paymentVoucherDTO);
+			boolean isUpdate = paymentVoucherDTO.getId() != null;
 
-	        if (paymentVoucherVO != null) {
-	            responseObjectsMap.put(CommonConstant.STRING_MESSAGE, isUpdate ? "PaymentVoucher updated successfully" : "PaymentVoucher created successfully");
-	            responseObjectsMap.put("paymentVoucherVO", paymentVoucherVO);
-	            responseDTO = createServiceResponse(responseObjectsMap);
-	        } else {
-	            errorMsg = isUpdate ? "PaymentVoucher not found for ID: " + paymentVoucherDTO.getId() : "PaymentVoucher creation failed";
-	            responseDTO = createServiceResponseError(responseObjectsMap, isUpdate ? "PaymentVoucher update failed" : "PaymentVoucher creation failed", errorMsg);
-	        }
-	    } catch (Exception e) {
-	        errorMsg = e.getMessage();
-	        boolean isUpdate = paymentVoucherDTO.getId() != null;
-	        LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
-	        responseDTO = createServiceResponseError(responseObjectsMap, isUpdate ? "PaymentVoucher update failed" : "PaymentVoucher creation failed", errorMsg);
-	    }
+			if (paymentVoucherVO != null) {
+				responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+						isUpdate ? "PaymentVoucher updated successfully" : "PaymentVoucher created successfully");
+				responseObjectsMap.put("paymentVoucherVO", paymentVoucherVO);
+				responseDTO = createServiceResponse(responseObjectsMap);
+			} else {
+				errorMsg = isUpdate ? "PaymentVoucher not found for ID: " + paymentVoucherDTO.getId()
+						: "PaymentVoucher creation failed";
+				responseDTO = createServiceResponseError(responseObjectsMap,
+						isUpdate ? "PaymentVoucher update failed" : "PaymentVoucher creation failed", errorMsg);
+			}
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			boolean isUpdate = paymentVoucherDTO.getId() != null;
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					isUpdate ? "PaymentVoucher update failed" : "PaymentVoucher creation failed", errorMsg);
+		}
 
-	    LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
-	    return ResponseEntity.ok().body(responseDTO);
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
 	}
-
 
 	@GetMapping("/getPaymentVoucherByActive")
 	public ResponseEntity<ResponseDTO> getPaymentVoucherByActive() {
@@ -1406,36 +1445,39 @@ public class TransactionController extends BaseController {
 	}
 
 	@PutMapping("/updateCreateArapDetails")
-	public ResponseEntity<ResponseDTO> updateCreateArapDetails(
-	        @Valid @RequestBody ArapDetailsDTO arapDetailsDTO) {
-	    String methodName = "updateCreateArapDetails()";
+	public ResponseEntity<ResponseDTO> updateCreateArapDetails(@Valid @RequestBody ArapDetailsDTO arapDetailsDTO) {
+		String methodName = "updateCreateArapDetails()";
 
-	    LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
-	    String errorMsg = null;
-	    Map<String, Object> responseObjectsMap = new HashMap<>();
-	    ResponseDTO responseDTO = null;
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
 
-	    try {
-	        ArapDetailsVO arapDetailsVO = transactionService.updateCreateArapDetails(arapDetailsDTO);
-	        boolean isUpdate = arapDetailsDTO.getId() != null;
+		try {
+			ArapDetailsVO arapDetailsVO = transactionService.updateCreateArapDetails(arapDetailsDTO);
+			boolean isUpdate = arapDetailsDTO.getId() != null;
 
-	        if (arapDetailsVO != null) {
-	            responseObjectsMap.put(CommonConstant.STRING_MESSAGE, isUpdate ? "ArapDetails updated successfully" : "ArapDetails created successfully");
-	            responseObjectsMap.put("arapDetailsVO", arapDetailsVO);
-	            responseDTO = createServiceResponse(responseObjectsMap);
-	        } else {
-	            errorMsg = isUpdate ? "ArapDetails not found for ID: " + arapDetailsDTO.getId() : "ArapDetails creation failed";
-	            responseDTO = createServiceResponseError(responseObjectsMap, isUpdate ? "ArapDetails update failed" : "ArapDetails creation failed", errorMsg);
-	        }
-	    } catch (Exception e) {
-	        errorMsg = e.getMessage();
-	        boolean isUpdate = arapDetailsDTO.getId() != null;
-	        LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
-	        responseDTO = createServiceResponseError(responseObjectsMap, isUpdate ? "ArapDetails update failed" : "ArapDetails creation failed", errorMsg);
-	    }
+			if (arapDetailsVO != null) {
+				responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+						isUpdate ? "ArapDetails updated successfully" : "ArapDetails created successfully");
+				responseObjectsMap.put("arapDetailsVO", arapDetailsVO);
+				responseDTO = createServiceResponse(responseObjectsMap);
+			} else {
+				errorMsg = isUpdate ? "ArapDetails not found for ID: " + arapDetailsDTO.getId()
+						: "ArapDetails creation failed";
+				responseDTO = createServiceResponseError(responseObjectsMap,
+						isUpdate ? "ArapDetails update failed" : "ArapDetails creation failed", errorMsg);
+			}
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			boolean isUpdate = arapDetailsDTO.getId() != null;
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					isUpdate ? "ArapDetails update failed" : "ArapDetails creation failed", errorMsg);
+		}
 
-	    LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
-	    return ResponseEntity.ok().body(responseDTO);
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
 	}
 
 	@GetMapping("/getArapDetailsByActive")
@@ -1523,35 +1565,39 @@ public class TransactionController extends BaseController {
 
 	@PutMapping("/updateCreateArapAdjustments")
 	public ResponseEntity<ResponseDTO> updateCreateArapAdjustments(
-	        @Valid @RequestBody ArapAdjustmentsDTO arapAdjustmentsDTO) {
-	    String methodName = "updateCreateArapAdjustments()";
+			@Valid @RequestBody ArapAdjustmentsDTO arapAdjustmentsDTO) {
+		String methodName = "updateCreateArapAdjustments()";
 
-	    LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
-	    String errorMsg = null;
-	    Map<String, Object> responseObjectsMap = new HashMap<>();
-	    ResponseDTO responseDTO = null;
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
 
-	    try {
-	        ArapAdjustmentsVO arapAdjustmentsVO = transactionService.updateCreateArapAdjustments(arapAdjustmentsDTO);
-	        boolean isUpdate = arapAdjustmentsDTO.getId() != null;
+		try {
+			ArapAdjustmentsVO arapAdjustmentsVO = transactionService.updateCreateArapAdjustments(arapAdjustmentsDTO);
+			boolean isUpdate = arapAdjustmentsDTO.getId() != null;
 
-	        if (arapAdjustmentsVO != null) {
-	            responseObjectsMap.put(CommonConstant.STRING_MESSAGE, isUpdate ? "ArapAdjustments updated successfully" : "ArapAdjustments created successfully");
-	            responseObjectsMap.put("arapAdjustmentsVO", arapAdjustmentsVO);
-	            responseDTO = createServiceResponse(responseObjectsMap);
-	        } else {
-	            errorMsg = isUpdate ? "ArapAdjustments not found for ID: " + arapAdjustmentsDTO.getId() : "ArapAdjustments creation failed";
-	            responseDTO = createServiceResponseError(responseObjectsMap, isUpdate ? "ArapAdjustments update failed" : "ArapAdjustments creation failed", errorMsg);
-	        }
-	    } catch (Exception e) {
-	        errorMsg = e.getMessage();
-	        boolean isUpdate = arapAdjustmentsDTO.getId() != null;
-	        LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
-	        responseDTO = createServiceResponseError(responseObjectsMap, isUpdate ? "ArapAdjustments update failed" : "ArapAdjustments creation failed", errorMsg);
-	    }
+			if (arapAdjustmentsVO != null) {
+				responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+						isUpdate ? "ArapAdjustments updated successfully" : "ArapAdjustments created successfully");
+				responseObjectsMap.put("arapAdjustmentsVO", arapAdjustmentsVO);
+				responseDTO = createServiceResponse(responseObjectsMap);
+			} else {
+				errorMsg = isUpdate ? "ArapAdjustments not found for ID: " + arapAdjustmentsDTO.getId()
+						: "ArapAdjustments creation failed";
+				responseDTO = createServiceResponseError(responseObjectsMap,
+						isUpdate ? "ArapAdjustments update failed" : "ArapAdjustments creation failed", errorMsg);
+			}
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			boolean isUpdate = arapAdjustmentsDTO.getId() != null;
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					isUpdate ? "ArapAdjustments update failed" : "ArapAdjustments creation failed", errorMsg);
+		}
 
-	    LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
-	    return ResponseEntity.ok().body(responseDTO);
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
 	}
 
 	@GetMapping("/getArapAdjustmentsByActive")
@@ -1640,37 +1686,40 @@ public class TransactionController extends BaseController {
 
 	@PutMapping("/updateCreateReceiptReversal")
 	public ResponseEntity<ResponseDTO> updateCreateReceiptReversal(
-	        @Valid @RequestBody ReceiptReversalDTO receiptReversalDTO) {
-	    String methodName = "updateCreateReceiptReversal()";
+			@Valid @RequestBody ReceiptReversalDTO receiptReversalDTO) {
+		String methodName = "updateCreateReceiptReversal()";
 
-	    LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
-	    String errorMsg = null;
-	    Map<String, Object> responseObjectsMap = new HashMap<>();
-	    ResponseDTO responseDTO = null;
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
 
-	    try {
-	        ReceiptReversalVO receiptReversalVO = transactionService.updateCreateReceiptReversal(receiptReversalDTO);
-	        boolean isUpdate = receiptReversalDTO.getId() != null;
+		try {
+			ReceiptReversalVO receiptReversalVO = transactionService.updateCreateReceiptReversal(receiptReversalDTO);
+			boolean isUpdate = receiptReversalDTO.getId() != null;
 
-	        if (receiptReversalVO != null) {
-	            responseObjectsMap.put(CommonConstant.STRING_MESSAGE, isUpdate ? "ReceiptReversal updated successfully" : "ReceiptReversal created successfully");
-	            responseObjectsMap.put("receiptReversalVO", receiptReversalVO);
-	            responseDTO = createServiceResponse(responseObjectsMap);
-	        } else {
-	            errorMsg = isUpdate ? "ReceiptReversal not found for ID: " + receiptReversalDTO.getId() : "ReceiptReversal creation failed";
-	            responseDTO = createServiceResponseError(responseObjectsMap, isUpdate ? "ReceiptReversal update failed" : "ReceiptReversal creation failed", errorMsg);
-	        }
-	    } catch (Exception e) {
-	        errorMsg = e.getMessage();
-	        boolean isUpdate = receiptReversalDTO.getId() != null;
-	        LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
-	        responseDTO = createServiceResponseError(responseObjectsMap, isUpdate ? "ReceiptReversal update failed" : "ReceiptReversal creation failed", errorMsg);
-	    }
+			if (receiptReversalVO != null) {
+				responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+						isUpdate ? "ReceiptReversal updated successfully" : "ReceiptReversal created successfully");
+				responseObjectsMap.put("receiptReversalVO", receiptReversalVO);
+				responseDTO = createServiceResponse(responseObjectsMap);
+			} else {
+				errorMsg = isUpdate ? "ReceiptReversal not found for ID: " + receiptReversalDTO.getId()
+						: "ReceiptReversal creation failed";
+				responseDTO = createServiceResponseError(responseObjectsMap,
+						isUpdate ? "ReceiptReversal update failed" : "ReceiptReversal creation failed", errorMsg);
+			}
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			boolean isUpdate = receiptReversalDTO.getId() != null;
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					isUpdate ? "ReceiptReversal update failed" : "ReceiptReversal creation failed", errorMsg);
+		}
 
-	    LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
-	    return ResponseEntity.ok().body(responseDTO);
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
 	}
-
 
 	@GetMapping("/getReceiptReversalByActive")
 	public ResponseEntity<ResponseDTO> getReceiptReversalByActive() {
@@ -1758,37 +1807,40 @@ public class TransactionController extends BaseController {
 
 	@PutMapping("/updateCreatePaymentReversal")
 	public ResponseEntity<ResponseDTO> updateCreatePaymentReversal(
-	        @Valid @RequestBody PaymentReversalDTO paymentReversalDTO) {
-	    String methodName = "updateCreatePaymentReversal()";
+			@Valid @RequestBody PaymentReversalDTO paymentReversalDTO) {
+		String methodName = "updateCreatePaymentReversal()";
 
-	    LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
-	    String errorMsg = null;
-	    Map<String, Object> responseObjectsMap = new HashMap<>();
-	    ResponseDTO responseDTO = null;
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
 
-	    try {
-	        PaymentReversalVO paymentReversalVO = transactionService.updateCreatePaymentReversal(paymentReversalDTO);
-	        boolean isUpdate = paymentReversalDTO.getId() != null;
+		try {
+			PaymentReversalVO paymentReversalVO = transactionService.updateCreatePaymentReversal(paymentReversalDTO);
+			boolean isUpdate = paymentReversalDTO.getId() != null;
 
-	        if (paymentReversalVO != null) {
-	            responseObjectsMap.put(CommonConstant.STRING_MESSAGE, isUpdate ? "PaymentReversal updated successfully" : "PaymentReversal created successfully");
-	            responseObjectsMap.put("paymentReversalVO", paymentReversalVO);
-	            responseDTO = createServiceResponse(responseObjectsMap);
-	        } else {
-	            errorMsg = isUpdate ? "PaymentReversal not found for ID: " + paymentReversalDTO.getId() : "PaymentReversal creation failed";
-	            responseDTO = createServiceResponseError(responseObjectsMap, isUpdate ? "PaymentReversal update failed" : "PaymentReversal creation failed", errorMsg);
-	        }
-	    } catch (Exception e) {
-	        errorMsg = e.getMessage();
-	        boolean isUpdate = paymentReversalDTO.getId() != null;
-	        LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
-	        responseDTO = createServiceResponseError(responseObjectsMap, isUpdate ? "PaymentReversal update failed" : "PaymentReversal creation failed", errorMsg);
-	    }
+			if (paymentReversalVO != null) {
+				responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+						isUpdate ? "PaymentReversal updated successfully" : "PaymentReversal created successfully");
+				responseObjectsMap.put("paymentReversalVO", paymentReversalVO);
+				responseDTO = createServiceResponse(responseObjectsMap);
+			} else {
+				errorMsg = isUpdate ? "PaymentReversal not found for ID: " + paymentReversalDTO.getId()
+						: "PaymentReversal creation failed";
+				responseDTO = createServiceResponseError(responseObjectsMap,
+						isUpdate ? "PaymentReversal update failed" : "PaymentReversal creation failed", errorMsg);
+			}
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			boolean isUpdate = paymentReversalDTO.getId() != null;
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					isUpdate ? "PaymentReversal update failed" : "PaymentReversal creation failed", errorMsg);
+		}
 
-	    LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
-	    return ResponseEntity.ok().body(responseDTO);
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
 	}
-
 
 	@GetMapping("/getPaymentReversalByActive")
 	public ResponseEntity<ResponseDTO> getPaymentReversalByActive() {
@@ -1877,37 +1929,43 @@ public class TransactionController extends BaseController {
 
 	@PutMapping("/updateCreateArApAdjustmentOffSet")
 	public ResponseEntity<ResponseDTO> updateCreateArApAdjustmentOffSet(
-	        @Valid @RequestBody ArApAdjustmentOffSetDTO arApAdjustmentOffSetDTO) {
-	    String methodName = "updateCreateArApAdjustmentOffSet()";
+			@Valid @RequestBody ArApAdjustmentOffSetDTO arApAdjustmentOffSetDTO) {
+		String methodName = "updateCreateArApAdjustmentOffSet()";
 
-	    LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
-	    String errorMsg = null;
-	    Map<String, Object> responseObjectsMap = new HashMap<>();
-	    ResponseDTO responseDTO = null;
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
 
-	    try {
-	        ArApAdjustmentOffSetVO arApAdjustmentOffSetVO = transactionService.updateCreateArApAdjustmentOffSet(arApAdjustmentOffSetDTO);
-	        boolean isUpdate = arApAdjustmentOffSetDTO.getId() != null;
+		try {
+			ArApAdjustmentOffSetVO arApAdjustmentOffSetVO = transactionService
+					.updateCreateArApAdjustmentOffSet(arApAdjustmentOffSetDTO);
+			boolean isUpdate = arApAdjustmentOffSetDTO.getId() != null;
 
-	        if (arApAdjustmentOffSetVO != null) {
-	            responseObjectsMap.put(CommonConstant.STRING_MESSAGE, isUpdate ? "ArApAdjustmentOffSet updated successfully" : "ArApAdjustmentOffSet created successfully");
-	            responseObjectsMap.put("arApAdjustmentOffSetVO", arApAdjustmentOffSetVO);
-	            responseDTO = createServiceResponse(responseObjectsMap);
-	        } else {
-	            errorMsg = isUpdate ? "ArApAdjustmentOffSet not found for ID: " + arApAdjustmentOffSetDTO.getId() : "ArApAdjustmentOffSet creation failed";
-	            responseDTO = createServiceResponseError(responseObjectsMap, isUpdate ? "ArApAdjustmentOffSet update failed" : "ArApAdjustmentOffSet creation failed", errorMsg);
-	        }
-	    } catch (Exception e) {
-	        errorMsg = e.getMessage();
-	        boolean isUpdate = arApAdjustmentOffSetDTO.getId() != null;
-	        LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
-	        responseDTO = createServiceResponseError(responseObjectsMap, isUpdate ? "ArApAdjustmentOffSet update failed" : "ArApAdjustmentOffSet creation failed", errorMsg);
-	    }
+			if (arApAdjustmentOffSetVO != null) {
+				responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+						isUpdate ? "ArApAdjustmentOffSet updated successfully"
+								: "ArApAdjustmentOffSet created successfully");
+				responseObjectsMap.put("arApAdjustmentOffSetVO", arApAdjustmentOffSetVO);
+				responseDTO = createServiceResponse(responseObjectsMap);
+			} else {
+				errorMsg = isUpdate ? "ArApAdjustmentOffSet not found for ID: " + arApAdjustmentOffSetDTO.getId()
+						: "ArApAdjustmentOffSet creation failed";
+				responseDTO = createServiceResponseError(responseObjectsMap,
+						isUpdate ? "ArApAdjustmentOffSet update failed" : "ArApAdjustmentOffSet creation failed",
+						errorMsg);
+			}
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			boolean isUpdate = arApAdjustmentOffSetDTO.getId() != null;
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					isUpdate ? "ArApAdjustmentOffSet update failed" : "ArApAdjustmentOffSet creation failed", errorMsg);
+		}
 
-	    LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
-	    return ResponseEntity.ok().body(responseDTO);
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
 	}
-
 
 	@GetMapping("/getArApAdjustmentOffSetByActive")
 	public ResponseEntity<ResponseDTO> getArApAdjustmentOffSetByActive() {
@@ -1936,4 +1994,6 @@ public class TransactionController extends BaseController {
 		return ResponseEntity.ok().body(responseDTO);
 
 	}
+
+
 }
