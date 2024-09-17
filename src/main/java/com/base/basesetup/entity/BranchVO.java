@@ -1,0 +1,78 @@
+  package com.base.basesetup.entity;
+
+import javax.persistence.Column;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+
+import com.base.basesetup.dto.CreatedUpdatedDate;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Entity
+@Table(name = "branch")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class BranchVO {
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "branchgen")
+	@SequenceGenerator(name = "branchgen", sequenceName = "branchseq", initialValue = 1000000001, allocationSize = 1)
+	@Column(name = "branchid")
+	private Long id;
+
+	@Column(name = "branch")
+	private String branch;
+	@Column(name = "branchcode")
+	private String branchCode;
+	@Column(name = "orgid")
+	private Long orgId;
+	@Column(name = "addressline1")
+	private String addressLine1;
+	@Column(name = "addressline2")
+	private String addressLine2;
+	@Column(name = "panno")
+	private String pan;
+	@Column(name = "gstin")
+	private String gstIn;
+	@Column(name = "phone")
+	private String phone;
+	@Column(name = "state")
+	private String state;
+	@Column(name = "city")
+	private String city;
+	@Column(name = "pincode")
+	private String pinCode;
+	@Column(name = "country")
+	private String country;
+	@Column(name = "stateno")
+	private String stateNo;
+	@Column(name = "statecode")
+	private String stateCode;
+	@Column(name = "region")
+	private String region;
+	@Column(name = "lccurrency")
+	private String lccurrency;
+	@Column(name = "cancel")
+	private boolean cancel;
+	@Column(name = "cancelremarks")
+	private String cancelRemarks;
+	@Column(name = "createdby")
+	private String createdBy;
+	@Column(name = "modifiedby")
+	private String updatedBy;
+	@Column(name = "active")
+	private boolean active;
+	@Column(name = "userid")
+	private String userId;
+
+	@Embedded
+	private CreatedUpdatedDate commonDate = new CreatedUpdatedDate();
+}
