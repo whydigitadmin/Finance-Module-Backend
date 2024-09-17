@@ -15,7 +15,7 @@ public interface CostInvoiceRepo extends JpaRepository<CostInvoiceVO, Long> {
 	@Query(nativeQuery = true, value = "select * from costinvoice where costinvoiceid=?1")
 	List<CostInvoiceVO> getAllCostInvoiceById(Long id);
 
-	@Query(nativeQuery = true, value = "select * from where active = 1")
+	@Query(nativeQuery = true, value = "select * from costinvoice where active = 1")
 	List<CostInvoiceVO> findCostInvoiceByActive();
 
 }
