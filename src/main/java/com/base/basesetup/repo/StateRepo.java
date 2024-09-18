@@ -11,20 +11,20 @@ import com.base.basesetup.entity.StateVO;
 @Repository
 public interface StateRepo extends JpaRepository<StateVO, Long> {
 
-	@Query(nativeQuery = true, value = "select * from state where stateid=?1")
-	List<StateVO> findStateById(Long id);
 
-	@Query(nativeQuery = true, value = "select * from state where orgid=?1")
-	List<StateVO> findStateByOrgId(Long orgId);
+	@Query("select a from StateVO a where a.orgId=?1 and a.country=?2")
+	List<StateVO> findByCountry(Long orgid,String country);
 
-	@Query(nativeQuery = true, value = "select * from state where orgid=?1 and country=?2")
-	List<StateVO> findAllStateByCountry(Long orgId, String country);
-
-	boolean existsByStateNameAndOrgId(String stateName, Long orgId);
+	@Query("select a from StateVO a where a.orgId=?1")
+	List<StateVO> findAllByOrgId(Long orgid);
 
 	boolean existsByStateCodeAndOrgId(String stateCode, Long orgId);
 
-	@Query(nativeQuery = true, value = "select * from state where active=1")
-	List<StateVO> findStateByActive();
+	boolean existsByStateNumberAndOrgId(String stateNumber, Long orgId);
 
+	boolean existsByStateNameAndOrgId(String stateName, Long orgId);
+
+	//boolean existsByStateCodeAndStateNameAndStateNumberAndOrgId(String stateCode, String stateName, String stateNumber,Long orgId);
+
+	
 }

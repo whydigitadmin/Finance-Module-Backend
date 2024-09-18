@@ -1,15 +1,14 @@
 package com.base.basesetup.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class CompanyDTO {
+	
 	private Long id;
 	private String companyCode;
 	private String companyName;
@@ -24,11 +23,16 @@ public class CompanyDTO {
 	private String email;
 	private String webSite;
 	private String note;
+	//private String userId;
 	private String employeeName;
 	private String employeeCode;
 	private String password;
 	private String createdBy;
+	private String updatedBy;
+	private boolean cancel;
 	private boolean active;
-	private Long orgId;
-	
+	private String ceo;
+	private String gst;
+	private int role;
+
 }

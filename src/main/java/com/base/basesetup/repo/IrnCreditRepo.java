@@ -23,7 +23,7 @@ public interface IrnCreditRepo extends JpaRepository<IrnCreditVO, Long> {
 	@Query(nativeQuery = true, value = "select * from irncredit where irncreditid=?1")
 	List<IrnCreditVO> getAllIrnCreditById(Long id);
 
-	@Query(nativeQuery = true, value = "select * from where active=1")
+	@Query(nativeQuery = true, value = "select * from irncredit where active=1")
 	List<IrnCreditVO> findIrnCreditByActive();
 
 	@Query(nativeQuery = true, value = "SELECT RIGHT(\r\n" + "    IF(\r\n"
