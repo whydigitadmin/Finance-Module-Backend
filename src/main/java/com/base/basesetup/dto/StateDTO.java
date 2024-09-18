@@ -5,17 +5,20 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 public class StateDTO {
-	private Long id;
+
+private Long id;
+	
 	private String stateCode;
 	private String stateName;
-	private String country;
-	private String region;
-	private int stateNumber;
-	private String userId;
+    private String country;
+    private String region;
+    private String stateNumber;
+    private boolean active;
+    private String createdBy;
 	private Long orgId;
-	private boolean active;
-	private String createdBy;
+	private boolean cancel;
+
 }

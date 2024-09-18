@@ -10,6 +10,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.base.basesetup.dto.CreatedUpdatedDate;
+import com.fasterxml.jackson.annotation.JsonGetter;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -36,12 +37,12 @@ public class StateVO {
     private String country;
 	@Column(name="region")
     private String region;
-	@Column(name="stateno")
-    private int stateNumber;
+	@Column(name="statenumber")
+	 private String stateNumber;
 	@Column(name="active")
     private boolean active;
-	@Column(name="userid")
-    private String userId;
+//	@Column(name="userid")
+//    private String userId;
     @Column(name="createdby")
     private String createdBy;
     @Column(name="modifiedby")
@@ -51,6 +52,17 @@ public class StateVO {
     @Column(name="cancel")
 	private boolean cancel;
 
-	@Embedded
+    @JsonGetter("active")
+	public String getActive() {
+		return active ? "Active" : "In-Active";
+	}
+
+	// Optionally, if you want to control serialization for 'cancel' field similarly
+	@JsonGetter("cancel")
+	public String getCancel() {
+		return cancel ? "T" : "F";
+	}
+    
+    @Embedded
 	private CreatedUpdatedDate commonDate = new CreatedUpdatedDate();
 }
