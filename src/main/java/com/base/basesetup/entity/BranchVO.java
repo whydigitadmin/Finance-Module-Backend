@@ -1,4 +1,4 @@
-  package com.base.basesetup.entity;
+package com.base.basesetup.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Embedded;
@@ -10,6 +10,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.base.basesetup.dto.CreatedUpdatedDate;
+import com.fasterxml.jackson.annotation.JsonGetter;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,13 +25,13 @@ public class BranchVO {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "branchgen")
-	@SequenceGenerator(name = "branchgen", sequenceName = "branchseq", initialValue = 1000000001, allocationSize = 1)
+	@SequenceGenerator(name = "branchgen", sequenceName = "brancseq", initialValue = 1000000001, allocationSize = 1)
 	@Column(name = "branchid")
 	private Long id;
 
 	@Column(name = "branch")
 	private String branch;
-	@Column(name = "branchcode")
+	@Column(name = "branchode")
 	private String branchCode;
 	@Column(name = "orgid")
 	private Long orgId;
@@ -70,9 +71,18 @@ public class BranchVO {
 	private String updatedBy;
 	@Column(name = "active")
 	private boolean active;
-	@Column(name = "userid")
-	private String userId;
 
+	@JsonGetter("active")
+	public String getActive() {
+		return active ? "Active" : "In-Active";
+	}
+
+	// Optionally, if you want to control serialization for 'cancel' field similarly
+	@JsonGetter("cancel")
+	public String getCancel() {
+		return cancel ? "T" : "F";
+	}
+	
 	@Embedded
 	private CreatedUpdatedDate commonDate = new CreatedUpdatedDate();
 }

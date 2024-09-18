@@ -1,6 +1,5 @@
 package com.base.basesetup.entity;
 
-
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -30,9 +29,9 @@ public class CompanyVO {
 	@Column(name = "companyid")
 	private Long id;
 
-    @Column(name = "companycode")
+	@Column(name = "companycode")
 	private String companyCode;
-    @Column(name = "companyname")
+	@Column(name = "companyname")
 	private String companyName;
 	@Column(name = "country")
 	private String country;
@@ -77,23 +76,19 @@ public class CompanyVO {
 	private int role;
 	private String ceo;
 	private String gst;
-	
-	
-	 @JsonGetter("active")
-		public String getActive() {
-			return active ? "Active" : "In-Active";
-		}
 
-		// Optionally, if you want to control serialization for 'cancel' field similarly
-		@JsonGetter("cancel")
-		public String getCancel() {
-			return cancel ? "T" : "F";
-		}
-	    
-	
+	@JsonGetter("active")
+	public String getActive() {
+		return active ? "Active" : "In-Active";
+	}
+
+	// Optionally, if you want to control serialization for 'cancel' field similarly
+	@JsonGetter("cancel")
+	public String getCancel() {
+		return cancel ? "T" : "F";
+	}
 
 	@Embedded
 	private CreatedUpdatedDate commonDate = new CreatedUpdatedDate();
 
-	
 }

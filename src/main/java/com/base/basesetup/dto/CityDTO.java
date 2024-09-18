@@ -5,16 +5,17 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 public class CityDTO {
 	private Long id;
+
 	private String cityCode;
 	private String country;
 	private String cityName;
 	private String state;
-	private String userId;
-	private Long orgId;
 	private boolean active;
 	private String createdBy;
+	private Long orgId;
+	private boolean cancel;
 }

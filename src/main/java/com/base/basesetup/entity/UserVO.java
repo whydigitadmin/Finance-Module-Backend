@@ -12,10 +12,13 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.base.basesetup.dto.CreatedUpdatedDate;
+import com.base.basesetup.dto.Role;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.AllArgsConstructor;
@@ -66,6 +69,14 @@ public class UserVO {
 	private Date accountRemovedDate;
 	@Column(name="lastlogin")
 	private String lastLogin;
+	@Column(name = "mobileno")
+	private String mobileNo;
+	@Column(name = "createdby")
+	private String createdby;
+	@Column(name = "modifiedby")
+	private String updatedby;
+	@Column(name = "role")
+	private Role role;
 
 	@OneToMany(mappedBy = "userVO",cascade = CascadeType.ALL)
 	@JsonManagedReference
@@ -76,6 +87,9 @@ public class UserVO {
 	@JsonManagedReference
 	private List<BranchAccessVO> branchAccessVO;
 
+	@ManyToOne
+	@JoinColumn(name="companyid")
+	private CompanyVO companyVO;
 
 	@Embedded
 	private CreatedUpdatedDate commonDate = new CreatedUpdatedDate();
