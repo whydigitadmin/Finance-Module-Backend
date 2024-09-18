@@ -1,8 +1,12 @@
 package com.base.basesetup.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 import org.apache.commons.lang3.ObjectUtils;
@@ -15,6 +19,7 @@ import com.base.basesetup.dto.Account1DTO;
 import com.base.basesetup.dto.Account2DTO;
 import com.base.basesetup.dto.Account3DTO;
 import com.base.basesetup.dto.AccountDTO;
+import com.base.basesetup.dto.BranchDTO;
 import com.base.basesetup.dto.ChargeTypeRequestDTO;
 import com.base.basesetup.dto.ChequeBookDTO;
 import com.base.basesetup.dto.ChequeBookDetailsDTO;
@@ -36,6 +41,7 @@ import com.base.basesetup.entity.Account1VO;
 import com.base.basesetup.entity.Account2VO;
 import com.base.basesetup.entity.Account3VO;
 import com.base.basesetup.entity.AccountVO;
+import com.base.basesetup.entity.BranchVO;
 import com.base.basesetup.entity.ChargeTypeRequestVO;
 import com.base.basesetup.entity.ChequeBookDetailsVO;
 import com.base.basesetup.entity.ChequeBookVO;
@@ -58,6 +64,7 @@ import com.base.basesetup.repo.Account1Repo;
 import com.base.basesetup.repo.Account2Repo;
 import com.base.basesetup.repo.Account3Repo;
 import com.base.basesetup.repo.AccountRepo;
+import com.base.basesetup.repo.BranchRepo;
 import com.base.basesetup.repo.ChargeTypeRequestRepo;
 import com.base.basesetup.repo.ChequeBookDetailsRepo;
 import com.base.basesetup.repo.ChequeBookRepo;
@@ -79,6 +86,10 @@ import com.base.basesetup.repo.TdsMasterRepo;
 @Service
 public class MasterServiceImpl implements MasterService {
 	public static final Logger LOGGER = LoggerFactory.getLogger(MasterServiceImpl.class);
+	
+	@Autowired
+	BranchRepo branchRepo;
+	
 	@Autowired
 	SetTaxRateRepo setTaxRateRepo;
 
@@ -142,6 +153,107 @@ public class MasterServiceImpl implements MasterService {
 	@Autowired
 	ChequeBookDetailsRepo chequeBookDetailsRepo;
 
+	// Branch
+
+		@Override
+		public List<BranchVO> getAllBranch(Long orgid) {
+			return branchRepo.findAll(orgid);
+		}
+
+		@Override
+		public Optional<BranchVO> getBranchById(Long branchid) {
+
+			return branchRepo.findById(branchid);
+		}
+
+		@Override
+		@Transactional
+		public Map<String, Object> createUpdateBranch(BranchDTO branchDTO) throws Exception {
+			BranchVO branchVO;
+			String message = null;
+
+			if (ObjectUtils.isEmpty(branchDTO.getId())) {
+				// Check if the branch already exists for creation
+				if (branchRepo.existsByBranchAndOrgId(branchDTO.getBranch(), branchDTO.getOrgId())) {
+					String errorMessage = String.format("This Branch: %s Already Exists in This Organization",
+							branchDTO.getBranch());
+					throw new ApplicationException(errorMessage);
+				}
+
+				if (branchRepo.existsByBranchCodeAndOrgId(branchDTO.getBranchCode(), branchDTO.getOrgId())) {
+					String errorMessage = String.format("This BranchCode: %s Already Exists in This Organization",
+							branchDTO.getBranchCode());
+					throw new ApplicationException(errorMessage);
+				}
+
+				// Create new branch
+				branchVO = new BranchVO();
+				branchVO.setCreatedBy(branchDTO.getCreatedBy());
+				branchVO.setUpdatedBy(branchDTO.getCreatedBy());
+				message = "Branch Created Successfully";
+			} else {
+				// Update existing branch
+				branchVO = branchRepo.findById(branchDTO.getId())
+						.orElseThrow(() -> new ApplicationException("Branch not found with id: " + branchDTO.getId()));
+
+				branchVO.setUpdatedBy(branchDTO.getCreatedBy());
+
+				if (!branchVO.getBranch().equalsIgnoreCase(branchDTO.getBranch())) {
+					if (branchRepo.existsByBranchAndOrgId(branchDTO.getBranch(), branchDTO.getOrgId())) {
+						String errorMessage = String.format("This Branch: %s Already Exists in This Organization",
+								branchDTO.getBranch());
+						throw new ApplicationException(errorMessage);
+					}
+					branchVO.setBranch(branchDTO.getBranch().toUpperCase());
+				}
+
+				if (!branchVO.getBranchCode().equalsIgnoreCase(branchDTO.getBranchCode())) {
+					if (branchRepo.existsByBranchCodeAndOrgId(branchDTO.getBranchCode(), branchDTO.getOrgId())) {
+						String errorMessage = String.format("This BranchCode: %s Already Exists in This Organization",
+								branchDTO.getBranchCode());
+						throw new ApplicationException(errorMessage);
+					}
+					branchVO.setBranchCode(branchDTO.getBranchCode().toUpperCase());
+				}
+
+				message = "Branch Updated Successfully";
+			}
+
+			getBranchVOFromBranchDTO(branchVO, branchDTO);
+			branchRepo.save(branchVO);
+
+			Map<String, Object> response = new HashMap<>();
+			response.put("message", message);
+			response.put("branchVO", branchVO);
+			return response;
+		}
+
+		private void getBranchVOFromBranchDTO(BranchVO branchVO, BranchDTO branchDTO) {
+			branchVO.setBranch(branchDTO.getBranch().toUpperCase());
+			branchVO.setBranchCode(branchDTO.getBranchCode().toUpperCase());
+			branchVO.setOrgId(branchDTO.getOrgId());
+			branchVO.setAddressLine1(branchDTO.getAddressLine1());
+			branchVO.setAddressLine2(branchDTO.getAddressLine2());
+			branchVO.setPan(branchDTO.getPan());
+			branchVO.setGstIn(branchDTO.getGstIn());
+			branchVO.setPhone(branchDTO.getPhone());
+			branchVO.setState(branchDTO.getState().toUpperCase());
+			branchVO.setCity(branchDTO.getCity().toUpperCase());
+			branchVO.setPinCode(branchDTO.getPinCode());
+			branchVO.setCountry(branchDTO.getCountry().toUpperCase());
+			branchVO.setStateNo(branchDTO.getStateNo().toUpperCase());
+			branchVO.setStateCode(branchDTO.getStateCode().toUpperCase());
+			branchVO.setLccurrency(branchDTO.getLccurrency());
+			branchVO.setCancelRemarks(branchDTO.getCancelRemarks());
+			branchVO.setActive(branchDTO.isActive());
+		}
+
+		@Override
+		public void deleteBranch(Long branchid) {
+			branchRepo.deleteById(branchid);
+		}
+
+	
 	// setTaxesRate
 	@Override
 	public List<SetTaxRateVO> getAllSetTaxRateByOrgId(Long orgId) {

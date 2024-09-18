@@ -1,4 +1,5 @@
 package com.base.basesetup.service;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -6,10 +7,7 @@ import java.util.Optional;
 import javax.validation.Valid;
 
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
 
-import com.base.basesetup.dto.BranchDTO;
 import com.base.basesetup.dto.CityDTO;
 import com.base.basesetup.dto.CompanyDTO;
 import com.base.basesetup.dto.CountryDTO;
@@ -23,7 +21,6 @@ import com.base.basesetup.dto.RegionDTO;
 import com.base.basesetup.dto.ResponsibilitiesDTO;
 import com.base.basesetup.dto.RoleMasterDTO;
 import com.base.basesetup.dto.StateDTO;
-import com.base.basesetup.entity.BranchVO;
 import com.base.basesetup.entity.CityVO;
 import com.base.basesetup.entity.CompanyVO;
 import com.base.basesetup.entity.CountryVO;
@@ -39,32 +36,77 @@ import com.base.basesetup.entity.RoleMasterVO;
 import com.base.basesetup.entity.StateVO;
 import com.base.basesetup.exception.ApplicationException;
 
-
 @Service
-public interface BasicMasterService {
+public interface CommonMasterService {
 
-//	Currency
+	// Country
+
+	List<CountryVO> getAllCountry(Long orgid); // Method names should be in camelCase
+
+	Optional<CountryVO> getCountryById(Long countryid);
+
+	Map<String, Object> createUpdateCountry(CountryDTO countryDTO) throws ApplicationException; // Return the created
+																								// entity
+
+	void deleteCountry(Long countryid);
+
+	// State
+
+	List<StateVO> getAllgetAllStates(Long orgid);
+
+	Optional<StateVO> getStateById(Long stateid);
+
+	List<StateVO> getStatesByCountry(Long orgid, String country);
+
+	Map<String, Object> createUpdateState(StateDTO stateDTO) throws ApplicationException;
+
+	void deleteState(Long stateid);
+
+	// city
+
+	List<CityVO> getAllgetAllCities(Long orgid);
+
+	List<CityVO> getAllCitiesByState(Long orgid, String state);
+
+	Optional<CityVO> getCityById(Long cityid);
+
+	Map<String, Object> createUpdateCity(CityDTO cityDTO) throws ApplicationException;
+
+	void deleteCity(Long cityid);
+
+	// Currency
+
 	List<CurrencyVO> getAllCurrency(Long orgid);
 
 	Optional<CurrencyVO> getCurrencyById(Long currencyid);
-	
+
 	Map<String, Object> createUpdateCurrency(CurrencyDTO currencyDTO) throws ApplicationException;
 
 	void deleteCurrency(Long currencyid);
-	
 
-//	Company
-	List<CompanyVO> getCompanyById(Long id);
+	// region
 
-	List<CompanyVO> getCompanyByOrgId(Long orgid);
+	List<RegionVO> getAllRegios();
 
-	CompanyVO updateCreateCompany(@Valid CompanyDTO companyDTO) throws Exception;
+	List<RegionVO> getAllRegionsByOrgId(Long orgId);
 
-	List<CompanyVO> getCompanyByActive();
+	Optional<RegionVO> getRegionById(Long regionid);
 
-	CompanyVO saveImage(MultipartFile file, @RequestParam Long id) throws ApplicationException, java.io.IOException;
+	Map<String, Object> createUpdateRegion(RegionDTO regionDTO) throws ApplicationException;
 
-	Optional<CompanyVO> getImage(Long id);
+	void deleteRegion(Long regionid);
+
+	// Company
+
+	List<CompanyVO> getAllCompany();
+
+	List<CompanyVO> getCompanyById(Long companyid);
+
+	CompanyVO createCompany(CompanyDTO companyDTO) throws Exception;
+
+	CompanyVO updateCompany(CompanyDTO companyDTO) throws ApplicationException;
+
+	void deleteCompany(Long companyid);
 
 //	Employee
 	List<EmployeeVO> getEmployeeById(Long id);
@@ -75,55 +117,15 @@ public interface BasicMasterService {
 
 	List<EmployeeVO> getEmployeeByActive();
 
-//	Country
-	List<CountryVO> getCountryById(Long id);
-
-	List<CountryVO> getCountryByOrgId(Long orgid);
-
-	CountryVO updateCreateCountry(@Valid CountryDTO countryDTO) throws ApplicationException;
-
-	List<CountryVO> getCountryByActive();
-
-//	State
-	List<StateVO> getStateById(Long id);
-
-	List<StateVO> getStateByOrgId(Long orgid);
-
-	StateVO updateCreateState(@Valid StateDTO stateDTO) throws ApplicationException;
-
-	List<StateVO> getAllStateByCountry(Long orgId, String country);
-
-	List<StateVO> getStateByActive();
-
-//	City
-	List<CityVO> getCityById(Long id);
-
-	List<CityVO> getCityByOrgId(Long orgid);
-
-	CityVO updateCreateCity(@Valid CityDTO cityDTO) throws ApplicationException;
-
-	List<CityVO> getAllCityByState(Long orgId, String state);
-
-	List<CityVO> getCityByActive();
-
 //	Financial Year
 	List<FinancialYearVO> getFinancialYearById(Long id);
 
 	List<FinancialYearVO> getFinancialYearByOrgId(Long orgid);
 
 	FinancialYearVO updateCreateFinancialYear(@Valid FinancialYearDTO financialYearDTO) throws ApplicationException;
-	
+
 	List<Map<String, Object>> getFinYrAndFinYrIdByOrgId(Long orgId);
 
-
-//	Branch
-	List<BranchVO> getBranchById(Long id);
-
-	List<BranchVO> getBranchByOrgId(Long orgid);
-
-	BranchVO updateCreateBranch(@Valid BranchDTO branchDTO) throws ApplicationException;
-
-	List<BranchVO> getBranchByActive();
 
 //	Role
 	List<RoleMasterVO> getRoleById(Long id);
@@ -165,21 +167,10 @@ public interface BasicMasterService {
 
 	List<DocumentTypesMappingVO> getDocumentTypesMappingByOrgId(Long orgid);
 
-	DocumentTypesMappingVO updateCreateDocumentTypesMapping(@Valid DocumentTypesMappingDTO documentTypesMappingDTO) throws ApplicationException;
+	DocumentTypesMappingVO updateCreateDocumentTypesMapping(@Valid DocumentTypesMappingDTO documentTypesMappingDTO)
+			throws ApplicationException;
 
-	List<Map<String, Object>> getAllDocumentTypesMappingDetailsByDocumentType(String branch,String branchCode,String finYr,Long orgId,String finyrId);
+	List<Map<String, Object>> getAllDocumentTypesMappingDetailsByDocumentType(String branch, String branchCode,
+			String finYr, Long orgId, String finyrId);
 
-	// Region
-	
-	List<RegionVO> getAllRegios();
-	
-	List<RegionVO> getAllRegionsByOrgId(Long orgId);
-
-	Optional<RegionVO> getRegionById(Long regionid);
-
-	Map<String, Object> createUpdateRegion(RegionDTO regionDTO) throws ApplicationException;
-
-	void deleteRegion(Long regionid);
-
-	
 }

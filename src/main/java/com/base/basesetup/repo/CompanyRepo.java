@@ -4,10 +4,13 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
 import com.base.basesetup.entity.CompanyVO;
 
-public interface CompanyRepo extends JpaRepository<CompanyVO , Long>{
+@Repository
+public interface CompanyRepo extends JpaRepository<CompanyVO, Long> {
+
 	boolean existsByCompanyCodeAndId(String companyCode, Long id);
 
 	boolean existsByCompanyNameAndId(String companyName, Long id);
