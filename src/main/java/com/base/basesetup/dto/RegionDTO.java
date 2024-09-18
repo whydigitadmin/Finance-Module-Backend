@@ -1,23 +1,20 @@
 package com.base.basesetup.dto;
 
+
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-@Builder
-public class CurrencyDTO {
+@NoArgsConstructor
+public class RegionDTO {
 
 	private Long id;
-	private String country;
-	private String currency;
-	private String subCurrency;
-	private String currencySymbol;
-	private Long orgId;
+	private String regionCode;
+	private String regionName;
 	private boolean active;
 	private String createdBy;
+	private Long orgId;
 	private boolean cancel;
 }
