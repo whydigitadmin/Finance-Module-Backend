@@ -55,7 +55,7 @@ import com.base.basesetup.service.CommonMasterService;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/api/commonMaster")
+@RequestMapping("/api/commonmaster")
 public class CommonMasterController extends BaseController {
 
 	@Autowired
