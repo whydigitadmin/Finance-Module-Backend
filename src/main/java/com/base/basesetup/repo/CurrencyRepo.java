@@ -9,19 +9,15 @@ import com.base.basesetup.entity.CurrencyVO;
 
 public interface CurrencyRepo extends JpaRepository<CurrencyVO, Long> {
 
-	@Query(nativeQuery = true, value = "select * from currency where currencyid=?1")
-	List<CurrencyVO> findCurrencyById(Long id);
 
-	@Query(nativeQuery = true, value = "select * from currency where orgid=?1")
-	List<CurrencyVO> findCurrencyByOrgId(Long orgId);
-
-	@Query(nativeQuery = true, value = "select * from currency where active=1")
-	List<CurrencyVO> findCurrencyByActive();
-
+	@Query("select a from CurrencyVO a where a.orgId=?1")
+	List<CurrencyVO> findAll(Long orgid);
 
 	boolean existsByCurrencyAndOrgId(String currency, Long orgId);
 
-	boolean existsByCountryAndOrgId(String country, Long orgId);
+	boolean existsByCurrencySymbolAndOrgId(String currencySymbol, Long orgId);
+
+	boolean existsBySubCurrencyAndOrgId(String subCurrency, Long orgId);
 
 
 

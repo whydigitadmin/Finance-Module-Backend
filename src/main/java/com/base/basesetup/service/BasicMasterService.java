@@ -1,9 +1,7 @@
 package com.base.basesetup.service;
-
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 
 import javax.validation.Valid;
 
@@ -21,6 +19,7 @@ import com.base.basesetup.dto.DocumentTypesMappingDTO;
 import com.base.basesetup.dto.EmployeeDTO;
 import com.base.basesetup.dto.FinScreenDTO;
 import com.base.basesetup.dto.FinancialYearDTO;
+import com.base.basesetup.dto.RegionDTO;
 import com.base.basesetup.dto.ResponsibilitiesDTO;
 import com.base.basesetup.dto.RoleMasterDTO;
 import com.base.basesetup.dto.StateDTO;
@@ -34,22 +33,25 @@ import com.base.basesetup.entity.DocumentTypesMappingVO;
 import com.base.basesetup.entity.EmployeeVO;
 import com.base.basesetup.entity.FinScreenVO;
 import com.base.basesetup.entity.FinancialYearVO;
+import com.base.basesetup.entity.RegionVO;
 import com.base.basesetup.entity.ResponsibilitiesVO;
 import com.base.basesetup.entity.RoleMasterVO;
 import com.base.basesetup.entity.StateVO;
 import com.base.basesetup.exception.ApplicationException;
 
+
 @Service
 public interface BasicMasterService {
 
 //	Currency
-	List<CurrencyVO> getCurrencyById(Long id);
+	List<CurrencyVO> getAllCurrency(Long orgid);
 
-	List<CurrencyVO> getCurrencyByOrgId(Long orgid);
+	Optional<CurrencyVO> getCurrencyById(Long currencyid);
+	
+	Map<String, Object> createUpdateCurrency(CurrencyDTO currencyDTO) throws ApplicationException;
 
-	CurrencyVO updateCreateCurrency(@Valid CurrencyDTO currencyDTO) throws Exception;
-
-	List<CurrencyVO> getCurrencyByActive();
+	void deleteCurrency(Long currencyid);
+	
 
 //	Company
 	List<CompanyVO> getCompanyById(Long id);
@@ -167,6 +169,17 @@ public interface BasicMasterService {
 
 	List<Map<String, Object>> getAllDocumentTypesMappingDetailsByDocumentType(String branch,String branchCode,String finYr,Long orgId,String finyrId);
 
+	// Region
+	
+	List<RegionVO> getAllRegios();
+	
+	List<RegionVO> getAllRegionsByOrgId(Long orgId);
+
+	Optional<RegionVO> getRegionById(Long regionid);
+
+	Map<String, Object> createUpdateRegion(RegionDTO regionDTO) throws ApplicationException;
+
+	void deleteRegion(Long regionid);
 
 	
 }
