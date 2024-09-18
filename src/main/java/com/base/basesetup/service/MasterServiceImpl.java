@@ -86,10 +86,10 @@ import com.base.basesetup.repo.TdsMasterRepo;
 @Service
 public class MasterServiceImpl implements MasterService {
 	public static final Logger LOGGER = LoggerFactory.getLogger(MasterServiceImpl.class);
-	
+
 	@Autowired
 	BranchRepo branchRepo;
-	
+
 	@Autowired
 	SetTaxRateRepo setTaxRateRepo;
 
@@ -155,105 +155,104 @@ public class MasterServiceImpl implements MasterService {
 
 	// Branch
 
-		@Override
-		public List<BranchVO> getAllBranch(Long orgid) {
-			return branchRepo.findAll(orgid);
-		}
+	@Override
+	public List<BranchVO> getAllBranch(Long orgid) {
+		return branchRepo.findAll(orgid);
+	}
 
-		@Override
-		public Optional<BranchVO> getBranchById(Long branchid) {
+	@Override
+	public Optional<BranchVO> getBranchById(Long branchid) {
 
-			return branchRepo.findById(branchid);
-		}
+		return branchRepo.findById(branchid);
+	}
 
-		@Override
-		@Transactional
-		public Map<String, Object> createUpdateBranch(BranchDTO branchDTO) throws Exception {
-			BranchVO branchVO;
-			String message = null;
+	@Override
+	@Transactional
+	public Map<String, Object> createUpdateBranch(BranchDTO branchDTO) throws Exception {
+		BranchVO branchVO;
+		String message = null;
 
-			if (ObjectUtils.isEmpty(branchDTO.getId())) {
-				// Check if the branch already exists for creation
+		if (ObjectUtils.isEmpty(branchDTO.getId())) {
+			// Check if the branch already exists for creation
+			if (branchRepo.existsByBranchAndOrgId(branchDTO.getBranch(), branchDTO.getOrgId())) {
+				String errorMessage = String.format("This Branch: %s Already Exists in This Organization",
+						branchDTO.getBranch());
+				throw new ApplicationException(errorMessage);
+			}
+
+			if (branchRepo.existsByBranchCodeAndOrgId(branchDTO.getBranchCode(), branchDTO.getOrgId())) {
+				String errorMessage = String.format("This BranchCode: %s Already Exists in This Organization",
+						branchDTO.getBranchCode());
+				throw new ApplicationException(errorMessage);
+			}
+
+			// Create new branch
+			branchVO = new BranchVO();
+			branchVO.setCreatedBy(branchDTO.getCreatedBy());
+			branchVO.setUpdatedBy(branchDTO.getCreatedBy());
+			message = "Branch Created Successfully";
+		} else {
+			// Update existing branch
+			branchVO = branchRepo.findById(branchDTO.getId())
+					.orElseThrow(() -> new ApplicationException("Branch not found with id: " + branchDTO.getId()));
+
+			branchVO.setUpdatedBy(branchDTO.getCreatedBy());
+
+			if (!branchVO.getBranch().equalsIgnoreCase(branchDTO.getBranch())) {
 				if (branchRepo.existsByBranchAndOrgId(branchDTO.getBranch(), branchDTO.getOrgId())) {
 					String errorMessage = String.format("This Branch: %s Already Exists in This Organization",
 							branchDTO.getBranch());
 					throw new ApplicationException(errorMessage);
 				}
+				branchVO.setBranch(branchDTO.getBranch().toUpperCase());
+			}
 
+			if (!branchVO.getBranchCode().equalsIgnoreCase(branchDTO.getBranchCode())) {
 				if (branchRepo.existsByBranchCodeAndOrgId(branchDTO.getBranchCode(), branchDTO.getOrgId())) {
 					String errorMessage = String.format("This BranchCode: %s Already Exists in This Organization",
 							branchDTO.getBranchCode());
 					throw new ApplicationException(errorMessage);
 				}
-
-				// Create new branch
-				branchVO = new BranchVO();
-				branchVO.setCreatedBy(branchDTO.getCreatedBy());
-				branchVO.setUpdatedBy(branchDTO.getCreatedBy());
-				message = "Branch Created Successfully";
-			} else {
-				// Update existing branch
-				branchVO = branchRepo.findById(branchDTO.getId())
-						.orElseThrow(() -> new ApplicationException("Branch not found with id: " + branchDTO.getId()));
-
-				branchVO.setUpdatedBy(branchDTO.getCreatedBy());
-
-				if (!branchVO.getBranch().equalsIgnoreCase(branchDTO.getBranch())) {
-					if (branchRepo.existsByBranchAndOrgId(branchDTO.getBranch(), branchDTO.getOrgId())) {
-						String errorMessage = String.format("This Branch: %s Already Exists in This Organization",
-								branchDTO.getBranch());
-						throw new ApplicationException(errorMessage);
-					}
-					branchVO.setBranch(branchDTO.getBranch().toUpperCase());
-				}
-
-				if (!branchVO.getBranchCode().equalsIgnoreCase(branchDTO.getBranchCode())) {
-					if (branchRepo.existsByBranchCodeAndOrgId(branchDTO.getBranchCode(), branchDTO.getOrgId())) {
-						String errorMessage = String.format("This BranchCode: %s Already Exists in This Organization",
-								branchDTO.getBranchCode());
-						throw new ApplicationException(errorMessage);
-					}
-					branchVO.setBranchCode(branchDTO.getBranchCode().toUpperCase());
-				}
-
-				message = "Branch Updated Successfully";
+				branchVO.setBranchCode(branchDTO.getBranchCode().toUpperCase());
 			}
 
-			getBranchVOFromBranchDTO(branchVO, branchDTO);
-			branchRepo.save(branchVO);
-
-			Map<String, Object> response = new HashMap<>();
-			response.put("message", message);
-			response.put("branchVO", branchVO);
-			return response;
+			message = "Branch Updated Successfully";
 		}
 
-		private void getBranchVOFromBranchDTO(BranchVO branchVO, BranchDTO branchDTO) {
-			branchVO.setBranch(branchDTO.getBranch().toUpperCase());
-			branchVO.setBranchCode(branchDTO.getBranchCode().toUpperCase());
-			branchVO.setOrgId(branchDTO.getOrgId());
-			branchVO.setAddressLine1(branchDTO.getAddressLine1());
-			branchVO.setAddressLine2(branchDTO.getAddressLine2());
-			branchVO.setPan(branchDTO.getPan());
-			branchVO.setGstIn(branchDTO.getGstIn());
-			branchVO.setPhone(branchDTO.getPhone());
-			branchVO.setState(branchDTO.getState().toUpperCase());
-			branchVO.setCity(branchDTO.getCity().toUpperCase());
-			branchVO.setPinCode(branchDTO.getPinCode());
-			branchVO.setCountry(branchDTO.getCountry().toUpperCase());
-			branchVO.setStateNo(branchDTO.getStateNo().toUpperCase());
-			branchVO.setStateCode(branchDTO.getStateCode().toUpperCase());
-			branchVO.setLccurrency(branchDTO.getLccurrency());
-			branchVO.setCancelRemarks(branchDTO.getCancelRemarks());
-			branchVO.setActive(branchDTO.isActive());
-		}
+		getBranchVOFromBranchDTO(branchVO, branchDTO);
+		branchRepo.save(branchVO);
 
-		@Override
-		public void deleteBranch(Long branchid) {
-			branchRepo.deleteById(branchid);
-		}
+		Map<String, Object> response = new HashMap<>();
+		response.put("message", message);
+		response.put("branchVO", branchVO);
+		return response;
+	}
 
-	
+	private void getBranchVOFromBranchDTO(BranchVO branchVO, BranchDTO branchDTO) {
+		branchVO.setBranch(branchDTO.getBranch().toUpperCase());
+		branchVO.setBranchCode(branchDTO.getBranchCode().toUpperCase());
+		branchVO.setOrgId(branchDTO.getOrgId());
+		branchVO.setAddressLine1(branchDTO.getAddressLine1());
+		branchVO.setAddressLine2(branchDTO.getAddressLine2());
+		branchVO.setPan(branchDTO.getPan());
+		branchVO.setGstIn(branchDTO.getGstIn());
+		branchVO.setPhone(branchDTO.getPhone());
+		branchVO.setState(branchDTO.getState().toUpperCase());
+		branchVO.setCity(branchDTO.getCity().toUpperCase());
+		branchVO.setPinCode(branchDTO.getPinCode());
+		branchVO.setCountry(branchDTO.getCountry().toUpperCase());
+		branchVO.setStateNo(branchDTO.getStateNo().toUpperCase());
+		branchVO.setStateCode(branchDTO.getStateCode().toUpperCase());
+		branchVO.setLccurrency(branchDTO.getLccurrency());
+		branchVO.setCancelRemarks(branchDTO.getCancelRemarks());
+		branchVO.setActive(branchDTO.isActive());
+	}
+
+	@Override
+	public void deleteBranch(Long branchid) {
+		branchRepo.deleteById(branchid);
+	}
+
 	// setTaxesRate
 	@Override
 	public List<SetTaxRateVO> getAllSetTaxRateByOrgId(Long orgId) {
@@ -347,11 +346,11 @@ public class MasterServiceImpl implements MasterService {
 			taxMasterVO = taxMasterRepo.findById(taxMasterDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid TaxMaster details"));
 			taxMasterVO.setUpdatedBy(taxMasterDTO.getCreatedBy());
-		}else {
+		} else {
 			taxMasterVO.setUpdatedBy(taxMasterDTO.getCreatedBy());
 			taxMasterVO.setCreatedBy(taxMasterDTO.getCreatedBy());
 		}
-		
+
 		List<TaxMasterDetailsVO> taxMasterDetailsVOs = new ArrayList<>();
 		if (taxMasterDTO.getTaxMasterDetailsDTO() != null) {
 			for (TaxMasterDetailsDTO taxMasterDetailsDTO : taxMasterDTO.getTaxMasterDetailsDTO()) {
@@ -380,8 +379,7 @@ public class MasterServiceImpl implements MasterService {
 		return taxMasterRepo.save(taxMasterVO);
 	}
 
-	private void getTaxMasterVOFromTaxMasterDTO(@Valid TaxMasterDTO taxMasterDTO,
-			TaxMasterVO taxMasterVO) {
+	private void getTaxMasterVOFromTaxMasterDTO(@Valid TaxMasterDTO taxMasterDTO, TaxMasterVO taxMasterVO) {
 		taxMasterVO.setOrgId(taxMasterDTO.getOrgId());
 		taxMasterVO.setFinYear(taxMasterDTO.getFinYear());
 		taxMasterVO.setServiceAccountCode(taxMasterDTO.getServiceAccountCode());
@@ -390,7 +388,6 @@ public class MasterServiceImpl implements MasterService {
 		taxMasterVO.setGst(taxMasterDTO.getGst());
 		taxMasterVO.setGstSlab(taxMasterDTO.getGstSlab());
 	}
-
 
 	@Override
 	public List<TaxMasterVO> getAllTaxMasterByOrgId(Long orgId) {
@@ -927,11 +924,11 @@ public class MasterServiceImpl implements MasterService {
 			sacCodeVO = sacCodeRepo.findById(sacCodeDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid SacCode details"));
 			sacCodeVO.setUpdatedBy(sacCodeDTO.getCreatedBy());
-		}else {
+		} else {
 			sacCodeVO.setUpdatedBy(sacCodeDTO.getCreatedBy());
 			sacCodeVO.setCreatedBy(sacCodeDTO.getCreatedBy());
 		}
-			//		} else {
+		// } else {
 //
 //			if (sacCodeRepo.existsByCodeAndOrgId(sacCodeDTO.getCode(), sacCodeDTO.getOrgId())) {
 //				throw new ApplicationException("The given code already exists.");
@@ -1012,7 +1009,7 @@ public class MasterServiceImpl implements MasterService {
 			exRatesVO = exRatesRepo.findById(exRatesDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid ExRates details"));
 			exRatesVO.setUpdatedBy(exRatesDTO.getCreatedBy());
-		}else {
+		} else {
 			exRatesVO.setUpdatedBy(exRatesDTO.getCreatedBy());
 			exRatesVO.setCreatedBy(exRatesDTO.getCreatedBy());
 		}
@@ -1174,7 +1171,7 @@ public class MasterServiceImpl implements MasterService {
 		CostCenterVO costCenterVO = new CostCenterVO();
 		boolean isUpdate = false;
 		if (ObjectUtils.isNotEmpty(costCenterDTO.getId())) {
-			 isUpdate = true;
+			isUpdate = true;
 			costCenterVO = costCenterRepo.findById(costCenterDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid CostCenter details"));
 			costCenterVO.setUpdatedBy(costCenterDTO.getCreatedBy());
@@ -1258,7 +1255,7 @@ public class MasterServiceImpl implements MasterService {
 			chequeBookVO = chequeBookRepo.findById(chequeBookDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid ChequeBook details"));
 			chequeBookVO.setUpdatedBy(chequeBookDTO.getCreatedBy());
-		}else {
+		} else {
 			chequeBookVO.setUpdatedBy(chequeBookDTO.getCreatedBy());
 			chequeBookVO.setCreatedBy(chequeBookDTO.getCreatedBy());
 		}
@@ -1284,7 +1281,7 @@ public class MasterServiceImpl implements MasterService {
 		// Update ChequeBookVO properties
 		getChequeBookVOFromChequeBookDTO(chequeBookDTO, chequeBookVO);
 		chequeBookVO.setChequeBookDetailsVO(chequeBookDetailsVOs);
-		
+
 		return chequeBookRepo.save(chequeBookVO);
 	}
 

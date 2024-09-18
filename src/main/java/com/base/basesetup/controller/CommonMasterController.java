@@ -55,16 +55,13 @@ import com.base.basesetup.service.CommonMasterService;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/api/commonMaster")
+@RequestMapping("/api/commonmaster")
 public class CommonMasterController extends BaseController {
 
 	@Autowired
 	CommonMasterService basicMasterService;
 
 	public static final Logger LOGGER = LoggerFactory.getLogger(CommonMasterController.class);
-	
-	
-
 
 	@GetMapping("/country")
 	public ResponseEntity<ResponseDTO> getAllcountries(@RequestParam Long orgid) {
@@ -122,23 +119,22 @@ public class CommonMasterController extends BaseController {
 	public ResponseEntity<ResponseDTO> createUpdateCountry(@RequestBody CountryDTO countryDTO) {
 		String methodName = "createCountry()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
-		Map<String, Object> responseObjectsMap=new HashMap<String, Object>();
+		Map<String, Object> responseObjectsMap = new HashMap<String, Object>();
 		String errorMsg = null;
 		ResponseDTO responseDTO = null;
 		try {
 			Map<String, Object> createdCountryVO = basicMasterService.createUpdateCountry(countryDTO);
-			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,createdCountryVO.get("message") );
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, createdCountryVO.get("message"));
 			responseObjectsMap.put("countryVO", createdCountryVO.get("createdCountryVO"));
 			responseDTO = createServiceResponse(responseObjectsMap);
 		} catch (Exception e) {
 			errorMsg = e.getMessage();
 			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
-			responseDTO = createServiceResponseError(responseObjectsMap,errorMsg ,errorMsg);
+			responseDTO = createServiceResponseError(responseObjectsMap, errorMsg, errorMsg);
 		}
 		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
 		return ResponseEntity.ok().body(responseDTO);
 	}
-
 
 	// State
 
@@ -232,13 +228,13 @@ public class CommonMasterController extends BaseController {
 		ResponseDTO responseDTO = null;
 		try {
 			Map<String, Object> stateVO = basicMasterService.createUpdateState(stateDTO);
-			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,stateVO.get("message") );
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, stateVO.get("message"));
 			responseObjectsMap.put("stateVO", stateVO.get("stateVO"));
 			responseDTO = createServiceResponse(responseObjectsMap);
 		} catch (Exception e) {
 			errorMsg = e.getMessage();
 			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
-			responseDTO = createServiceResponseError(responseObjectsMap,errorMsg ,errorMsg);
+			responseDTO = createServiceResponseError(responseObjectsMap, errorMsg, errorMsg);
 		}
 		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
 		return ResponseEntity.ok().body(responseDTO);
@@ -337,12 +333,12 @@ public class CommonMasterController extends BaseController {
 			responseObjectsMap.put("cityVO", createdCityVO.get("cityVO"));
 			responseDTO = createServiceResponse(responseObjectsMap);
 		} catch (Exception e) {
-	        errorMsg = e.getMessage();
-	        LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
-	        responseDTO = createServiceResponseError(responseObjectsMap, errorMsg, errorMsg);
-	    }
-	    LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
-	    return ResponseEntity.ok().body(responseDTO);
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+			responseDTO = createServiceResponseError(responseObjectsMap, errorMsg, errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
 	}
 
 	// Region
@@ -437,12 +433,12 @@ public class CommonMasterController extends BaseController {
 			responseObjectsMap.put("regionvo", regionvo.get("regionVO"));
 			responseDTO = createServiceResponse(responseObjectsMap);
 		} catch (Exception e) {
-	        errorMsg = e.getMessage();
-	        LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
-	        responseDTO = createServiceResponseError(responseObjectsMap, errorMsg, errorMsg);
-	    }
-	    LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
-	    return ResponseEntity.ok().body(responseDTO);
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+			responseDTO = createServiceResponseError(responseObjectsMap, errorMsg, errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
 	}
 
 	// Currency
@@ -515,12 +511,12 @@ public class CommonMasterController extends BaseController {
 			responseObjectsMap.put("currency", currency.get("currencyVO"));
 			responseDTO = createServiceResponse(responseObjectsMap);
 		} catch (Exception e) {
-	        errorMsg = e.getMessage();
-	        LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
-	        responseDTO = createServiceResponseError(responseObjectsMap, errorMsg, errorMsg);
-	    }
-	    LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
-	    return ResponseEntity.ok().body(responseDTO);
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+			responseDTO = createServiceResponseError(responseObjectsMap, errorMsg, errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
 	}
 
 	// Company
@@ -558,7 +554,7 @@ public class CommonMasterController extends BaseController {
 		String errorMsg = null;
 		Map<String, Object> responseObjectsMap = new HashMap<>();
 		ResponseDTO responseDTO = null;
-		List<CompanyVO> companyVO=new ArrayList<CompanyVO>();
+		List<CompanyVO> companyVO = new ArrayList<CompanyVO>();
 		try {
 			companyVO = basicMasterService.getCompanyById(companyid);
 		} catch (Exception e) {
@@ -624,12 +620,9 @@ public class CommonMasterController extends BaseController {
 		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
 		return ResponseEntity.ok().body(responseDTO);
 	}
-	
-	
-	
+
 //	-------------------------------------------------------------------------------------
 
-	
 	// Employee-----------------------------------------------------------------------------------
 	@GetMapping("/getEmployeeById")
 	public ResponseEntity<ResponseDTO> getEmployeeById(@RequestParam(required = false) Long id) {
@@ -743,7 +736,6 @@ public class CommonMasterController extends BaseController {
 
 	}
 
-	
 	// FinacialYear
 	@GetMapping("/getFinancialYearById")
 	public ResponseEntity<ResponseDTO> getFinancialYearById(@RequestParam(required = false) Long id) {
@@ -858,7 +850,6 @@ public class CommonMasterController extends BaseController {
 		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
 		return ResponseEntity.ok().body(responseDTO);
 	}
-
 
 	// Roles-----------------------------------------------------------------
 	@GetMapping("/getRoleMasterById")
@@ -1417,5 +1408,4 @@ public class CommonMasterController extends BaseController {
 		return ResponseEntity.ok().body(responseDTO);
 	}
 
-	
 }
