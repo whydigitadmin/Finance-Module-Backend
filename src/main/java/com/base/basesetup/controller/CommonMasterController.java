@@ -125,7 +125,7 @@ public class CommonMasterController extends BaseController {
 		try {
 			Map<String, Object> createdCountryVO = basicMasterService.createUpdateCountry(countryDTO);
 			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, createdCountryVO.get("message"));
-			responseObjectsMap.put("countryVO", createdCountryVO.get("createdCountryVO"));
+			responseObjectsMap.put("countryVO", createdCountryVO.get("countryVO"));
 			responseDTO = createServiceResponse(responseObjectsMap);
 		} catch (Exception e) {
 			errorMsg = e.getMessage();

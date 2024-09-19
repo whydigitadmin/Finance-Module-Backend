@@ -951,9 +951,13 @@ public class CommonMasterServiceImpl implements CommonMasterService {
 						countryDTO.getCountryCode());
 				throw new ApplicationException(errorMessage);
 			}
+			// Create new branch
+						countryVO = new CountryVO();
+						countryVO.setCreatedBy(countryDTO.getCreatedBy());
+						countryVO.setUpdatedBy(countryDTO.getCreatedBy());
 			message = "Country Creation SuccessFully";
 		}
-		if (countryDTO.getId() != null) {
+		else{
 			// Update existing branch
 			countryVO = countryRepo.findById(countryDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Branch not found with id: " + countryDTO.getId()));
@@ -975,14 +979,8 @@ public class CommonMasterServiceImpl implements CommonMasterService {
 				countryVO.setCountryName(countryDTO.getCountryName().toUpperCase());
 
 			}
-
-		} else {
-			// Create new branch
-			countryVO = new CountryVO();
-			countryVO.setCreatedBy(countryDTO.getCreatedBy());
-			countryVO.setUpdatedBy(countryDTO.getCreatedBy());
-			message = "Country Creation Failed";
-		}
+			message = "Country Update Successfully";
+		} 
 
 		getCountryVOFromCounytryDTO(countryVO, countryDTO);
 		countryRepo.save(countryVO);
