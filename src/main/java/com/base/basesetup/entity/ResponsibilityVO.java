@@ -14,6 +14,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.base.basesetup.dto.CreatedUpdatedDate;
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.AllArgsConstructor;
@@ -21,32 +22,43 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "responsibilities")
-@Data
+@Table(name="responsibility")
 @NoArgsConstructor
 @AllArgsConstructor
-public class ResponsibilitiesVO {
-
+@Data
+public class ResponsibilityVO {
+	
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "responsibilitiesgen")
-	@SequenceGenerator(name = "responsibilitiesgen", sequenceName = "responsibilitiesseq", initialValue = 1000000001, allocationSize = 1)
-	@Column(name = "responsibilitiesid")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "responsibilitygen")
+	@SequenceGenerator(name = "responsibilitygen", sequenceName = "responsibilityseq", initialValue = 1000000001, allocationSize = 1)
+	@Column(name = "responsibilityid")
 	private Long id;
-	@Column(name = "role")
-	private String role;
-	@Column(name = "active")
-	private boolean active;
-	@Column(name = "orgid")
-	private Long orgId;
-	@Column(name = "createdby")
+	
+	@Column(name="responsibility")
+	private String responsibility;
+	
+	@Column(name="createdby")
 	private String createdBy;
-	@Column(name = "modifiedby")
+	
+	@Column(name="modifiedby")
 	private String updatedBy;
 	
-	@OneToMany(mappedBy = "responsibilitiesVO", cascade = CascadeType.ALL, orphanRemoval = true)
-	@JsonManagedReference
-	private List<ScreenVO> screenVO;
+	@Column(name="orgid")
+	private Long orgId;
+	
+	private boolean active;
 
+	@JsonManagedReference
+	@OneToMany(mappedBy = "responsibilityVO", cascade = CascadeType.ALL)
+	private List<ScreensVO>screensVO;
+	
 	@Embedded
 	private CreatedUpdatedDate commonDate = new CreatedUpdatedDate();
+
+	@JsonGetter("active")
+    public String getActive() {
+        return active ? "Active" : "In-Active";
+    }
+	
+
 }

@@ -14,12 +14,9 @@ import com.base.basesetup.dto.CountryDTO;
 import com.base.basesetup.dto.CurrencyDTO;
 import com.base.basesetup.dto.DocumentTypeDTO;
 import com.base.basesetup.dto.DocumentTypesMappingDTO;
-import com.base.basesetup.dto.EmployeeDTO;
 import com.base.basesetup.dto.FinScreenDTO;
 import com.base.basesetup.dto.FinancialYearDTO;
 import com.base.basesetup.dto.RegionDTO;
-import com.base.basesetup.dto.ResponsibilitiesDTO;
-import com.base.basesetup.dto.RoleMasterDTO;
 import com.base.basesetup.dto.StateDTO;
 import com.base.basesetup.entity.CityVO;
 import com.base.basesetup.entity.CompanyVO;
@@ -27,12 +24,9 @@ import com.base.basesetup.entity.CountryVO;
 import com.base.basesetup.entity.CurrencyVO;
 import com.base.basesetup.entity.DocumentTypeVO;
 import com.base.basesetup.entity.DocumentTypesMappingVO;
-import com.base.basesetup.entity.EmployeeVO;
 import com.base.basesetup.entity.FinScreenVO;
 import com.base.basesetup.entity.FinancialYearVO;
 import com.base.basesetup.entity.RegionVO;
-import com.base.basesetup.entity.ResponsibilitiesVO;
-import com.base.basesetup.entity.RoleMasterVO;
 import com.base.basesetup.entity.StateVO;
 import com.base.basesetup.exception.ApplicationException;
 
@@ -108,15 +102,6 @@ public interface CommonMasterService {
 
 	void deleteCompany(Long companyid);
 
-//	Employee
-	List<EmployeeVO> getEmployeeById(Long id);
-
-	List<EmployeeVO> getEmployeeByOrgId(Long orgid);
-
-	EmployeeVO updateCreateEmployee(@Valid EmployeeDTO employeeDTO) throws ApplicationException, Exception;
-
-	List<EmployeeVO> getEmployeeByActive();
-
 //	Financial Year
 	List<FinancialYearVO> getFinancialYearById(Long id);
 
@@ -126,25 +111,6 @@ public interface CommonMasterService {
 
 	List<Map<String, Object>> getFinYrAndFinYrIdByOrgId(Long orgId);
 
-
-//	Role
-	List<RoleMasterVO> getRoleById(Long id);
-
-	List<RoleMasterVO> getRoleByOrgId(Long orgid);
-
-	RoleMasterVO updateCreateRole(@Valid RoleMasterDTO roleDTO) throws ApplicationException;
-
-	List<RoleMasterVO> getRoleByActive();
-
-//	Responsibilities 
-	List<ResponsibilitiesVO> getResponsibilitiesById(Long id);
-
-	List<ResponsibilitiesVO> getResponsibilitiesByOrgId(Long orgid);
-
-	ResponsibilitiesVO updateCreateResponsibilities(@Valid ResponsibilitiesDTO responsibilitiesDTO)
-			throws ApplicationException;
-
-	List<ResponsibilitiesVO> getResponsibilitiesByActive();
 
 //	FinScreen
 	List<FinScreenVO> getFinScreenById(Long id);

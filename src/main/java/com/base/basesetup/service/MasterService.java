@@ -13,6 +13,7 @@ import com.base.basesetup.dto.BranchDTO;
 import com.base.basesetup.dto.ChargeTypeRequestDTO;
 import com.base.basesetup.dto.ChequeBookDTO;
 import com.base.basesetup.dto.CostCenterDTO;
+import com.base.basesetup.dto.EmployeeDTO;
 import com.base.basesetup.dto.ExRatesDTO;
 import com.base.basesetup.dto.GroupLedgerDTO;
 import com.base.basesetup.dto.ListOfValuesDTO;
@@ -27,6 +28,7 @@ import com.base.basesetup.entity.BranchVO;
 import com.base.basesetup.entity.ChargeTypeRequestVO;
 import com.base.basesetup.entity.ChequeBookVO;
 import com.base.basesetup.entity.CostCenterVO;
+import com.base.basesetup.entity.EmployeeVO;
 import com.base.basesetup.entity.ExRatesVO;
 import com.base.basesetup.entity.GroupLedgerVO;
 import com.base.basesetup.entity.ListOfValuesVO;
@@ -51,6 +53,18 @@ public interface MasterService {
 
 	void deleteBranch(Long branchid);
 
+	// employee
+	
+	List<EmployeeVO> getAllEmployee();
+
+	List<EmployeeVO> getAllEmployeeByOrgId(Long orgId);
+
+	Optional<EmployeeVO> getEmployeeById(Long employeeid);
+
+	Map<String, Object> createEmployee(EmployeeDTO employeeDTO) throws ApplicationException;
+
+	void deleteEmployee(Long employeeid);
+	
 //	SetTaxRateVO
 	List<SetTaxRateVO> getAllSetTaxRateByOrgId(Long orgId);
 
