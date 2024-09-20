@@ -48,8 +48,6 @@ public class GlobalParameterServiceImpl implements GlobalParameterService {
 	@Autowired
 	ClientRepo clientRepo;
 
-	// Global Parameter
-
 	// Global Parametre
 
 		@Override
@@ -104,5 +102,4 @@ public class GlobalParameterServiceImpl implements GlobalParameterService {
 		public Set<Object[]> getAllAccessClientForLogin(Long orgid, String userName, String branchcode, String customer) {
 			// TODO Auto-generated method stub
 			return clientRepo.findAllAccessClientByUserName(orgid, userName, branchcode, customer);
-		}
-}
+		}}
