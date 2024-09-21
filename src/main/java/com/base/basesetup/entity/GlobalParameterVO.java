@@ -32,8 +32,6 @@ public class GlobalParameterVO {
 	private Long orgId;
 	@Column(name = "userid")
 	private String userid;
-	@Column(name = "warehouse")
-	private String warehouse;
 	@Column(name = "branch")
 	private String branch;
 	@Column(name = "branchcode")

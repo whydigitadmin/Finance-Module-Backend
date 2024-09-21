@@ -23,13 +23,12 @@ public class GlobalParameterServiceImpl implements GlobalParameterService {
 
 	public static final Logger LOGGER = LoggerFactory.getLogger(GlobalParameterServiceImpl.class);
 
-
 	@Autowired
 	GlobalParameterRepo globalParameterRepo;
 
 	@Autowired
 	UserRepo userRepo;
-	
+
 	@Autowired
 	UserBranchAccessRepo userBranchAccessRepo;
 
@@ -41,65 +40,61 @@ public class GlobalParameterServiceImpl implements GlobalParameterService {
 
 	@Autowired
 	FinancialYearRepo financialRepo;
-	
+
 	@Autowired
 	CustomerRepo customerRepo;
-	
+
 	@Autowired
 	ClientRepo clientRepo;
 
 	// Global Parametre
 
-		@Override
-		public Optional<GlobalParameterVO> getGlobalParamByOrgIdAndUserName(Long orgid, String username) {
+	@Override
+	public Optional<GlobalParameterVO> getGlobalParamByOrgIdAndUserName(Long orgid, String username) {
 
-			return globalParameterRepo.findGlobalParamByOrgIdAndUserName(orgid, username);
+		return globalParameterRepo.findGlobalParamByOrgIdAndUserName(orgid, username);
+	}
+
+	// Change Global Parameter or update Parameters
+	@Override
+
+	public GlobalParameterVO updateGlobaParameter(GlobalParameterVO globalParameterVO) {
+
+		GlobalParameterVO existingRecord = globalParameterRepo.findGlobalParam(globalParameterVO.getOrgId(),
+				globalParameterVO.getUserid());
+
+		if (existingRecord != null) {
+			// If the record exists, it's a PUT operation
+			existingRecord.setBranch(globalParameterVO.getBranch());
+			existingRecord.setBranchcode(globalParameterVO.getBranchcode());
+			existingRecord.setCustomer(globalParameterVO.getCustomer());
+			existingRecord.setClient(globalParameterVO.getClient());
+			existingRecord.setOrgId(globalParameterVO.getOrgId());
+
+			return globalParameterRepo.save(existingRecord);
+		} else {
+			// If the record doesn't exist, it's a POST operation
+			return globalParameterRepo.save(globalParameterVO);
 		}
 
-		@Override
-		public Set<Object[]> getWarehouseNameByOrgIdAndBranchAndClient(Long orgid, String branch, String client) {
-			return globalParameterRepo.findWarehouseNameByOrgIdAndBranchAndClient(orgid, branch, client);
-		}
+	}
 
-		// Change Global Parameter or update Parameters
-		@Override
-		public GlobalParameterVO updateGlobaParameter(GlobalParameterVO globalParameterVO) {
+	// get access Branch
+	@Override
+	public Set<Object[]> getGlobalParametersBranchAndBranchCodeByOrgIdAndUserName(Long orgid, String userName) {
 
-			GlobalParameterVO existingRecord = globalParameterRepo.findGlobalParam(globalParameterVO.getOrgId(),
-					globalParameterVO.getUserid());
+		return userBranchAccessRepo.findGlobalParametersBranchByUserName(orgid, userName);
+	}
 
-			if (existingRecord != null) {
-				// If the record exists, it's a PUT operation
-				existingRecord.setBranch(globalParameterVO.getBranch());
-				existingRecord.setBranchcode(globalParameterVO.getBranchcode());
-				existingRecord.setCustomer(globalParameterVO.getCustomer());
-				existingRecord.setClient(globalParameterVO.getClient());
-				existingRecord.setWarehouse(globalParameterVO.getWarehouse());
-				existingRecord.setOrgId(globalParameterVO.getOrgId());
+	@Override
+	public Set<Object[]> getAllAccessCustomerForLogin(Long orgid, String userName, String branchcode) {
 
-				return globalParameterRepo.save(existingRecord);
-			} else {
-				// If the record doesn't exist, it's a POST operation
-				return globalParameterRepo.save(globalParameterVO);
-			}
+		return customerRepo.findAllAccessCustomerByUserName(orgid, userName, branchcode);
+	}
 
-		}
-
-		// get access Branch
-		@Override
-		public Set<Object[]> getGlobalParametersBranchAndBranchCodeByOrgIdAndUserName(Long orgid, String userName) {
-
-			return userBranchAccessRepo.findGlobalParametersBranchByUserName(orgid, userName);
-		}
-
-		@Override
-		public Set<Object[]> getAllAccessCustomerForLogin(Long orgid, String userName, String branchcode) {
-
-			return customerRepo.findAllAccessCustomerByUserName(orgid, userName, branchcode);
-		}
-
-		@Override
-		public Set<Object[]> getAllAccessClientForLogin(Long orgid, String userName, String branchcode, String customer) {
-			// TODO Auto-generated method stub
-			return clientRepo.findAllAccessClientByUserName(orgid, userName, branchcode, customer);
-		}}
+	@Override
+	public Set<Object[]> getAllAccessClientForLogin(Long orgid, String userName, String branchcode, String customer) {
+		// TODO Auto-generated method stub
+		return clientRepo.findAllAccessClientByUserName(orgid, userName, branchcode, customer);
+	}
+}
