@@ -1,24 +1,30 @@
 package com.base.basesetup.service;
 
-import java.util.List;
-import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.stereotype.Service;
 
-import com.base.basesetup.dto.GlobalParameterDTO;
 import com.base.basesetup.entity.GlobalParameterVO;
 
 @Service
 public interface GlobalParameterService {
-
-	GlobalParameterVO createUpdateGlobalParameter(GlobalParameterDTO globalParameterDTO);
-
-	GlobalParameterVO getGlobalParameterByUserId(Long userId);
-
-	List<Map<String,Object>> getUserAccessBranchByUserId(Long userId);
-
-	List<Map<String,Object>> getUserCompanyByUserId(Long userId);
+	// Global Parameter
 	
-	List<Map<String, Object>> getFinYearforGlobalParam(Long orgId);
+	Set<Object[]>getWarehouseNameByOrgIdAndBranchAndClient(Long orgid, String branch, String client);
+	
+	Optional<GlobalParameterVO> getGlobalParamByOrgIdAndUserName(Long orgid,String userId);
+	
+	GlobalParameterVO updateGlobaParameter(GlobalParameterVO globalParameterVO);
+	
+		
+	// to getAcces Global Param Dteails
+	
+	Set<Object[]> getGlobalParametersBranchAndBranchCodeByOrgIdAndUserName(Long orgid,String userName);
+	
+	Set<Object[]>getAllAccessCustomerForLogin(Long orgid,String userName,String branchcode);
+	
+	Set<Object[]>getAllAccessClientForLogin(Long orgid,String userName,String branchcode,String customer);
+	
 
 }

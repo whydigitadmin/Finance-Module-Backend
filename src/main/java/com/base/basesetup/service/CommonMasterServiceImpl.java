@@ -18,8 +18,6 @@ import org.springframework.context.ApplicationContextException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.base.basesetup.common.UserConstants;
-import com.base.basesetup.dto.BranchDTO;
 import com.base.basesetup.dto.CityDTO;
 import com.base.basesetup.dto.CompanyDTO;
 import com.base.basesetup.dto.CountryDTO;
@@ -27,16 +25,11 @@ import com.base.basesetup.dto.CurrencyDTO;
 import com.base.basesetup.dto.DocumentTypeDTO;
 import com.base.basesetup.dto.DocumentTypesMappingDTO;
 import com.base.basesetup.dto.DocumentTypesMappingDetailsDTO;
-import com.base.basesetup.dto.EmployeeDTO;
 import com.base.basesetup.dto.FinScreenDTO;
 import com.base.basesetup.dto.FinancialYearDTO;
 import com.base.basesetup.dto.RegionDTO;
-import com.base.basesetup.dto.ResponsibilitiesDTO;
 import com.base.basesetup.dto.Role;
-import com.base.basesetup.dto.RoleMasterDTO;
-import com.base.basesetup.dto.ScreenDTO;
 import com.base.basesetup.dto.StateDTO;
-import com.base.basesetup.entity.BranchVO;
 import com.base.basesetup.entity.CityVO;
 import com.base.basesetup.entity.CompanyVO;
 import com.base.basesetup.entity.CountryVO;
@@ -48,13 +41,9 @@ import com.base.basesetup.entity.EmployeeVO;
 import com.base.basesetup.entity.FinScreenVO;
 import com.base.basesetup.entity.FinancialYearVO;
 import com.base.basesetup.entity.RegionVO;
-import com.base.basesetup.entity.ResponsibilitiesVO;
-import com.base.basesetup.entity.RoleMasterVO;
-import com.base.basesetup.entity.ScreenVO;
 import com.base.basesetup.entity.StateVO;
 import com.base.basesetup.entity.UserVO;
 import com.base.basesetup.exception.ApplicationException;
-import com.base.basesetup.repo.BranchRepo;
 import com.base.basesetup.repo.CityRepo;
 import com.base.basesetup.repo.CompanyRepo;
 import com.base.basesetup.repo.CountryRepo;
@@ -68,7 +57,6 @@ import com.base.basesetup.repo.FinancialYearRepo;
 import com.base.basesetup.repo.RegionRepo;
 import com.base.basesetup.repo.ResponsibilitiesRepo;
 import com.base.basesetup.repo.RoleRepo;
-import com.base.basesetup.repo.ScreenRepo;
 import com.base.basesetup.repo.StateRepo;
 import com.base.basesetup.repo.UserRepo;
 import com.base.basesetup.util.CryptoUtils;
@@ -113,9 +101,6 @@ public class CommonMasterServiceImpl implements CommonMasterService {
 
 	@Autowired
 	ResponsibilitiesRepo responsibilitiesRepo;
-
-	@Autowired
-	ScreenRepo screenRepo;
 
 	@Autowired
 	FinScreenRepo finScreenRepo;
@@ -313,108 +298,6 @@ public class CommonMasterServiceImpl implements CommonMasterService {
 //
 //	}
 
-	// Employee-----------------------------------------------------------------------------------//
-
-	@Override
-	public List<EmployeeVO> getEmployeeById(Long id) {
-		List<EmployeeVO> employeeVO = new ArrayList<>();
-		if (ObjectUtils.isNotEmpty(id)) {
-			LOGGER.info("Successfully Received Employee BY Id : {}", id);
-			employeeVO = employeeRepo.findEmployeeById(id);
-		} else {
-			LOGGER.info("Successfully Received Employee For All Id.");
-			employeeVO = employeeRepo.findAll();
-		}
-		return employeeVO;
-	}
-
-	@Override
-	public List<EmployeeVO> getEmployeeByOrgId(Long orgId) {
-		List<EmployeeVO> employeeVO = new ArrayList<>();
-		if (ObjectUtils.isNotEmpty(orgId)) {
-			LOGGER.info("Successfully Received Employee BY OrgId : {}", orgId);
-			employeeVO = employeeRepo.findEmployeeByOrgId(orgId);
-		} else {
-			LOGGER.info("Successfully Received Employee For All OrgId.");
-			employeeVO = employeeRepo.findAll();
-		}
-		return employeeVO;
-	}
-
-	@Override
-	public EmployeeVO updateCreateEmployee(@Valid EmployeeDTO employeeDTO) throws Exception {
-		EmployeeVO employeeVO = new EmployeeVO();
-		boolean isUpdate = false;
-		if (ObjectUtils.isNotEmpty(employeeDTO.getId())) {
-			isUpdate = true;
-			employeeVO = employeeRepo.findById(employeeDTO.getId())
-					.orElseThrow(() -> new ApplicationException("Invalid Employee Details"));
-			employeeVO.setUpdatedBy(employeeDTO.getCreatedBy());
-
-		} else {
-			if (employeeRepo.existsByEmployeeCodeAndOrgId(employeeDTO.getEmployeeCode(), employeeDTO.getOrgId())) {
-				throw new ApplicationException("Employee Code already exixts.");
-			}
-			employeeVO.setUpdatedBy(employeeDTO.getCreatedBy());
-			employeeVO.setCreatedBy(employeeDTO.getCreatedBy());
-		}
-
-		// update check
-		if (isUpdate) {
-			EmployeeVO employee = employeeRepo.findById(employeeDTO.getId()).orElse(null);
-			if (!employee.getEmployeeCode().equalsIgnoreCase(employeeDTO.getEmployeeCode())) {
-				if (employeeRepo.existsByEmployeeCodeAndOrgId(employeeDTO.getEmployeeCode(), employeeDTO.getOrgId())) {
-					throw new ApplicationException("Employee Code already exists");
-				}
-			}
-		}
-		getEmployeeVOFromEmployeeDTO(employeeDTO, employeeVO);
-		employeeRepo.save(employeeVO);
-		UserVO userVO = new UserVO();
-		userVO.setEmployeeName(employeeDTO.getEmployeeName());
-		if (userRepo.existsByUserName(employeeDTO.getEmployeeCode())) {
-			throw new ApplicationException("Employee code already existes");
-		}
-		userVO.setUserName(employeeDTO.getEmployeeCode());
-		userVO.setOrgId(employeeDTO.getOrgId());
-		try {
-			userVO.setPassword(encoder.encode(CryptoUtils.getDecrypt(employeeDTO.getPassword())));
-		} catch (Exception e) {
-			LOGGER.error(e.getMessage());
-			throw new ApplicationContextException(UserConstants.ERRROR_MSG_UNABLE_TO_ENCODE_USER_PASSWORD);
-		}
-		userVO.setActive(true);
-		userVO.setLoginStatus(false);
-
-		userRepo.save(userVO);
-		return employeeVO;
-		// return employeeRepo.save(employeeVO);
-	}
-
-	private void getEmployeeVOFromEmployeeDTO(@Valid EmployeeDTO employeeDTO, EmployeeVO employeeVO)
-			throws ApplicationException {
-
-		employeeVO.setOrgId(employeeDTO.getOrgId());
-		employeeVO.setActive(employeeDTO.isActive());
-		employeeVO.setEmployeeCode(employeeDTO.getEmployeeCode());
-		employeeVO.setGender(employeeDTO.getGender());
-		employeeVO.setPassword(employeeDTO.getPassword());
-		employeeVO.setRole(employeeDTO.getRole());
-		employeeVO.setEmployeeName(employeeDTO.getEmployeeName());
-		employeeVO.setBranch(employeeDTO.getBranch());
-		employeeVO.setBranchCode(employeeDTO.getBranchCode());
-		employeeVO.setDepartment(employeeDTO.getDepartment());
-		employeeVO.setDesignation(employeeDTO.getDesignation());
-		employeeVO.setJoiningDate(employeeDTO.getJoiningDate());
-		employeeVO.setDateOfBirth(employeeDTO.getDateOfBirth());
-		employeeVO.setActive(employeeDTO.isActive());
-
-	}
-
-	@Override
-	public List<EmployeeVO> getEmployeeByActive() {
-		return employeeRepo.findEmployeeByActive();
-	}
 
 	// FinancialYear-----------------------------------------------------------------------------------
 	@Override
@@ -497,162 +380,6 @@ public class CommonMasterServiceImpl implements CommonMasterService {
 		return finyrList;
 	}
 
-	// Role------------------------------------------------------------------------------------------------
-
-	@Override
-	public List<RoleMasterVO> getRoleById(Long id) {
-		List<RoleMasterVO> roleVO = new ArrayList<>();
-		if (ObjectUtils.isNotEmpty(id)) {
-			LOGGER.info("Successfully Received Role BY Id : {}", id);
-			roleVO = roleRepo.findRoleById(id);
-		} else {
-			LOGGER.info("Successfully Received Role For All Id.");
-			roleVO = roleRepo.findAll();
-		}
-		return roleVO;
-	}
-
-	@Override
-	public List<RoleMasterVO> getRoleByOrgId(Long orgId) {
-		List<RoleMasterVO> roleVO = new ArrayList<>();
-		if (ObjectUtils.isNotEmpty(orgId)) {
-			LOGGER.info("Successfully Received Role BY OrgId : {}", orgId);
-			roleVO = roleRepo.findRoleByOrgId(orgId);
-		} else {
-			LOGGER.info("Successfully Received Role For All OrgId.");
-			roleVO = roleRepo.findAll();
-		}
-		return roleVO;
-	}
-
-	@Override
-	public RoleMasterVO updateCreateRole(@Valid RoleMasterDTO roleMasterDTO) throws ApplicationException {
-		RoleMasterVO roleMasterVO = new RoleMasterVO();
-		boolean isUpdate = false;
-		if (ObjectUtils.isNotEmpty(roleMasterDTO.getId())) {
-			isUpdate = true;
-			roleMasterVO = roleRepo.findById(roleMasterDTO.getId())
-					.orElseThrow(() -> new ApplicationException("Invalid Role Details"));
-			roleMasterVO.setUpdatedBy(roleMasterDTO.getCreatedBy());
-
-		} else {
-			if (roleRepo.existsByRoleAndOrgId(roleMasterDTO.getRole(), roleMasterDTO.getOrgId())) {
-				throw new ApplicationException("The given role already exists.");
-			}
-			roleMasterVO.setUpdatedBy(roleMasterDTO.getCreatedBy());
-			roleMasterVO.setCreatedBy(roleMasterDTO.getCreatedBy());
-		}
-
-		// update check
-		if (isUpdate) {
-			RoleMasterVO role = roleRepo.findById(roleMasterDTO.getId()).orElse(null);
-			if (!role.getRole().equalsIgnoreCase(roleMasterDTO.getRole())) {
-				if (roleRepo.existsByRoleAndOrgId(roleMasterDTO.getRole(), roleMasterDTO.getOrgId())) {
-					throw new ApplicationException("The given role already exists.");
-				}
-			}
-		}
-		getRoleMasterVOFromRoleMasterDTO(roleMasterDTO, roleMasterVO);
-		return roleRepo.save(roleMasterVO);
-	}
-
-	private void getRoleMasterVOFromRoleMasterDTO(@Valid RoleMasterDTO roleMasterDTO, RoleMasterVO roleMasterVO)
-			throws ApplicationException {
-		roleMasterVO.setOrgId(roleMasterDTO.getOrgId());
-		roleMasterVO.setActive(roleMasterDTO.isActive());
-		roleMasterVO.setRole(roleMasterDTO.getRole());
-	}
-
-	@Override
-	public List<RoleMasterVO> getRoleByActive() {
-		return roleRepo.findRoleByActive();
-	}
-
-	// Responsibilities-----------------------------------------------------------------------------------------
-	@Override
-	public List<ResponsibilitiesVO> getResponsibilitiesById(Long id) {
-		List<ResponsibilitiesVO> responsibilitiesVO = new ArrayList<>();
-		if (ObjectUtils.isNotEmpty(id)) {
-			LOGGER.info("Successfully Received Responsibilities BY Id : {}", id);
-			responsibilitiesVO = responsibilitiesRepo.findResponsibilitiesById(id);
-		} else {
-			LOGGER.info("Successfully Received Responsibilities For All Id.");
-			responsibilitiesVO = responsibilitiesRepo.findAll();
-		}
-		return responsibilitiesVO;
-	}
-
-	@Override
-	public List<ResponsibilitiesVO> getResponsibilitiesByOrgId(Long orgId) {
-		List<ResponsibilitiesVO> responsibilitiesVO = new ArrayList<>();
-		if (ObjectUtils.isNotEmpty(orgId)) {
-			LOGGER.info("Successfully Received Responsibilities BY OrgId : {}", orgId);
-			responsibilitiesVO = responsibilitiesRepo.findResponsibilitiesByOrgId(orgId);
-		} else {
-			LOGGER.info("Successfully Received Responsibilities For All OrgId.");
-			responsibilitiesVO = responsibilitiesRepo.findAll();
-		}
-		return responsibilitiesVO;
-	}
-
-	@Transactional
-	@Override
-	public ResponsibilitiesVO updateCreateResponsibilities(ResponsibilitiesDTO responsibilitiesDTO)
-			throws ApplicationException {
-		Logger log = LoggerFactory.getLogger(this.getClass());
-		log.info("STARTING METHOD :updateCreateResponsibilities()");
-		boolean isUpdate = false;
-		ResponsibilitiesVO responsibilitiesVO = new ResponsibilitiesVO();
-		try {
-			if (ObjectUtils.isNotEmpty(responsibilitiesDTO.getId())) {
-				isUpdate = true;
-				responsibilitiesVO = responsibilitiesRepo.findById(responsibilitiesDTO.getId())
-						.orElseThrow(() -> new ApplicationException("Invalid Responsibilities details"));
-				responsibilitiesVO.setUpdatedBy(responsibilitiesDTO.getCreatedBy());
-			} else {
-				responsibilitiesVO.setUpdatedBy(responsibilitiesDTO.getCreatedBy());
-				responsibilitiesVO.setCreatedBy(responsibilitiesDTO.getCreatedBy());
-			}
-			getResponsibilitiesVOFromResponsibilitiesDTO(responsibilitiesDTO, responsibilitiesVO);
-
-			// Clear existing ScreenVOs and add new ones
-			responsibilitiesVO.getScreenVO().clear();
-			if (responsibilitiesDTO.getScreenDTO() != null) {
-				for (ScreenDTO screenDTO : responsibilitiesDTO.getScreenDTO()) {
-					ScreenVO screenVO;
-					if (screenDTO.getId() != null && ObjectUtils.isNotEmpty(screenDTO.getId())) {
-						screenVO = screenRepo.findById(screenDTO.getId())
-								.orElseThrow(() -> new ApplicationException("Invalid Screen details"));
-					} else {
-						screenVO = new ScreenVO();
-					}
-					screenVO.setResponsibilities(screenDTO.getResponsibilities());
-					screenVO.setScreenName(screenDTO.getScreenName());
-					screenVO.setResponsibilitiesVO(responsibilitiesVO);
-					responsibilitiesVO.getScreenVO().add(screenVO);
-				}
-			}
-
-			log.info("ENDING METHOD :updateCreateResponsibilities()");
-			return responsibilitiesRepo.save(responsibilitiesVO);
-		} catch (Exception e) {
-			log.error("Error in method updateCreateResponsibilities: ", e);
-			throw new ApplicationException("An error occurred while updating responsibilities", e);
-		}
-	}
-
-	private void getResponsibilitiesVOFromResponsibilitiesDTO(ResponsibilitiesDTO responsibilitiesDTO,
-			ResponsibilitiesVO responsibilitiesVO) {
-		responsibilitiesVO.setOrgId(responsibilitiesDTO.getOrgId());
-		responsibilitiesVO.setRole(responsibilitiesDTO.getRole());
-		responsibilitiesVO.setActive(responsibilitiesDTO.isActive());
-	}
-
-	@Override
-	public List<ResponsibilitiesVO> getResponsibilitiesByActive() {
-		return responsibilitiesRepo.findResponsibilitiesByActive();
-
-	}
 
 	// FinScreen-----------------------------------------------------------------------------------
 	@Override

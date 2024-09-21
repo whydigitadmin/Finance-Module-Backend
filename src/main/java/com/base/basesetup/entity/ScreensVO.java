@@ -17,25 +17,27 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "screen")
-@Data
+@Table(name="screens")
 @NoArgsConstructor
 @AllArgsConstructor
-public class ScreenVO {
-
+@Data
+public class ScreensVO {
+	
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "screengen")
-	@SequenceGenerator(name = "screengen", sequenceName = "screenseq", initialValue = 1000000001, allocationSize = 1)
-	@Column(name = "screenid")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "screensgen")
+	@SequenceGenerator(name = "screensgen", sequenceName = "screensseq", initialValue = 1000000001, allocationSize = 1)
+	@Column(name = "screensid")
 	private Long id;
-	@Column(name = "screenname")
+	
+	@Column(name="screenname")
 	private String screenName;
-	@Column(name = "responsibilities")
-	private String responsibilities;
-
-	@ManyToOne
+	
+	@Column(name="orgid")
+	private Long orgId;
+	
 	@JsonBackReference
-	@JoinColumn(name = "responsibilitiesid")
-	private ResponsibilitiesVO responsibilitiesVO;
+	@ManyToOne
+	@JoinColumn(name = "responsibilityid")
+	private ResponsibilityVO responsibilityVO;
 
 }

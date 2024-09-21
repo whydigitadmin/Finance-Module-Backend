@@ -9,13 +9,14 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ResponsibilitiesDTO {
-
+public class ResponsibilityDTO {
+	
 	private Long id;
-	private String role;
-	private boolean active;
+	private String responsibility;
+	private List<ScreensDTO>screensDTO;
 	private Long orgId;
 	private String createdBy;
+	private boolean active;
 	
-	private List<ScreenDTO> screenDTO;
+
 }

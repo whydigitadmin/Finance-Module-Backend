@@ -24,6 +24,7 @@ import com.base.basesetup.dto.ChargeTypeRequestDTO;
 import com.base.basesetup.dto.ChequeBookDTO;
 import com.base.basesetup.dto.ChequeBookDetailsDTO;
 import com.base.basesetup.dto.CostCenterDTO;
+import com.base.basesetup.dto.EmployeeDTO;
 import com.base.basesetup.dto.ExRatesDTO;
 import com.base.basesetup.dto.GroupLedgerDTO;
 import com.base.basesetup.dto.ListOfValues1DTO;
@@ -46,6 +47,7 @@ import com.base.basesetup.entity.ChargeTypeRequestVO;
 import com.base.basesetup.entity.ChequeBookDetailsVO;
 import com.base.basesetup.entity.ChequeBookVO;
 import com.base.basesetup.entity.CostCenterVO;
+import com.base.basesetup.entity.EmployeeVO;
 import com.base.basesetup.entity.ExRatesVO;
 import com.base.basesetup.entity.GroupLedgerVO;
 import com.base.basesetup.entity.ListOfValues1VO;
@@ -69,6 +71,7 @@ import com.base.basesetup.repo.ChargeTypeRequestRepo;
 import com.base.basesetup.repo.ChequeBookDetailsRepo;
 import com.base.basesetup.repo.ChequeBookRepo;
 import com.base.basesetup.repo.CostCenterRepo;
+import com.base.basesetup.repo.EmployeeRepo;
 import com.base.basesetup.repo.ExRatesRepo;
 import com.base.basesetup.repo.GroupLedgerRepo;
 import com.base.basesetup.repo.ListOfValues1Repo;
@@ -89,6 +92,9 @@ public class MasterServiceImpl implements MasterService {
 
 	@Autowired
 	BranchRepo branchRepo;
+	
+	@Autowired
+	EmployeeRepo employeeRepo;
 
 	@Autowired
 	SetTaxRateRepo setTaxRateRepo;
@@ -252,6 +258,94 @@ public class MasterServiceImpl implements MasterService {
 	public void deleteBranch(Long branchid) {
 		branchRepo.deleteById(branchid);
 	}
+	
+	// Employee
+
+		@Override
+		public List<EmployeeVO> getAllEmployeeByOrgId(Long orgId) {
+			return employeeRepo.findAllEmployeeByOrgId(orgId);
+		}
+
+		@Override
+		public List<EmployeeVO> getAllEmployee() {
+			return employeeRepo.findAll();
+		}
+
+		@Override
+		public Optional<EmployeeVO> getEmployeeById(Long employeeid) {
+			return employeeRepo.findById(employeeid);
+		}
+
+		@Override
+		public Map<String, Object> createEmployee(EmployeeDTO employeeDTO) throws ApplicationException {
+			EmployeeVO employeeVO;
+			String message = null;
+
+			if (ObjectUtils.isEmpty(employeeDTO.getId())) {
+				// Check for existing employee by employee code within the organization
+				if (employeeRepo.existsByEmployeeCodeAndOrgId(employeeDTO.getEmployeeCode(), employeeDTO.getOrgId())) {
+					String errorMessage = String.format("This EmployeeCode: %s Already Exists in This Organization",
+							employeeDTO.getEmployeeCode());
+					throw new ApplicationException(errorMessage);
+				}
+				// Create new employee
+				employeeVO = new EmployeeVO();
+				employeeVO.setCreatedBy(employeeDTO.getCreatedBy());
+				employeeVO.setUpdatedBy(employeeDTO.getCreatedBy());
+				message = "Employee Creation Successfully";
+			} else {
+				// Update existing employee
+				employeeVO = employeeRepo.findById(employeeDTO.getId()).orElseThrow(
+						() -> new ApplicationException("ID is Not Found Any Information: " + employeeDTO.getId()));
+
+				employeeVO.setUpdatedBy(employeeDTO.getCreatedBy());
+
+				if (!employeeVO.getEmployeeCode().equalsIgnoreCase(employeeDTO.getEmployeeCode())) {
+					if (employeeRepo.existsByEmployeeCodeAndOrgId(employeeDTO.getEmployeeCode(), employeeDTO.getOrgId())) {
+						String errorMessage = String.format("This EmployeeCode: %s Already Exists in This Organization",
+								employeeDTO.getEmployeeCode());
+						throw new ApplicationException(errorMessage);
+					}
+					employeeVO.setEmployeeCode(employeeDTO.getEmployeeCode());
+				}
+				message = "Employee Update Successfully";
+			}
+
+			// Map the remaining fields
+			getEmployeeVOFromEmployeeDTO(employeeVO, employeeDTO);
+
+			// Save the entity
+			employeeRepo.save(employeeVO);
+
+			// Prepare the response
+			Map<String, Object> response = new HashMap<>();
+			response.put("message", message);
+			response.put("employeeVO", employeeVO);
+
+			return response;
+		}
+
+		private void getEmployeeVOFromEmployeeDTO(EmployeeVO employeeVO, EmployeeDTO employeeDTO) {
+			employeeVO.setEmployeeCode(employeeDTO.getEmployeeCode());
+			employeeVO.setEmployeeName(employeeDTO.getEmployeeName());
+			employeeVO.setGender(employeeDTO.getGender());
+			employeeVO.setBranch(employeeDTO.getBranch());
+			employeeVO.setBranchCode(employeeDTO.getBranchCode());
+			employeeVO.setDepartment(employeeDTO.getDepartment());
+			employeeVO.setDesignation(employeeDTO.getDesignation());
+			employeeVO.setDateOfBirth(employeeDTO.getDateOfBirth());
+			employeeVO.setJoiningDate(employeeDTO.getJoiningdate());
+			employeeVO.setOrgId(employeeDTO.getOrgId());
+			employeeVO.setCancel(employeeDTO.isCancel());
+			employeeVO.setActive(employeeDTO.isActive());
+			employeeVO.setCancelRemark(employeeDTO.getCancelRemark());
+		}
+
+		@Override
+		public void deleteEmployee(Long employeeid) {
+			employeeRepo.deleteById(employeeid);
+		}
+
 
 	// setTaxesRate
 	@Override

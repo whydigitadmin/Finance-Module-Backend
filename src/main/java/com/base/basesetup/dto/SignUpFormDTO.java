@@ -9,7 +9,7 @@
  */
 package com.base.basesetup.dto;
 
-import javax.validation.constraints.NotBlank;
+import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,25 +19,19 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SignUpFormDTO {
-	@NotBlank(message = "First Name is required")
-	private String employeeName;
 
+	private Long id;
 	private String userName;
-
-	private String email;
-
 	private String password;
-
-	// @Size(min = 2, max = 13, message = "Please provide Valid Phone Number")
-	// private String phoneNumber;
-
-	// private String secondaryPhone;
-
-	// @Enumerated(EnumType.STRING)
-	// private Gender gender;
-
-	// @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-	// @Past(message = "The date of birth must be in the past.")
-	// private LocalDate dob;
+	private String employeeName;
+	private String nickName;
+	private String email;
+	private Long orgId;
+	private String mobileNo;
+	private String userType;
+	private boolean isActive;
+	private List<UserLoginRoleAccessDTO> roleAccessDTO;
+	private List<UserLoginClientAccessDTO> clientAccessDTOList;
+	private List<UserLoginBranchAccessDTO> branchAccessDTOList;
 
 }

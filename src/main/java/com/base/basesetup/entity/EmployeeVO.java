@@ -1,7 +1,5 @@
 package com.base.basesetup.entity;
 
-import java.time.LocalDate;
-
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -12,6 +10,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.base.basesetup.dto.CreatedUpdatedDate;
+import com.fasterxml.jackson.annotation.JsonGetter;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -47,11 +46,7 @@ public class EmployeeVO {
 	@Column(name = "dateofbirth")
 	private String dateOfBirth;
 	@Column(name = "joiningdate")
-	private LocalDate joiningDate;
-	@Column(name = "role")
-	private String role;
-	@Column(name = "password")
-	private String password;
+	private String joiningDate;
 	@Column(name = "createdby")
 	private String createdBy;
 	@Column(name = "modifiedby")
@@ -64,14 +59,18 @@ public class EmployeeVO {
 	private String cancelRemark;
 	@Column(name = "active")
 	private boolean active;
-	
-	
-//	@JsonManagedReference
-//	@OneToOne(mappedBy = "employeeVO", cascade = CascadeType.ALL)
-//	private UserVO userVO;
-//	
+
+	@JsonGetter("active")
+	public String getActive() {
+		return active ? "Active" : "In-Active";
+	}
+
+	// Optionally, if you want to control serialization for 'cancel' field similarly
+	@JsonGetter("cancel")
+	public String getCancel() {
+		return cancel ? "T" : "F";
+	}
 
 	@Embedded
 	private CreatedUpdatedDate commonDate = new CreatedUpdatedDate();
-
 }

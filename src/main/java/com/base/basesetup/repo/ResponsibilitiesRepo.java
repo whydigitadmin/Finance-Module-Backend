@@ -1,23 +1,25 @@
 package com.base.basesetup.repo;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.stereotype.Repository;
 
-import com.base.basesetup.entity.ResponsibilitiesVO;
+import com.base.basesetup.entity.ResponsibilityVO;
 
-@Repository
-public interface ResponsibilitiesRepo extends JpaRepository<ResponsibilitiesVO, Long> {
+public interface ResponsibilitiesRepo extends JpaRepository<ResponsibilityVO, Long> {
 
-	@Query(nativeQuery = true, value = "select * from responsibilities where Responsibilitiesid=?1")
-	List<ResponsibilitiesVO> findResponsibilitiesById(Long id);
+	boolean existsByResponsibilityAndOrgId(String responsibility,Long OrgId);
 
-	@Query(nativeQuery = true, value = "select * from responsibilities where orgid=?1")
-	List<ResponsibilitiesVO> findResponsibilitiesByOrgId(Long orgId);
+	@Query(value="select a.id,a.responsibility from ResponsibilityVO a where a.orgId=?1 and a.active=true")
+	Set<Object[]> findActiveByOrgId(Long orgId);
 
-	@Query(nativeQuery = true, value = "select * from responsibilities where active=1")
-	List<ResponsibilitiesVO> findResponsibilitiesByActive();
+	@Query(value="select a from ResponsibilityVO a where a.orgId=?1 ")
+	List<ResponsibilityVO> findAllResponsibilityByOrgId(Long orgId);
+
+	@Query(value="select a from ResponsibilityVO a where a.orgId=?1 and a.active=true ")
+	List<ResponsibilityVO> findAllActiveResponsibilityByOrgId(Long orgId);
+
 
 }
