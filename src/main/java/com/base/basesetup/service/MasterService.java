@@ -1,15 +1,19 @@
 package com.base.basesetup.service;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
 import org.springframework.stereotype.Service;
 
 import com.base.basesetup.dto.AccountDTO;
+import com.base.basesetup.dto.BranchDTO;
 import com.base.basesetup.dto.ChargeTypeRequestDTO;
 import com.base.basesetup.dto.ChequeBookDTO;
 import com.base.basesetup.dto.CostCenterDTO;
+import com.base.basesetup.dto.EmployeeDTO;
 import com.base.basesetup.dto.ExRatesDTO;
 import com.base.basesetup.dto.GroupLedgerDTO;
 import com.base.basesetup.dto.ListOfValuesDTO;
@@ -20,9 +24,11 @@ import com.base.basesetup.dto.TaxMasterDTO;
 import com.base.basesetup.dto.TcsMasterDTO;
 import com.base.basesetup.dto.TdsMasterDTO;
 import com.base.basesetup.entity.AccountVO;
+import com.base.basesetup.entity.BranchVO;
 import com.base.basesetup.entity.ChargeTypeRequestVO;
 import com.base.basesetup.entity.ChequeBookVO;
 import com.base.basesetup.entity.CostCenterVO;
+import com.base.basesetup.entity.EmployeeVO;
 import com.base.basesetup.entity.ExRatesVO;
 import com.base.basesetup.entity.GroupLedgerVO;
 import com.base.basesetup.entity.ListOfValuesVO;
@@ -37,6 +43,28 @@ import com.base.basesetup.exception.ApplicationException;
 @Service
 public interface MasterService {
 
+	// Branch
+
+	List<BranchVO> getAllBranch(Long orgid);
+
+	Optional<BranchVO> getBranchById(Long branchid);
+
+	Map<String, Object> createUpdateBranch(BranchDTO branchDTO) throws Exception;
+
+	void deleteBranch(Long branchid);
+
+	// employee
+	
+	List<EmployeeVO> getAllEmployee();
+
+	List<EmployeeVO> getAllEmployeeByOrgId(Long orgId);
+
+	Optional<EmployeeVO> getEmployeeById(Long employeeid);
+
+	Map<String, Object> createEmployee(EmployeeDTO employeeDTO) throws ApplicationException;
+
+	void deleteEmployee(Long employeeid);
+	
 //	SetTaxRateVO
 	List<SetTaxRateVO> getAllSetTaxRateByOrgId(Long orgId);
 
@@ -60,7 +88,7 @@ public interface MasterService {
 
 	List<TcsMasterVO> getAllTcsMasterById(Long id);
 
-	TcsMasterVO updateCreateTcsMaster(@ Valid TcsMasterDTO tcsMasterDTO) throws ApplicationException;
+	TcsMasterVO updateCreateTcsMaster(@Valid TcsMasterDTO tcsMasterDTO) throws ApplicationException;
 
 	List<TcsMasterVO> getTcsMasterByActive();
 

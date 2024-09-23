@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,9 +24,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.base.basesetup.common.CommonConstant;
 import com.base.basesetup.common.UserConstants;
 import com.base.basesetup.dto.AccountDTO;
+import com.base.basesetup.dto.BranchDTO;
 import com.base.basesetup.dto.ChargeTypeRequestDTO;
 import com.base.basesetup.dto.ChequeBookDTO;
 import com.base.basesetup.dto.CostCenterDTO;
+import com.base.basesetup.dto.EmployeeDTO;
 import com.base.basesetup.dto.ExRatesDTO;
 import com.base.basesetup.dto.GroupLedgerDTO;
 import com.base.basesetup.dto.ListOfValuesDTO;
@@ -37,9 +40,11 @@ import com.base.basesetup.dto.TaxMasterDTO;
 import com.base.basesetup.dto.TcsMasterDTO;
 import com.base.basesetup.dto.TdsMasterDTO;
 import com.base.basesetup.entity.AccountVO;
+import com.base.basesetup.entity.BranchVO;
 import com.base.basesetup.entity.ChargeTypeRequestVO;
 import com.base.basesetup.entity.ChequeBookVO;
 import com.base.basesetup.entity.CostCenterVO;
+import com.base.basesetup.entity.EmployeeVO;
 import com.base.basesetup.entity.ExRatesVO;
 import com.base.basesetup.entity.GroupLedgerVO;
 import com.base.basesetup.entity.ListOfValuesVO;
@@ -61,6 +66,182 @@ public class MasterController extends BaseController {
 
 	public static final Logger LOGGER = LoggerFactory.getLogger(MasterController.class);
 
+	// Branch
+		@GetMapping("/branch")
+		public ResponseEntity<ResponseDTO> getAllBranch(@RequestParam Long orgid) {
+			String methodName = "getAllBranch()";
+			LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+			String errorMsg = null;
+			Map<String, Object> responseObjectsMap = new HashMap<>();
+			ResponseDTO responseDTO = null;
+			List<BranchVO> branchVO = new ArrayList<>();
+			try {
+				branchVO = masterService.getAllBranch(orgid);
+			} catch (Exception e) {
+				errorMsg = e.getMessage();
+				LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+			}
+			if (StringUtils.isBlank(errorMsg)) {
+				responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "Branch information get successfully");
+				responseObjectsMap.put("branchVO", branchVO);
+				responseDTO = createServiceResponse(responseObjectsMap);
+			} else {
+				responseDTO = createServiceResponseError(responseObjectsMap, "Branch information receive failed", errorMsg);
+			}
+			LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+			return ResponseEntity.ok().body(responseDTO);
+		}
+
+		@GetMapping("/branch/{branchid}")
+		public ResponseEntity<ResponseDTO> getBranchById(@PathVariable Long branchid) {
+			String methodName = "getBranchById()";
+			LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+			String errorMsg = null;
+			Map<String, Object> responseObjectsMap = new HashMap<>();
+			ResponseDTO responseDTO = null;
+			BranchVO branchVO = null;
+			try {
+				branchVO = masterService.getBranchById(branchid).orElse(null);
+			} catch (Exception e) {
+				errorMsg = e.getMessage();
+				LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+			}
+			if (StringUtils.isEmpty(errorMsg)) {
+				responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "Branch found by ID");
+				responseObjectsMap.put("Branch", branchVO);
+				responseDTO = createServiceResponse(responseObjectsMap);
+			} else {
+				errorMsg = "Branch not found for ID: " + branchid;
+				responseDTO = createServiceResponseError(responseObjectsMap, "Branch not found", errorMsg);
+			}
+			LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+			return ResponseEntity.ok().body(responseDTO);
+		}
+	 
+		@PutMapping("/createUpdateBranch")
+		public ResponseEntity<ResponseDTO> createUpdateBranch(@RequestBody BranchDTO branchDTO) {
+			String methodName = "createBranch()";
+			LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+			String errorMsg = null;
+			Map<String, Object> responseObjectsMap = new HashMap<>();
+			ResponseDTO responseDTO = null;
+			try {
+				Map<String, Object> createdBranchVO = masterService.createUpdateBranch(branchDTO);
+				responseObjectsMap.put(CommonConstant.STRING_MESSAGE,createdBranchVO.get("message"));
+				responseObjectsMap.put("branchVO", createdBranchVO.get("branchVO"));
+				responseDTO = createServiceResponse(responseObjectsMap);
+			} catch (Exception e) {
+		        errorMsg = e.getMessage();
+		        LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		        responseDTO = createServiceResponseError(responseObjectsMap, errorMsg, errorMsg);
+		    }
+		    LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		    return ResponseEntity.ok().body(responseDTO);
+		}
+	
+		// Employee
+
+		@GetMapping("/getAllEmployeeByOrgId")
+		public ResponseEntity<ResponseDTO> getAllEmployeeByOrgId(@RequestParam Long orgId) {
+			String methodName = "getAllEmployeeByOrgId()";
+			LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+			String errorMsg = null;
+			Map<String, Object> responseObjectsMap = new HashMap<>();
+			ResponseDTO responseDTO = null;
+			List<EmployeeVO> employeeVO = new ArrayList<>();
+			try {
+				employeeVO = masterService.getAllEmployeeByOrgId(orgId);
+			} catch (Exception e) {
+				errorMsg = e.getMessage();
+				LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+			}
+			if (StringUtils.isBlank(errorMsg)) {
+				responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "Employee information get successfully");
+				responseObjectsMap.put("employeeVO", employeeVO);
+				responseDTO = createServiceResponse(responseObjectsMap);
+			} else {
+				responseDTO = createServiceResponseError(responseObjectsMap, "Employee information receive failed",
+						errorMsg);
+			}
+			LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+			return ResponseEntity.ok().body(responseDTO);
+		}
+
+		@GetMapping("/getAllEmployee")
+		public ResponseEntity<ResponseDTO> getAllEmployee() {
+			String methodName = "getAllEmployeeByOrgId()";
+			LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+			String errorMsg = null;
+			Map<String, Object> responseObjectsMap = new HashMap<>();
+			ResponseDTO responseDTO = null;
+			List<EmployeeVO> employeeVO = new ArrayList<>();
+			try {
+				employeeVO = masterService.getAllEmployee();
+			} catch (Exception e) {
+				errorMsg = e.getMessage();
+				LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+			}
+			if (StringUtils.isBlank(errorMsg)) {
+				responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "Employee information get successfully");
+				responseObjectsMap.put("employeeVO", employeeVO);
+				responseDTO = createServiceResponse(responseObjectsMap);
+			} else {
+				responseDTO = createServiceResponseError(responseObjectsMap, "Employee information receive failed",
+						errorMsg);
+			}
+			LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+			return ResponseEntity.ok().body(responseDTO);
+		}
+
+		@GetMapping("/employee/{employeeid}")
+		public ResponseEntity<ResponseDTO> getEmployeeById(@PathVariable Long employeeid) {
+			String methodName = "getEmployeeById()";
+			LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+			String errorMsg = null;
+			Map<String, Object> responseObjectsMap = new HashMap<>();
+			ResponseDTO responseDTO = null;
+			EmployeeVO employeeVO = null;
+			try {
+				employeeVO = masterService.getEmployeeById(employeeid).orElse(null);
+			} catch (Exception e) {
+				errorMsg = e.getMessage();
+				LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+			}
+			if (StringUtils.isEmpty(errorMsg)) {
+				responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "Employee found by ID");
+				responseObjectsMap.put("Employee", employeeVO);
+				responseDTO = createServiceResponse(responseObjectsMap);
+			} else {
+				errorMsg = "Employee not found for ID: " + employeeid;
+				responseDTO = createServiceResponseError(responseObjectsMap, "Employee not found", errorMsg);
+			}
+			LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+			return ResponseEntity.ok().body(responseDTO);
+		}
+
+		@PutMapping("/createUpdateEmployee")
+		public ResponseEntity<ResponseDTO> createUpdateEmployee(@RequestBody EmployeeDTO employeeDTO) {
+			String methodName = "createEmployee()";
+			LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+			String errorMsg = null;
+			Map<String, Object> responseObjectsMap = new HashMap<>();
+			ResponseDTO responseDTO = null;
+			try {
+				Map<String, Object> createdEmployeeVO = masterService.createEmployee(employeeDTO);
+				responseObjectsMap.put(CommonConstant.STRING_MESSAGE,createdEmployeeVO.get("message") );
+				responseObjectsMap.put("employeeVO", createdEmployeeVO.get("createdEmployeeVO"));
+				responseDTO = createServiceResponse(responseObjectsMap);
+			} catch (Exception e) {
+				errorMsg = e.getMessage();
+				LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+				responseDTO = createServiceResponseError(responseObjectsMap, errorMsg,
+						errorMsg);
+			}
+			LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+			return ResponseEntity.ok().body(responseDTO);
+		}
+
+	
 	// SetTaxRate
 
 	@GetMapping("/getAllSetTaxRateByOrgId")

@@ -1,9 +1,6 @@
 package com.base.basesetup.service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import org.slf4j.Logger;
@@ -11,11 +8,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.base.basesetup.dto.GlobalParameterDTO;
 import com.base.basesetup.entity.GlobalParameterVO;
 import com.base.basesetup.repo.BranchAccessRepo;
+import com.base.basesetup.repo.ClientRepo;
+import com.base.basesetup.repo.CustomerRepo;
 import com.base.basesetup.repo.FinancialYearRepo;
 import com.base.basesetup.repo.GlobalParameterRepo;
+import com.base.basesetup.repo.UserBranchAccessRepo;
 import com.base.basesetup.repo.UserRepo;
 import com.base.basesetup.repo.UserRoleRepo;
 
@@ -24,12 +23,14 @@ public class GlobalParameterServiceImpl implements GlobalParameterService {
 
 	public static final Logger LOGGER = LoggerFactory.getLogger(GlobalParameterServiceImpl.class);
 
-
 	@Autowired
 	GlobalParameterRepo globalParameterRepo;
 
 	@Autowired
 	UserRepo userRepo;
+
+	@Autowired
+	UserBranchAccessRepo userBranchAccessRepo;
 
 	@Autowired
 	UserRoleRepo userRoleRepo;
@@ -40,90 +41,60 @@ public class GlobalParameterServiceImpl implements GlobalParameterService {
 	@Autowired
 	FinancialYearRepo financialRepo;
 
+	@Autowired
+	CustomerRepo customerRepo;
+
+	@Autowired
+	ClientRepo clientRepo;
+
+	// Global Parametre
+
 	@Override
-	public GlobalParameterVO createUpdateGlobalParameter(GlobalParameterDTO globalParameterDTO) {
+	public Optional<GlobalParameterVO> getGlobalParamByOrgIdAndUserName(Long orgid, String username) {
 
-		GlobalParameterVO globalParameterVO= new GlobalParameterVO();
+		return globalParameterRepo.findGlobalParamByOrgIdAndUserName(orgid, username);
+	}
 
+	// Change Global Parameter or update Parameters
+	@Override
 
-		if(!globalParameterRepo.existsById(globalParameterDTO.getUserId()))
-		{			
-			globalParameterVO.setUserId(globalParameterDTO.getUserId());
-			globalParameterVO.setCompany(globalParameterDTO.getCompany());
-			globalParameterVO.setFinYear(globalParameterDTO.getFinYear());
-			globalParameterVO.setBranch(globalParameterDTO.getBranch());
-			globalParameterVO.setBranchCode(globalParameterDTO.getBranchCode());
-			globalParameterRepo.save(globalParameterVO);
+	public GlobalParameterVO updateGlobaParameter(GlobalParameterVO globalParameterVO) {
 
+		GlobalParameterVO existingRecord = globalParameterRepo.findGlobalParam(globalParameterVO.getOrgId(),
+				globalParameterVO.getUserid());
+
+		if (existingRecord != null) {
+			// If the record exists, it's a PUT operation
+			existingRecord.setBranch(globalParameterVO.getBranch());
+			existingRecord.setBranchcode(globalParameterVO.getBranchcode());
+			existingRecord.setCustomer(globalParameterVO.getCustomer());
+			existingRecord.setClient(globalParameterVO.getClient());
+			existingRecord.setOrgId(globalParameterVO.getOrgId());
+
+			return globalParameterRepo.save(existingRecord);
+		} else {
+			// If the record doesn't exist, it's a POST operation
+			return globalParameterRepo.save(globalParameterVO);
 		}
-		else
-		{
-			globalParameterVO=globalParameterRepo.findById(globalParameterDTO.getUserId()).get();
-			globalParameterVO.setCompany(globalParameterDTO.getCompany());
-			globalParameterVO.setFinYear(globalParameterDTO.getFinYear());
-			globalParameterVO.setBranch(globalParameterDTO.getBranch());
-			globalParameterVO.setBranchCode(globalParameterDTO.getBranchCode());
-			globalParameterRepo.save(globalParameterVO);
-		}
-		return globalParameterVO;
+
+	}
+
+	// get access Branch
+	@Override
+	public Set<Object[]> getGlobalParametersBranchAndBranchCodeByOrgIdAndUserName(Long orgid, String userName) {
+
+		return userBranchAccessRepo.findGlobalParametersBranchByUserName(orgid, userName);
 	}
 
 	@Override
-	public GlobalParameterVO getGlobalParameterByUserId(Long userId) {
+	public Set<Object[]> getAllAccessCustomerForLogin(Long orgid, String userName, String branchcode) {
 
-		return globalParameterRepo.findById(userId).get();
+		return customerRepo.findAllAccessCustomerByUserName(orgid, userName, branchcode);
 	}
 
 	@Override
-	public List<Map<String, Object>> getUserAccessBranchByUserId(Long userId) {
-		Set<Object[]> getBranchAndBranchCode=branchAccessRepo.getUserAccessBranch(userId);
-		return getBranch(getBranchAndBranchCode);
+	public Set<Object[]> getAllAccessClientForLogin(Long orgid, String userName, String branchcode, String customer) {
+		// TODO Auto-generated method stub
+		return clientRepo.findAllAccessClientByUserName(orgid, userName, branchcode, customer);
 	}
-
-	private List<Map<String, Object>> getBranch(Set<Object[]> getBranchAndBranchCode) {
-
-		List<Map<String, Object>> branchList = new ArrayList<>();
-
-	    for (Object[] branchData : getBranchAndBranchCode) {
-	        Map<String, Object> branchMap = new HashMap<>();
-	        branchMap.put("branchName", branchData[0] != null ? branchData[0].toString() : "");
-	        branchMap.put("branchCode", branchData[1]!= null ? branchData[1].toString() : "");
-	        branchList.add(branchMap);
-	    }
-	    return branchList;
-	}
-
-	@Override
-	public List<Map<String, Object>> getFinYearforGlobalParam(Long orgId) {
-		Set<Object[]>getFinyer=financialRepo.getFinyer(orgId);
-		return getFinyearDetails(getFinyer);
-	}
-
-	private List<Map<String, Object>> getFinyearDetails(Set<Object[]> getFinyer) {
-		List<Map<String, Object>> finyrList = new ArrayList<>();
-
-	    for (Object[] finyeDate : getFinyer) {
-	        Map<String, Object> branchMap = new HashMap<>();
-	        branchMap.put("finYear", finyeDate[0] != null ? finyeDate[0].toString() : "");
-	        finyrList.add(branchMap);
-	    }
-	    return finyrList;
-	}
-
-	@Override
-	public List<Map<String, Object>> getUserCompanyByUserId(Long userId) {
-		Set<Object[]>getUserCompanyByOrgid=userRepo.getUserCompany(userId);
-		return getCompany(getUserCompanyByOrgid);
-	}
-
-	private List<Map<String, Object>> getCompany(Set<Object[]> getUserCompanyByOrgid) {
-		List<Map<String, Object>> companyDetails = new ArrayList<>();
-		 for (Object[] company : getUserCompanyByOrgid) {
-		        Map<String, Object> comp = new HashMap<>();
-		        comp.put("companyName", company[0] != null ? company[0].toString() : "");
-		        companyDetails.add(comp);
-		    }
-		    return companyDetails;
-	}
-
 }

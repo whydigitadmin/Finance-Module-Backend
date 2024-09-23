@@ -5,10 +5,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class ScreenDTO {
+@NoArgsConstructor
+public class ClientBranchDTO {
 	private Long id;
-	private String screenName;
-	private String responsibilities;
+	private String branchCode;
+	private String branch;
+//	private Long orgId;
+
 }

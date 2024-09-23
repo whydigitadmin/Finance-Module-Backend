@@ -4,23 +4,27 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
 import com.base.basesetup.entity.CompanyVO;
 
-public interface CompanyRepo extends JpaRepository<CompanyVO , Long>{
+@Repository
+public interface CompanyRepo extends JpaRepository<CompanyVO, Long> {
 
-	@Query(nativeQuery = true,value = "select * from company where companyid=?1")
-	List<CompanyVO> findCompanyById(Long id);
+	boolean existsByCompanyCodeAndId(String companyCode, Long id);
 
-	@Query(nativeQuery = true,value = "select * from company where orgid=?1")
-	List<CompanyVO> findCompanyByOrgId(Long orgId);
+	boolean existsByCompanyNameAndId(String companyName, Long id);
 
-	boolean existsByCompanyCodeAndOrgId(String companyCode, Long orgId);
+	boolean existsByEmployeeCodeAndId(String employeeCode, Long id);
 
-	boolean existsByCompanyNameAndOrgId(String companyName, Long orgId);
+	boolean existsByEmailAndId(String email, Long id);
 
-	@Query(nativeQuery = true,value = "select * from company where active=1;")
-	List<CompanyVO> findCompanyByActive();
+	boolean existsByPhoneAndId(String phone, Long id);
 
+	boolean existsByCompanyCodeAndCompanyNameAndEmployeeCodeAndEmailAndPhoneAndId(String companyCode,
+			String companyName, String employeeCode, String email, String phone, Long id);
+
+	@Query(nativeQuery = true, value = "select * from company  where companyid=?1")
+	List<CompanyVO> findByCompany(Long companyid);
 
 }

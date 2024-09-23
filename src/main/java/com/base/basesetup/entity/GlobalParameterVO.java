@@ -1,31 +1,48 @@
 package com.base.basesetup.entity;
 
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+
+import com.base.basesetup.dto.CreatedUpdatedDate;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name="globalparameter")
+@Table(name = "globalparam")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class GlobalParameterVO {
 
 	@Id
-	@Column(name="userid")
-	private Long userId;
-	@Column(name="finyear")
-	private String finYear;
-	@Column(name="branch")
-	private String branch;
-	@Column(name="branchcode")
-	private String branchCode;
-	@Column(name="company")
-	private String company;
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "globalparamgen")
+	@SequenceGenerator(name = "globalparamgen", sequenceName = "globalparamseq", initialValue = 1000000001, allocationSize = 1)
+	@Column(name = "globalparamid")
+	private Long id;
 
+	@Column(name = "orgid")
+	private Long orgId;
+	@Column(name = "userid")
+	private String userid;
+	@Column(name = "branch")
+	private String branch;
+	@Column(name = "branchcode")
+	private String branchcode;
+	@Column(name = "customer")
+	private String customer;
+	@Column(name = "client")
+	private String client;
+	@Column(name = "finyear")
+	private String finYear;
+	
+	@Embedded
+	private CreatedUpdatedDate commonDate = new CreatedUpdatedDate();
 }
