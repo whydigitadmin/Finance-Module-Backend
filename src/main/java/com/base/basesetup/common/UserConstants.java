@@ -2,8 +2,8 @@ package com.base.basesetup.common;
 
 public class UserConstants {
 
-	public static final String SIGNUP_REGISTERED_SUCCESS_MESSAGE = "User registered successfully.";
-	public static final String SIGNUP_REGISTERED_FAILED_MESSAGE = "User register failed.";
+	public static final String SIGNUP_REGISTERED_SUCCESS_MESSAGE = "User Created successfully.";
+	public static final String SIGNUP_REGISTERED_FAILED_MESSAGE = "User Creation failed.";
 	public static final String ERRROR_MSG_INVALID_USER_REGISTER_INFORMATION = "Invalid user register information.";
 	public static final String ERRROR_MSG_USER_INFORMATION_ALREADY_REGISTERED = "User information already registered.";
 	public static final String ERRROR_MSG_UNABLE_TO_ENCODE_USER_PASSWORD = "Unable  to encode the password.";
@@ -27,6 +27,7 @@ public class UserConstants {
 	public static final String ERRROR_MSG_INVALID_USER_ID = "Invalid userId.";
 	public static final String ERRROR_MSG_INVALID_USER_NAME = "Invalid userName.";
 	public static final String KEY_USER_VO = "userVO";
+	public static final String ACCOUNT_INACTIVE_MESSAGE = "Your Account is In-Active, Please Contact Administrator";
 	public static final String GET_USER_INFORMATION_SUCCESS_MESSAGE = "User information get successfully";
 	public static final String GET_USER_INFORMATION_FAILED_MESSAGE = "User information receive failed";
 	public static final String ERROR_MSG_METHOD_NAME_WITH_USER_NAME = "MethodName : {} UserName : {} Error : {}";
@@ -44,5 +45,9 @@ public class UserConstants {
 	public static final String USER_ACTION_ADD_EMPLOYEE_VERIFICATION = "ADD_EMPLOYEE_VERIFICATION";
 	public static final String USER_ACTION_ADD_ACCOUNT = "ADD_ACCOUNT";
 	public static final String USER_ACTION_REMOVE_ACCOUNT = "REMOVE_ACCOUNT";
+	public static final String ERROR_MSG_METHOD_NAME = "message";
+	public static final String REFRESH_TOKEN_EXPIRED_MESSAGE = "Your token id expired.Please login again.";
+	public static final String REFRESH_TOKEN_SUCCESS_MESSAGE = "The refresh token has been successfully generated.";
+	public static final String REFRESH_TOKEN_FAILED_MESSAGE = "Failed to generate the refresh token.Please login again.";
 
 }
