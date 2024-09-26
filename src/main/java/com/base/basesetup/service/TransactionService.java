@@ -16,6 +16,7 @@ import com.base.basesetup.dto.DailyMonthlyExRatesDTO;
 import com.base.basesetup.dto.DebitNoteDTO;
 import com.base.basesetup.dto.FundTransferDTO;
 import com.base.basesetup.dto.GeneralJournalDTO;
+import com.base.basesetup.dto.GlOpeningBalanceDTO;
 import com.base.basesetup.dto.GstSalesVoucherDTO;
 import com.base.basesetup.dto.IrnCreditDTO;
 import com.base.basesetup.dto.PaymentReversalDTO;
@@ -32,6 +33,7 @@ import com.base.basesetup.entity.DailyMonthlyExRatesVO;
 import com.base.basesetup.entity.DebitNoteVO;
 import com.base.basesetup.entity.FundTransferVO;
 import com.base.basesetup.entity.GeneralJournalVO;
+import com.base.basesetup.entity.GlOpeningBalanceVO;
 import com.base.basesetup.entity.GstSalesVoucherVO;
 import com.base.basesetup.entity.IrnCreditVO;
 import com.base.basesetup.entity.PaymentReversalVO;
@@ -197,4 +199,14 @@ public interface TransactionService {
 	List<ArApAdjustmentOffSetVO> getAllArApAdjustmentOffSetById(Long id);
 
 	List<ArApAdjustmentOffSetVO> getArApAdjustmentOffSetByActive();
+	
+	//GlOpeningBalance
+	List<GlOpeningBalanceVO> getAllGlOpeningBalanceByOrgId(Long orgId);
+	
+	GlOpeningBalanceVO updateCreateGlOpeningBalance(@Valid GlOpeningBalanceDTO glOpeningBalanceDTO) throws ApplicationException;
+	
+	List<GlOpeningBalanceVO> getAllGlOpeningBalanceById(Long id);
+
+	List<GlOpeningBalanceVO> getGlOpeningBalanceByActive();
+	
 }
