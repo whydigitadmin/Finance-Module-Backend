@@ -146,10 +146,12 @@ public class AuthServiceImpl implements AuthService {
 		userVO.setEmployeeName(signUpFormDTO.getEmployeeName());
 		userVO.setNickName(signUpFormDTO.getNickName());
 		userVO.setEmail(signUpFormDTO.getEmail());
+		userVO.setEmployeeCode(signUpFormDTO.getEmployeeCode());
 		userVO.setMobileNo(signUpFormDTO.getMobileNo());
 		userVO.setUserType(signUpFormDTO.getUserType());
 		userVO.setActive(signUpFormDTO.isActive());
 		userVO.setOrgId(signUpFormDTO.getOrgId());
+		userVO.setAllIndiaAcces(signUpFormDTO.isAllIndiaAcces());
 
 		List<UserLoginRolesVO> rolesVO = new ArrayList<>();
 		if (signUpFormDTO.getRoleAccessDTO() != null) {
@@ -159,7 +161,7 @@ public class AuthServiceImpl implements AuthService {
 				loginRolesVO.setRole(accessDTO.getRole());
 				loginRolesVO.setStartDate(accessDTO.getStartDate());
 				loginRolesVO.setEndDate(accessDTO.getEndDate());
-				loginRolesVO.setRoleId(accessDTO.getRoleId());
+			//	loginRolesVO.setRoleId(accessDTO.getRoleId());
 				loginRolesVO.setUserVO(userVO);
 				rolesVO.add(loginRolesVO);
 			}
@@ -407,12 +409,14 @@ public class AuthServiceImpl implements AuthService {
 		UserResponseDTO userDTO = new UserResponseDTO();
 		userDTO.setUsersId(userVO.getId());
 		userDTO.setEmployeeName(userVO.getEmployeeName());
+		userDTO.setEmployeeCode(userVO.getEmployeeCode());
 		userDTO.setCustomer(userVO.getCustomer());
 		userDTO.setClient(userVO.getClient());
 		userDTO.setOrgId(userVO.getOrgId());
 		userDTO.setActive(userVO.isActive());
 		userDTO.setUserType(userVO.getUserType());
 		userDTO.setEmail(userVO.getEmail());
+		userDTO.setAllIndiaAcces(userVO.isActive());
 		userDTO.setUserName(userVO.getUserName());
 		userDTO.setLoginStatus(userVO.isLoginStatus());
 		// userDTO.setIsActive(userVO.getIsActive());

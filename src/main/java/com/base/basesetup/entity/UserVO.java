@@ -44,6 +44,8 @@ public class UserVO {
 	private String userName;
 	@Column(name = "password")
 	private String password;
+	@Column(name = "employeecode")
+	private String employeeCode;
 	@Column(name = "employeename")
 	private String employeeName;
 	@Column(name = "nickname")
@@ -76,6 +78,7 @@ public class UserVO {
 	private String updatedby;
 	@Column(name = "role")
 	private Role role;
+	private boolean allIndiaAcces;
 
 	@Embedded
 	private CreatedUpdatedDate commonDate = new CreatedUpdatedDate();
