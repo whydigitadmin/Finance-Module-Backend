@@ -34,7 +34,7 @@ public class GroupLedgerVO {
 	@Column(name = "groupname")
 	private String groupName;
 	@Column(name = "gsttaxflag")
-	private boolean gstTaxFlag;
+	private String gstTaxFlag;
 	@Column(name = "accountcode")
 	private String accountCode;
 	@Column(name = "coalist")
