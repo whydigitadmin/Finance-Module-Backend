@@ -37,6 +37,6 @@ public class ChargeTypeRequestDTO {
 	private LocalDateTime eftoDate;
 
 	private boolean active;
+	private String createdBy;
 	private Long orgId;
-	private Long createdBy;
 }

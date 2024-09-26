@@ -943,14 +943,14 @@ public class MasterServiceImpl implements MasterService {
 		if (isUpdate) {
 			GroupLedgerVO groupLedger = groupLedgerRepo.findById(groupLedgerDTO.getId()).orElse(null);
 			if (!groupLedger.getAccountCode().equalsIgnoreCase(groupLedgerDTO.getAccountCode())) {
-				if (groupLedgerRepo.existsByAccountCodeAndOrgId(groupLedgerDTO.getAccountCode(),
-						groupLedgerDTO.getOrgId())) {
+				if (groupLedgerRepo.existsByAccountCodeAndOrgIdAndId(groupLedgerDTO.getAccountCode(),
+						groupLedgerDTO.getOrgId(),groupLedgerDTO.getId())) {
 					throw new ApplicationException("The given Account name already exists.");
 				}
 			}
 			if (!groupLedger.getGroupName().equals(groupLedgerDTO.getGroupName())) {
-				if (groupLedgerRepo.existsByAccountGroupNameAndOrgId(groupLedgerDTO.getAccountGroupName(),
-						groupLedgerDTO.getOrgId())) {
+				if (groupLedgerRepo.existsByAccountGroupNameAndOrgIdAndId(groupLedgerDTO.getAccountGroupName(),
+						groupLedgerDTO.getOrgId(),groupLedgerDTO.getId())) {
 					throw new ApplicationException("The given Account Code already exists.");
 				}
 			}
@@ -964,7 +964,7 @@ public class MasterServiceImpl implements MasterService {
 		groupLedgerVO.setOrgId(groupLedgerDTO.getOrgId());
 		groupLedgerVO.setAccountCode(groupLedgerDTO.getAccountCode());
 		groupLedgerVO.setCoaList(groupLedgerDTO.getCoaList());
-		groupLedgerVO.setGstTaxFlag(true);
+		groupLedgerVO.setGstTaxFlag(groupLedgerDTO.getGstTaxflag());
 		groupLedgerVO.setType(groupLedgerDTO.getType());
 		groupLedgerVO.setCategory(groupLedgerDTO.getCategory());
 		groupLedgerVO.setCurrency(groupLedgerDTO.getCurrency());
