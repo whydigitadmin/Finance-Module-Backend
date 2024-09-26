@@ -31,7 +31,6 @@ import com.base.basesetup.dto.RolesResponsibilityDTO;
 import com.base.basesetup.dto.ScreensDTO;
 import com.base.basesetup.dto.SignUpFormDTO;
 import com.base.basesetup.dto.UserLoginBranchAccessDTO;
-import com.base.basesetup.dto.UserLoginClientAccessDTO;
 import com.base.basesetup.dto.UserLoginRoleAccessDTO;
 import com.base.basesetup.dto.UserResponseDTO;
 import com.base.basesetup.entity.ResponsibilityVO;
@@ -40,7 +39,6 @@ import com.base.basesetup.entity.RolesVO;
 import com.base.basesetup.entity.ScreensVO;
 import com.base.basesetup.entity.TokenVO;
 import com.base.basesetup.entity.UserLoginBranchAccessibleVO;
-import com.base.basesetup.entity.UserLoginClientAccessVO;
 import com.base.basesetup.entity.UserLoginRolesVO;
 import com.base.basesetup.entity.UserVO;
 import com.base.basesetup.exception.ApplicationException;
@@ -52,7 +50,6 @@ import com.base.basesetup.repo.ScreensRepo;
 import com.base.basesetup.repo.TokenRepo;
 import com.base.basesetup.repo.UserActionRepo;
 import com.base.basesetup.repo.UserBranchAccessRepo;
-import com.base.basesetup.repo.UserClientAccessRepo;
 import com.base.basesetup.repo.UserLoginRolesRepo;
 import com.base.basesetup.repo.UserRepo;
 import com.base.basesetup.security.TokenProvider;
@@ -79,8 +76,6 @@ public class AuthServiceImpl implements AuthService {
 	@Autowired
 	UserBranchAccessRepo branchAccessRepo;
 
-	@Autowired
-	UserClientAccessRepo clientAccessRepo;
 
 	@Autowired
 	ClientRepo clientRepo;
@@ -136,8 +131,8 @@ public class AuthServiceImpl implements AuthService {
 		
 			List<UserLoginRolesVO> roles = loginRolesRepo.findByUserVO(userVO);
 			loginRolesRepo.deleteAll(roles);
-			List<UserLoginClientAccessVO> client = clientAccessRepo.findByUserVO(userVO);
-			clientAccessRepo.deleteAll(client);
+//			List<UserLoginClientAccessVO> client = clientAccessRepo.findByUserVO(userVO);
+//			clientAccessRepo.deleteAll(client);
 			List<UserLoginBranchAccessibleVO> branch = branchAccessRepo.findByUserVO(userVO);
 			branchAccessRepo.deleteAll(branch);
 		}
@@ -171,17 +166,17 @@ public class AuthServiceImpl implements AuthService {
 		}
 
 		userVO.setRoleAccessVO(rolesVO);
-		List<UserLoginClientAccessVO> clientAccessVOList = new ArrayList<>();
-		if (signUpFormDTO.getClientAccessDTOList() != null) {
-			for (UserLoginClientAccessDTO clientAccessDTO : signUpFormDTO.getClientAccessDTOList()) {
-				UserLoginClientAccessVO clientAccessVO = new UserLoginClientAccessVO();
-				clientAccessVO.setClient(clientAccessDTO.getClient());
-				clientAccessVO.setCustomer(clientAccessDTO.getCustomer());
-				clientAccessVO.setUserVO(userVO);
-				clientAccessVOList.add(clientAccessVO);
-			}
-		}
-		userVO.setClientAccessVO(clientAccessVOList);
+//		List<UserLoginClientAccessVO> clientAccessVOList = new ArrayList<>();
+//		if (signUpFormDTO.getClientAccessDTOList() != null) {
+//			for (UserLoginClientAccessDTO clientAccessDTO : signUpFormDTO.getClientAccessDTOList()) {
+//				UserLoginClientAccessVO clientAccessVO = new UserLoginClientAccessVO();
+//				clientAccessVO.setClient(clientAccessDTO.getClient());
+//				clientAccessVO.setCustomer(clientAccessDTO.getCustomer());
+//				clientAccessVO.setUserVO(userVO);
+//				clientAccessVOList.add(clientAccessVO);
+//			}
+//		}
+//		userVO.setClientAccessVO(clientAccessVOList);
 
 		List<UserLoginBranchAccessibleVO> branchAccessList = new ArrayList<>();
 		if (signUpFormDTO.getBranchAccessDTOList() != null) {
@@ -411,13 +406,11 @@ public class AuthServiceImpl implements AuthService {
 	public static UserResponseDTO mapUserVOToDTO(UserVO userVO) {
 		UserResponseDTO userDTO = new UserResponseDTO();
 		userDTO.setUsersId(userVO.getId());
-		userDTO.setBranch(userVO.getBranch());
 		userDTO.setEmployeeName(userVO.getEmployeeName());
 		userDTO.setCustomer(userVO.getCustomer());
 		userDTO.setClient(userVO.getClient());
 		userDTO.setOrgId(userVO.getOrgId());
 		userDTO.setActive(userVO.isActive());
-		userDTO.setWarehouse(userVO.getWarehouse());
 		userDTO.setUserType(userVO.getUserType());
 		userDTO.setEmail(userVO.getEmail());
 		userDTO.setUserName(userVO.getUserName());
