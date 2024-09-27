@@ -84,9 +84,9 @@ public class ChargeTypeRequestVO {
 	@Column(name = "orgid")
 	private Long orgId;
 	@Column(name = "createdby")
-	private Long createdBy;
+	private String createdBy;
 	@Column(name = "modifiedby")
-	private Long updatedBy;
+	private String updatedBy;
 	@Column(name = "cancel")
 	private Long cancel;
 	@Column(name = "cancelremarks")

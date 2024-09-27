@@ -14,7 +14,7 @@ public class GroupLedgerDTO {
 	private Long id;
 	private Long orgId;
 	private String groupName;
-	private boolean gstTaxflag;
+	private String gstTaxflag;
 	private String accountCode;
 	private String coaList;
 	private String accountGroupName;

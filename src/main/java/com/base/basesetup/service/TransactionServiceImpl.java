@@ -1,7 +1,10 @@
 package com.base.basesetup.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import javax.validation.Valid;
 
@@ -84,6 +87,7 @@ import com.base.basesetup.repo.ArApAdjustmentOffSetRepo;
 import com.base.basesetup.repo.ArApOffSetInvoiceDetailsRepo;
 import com.base.basesetup.repo.ArapAdjustmentsRepo;
 import com.base.basesetup.repo.ArapDetailsRepo;
+import com.base.basesetup.repo.BranchRepo;
 import com.base.basesetup.repo.BrsOpeningRepo;
 import com.base.basesetup.repo.ChargerCostInvoiceRepo;
 import com.base.basesetup.repo.ChargerDebitNoteRepo;
@@ -219,6 +223,9 @@ public class TransactionServiceImpl implements TransactionService {
 
 	@Autowired
 	ArApOffSetInvoiceDetailsRepo arApOffSetInvoiceDetailsRepo;
+
+	@Autowired
+	BranchRepo branchRepo;
 
 // TaxInvoice
 	@Override
@@ -680,8 +687,23 @@ public class TransactionServiceImpl implements TransactionService {
 	public List<BrsOpeningVO> getBrsOpeningByActive() {
 		return brsOpeningRepo.findBrsOpeningByActive();
 	}
-	// ChartCostCenter
 
+	@Override
+	public List<Map<String, Object>> getBranchForBrsOpening(Long orgId) {
+		Set<Object[]> result = branchRepo.findBranchForBrsOpening(orgId);
+		return getBranch(result);
+	}
+
+	private List<Map<String, Object>> getBranch(Set<Object[]> result) {
+		List<Map<String, Object>> details = new ArrayList<>();
+		for (Object[] fs : result) {
+			Map<String, Object> object = new HashMap<>();
+			object.put("branch", fs[0] != null ? fs[0].toString() : "");
+		}
+		return details;
+	}
+
+	// ChartCostCenter
 	@Override
 	public List<ChartCostCenterVO> getAllChartCostCenterByOrgId(Long orgId) {
 		List<ChartCostCenterVO> chartCostCenterVO = new ArrayList<>();
@@ -1279,7 +1301,7 @@ public class TransactionServiceImpl implements TransactionService {
 		GstSalesVoucherVO gstSalesVoucherVO = new GstSalesVoucherVO();
 		boolean isUpdate = false;
 		if (ObjectUtils.isNotEmpty(gstSalesVoucherDTO.getId())) {
-			 isUpdate = true;
+			isUpdate = true;
 			gstSalesVoucherVO = gstSalesVoucherRepo.findById(gstSalesVoucherDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid GstSalesVoucher details"));
 			gstSalesVoucherVO.setUpdatedBy(gstSalesVoucherDTO.getCreatedBy());
@@ -1379,7 +1401,7 @@ public class TransactionServiceImpl implements TransactionService {
 		PaymentVoucherVO paymentVoucherVO = new PaymentVoucherVO();
 		boolean isUpdate = false;
 		if (ObjectUtils.isNotEmpty(paymentVoucherDTO.getId())) {
-			 isUpdate = true;
+			isUpdate = true;
 			paymentVoucherVO = paymentVoucherRepo.findById(paymentVoucherDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid PaymentVoucher details"));
 			paymentVoucherVO.setUpdatedBy(paymentVoucherDTO.getCreatedBy());
@@ -1798,7 +1820,7 @@ public class TransactionServiceImpl implements TransactionService {
 		PaymentReversalVO paymentReversalVO = new PaymentReversalVO();
 		boolean isUpdate = false;
 		if (ObjectUtils.isNotEmpty(paymentReversalDTO.getId())) {
-		isUpdate = true;
+			isUpdate = true;
 			paymentReversalVO = paymentReversalRepo.findById(paymentReversalDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid PaymentReversal details"));
 			paymentReversalVO.setUpdatedBy(paymentReversalDTO.getCreatedBy());
