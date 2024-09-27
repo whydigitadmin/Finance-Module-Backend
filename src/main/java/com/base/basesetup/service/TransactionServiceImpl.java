@@ -709,23 +709,39 @@ public class TransactionServiceImpl implements TransactionService {
 	}
 
 	@Override
-	public ChartCostCenterVO updateCreateChartCostCenter(@Valid ChartCostCenterDTO chartCostCenterDTO)
-			throws ApplicationException {
-		ChartCostCenterVO chartCostCenterVO = new ChartCostCenterVO();
-		boolean isUpdate = false;
-		if (ObjectUtils.isNotEmpty(chartCostCenterDTO.getId())) {
-			isUpdate = true;
-			chartCostCenterVO = chartCostCenterRepo.findById(chartCostCenterDTO.getId())
-					.orElseThrow(() -> new ApplicationException("Invalid ChartCostCenter details"));
-			chartCostCenterVO.setUpdatedBy(chartCostCenterDTO.getCreatedBy());
-		} else {
-			chartCostCenterVO.setUpdatedBy(chartCostCenterDTO.getCreatedBy());
-			chartCostCenterVO.setCreatedBy(chartCostCenterDTO.getCreatedBy());
-		}
+	public List<ChartCostCenterVO> updateCreateChartCostCenter(@Valid List<ChartCostCenterDTO> chartCostCenterDTOList)
+	        throws ApplicationException {
 
-		getChartCostCenterVOFromChartCostCenterDTO(chartCostCenterDTO, chartCostCenterVO);
-		return chartCostCenterRepo.save(chartCostCenterVO);
+	    // Iterate through each DTO in the list
+	    for (ChartCostCenterDTO chartCostCenterDTO : chartCostCenterDTOList) {
+	        ChartCostCenterVO chartCostCenterVO = new ChartCostCenterVO();
+	        boolean isUpdate = false;
+
+	        // Check if the DTO contains an ID for update operation
+	        if (ObjectUtils.isNotEmpty(chartCostCenterDTO.getId())) {
+	            // Update operation
+	            isUpdate = true;
+	            chartCostCenterVO = chartCostCenterRepo.findById(chartCostCenterDTO.getId())
+	                    .orElseThrow(() -> new ApplicationException("Invalid ChartCostCenter details with ID: " + chartCostCenterDTO.getId()));
+	            chartCostCenterVO.setUpdatedBy(chartCostCenterDTO.getCreatedBy());
+	        } else {
+	            // Create operation (new entity)
+	            chartCostCenterVO = new ChartCostCenterVO();
+	            chartCostCenterVO.setCreatedBy(chartCostCenterDTO.getCreatedBy());
+	            chartCostCenterVO.setUpdatedBy(chartCostCenterDTO.getCreatedBy());
+	        }
+
+	        // Map fields from DTO to VO
+	        getChartCostCenterVOFromChartCostCenterDTO(chartCostCenterDTO, chartCostCenterVO);
+
+	        // Save the entity and add it to the list
+	        chartCostCenterRepo.save(chartCostCenterVO);
+	    }
+
+	    // Return the list of saved entities
+	    return chartCostCenterRepo.findAll();
 	}
+
 
 	private void getChartCostCenterVOFromChartCostCenterDTO(@Valid ChartCostCenterDTO chartCostCenterDTO,
 			ChartCostCenterVO chartCostCenterVO) {

@@ -33,9 +33,9 @@ public class ChartCostCenterVO {
 	@Column(name = "costcentername")
 	private String costCenterName;
 	@Column(name = "credit")
-	private String credit;
+	private Long credit;
 	@Column(name = "debit")
-	private String debit;
+	private Long debit;
 	@Column(name = "orgid")
 	private Long orgId;
 	@Column(name = "active")
