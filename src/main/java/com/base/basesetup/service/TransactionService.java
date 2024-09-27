@@ -90,7 +90,7 @@ public interface TransactionService {
 //	ChartCostCenter
 	List<ChartCostCenterVO> getAllChartCostCenterByOrgId(Long orgId);
 
-	ChartCostCenterVO updateCreateChartCostCenter(@Valid ChartCostCenterDTO chartCostCenterDTO)
+	List<ChartCostCenterVO> updateCreateChartCostCenter(@Valid List<ChartCostCenterDTO> chartCostCenterDTOList)
 			throws ApplicationException;
 
 	List<ChartCostCenterVO> getAllChartCostCenterById(Long id);
@@ -200,4 +200,6 @@ public interface TransactionService {
 	List<ArApAdjustmentOffSetVO> getAllArApAdjustmentOffSetById(Long id);
 
 	List<ArApAdjustmentOffSetVO> getArApAdjustmentOffSetByActive();
+
+	
 }

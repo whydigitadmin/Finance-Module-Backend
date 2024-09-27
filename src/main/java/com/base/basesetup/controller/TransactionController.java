@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -649,35 +650,31 @@ public class TransactionController extends BaseController {
 
 	@PutMapping("/updateCreateChartCostCenter")
 	public ResponseEntity<ResponseDTO> updateChartCostCenter(
-			@Valid @RequestBody ChartCostCenterDTO chartCostCenterDTO) {
+			@RequestBody List<ChartCostCenterDTO> chartCostCenterDTOList) {
 		String methodName = "updateCreateChartCostCenter()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
-		String errorMsg = null;
 		Map<String, Object> responseObjectsMap = new HashMap<>();
 		ResponseDTO responseDTO = null;
 
 		try {
-			ChartCostCenterVO chartCostCenterVO = transactionService.updateCreateChartCostCenter(chartCostCenterDTO);
-			boolean isUpdate = chartCostCenterDTO.getId() != null;
+			// Process the list (both update and create operations)
+			List<ChartCostCenterVO> chartCostCenterVOList = transactionService
+					.updateCreateChartCostCenter(chartCostCenterDTOList);
 
-			if (chartCostCenterVO != null) {
-				responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
-						isUpdate ? "ChartCostCenter updated successfully" : "ChartCostCenter created successfully");
-				responseObjectsMap.put("chartCostCenterVO", chartCostCenterVO);
+			if (!chartCostCenterVOList.isEmpty()) {
+				responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "ChartCostCenters processed successfully");
+				responseObjectsMap.put("chartCostCenterVOList", chartCostCenterVOList);
 				responseDTO = createServiceResponse(responseObjectsMap);
 			} else {
-				errorMsg = isUpdate ? "ChartCostCenter not found for ID: " + chartCostCenterDTO.getId()
-						: "ChartCostCenter creation failed";
-				responseDTO = createServiceResponseError(responseObjectsMap,
-						isUpdate ? "ChartCostCenter update failed" : "ChartCostCenter creation failed", errorMsg);
+				responseDTO = createServiceResponseError(responseObjectsMap, "Processing failed",
+						"No records processed");
 			}
 		} catch (Exception e) {
-			errorMsg = e.getMessage();
-			boolean isUpdate = chartCostCenterDTO.getId() != null;
+			String errorMsg = e.getMessage();
 			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
-			responseDTO = createServiceResponseError(responseObjectsMap,
-					isUpdate ? "ChartCostCenter update failed" : "ChartCostCenter creation failed", errorMsg);
+			responseDTO = createServiceResponseError(responseObjectsMap, "Processing failed", errorMsg);
 		}
+
 		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
 		return ResponseEntity.ok().body(responseDTO);
 	}
@@ -2024,6 +2021,5 @@ public class TransactionController extends BaseController {
 		return ResponseEntity.ok().body(responseDTO);
 
 	}
-
 
 }
