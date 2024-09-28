@@ -33,6 +33,7 @@ import com.base.basesetup.dto.DailyMonthlyExRatesDTO;
 import com.base.basesetup.dto.DebitNoteDTO;
 import com.base.basesetup.dto.FundTransferDTO;
 import com.base.basesetup.dto.GeneralJournalDTO;
+import com.base.basesetup.dto.GlOpeningBalanceDTO;
 import com.base.basesetup.dto.GstSalesVoucherDTO;
 import com.base.basesetup.dto.IrnCreditDTO;
 import com.base.basesetup.dto.PaymentReversalDTO;
@@ -50,6 +51,7 @@ import com.base.basesetup.entity.DailyMonthlyExRatesVO;
 import com.base.basesetup.entity.DebitNoteVO;
 import com.base.basesetup.entity.FundTransferVO;
 import com.base.basesetup.entity.GeneralJournalVO;
+import com.base.basesetup.entity.GlOpeningBalanceVO;
 import com.base.basesetup.entity.GstSalesVoucherVO;
 import com.base.basesetup.entity.IrnCreditVO;
 import com.base.basesetup.entity.PaymentReversalVO;
@@ -2021,5 +2023,128 @@ public class TransactionController extends BaseController {
 		return ResponseEntity.ok().body(responseDTO);
 
 	}
+	
+	//GlOpeningBalance
+	
+	@GetMapping("/getAllGlOpeningBalanceByOrgId")
+	public ResponseEntity<ResponseDTO> getAllGlOpeningBalanceByOrgId(@RequestParam(required = false) Long orgId) {
+		String methodName = "getAllGlOpeningBalanceByOrgId()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		List<GlOpeningBalanceVO> glOpeningBalanceVO = new ArrayList<>();
+		try {
+			glOpeningBalanceVO = transactionService.getAllGlOpeningBalanceByOrgId(orgId);
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+					"GlOpeningBalance information get successfully By OrgId");
+			responseObjectsMap.put("GlOpeningBalanceVO", glOpeningBalanceVO);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					"GlOpeningBalance information receive failed By OrgId", errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+
+
+	}
+	
+	@GetMapping("/getAllGlOpeningBalanceById")
+	public ResponseEntity<ResponseDTO> getAllGlOpeningBalanceById(@RequestParam(required = false) Long id) {
+		String methodName = "getAllGlOpeningBalanceById()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		List<GlOpeningBalanceVO> glOpeningBalanceVO = new ArrayList<>();
+		try {
+			glOpeningBalanceVO = transactionService.getAllGlOpeningBalanceById(id);
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "GlOpeningBalance information get successfully By id");
+			responseObjectsMap.put("glOpeningBalanceVO", glOpeningBalanceVO);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					"GlOpeningBalance information receive failedByOrgId", errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+	}
+
+	
+	@PutMapping("/updateCreateGlOpeningBalance")
+	public ResponseEntity<ResponseDTO> updateCreateGlOpeningBalance(
+			@Valid @RequestBody GlOpeningBalanceDTO glOpeningBalanceDTO) {
+		String methodName = "updateCreateGlOpeningBalance()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+
+		try {
+			GlOpeningBalanceVO glOpeningBalanceVO = transactionService.updateCreateGlOpeningBalance(glOpeningBalanceDTO);
+			boolean isUpdate = glOpeningBalanceDTO.getId() != null;
+
+			if (glOpeningBalanceVO != null) {
+				responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+						isUpdate ? "GlOpeningBalance updated successfully" : "GlOpeningBalance created successfully");
+				responseObjectsMap.put("glOpeningBalanceVO", glOpeningBalanceVO);
+				responseDTO = createServiceResponse(responseObjectsMap);
+			} else {
+				errorMsg = isUpdate ? "GlOpeningBalance not found for ID: " + glOpeningBalanceDTO.getId()
+						: "GlOpeningBalance creation failed";
+				responseDTO = createServiceResponseError(responseObjectsMap,
+						isUpdate ? "GlOpeningBalance update failed" : "GlOpeningBalance creation failed", errorMsg);
+			}
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			boolean isUpdate = glOpeningBalanceDTO.getId() != null;
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					isUpdate ? "GlOpeningBalance update failed" : "GlOpeningBalance creation failed", errorMsg);
+		}
+
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+	}
+
+	@GetMapping("/getGlOpeningBalanceByActive")
+	public ResponseEntity<ResponseDTO> getGlOpeningBalanceByActive() {
+		String methodName = "getGlOpeningBalanceByActive()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		List<GlOpeningBalanceVO> glOpeningBalanceVO = new ArrayList<>();
+		try {
+			glOpeningBalanceVO = transactionService.getGlOpeningBalanceByActive();
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+					"GlOpeningBalance information get successfully By Active");
+			responseObjectsMap.put("glOpeningBalanceVO", glOpeningBalanceVO);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					"GlOpeningBalance information receive failed By Active", errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+
+	}
+	   
 
 }
