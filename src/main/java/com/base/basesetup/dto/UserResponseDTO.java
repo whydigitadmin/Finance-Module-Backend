@@ -19,6 +19,7 @@ public class UserResponseDTO {
 	private Long usersId;
 	private String userName;
 	private String employeeName; 
+	private String employeeCode; 
 	private String email; 
 	private String userType;
 	private Long orgId;
@@ -28,6 +29,7 @@ public class UserResponseDTO {
 	private String client;
 	private boolean loginStatus;
 	private boolean active;
+	private boolean allIndiaAcces;
 	private List<Map<String, Object>> roleVO;
 //	private List<Map<String, Object>> responsibilityVO;
 //	private List<Map<String, Object>> screensVO;
