@@ -1,6 +1,7 @@
 package com.base.basesetup.service;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.validation.Valid;
 
@@ -85,11 +86,13 @@ public interface TransactionService {
 	List<BrsOpeningVO> getAllBrsOpeningById(Long id);
 
 	List<BrsOpeningVO> getBrsOpeningByActive();
+	
+	List<Map<String,Object>> getBranchForBrsOpening(Long orgId);
 
 //	ChartCostCenter
 	List<ChartCostCenterVO> getAllChartCostCenterByOrgId(Long orgId);
 
-	ChartCostCenterVO updateCreateChartCostCenter(@Valid ChartCostCenterDTO chartCostCenterDTO)
+	List<ChartCostCenterVO> updateCreateChartCostCenter(@Valid List<ChartCostCenterDTO> chartCostCenterDTOList)
 			throws ApplicationException;
 
 	List<ChartCostCenterVO> getAllChartCostCenterById(Long id);
@@ -199,6 +202,7 @@ public interface TransactionService {
 	List<ArApAdjustmentOffSetVO> getAllArApAdjustmentOffSetById(Long id);
 
 	List<ArApAdjustmentOffSetVO> getArApAdjustmentOffSetByActive();
+
 	
 	//GlOpeningBalance
 	List<GlOpeningBalanceVO> getAllGlOpeningBalanceByOrgId(Long orgId);
@@ -208,5 +212,6 @@ public interface TransactionService {
 	List<GlOpeningBalanceVO> getAllGlOpeningBalanceById(Long id);
 
 	List<GlOpeningBalanceVO> getGlOpeningBalanceByActive();
+
 	
 }

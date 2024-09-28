@@ -1,7 +1,10 @@
 package com.base.basesetup.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import javax.validation.Valid;
 
@@ -88,6 +91,7 @@ import com.base.basesetup.repo.ArApAdjustmentOffSetRepo;
 import com.base.basesetup.repo.ArApOffSetInvoiceDetailsRepo;
 import com.base.basesetup.repo.ArapAdjustmentsRepo;
 import com.base.basesetup.repo.ArapDetailsRepo;
+import com.base.basesetup.repo.BranchRepo;
 import com.base.basesetup.repo.BrsOpeningRepo;
 import com.base.basesetup.repo.ChargerCostInvoiceRepo;
 import com.base.basesetup.repo.ChargerDebitNoteRepo;
@@ -227,6 +231,9 @@ public class TransactionServiceImpl implements TransactionService {
 	ArApOffSetInvoiceDetailsRepo arApOffSetInvoiceDetailsRepo;
 
 	@Autowired
+	BranchRepo branchRepo;
+
+  	@Autowired
 	GlOpeningBalanceRepo glOpeningBalanceRepo;
 
 	@Autowired
@@ -692,8 +699,23 @@ public class TransactionServiceImpl implements TransactionService {
 	public List<BrsOpeningVO> getBrsOpeningByActive() {
 		return brsOpeningRepo.findBrsOpeningByActive();
 	}
-	// ChartCostCenter
 
+	@Override
+	public List<Map<String, Object>> getBranchForBrsOpening(Long orgId) {
+		Set<Object[]> result = branchRepo.findBranchForBrsOpening(orgId);
+		return getBranch(result);
+	}
+
+	private List<Map<String, Object>> getBranch(Set<Object[]> result) {
+		List<Map<String, Object>> details = new ArrayList<>();
+		for (Object[] fs : result) {
+			Map<String, Object> object = new HashMap<>();
+			object.put("branch", fs[0] != null ? fs[0].toString() : "");
+		}
+		return details;
+	}
+
+	// ChartCostCenter
 	@Override
 	public List<ChartCostCenterVO> getAllChartCostCenterByOrgId(Long orgId) {
 		List<ChartCostCenterVO> chartCostCenterVO = new ArrayList<>();
@@ -721,23 +743,39 @@ public class TransactionServiceImpl implements TransactionService {
 	}
 
 	@Override
-	public ChartCostCenterVO updateCreateChartCostCenter(@Valid ChartCostCenterDTO chartCostCenterDTO)
-			throws ApplicationException {
-		ChartCostCenterVO chartCostCenterVO = new ChartCostCenterVO();
-		boolean isUpdate = false;
-		if (ObjectUtils.isNotEmpty(chartCostCenterDTO.getId())) {
-			isUpdate = true;
-			chartCostCenterVO = chartCostCenterRepo.findById(chartCostCenterDTO.getId())
-					.orElseThrow(() -> new ApplicationException("Invalid ChartCostCenter details"));
-			chartCostCenterVO.setUpdatedBy(chartCostCenterDTO.getCreatedBy());
-		} else {
-			chartCostCenterVO.setUpdatedBy(chartCostCenterDTO.getCreatedBy());
-			chartCostCenterVO.setCreatedBy(chartCostCenterDTO.getCreatedBy());
-		}
+	public List<ChartCostCenterVO> updateCreateChartCostCenter(@Valid List<ChartCostCenterDTO> chartCostCenterDTOList)
+	        throws ApplicationException {
 
-		getChartCostCenterVOFromChartCostCenterDTO(chartCostCenterDTO, chartCostCenterVO);
-		return chartCostCenterRepo.save(chartCostCenterVO);
+	    // Iterate through each DTO in the list
+	    for (ChartCostCenterDTO chartCostCenterDTO : chartCostCenterDTOList) {
+	        ChartCostCenterVO chartCostCenterVO = new ChartCostCenterVO();
+	        boolean isUpdate = false;
+
+	        // Check if the DTO contains an ID for update operation
+	        if (ObjectUtils.isNotEmpty(chartCostCenterDTO.getId())) {
+	            // Update operation
+	            isUpdate = true;
+	            chartCostCenterVO = chartCostCenterRepo.findById(chartCostCenterDTO.getId())
+	                    .orElseThrow(() -> new ApplicationException("Invalid ChartCostCenter details with ID: " + chartCostCenterDTO.getId()));
+	            chartCostCenterVO.setUpdatedBy(chartCostCenterDTO.getCreatedBy());
+	        } else {
+	            // Create operation (new entity)
+	            chartCostCenterVO = new ChartCostCenterVO();
+	            chartCostCenterVO.setCreatedBy(chartCostCenterDTO.getCreatedBy());
+	            chartCostCenterVO.setUpdatedBy(chartCostCenterDTO.getCreatedBy());
+	        }
+
+	        // Map fields from DTO to VO
+	        getChartCostCenterVOFromChartCostCenterDTO(chartCostCenterDTO, chartCostCenterVO);
+
+	        // Save the entity and add it to the list
+	        chartCostCenterRepo.save(chartCostCenterVO);
+	    }
+
+	    // Return the list of saved entities
+	    return chartCostCenterRepo.findAll();
 	}
+
 
 	private void getChartCostCenterVOFromChartCostCenterDTO(@Valid ChartCostCenterDTO chartCostCenterDTO,
 			ChartCostCenterVO chartCostCenterVO) {

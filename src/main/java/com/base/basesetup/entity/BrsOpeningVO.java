@@ -63,7 +63,7 @@ public class BrsOpeningVO {
 	private String createdBy;
 	@Column(name = "updatedby")
 	private String updatedBy;
-	
+
 	@Embedded
 	private CreatedUpdatedDate commonDate = new CreatedUpdatedDate();
 }

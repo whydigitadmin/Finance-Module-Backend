@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 public class ExRatesDTO {
 	private Long id;
 	private LocalDate docDate;
-	private LocalDate docMonth;
+	private String docMonth;
 	private String currency;
 	private String sellRate;
 	private String buyRate;

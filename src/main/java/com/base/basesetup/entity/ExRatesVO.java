@@ -32,7 +32,7 @@ public class ExRatesVO {
 	@Column(name = "docdate")
 	private LocalDate docDate;
 	@Column(name = "docmonth")
-	private LocalDate docMonth;
+	private String docMonth;
 	@Column(name = "currency")
 	private String currency;
 	@Column(name = "sellrate")
