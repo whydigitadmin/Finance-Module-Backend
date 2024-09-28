@@ -671,12 +671,12 @@ public class MasterServiceImpl implements MasterService {
 		if (isUpdate) {
 			TdsMasterVO tdsMaster = tdsMasterRepo.findById(tdsMasterDTO.getId()).orElse(null);
 			if (!tdsMaster.getSection().equalsIgnoreCase(tdsMasterDTO.getSection())) {
-				if (tdsMasterRepo.existsBySectionAndOrgId(tdsMasterDTO.getSection(), tdsMasterDTO.getOrgId())) {
+				if (tdsMasterRepo.existsBySectionAndOrgIdAndId(tdsMasterDTO.getSection(), tdsMasterDTO.getOrgId(),tdsMasterDTO.getId())) {
 					throw new ApplicationException("The given section already exists.");
 				}
 			}
 			if (!tdsMaster.getSectionName().equals(tdsMasterDTO.getSectionName())) {
-				if (tdsMasterRepo.existsBySectionNameAndOrgId(tdsMasterDTO.getSectionName(), tdsMasterDTO.getOrgId())) {
+				if (tdsMasterRepo.existsBySectionNameAndOrgIdAndId(tdsMasterDTO.getSectionName(), tdsMasterDTO.getOrgId(),tdsMasterDTO.getId())) {
 					throw new ApplicationException("The given Section name already exists.");
 				}
 			}

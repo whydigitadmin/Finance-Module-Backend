@@ -25,4 +25,8 @@ public interface TdsMasterRepo extends JpaRepository<TdsMasterVO, Long> {
 
 	boolean existsBySectionNameAndOrgId(String sectionName, Long orgId);
 
+	boolean existsBySectionAndOrgIdAndId(String section, Long orgId, Long id);
+
+	boolean existsBySectionNameAndOrgIdAndId(String sectionName, Long orgId, Long id);
+
 }
