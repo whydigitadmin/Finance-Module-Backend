@@ -10,9 +10,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserLoginRoleAccessDTO {
-	
+	private Long id;
 	private String role;
-	private Long roleId;
+	//private Long roleId;
 	private LocalDate startDate=LocalDate.now();
 	private LocalDate endDate=LocalDate.now();
 	

@@ -12,7 +12,7 @@ import org.springframework.web.filter.CorsFilter;
 @Configuration
 public class CorsConfig {
 
-	private static final long MAX_AGE_SECONDS = 3600;
+//	private static final long MAX_AGE_SECONDS = 3600;
 
 	@Value("${cors.allowed-origins}")
 	private String[] allowedOrigins;
@@ -26,7 +26,7 @@ public class CorsConfig {
 		config.addAllowedMethod("POST");
 		config.addAllowedMethod("PUT");
 		config.addAllowedMethod("DELETE");
-		config.setMaxAge(MAX_AGE_SECONDS);
+//		config.setMaxAge(MAX_AGE_SECONDS);
 		config.addAllowedHeader("*");
 		source.registerCorsConfiguration("/**", config);
 		return new CorsFilter(source);
