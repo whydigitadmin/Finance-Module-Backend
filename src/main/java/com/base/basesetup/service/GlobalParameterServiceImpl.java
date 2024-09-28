@@ -50,6 +50,12 @@ public class GlobalParameterServiceImpl implements GlobalParameterService {
 	// Global Parametre
 
 	@Override
+	public Set<Object[]> getWarehouseNameByOrgIdAndBranchAndClient(Long orgid, String branch, String client) {
+		return globalParameterRepo.findWarehouseNameByOrgIdAndBranchAndClient(orgid, branch, client);
+	}
+
+	
+	@Override
 	public Optional<GlobalParameterVO> getGlobalParamByOrgIdAndUserName(Long orgid, String username) {
 
 		return globalParameterRepo.findGlobalParamByOrgIdAndUserName(orgid, username);
