@@ -32,7 +32,7 @@ public class BrsOpeningVO {
 	@Column(name = "branch")
 	private String branch;
 	@Column(name = "billno")
-	private String billno;
+	private String billNo;
 	@Column(name = "billdate")
 	private LocalDateTime billDate;
 	@Column(name = "chqno")

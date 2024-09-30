@@ -1,18 +1,33 @@
 package com.base.basesetup.service;
 
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 import org.apache.commons.lang3.ObjectUtils;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.DataFormatter;
+import org.apache.poi.ss.usermodel.DateUtil;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.base.basesetup.dto.ArApAdjustmentOffSetDTO;
 import com.base.basesetup.dto.ArApOffSetInvoiceDetailsDTO;
@@ -57,6 +72,7 @@ import com.base.basesetup.entity.ArApAdjustmentOffSetVO;
 import com.base.basesetup.entity.ArApOffSetInvoiceDetailsVO;
 import com.base.basesetup.entity.ArapAdjustmentsVO;
 import com.base.basesetup.entity.ArapDetailsVO;
+import com.base.basesetup.entity.BrsExcelUploadVO;
 import com.base.basesetup.entity.BrsOpeningVO;
 import com.base.basesetup.entity.ChargerCostInvoiceVO;
 import com.base.basesetup.entity.ChargerDebitNoteVO;
@@ -98,6 +114,7 @@ import com.base.basesetup.repo.ArApOffSetInvoiceDetailsRepo;
 import com.base.basesetup.repo.ArapAdjustmentsRepo;
 import com.base.basesetup.repo.ArapDetailsRepo;
 import com.base.basesetup.repo.BranchRepo;
+import com.base.basesetup.repo.BrsExcelUploadRepo;
 import com.base.basesetup.repo.BrsOpeningRepo;
 import com.base.basesetup.repo.ChargerCostInvoiceRepo;
 import com.base.basesetup.repo.ChargerDebitNoteRepo;
@@ -242,7 +259,7 @@ public class TransactionServiceImpl implements TransactionService {
 	@Autowired
 	BranchRepo branchRepo;
 
-  	@Autowired
+	@Autowired
 	GlOpeningBalanceRepo glOpeningBalanceRepo;
 
 	@Autowired
@@ -256,6 +273,9 @@ public class TransactionServiceImpl implements TransactionService {
 	
 	@Autowired
 	DepositsReconcileRepo depositsReconcileRepo;
+
+	@Autowired
+	BrsExcelUploadRepo brsExcelUploadRepo;
 
 	// TaxInvoice
 	@Override
@@ -572,7 +592,7 @@ public class TransactionServiceImpl implements TransactionService {
 
 	}
 
-	//	DailyMonthlyExRates
+	// DailyMonthlyExRates
 	@Override
 	public List<DailyMonthlyExRatesVO> getAllDailyMonthlyExRatesById(Long id) {
 		List<DailyMonthlyExRatesVO> dailyMonthlyExRatesVO = new ArrayList<>();
@@ -699,7 +719,7 @@ public class TransactionServiceImpl implements TransactionService {
 	}
 
 	private void getBrsOpeningVOFromBrsOpeningDTO(@Valid BrsOpeningDTO brsOpeningDTO, BrsOpeningVO brsOpeningVO) {
-		brsOpeningVO.setBillno(brsOpeningDTO.getBillNo());
+		brsOpeningVO.setBillNo(brsOpeningDTO.getBillNo());
 		brsOpeningVO.setBillDate(brsOpeningDTO.getBillDate());
 		brsOpeningVO.setChqNo(brsOpeningDTO.getChqNo());
 		brsOpeningVO.setChqDate(brsOpeningDTO.getChqDate());
@@ -733,6 +753,198 @@ public class TransactionServiceImpl implements TransactionService {
 		return details;
 	}
 
+	// BRS file upload
+	private int totalRows = 0; // Instance variable to keep track of total rows
+	private int successfulUploads = 0; // Instance variable to keep track of successful uploads
+
+	private final DataFormatter dataFormatter = new DataFormatter();
+
+	@Transactional
+	public void ExcelUploadForBrs(MultipartFile[] files, Long orgId, String createdBy, String customer, String client,
+			String finYear, String branch, String branchCode) throws ApplicationException {
+		List<BrsExcelUploadVO> brsExcelUploadVOsToSave = new ArrayList<>();
+		totalRows = 0;
+		successfulUploads = 0;
+
+		for (MultipartFile file : files) {
+			if (file.isEmpty()) {
+				throw new ApplicationException(
+						"The supplied file '" + file.getOriginalFilename() + "' is empty (zero bytes long).");
+			}
+
+			try (Workbook workbook = WorkbookFactory.create(file.getInputStream())) {
+				Sheet sheet = workbook.getSheetAt(0);
+				List<String> errorMessages = new ArrayList<>();
+				System.out.println("Processing file: " + file.getOriginalFilename());
+
+				Row headerRow = sheet.getRow(0);
+				if (!isHeaderValid(headerRow)) {
+					throw new ApplicationException("Invalid Excel format in file '" + file.getOriginalFilename()
+							+ "'. Expected headers are: Type, From location, From location type, Location pick, partno, partdesc, sku, Grn No, GRN date, Batch No, Exp date, Entry no, From Status, To Status");
+				}
+
+				for (Row row : sheet) {
+					if (row.getRowNum() == 0 || isRowEmpty(row)) {
+						continue;
+					}
+
+					totalRows++;
+					System.out.println("Validating row: " + (row.getRowNum() + 1));
+
+					try {
+						String billNo = getStringCellValue(row.getCell(0));
+						LocalDate billDate = parseDate(row.getCell(1));
+						String chqNo = getStringCellValue(row.getCell(2));
+						LocalDate chqDate = parseDate(row.getCell(3));
+						String bank = getStringCellValue(row.getCell(4));
+						String currency = getStringCellValue(row.getCell(5));
+						String exRate = getStringCellValue(row.getCell(6));
+						BigDecimal receiptAmount = getBigDecimalCellValue(row.getCell(7));
+						BigDecimal paymentAmount = getBigDecimalCellValue(row.getCell(8));
+						boolean reconcile = getBooleanCellValue(row.getCell(9));
+
+						// Create and populate SrsExcelUploadVO object
+						BrsExcelUploadVO brsExcelUploadVO = new BrsExcelUploadVO();
+						brsExcelUploadVO.setBillNo(billNo);
+						brsExcelUploadVO.setBillDate(billDate);
+						brsExcelUploadVO.setChqNo(chqNo);
+						brsExcelUploadVO.setChqDate(chqDate);
+						brsExcelUploadVO.setBank(bank);
+						brsExcelUploadVO.setCurrency(currency);
+						brsExcelUploadVO.setExRate(exRate);
+						brsExcelUploadVO.setReceiptAmount(receiptAmount);
+						brsExcelUploadVO.setPaymentAmount(paymentAmount);
+						brsExcelUploadVO.setReconcile(reconcile);
+						brsExcelUploadVO.setOrgId(orgId);
+						brsExcelUploadVO.setCustomer(customer);
+						brsExcelUploadVO.setClient(client);
+						brsExcelUploadVO.setFinYear(finYear);
+						brsExcelUploadVO.setBranch(branch);
+						brsExcelUploadVO.setBranchCode(branchCode);
+						brsExcelUploadVO.setCreatedBy(createdBy);
+						brsExcelUploadVO.setUpdatedBy(createdBy);
+						brsExcelUploadVO.setActive(true);
+						brsExcelUploadVO.setCancel(false);
+						brsExcelUploadVO.setCancelRemarks("");
+
+						brsExcelUploadVOsToSave.add(brsExcelUploadVO);
+						successfulUploads++;
+					} catch (Exception e) {
+						// Optionally handle specific row processing exceptions here
+					}
+				}
+
+				brsExcelUploadRepo.saveAll(brsExcelUploadVOsToSave);
+			} catch (IOException e) {
+				throw new ApplicationException(
+						"Failed to process file: " + file.getOriginalFilename() + " - " + e.getMessage());
+			}
+		}
+	}
+
+	private boolean getBooleanCellValue(Cell cell) {
+		if (cell == null) {
+			return false; // Return false if the cell is null
+		}
+
+		switch (cell.getCellType()) {
+		case BOOLEAN:
+			return cell.getBooleanCellValue(); // If the cell type is BOOLEAN, return its value
+		case STRING:
+			// For string values, treat "true" (case-insensitive) as true, anything else as
+			// false
+			return "true".equalsIgnoreCase(cell.getStringCellValue().trim());
+		case NUMERIC:
+			// If numeric and non-zero, treat as true (e.g., 1 = true, 0 = false)
+			return cell.getNumericCellValue() != 0;
+		default:
+			throw new RuntimeException("Cell type is not BOOLEAN, STRING, or NUMERIC.");
+		}
+	}
+
+	private BigDecimal getBigDecimalCellValue(Cell cell) {
+		if (cell == null) {
+			return BigDecimal.ZERO; // Return 0 if the cell is null
+		}
+
+		switch (cell.getCellType()) {
+		case NUMERIC:
+			return BigDecimal.valueOf(cell.getNumericCellValue()); // Convert numeric value to BigDecimal
+		case STRING:
+			try {
+				return new BigDecimal(cell.getStringCellValue().trim()); // Convert string value to BigDecimal
+			} catch (NumberFormatException e) {
+				throw new RuntimeException("Invalid number format for BigDecimal: " + cell.getStringCellValue());
+			}
+		default:
+			throw new RuntimeException("Cell type is not numeric or string convertible to BigDecimal.");
+		}
+	}
+
+	private LocalDate parseDate(Cell cell) {
+		if (cell == null) {
+			return null;
+		}
+
+		try {
+			if (cell.getCellType() == CellType.NUMERIC && DateUtil.isCellDateFormatted(cell)) {
+				return cell.getLocalDateTimeCellValue().toLocalDate();
+			} else if (cell.getCellType() == CellType.STRING) {
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy"); // Adjusted to dd/MM/yyyy
+				return LocalDate.parse(cell.getStringCellValue(), formatter);
+			}
+		} catch (Exception e) {
+			System.err.println("Date parsing error for cell value: " + getStringCellValue(cell));
+		}
+		return null;
+	}
+
+	private String getStringCellValue(Cell cell) {
+		if (cell == null) {
+			return ""; // Return empty string if cell is null
+		}
+
+		// Use DataFormatter to get the cell value as a string
+		return dataFormatter.formatCellValue(cell);
+	}
+
+	private boolean isRowEmpty(Row row) {
+		for (Cell cell : row) {
+			if (cell.getCellType() != CellType.BLANK) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	private boolean isHeaderValid(Row headerRow) throws ApplicationException {
+		if (headerRow == null) {
+			return false;
+		}
+		List<String> expectedHeaders = Arrays.asList("Bill No", "Bill Date", "Cheque No", "Cheque Date", "Bank",
+				"Currency", "Ex Rate", "Receipt Amount", "Payment Amount", "Reconcile");
+
+		List<String> actualHeaders = new ArrayList<>();
+		for (Cell cell : headerRow) {
+			actualHeaders.add(getStringCellValue(cell).trim());
+		}
+
+		if (!expectedHeaders.equals(actualHeaders)) {
+			String errorDetails = "Expected headers: " + expectedHeaders.toString() + ", Found headers: "
+					+ actualHeaders.toString();
+			throw new ApplicationException("Invalid Excel format. " + errorDetails);
+		}
+		return true;
+	}
+
+	public int getTotalRows() {
+		return totalRows;
+	}
+
+	public int getSuccessfulUploads() {
+		return successfulUploads;
+	}
+
 	// ChartCostCenter
 	@Override
 	public List<ChartCostCenterVO> getAllChartCostCenterByOrgId(Long orgId) {
@@ -762,38 +974,38 @@ public class TransactionServiceImpl implements TransactionService {
 
 	@Override
 	public List<ChartCostCenterVO> updateCreateChartCostCenter(@Valid List<ChartCostCenterDTO> chartCostCenterDTOList)
-	        throws ApplicationException {
+			throws ApplicationException {
 
-	    // Iterate through each DTO in the list
-	    for (ChartCostCenterDTO chartCostCenterDTO : chartCostCenterDTOList) {
-	        ChartCostCenterVO chartCostCenterVO = new ChartCostCenterVO();
-	        boolean isUpdate = false;
+		// Iterate through each DTO in the list
+		for (ChartCostCenterDTO chartCostCenterDTO : chartCostCenterDTOList) {
+			ChartCostCenterVO chartCostCenterVO = new ChartCostCenterVO();
+			boolean isUpdate = false;
 
-	        // Check if the DTO contains an ID for update operation
-	        if (ObjectUtils.isNotEmpty(chartCostCenterDTO.getId())) {
-	            // Update operation
-	            isUpdate = true;
-	            chartCostCenterVO = chartCostCenterRepo.findById(chartCostCenterDTO.getId())
-	                    .orElseThrow(() -> new ApplicationException("Invalid ChartCostCenter details with ID: " + chartCostCenterDTO.getId()));
-	            chartCostCenterVO.setUpdatedBy(chartCostCenterDTO.getCreatedBy());
-	        } else {
-	            // Create operation (new entity)
-	            chartCostCenterVO = new ChartCostCenterVO();
-	            chartCostCenterVO.setCreatedBy(chartCostCenterDTO.getCreatedBy());
-	            chartCostCenterVO.setUpdatedBy(chartCostCenterDTO.getCreatedBy());
-	        }
+			// Check if the DTO contains an ID for update operation
+			if (ObjectUtils.isNotEmpty(chartCostCenterDTO.getId())) {
+				// Update operation
+				isUpdate = true;
+				chartCostCenterVO = chartCostCenterRepo.findById(chartCostCenterDTO.getId())
+						.orElseThrow(() -> new ApplicationException(
+								"Invalid ChartCostCenter details with ID: " + chartCostCenterDTO.getId()));
+				chartCostCenterVO.setUpdatedBy(chartCostCenterDTO.getCreatedBy());
+			} else {
+				// Create operation (new entity)
+				chartCostCenterVO = new ChartCostCenterVO();
+				chartCostCenterVO.setCreatedBy(chartCostCenterDTO.getCreatedBy());
+				chartCostCenterVO.setUpdatedBy(chartCostCenterDTO.getCreatedBy());
+			}
 
-	        // Map fields from DTO to VO
-	        getChartCostCenterVOFromChartCostCenterDTO(chartCostCenterDTO, chartCostCenterVO);
+			// Map fields from DTO to VO
+			getChartCostCenterVOFromChartCostCenterDTO(chartCostCenterDTO, chartCostCenterVO);
 
-	        // Save the entity and add it to the list
-	        chartCostCenterRepo.save(chartCostCenterVO);
-	    }
+			// Save the entity and add it to the list
+			chartCostCenterRepo.save(chartCostCenterVO);
+		}
 
-	    // Return the list of saved entities
-	    return chartCostCenterRepo.findAll();
+		// Return the list of saved entities
+		return chartCostCenterRepo.findAll();
 	}
-
 
 	private void getChartCostCenterVOFromChartCostCenterDTO(@Valid ChartCostCenterDTO chartCostCenterDTO,
 			ChartCostCenterVO chartCostCenterVO) {
@@ -1010,7 +1222,7 @@ public class TransactionServiceImpl implements TransactionService {
 	@Override
 	public CostInvoiceVO updateCreateCostInvoice(@Valid CostInvoiceDTO costInvoiceDTO) throws ApplicationException {
 		CostInvoiceVO costInvoiceVO = new CostInvoiceVO();
-		//		boolean isUpdate = false;
+		// boolean isUpdate = false;
 		if (ObjectUtils.isNotEmpty(costInvoiceDTO.getId())) {
 			boolean isUpdate = true;
 			costInvoiceVO = costInvoiceRepo.findById(costInvoiceDTO.getId())
@@ -1074,16 +1286,16 @@ public class TransactionServiceImpl implements TransactionService {
 	}
 
 	private void getCostInvoiceVOFromCostInvoiceDTO(@Valid CostInvoiceDTO costInvoiceDTO, CostInvoiceVO costInvoiceVO) {
-		//			// Finyr
-		//			int finyr = taxInvoiceRepo.findFinyr();
-		//			// DocId
-		//			String taxInvoice = "AI" + finyr + taxInvoiceRepo.findDocId();
-		//			taxInvoiceVO.setDocId(taxInvoice);
-		//			taxInvoiceRepo.nextSeq();
-		//			// InvoiceNo
-		//			String invoiceNo = "AI" + finyr + "INV" + taxInvoiceRepo.findInvoiceNo();
-		//			taxInvoiceVO.setInvoiceNo(invoiceNo);	
-		//			taxInvoiceRepo.nextSeqInvoice();
+		// // Finyr
+		// int finyr = taxInvoiceRepo.findFinyr();
+		// // DocId
+		// String taxInvoice = "AI" + finyr + taxInvoiceRepo.findDocId();
+		// taxInvoiceVO.setDocId(taxInvoice);
+		// taxInvoiceRepo.nextSeq();
+		// // InvoiceNo
+		// String invoiceNo = "AI" + finyr + "INV" + taxInvoiceRepo.findInvoiceNo();
+		// taxInvoiceVO.setInvoiceNo(invoiceNo);
+		// taxInvoiceRepo.nextSeqInvoice();
 		costInvoiceVO.setMode(costInvoiceDTO.getMode());
 		costInvoiceVO.setProduct(costInvoiceDTO.getProduct());
 		costInvoiceVO.setPurVchNo(costInvoiceDTO.getPurVchNo());
@@ -1126,7 +1338,7 @@ public class TransactionServiceImpl implements TransactionService {
 		return costInvoiceRepo.findCostInvoiceByActive();
 	}
 
-	//DebitNote
+	// DebitNote
 
 	@Override
 	public List<DebitNoteVO> getAllDebitNoteByOrgId(Long orgId) {
@@ -1246,16 +1458,16 @@ public class TransactionServiceImpl implements TransactionService {
 	}
 
 	private void getDebitNoteVOFromDebitNoteDTO(@Valid DebitNoteDTO debitNoteDTO, DebitNoteVO debitNoteVO) {
-		//					// Finyr
-		//					int finyr = taxInvoiceRepo.findFinyr();
-		//					// DocId
-		//					String taxInvoice = "AI" + finyr + taxInvoiceRepo.findDocId();
-		//					taxInvoiceVO.setDocId(taxInvoice);
-		//					taxInvoiceRepo.nextSeq();
-		//					// InvoiceNo
-		//					String invoiceNo = "AI" + finyr + "INV" + taxInvoiceRepo.findInvoiceNo();
-		//					taxInvoiceVO.setInvoiceNo(invoiceNo);
-		//					taxInvoiceRepo.nextSeqInvoice();
+		// // Finyr
+		// int finyr = taxInvoiceRepo.findFinyr();
+		// // DocId
+		// String taxInvoice = "AI" + finyr + taxInvoiceRepo.findDocId();
+		// taxInvoiceVO.setDocId(taxInvoice);
+		// taxInvoiceRepo.nextSeq();
+		// // InvoiceNo
+		// String invoiceNo = "AI" + finyr + "INV" + taxInvoiceRepo.findInvoiceNo();
+		// taxInvoiceVO.setInvoiceNo(invoiceNo);
+		// taxInvoiceRepo.nextSeqInvoice();
 		debitNoteVO.setDocNo(debitNoteDTO.getDocNo());
 		debitNoteVO.setSubType(debitNoteDTO.getSubType());
 		debitNoteVO.setProduct(debitNoteDTO.getProduct());
@@ -1297,7 +1509,7 @@ public class TransactionServiceImpl implements TransactionService {
 		return debitNoteRepo.findDebitNoteByActive();
 	}
 
-	//	GstSalesVoucher
+	// GstSalesVoucher
 
 	@Override
 	public List<GstSalesVoucherVO> getAllGstSalesVoucherByOrgId(Long orgId) {
@@ -1397,7 +1609,7 @@ public class TransactionServiceImpl implements TransactionService {
 		return gstSalesVoucherRepo.findGstSalesVoucherByActive();
 	}
 
-	//	PaymentVoucher
+	// PaymentVoucher
 
 	@Override
 	public List<PaymentVoucherVO> getAllPaymentVoucherByOrgId(Long orgId) {
@@ -1470,7 +1682,7 @@ public class TransactionServiceImpl implements TransactionService {
 
 	private void getPaymentVoucherVOFromPaymentVoucherDTO(@Valid PaymentVoucherDTO paymentVoucherDTO,
 			PaymentVoucherVO paymentVoucherVO) {
-		//		// Finyr
+		// // Finyr
 		int finyr = paymentVoucherRepo.findFinyr();
 		// DocId
 		String paymentVoucher = "PV" + finyr + paymentVoucherRepo.findDocId();
@@ -1494,7 +1706,7 @@ public class TransactionServiceImpl implements TransactionService {
 		return paymentVoucherRepo.findPaymentVoucherByActive();
 	}
 
-	//	ArapDetails
+	// ArapDetails
 
 	@Override
 	public List<ArapDetailsVO> getAllArapDetailsByOrgId(Long orgId) {
@@ -1541,12 +1753,12 @@ public class TransactionServiceImpl implements TransactionService {
 	}
 
 	private void getArapDetailsVOFromArapDetailsDTO(@Valid ArapDetailsDTO arapDetailsDTO, ArapDetailsVO arapDetailsVO) {
-		//		// Finyr
-		//		int finyr = paymentVoucherRepo.findFinyr();
-		//		// DocId
-		//		String paymentVoucher = "PV" + finyr + paymentVoucherRepo.findDocId();
-		//		paymentVoucherRepo.setDocId(paymentVoucher);
-		//		paymentVoucherRepo.nextSeq();
+		// // Finyr
+		// int finyr = paymentVoucherRepo.findFinyr();
+		// // DocId
+		// String paymentVoucher = "PV" + finyr + paymentVoucherRepo.findDocId();
+		// paymentVoucherRepo.setDocId(paymentVoucher);
+		// paymentVoucherRepo.nextSeq();
 		arapDetailsVO.setBranch(arapDetailsDTO.getBranch());
 		arapDetailsVO.setFinyr(arapDetailsDTO.getFinyr());
 		arapDetailsVO.setSourceTransid(arapDetailsDTO.getSourceTransid());
@@ -1584,7 +1796,7 @@ public class TransactionServiceImpl implements TransactionService {
 		return arapDetailsRepo.findArapDetailsByActive();
 	}
 
-	//	ArapAdjustments
+	// ArapAdjustments
 
 	@Override
 	public List<ArapAdjustmentsVO> getAllArapAdjustmentsByOrgId(Long orgId) {
@@ -1633,12 +1845,12 @@ public class TransactionServiceImpl implements TransactionService {
 
 	private void getArapAdjustmentsVOFromArapAdjustmentsDTO(@Valid ArapAdjustmentsDTO arapAdjustmentsDTO,
 			ArapAdjustmentsVO arapAdjustmentsVO) {
-		//		// Finyr
-		//		int finyr = paymentVoucherRepo.findFinyr();
-		//		// DocId
-		//		String paymentVoucher = "PV" + finyr + paymentVoucherRepo.findDocId();
-		//		paymentVoucherRepo.setDocId(paymentVoucher);
-		//		paymentVoucherRepo.nextSeq();
+		// // Finyr
+		// int finyr = paymentVoucherRepo.findFinyr();
+		// // DocId
+		// String paymentVoucher = "PV" + finyr + paymentVoucherRepo.findDocId();
+		// paymentVoucherRepo.setDocId(paymentVoucher);
+		// paymentVoucherRepo.nextSeq();
 		arapAdjustmentsVO.setBranch(arapAdjustmentsDTO.getBranch());
 		arapAdjustmentsVO.setFinyr(arapAdjustmentsDTO.getFinyr());
 		arapAdjustmentsVO.setSourceTransId(arapAdjustmentsDTO.getSourceTransId());
@@ -1769,16 +1981,16 @@ public class TransactionServiceImpl implements TransactionService {
 
 	private void getReceiptReversalVOFromReceiptReversalDTO(@Valid ReceiptReversalDTO receiptReversalDTO,
 			ReceiptReversalVO receiptReversalVO) {
-		//				// Finyr
-		//				int finyr = taxInvoiceRepo.findFinyr();
-		//				// DocId
-		//				String taxInvoice = "AI" + finyr + taxInvoiceRepo.findDocId();
-		//				taxInvoiceVO.setDocId(taxInvoice);
-		//				taxInvoiceRepo.nextSeq();bbbbb 
-		//				// InvoiceNo
-		//				String invoiceNo = "AI" + finyr + "INV" + taxInvoiceRepo.findInvoiceNo();
-		//				taxInvoiceVO.setInvoiceNo(invoiceNo);
-		//				taxInvoiceRepo.nextSeqInvoice();
+		// // Finyr
+		// int finyr = taxInvoiceRepo.findFinyr();
+		// // DocId
+		// String taxInvoice = "AI" + finyr + taxInvoiceRepo.findDocId();
+		// taxInvoiceVO.setDocId(taxInvoice);
+		// taxInvoiceRepo.nextSeq();bbbbb
+		// // InvoiceNo
+		// String invoiceNo = "AI" + finyr + "INV" + taxInvoiceRepo.findInvoiceNo();
+		// taxInvoiceVO.setInvoiceNo(invoiceNo);
+		// taxInvoiceRepo.nextSeqInvoice();
 		receiptReversalVO.setDocId(receiptReversalDTO.getDocId());
 		receiptReversalVO.setDocDate(receiptReversalDTO.getDocDate());
 		receiptReversalVO.setOriginBill(receiptReversalDTO.getOriginBill());
@@ -1916,16 +2128,16 @@ public class TransactionServiceImpl implements TransactionService {
 
 	private void getPaymentReversalVOFromPaymentReversalDTO(@Valid PaymentReversalDTO paymentReversalDTO,
 			PaymentReversalVO paymentReversalVO) {
-		//				// Finyr
-		//				int finyr = taxInvoiceRepo.findFinyr();
-		//				// DocId
-		//				String taxInvoice = "AI" + finyr + taxInvoiceRepo.findDocId();
-		//				taxInvoiceVO.setDocId(taxInvoice);
-		//				taxInvoiceRepo.nextSeq();
-		//				// InvoiceNo
-		//				String invoiceNo = "AI" + finyr + "INV" + taxInvoiceRepo.findInvoiceNo();
-		//				taxInvoiceVO.setInvoiceNo(invoiceNo);
-		//				taxInvoiceRepo.nextSeqInvoice();
+		// // Finyr
+		// int finyr = taxInvoiceRepo.findFinyr();
+		// // DocId
+		// String taxInvoice = "AI" + finyr + taxInvoiceRepo.findDocId();
+		// taxInvoiceVO.setDocId(taxInvoice);
+		// taxInvoiceRepo.nextSeq();
+		// // InvoiceNo
+		// String invoiceNo = "AI" + finyr + "INV" + taxInvoiceRepo.findInvoiceNo();
+		// taxInvoiceVO.setInvoiceNo(invoiceNo);
+		// taxInvoiceRepo.nextSeqInvoice();
 		paymentReversalVO.setDocId(paymentReversalDTO.getDocId());
 		paymentReversalVO.setDocDate(paymentReversalDTO.getDocDate());
 		paymentReversalVO.setOriginBill(paymentReversalDTO.getOriginBill());
@@ -2045,16 +2257,16 @@ public class TransactionServiceImpl implements TransactionService {
 
 	private void getArApAdjustmentOffSetVOFromArApAdjustmentOffSetDTO(
 			@Valid ArApAdjustmentOffSetDTO arApAdjustmentOffSetDTO, ArApAdjustmentOffSetVO arApAdjustmentOffSetVO) {
-		//					// Finyr
-		//					int finyr = taxInvoiceRepo.findFinyr();
-		//					// DocId
-		//					String taxInvoice = "AI" + finyr + taxInvoiceRepo.findDocId();
-		//					taxInvoiceVO.setDocId(taxInvoice);
-		//					taxInvoiceRepo.nextSeq();
-		//					// InvoiceNo
-		//					String invoiceNo = "AI" + finyr + "INV" + taxInvoiceRepo.findInvoiceNo();
-		//					taxInvoiceVO.setInvoiceNo(invoiceNo);
-		//					taxInvoiceRepo.nextSeqInvoice();
+		// // Finyr
+		// int finyr = taxInvoiceRepo.findFinyr();
+		// // DocId
+		// String taxInvoice = "AI" + finyr + taxInvoiceRepo.findDocId();
+		// taxInvoiceVO.setDocId(taxInvoice);
+		// taxInvoiceRepo.nextSeq();
+		// // InvoiceNo
+		// String invoiceNo = "AI" + finyr + "INV" + taxInvoiceRepo.findInvoiceNo();
+		// taxInvoiceVO.setInvoiceNo(invoiceNo);
+		// taxInvoiceRepo.nextSeqInvoice();
 		arApAdjustmentOffSetVO.setDocId(arApAdjustmentOffSetDTO.getDocId());
 		arApAdjustmentOffSetVO.setDocDate(arApAdjustmentOffSetDTO.getDocDate());
 		arApAdjustmentOffSetVO.setSubLedgerType(arApAdjustmentOffSetDTO.getSubLedgerType());
@@ -2080,7 +2292,7 @@ public class TransactionServiceImpl implements TransactionService {
 		return arApAdjustmentOffSetRepo.findArApAdjustmentOffSetByActive();
 	}
 
-	////GlOpeningBalance
+	//// GlOpeningBalance
 
 	@Override
 	public List<GlOpeningBalanceVO> getAllGlOpeningBalanceByOrgId(Long orgId) {
@@ -2108,7 +2320,6 @@ public class TransactionServiceImpl implements TransactionService {
 		return glOpeningBalanceVO;
 	}
 
-
 	@Override
 	public GlOpeningBalanceVO updateCreateGlOpeningBalance(@Valid GlOpeningBalanceDTO glOpeningBalanceDTO)
 			throws ApplicationException {
@@ -2126,10 +2337,13 @@ public class TransactionServiceImpl implements TransactionService {
 
 		List<ParticularsGlOpeningBalanceVO> particularsGlOpeningBalanceVOs = new ArrayList<>();
 		if (glOpeningBalanceDTO.getParticularsGlOpeningBalanceDTO() != null) {
-			for (ParticularsGlOpeningBalanceDTO particularsGlOpeningBalanceDTO : glOpeningBalanceDTO.getParticularsGlOpeningBalanceDTO()) {
+			for (ParticularsGlOpeningBalanceDTO particularsGlOpeningBalanceDTO : glOpeningBalanceDTO
+					.getParticularsGlOpeningBalanceDTO()) {
 				ParticularsGlOpeningBalanceVO particularsGlOpeningBalanceVO;
-				if (particularsGlOpeningBalanceDTO.getId() != null & ObjectUtils.isEmpty(particularsGlOpeningBalanceDTO.getId())) {
-					particularsGlOpeningBalanceVO = particularsGlOpeningBalanceRepo.findById(particularsGlOpeningBalanceDTO.getId())
+				if (particularsGlOpeningBalanceDTO.getId() != null
+						& ObjectUtils.isEmpty(particularsGlOpeningBalanceDTO.getId())) {
+					particularsGlOpeningBalanceVO = particularsGlOpeningBalanceRepo
+							.findById(particularsGlOpeningBalanceDTO.getId())
 							.orElse(new ParticularsGlOpeningBalanceVO());
 				} else {
 					particularsGlOpeningBalanceVO = new ParticularsGlOpeningBalanceVO();
@@ -2305,6 +2519,3 @@ public class TransactionServiceImpl implements TransactionService {
 
 	
 }
-
-
-
