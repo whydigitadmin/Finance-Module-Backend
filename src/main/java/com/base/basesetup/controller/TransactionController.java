@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.base.basesetup.common.CommonConstant;
 import com.base.basesetup.common.UserConstants;
@@ -29,6 +30,7 @@ import com.base.basesetup.dto.ArapDetailsDTO;
 import com.base.basesetup.dto.BrsOpeningDTO;
 import com.base.basesetup.dto.ChartCostCenterDTO;
 import com.base.basesetup.dto.CostInvoiceDTO;
+import com.base.basesetup.dto.CustomerAttachmentType;
 import com.base.basesetup.dto.DailyMonthlyExRatesDTO;
 import com.base.basesetup.dto.DebitNoteDTO;
 import com.base.basesetup.dto.FundTransferDTO;
@@ -574,7 +576,7 @@ public class TransactionController extends BaseController {
 		String errorMsg = null;
 		Map<String, Object> responseObjectsMap = new HashMap<>();
 		ResponseDTO responseDTO = null;
-		List<Map<String, Object>> branch= new ArrayList<>();
+		List<Map<String, Object>> branch = new ArrayList<>();
 
 		try {
 			branch = transactionService.getBranchForBrsOpening(orgId);
@@ -583,18 +585,63 @@ public class TransactionController extends BaseController {
 			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
 		}
 		if (StringUtils.isBlank(errorMsg)) {
-			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
-					"Branch retrieved successfully");
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "Branch retrieved successfully");
 			responseObjectsMap.put("branch", branch);
 			responseDTO = createServiceResponse(responseObjectsMap);
 		} else {
-			responseDTO = createServiceResponseError(responseObjectsMap,
-					"Failed to retrieve Branch information", errorMsg);
+			responseDTO = createServiceResponseError(responseObjectsMap, "Failed to retrieve Branch information",
+					errorMsg);
 		}
 		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
 		return ResponseEntity.ok().body(responseDTO);
 	}
 
+//	@PostMapping("/brsExcelUpload")
+//	public ResponseEntity<String> uploadExcel(@RequestParam("file") MultipartFile file) throws Exception {
+//		transactionService.saveBrsExcelData(file);
+//		return new ResponseEntity<>("File uploaded successfully", HttpStatus.OK);
+//	}
+
+	
+	@PostMapping("/excelUploadForBrs")
+	public ResponseEntity<ResponseDTO> ExcelUploadForBrs(@RequestParam MultipartFile[] files,
+		 @RequestParam(required = false) Long orgId,
+			@RequestParam(required = false) String createdBy, String customer, String client, String finYear, String branch, String branchCode) {
+		String methodName = "ExcelUploadForBrs()";
+		int totalRows = 0;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		int successfulUploads = 0;
+		ResponseDTO responseDTO = null;
+		try {
+			// Call service method to process Excel upload
+			transactionService.ExcelUploadForBrs(files, orgId, createdBy, customer,  client,  finYear,  branch,  branchCode);
+
+			// Retrieve the counts after processing
+			totalRows = transactionService.getTotalRows(); // Get total rows processed
+			successfulUploads = transactionService.getSuccessfulUploads(); // Get successful uploads count
+			// Construct success response
+			responseObjectsMap.put("statusFlag", "Ok");
+			responseObjectsMap.put("status", true);
+			responseObjectsMap.put("totalRows", totalRows);
+			responseObjectsMap.put("successfulUploads", successfulUploads);
+			Map<String, Object> paramObjectsMap = new HashMap<>();
+			paramObjectsMap.put("message", "Excel Upload For brs successful");
+			responseObjectsMap.put("paramObjectsMap", paramObjectsMap);
+			responseDTO = createServiceResponse(responseObjectsMap);
+
+		} catch (Exception e) {
+
+			String errorMsg = e.getMessage();
+			LOGGER.error(CommonConstant.EXCEPTION, methodName, e);
+			responseObjectsMap.put("statusFlag", "Error");
+			responseObjectsMap.put("status", false);
+			responseObjectsMap.put("errorMessage", errorMsg);
+
+			responseDTO = createServiceResponseError(responseObjectsMap, "Excel Upload For Brs Failed", errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+	}
 	
 //	ChartCostCenter
 	@GetMapping("/getAllChartCostCenterByOrgId")
@@ -2023,9 +2070,9 @@ public class TransactionController extends BaseController {
 		return ResponseEntity.ok().body(responseDTO);
 
 	}
-	
-	//GlOpeningBalance
-	
+
+	// GlOpeningBalance
+
 	@GetMapping("/getAllGlOpeningBalanceByOrgId")
 	public ResponseEntity<ResponseDTO> getAllGlOpeningBalanceByOrgId(@RequestParam(required = false) Long orgId) {
 		String methodName = "getAllGlOpeningBalanceByOrgId()";
@@ -2052,9 +2099,8 @@ public class TransactionController extends BaseController {
 		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
 		return ResponseEntity.ok().body(responseDTO);
 
-
 	}
-	
+
 	@GetMapping("/getAllGlOpeningBalanceById")
 	public ResponseEntity<ResponseDTO> getAllGlOpeningBalanceById(@RequestParam(required = false) Long id) {
 		String methodName = "getAllGlOpeningBalanceById()";
@@ -2070,7 +2116,8 @@ public class TransactionController extends BaseController {
 			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
 		}
 		if (StringUtils.isBlank(errorMsg)) {
-			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "GlOpeningBalance information get successfully By id");
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+					"GlOpeningBalance information get successfully By id");
 			responseObjectsMap.put("glOpeningBalanceVO", glOpeningBalanceVO);
 			responseDTO = createServiceResponse(responseObjectsMap);
 		} else {
@@ -2081,7 +2128,6 @@ public class TransactionController extends BaseController {
 		return ResponseEntity.ok().body(responseDTO);
 	}
 
-	
 	@PutMapping("/updateCreateGlOpeningBalance")
 	public ResponseEntity<ResponseDTO> updateCreateGlOpeningBalance(
 			@Valid @RequestBody GlOpeningBalanceDTO glOpeningBalanceDTO) {
@@ -2092,7 +2138,8 @@ public class TransactionController extends BaseController {
 		ResponseDTO responseDTO = null;
 
 		try {
-			GlOpeningBalanceVO glOpeningBalanceVO = transactionService.updateCreateGlOpeningBalance(glOpeningBalanceDTO);
+			GlOpeningBalanceVO glOpeningBalanceVO = transactionService
+					.updateCreateGlOpeningBalance(glOpeningBalanceDTO);
 			boolean isUpdate = glOpeningBalanceDTO.getId() != null;
 
 			if (glOpeningBalanceVO != null) {
@@ -2145,6 +2192,5 @@ public class TransactionController extends BaseController {
 		return ResponseEntity.ok().body(responseDTO);
 
 	}
-	   
 
 }
