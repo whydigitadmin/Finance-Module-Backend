@@ -84,6 +84,7 @@ import com.base.basesetup.entity.PaymentVoucherVO;
 import com.base.basesetup.entity.ReceiptInvoiceVO;
 import com.base.basesetup.entity.ReceiptOtherAccountVO;
 import com.base.basesetup.entity.ReceiptReversalVO;
+import com.base.basesetup.entity.ReconciliationSummaryVO;
 import com.base.basesetup.entity.TaxInvoiceVO;
 import com.base.basesetup.entity.TdsCostInvoiceVO;
 import com.base.basesetup.exception.ApplicationException;
@@ -122,6 +123,7 @@ import com.base.basesetup.repo.PaymentVoucherRepo;
 import com.base.basesetup.repo.ReceiptInvoiceRepo;
 import com.base.basesetup.repo.ReceiptOtherAccountRepo;
 import com.base.basesetup.repo.ReceiptReversalRepo;
+import com.base.basesetup.repo.ReconciliationSummaryRepo;
 import com.base.basesetup.repo.TaxInvoiceRepo;
 import com.base.basesetup.repo.TdsCostInvoiceRepo;
 
@@ -238,6 +240,9 @@ public class TransactionServiceImpl implements TransactionService {
 
 	@Autowired
 	ParticularsGlOpeningBalanceRepo particularsGlOpeningBalanceRepo;
+	
+	@Autowired
+	ReconciliationSummaryRepo reconciliationSummaryRepo;
 
 	// TaxInvoice
 	@Override
@@ -2152,6 +2157,33 @@ public class TransactionServiceImpl implements TransactionService {
 	public List<GlOpeningBalanceVO> getGlOpeningBalanceByActive() {
 		return glOpeningBalanceRepo.findGlOpeningBalanceByActive();
 	}
+	
+	@Override
+	public List<ReconciliationSummaryVO> getAllReconciliationSummaryByOrgId(Long orgId) {
+		List<ReconciliationSummaryVO> reconciliationSummaryVO = new ArrayList<>();
+		if (ObjectUtils.isNotEmpty(orgId)) {
+			LOGGER.info("Successfully Received  ReconciliationSummary BY OrgId: {}", orgId);
+			reconciliationSummaryVO = reconciliationSummaryRepo.getAllReconciliationSummaryByOrgId(orgId);
+		} else {
+			LOGGER.info("Successfully Received  ReconciliationSummary For All OrgId.");
+			reconciliationSummaryVO = reconciliationSummaryRepo.findAll();
+		}
+		return reconciliationSummaryVO;
+	}
+
+	@Override
+	public List<ReconciliationSummaryVO> getAllReconciliationSummaryById(Long id) {
+		List<ReconciliationSummaryVO> reconciliationSummaryVO = new ArrayList<>();
+		if (ObjectUtils.isNotEmpty(id)) {
+			LOGGER.info("Successfully Received  ReconciliationSummary BY Id : {}", id);
+			reconciliationSummaryVO = reconciliationSummaryRepo.getAllReconciliationSummaryById(id);
+		} else {
+			LOGGER.info("Successfully Received  ReconciliationSummary For All Id.");
+			reconciliationSummaryVO = reconciliationSummaryRepo.findAll();
+		}
+		return reconciliationSummaryVO;
+	}
+
 
 }
 

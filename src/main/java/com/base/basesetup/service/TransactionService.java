@@ -40,6 +40,7 @@ import com.base.basesetup.entity.IrnCreditVO;
 import com.base.basesetup.entity.PaymentReversalVO;
 import com.base.basesetup.entity.PaymentVoucherVO;
 import com.base.basesetup.entity.ReceiptReversalVO;
+import com.base.basesetup.entity.ReconciliationSummaryVO;
 import com.base.basesetup.entity.TaxInvoiceVO;
 import com.base.basesetup.exception.ApplicationException;
 
@@ -212,6 +213,12 @@ public interface TransactionService {
 	List<GlOpeningBalanceVO> getAllGlOpeningBalanceById(Long id);
 
 	List<GlOpeningBalanceVO> getGlOpeningBalanceByActive();
+	
+	//ReconciliationSummary
+
+	List<ReconciliationSummaryVO> getAllReconciliationSummaryById(Long id);
+
+	List<ReconciliationSummaryVO> getAllReconciliationSummaryByOrgId(Long orgId);
 
 	
 }
