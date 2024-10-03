@@ -23,6 +23,7 @@ import com.base.basesetup.dto.IrnCreditDTO;
 import com.base.basesetup.dto.PaymentReversalDTO;
 import com.base.basesetup.dto.PaymentVoucherDTO;
 import com.base.basesetup.dto.ReceiptReversalDTO;
+import com.base.basesetup.dto.ReconciliationSummaryDTO;
 import com.base.basesetup.dto.TaxInvoiceDTO;
 import com.base.basesetup.entity.ArApAdjustmentOffSetVO;
 import com.base.basesetup.entity.ArapAdjustmentsVO;
@@ -216,9 +217,11 @@ public interface TransactionService {
 	
 	//ReconciliationSummary
 
-	List<ReconciliationSummaryVO> getAllReconciliationSummaryById(Long id);
-
-	List<ReconciliationSummaryVO> getAllReconciliationSummaryByOrgId(Long orgId);
+//	List<ReconciliationSummaryVO> getAllReconciliationSummaryById(Long id);
+//
+//	List<ReconciliationSummaryVO> getAllReconciliationSummaryByOrgId(Long orgId);
+//
+//	ReconciliationSummaryVO updateCreateReconciliationSummary(@Valid ReconciliationSummaryDTO reconciliationSummaryDTO);
 
 	
 }

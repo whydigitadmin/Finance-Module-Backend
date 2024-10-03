@@ -38,6 +38,8 @@ import com.base.basesetup.dto.IrnCreditDTO;
 import com.base.basesetup.dto.PaymentReversalDTO;
 import com.base.basesetup.dto.PaymentVoucherDTO;
 import com.base.basesetup.dto.ReceiptReversalDTO;
+import com.base.basesetup.dto.ReconciliationSummaryDTO;
+import com.base.basesetup.dto.ReconciliationSummaryDTO;
 import com.base.basesetup.dto.ResponseDTO;
 import com.base.basesetup.dto.TaxInvoiceDTO;
 import com.base.basesetup.entity.ArApAdjustmentOffSetVO;
@@ -2147,60 +2149,95 @@ public class TransactionController extends BaseController {
 	}
 	
 	
-	// TaxInvoice
+	// ReconciliationSummary
 
-	@GetMapping("/getAllReconciliationSummaryByOrgId")
-	public ResponseEntity<ResponseDTO> getAllReconciliationSummaryByOrgId(@RequestParam(required = false) Long orgId) {
-		String methodName = "getAllReconciliationSummaryByOrgId()";
-		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
-		String errorMsg = null;
-		Map<String, Object> responseObjectsMap = new HashMap<>();
-		ResponseDTO responseDTO = null;
-		List<ReconciliationSummaryVO> reconciliationSummaryVO = new ArrayList<>();
-		try {
-			reconciliationSummaryVO = transactionService.getAllReconciliationSummaryByOrgId(orgId);
-		} catch (Exception e) {
-			errorMsg = e.getMessage();
-			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
-		}
-		if (StringUtils.isBlank(errorMsg)) {
-			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "ReconciliationSummary information get successfully ByOrgId");
-			responseObjectsMap.put("ReconciliationSummaryVO", reconciliationSummaryVO);
-			responseDTO = createServiceResponse(responseObjectsMap);
-		} else {
-			responseDTO = createServiceResponseError(responseObjectsMap, "ReconciliationSummary information receive failedByOrgId",
-					errorMsg);
-		}
-		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
-		return ResponseEntity.ok().body(responseDTO);
+//	@GetMapping("/getAllReconciliationSummaryByOrgId")
+//	public ResponseEntity<ResponseDTO> getAllReconciliationSummaryByOrgId(@RequestParam(required = false) Long orgId) {
+//		String methodName = "getAllReconciliationSummaryByOrgId()";
+//		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+//		String errorMsg = null;
+//		Map<String, Object> responseObjectsMap = new HashMap<>();
+//		ResponseDTO responseDTO = null;
+//		List<ReconciliationSummaryVO> reconciliationSummaryVO = new ArrayList<>();
+//		try {
+//			reconciliationSummaryVO = transactionService.getAllReconciliationSummaryByOrgId(orgId);
+//		} catch (Exception e) {
+//			errorMsg = e.getMessage();
+//			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+//		}
+//		if (StringUtils.isBlank(errorMsg)) {
+//			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "ReconciliationSummary information get successfully ByOrgId");
+//			responseObjectsMap.put("ReconciliationSummaryVO", reconciliationSummaryVO);
+//			responseDTO = createServiceResponse(responseObjectsMap);
+//		} else {
+//			responseDTO = createServiceResponseError(responseObjectsMap, "ReconciliationSummary information receive failedByOrgId",
+//					errorMsg);
+//		}
+//		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+//		return ResponseEntity.ok().body(responseDTO);
+//
+//	}
+//
+//	@GetMapping("/getAllReconciliationSummaryById")
+//	public ResponseEntity<ResponseDTO> getAllReconciliationSummaryById(@RequestParam(required = false) Long id) {
+//		String methodName = "getAllReconciliationSummaryById()";
+//		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+//		String errorMsg = null;
+//		Map<String, Object> responseObjectsMap = new HashMap<>();
+//		ResponseDTO responseDTO = null;
+//		List<ReconciliationSummaryVO> reconciliationSummaryVO = new ArrayList<>();
+//		try {
+//			reconciliationSummaryVO = transactionService.getAllReconciliationSummaryById(id);
+//		} catch (Exception e) {
+//			errorMsg = e.getMessage();
+//			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+//		}
+//		if (StringUtils.isBlank(errorMsg)) {
+//			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "ReconciliationSummary information get successfully By id");
+//			responseObjectsMap.put("ReconciliationSummaryVO", reconciliationSummaryVO);
+//			responseDTO = createServiceResponse(responseObjectsMap);
+//		} else {
+//			responseDTO = createServiceResponseError(responseObjectsMap, "ReconciliationSummary information receive failedByOrgId",
+//					errorMsg);
+//		}
+//		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+//		return ResponseEntity.ok().body(responseDTO);
+//	}
+//	  
+//	@PutMapping("/updateCreateReconciliationSummary")
+//	public ResponseEntity<ResponseDTO> updateCreateReconciliationSummary( @Valid @RequestBody ReconciliationSummaryDTO reconciliationSummaryDTO) {
+//		String methodName = "updateCreateReconciliationSummary()";
+//		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+//		String errorMsg = null;
+//		Map<String, Object> responseObjectsMap = new HashMap<>();
+//		ResponseDTO responseDTO = null;
+//
+//		try {
+//			ReconciliationSummaryVO reconciliationSummaryVO = transactionService.updateCreateReconciliationSummary(reconciliationSummaryDTO);
+//			boolean isUpdate = reconciliationSummaryDTO.getId() != null;
+//
+//			if (reconciliationSummaryVO != null) {
+//				responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+//						isUpdate ? "ReconciliationSummary updated successfully" : "ReconciliationSummary created successfully");
+//				responseObjectsMap.put("reconciliationSummaryVO", reconciliationSummaryVO);
+//				responseDTO = createServiceResponse(responseObjectsMap);
+//			} else {
+//				errorMsg = isUpdate ? "ReconciliationSummary not found for ID: " + reconciliationSummaryDTO.getId()
+//						: "ReconciliationSummary creation failed";
+//				responseDTO = createServiceResponseError(responseObjectsMap,
+//						isUpdate ? "ReconciliationSummary update failed" : "ReconciliationSummary creation failed", errorMsg);
+//			}
+//		} catch (Exception e) {
+//			errorMsg = e.getMessage();
+//			boolean isUpdate = reconciliationSummaryDTO.getId() != null;
+//			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+//			responseDTO = createServiceResponseError(responseObjectsMap,
+//					isUpdate ? "ReconciliationSummary update failed" : "ReconciliationSummary creation failed", errorMsg);
+//		}
+//
+//		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+//		return ResponseEntity.ok().body(responseDTO);
+//	}
 
-	}
-
-	@GetMapping("/getAllReconciliationSummaryById")
-	public ResponseEntity<ResponseDTO> getAllReconciliationSummaryById(@RequestParam(required = false) Long id) {
-		String methodName = "getAllReconciliationSummaryById()";
-		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
-		String errorMsg = null;
-		Map<String, Object> responseObjectsMap = new HashMap<>();
-		ResponseDTO responseDTO = null;
-		List<ReconciliationSummaryVO> reconciliationSummaryVO = new ArrayList<>();
-		try {
-			reconciliationSummaryVO = transactionService.getAllReconciliationSummaryById(id);
-		} catch (Exception e) {
-			errorMsg = e.getMessage();
-			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
-		}
-		if (StringUtils.isBlank(errorMsg)) {
-			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "ReconciliationSummary information get successfully By id");
-			responseObjectsMap.put("ReconciliationSummaryVO", reconciliationSummaryVO);
-			responseDTO = createServiceResponse(responseObjectsMap);
-		} else {
-			responseDTO = createServiceResponseError(responseObjectsMap, "ReconciliationSummary information receive failedByOrgId",
-					errorMsg);
-		}
-		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
-		return ResponseEntity.ok().body(responseDTO);
-	}
-	   
 
 }
