@@ -2091,7 +2091,7 @@ public class TransactionController extends BaseController {
 		if (StringUtils.isBlank(errorMsg)) {
 			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
 					"GlOpeningBalance information get successfully By OrgId");
-			responseObjectsMap.put("GlOpeningBalanceVO", glOpeningBalanceVO);
+			responseObjectsMap.put("glOpeningBalanceVO", glOpeningBalanceVO);
 			responseDTO = createServiceResponse(responseObjectsMap);
 		} else {
 			responseDTO = createServiceResponseError(responseObjectsMap,
