@@ -1,18 +1,33 @@
 package com.base.basesetup.service;
 
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 import org.apache.commons.lang3.ObjectUtils;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.DataFormatter;
+import org.apache.poi.ss.usermodel.DateUtil;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.base.basesetup.dto.ArApAdjustmentOffSetDTO;
 import com.base.basesetup.dto.ArApOffSetInvoiceDetailsDTO;
@@ -28,6 +43,7 @@ import com.base.basesetup.dto.CostInvoiceDTO;
 import com.base.basesetup.dto.DailyMonthlyExRatesDTO;
 import com.base.basesetup.dto.DailyMonthlyExRatesDtlDTO;
 import com.base.basesetup.dto.DebitNoteDTO;
+import com.base.basesetup.dto.DepositsReconcileDTO;
 import com.base.basesetup.dto.FundTransferDTO;
 import com.base.basesetup.dto.GeneralJournalDTO;
 import com.base.basesetup.dto.GlOpeningBalanceDTO;
@@ -48,12 +64,15 @@ import com.base.basesetup.dto.PaymentVoucherDTO;
 import com.base.basesetup.dto.ReceiptInvoiceDTO;
 import com.base.basesetup.dto.ReceiptOtherAccountDTO;
 import com.base.basesetup.dto.ReceiptReversalDTO;
+import com.base.basesetup.dto.ReconcileDTO;
 import com.base.basesetup.dto.TaxInvoiceDTO;
 import com.base.basesetup.dto.TdsCostInvoiceDTO;
+import com.base.basesetup.dto.WithdrawalsReconcileDTO;
 import com.base.basesetup.entity.ArApAdjustmentOffSetVO;
 import com.base.basesetup.entity.ArApOffSetInvoiceDetailsVO;
 import com.base.basesetup.entity.ArapAdjustmentsVO;
 import com.base.basesetup.entity.ArapDetailsVO;
+import com.base.basesetup.entity.BrsExcelUploadVO;
 import com.base.basesetup.entity.BrsOpeningVO;
 import com.base.basesetup.entity.ChargerCostInvoiceVO;
 import com.base.basesetup.entity.ChargerDebitNoteVO;
@@ -64,6 +83,7 @@ import com.base.basesetup.entity.CostInvoiceVO;
 import com.base.basesetup.entity.DailyMonthlyExRatesDtlVO;
 import com.base.basesetup.entity.DailyMonthlyExRatesVO;
 import com.base.basesetup.entity.DebitNoteVO;
+import com.base.basesetup.entity.DepositsReconcileVO;
 import com.base.basesetup.entity.FundTransferVO;
 import com.base.basesetup.entity.GeneralJournalVO;
 import com.base.basesetup.entity.GlOpeningBalanceVO;
@@ -84,15 +104,20 @@ import com.base.basesetup.entity.PaymentVoucherVO;
 import com.base.basesetup.entity.ReceiptInvoiceVO;
 import com.base.basesetup.entity.ReceiptOtherAccountVO;
 import com.base.basesetup.entity.ReceiptReversalVO;
+
+import com.base.basesetup.entity.ReconcileVO;
 import com.base.basesetup.entity.ReconciliationSummaryVO;
+
 import com.base.basesetup.entity.TaxInvoiceVO;
 import com.base.basesetup.entity.TdsCostInvoiceVO;
+import com.base.basesetup.entity.WithdrawalsReconcileVO;
 import com.base.basesetup.exception.ApplicationException;
 import com.base.basesetup.repo.ArApAdjustmentOffSetRepo;
 import com.base.basesetup.repo.ArApOffSetInvoiceDetailsRepo;
 import com.base.basesetup.repo.ArapAdjustmentsRepo;
 import com.base.basesetup.repo.ArapDetailsRepo;
 import com.base.basesetup.repo.BranchRepo;
+import com.base.basesetup.repo.BrsExcelUploadRepo;
 import com.base.basesetup.repo.BrsOpeningRepo;
 import com.base.basesetup.repo.ChargerCostInvoiceRepo;
 import com.base.basesetup.repo.ChargerDebitNoteRepo;
@@ -103,6 +128,7 @@ import com.base.basesetup.repo.CostInvoiceRepo;
 import com.base.basesetup.repo.DailyMonthlyExRatesDtlRepo;
 import com.base.basesetup.repo.DailyMonthlyExRatesRepo;
 import com.base.basesetup.repo.DebitNoteRepo;
+import com.base.basesetup.repo.DepositsReconcileRepo;
 import com.base.basesetup.repo.FundTransferRepo;
 import com.base.basesetup.repo.GeneralJournalRepo;
 import com.base.basesetup.repo.GlOpeningBalanceRepo;
@@ -123,9 +149,14 @@ import com.base.basesetup.repo.PaymentVoucherRepo;
 import com.base.basesetup.repo.ReceiptInvoiceRepo;
 import com.base.basesetup.repo.ReceiptOtherAccountRepo;
 import com.base.basesetup.repo.ReceiptReversalRepo;
+
+import com.base.basesetup.repo.ReconcileRepo;
+
 import com.base.basesetup.repo.ReconciliationSummaryRepo;
+
 import com.base.basesetup.repo.TaxInvoiceRepo;
 import com.base.basesetup.repo.TdsCostInvoiceRepo;
+import com.base.basesetup.repo.WithdrawalsReconcileRepo;
 
 @Service
 public class TransactionServiceImpl implements TransactionService {
@@ -235,14 +266,27 @@ public class TransactionServiceImpl implements TransactionService {
 	@Autowired
 	BranchRepo branchRepo;
 
-  	@Autowired
+	@Autowired
 	GlOpeningBalanceRepo glOpeningBalanceRepo;
 
 	@Autowired
 	ParticularsGlOpeningBalanceRepo particularsGlOpeningBalanceRepo;
 	
 	@Autowired
+
+	ReconcileRepo reconcileRepo;
+	
+	@Autowired
+	WithdrawalsReconcileRepo  withdrawalsReconcileRepo;
+	
+	@Autowired
+	DepositsReconcileRepo depositsReconcileRepo;
+
+	@Autowired
+	BrsExcelUploadRepo brsExcelUploadRepo;
+
 	ReconciliationSummaryRepo reconciliationSummaryRepo;
+
 
 	// TaxInvoice
 	@Override
@@ -559,7 +603,7 @@ public class TransactionServiceImpl implements TransactionService {
 
 	}
 
-	//	DailyMonthlyExRates
+	// DailyMonthlyExRates
 	@Override
 	public List<DailyMonthlyExRatesVO> getAllDailyMonthlyExRatesById(Long id) {
 		List<DailyMonthlyExRatesVO> dailyMonthlyExRatesVO = new ArrayList<>();
@@ -686,7 +730,7 @@ public class TransactionServiceImpl implements TransactionService {
 	}
 
 	private void getBrsOpeningVOFromBrsOpeningDTO(@Valid BrsOpeningDTO brsOpeningDTO, BrsOpeningVO brsOpeningVO) {
-		brsOpeningVO.setBillno(brsOpeningDTO.getBillNo());
+		brsOpeningVO.setBillNo(brsOpeningDTO.getBillNo());
 		brsOpeningVO.setBillDate(brsOpeningDTO.getBillDate());
 		brsOpeningVO.setChqNo(brsOpeningDTO.getChqNo());
 		brsOpeningVO.setChqDate(brsOpeningDTO.getChqDate());
@@ -720,6 +764,198 @@ public class TransactionServiceImpl implements TransactionService {
 		return details;
 	}
 
+	// BRS file upload
+	private int totalRows = 0; // Instance variable to keep track of total rows
+	private int successfulUploads = 0; // Instance variable to keep track of successful uploads
+
+	private final DataFormatter dataFormatter = new DataFormatter();
+
+	@Transactional
+	public void ExcelUploadForBrs(MultipartFile[] files, Long orgId, String createdBy, String customer, String client,
+			String finYear, String branch, String branchCode) throws ApplicationException {
+		List<BrsExcelUploadVO> brsExcelUploadVOsToSave = new ArrayList<>();
+		totalRows = 0;
+		successfulUploads = 0;
+
+		for (MultipartFile file : files) {
+			if (file.isEmpty()) {
+				throw new ApplicationException(
+						"The supplied file '" + file.getOriginalFilename() + "' is empty (zero bytes long).");
+			}
+
+			try (Workbook workbook = WorkbookFactory.create(file.getInputStream())) {
+				Sheet sheet = workbook.getSheetAt(0);
+				List<String> errorMessages = new ArrayList<>();
+				System.out.println("Processing file: " + file.getOriginalFilename());
+
+				Row headerRow = sheet.getRow(0);
+				if (!isHeaderValid(headerRow)) {
+					throw new ApplicationException("Invalid Excel format in file '" + file.getOriginalFilename()
+							+ "'. Expected headers are: Type, From location, From location type, Location pick, partno, partdesc, sku, Grn No, GRN date, Batch No, Exp date, Entry no, From Status, To Status");
+				}
+
+				for (Row row : sheet) {
+					if (row.getRowNum() == 0 || isRowEmpty(row)) {
+						continue;
+					}
+
+					totalRows++;
+					System.out.println("Validating row: " + (row.getRowNum() + 1));
+
+					try {
+						String billNo = getStringCellValue(row.getCell(0));
+						LocalDate billDate = parseDate(row.getCell(1));
+						String chqNo = getStringCellValue(row.getCell(2));
+						LocalDate chqDate = parseDate(row.getCell(3));
+						String bank = getStringCellValue(row.getCell(4));
+						String currency = getStringCellValue(row.getCell(5));
+						String exRate = getStringCellValue(row.getCell(6));
+						BigDecimal receiptAmount = getBigDecimalCellValue(row.getCell(7));
+						BigDecimal paymentAmount = getBigDecimalCellValue(row.getCell(8));
+						boolean reconcile = getBooleanCellValue(row.getCell(9));
+
+						// Create and populate SrsExcelUploadVO object
+						BrsExcelUploadVO brsExcelUploadVO = new BrsExcelUploadVO();
+						brsExcelUploadVO.setBillNo(billNo);
+						brsExcelUploadVO.setBillDate(billDate);
+						brsExcelUploadVO.setChqNo(chqNo);
+						brsExcelUploadVO.setChqDate(chqDate);
+						brsExcelUploadVO.setBank(bank);
+						brsExcelUploadVO.setCurrency(currency);
+						brsExcelUploadVO.setExRate(exRate);
+						brsExcelUploadVO.setReceiptAmount(receiptAmount);
+						brsExcelUploadVO.setPaymentAmount(paymentAmount);
+						brsExcelUploadVO.setReconcile(reconcile);
+						brsExcelUploadVO.setOrgId(orgId);
+						brsExcelUploadVO.setCustomer(customer);
+						brsExcelUploadVO.setClient(client);
+						brsExcelUploadVO.setFinYear(finYear);
+						brsExcelUploadVO.setBranch(branch);
+						brsExcelUploadVO.setBranchCode(branchCode);
+						brsExcelUploadVO.setCreatedBy(createdBy);
+						brsExcelUploadVO.setUpdatedBy(createdBy);
+						brsExcelUploadVO.setActive(true);
+						brsExcelUploadVO.setCancel(false);
+						brsExcelUploadVO.setCancelRemarks("");
+
+						brsExcelUploadVOsToSave.add(brsExcelUploadVO);
+						successfulUploads++;
+					} catch (Exception e) {
+						// Optionally handle specific row processing exceptions here
+					}
+				}
+
+				brsExcelUploadRepo.saveAll(brsExcelUploadVOsToSave);
+			} catch (IOException e) {
+				throw new ApplicationException(
+						"Failed to process file: " + file.getOriginalFilename() + " - " + e.getMessage());
+			}
+		}
+	}
+
+	private boolean getBooleanCellValue(Cell cell) {
+		if (cell == null) {
+			return false; // Return false if the cell is null
+		}
+
+		switch (cell.getCellType()) {
+		case BOOLEAN:
+			return cell.getBooleanCellValue(); // If the cell type is BOOLEAN, return its value
+		case STRING:
+			// For string values, treat "true" (case-insensitive) as true, anything else as
+			// false
+			return "true".equalsIgnoreCase(cell.getStringCellValue().trim());
+		case NUMERIC:
+			// If numeric and non-zero, treat as true (e.g., 1 = true, 0 = false)
+			return cell.getNumericCellValue() != 0;
+		default:
+			throw new RuntimeException("Cell type is not BOOLEAN, STRING, or NUMERIC.");
+		}
+	}
+
+	private BigDecimal getBigDecimalCellValue(Cell cell) {
+		if (cell == null) {
+			return BigDecimal.ZERO; // Return 0 if the cell is null
+		}
+
+		switch (cell.getCellType()) {
+		case NUMERIC:
+			return BigDecimal.valueOf(cell.getNumericCellValue()); // Convert numeric value to BigDecimal
+		case STRING:
+			try {
+				return new BigDecimal(cell.getStringCellValue().trim()); // Convert string value to BigDecimal
+			} catch (NumberFormatException e) {
+				throw new RuntimeException("Invalid number format for BigDecimal: " + cell.getStringCellValue());
+			}
+		default:
+			throw new RuntimeException("Cell type is not numeric or string convertible to BigDecimal.");
+		}
+	}
+
+	private LocalDate parseDate(Cell cell) {
+		if (cell == null) {
+			return null;
+		}
+
+		try {
+			if (cell.getCellType() == CellType.NUMERIC && DateUtil.isCellDateFormatted(cell)) {
+				return cell.getLocalDateTimeCellValue().toLocalDate();
+			} else if (cell.getCellType() == CellType.STRING) {
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy"); // Adjusted to dd/MM/yyyy
+				return LocalDate.parse(cell.getStringCellValue(), formatter);
+			}
+		} catch (Exception e) {
+			System.err.println("Date parsing error for cell value: " + getStringCellValue(cell));
+		}
+		return null;
+	}
+
+	private String getStringCellValue(Cell cell) {
+		if (cell == null) {
+			return ""; // Return empty string if cell is null
+		}
+
+		// Use DataFormatter to get the cell value as a string
+		return dataFormatter.formatCellValue(cell);
+	}
+
+	private boolean isRowEmpty(Row row) {
+		for (Cell cell : row) {
+			if (cell.getCellType() != CellType.BLANK) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	private boolean isHeaderValid(Row headerRow) throws ApplicationException {
+		if (headerRow == null) {
+			return false;
+		}
+		List<String> expectedHeaders = Arrays.asList("Bill No", "Bill Date", "Cheque No", "Cheque Date", "Bank",
+				"Currency", "Ex Rate", "Receipt Amount", "Payment Amount", "Reconcile");
+
+		List<String> actualHeaders = new ArrayList<>();
+		for (Cell cell : headerRow) {
+			actualHeaders.add(getStringCellValue(cell).trim());
+		}
+
+		if (!expectedHeaders.equals(actualHeaders)) {
+			String errorDetails = "Expected headers: " + expectedHeaders.toString() + ", Found headers: "
+					+ actualHeaders.toString();
+			throw new ApplicationException("Invalid Excel format. " + errorDetails);
+		}
+		return true;
+	}
+
+	public int getTotalRows() {
+		return totalRows;
+	}
+
+	public int getSuccessfulUploads() {
+		return successfulUploads;
+	}
+
 	// ChartCostCenter
 	@Override
 	public List<ChartCostCenterVO> getAllChartCostCenterByOrgId(Long orgId) {
@@ -749,38 +985,38 @@ public class TransactionServiceImpl implements TransactionService {
 
 	@Override
 	public List<ChartCostCenterVO> updateCreateChartCostCenter(@Valid List<ChartCostCenterDTO> chartCostCenterDTOList)
-	        throws ApplicationException {
+			throws ApplicationException {
 
-	    // Iterate through each DTO in the list
-	    for (ChartCostCenterDTO chartCostCenterDTO : chartCostCenterDTOList) {
-	        ChartCostCenterVO chartCostCenterVO = new ChartCostCenterVO();
-	        boolean isUpdate = false;
+		// Iterate through each DTO in the list
+		for (ChartCostCenterDTO chartCostCenterDTO : chartCostCenterDTOList) {
+			ChartCostCenterVO chartCostCenterVO = new ChartCostCenterVO();
+			boolean isUpdate = false;
 
-	        // Check if the DTO contains an ID for update operation
-	        if (ObjectUtils.isNotEmpty(chartCostCenterDTO.getId())) {
-	            // Update operation
-	            isUpdate = true;
-	            chartCostCenterVO = chartCostCenterRepo.findById(chartCostCenterDTO.getId())
-	                    .orElseThrow(() -> new ApplicationException("Invalid ChartCostCenter details with ID: " + chartCostCenterDTO.getId()));
-	            chartCostCenterVO.setUpdatedBy(chartCostCenterDTO.getCreatedBy());
-	        } else {
-	            // Create operation (new entity)
-	            chartCostCenterVO = new ChartCostCenterVO();
-	            chartCostCenterVO.setCreatedBy(chartCostCenterDTO.getCreatedBy());
-	            chartCostCenterVO.setUpdatedBy(chartCostCenterDTO.getCreatedBy());
-	        }
+			// Check if the DTO contains an ID for update operation
+			if (ObjectUtils.isNotEmpty(chartCostCenterDTO.getId())) {
+				// Update operation
+				isUpdate = true;
+				chartCostCenterVO = chartCostCenterRepo.findById(chartCostCenterDTO.getId())
+						.orElseThrow(() -> new ApplicationException(
+								"Invalid ChartCostCenter details with ID: " + chartCostCenterDTO.getId()));
+				chartCostCenterVO.setUpdatedBy(chartCostCenterDTO.getCreatedBy());
+			} else {
+				// Create operation (new entity)
+				chartCostCenterVO = new ChartCostCenterVO();
+				chartCostCenterVO.setCreatedBy(chartCostCenterDTO.getCreatedBy());
+				chartCostCenterVO.setUpdatedBy(chartCostCenterDTO.getCreatedBy());
+			}
 
-	        // Map fields from DTO to VO
-	        getChartCostCenterVOFromChartCostCenterDTO(chartCostCenterDTO, chartCostCenterVO);
+			// Map fields from DTO to VO
+			getChartCostCenterVOFromChartCostCenterDTO(chartCostCenterDTO, chartCostCenterVO);
 
-	        // Save the entity and add it to the list
-	        chartCostCenterRepo.save(chartCostCenterVO);
-	    }
+			// Save the entity and add it to the list
+			chartCostCenterRepo.save(chartCostCenterVO);
+		}
 
-	    // Return the list of saved entities
-	    return chartCostCenterRepo.findAll();
+		// Return the list of saved entities
+		return chartCostCenterRepo.findAll();
 	}
-
 
 	private void getChartCostCenterVOFromChartCostCenterDTO(@Valid ChartCostCenterDTO chartCostCenterDTO,
 			ChartCostCenterVO chartCostCenterVO) {
@@ -998,7 +1234,7 @@ public class TransactionServiceImpl implements TransactionService {
 	@Override
 	public CostInvoiceVO updateCreateCostInvoice(@Valid CostInvoiceDTO costInvoiceDTO) throws ApplicationException {
 		CostInvoiceVO costInvoiceVO = new CostInvoiceVO();
-		//		boolean isUpdate = false;
+		// boolean isUpdate = false;
 		if (ObjectUtils.isNotEmpty(costInvoiceDTO.getId())) {
 			boolean isUpdate = true;
 			costInvoiceVO = costInvoiceRepo.findById(costInvoiceDTO.getId())
@@ -1062,16 +1298,16 @@ public class TransactionServiceImpl implements TransactionService {
 	}
 
 	private void getCostInvoiceVOFromCostInvoiceDTO(@Valid CostInvoiceDTO costInvoiceDTO, CostInvoiceVO costInvoiceVO) {
-		//			// Finyr
-		//			int finyr = taxInvoiceRepo.findFinyr();
-		//			// DocId
-		//			String taxInvoice = "AI" + finyr + taxInvoiceRepo.findDocId();
-		//			taxInvoiceVO.setDocId(taxInvoice);
-		//			taxInvoiceRepo.nextSeq();
-		//			// InvoiceNo
-		//			String invoiceNo = "AI" + finyr + "INV" + taxInvoiceRepo.findInvoiceNo();
-		//			taxInvoiceVO.setInvoiceNo(invoiceNo);	
-		//			taxInvoiceRepo.nextSeqInvoice();
+		// // Finyr
+		// int finyr = taxInvoiceRepo.findFinyr();
+		// // DocId
+		// String taxInvoice = "AI" + finyr + taxInvoiceRepo.findDocId();
+		// taxInvoiceVO.setDocId(taxInvoice);
+		// taxInvoiceRepo.nextSeq();
+		// // InvoiceNo
+		// String invoiceNo = "AI" + finyr + "INV" + taxInvoiceRepo.findInvoiceNo();
+		// taxInvoiceVO.setInvoiceNo(invoiceNo);
+		// taxInvoiceRepo.nextSeqInvoice();
 		costInvoiceVO.setMode(costInvoiceDTO.getMode());
 		costInvoiceVO.setProduct(costInvoiceDTO.getProduct());
 		costInvoiceVO.setPurVchNo(costInvoiceDTO.getPurVchNo());
@@ -1114,7 +1350,7 @@ public class TransactionServiceImpl implements TransactionService {
 		return costInvoiceRepo.findCostInvoiceByActive();
 	}
 
-	//DebitNote
+	// DebitNote
 
 	@Override
 	public List<DebitNoteVO> getAllDebitNoteByOrgId(Long orgId) {
@@ -1234,16 +1470,16 @@ public class TransactionServiceImpl implements TransactionService {
 	}
 
 	private void getDebitNoteVOFromDebitNoteDTO(@Valid DebitNoteDTO debitNoteDTO, DebitNoteVO debitNoteVO) {
-		//					// Finyr
-		//					int finyr = taxInvoiceRepo.findFinyr();
-		//					// DocId
-		//					String taxInvoice = "AI" + finyr + taxInvoiceRepo.findDocId();
-		//					taxInvoiceVO.setDocId(taxInvoice);
-		//					taxInvoiceRepo.nextSeq();
-		//					// InvoiceNo
-		//					String invoiceNo = "AI" + finyr + "INV" + taxInvoiceRepo.findInvoiceNo();
-		//					taxInvoiceVO.setInvoiceNo(invoiceNo);
-		//					taxInvoiceRepo.nextSeqInvoice();
+		// // Finyr
+		// int finyr = taxInvoiceRepo.findFinyr();
+		// // DocId
+		// String taxInvoice = "AI" + finyr + taxInvoiceRepo.findDocId();
+		// taxInvoiceVO.setDocId(taxInvoice);
+		// taxInvoiceRepo.nextSeq();
+		// // InvoiceNo
+		// String invoiceNo = "AI" + finyr + "INV" + taxInvoiceRepo.findInvoiceNo();
+		// taxInvoiceVO.setInvoiceNo(invoiceNo);
+		// taxInvoiceRepo.nextSeqInvoice();
 		debitNoteVO.setDocNo(debitNoteDTO.getDocNo());
 		debitNoteVO.setSubType(debitNoteDTO.getSubType());
 		debitNoteVO.setProduct(debitNoteDTO.getProduct());
@@ -1285,7 +1521,7 @@ public class TransactionServiceImpl implements TransactionService {
 		return debitNoteRepo.findDebitNoteByActive();
 	}
 
-	//	GstSalesVoucher
+	// GstSalesVoucher
 
 	@Override
 	public List<GstSalesVoucherVO> getAllGstSalesVoucherByOrgId(Long orgId) {
@@ -1385,7 +1621,7 @@ public class TransactionServiceImpl implements TransactionService {
 		return gstSalesVoucherRepo.findGstSalesVoucherByActive();
 	}
 
-	//	PaymentVoucher
+	// PaymentVoucher
 
 	@Override
 	public List<PaymentVoucherVO> getAllPaymentVoucherByOrgId(Long orgId) {
@@ -1458,7 +1694,7 @@ public class TransactionServiceImpl implements TransactionService {
 
 	private void getPaymentVoucherVOFromPaymentVoucherDTO(@Valid PaymentVoucherDTO paymentVoucherDTO,
 			PaymentVoucherVO paymentVoucherVO) {
-		//		// Finyr
+		// // Finyr
 		int finyr = paymentVoucherRepo.findFinyr();
 		// DocId
 		String paymentVoucher = "PV" + finyr + paymentVoucherRepo.findDocId();
@@ -1482,7 +1718,7 @@ public class TransactionServiceImpl implements TransactionService {
 		return paymentVoucherRepo.findPaymentVoucherByActive();
 	}
 
-	//	ArapDetails
+	// ArapDetails
 
 	@Override
 	public List<ArapDetailsVO> getAllArapDetailsByOrgId(Long orgId) {
@@ -1529,12 +1765,12 @@ public class TransactionServiceImpl implements TransactionService {
 	}
 
 	private void getArapDetailsVOFromArapDetailsDTO(@Valid ArapDetailsDTO arapDetailsDTO, ArapDetailsVO arapDetailsVO) {
-		//		// Finyr
-		//		int finyr = paymentVoucherRepo.findFinyr();
-		//		// DocId
-		//		String paymentVoucher = "PV" + finyr + paymentVoucherRepo.findDocId();
-		//		paymentVoucherRepo.setDocId(paymentVoucher);
-		//		paymentVoucherRepo.nextSeq();
+		// // Finyr
+		// int finyr = paymentVoucherRepo.findFinyr();
+		// // DocId
+		// String paymentVoucher = "PV" + finyr + paymentVoucherRepo.findDocId();
+		// paymentVoucherRepo.setDocId(paymentVoucher);
+		// paymentVoucherRepo.nextSeq();
 		arapDetailsVO.setBranch(arapDetailsDTO.getBranch());
 		arapDetailsVO.setFinyr(arapDetailsDTO.getFinyr());
 		arapDetailsVO.setSourceTransid(arapDetailsDTO.getSourceTransid());
@@ -1572,7 +1808,7 @@ public class TransactionServiceImpl implements TransactionService {
 		return arapDetailsRepo.findArapDetailsByActive();
 	}
 
-	//	ArapAdjustments
+	// ArapAdjustments
 
 	@Override
 	public List<ArapAdjustmentsVO> getAllArapAdjustmentsByOrgId(Long orgId) {
@@ -1621,12 +1857,12 @@ public class TransactionServiceImpl implements TransactionService {
 
 	private void getArapAdjustmentsVOFromArapAdjustmentsDTO(@Valid ArapAdjustmentsDTO arapAdjustmentsDTO,
 			ArapAdjustmentsVO arapAdjustmentsVO) {
-		//		// Finyr
-		//		int finyr = paymentVoucherRepo.findFinyr();
-		//		// DocId
-		//		String paymentVoucher = "PV" + finyr + paymentVoucherRepo.findDocId();
-		//		paymentVoucherRepo.setDocId(paymentVoucher);
-		//		paymentVoucherRepo.nextSeq();
+		// // Finyr
+		// int finyr = paymentVoucherRepo.findFinyr();
+		// // DocId
+		// String paymentVoucher = "PV" + finyr + paymentVoucherRepo.findDocId();
+		// paymentVoucherRepo.setDocId(paymentVoucher);
+		// paymentVoucherRepo.nextSeq();
 		arapAdjustmentsVO.setBranch(arapAdjustmentsDTO.getBranch());
 		arapAdjustmentsVO.setFinyr(arapAdjustmentsDTO.getFinyr());
 		arapAdjustmentsVO.setSourceTransId(arapAdjustmentsDTO.getSourceTransId());
@@ -1757,16 +1993,16 @@ public class TransactionServiceImpl implements TransactionService {
 
 	private void getReceiptReversalVOFromReceiptReversalDTO(@Valid ReceiptReversalDTO receiptReversalDTO,
 			ReceiptReversalVO receiptReversalVO) {
-		//				// Finyr
-		//				int finyr = taxInvoiceRepo.findFinyr();
-		//				// DocId
-		//				String taxInvoice = "AI" + finyr + taxInvoiceRepo.findDocId();
-		//				taxInvoiceVO.setDocId(taxInvoice);
-		//				taxInvoiceRepo.nextSeq();bbbbb 
-		//				// InvoiceNo
-		//				String invoiceNo = "AI" + finyr + "INV" + taxInvoiceRepo.findInvoiceNo();
-		//				taxInvoiceVO.setInvoiceNo(invoiceNo);
-		//				taxInvoiceRepo.nextSeqInvoice();
+		// // Finyr
+		// int finyr = taxInvoiceRepo.findFinyr();
+		// // DocId
+		// String taxInvoice = "AI" + finyr + taxInvoiceRepo.findDocId();
+		// taxInvoiceVO.setDocId(taxInvoice);
+		// taxInvoiceRepo.nextSeq();bbbbb
+		// // InvoiceNo
+		// String invoiceNo = "AI" + finyr + "INV" + taxInvoiceRepo.findInvoiceNo();
+		// taxInvoiceVO.setInvoiceNo(invoiceNo);
+		// taxInvoiceRepo.nextSeqInvoice();
 		receiptReversalVO.setDocId(receiptReversalDTO.getDocId());
 		receiptReversalVO.setDocDate(receiptReversalDTO.getDocDate());
 		receiptReversalVO.setOriginBill(receiptReversalDTO.getOriginBill());
@@ -1904,16 +2140,16 @@ public class TransactionServiceImpl implements TransactionService {
 
 	private void getPaymentReversalVOFromPaymentReversalDTO(@Valid PaymentReversalDTO paymentReversalDTO,
 			PaymentReversalVO paymentReversalVO) {
-		//				// Finyr
-		//				int finyr = taxInvoiceRepo.findFinyr();
-		//				// DocId
-		//				String taxInvoice = "AI" + finyr + taxInvoiceRepo.findDocId();
-		//				taxInvoiceVO.setDocId(taxInvoice);
-		//				taxInvoiceRepo.nextSeq();
-		//				// InvoiceNo
-		//				String invoiceNo = "AI" + finyr + "INV" + taxInvoiceRepo.findInvoiceNo();
-		//				taxInvoiceVO.setInvoiceNo(invoiceNo);
-		//				taxInvoiceRepo.nextSeqInvoice();
+		// // Finyr
+		// int finyr = taxInvoiceRepo.findFinyr();
+		// // DocId
+		// String taxInvoice = "AI" + finyr + taxInvoiceRepo.findDocId();
+		// taxInvoiceVO.setDocId(taxInvoice);
+		// taxInvoiceRepo.nextSeq();
+		// // InvoiceNo
+		// String invoiceNo = "AI" + finyr + "INV" + taxInvoiceRepo.findInvoiceNo();
+		// taxInvoiceVO.setInvoiceNo(invoiceNo);
+		// taxInvoiceRepo.nextSeqInvoice();
 		paymentReversalVO.setDocId(paymentReversalDTO.getDocId());
 		paymentReversalVO.setDocDate(paymentReversalDTO.getDocDate());
 		paymentReversalVO.setOriginBill(paymentReversalDTO.getOriginBill());
@@ -2033,16 +2269,16 @@ public class TransactionServiceImpl implements TransactionService {
 
 	private void getArApAdjustmentOffSetVOFromArApAdjustmentOffSetDTO(
 			@Valid ArApAdjustmentOffSetDTO arApAdjustmentOffSetDTO, ArApAdjustmentOffSetVO arApAdjustmentOffSetVO) {
-		//					// Finyr
-		//					int finyr = taxInvoiceRepo.findFinyr();
-		//					// DocId
-		//					String taxInvoice = "AI" + finyr + taxInvoiceRepo.findDocId();
-		//					taxInvoiceVO.setDocId(taxInvoice);
-		//					taxInvoiceRepo.nextSeq();
-		//					// InvoiceNo
-		//					String invoiceNo = "AI" + finyr + "INV" + taxInvoiceRepo.findInvoiceNo();
-		//					taxInvoiceVO.setInvoiceNo(invoiceNo);
-		//					taxInvoiceRepo.nextSeqInvoice();
+		// // Finyr
+		// int finyr = taxInvoiceRepo.findFinyr();
+		// // DocId
+		// String taxInvoice = "AI" + finyr + taxInvoiceRepo.findDocId();
+		// taxInvoiceVO.setDocId(taxInvoice);
+		// taxInvoiceRepo.nextSeq();
+		// // InvoiceNo
+		// String invoiceNo = "AI" + finyr + "INV" + taxInvoiceRepo.findInvoiceNo();
+		// taxInvoiceVO.setInvoiceNo(invoiceNo);
+		// taxInvoiceRepo.nextSeqInvoice();
 		arApAdjustmentOffSetVO.setDocId(arApAdjustmentOffSetDTO.getDocId());
 		arApAdjustmentOffSetVO.setDocDate(arApAdjustmentOffSetDTO.getDocDate());
 		arApAdjustmentOffSetVO.setSubLedgerType(arApAdjustmentOffSetDTO.getSubLedgerType());
@@ -2068,7 +2304,7 @@ public class TransactionServiceImpl implements TransactionService {
 		return arApAdjustmentOffSetRepo.findArApAdjustmentOffSetByActive();
 	}
 
-	////GlOpeningBalance
+	//// GlOpeningBalance
 
 	@Override
 	public List<GlOpeningBalanceVO> getAllGlOpeningBalanceByOrgId(Long orgId) {
@@ -2096,7 +2332,6 @@ public class TransactionServiceImpl implements TransactionService {
 		return glOpeningBalanceVO;
 	}
 
-
 	@Override
 	public GlOpeningBalanceVO updateCreateGlOpeningBalance(@Valid GlOpeningBalanceDTO glOpeningBalanceDTO)
 			throws ApplicationException {
@@ -2114,10 +2349,13 @@ public class TransactionServiceImpl implements TransactionService {
 
 		List<ParticularsGlOpeningBalanceVO> particularsGlOpeningBalanceVOs = new ArrayList<>();
 		if (glOpeningBalanceDTO.getParticularsGlOpeningBalanceDTO() != null) {
-			for (ParticularsGlOpeningBalanceDTO particularsGlOpeningBalanceDTO : glOpeningBalanceDTO.getParticularsGlOpeningBalanceDTO()) {
+			for (ParticularsGlOpeningBalanceDTO particularsGlOpeningBalanceDTO : glOpeningBalanceDTO
+					.getParticularsGlOpeningBalanceDTO()) {
 				ParticularsGlOpeningBalanceVO particularsGlOpeningBalanceVO;
-				if (particularsGlOpeningBalanceDTO.getId() != null & ObjectUtils.isEmpty(particularsGlOpeningBalanceDTO.getId())) {
-					particularsGlOpeningBalanceVO = particularsGlOpeningBalanceRepo.findById(particularsGlOpeningBalanceDTO.getId())
+				if (particularsGlOpeningBalanceDTO.getId() != null
+						& ObjectUtils.isEmpty(particularsGlOpeningBalanceDTO.getId())) {
+					particularsGlOpeningBalanceVO = particularsGlOpeningBalanceRepo
+							.findById(particularsGlOpeningBalanceDTO.getId())
 							.orElse(new ParticularsGlOpeningBalanceVO());
 				} else {
 					particularsGlOpeningBalanceVO = new ParticularsGlOpeningBalanceVO();
@@ -2159,34 +2397,140 @@ public class TransactionServiceImpl implements TransactionService {
 		return glOpeningBalanceRepo.findGlOpeningBalanceByActive();
 	}
 	
-//	@Override
-//	public List<ReconciliationSummaryVO> getAllReconciliationSummaryByOrgId(Long orgId) {
-//		List<ReconciliationSummaryVO> reconciliationSummaryVO = new ArrayList<>();
-//		if (ObjectUtils.isNotEmpty(orgId)) {
-//			LOGGER.info("Successfully Received  ReconciliationSummary BY OrgId: {}", orgId);
-//			reconciliationSummaryVO = reconciliationSummaryRepo.getAllReconciliationSummaryByOrgId(orgId);
-//		} else {
-//			LOGGER.info("Successfully Received  ReconciliationSummary For All OrgId.");
-//			reconciliationSummaryVO = reconciliationSummaryRepo.findAll();
-//		}
-//		return reconciliationSummaryVO;
-//	}
-//
-//	@Override
-//	public List<ReconciliationSummaryVO> getAllReconciliationSummaryById(Long id) {
-//		List<ReconciliationSummaryVO> reconciliationSummaryVO = new ArrayList<>();
-//		if (ObjectUtils.isNotEmpty(id)) {
-//			LOGGER.info("Successfully Received  ReconciliationSummary BY Id : {}", id);
-//			reconciliationSummaryVO = reconciliationSummaryRepo.getAllReconciliationSummaryById(id);
-//		} else {
-//			LOGGER.info("Successfully Received  ReconciliationSummary For All Id.");
-//			reconciliationSummaryVO = reconciliationSummaryRepo.findAll();
-//		}
-//		return reconciliationSummaryVO;
-//	}
+
+///Reconcile
+	
+	@Override
+	public List<ReconcileVO> getAllReconcileByOrgId(Long orgId) {
+		List<ReconcileVO> reconcileVO = new ArrayList<>();
+		if (ObjectUtils.isNotEmpty(orgId)) {
+			LOGGER.info("Successfully Received  Reconcile BY OrgId : {}", orgId);
+			reconcileVO = reconcileRepo.getAllReconcileByOrgId(orgId);
+		} else {
+			LOGGER.info("Successfully Received  Reconcile For All OrgId.");
+			reconcileVO = reconcileRepo.findAll();
+		}
+		return reconcileVO;
+	}
+	
+	@Override
+	public List<ReconcileVO> getAllReconcileById(Long id) {
+		List<ReconcileVO> reconcileVO = new ArrayList<>();
+		if (ObjectUtils.isNotEmpty(id)) {
+			LOGGER.info("Successfully Received  Reconcile BY Id : {}", id);
+			reconcileVO = reconcileRepo.getAllReconcileById(id);
+		} else {
+			LOGGER.info("Successfully Received Reconcile For All Id.");
+			reconcileVO = reconcileRepo.findAll();
+		}
+		return reconcileVO;
+	}
 
 
+
+	@Override
+	public ReconcileVO updateCreateReconcile(@Valid ReconcileDTO reconcileDTO) throws ApplicationException {
+		ReconcileVO reconcileVO = new ReconcileVO();
+		//		boolean isUpdate = false;
+		if (ObjectUtils.isNotEmpty(reconcileDTO.getId())) {
+			boolean isUpdate = true;
+			reconcileVO = reconcileRepo.findById(reconcileDTO.getId())
+					.orElseThrow(() -> new ApplicationException("Invalid ReconcileVO details"));
+			reconcileVO.setUpdatedBy(reconcileDTO.getCreatedBy());
+		} else {
+			reconcileVO.setUpdatedBy(reconcileDTO.getCreatedBy());
+			reconcileVO.setCreatedBy(reconcileDTO.getCreatedBy());
+		}
+
+		List<WithdrawalsReconcileVO> withdrawalsReconcileVOs = new ArrayList<>();
+		if (reconcileDTO.getWithdrawalsReconcileDTO() != null) {
+			for (WithdrawalsReconcileDTO withdrawalsReconcileDTO : reconcileDTO.getWithdrawalsReconcileDTO()) {
+				WithdrawalsReconcileVO withdrawalsReconcileVO;
+				if (withdrawalsReconcileDTO.getId() != null && ObjectUtils.isNotEmpty(withdrawalsReconcileDTO.getId())) {
+					withdrawalsReconcileVO = withdrawalsReconcileRepo.findById(withdrawalsReconcileDTO.getId())
+							.orElse(new WithdrawalsReconcileVO());
+				} else {
+					withdrawalsReconcileVO = new WithdrawalsReconcileVO();
+				}
+				withdrawalsReconcileVO.setVoucherNo(withdrawalsReconcileDTO.getVoucherNo());
+				withdrawalsReconcileVO.setVoucherDate(withdrawalsReconcileDTO.getVoucherDate());
+				withdrawalsReconcileVO.setChqDdNo(withdrawalsReconcileDTO.getChqDdNo());
+				withdrawalsReconcileVO.setChqDdDate(withdrawalsReconcileDTO.getChqDdDate());
+				withdrawalsReconcileVO.setClearedDate(withdrawalsReconcileDTO.getClearedDate());
+				withdrawalsReconcileVO.setPaymentAmt(withdrawalsReconcileDTO.getPaymentAmt());
+				withdrawalsReconcileVO.setPaymentName(withdrawalsReconcileDTO.getPaymentName());
+				withdrawalsReconcileVO.setNarration(withdrawalsReconcileDTO.getNarration());
+				withdrawalsReconcileVO.setReconcileVO(reconcileVO);
+				withdrawalsReconcileVOs.add(withdrawalsReconcileVO)	;
+				}
+		}
+
+		List<DepositsReconcileVO> depositsReconcileVOs = new ArrayList<>();
+		if (reconcileDTO.getDepositsReconcileDTO() != null) {
+			for (DepositsReconcileDTO depositsReconcileDTO : reconcileDTO.getDepositsReconcileDTO()) {
+				DepositsReconcileVO depositsReconcileVO;
+				if (depositsReconcileDTO.getId() != null & ObjectUtils.isEmpty(depositsReconcileDTO.getId())) {
+					depositsReconcileVO = depositsReconcileRepo.findById(depositsReconcileDTO.getId())
+							.orElse(new DepositsReconcileVO());
+				} else {
+					depositsReconcileVO = new DepositsReconcileVO();
+				}
+				depositsReconcileVO.setVoucherNo(depositsReconcileDTO.getVoucherNo());
+				depositsReconcileVO.setVoucherDate(depositsReconcileDTO.getVoucherDate());
+				depositsReconcileVO.setChqDdNo(depositsReconcileDTO.getChqDdNo());
+				depositsReconcileVO.setChqDdDate(depositsReconcileDTO.getChqDdDate());
+				depositsReconcileVO.setClearedDate(depositsReconcileDTO.getClearedDate());
+				depositsReconcileVO.setPaymentAmt(depositsReconcileDTO.getPaymentAmt());
+				depositsReconcileVO.setPaymentName(depositsReconcileDTO.getPaymentName());
+				depositsReconcileVO.setNarration(depositsReconcileDTO.getNarration());
+				depositsReconcileVO.setReconcileVO(reconcileVO);
+			     depositsReconcileVOs.add(depositsReconcileVO)	;
+			     }
+		}
+
+		getReconcileVOFromReconcileDTO(reconcileDTO, reconcileVO);
+		reconcileVO.setWithdrawalsReconcileVO(withdrawalsReconcileVOs);
+		reconcileVO.setDepositsReconcileVO(depositsReconcileVOs);	
+		return reconcileRepo.save(reconcileVO);
+		}
+
+	private void getReconcileVOFromReconcileDTO(@Valid ReconcileDTO reconcileDTO, ReconcileVO reconcileVO) {
+		//			// Finyr
+		//			int finyr = taxInvoiceRepo.findFinyr();
+		//			// DocId
+		//			String taxInvoice = "AI" + finyr + taxInvoiceRepo.findDocId();
+		//			taxInvoiceVO.setDocId(taxInvoice);
+		//			taxInvoiceRepo.nextSeq();
+		//			// InvoiceNo
+		//			String invoiceNo = "AI" + finyr + "INV" + taxInvoiceRepo.findInvoiceNo();
+		//			taxInvoiceVO.setInvoiceNo(invoiceNo);	
+		//			taxInvoiceRepo.nextSeqInvoice();
+	
+	    reconcileVO.setBranch(reconcileDTO.getBranch());
+	    reconcileVO.setDocId(reconcileDTO.getDocId());
+	    reconcileVO.setDocDate(reconcileDTO.getDocDate());
+	    reconcileVO.setBankStmtDate(reconcileDTO.getBankStmtDate());
+	    reconcileVO.setBankAccount(reconcileDTO.getBankAccount());
+	    reconcileVO.setLastReconciledOn(reconcileDTO.getLastReconciledOn());
+	    reconcileVO.setClearedDate(reconcileDTO.getClearedDate());
+	    reconcileVO.setLedgerBalance(reconcileDTO.getLedgerBalance());
+	    reconcileVO.setBeginingBalance(reconcileDTO.getBeginingBalance());
+	    reconcileVO.setEndingBalance(reconcileDTO.getEndingBalance());
+	    reconcileVO.setTotalWithdrawal(reconcileDTO.getTotalWithdrawal());
+	    reconcileVO.setTotalDeposit(reconcileDTO.getTotalDeposit());
+	    reconcileVO.setSummaryEndingBalance(reconcileDTO.getSummaryEndingBalance());
+	    reconcileVO.setClearedBalance(reconcileDTO.getClearedBalance());
+	    reconcileVO.setDifference(reconcileDTO.getDifference());
+	    reconcileVO.setNarration(reconcileDTO.getNarration());
+	    reconcileVO.setOrgId(reconcileDTO.getOrgId());
+	    reconcileVO.setActive(reconcileDTO.isActive());
+	}
+
+	@Override
+	public List<ReconcileVO> getReconcileByActive() {
+		
+		return reconcileRepo.findReconcileByActive();
+	}
+
+	
 }
-
-
-

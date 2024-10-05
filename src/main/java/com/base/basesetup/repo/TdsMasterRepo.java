@@ -21,9 +21,9 @@ public interface TdsMasterRepo extends JpaRepository<TdsMasterVO, Long> {
 	@Query(nativeQuery = true, value = "select * from tdsmaster where active=1")
 	List<TdsMasterVO> findTdsMasterByActive();
 
-	boolean existsBySectionAndOrgId(String section, Long orgId);
-
 	boolean existsBySectionNameAndOrgId(String sectionName, Long orgId);
+
+	boolean existsBySectionAndOrgId(String section, Long orgId);
 
 	boolean existsBySectionAndOrgIdAndId(String section, Long orgId, Long id);
 

@@ -1,5 +1,4 @@
 package com.base.basesetup.controller;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -19,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.base.basesetup.common.CommonConstant;
 import com.base.basesetup.common.UserConstants;
@@ -28,6 +28,7 @@ import com.base.basesetup.dto.ArapDetailsDTO;
 import com.base.basesetup.dto.BrsOpeningDTO;
 import com.base.basesetup.dto.ChartCostCenterDTO;
 import com.base.basesetup.dto.CostInvoiceDTO;
+import com.base.basesetup.dto.CustomerAttachmentType;
 import com.base.basesetup.dto.DailyMonthlyExRatesDTO;
 import com.base.basesetup.dto.DebitNoteDTO;
 import com.base.basesetup.dto.FundTransferDTO;
@@ -38,8 +39,12 @@ import com.base.basesetup.dto.IrnCreditDTO;
 import com.base.basesetup.dto.PaymentReversalDTO;
 import com.base.basesetup.dto.PaymentVoucherDTO;
 import com.base.basesetup.dto.ReceiptReversalDTO;
+
+import com.base.basesetup.dto.ReconcileDTO;
+
 import com.base.basesetup.dto.ReconciliationSummaryDTO;
 import com.base.basesetup.dto.ReconciliationSummaryDTO;
+
 import com.base.basesetup.dto.ResponseDTO;
 import com.base.basesetup.dto.TaxInvoiceDTO;
 import com.base.basesetup.entity.ArApAdjustmentOffSetVO;
@@ -58,7 +63,11 @@ import com.base.basesetup.entity.IrnCreditVO;
 import com.base.basesetup.entity.PaymentReversalVO;
 import com.base.basesetup.entity.PaymentVoucherVO;
 import com.base.basesetup.entity.ReceiptReversalVO;
+
+import com.base.basesetup.entity.ReconcileVO;
+
 import com.base.basesetup.entity.ReconciliationSummaryVO;
+
 import com.base.basesetup.entity.TaxInvoiceVO;
 import com.base.basesetup.service.TransactionService;
 
@@ -576,7 +585,7 @@ public class TransactionController extends BaseController {
 		String errorMsg = null;
 		Map<String, Object> responseObjectsMap = new HashMap<>();
 		ResponseDTO responseDTO = null;
-		List<Map<String, Object>> branch= new ArrayList<>();
+		List<Map<String, Object>> branch = new ArrayList<>();
 
 		try {
 			branch = transactionService.getBranchForBrsOpening(orgId);
@@ -585,18 +594,63 @@ public class TransactionController extends BaseController {
 			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
 		}
 		if (StringUtils.isBlank(errorMsg)) {
-			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
-					"Branch retrieved successfully");
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "Branch retrieved successfully");
 			responseObjectsMap.put("branch", branch);
 			responseDTO = createServiceResponse(responseObjectsMap);
 		} else {
-			responseDTO = createServiceResponseError(responseObjectsMap,
-					"Failed to retrieve Branch information", errorMsg);
+			responseDTO = createServiceResponseError(responseObjectsMap, "Failed to retrieve Branch information",
+					errorMsg);
 		}
 		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
 		return ResponseEntity.ok().body(responseDTO);
 	}
 
+//	@PostMapping("/brsExcelUpload")
+//	public ResponseEntity<String> uploadExcel(@RequestParam("file") MultipartFile file) throws Exception {
+//		transactionService.saveBrsExcelData(file);
+//		return new ResponseEntity<>("File uploaded successfully", HttpStatus.OK);
+//	}
+
+	
+	@PostMapping("/excelUploadForBrs")
+	public ResponseEntity<ResponseDTO> ExcelUploadForBrs(@RequestParam MultipartFile[] files,
+		 @RequestParam(required = false) Long orgId,
+			@RequestParam(required = false) String createdBy, String customer, String client, String finYear, String branch, String branchCode) {
+		String methodName = "ExcelUploadForBrs()";
+		int totalRows = 0;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		int successfulUploads = 0;
+		ResponseDTO responseDTO = null;
+		try {
+			// Call service method to process Excel upload
+			transactionService.ExcelUploadForBrs(files, orgId, createdBy, customer,  client,  finYear,  branch,  branchCode);
+
+			// Retrieve the counts after processing
+			totalRows = transactionService.getTotalRows(); // Get total rows processed
+			successfulUploads = transactionService.getSuccessfulUploads(); // Get successful uploads count
+			// Construct success response
+			responseObjectsMap.put("statusFlag", "Ok");
+			responseObjectsMap.put("status", true);
+			responseObjectsMap.put("totalRows", totalRows);
+			responseObjectsMap.put("successfulUploads", successfulUploads);
+			Map<String, Object> paramObjectsMap = new HashMap<>();
+			paramObjectsMap.put("message", "Excel Upload For brs successful");
+			responseObjectsMap.put("paramObjectsMap", paramObjectsMap);
+			responseDTO = createServiceResponse(responseObjectsMap);
+
+		} catch (Exception e) {
+
+			String errorMsg = e.getMessage();
+			LOGGER.error(CommonConstant.EXCEPTION, methodName, e);
+			responseObjectsMap.put("statusFlag", "Error");
+			responseObjectsMap.put("status", false);
+			responseObjectsMap.put("errorMessage", errorMsg);
+
+			responseDTO = createServiceResponseError(responseObjectsMap, "Excel Upload For Brs Failed", errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+	}
 	
 //	ChartCostCenter
 	@GetMapping("/getAllChartCostCenterByOrgId")
@@ -2025,9 +2079,9 @@ public class TransactionController extends BaseController {
 		return ResponseEntity.ok().body(responseDTO);
 
 	}
-	
-	//GlOpeningBalance
-	
+
+	// GlOpeningBalance
+
 	@GetMapping("/getAllGlOpeningBalanceByOrgId")
 	public ResponseEntity<ResponseDTO> getAllGlOpeningBalanceByOrgId(@RequestParam(required = false) Long orgId) {
 		String methodName = "getAllGlOpeningBalanceByOrgId()";
@@ -2045,7 +2099,7 @@ public class TransactionController extends BaseController {
 		if (StringUtils.isBlank(errorMsg)) {
 			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
 					"GlOpeningBalance information get successfully By OrgId");
-			responseObjectsMap.put("GlOpeningBalanceVO", glOpeningBalanceVO);
+			responseObjectsMap.put("glOpeningBalanceVO", glOpeningBalanceVO);
 			responseDTO = createServiceResponse(responseObjectsMap);
 		} else {
 			responseDTO = createServiceResponseError(responseObjectsMap,
@@ -2054,9 +2108,8 @@ public class TransactionController extends BaseController {
 		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
 		return ResponseEntity.ok().body(responseDTO);
 
-
 	}
-	
+
 	@GetMapping("/getAllGlOpeningBalanceById")
 	public ResponseEntity<ResponseDTO> getAllGlOpeningBalanceById(@RequestParam(required = false) Long id) {
 		String methodName = "getAllGlOpeningBalanceById()";
@@ -2072,7 +2125,8 @@ public class TransactionController extends BaseController {
 			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
 		}
 		if (StringUtils.isBlank(errorMsg)) {
-			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "GlOpeningBalance information get successfully By id");
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+					"GlOpeningBalance information get successfully By id");
 			responseObjectsMap.put("glOpeningBalanceVO", glOpeningBalanceVO);
 			responseDTO = createServiceResponse(responseObjectsMap);
 		} else {
@@ -2083,7 +2137,6 @@ public class TransactionController extends BaseController {
 		return ResponseEntity.ok().body(responseDTO);
 	}
 
-	
 	@PutMapping("/updateCreateGlOpeningBalance")
 	public ResponseEntity<ResponseDTO> updateCreateGlOpeningBalance(
 			@Valid @RequestBody GlOpeningBalanceDTO glOpeningBalanceDTO) {
@@ -2094,7 +2147,8 @@ public class TransactionController extends BaseController {
 		ResponseDTO responseDTO = null;
 
 		try {
-			GlOpeningBalanceVO glOpeningBalanceVO = transactionService.updateCreateGlOpeningBalance(glOpeningBalanceDTO);
+			GlOpeningBalanceVO glOpeningBalanceVO = transactionService
+					.updateCreateGlOpeningBalance(glOpeningBalanceDTO);
 			boolean isUpdate = glOpeningBalanceDTO.getId() != null;
 
 			if (glOpeningBalanceVO != null) {
@@ -2147,97 +2201,124 @@ public class TransactionController extends BaseController {
 		return ResponseEntity.ok().body(responseDTO);
 
 	}
+
+	//Reconcile
+	
+	@GetMapping("/getAllReconcileByOrgId")
+	public ResponseEntity<ResponseDTO> getAllReconcileByOrgId(@RequestParam(required = false) Long orgId) {
+		String methodName = "getAllReconcileByOrgId()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		List<ReconcileVO> reconcileVO = new ArrayList<>();
+		try {
+			reconcileVO = transactionService.getAllReconcileByOrgId(orgId);
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "Reconcile information get successfully By OrgId");
+			responseObjectsMap.put("reconcileVO", reconcileVO);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					"Reconcile information receive failed By OrgId", errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+
+	}
+	
+	@GetMapping("/getAllReconcileById")
+	public ResponseEntity<ResponseDTO> getAllReconcileById(@RequestParam(required = false) Long id) {
+		String methodName = "getAllCostInvoiceById()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		List<ReconcileVO> reconcileVO = new ArrayList<>();
+		try {
+			reconcileVO = transactionService.getAllReconcileById(id);
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "Reconcile information get successfully By id");
+			responseObjectsMap.put("reconcileVO", reconcileVO);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					"Reconcile information receive failed By OrgId", errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+	}
 	
 	
-	// ReconciliationSummary
+	@PutMapping("/updateCreateReconcile")
+	public ResponseEntity<ResponseDTO> updateCreateReconcile(@Valid @RequestBody ReconcileDTO reconcileDTO) {
+		String methodName = "updateCreateReconcile()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
 
-//	@GetMapping("/getAllReconciliationSummaryByOrgId")
-//	public ResponseEntity<ResponseDTO> getAllReconciliationSummaryByOrgId(@RequestParam(required = false) Long orgId) {
-//		String methodName = "getAllReconciliationSummaryByOrgId()";
-//		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
-//		String errorMsg = null;
-//		Map<String, Object> responseObjectsMap = new HashMap<>();
-//		ResponseDTO responseDTO = null;
-//		List<ReconciliationSummaryVO> reconciliationSummaryVO = new ArrayList<>();
-//		try {
-//			reconciliationSummaryVO = transactionService.getAllReconciliationSummaryByOrgId(orgId);
-//		} catch (Exception e) {
-//			errorMsg = e.getMessage();
-//			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
-//		}
-//		if (StringUtils.isBlank(errorMsg)) {
-//			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "ReconciliationSummary information get successfully ByOrgId");
-//			responseObjectsMap.put("ReconciliationSummaryVO", reconciliationSummaryVO);
-//			responseDTO = createServiceResponse(responseObjectsMap);
-//		} else {
-//			responseDTO = createServiceResponseError(responseObjectsMap, "ReconciliationSummary information receive failedByOrgId",
-//					errorMsg);
-//		}
-//		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
-//		return ResponseEntity.ok().body(responseDTO);
-//
-//	}
-//
-//	@GetMapping("/getAllReconciliationSummaryById")
-//	public ResponseEntity<ResponseDTO> getAllReconciliationSummaryById(@RequestParam(required = false) Long id) {
-//		String methodName = "getAllReconciliationSummaryById()";
-//		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
-//		String errorMsg = null;
-//		Map<String, Object> responseObjectsMap = new HashMap<>();
-//		ResponseDTO responseDTO = null;
-//		List<ReconciliationSummaryVO> reconciliationSummaryVO = new ArrayList<>();
-//		try {
-//			reconciliationSummaryVO = transactionService.getAllReconciliationSummaryById(id);
-//		} catch (Exception e) {
-//			errorMsg = e.getMessage();
-//			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
-//		}
-//		if (StringUtils.isBlank(errorMsg)) {
-//			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "ReconciliationSummary information get successfully By id");
-//			responseObjectsMap.put("ReconciliationSummaryVO", reconciliationSummaryVO);
-//			responseDTO = createServiceResponse(responseObjectsMap);
-//		} else {
-//			responseDTO = createServiceResponseError(responseObjectsMap, "ReconciliationSummary information receive failedByOrgId",
-//					errorMsg);
-//		}
-//		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
-//		return ResponseEntity.ok().body(responseDTO);
-//	}
-//	  
-//	@PutMapping("/updateCreateReconciliationSummary")
-//	public ResponseEntity<ResponseDTO> updateCreateReconciliationSummary( @Valid @RequestBody ReconciliationSummaryDTO reconciliationSummaryDTO) {
-//		String methodName = "updateCreateReconciliationSummary()";
-//		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
-//		String errorMsg = null;
-//		Map<String, Object> responseObjectsMap = new HashMap<>();
-//		ResponseDTO responseDTO = null;
-//
-//		try {
-//			ReconciliationSummaryVO reconciliationSummaryVO = transactionService.updateCreateReconciliationSummary(reconciliationSummaryDTO);
-//			boolean isUpdate = reconciliationSummaryDTO.getId() != null;
-//
-//			if (reconciliationSummaryVO != null) {
-//				responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
-//						isUpdate ? "ReconciliationSummary updated successfully" : "ReconciliationSummary created successfully");
-//				responseObjectsMap.put("reconciliationSummaryVO", reconciliationSummaryVO);
-//				responseDTO = createServiceResponse(responseObjectsMap);
-//			} else {
-//				errorMsg = isUpdate ? "ReconciliationSummary not found for ID: " + reconciliationSummaryDTO.getId()
-//						: "ReconciliationSummary creation failed";
-//				responseDTO = createServiceResponseError(responseObjectsMap,
-//						isUpdate ? "ReconciliationSummary update failed" : "ReconciliationSummary creation failed", errorMsg);
-//			}
-//		} catch (Exception e) {
-//			errorMsg = e.getMessage();
-//			boolean isUpdate = reconciliationSummaryDTO.getId() != null;
-//			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
-//			responseDTO = createServiceResponseError(responseObjectsMap,
-//					isUpdate ? "ReconciliationSummary update failed" : "ReconciliationSummary creation failed", errorMsg);
-//		}
-//
-//		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
-//		return ResponseEntity.ok().body(responseDTO);
-//	}
+		try {
+			ReconcileVO reconcileVO = transactionService.updateCreateReconcile(reconcileDTO);
+			boolean isUpdate = reconcileDTO.getId() != null;
+
+			if (reconcileVO != null) {
+				responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+						isUpdate ? "Reconcile updated successfully" : "Reconcile created successfully");
+				responseObjectsMap.put("reconcileVO", reconcileVO);
+				responseDTO = createServiceResponse(responseObjectsMap);
+			} else {
+				errorMsg = isUpdate ? "Reconcile not found for ID: " + reconcileDTO.getId()
+						: "Reconcile creation failed";
+				responseDTO = createServiceResponseError(responseObjectsMap,
+						isUpdate ? "Reconcile update failed" : "Reconcile creation failed", errorMsg);
+			}
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			boolean isUpdate = reconcileDTO.getId() != null;
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					isUpdate ? "Reconcile update failed" : "Reconcile creation failed", errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+	}
+
+	@GetMapping("/getReconcileByActive")
+	public ResponseEntity<ResponseDTO> getReconcileByActive() {
+		String methodName = "getReconcileByActive()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		List<ReconcileVO> reconcileVO = new ArrayList<>();
+		try {
+			reconcileVO = transactionService.getReconcileByActive();
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+					"Reconcile information get successfully By Active");
+			responseObjectsMap.put("reconcileVO", reconcileVO);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					"ReconcileVO information receive failed By Active", errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
 
 
+	}
+	
 }
