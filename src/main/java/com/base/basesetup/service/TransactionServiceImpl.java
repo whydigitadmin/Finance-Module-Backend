@@ -104,7 +104,10 @@ import com.base.basesetup.entity.PaymentVoucherVO;
 import com.base.basesetup.entity.ReceiptInvoiceVO;
 import com.base.basesetup.entity.ReceiptOtherAccountVO;
 import com.base.basesetup.entity.ReceiptReversalVO;
+
 import com.base.basesetup.entity.ReconcileVO;
+import com.base.basesetup.entity.ReconciliationSummaryVO;
+
 import com.base.basesetup.entity.TaxInvoiceVO;
 import com.base.basesetup.entity.TdsCostInvoiceVO;
 import com.base.basesetup.entity.WithdrawalsReconcileVO;
@@ -146,7 +149,11 @@ import com.base.basesetup.repo.PaymentVoucherRepo;
 import com.base.basesetup.repo.ReceiptInvoiceRepo;
 import com.base.basesetup.repo.ReceiptOtherAccountRepo;
 import com.base.basesetup.repo.ReceiptReversalRepo;
+
 import com.base.basesetup.repo.ReconcileRepo;
+
+import com.base.basesetup.repo.ReconciliationSummaryRepo;
+
 import com.base.basesetup.repo.TaxInvoiceRepo;
 import com.base.basesetup.repo.TdsCostInvoiceRepo;
 import com.base.basesetup.repo.WithdrawalsReconcileRepo;
@@ -266,6 +273,7 @@ public class TransactionServiceImpl implements TransactionService {
 	ParticularsGlOpeningBalanceRepo particularsGlOpeningBalanceRepo;
 	
 	@Autowired
+
 	ReconcileRepo reconcileRepo;
 	
 	@Autowired
@@ -276,6 +284,9 @@ public class TransactionServiceImpl implements TransactionService {
 
 	@Autowired
 	BrsExcelUploadRepo brsExcelUploadRepo;
+
+	ReconciliationSummaryRepo reconciliationSummaryRepo;
+
 
 	// TaxInvoice
 	@Override
@@ -1153,10 +1164,12 @@ public class TransactionServiceImpl implements TransactionService {
 				} else {
 					particularsJournalVO = new ParticularsJournalVO();
 				}
-				particularsJournalVO.setCurrency(particularsJournalDTO.getCurrency());
+				particularsJournalVO.setAccountsName(particularsJournalDTO.getAccountsName());
+				particularsJournalVO.setSubledgerName(particularsJournalDTO.getSubledgerName());
 				particularsJournalVO.setSubLedgerCode(particularsJournalDTO.getSubLedgerCode());
 				particularsJournalVO.setDebitAmount(particularsJournalDTO.getDebitAmount());
 				particularsJournalVO.setCreditAmount(particularsJournalDTO.getCreditAmount());
+				particularsJournalVO.setNarration(particularsJournalDTO.getNarration());
 				particularsJournalVO.setGeneralJournalVO(generalJournalVO);
 				particularsJournalVOs.add(particularsJournalVO);
 			}
@@ -1168,19 +1181,18 @@ public class TransactionServiceImpl implements TransactionService {
 
 	private void getGeneralJournalVOFromGeneralJournalDTO(@Valid GeneralJournalDTO generalJournalDTO,
 			GeneralJournalVO generalJournalVO) {
-		generalJournalVO.setBranch(generalJournalDTO.getBranch());
-		generalJournalVO.setVoucherType(generalJournalDTO.getVoucherType());
+		generalJournalVO.setVoucherSubType(generalJournalDTO.getVoucherSubType());
 		generalJournalVO.setDocDate(generalJournalDTO.getDocDate());
 		generalJournalVO.setDocId(generalJournalDTO.getDocId());
-		generalJournalVO.setTemplate(generalJournalDTO.getTemplate());
+		generalJournalVO.setRemarks(generalJournalDTO.getRemarks());
 		generalJournalVO.setCurrency(generalJournalDTO.getCurrency());
 		generalJournalVO.setExRate(generalJournalDTO.getExRate());
 		generalJournalVO.setRefNo(generalJournalDTO.getRefNo());
 		generalJournalVO.setRefDate(generalJournalDTO.getRefDate());
-		generalJournalVO.setReverseOn(generalJournalDTO.getReverseOn());
-		generalJournalVO.setNarration(generalJournalDTO.getNarration());
 		generalJournalVO.setOrgId(generalJournalDTO.getOrgId());
 		generalJournalVO.setActive(generalJournalDTO.isActive());
+		generalJournalVO.setCancel(generalJournalDTO.isCancel());
+		generalJournalVO.setCancelRemarks(generalJournalDTO.getCancelRemarks());
 		generalJournalVO.setTotalCreditAmount(generalJournalDTO.getTotalCreditAmount());
 		generalJournalVO.setTotalDebitAmount(generalJournalDTO.getTotalDebitAmount());
 	}
@@ -2385,6 +2397,7 @@ public class TransactionServiceImpl implements TransactionService {
 		return glOpeningBalanceRepo.findGlOpeningBalanceByActive();
 	}
 	
+
 ///Reconcile
 	
 	@Override
@@ -2412,6 +2425,8 @@ public class TransactionServiceImpl implements TransactionService {
 		}
 		return reconcileVO;
 	}
+
+
 
 	@Override
 	public ReconcileVO updateCreateReconcile(@Valid ReconcileDTO reconcileDTO) throws ApplicationException {

@@ -16,7 +16,6 @@ import com.base.basesetup.dto.ArapDetailsDTO;
 import com.base.basesetup.dto.BrsOpeningDTO;
 import com.base.basesetup.dto.ChartCostCenterDTO;
 import com.base.basesetup.dto.CostInvoiceDTO;
-import com.base.basesetup.dto.CustomerAttachmentType;
 import com.base.basesetup.dto.DailyMonthlyExRatesDTO;
 import com.base.basesetup.dto.DebitNoteDTO;
 import com.base.basesetup.dto.FundTransferDTO;
@@ -28,6 +27,9 @@ import com.base.basesetup.dto.PaymentReversalDTO;
 import com.base.basesetup.dto.PaymentVoucherDTO;
 import com.base.basesetup.dto.ReceiptReversalDTO;
 import com.base.basesetup.dto.ReconcileDTO;
+
+import com.base.basesetup.dto.ReconciliationSummaryDTO;
+
 import com.base.basesetup.dto.TaxInvoiceDTO;
 import com.base.basesetup.entity.ArApAdjustmentOffSetVO;
 import com.base.basesetup.entity.ArapAdjustmentsVO;
@@ -45,7 +47,11 @@ import com.base.basesetup.entity.IrnCreditVO;
 import com.base.basesetup.entity.PaymentReversalVO;
 import com.base.basesetup.entity.PaymentVoucherVO;
 import com.base.basesetup.entity.ReceiptReversalVO;
+
 import com.base.basesetup.entity.ReconcileVO;
+
+import com.base.basesetup.entity.ReconciliationSummaryVO;
+
 import com.base.basesetup.entity.TaxInvoiceVO;
 import com.base.basesetup.exception.ApplicationException;
 
@@ -226,6 +232,14 @@ public interface TransactionService {
 	List<GlOpeningBalanceVO> getAllGlOpeningBalanceById(Long id);
 
 	List<GlOpeningBalanceVO> getGlOpeningBalanceByActive();
+	
+	//ReconciliationSummary
+
+//	List<ReconciliationSummaryVO> getAllReconciliationSummaryById(Long id);
+//
+//	List<ReconciliationSummaryVO> getAllReconciliationSummaryByOrgId(Long orgId);
+//
+//	ReconciliationSummaryVO updateCreateReconciliationSummary(@Valid ReconciliationSummaryDTO reconciliationSummaryDTO);
 
 	//Reconcile
 	List<ReconcileVO> getAllReconcileByOrgId(Long orgId);

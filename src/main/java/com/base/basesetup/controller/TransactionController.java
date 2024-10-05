@@ -39,7 +39,12 @@ import com.base.basesetup.dto.IrnCreditDTO;
 import com.base.basesetup.dto.PaymentReversalDTO;
 import com.base.basesetup.dto.PaymentVoucherDTO;
 import com.base.basesetup.dto.ReceiptReversalDTO;
+
 import com.base.basesetup.dto.ReconcileDTO;
+
+import com.base.basesetup.dto.ReconciliationSummaryDTO;
+import com.base.basesetup.dto.ReconciliationSummaryDTO;
+
 import com.base.basesetup.dto.ResponseDTO;
 import com.base.basesetup.dto.TaxInvoiceDTO;
 import com.base.basesetup.entity.ArApAdjustmentOffSetVO;
@@ -58,7 +63,11 @@ import com.base.basesetup.entity.IrnCreditVO;
 import com.base.basesetup.entity.PaymentReversalVO;
 import com.base.basesetup.entity.PaymentVoucherVO;
 import com.base.basesetup.entity.ReceiptReversalVO;
+
 import com.base.basesetup.entity.ReconcileVO;
+
+import com.base.basesetup.entity.ReconciliationSummaryVO;
+
 import com.base.basesetup.entity.TaxInvoiceVO;
 import com.base.basesetup.service.TransactionService;
 
@@ -2090,7 +2099,7 @@ public class TransactionController extends BaseController {
 		if (StringUtils.isBlank(errorMsg)) {
 			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
 					"GlOpeningBalance information get successfully By OrgId");
-			responseObjectsMap.put("GlOpeningBalanceVO", glOpeningBalanceVO);
+			responseObjectsMap.put("glOpeningBalanceVO", glOpeningBalanceVO);
 			responseDTO = createServiceResponse(responseObjectsMap);
 		} else {
 			responseDTO = createServiceResponseError(responseObjectsMap,
@@ -2191,7 +2200,8 @@ public class TransactionController extends BaseController {
 		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
 		return ResponseEntity.ok().body(responseDTO);
 
-	   
+	}
+
 	//Reconcile
 	
 	@GetMapping("/getAllReconcileByOrgId")
@@ -2307,6 +2317,7 @@ public class TransactionController extends BaseController {
 		}
 		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
 		return ResponseEntity.ok().body(responseDTO);
+
 
 	}
 	
