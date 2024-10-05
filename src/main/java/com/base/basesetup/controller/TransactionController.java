@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,7 +39,12 @@ import com.base.basesetup.dto.IrnCreditDTO;
 import com.base.basesetup.dto.PaymentReversalDTO;
 import com.base.basesetup.dto.PaymentVoucherDTO;
 import com.base.basesetup.dto.ReceiptReversalDTO;
+
 import com.base.basesetup.dto.ReconcileDTO;
+
+import com.base.basesetup.dto.ReconciliationSummaryDTO;
+import com.base.basesetup.dto.ReconciliationSummaryDTO;
+
 import com.base.basesetup.dto.ResponseDTO;
 import com.base.basesetup.dto.TaxInvoiceDTO;
 import com.base.basesetup.entity.ArApAdjustmentOffSetVO;
@@ -59,7 +63,11 @@ import com.base.basesetup.entity.IrnCreditVO;
 import com.base.basesetup.entity.PaymentReversalVO;
 import com.base.basesetup.entity.PaymentVoucherVO;
 import com.base.basesetup.entity.ReceiptReversalVO;
+
 import com.base.basesetup.entity.ReconcileVO;
+
+import com.base.basesetup.entity.ReconciliationSummaryVO;
+
 import com.base.basesetup.entity.TaxInvoiceVO;
 import com.base.basesetup.service.TransactionService;
 
@@ -2193,6 +2201,7 @@ public class TransactionController extends BaseController {
 		return ResponseEntity.ok().body(responseDTO);
 
 	}
+
 	//Reconcile
 	
 	@GetMapping("/getAllReconcileByOrgId")
@@ -2308,6 +2317,7 @@ public class TransactionController extends BaseController {
 		}
 		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
 		return ResponseEntity.ok().body(responseDTO);
+
 
 	}
 	

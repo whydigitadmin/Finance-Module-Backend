@@ -31,8 +31,10 @@ public class ParticularsJournalVO {
 	@SequenceGenerator(name = "particularsjournalgen", sequenceName = "particularsjournalseq", initialValue = 1000000001, allocationSize = 1)
 	@Column(name = "particularsjournalid")
 	private Long id;
-	@Column(name = "currency")
-	private BigDecimal currency;
+	@Column(name = "accountsname")
+	private String accountsName;
+	@Column(name = "subledgername")
+	private String subledgerName;
 	@Column(name = "subledgercode")
 	private BigDecimal subLedgerCode;
 	@Column(name = "debitamount")

@@ -32,6 +32,7 @@ import com.base.basesetup.dto.EmployeeDTO;
 import com.base.basesetup.dto.ExRatesDTO;
 import com.base.basesetup.dto.GroupLedgerDTO;
 import com.base.basesetup.dto.ListOfValuesDTO;
+import com.base.basesetup.dto.PartyMasterDTO;
 import com.base.basesetup.dto.ResponseDTO;
 import com.base.basesetup.dto.SacCodeDTO;
 import com.base.basesetup.dto.SetTaxRateDTO;
@@ -48,6 +49,7 @@ import com.base.basesetup.entity.EmployeeVO;
 import com.base.basesetup.entity.ExRatesVO;
 import com.base.basesetup.entity.GroupLedgerVO;
 import com.base.basesetup.entity.ListOfValuesVO;
+import com.base.basesetup.entity.PartyMasterVO;
 import com.base.basesetup.entity.SacCodeVO;
 import com.base.basesetup.entity.SetTaxRateVO;
 import com.base.basesetup.entity.SubLedgerAccountVO;
@@ -1660,5 +1662,93 @@ public class MasterController extends BaseController {
 	    LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
 	    return ResponseEntity.ok().body(responseDTO);
 	}
+	
+	// PartyMaster
+
+		@GetMapping("/getPartyMasterById")
+		public ResponseEntity<ResponseDTO> getPartyMasterById(@RequestParam(required = false) Long id) {
+			String methodName = "getPartyMasterById()";
+			LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+			String errorMsg = null;
+			Map<String, Object> responseObjectsMap = new HashMap<>();
+			ResponseDTO responseDTO = null;
+			List<PartyMasterVO> partyMasterVO = new ArrayList<>();
+			try {
+				partyMasterVO = masterService.getPartyMasterById(id);
+			} catch (Exception e) {
+				errorMsg = e.getMessage();
+				LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+			}
+			if (StringUtils.isBlank(errorMsg)) {
+				responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "PartyMaster information get successfully By Id");
+				responseObjectsMap.put("partyMasterVO", partyMasterVO);
+				responseDTO = createServiceResponse(responseObjectsMap);
+			} else {
+				responseDTO = createServiceResponseError(responseObjectsMap, "PartyMaster information receive failed By Id",
+						errorMsg);
+			}
+			LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+			return ResponseEntity.ok().body(responseDTO);
+		}
+
+		@GetMapping("/getPartyMasterByOrgId")
+		public ResponseEntity<ResponseDTO> getPartyMasterByOrgId(@RequestParam(required = false) Long orgid) {
+			String methodName = "getPartyMasterByOrgId()";
+			LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+			String errorMsg = null;
+			Map<String, Object> responseObjectsMap = new HashMap<>();
+			ResponseDTO responseDTO = null;
+			List<PartyMasterVO> partyMasterVO = new ArrayList<>();
+			try {
+				partyMasterVO = masterService.getPartyMasterByOrgId(orgid);
+			} catch (Exception e) {
+				errorMsg = e.getMessage();
+				LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+			}
+			if (StringUtils.isBlank(errorMsg)) {
+				responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "PartyMaster information get successfully By OrgId");
+				responseObjectsMap.put("partyMasterVO", partyMasterVO);
+				responseDTO = createServiceResponse(responseObjectsMap);
+			} else {
+				responseDTO = createServiceResponseError(responseObjectsMap,
+						"PartyMaster information receive failed By OrgId", errorMsg);
+			}
+			LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+			return ResponseEntity.ok().body(responseDTO);
+		}
+
+		@PutMapping("/updateCreatePartyMaster")
+		public ResponseEntity<ResponseDTO> updateCreatePartyMaster(@Valid @RequestBody PartyMasterDTO partyMasterDTO) {
+			String methodName = "updateCreatePartyMaster()";
+			LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+			String errorMsg = null;
+			Map<String, Object> responseObjectsMap = new HashMap<>();
+			ResponseDTO responseDTO = null;
+			try {
+				PartyMasterVO partyMasterVO = masterService.updateCreatePartyMaster(partyMasterDTO);
+				if (partyMasterVO != null) {
+					boolean isUpdate = partyMasterDTO.getId() != null;
+					responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+							isUpdate ? "PartyMaster updated successfully" : "PartyMaster created Successfully");
+					responseObjectsMap.put("partyMasterVO", partyMasterVO);
+					responseDTO = createServiceResponse(responseObjectsMap);
+				} else {
+					boolean isUpdate = partyMasterDTO.getId() != null;
+					errorMsg = isUpdate ? "PartyMaster not found for ID: " + partyMasterDTO.getId()
+							: "PartyMaster created failed";
+					responseDTO = createServiceResponseError(responseObjectsMap,
+							isUpdate ? "PartyMaster update failed" : "PartyMaster Created failed", errorMsg);
+				}
+			} catch (Exception e) {
+				errorMsg = e.getMessage();
+				boolean isUpdate = partyMasterDTO.getId() != null;
+				LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+				responseDTO = createServiceResponseError(responseObjectsMap,
+						isUpdate ? "PartyMaster update failed" : "PartyMaster Created failed", errorMsg);
+			}
+			LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+			return ResponseEntity.ok().body(responseDTO);
+		}
+
 
 }

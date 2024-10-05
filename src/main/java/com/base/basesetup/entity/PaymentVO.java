@@ -1,7 +1,7 @@
 package com.base.basesetup.entity;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -24,56 +24,76 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "generaljournal")
+@Table(name = "payment")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class GeneralJournalVO {
+public class PaymentVO {
+
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "generaljournalgen")
-	@SequenceGenerator(name = "generaljournalgen", sequenceName = "generaljournalseq", initialValue = 1000000001, allocationSize = 1)
-	@Column(name = "generaljournalid")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "paymentgen")
+	@SequenceGenerator(name = "paymentgen", sequenceName = "paymentseq", initialValue = 1000000001, allocationSize = 1)
+	@Column(name = "paymentid")
 	private Long id;
-	@Column(name = "vouchersubtype")
-	private String voucherSubType;
+	
+	@Column(name = "branch")
+	private String branch;
+	@Column(name = "paymenttype")
+	private String paymentType;
 	@Column(name = "docdate")
-	private LocalDateTime docDate;
+	private LocalDate docdate;
 	@Column(name = "docid")
 	private String docId;
-	
+	@Column(name = "bank")
+	private String bank;
+	@Column(name = "balance")
+	private BigDecimal balance;
 	@Column(name = "currency")
 	private String currency;
 	@Column(name = "exrate")
 	private String exRate;
+	@Column(name = "refdate")
+	private LocalDate refDate;
 	@Column(name = "refno")
 	private String refNo;
-	@Column(name = "refdate")
-	private LocalDateTime refDate;
-
+	@Column(name = "reconciled")
+	private boolean reconciled;
+	@Column(name = "payeetype")
+	private String payeeType;
+	@Column(name = "payeename")
+	private String payeeName;
+	@Column(name = "modeofpayment")
+	private String modeOfPayment;
+	@Column(name = "chqbook")
+	private String chqBook;
+	@Column(name = "chqcardno")
+	private String chqCardNo;
+	@Column(name = "chqdddt")
+	private String chqDdDt;
+	@Column(name = "netamount")
+	private String netAmount;
 	@Column(name = "remarks")
 	private String remarks;
+
 	@Column(name = "orgid")
 	private Long orgId;
 	@Column(name = "active")
 	private boolean active;
 	@Column(name = "cancel")
 	private boolean cancel;
-	@Column(name = "cancelremarks")
+	@Column(name = "canelremarks")
 	private String cancelRemarks;
 	@Column(name = "createdby")
 	private String createdBy;
 	@Column(name = "modifiedby")
 	private String updatedBy;
-	@Column(name = "totaldebitamount")
-	private BigDecimal totalDebitAmount;
-	@Column(name = "totalcreditamount")
-	private BigDecimal totalCreditAmount;
-
-	@OneToMany(mappedBy = "generalJournalVO", cascade = CascadeType.ALL)
-	@JsonManagedReference
-	List<ParticularsJournalVO> particularsJournalVO;
 	
+	@OneToMany(mappedBy = "paymentVO", cascade = CascadeType.ALL)
+	@JsonManagedReference
+	private List<AccountParticularsVO> accountParticularsVO;
+	
+
 	@Embedded
 	@Builder.Default
 	private CreatedUpdatedDate commonDate = new CreatedUpdatedDate();
