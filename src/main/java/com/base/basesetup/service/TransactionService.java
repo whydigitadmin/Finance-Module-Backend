@@ -23,6 +23,7 @@ import com.base.basesetup.dto.IrnCreditDTO;
 import com.base.basesetup.dto.PaymentReversalDTO;
 import com.base.basesetup.dto.PaymentVoucherDTO;
 import com.base.basesetup.dto.ReceiptReversalDTO;
+import com.base.basesetup.dto.ReconciliationSummaryDTO;
 import com.base.basesetup.dto.TaxInvoiceDTO;
 import com.base.basesetup.entity.ArApAdjustmentOffSetVO;
 import com.base.basesetup.entity.ArapAdjustmentsVO;
@@ -40,6 +41,7 @@ import com.base.basesetup.entity.IrnCreditVO;
 import com.base.basesetup.entity.PaymentReversalVO;
 import com.base.basesetup.entity.PaymentVoucherVO;
 import com.base.basesetup.entity.ReceiptReversalVO;
+import com.base.basesetup.entity.ReconciliationSummaryVO;
 import com.base.basesetup.entity.TaxInvoiceVO;
 import com.base.basesetup.exception.ApplicationException;
 
@@ -212,6 +214,14 @@ public interface TransactionService {
 	List<GlOpeningBalanceVO> getAllGlOpeningBalanceById(Long id);
 
 	List<GlOpeningBalanceVO> getGlOpeningBalanceByActive();
+	
+	//ReconciliationSummary
+
+//	List<ReconciliationSummaryVO> getAllReconciliationSummaryById(Long id);
+//
+//	List<ReconciliationSummaryVO> getAllReconciliationSummaryByOrgId(Long orgId);
+//
+//	ReconciliationSummaryVO updateCreateReconciliationSummary(@Valid ReconciliationSummaryDTO reconciliationSummaryDTO);
 
 	
 }

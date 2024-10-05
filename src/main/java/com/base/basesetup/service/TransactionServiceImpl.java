@@ -84,6 +84,7 @@ import com.base.basesetup.entity.PaymentVoucherVO;
 import com.base.basesetup.entity.ReceiptInvoiceVO;
 import com.base.basesetup.entity.ReceiptOtherAccountVO;
 import com.base.basesetup.entity.ReceiptReversalVO;
+import com.base.basesetup.entity.ReconciliationSummaryVO;
 import com.base.basesetup.entity.TaxInvoiceVO;
 import com.base.basesetup.entity.TdsCostInvoiceVO;
 import com.base.basesetup.exception.ApplicationException;
@@ -122,6 +123,7 @@ import com.base.basesetup.repo.PaymentVoucherRepo;
 import com.base.basesetup.repo.ReceiptInvoiceRepo;
 import com.base.basesetup.repo.ReceiptOtherAccountRepo;
 import com.base.basesetup.repo.ReceiptReversalRepo;
+import com.base.basesetup.repo.ReconciliationSummaryRepo;
 import com.base.basesetup.repo.TaxInvoiceRepo;
 import com.base.basesetup.repo.TdsCostInvoiceRepo;
 
@@ -238,6 +240,9 @@ public class TransactionServiceImpl implements TransactionService {
 
 	@Autowired
 	ParticularsGlOpeningBalanceRepo particularsGlOpeningBalanceRepo;
+	
+	@Autowired
+	ReconciliationSummaryRepo reconciliationSummaryRepo;
 
 	// TaxInvoice
 	@Override
@@ -923,10 +928,12 @@ public class TransactionServiceImpl implements TransactionService {
 				} else {
 					particularsJournalVO = new ParticularsJournalVO();
 				}
-				particularsJournalVO.setCurrency(particularsJournalDTO.getCurrency());
+				particularsJournalVO.setAccountsName(particularsJournalDTO.getAccountsName());
+				particularsJournalVO.setSubledgerName(particularsJournalDTO.getSubledgerName());
 				particularsJournalVO.setSubLedgerCode(particularsJournalDTO.getSubLedgerCode());
 				particularsJournalVO.setDebitAmount(particularsJournalDTO.getDebitAmount());
 				particularsJournalVO.setCreditAmount(particularsJournalDTO.getCreditAmount());
+				particularsJournalVO.setNarration(particularsJournalDTO.getNarration());
 				particularsJournalVO.setGeneralJournalVO(generalJournalVO);
 				particularsJournalVOs.add(particularsJournalVO);
 			}
@@ -938,19 +945,18 @@ public class TransactionServiceImpl implements TransactionService {
 
 	private void getGeneralJournalVOFromGeneralJournalDTO(@Valid GeneralJournalDTO generalJournalDTO,
 			GeneralJournalVO generalJournalVO) {
-		generalJournalVO.setBranch(generalJournalDTO.getBranch());
-		generalJournalVO.setVoucherType(generalJournalDTO.getVoucherType());
+		generalJournalVO.setVoucherSubType(generalJournalDTO.getVoucherSubType());
 		generalJournalVO.setDocDate(generalJournalDTO.getDocDate());
 		generalJournalVO.setDocId(generalJournalDTO.getDocId());
-		generalJournalVO.setTemplate(generalJournalDTO.getTemplate());
+		generalJournalVO.setRemarks(generalJournalDTO.getRemarks());
 		generalJournalVO.setCurrency(generalJournalDTO.getCurrency());
 		generalJournalVO.setExRate(generalJournalDTO.getExRate());
 		generalJournalVO.setRefNo(generalJournalDTO.getRefNo());
 		generalJournalVO.setRefDate(generalJournalDTO.getRefDate());
-		generalJournalVO.setReverseOn(generalJournalDTO.getReverseOn());
-		generalJournalVO.setNarration(generalJournalDTO.getNarration());
 		generalJournalVO.setOrgId(generalJournalDTO.getOrgId());
 		generalJournalVO.setActive(generalJournalDTO.isActive());
+		generalJournalVO.setCancel(generalJournalDTO.isCancel());
+		generalJournalVO.setCancelRemarks(generalJournalDTO.getCancelRemarks());
 		generalJournalVO.setTotalCreditAmount(generalJournalDTO.getTotalCreditAmount());
 		generalJournalVO.setTotalDebitAmount(generalJournalDTO.getTotalDebitAmount());
 	}
@@ -2152,6 +2158,33 @@ public class TransactionServiceImpl implements TransactionService {
 	public List<GlOpeningBalanceVO> getGlOpeningBalanceByActive() {
 		return glOpeningBalanceRepo.findGlOpeningBalanceByActive();
 	}
+	
+//	@Override
+//	public List<ReconciliationSummaryVO> getAllReconciliationSummaryByOrgId(Long orgId) {
+//		List<ReconciliationSummaryVO> reconciliationSummaryVO = new ArrayList<>();
+//		if (ObjectUtils.isNotEmpty(orgId)) {
+//			LOGGER.info("Successfully Received  ReconciliationSummary BY OrgId: {}", orgId);
+//			reconciliationSummaryVO = reconciliationSummaryRepo.getAllReconciliationSummaryByOrgId(orgId);
+//		} else {
+//			LOGGER.info("Successfully Received  ReconciliationSummary For All OrgId.");
+//			reconciliationSummaryVO = reconciliationSummaryRepo.findAll();
+//		}
+//		return reconciliationSummaryVO;
+//	}
+//
+//	@Override
+//	public List<ReconciliationSummaryVO> getAllReconciliationSummaryById(Long id) {
+//		List<ReconciliationSummaryVO> reconciliationSummaryVO = new ArrayList<>();
+//		if (ObjectUtils.isNotEmpty(id)) {
+//			LOGGER.info("Successfully Received  ReconciliationSummary BY Id : {}", id);
+//			reconciliationSummaryVO = reconciliationSummaryRepo.getAllReconciliationSummaryById(id);
+//		} else {
+//			LOGGER.info("Successfully Received  ReconciliationSummary For All Id.");
+//			reconciliationSummaryVO = reconciliationSummaryRepo.findAll();
+//		}
+//		return reconciliationSummaryVO;
+//	}
+
 
 }
 

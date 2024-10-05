@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import javax.persistence.Column;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,22 +17,23 @@ import lombok.NoArgsConstructor;
 @Builder
 public class GeneralJournalDTO {
 	private Long id;
-	private String branch;
-	private String voucherType;
+	private String voucherSubType;
 	private LocalDateTime docDate;
 	private String docId;
-	private String template;
+	
 	private String currency;
 	private String exRate;
 	private String refNo;
 	private LocalDateTime refDate;
-	private LocalDateTime reverseOn;
-	private String narration;
+
+	private String remarks;
 	private Long orgId;
 	private boolean active;
+	private boolean cancel;
+	private String cancelRemarks;
 	private String createdBy;
-	private BigDecimal totalCreditAmount;
 	private BigDecimal totalDebitAmount;
+	private BigDecimal totalCreditAmount;
 
 	List<ParticularsJournalDTO> particularsJournalDTO;
 
