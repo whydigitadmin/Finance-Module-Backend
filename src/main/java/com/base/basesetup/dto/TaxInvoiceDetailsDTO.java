@@ -12,22 +12,20 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ChargerTaxInvoiceDTO {
-	private Long id;
-	private String type;
+public class TaxInvoiceDetailsDTO {
+	
+	private String chargeType;
 	private String chargeCode;
-	private String gChargeCode;
+	private String govChargeCode;
+	private String ledger;
 	private String chargeName;
 	private String taxable;
 	private int qty;
-	private BigDecimal  rate;
+	private BigDecimal rate;
 	private String currency;
 	private BigDecimal exRate;
-	private BigDecimal fcAmount;
-	private BigDecimal lcAmount;
-	private BigDecimal billAmount;
+	private String exempted;
 	private String sac;
-	private BigDecimal GSTPercent;
-	private BigDecimal GST;
+	private int GSTPercent;
 
 }

@@ -20,23 +20,25 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "chargertaxinvoice")
+@Table(name = "taxinvoicedetails")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ChargerTaxInvoiceVO {
+public class TaxInvoiceDetailsVO {
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "chargertaxinvoicegen")
-	@SequenceGenerator(name = "chargertaxinvoicegen", sequenceName = "chargertaxinvoiceVO", initialValue = 1000000001, allocationSize = 1)
-	@Column(name = "chargertaxinvoiceid")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "taxinvoicedetailsgen")
+	@SequenceGenerator(name = "taxinvoicedetailsgen", sequenceName = "taxinvoicedetailsseq", initialValue = 1000000001, allocationSize = 1)
+	@Column(name = "taxinvoicedetailsid")
 	private Long id;
-	@Column(name = "type")
-	private String type;
-	@Column(name = "chargeCode")
+	@Column(name = "chargetype")
+	private String chargeType;
+	@Column(name = "chargecode")
 	private String chargeCode;
-	@Column(name = "gchargecode")
-	private String gChargeCode;
+	@Column(name = "govchargecode")
+	private String govChargeCode;
+	@Column(name = "ledger")
+	private String ledger;
 	@Column(name = "chargename")
 	private String chargeName;
 	@Column(name = "taxable")
@@ -47,20 +49,24 @@ public class ChargerTaxInvoiceVO {
 	private BigDecimal rate;
 	@Column(name = "currency")
 	private String currency;
-	@Column(name = "exRate")
+	@Column(name = "exrate")
 	private BigDecimal exRate;
-	@Column(name = "fcAmount")
+	@Column(name = "exempted")
+	private String exempted;
+	@Column(name = "fcamount")
 	private BigDecimal fcAmount;
-	@Column(name = "lcAmount")
+	@Column(name = "lcamount")
 	private BigDecimal lcAmount;
-	@Column(name = "billAmount")
+	@Column(name = "tlcamount")
+	private BigDecimal tlcAmount;
+	@Column(name = "billamount")
 	private BigDecimal billAmount;
 	@Column(name = "sac")
 	private String sac;
 	@Column(name = "gstpercent")
-	private BigDecimal GSTPercent;
+	private int GSTPercent;
 	@Column(name = "gstamount")
-	private BigDecimal GST;
+	private BigDecimal gstAmount;
 
 	@ManyToOne
 	@JsonBackReference

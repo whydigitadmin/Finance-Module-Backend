@@ -2,7 +2,6 @@ package com.base.basesetup.dto;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
@@ -15,38 +14,43 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class TaxInvoiceDTO {
+
 	private Long id;
-	private String headerColumns;
+	private Long orgId;
+	private String branch;
+	private String branchCode;
+	private String finYear;
+	private String createdBy;
+	private String bizType;
+	private String bizMode;
 	private String partyName;
 	private String partyCode;
 	private String partyType;
-	private String addressType;
+	private String stateNo;
+	private String stateCode;
 	private String recipientGSTIN;
 	private String placeOfSupply;
+	private String addressType;
 	private String address;
-	private String pincode;
+	private String pinCode;
 	private String status;
-	private String GSTType;
-	private LocalDate dueDate;
+	private String gstType;
+	private String supplierBillNo;
+	private LocalDate supplierBillDate;
 	private String billCurr;
-	private String salesType;
-	private Long orgId;
-	private boolean active;
-	private String createdBy;
-	private LocalDateTime docDate;
-	private LocalDateTime invoiceDate;
-	private BigDecimal lcChargeAmount;
-	private BigDecimal lcTaxAmount;
-	private BigDecimal lcInvAmount;
-	private BigDecimal lcRoundOffAmount;
-	private BigDecimal billlcChargeAmount;
-	private BigDecimal billTaxAmount;
-	private BigDecimal billInvAmount;
-	private BigDecimal lcTaxableAmount;
-	private String amountInwords;
-	private String billingRemarks;
+	private BigDecimal billCurrRate;
+	private BigDecimal exAmount;
 	
-	List<ChargerTaxInvoiceDTO> chargerTaxInvoiceDTO;
+	private int creditDays;
+	private String contactPerson;
+	private String shipperInvoiceNo;
+	private String billOfEntry;
+	private String billMonth;
+	private String invoiceNo;
+	private LocalDate invoiceDate;
+	private String salesType;
+	
+	List<TaxInvoiceDetailsDTO> taxInvoiceDetailsDTO;
 
-	List<GstTaxInvoiceDTO> gstTaxInvoiceDTO;
+	List<TaxInvoiceGstDTO> taxInvoiceGstDTO;
 }

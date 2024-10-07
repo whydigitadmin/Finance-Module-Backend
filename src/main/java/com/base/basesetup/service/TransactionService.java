@@ -61,7 +61,7 @@ public interface TransactionService {
 //	TaxInvoice
 	List<TaxInvoiceVO> getAllTaxInvoiceByOrgId(Long orgId);
 
-	TaxInvoiceVO updateCreateTaxInvoice(@Valid TaxInvoiceDTO taxInvoiceDTO) throws ApplicationException;
+	Map<String, Object> updateCreateTaxInvoice(TaxInvoiceDTO taxInvoiceDTO) throws ApplicationException;
 
 	List<TaxInvoiceVO> getAllTaxInvoiceById(Long id);
 
