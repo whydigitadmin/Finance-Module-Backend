@@ -1741,19 +1741,19 @@ public class MasterServiceImpl implements MasterService {
 			 if(ObjectUtils.isNotEmpty(partyMasterDTO.getId())){
 			List<PartyAddressVO> partyAddressVOList = partyAddressRepo.findByPartyMasterVO(partyMasterVO);
 			partyAddressRepo.deleteAll(partyAddressVOList);
-			 }
+			 
 			List<PartyAddressVO> partyAddressVOs= new ArrayList<>();
-			if(partyMasterDTO.getPartyAdressDTO()!=null) {
-				for(PartyAddressDTO partyAddressDTO : partyMasterDTO.getPartyAdressDTO()) {
+			if(partyMasterDTO.getPartyAddressDTO()!=null) {
+				for(PartyAddressDTO partyAddressDTO : partyMasterDTO.getPartyAddressDTO()) {
 					PartyAddressVO partyAddressVO = new PartyAddressVO();
 					partyAddressVO.setState(partyAddressDTO.getState());
 					partyAddressVO.setStateGstIn(partyAddressDTO.getStateGstIn());
 					partyAddressVO.setBusinessPlace(partyAddressDTO.getBusinessPlace());
 					partyAddressVO.setCityName(partyAddressDTO.getCityName());
 					partyAddressVO.setAddressType(partyAddressDTO.getAddressType());
-					partyAddressVO.setAddressline1(partyAddressDTO.getAddressline1());
-					partyAddressVO.setAddressline2(partyAddressDTO.getAddressline2());
-					partyAddressVO.setAddressline3(partyAddressDTO.getAddressline3());
+					partyAddressVO.setAddressLine1(partyAddressDTO.getAddressLine1());
+					partyAddressVO.setAddressLine2(partyAddressDTO.getAddressLine2());
+					partyAddressVO.setAddressLine3(partyAddressDTO.getAddressLine3());
 					partyAddressVO.setPincode( partyAddressDTO.getPincode());
 					partyAddressVO.setContactPerson(partyAddressDTO.getContactPerson());
 					partyAddressVO.setContactPhoneNo(partyAddressDTO.getContactPhoneNo());
@@ -1808,7 +1808,7 @@ public class MasterServiceImpl implements MasterService {
 			if(partyMasterDTO.getPartyChargesExemptionDTO()!=null) {
 				for(PartyChargesExemptionDTO partyChargesExemptionDTO : partyMasterDTO.getPartyChargesExemptionDTO()) {
 					PartyChargesExemptionVO partyChargesExemptionVO = new PartyChargesExemptionVO();
-					partyChargesExemptionVO.setTdssection(partyChargesExemptionDTO.getTdssection());
+					partyChargesExemptionVO.setTdsSection(partyChargesExemptionDTO.getTdsSection());
 					partyChargesExemptionVO.setCharge(partyChargesExemptionDTO.getCharge());
 					partyChargesExemptionVO.setPartyMasterVO(partyMasterVO);
 					partyChargesExemptionVOs.add(partyChargesExemptionVO);
@@ -1893,7 +1893,7 @@ public class MasterServiceImpl implements MasterService {
 			    	PartyVendorEvaluationDTO partyVendorEvaluationDTO=partyMasterDTO.getPartyVendorEvaluationDTO();
 			    	  partyVendorEvaluationVO = new PartyVendorEvaluationVO();
 			        BeanUtils.copyProperties(partyMasterDTO.getPartyVendorEvaluationDTO(), partyVendorEvaluationVO);
-			        partyVendorEvaluationVO.setWhoBroughtVentor(partyVendorEvaluationDTO.getWhoBroughtVentor());
+			        partyVendorEvaluationVO.setWhoBroughtVendor(partyVendorEvaluationDTO.getWhoBroughtVendor());
 			        partyVendorEvaluationVO.setWhatBasisVendorSelected(partyVendorEvaluationDTO.getWhatBasisVendorSelected());
 			        partyVendorEvaluationVO.setJustification(partyVendorEvaluationDTO.getJustification());
 			        partyVendorEvaluationVO.setSlaPoints(partyVendorEvaluationDTO.getSlaPoints());
@@ -1931,7 +1931,7 @@ public class MasterServiceImpl implements MasterService {
 			partyMasterVO.setCustomerCategory(partyMasterDTO.getCustomerCategory());
 			partyMasterVO.setAgentName(partyMasterDTO.getAgentName());
 			partyMasterVO.setAccountsType(partyMasterDTO.getAccountsType());
-			partyMasterVO.setBussinessType(partyMasterDTO.getBussinessType());
+			partyMasterVO.setBusinessType(partyMasterDTO.getBusinessType());
 			partyMasterVO.setCarrierCode(partyMasterDTO.getCarrierCode());
 			partyMasterVO.setSupplierType(partyMasterDTO.getSupplierType());
 			partyMasterVO.setSalesPerson(partyMasterDTO.getSalesPerson());
@@ -1945,8 +1945,8 @@ public class MasterServiceImpl implements MasterService {
 			partyMasterVO.setCurrency(partyMasterDTO.getCurrency());
 			partyMasterVO.setAirWayBillCode(partyMasterDTO.getAirWayBillCode());
 			partyMasterVO.setAirlineCode(partyMasterDTO.getAirlineCode());
-			partyMasterVO.setBussinessCategory(partyMasterDTO.getBussinessCategory());
-			partyMasterVO.setBussinessCategory1(partyMasterDTO.getBussinessCategory1());
+			partyMasterVO.setBusinessCategory(partyMasterDTO.getBusinessCategory());
+			partyMasterVO.setBusinessCategory1(partyMasterDTO.getBusinessCategory1());
 			partyMasterVO.setCountry(partyMasterDTO.getCountry());
 			partyMasterVO.setRemarks(partyMasterDTO.getRemarks());
 			partyMasterVO.setCompoundingScheme(partyMasterDTO.getCompoundingScheme());
