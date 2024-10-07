@@ -32,7 +32,7 @@ public class PartyChargesExemptionVO {
 	@Column(name = "partychargesexemptionid")
 	private Long id;
 	@Column(name = "tdssection")
-	private String tdssection;
+	private String tdsSection;
 	@Column(name = "charge")
 	private String charge;
 	
