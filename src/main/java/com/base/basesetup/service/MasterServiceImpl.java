@@ -1971,7 +1971,6 @@ public class MasterServiceImpl implements MasterService {
 		partyMasterVO.setSwift(partyMasterDTO.getSwift());
 		partyMasterVO.setActive(partyMasterDTO.isActive());
 		partyMasterVO.setOrgId(partyMasterDTO.getOrgId());
-
 	}
 
 }

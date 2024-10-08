@@ -1,7 +1,7 @@
 package com.base.basesetup.dto;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,9 +13,9 @@ import lombok.NoArgsConstructor;
 public class ParticularsReconcileDTO {
 	private Long id;
 	private String voucherNo;
-	private LocalDateTime voucherDate;
+	private LocalDate voucherDate;
 	private String chequeNo;
-	private LocalDateTime chequeDate;
+	private LocalDate chequeDate;
 	private BigDecimal deposit;
 	private BigDecimal withdrawal;
 	private String bankRef;

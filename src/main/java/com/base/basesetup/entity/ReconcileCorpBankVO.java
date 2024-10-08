@@ -1,6 +1,6 @@
 package com.base.basesetup.entity;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -35,11 +35,11 @@ public class ReconcileCorpBankVO {
 	@Column(name = "docid")
 	private String docId;
 	@Column(name = "docdate")
-	private LocalDateTime docDate;
+	private LocalDate docDate;
 	@Column(name="bankaccount")
 	private String bankAccount;
 	@Column(name = "bankstmtdate")
-	private LocalDateTime bankStmtDate;
+	private LocalDate bankStmtDate;
 	@Column(name="remarks")
 	private String remarks;
 	
