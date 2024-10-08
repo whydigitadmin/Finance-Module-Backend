@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -33,6 +34,6 @@ public class ReceiptReceivableDTO {
 	private String createdBy;
 	private BigDecimal netAmount;
 	private String remarks;
-	
-	List<ParticularsAccountReceiptDTO>particularsAccountReceiptDTO;
+
+	List<ParticularsAccountReceiptDTO> particularsAccountReceiptDTO;
 }
