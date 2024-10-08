@@ -11,11 +11,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.base.basesetup.dto.ArApBillBalanceReceivableDTO;
 import com.base.basesetup.dto.ParticularsAccountReceiptDTO;
 import com.base.basesetup.dto.ReceiptReceivableDTO;
+import com.base.basesetup.entity.ArApBillBalanceReceivableVO;
 import com.base.basesetup.entity.ParticularsAccountReceiptVO;
 import com.base.basesetup.entity.ReceiptReceivableVO;
 import com.base.basesetup.exception.ApplicationException;
+import com.base.basesetup.repo.ArApBillBalanceRecievableRepo;
 import com.base.basesetup.repo.ParticularsAccountReceiptRepo;
 import com.base.basesetup.repo.ReceiptReceivableRepo;
 
@@ -29,7 +32,11 @@ public class ARReceivableServiceImpl implements ARReceivableService {
 	
 	@Autowired
 	ParticularsAccountReceiptRepo particularsAccountReceiptRepo;
+	
+	@Autowired
+	ArApBillBalanceRecievableRepo arApBillBalanceReceivableRepo;
 
+	//Receipt
 	@Override
 	public List<ReceiptReceivableVO> getAllReceiptReceivableByOrgId(Long orgId) {
 		List<ReceiptReceivableVO> receiptReceivableVO = new ArrayList<>();
@@ -124,6 +131,77 @@ public class ARReceivableServiceImpl implements ARReceivableService {
 		return receiptReceivableRepo.findReceiptReceivablesByActive();
 	}
 
+	//ArApBillBalance
+	@Override
+	public List<ArApBillBalanceReceivableVO> getAllArApBillBalanceReceivableByOrgId(Long orgId) {
+		List<ArApBillBalanceReceivableVO> arApBillBalanceReceivableVO = new ArrayList<>();
+		if (ObjectUtils.isNotEmpty(orgId)) {
+			LOGGER.info("Successfully Received ArApBillBalance BY OrgId : {}", orgId);
+			arApBillBalanceReceivableVO = arApBillBalanceReceivableRepo.getAllArApBillBalanceReceivableByOrgId(orgId);
+		} else {
+			LOGGER.info("Successfully Received  ReceiptReceivable For All OrgId.");
+			arApBillBalanceReceivableVO = arApBillBalanceReceivableRepo.findAll();
+		}
+		return arApBillBalanceReceivableVO;
+	}
+
+	
+	@Override
+	public List<ArApBillBalanceReceivableVO> getAllArApBillBalanceReceivableById(Long id) {
+		List<ArApBillBalanceReceivableVO> arApBillBalanceReceivableVO = new ArrayList<>();
+		if (ObjectUtils.isNotEmpty(id)) {
+			LOGGER.info("Successfully Received ArApBillBalance BY Id : {}", id);
+			arApBillBalanceReceivableVO = arApBillBalanceReceivableRepo.getAllArApBillBalanceReceivableById(id);
+		} else {
+			LOGGER.info("Successfully Received ArApBillBalance For All Id.");
+			arApBillBalanceReceivableVO = arApBillBalanceReceivableRepo.findAll();
+		}
+		return arApBillBalanceReceivableVO;
+	}
+	
+	@Override
+	public ArApBillBalanceReceivableVO updateCreateArApBillBalanceReceivable(@Valid ArApBillBalanceReceivableDTO arApBillBalanceReceivableDTO)
+			throws ApplicationException {
+		ArApBillBalanceReceivableVO arApBillBalanceReceivableVO = new ArApBillBalanceReceivableVO();
+		boolean isUpdate = false;
+		if (ObjectUtils.isNotEmpty(arApBillBalanceReceivableDTO.getId())) {
+			isUpdate = true;
+			arApBillBalanceReceivableVO = arApBillBalanceReceivableRepo.findById(arApBillBalanceReceivableDTO.getId())
+					.orElseThrow(() -> new ApplicationException("Invalid ArApBillBalance details"));
+			arApBillBalanceReceivableVO.setUpdatedBy(arApBillBalanceReceivableDTO.getCreatedBy());
+		} else {
+			arApBillBalanceReceivableVO.setUpdatedBy(arApBillBalanceReceivableDTO.getCreatedBy());
+			arApBillBalanceReceivableVO.setCreatedBy(arApBillBalanceReceivableDTO.getCreatedBy());
+		}
+
+		
+		getArApBillBalanceReceivableVOFromArApBillBalanceReceivableDTO(arApBillBalanceReceivableDTO, arApBillBalanceReceivableVO);
+		return arApBillBalanceReceivableRepo.save(arApBillBalanceReceivableVO);
+	}
+
+	private void getArApBillBalanceReceivableVOFromArApBillBalanceReceivableDTO(@Valid ArApBillBalanceReceivableDTO arApBillBalanceReceivableDTO,
+			ArApBillBalanceReceivableVO arApBillBalanceReceivableVO) {
+		arApBillBalanceReceivableVO.setBranch(arApBillBalanceReceivableDTO.getBranch());
+		arApBillBalanceReceivableVO.setPartyName(arApBillBalanceReceivableDTO.getPartyName());
+		arApBillBalanceReceivableVO.setPartyCode(arApBillBalanceReceivableDTO.getPartyCode());
+		arApBillBalanceReceivableVO.setCurrency(arApBillBalanceReceivableDTO.getCurrency());
+		arApBillBalanceReceivableVO.setCreditDays(arApBillBalanceReceivableDTO.getCreditDays());
+		arApBillBalanceReceivableVO.setBillNo(arApBillBalanceReceivableDTO.getBillNo());
+		arApBillBalanceReceivableVO.setBillDate(arApBillBalanceReceivableDTO.getBillDate());
+		arApBillBalanceReceivableVO.setBillExRate(arApBillBalanceReceivableDTO.getBillExRate());
+		arApBillBalanceReceivableVO.setSupplierRefNo(arApBillBalanceReceivableDTO.getSupplierRefNo());
+		arApBillBalanceReceivableVO.setSupplierRefDate(arApBillBalanceReceivableDTO.getSupplierRefDate());
+		arApBillBalanceReceivableVO.setDueDate(arApBillBalanceReceivableDTO.getDueDate());
+		arApBillBalanceReceivableVO.setDebitAmount(arApBillBalanceReceivableDTO.getDebitAmount());
+		arApBillBalanceReceivableVO.setCreditAmount(arApBillBalanceReceivableDTO.getCreditAmount());
+		arApBillBalanceReceivableVO.setActive(arApBillBalanceReceivableDTO.isActive());
+		arApBillBalanceReceivableVO.setOrgId(arApBillBalanceReceivableDTO.getOrgId());
+	}
+
+	@Override
+	public List<ArApBillBalanceReceivableVO> getArApBillBalanceReceivableByActive() {
+		return arApBillBalanceReceivableRepo.findArApBillBalanceReceivableByActive();
+	}
 	
 	
 }
