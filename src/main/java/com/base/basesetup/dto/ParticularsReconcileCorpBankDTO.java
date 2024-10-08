@@ -10,14 +10,13 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class DepositsReconcileDTO {
+public class ParticularsReconcileCorpBankDTO {
 	private Long id;
 	private String voucherNo;
 	private LocalDateTime voucherDate;
-	private String chqDdNo;
-	private LocalDateTime chqDdDate;
-	private LocalDateTime clearedDate;
-	private BigDecimal paymentAmt;
-	private String paymentName;
-	private String narration;
+	private String chequeNo;
+	private LocalDateTime chequeDate;
+	private BigDecimal deposit;
+	private BigDecimal withdrawal;
+	private String bankRef;
 }

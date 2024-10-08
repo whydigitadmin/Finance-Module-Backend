@@ -23,37 +23,31 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "reconcile")
+@Table(name = "reconcilebank")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ReconcileVO {
+public class ReconcileBankVO {
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "reconcilegen")
-	@SequenceGenerator(name = "reconcilegen", sequenceName = "reconcileseq", initialValue = 1000000001, allocationSize = 1)
-	@Column(name = "reconcileid")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "reconcilebankgen")
+	@SequenceGenerator(name = "reconcilebankgen", sequenceName = "reconcilebankseq", initialValue = 1000000001, allocationSize = 1)
+	@Column(name = "reconcilebankid")
 	private Long id;
-	@Column(name = "branch")
-	private String branch;
 	@Column(name = "docid")
 	private String docId;
 	@Column(name = "docdate")
 	private LocalDateTime docDate;
-	@Column(name = "bankstmtdate")
-	private LocalDateTime bankStmtDate;
 	@Column(name="bankaccount")
 	private String bankAccount;
-	@Column(name = "lastreconciledon")
-	private LocalDateTime lastReconciledOn;
-	@Column(name = "cleareddate")
-	private LocalDateTime clearedDate;
-	@Column(name="ledgerbalance")
-	private BigDecimal ledgerBalance;
-	@Column(name="beginingbalance")
-	private BigDecimal beginingBalance;
-	@Column(name="endingbalance")
-	private BigDecimal endingBalance;
+	@Column(name = "bankstmtdate")
+	private LocalDateTime bankStmtDate;
+	@Column(name="remarks")
+	private String remarks;
+	@Column(name="totaldeposit")
+	private BigDecimal totalDeposit;
+	@Column(name="totalwithdrawal")
+	private BigDecimal totalWithdrawal;
 	@Column(name = "orgid")
 	private Long orgId;
 	@Column(name = "active")
@@ -76,18 +70,7 @@ public class ReconcileVO {
 	
 	
 	
-	@Column(name="totalwithdrawal")
-	private BigDecimal totalWithdrawal;
-	@Column(name="totaldeposit")
-	private BigDecimal totalDeposit;
-	@Column(name="summaryendingbalance")
-	private BigDecimal summaryEndingBalance;
-	@Column(name="clearedbalance")
-	private BigDecimal clearedBalance;
-	@Column(name="difference")
-	private BigDecimal difference;
-	@Column(name="narration")
-	private String narration;
+	
 	
 	
 //	@PrePersist
@@ -110,11 +93,9 @@ public class ReconcileVO {
 	
 	
 	
-	@OneToMany(mappedBy = "reconcileVO",cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "reconcileBankVO",cascade = CascadeType.ALL)
 	@JsonManagedReference
-	List<WithdrawalsReconcileVO> withdrawalsReconcileVO;
+	List<ParticularsReconcileVO> particularsReconcileVO;
 	
-	@OneToMany(mappedBy = "reconcileVO",cascade = CascadeType.ALL)
-	@JsonManagedReference
-	List<DepositsReconcileVO> depositsReconcileVO;
+	
 }
