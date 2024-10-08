@@ -43,11 +43,11 @@ public class PartyAddressVO {
 	@Column(name = "addresstype")
 	private String addressType;
 	@Column(name = "addressline1")
-	private String addressline1;
+	private String addressLine1;
 	@Column(name = "addressline2")
-	private String addressline2;
+	private String addressLine2;
 	@Column(name = "addressline3")
-	private String addressline3;
+	private String addressLine3;
 	@Column(name = "pincode")
 	private String pincode;
 	@Column(name = "contactperson")

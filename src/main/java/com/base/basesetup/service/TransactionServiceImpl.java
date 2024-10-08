@@ -2,6 +2,7 @@ package com.base.basesetup.service;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -37,7 +38,6 @@ import com.base.basesetup.dto.BrsOpeningDTO;
 import com.base.basesetup.dto.ChargerCostInvoiceDTO;
 import com.base.basesetup.dto.ChargerDebitNoteDTO;
 import com.base.basesetup.dto.ChargerIrnCreditDTO;
-import com.base.basesetup.dto.ChargerTaxInvoiceDTO;
 import com.base.basesetup.dto.ChartCostCenterDTO;
 import com.base.basesetup.dto.CostInvoiceDTO;
 import com.base.basesetup.dto.DailyMonthlyExRatesDTO;
@@ -50,7 +50,6 @@ import com.base.basesetup.dto.GlOpeningBalanceDTO;
 import com.base.basesetup.dto.GstDebitNoteDTO;
 import com.base.basesetup.dto.GstIrnCreditDTO;
 import com.base.basesetup.dto.GstSalesVoucherDTO;
-import com.base.basesetup.dto.GstTaxInvoiceDTO;
 import com.base.basesetup.dto.IrnCreditDTO;
 import com.base.basesetup.dto.ParticularsDebitNoteDTO;
 import com.base.basesetup.dto.ParticularsGlOpeningBalanceDTO;
@@ -66,6 +65,7 @@ import com.base.basesetup.dto.ReceiptOtherAccountDTO;
 import com.base.basesetup.dto.ReceiptReversalDTO;
 import com.base.basesetup.dto.ReconcileDTO;
 import com.base.basesetup.dto.TaxInvoiceDTO;
+import com.base.basesetup.dto.TaxInvoiceDetailsDTO;
 import com.base.basesetup.dto.TdsCostInvoiceDTO;
 import com.base.basesetup.dto.WithdrawalsReconcileDTO;
 import com.base.basesetup.entity.ArApAdjustmentOffSetVO;
@@ -77,7 +77,6 @@ import com.base.basesetup.entity.BrsOpeningVO;
 import com.base.basesetup.entity.ChargerCostInvoiceVO;
 import com.base.basesetup.entity.ChargerDebitNoteVO;
 import com.base.basesetup.entity.ChargerIrnCreditVO;
-import com.base.basesetup.entity.ChargerTaxInvoiceVO;
 import com.base.basesetup.entity.ChartCostCenterVO;
 import com.base.basesetup.entity.CostInvoiceVO;
 import com.base.basesetup.entity.DailyMonthlyExRatesDtlVO;
@@ -90,7 +89,6 @@ import com.base.basesetup.entity.GlOpeningBalanceVO;
 import com.base.basesetup.entity.GstDebitNoteVO;
 import com.base.basesetup.entity.GstIrnCreditVO;
 import com.base.basesetup.entity.GstSalesVoucherVO;
-import com.base.basesetup.entity.GstTaxInvoiceVO;
 import com.base.basesetup.entity.IrnCreditVO;
 import com.base.basesetup.entity.ParticularsDebitNoteVO;
 import com.base.basesetup.entity.ParticularsGlOpeningBalanceVO;
@@ -104,10 +102,9 @@ import com.base.basesetup.entity.PaymentVoucherVO;
 import com.base.basesetup.entity.ReceiptInvoiceVO;
 import com.base.basesetup.entity.ReceiptOtherAccountVO;
 import com.base.basesetup.entity.ReceiptReversalVO;
-
 import com.base.basesetup.entity.ReconcileVO;
-import com.base.basesetup.entity.ReconciliationSummaryVO;
-
+import com.base.basesetup.entity.TaxInvoiceDetailsVO;
+import com.base.basesetup.entity.TaxInvoiceGstVO;
 import com.base.basesetup.entity.TaxInvoiceVO;
 import com.base.basesetup.entity.TdsCostInvoiceVO;
 import com.base.basesetup.entity.WithdrawalsReconcileVO;
@@ -122,7 +119,6 @@ import com.base.basesetup.repo.BrsOpeningRepo;
 import com.base.basesetup.repo.ChargerCostInvoiceRepo;
 import com.base.basesetup.repo.ChargerDebitNoteRepo;
 import com.base.basesetup.repo.ChargerIrnCreditRepo;
-import com.base.basesetup.repo.ChargerTaxInvoiceRepo;
 import com.base.basesetup.repo.ChartCostCenterRepo;
 import com.base.basesetup.repo.CostInvoiceRepo;
 import com.base.basesetup.repo.DailyMonthlyExRatesDtlRepo;
@@ -135,7 +131,6 @@ import com.base.basesetup.repo.GlOpeningBalanceRepo;
 import com.base.basesetup.repo.GstDebitNoteRepo;
 import com.base.basesetup.repo.GstIrnCreditRepo;
 import com.base.basesetup.repo.GstSalesVoucherRepo;
-import com.base.basesetup.repo.GstTaxInvoiceRepo;
 import com.base.basesetup.repo.IrnCreditRepo;
 import com.base.basesetup.repo.ParticularsDebitNoteRepo;
 import com.base.basesetup.repo.ParticularsGlOpeningBalanceRepo;
@@ -149,11 +144,10 @@ import com.base.basesetup.repo.PaymentVoucherRepo;
 import com.base.basesetup.repo.ReceiptInvoiceRepo;
 import com.base.basesetup.repo.ReceiptOtherAccountRepo;
 import com.base.basesetup.repo.ReceiptReversalRepo;
-
 import com.base.basesetup.repo.ReconcileRepo;
-
 import com.base.basesetup.repo.ReconciliationSummaryRepo;
-
+import com.base.basesetup.repo.TaxInvoiceDetailsRepo;
+import com.base.basesetup.repo.TaxInvoiceGstRepo;
 import com.base.basesetup.repo.TaxInvoiceRepo;
 import com.base.basesetup.repo.TdsCostInvoiceRepo;
 import com.base.basesetup.repo.WithdrawalsReconcileRepo;
@@ -165,10 +159,10 @@ public class TransactionServiceImpl implements TransactionService {
 	TaxInvoiceRepo taxInvoiceRepo;
 
 	@Autowired
-	ChargerTaxInvoiceRepo chargerTaxInvoiceRepo;
+	TaxInvoiceDetailsRepo taxInvoiceDetailsRepo;
 
 	@Autowired
-	GstTaxInvoiceRepo gstTaxInvoiceRepo;
+	TaxInvoiceGstRepo gstTaxInvoiceRepo;
 
 	@Autowired
 	IrnCreditRepo irnCreditRepo;
@@ -271,14 +265,14 @@ public class TransactionServiceImpl implements TransactionService {
 
 	@Autowired
 	ParticularsGlOpeningBalanceRepo particularsGlOpeningBalanceRepo;
-	
+
 	@Autowired
 
 	ReconcileRepo reconcileRepo;
-	
+
 	@Autowired
-	WithdrawalsReconcileRepo  withdrawalsReconcileRepo;
-	
+	WithdrawalsReconcileRepo withdrawalsReconcileRepo;
+
 	@Autowired
 	DepositsReconcileRepo depositsReconcileRepo;
 
@@ -286,7 +280,6 @@ public class TransactionServiceImpl implements TransactionService {
 	BrsExcelUploadRepo brsExcelUploadRepo;
 
 	ReconciliationSummaryRepo reconciliationSummaryRepo;
-
 
 	// TaxInvoice
 	@Override
@@ -316,115 +309,164 @@ public class TransactionServiceImpl implements TransactionService {
 	}
 
 	@Override
-	public TaxInvoiceVO updateCreateTaxInvoice(@Valid TaxInvoiceDTO taxInvoiceDTO) throws ApplicationException {
+	public Map<String, Object> updateCreateTaxInvoice(TaxInvoiceDTO taxInvoiceDTO) throws ApplicationException {
 		TaxInvoiceVO taxInvoiceVO = new TaxInvoiceVO();
-		boolean isUpdate = false;
+		String message;
 		if (ObjectUtils.isNotEmpty(taxInvoiceDTO.getId())) {
-			isUpdate = true;
-			taxInvoiceVO = taxInvoiceRepo.findById(taxInvoiceDTO.getId())
-					.orElseThrow(() -> new ApplicationException("Invalid TaxInvoice details"));
-			taxInvoiceVO.setUpdatedBy(taxInvoiceDTO.getCreatedBy());
+			taxInvoiceVO = taxInvoiceRepo.findById(taxInvoiceVO.getId())
+					.orElseThrow(() -> new ApplicationException("Tax Invoice not found"));
+
+			taxInvoiceVO.setModifiedBy(taxInvoiceDTO.getCreatedBy());
+			createUpdateTaxInvoiceVOByTaxInvoiceDTO(taxInvoiceDTO, taxInvoiceVO);
+			message = "Tax Invoice Updated Successfully";
 		} else {
-			taxInvoiceVO.setUpdatedBy(taxInvoiceDTO.getCreatedBy());
+
 			taxInvoiceVO.setCreatedBy(taxInvoiceDTO.getCreatedBy());
+			taxInvoiceVO.setModifiedBy(taxInvoiceDTO.getCreatedBy());
+			createUpdateTaxInvoiceVOByTaxInvoiceDTO(taxInvoiceDTO, taxInvoiceVO);
+			message = "Tax Invoice Created Successfully";
 		}
 
-		List<ChargerTaxInvoiceVO> chargerTaxInvoiceVOs = new ArrayList<>();
-		if (taxInvoiceDTO.getChargerTaxInvoiceDTO() != null) {
-			for (ChargerTaxInvoiceDTO chargerTaxInvoiceDTO : taxInvoiceDTO.getChargerTaxInvoiceDTO()) {
-				ChargerTaxInvoiceVO chargerTaxInvoiceVO;
-				if (chargerTaxInvoiceDTO.getId() != null && ObjectUtils.isNotEmpty(chargerTaxInvoiceDTO.getId())) {
-					chargerTaxInvoiceVO = chargerTaxInvoiceRepo.findById(chargerTaxInvoiceDTO.getId())
-							.orElse(new ChargerTaxInvoiceVO());
-				} else {
-					chargerTaxInvoiceVO = new ChargerTaxInvoiceVO();
-				}
-				chargerTaxInvoiceVO.setType(chargerTaxInvoiceDTO.getType());
-				chargerTaxInvoiceVO.setChargeCode(chargerTaxInvoiceDTO.getChargeCode());
-				chargerTaxInvoiceVO.setGChargeCode(chargerTaxInvoiceDTO.getGChargeCode());
-				chargerTaxInvoiceVO.setChargeName(chargerTaxInvoiceDTO.getChargeName());
-				chargerTaxInvoiceVO.setTaxable(chargerTaxInvoiceDTO.getTaxable());
-				chargerTaxInvoiceVO.setQty(chargerTaxInvoiceDTO.getQty());
-				chargerTaxInvoiceVO.setRate(chargerTaxInvoiceDTO.getRate());
-				chargerTaxInvoiceVO.setCurrency(chargerTaxInvoiceDTO.getCurrency());
-				chargerTaxInvoiceVO.setExRate(chargerTaxInvoiceDTO.getExRate());
-				chargerTaxInvoiceVO.setQty(chargerTaxInvoiceDTO.getQty());
-				chargerTaxInvoiceVO.setFcAmount(chargerTaxInvoiceDTO.getFcAmount());
-				chargerTaxInvoiceVO.setLcAmount(chargerTaxInvoiceDTO.getLcAmount());
-				chargerTaxInvoiceVO.setBillAmount(chargerTaxInvoiceDTO.getBillAmount());
-				chargerTaxInvoiceVO.setSac(chargerTaxInvoiceDTO.getSac());
-				chargerTaxInvoiceVO.setGST(chargerTaxInvoiceDTO.getGST());
-				chargerTaxInvoiceVO.setGSTPercent(chargerTaxInvoiceDTO.getGSTPercent());
-				chargerTaxInvoiceVO.setTaxInvoiceVO(taxInvoiceVO);
-				chargerTaxInvoiceVOs.add(chargerTaxInvoiceVO);
-			}
-		}
-
-		List<GstTaxInvoiceVO> gstTaxInvoiceVOs = new ArrayList<>();
-		if (taxInvoiceDTO.getGstTaxInvoiceDTO() != null) {
-			for (GstTaxInvoiceDTO gstTaxInvoiceDTO : taxInvoiceDTO.getGstTaxInvoiceDTO()) {
-				GstTaxInvoiceVO gstTaxInvoiceVO;
-				if (gstTaxInvoiceDTO.getId() != null & ObjectUtils.isEmpty(gstTaxInvoiceDTO.getId())) {
-					gstTaxInvoiceVO = gstTaxInvoiceRepo.findById(gstTaxInvoiceDTO.getId())
-							.orElse(new GstTaxInvoiceVO());
-				} else {
-					gstTaxInvoiceVO = new GstTaxInvoiceVO();
-				}
-				gstTaxInvoiceVO.setGstBdBillAmount(gstTaxInvoiceDTO.getGstBdBillAmount());
-				gstTaxInvoiceVO.setGstCrLcAmount(gstTaxInvoiceDTO.getGstCrLcAmount());
-				gstTaxInvoiceVO.setGstCrBillAmount(gstTaxInvoiceDTO.getGstCrBillAmount());
-				gstTaxInvoiceVO.setGstDbLcAmount(gstTaxInvoiceDTO.getGstDbLcAmount());
-				gstTaxInvoiceVO.setGstChargeAcc(gstTaxInvoiceDTO.getGstChargeAcc());
-				gstTaxInvoiceVO.setGstSubledgerCode(gstTaxInvoiceDTO.getGstSubledgerCode());
-				gstTaxInvoiceVO.setTaxInvoiceVO(taxInvoiceVO);
-				gstTaxInvoiceVOs.add(gstTaxInvoiceVO);
-			}
-		}
-
-		getTaxInvoiceVOFromTaxInvoiceDTO(taxInvoiceDTO, taxInvoiceVO);
-		taxInvoiceVO.setChargerTaxInvoiceVO(chargerTaxInvoiceVOs);
-		taxInvoiceVO.setGstTaxInvoiceVO(gstTaxInvoiceVOs);
-		return taxInvoiceRepo.save(taxInvoiceVO);
+		taxInvoiceRepo.save(taxInvoiceVO);
+		Map<String, Object> response = new HashMap<>();
+		response.put("taxInvoiceVO", taxInvoiceVO);
+		response.put("message", message);
+		return response;
 	}
 
-	private void getTaxInvoiceVOFromTaxInvoiceDTO(@Valid TaxInvoiceDTO taxInvoiceDTO, TaxInvoiceVO taxInvoiceVO) {
-		// Finyr
-		int finyr = taxInvoiceRepo.findFinyr();
-		// DocId
-		String taxInvoice = "AI" + finyr + taxInvoiceRepo.findDocId();
-		taxInvoiceVO.setDocId(taxInvoice);
-		taxInvoiceRepo.nextSeq();
-		// InvoiceNo
-		String invoiceNo = "AI" + finyr + "INV" + taxInvoiceRepo.findInvoiceNo();
-		taxInvoiceVO.setInvoiceNo(invoiceNo);
-		taxInvoiceRepo.nextSeqInvoice();
+	private void createUpdateTaxInvoiceVOByTaxInvoiceDTO(TaxInvoiceDTO taxInvoiceDTO, TaxInvoiceVO taxInvoiceVO) {
+
+		// Map fields from DTO to VO
 		taxInvoiceVO.setOrgId(taxInvoiceDTO.getOrgId());
-		taxInvoiceVO.setAddress(taxInvoiceDTO.getAddress());
-		taxInvoiceVO.setAddressType(taxInvoiceDTO.getAddressType());
-		taxInvoiceVO.setBillCurr(taxInvoiceDTO.getBillCurr());
-		taxInvoiceVO.setDueDate(taxInvoiceDTO.getDueDate());
-		taxInvoiceVO.setGSTType(taxInvoiceDTO.getGSTType());
-		taxInvoiceVO.setHeaderColumns(taxInvoiceDTO.getHeaderColumns());
-		taxInvoiceVO.setPartyCode(taxInvoiceDTO.getPartyCode());
+		taxInvoiceVO.setBranch(taxInvoiceDTO.getBranch());
+		taxInvoiceVO.setBranchCode(taxInvoiceDTO.getBranchCode());
+		taxInvoiceVO.setFinYear(taxInvoiceDTO.getFinYear());
+		taxInvoiceVO.setCreatedBy(taxInvoiceDTO.getCreatedBy());
+		taxInvoiceVO.setBizType(taxInvoiceDTO.getBizType());
+		taxInvoiceVO.setBizMode(taxInvoiceDTO.getBizMode());
 		taxInvoiceVO.setPartyName(taxInvoiceDTO.getPartyName());
+		taxInvoiceVO.setPartyCode(taxInvoiceDTO.getPartyCode());
 		taxInvoiceVO.setPartyType(taxInvoiceDTO.getPartyType());
-		taxInvoiceVO.setPincode(taxInvoiceDTO.getPincode());
-		taxInvoiceVO.setPlaceOfSupply(taxInvoiceDTO.getPlaceOfSupply());
+		taxInvoiceVO.setStateNo(taxInvoiceDTO.getStateNo());
+		taxInvoiceVO.setStateCode(taxInvoiceDTO.getStateCode());
 		taxInvoiceVO.setRecipientGSTIN(taxInvoiceDTO.getRecipientGSTIN());
-		taxInvoiceVO.setSalesType(taxInvoiceDTO.getSalesType());
+		taxInvoiceVO.setPlaceOfSupply(taxInvoiceDTO.getPlaceOfSupply());
+		taxInvoiceVO.setAddressType(taxInvoiceDTO.getAddressType());
+		taxInvoiceVO.setAddress(taxInvoiceDTO.getAddress());
+		taxInvoiceVO.setPinCode(taxInvoiceDTO.getPinCode());
 		taxInvoiceVO.setStatus(taxInvoiceDTO.getStatus());
-		taxInvoiceVO.setDocDate(taxInvoiceDTO.getDocDate());
+		taxInvoiceVO.setGstType(taxInvoiceDTO.getGstType());
+		taxInvoiceVO.setSupplierBillNo(taxInvoiceDTO.getSupplierBillNo());
+		taxInvoiceVO.setSupplierBillDate(taxInvoiceDTO.getSupplierBillDate());
+		taxInvoiceVO.setBillCurr(taxInvoiceDTO.getBillCurr());
+		taxInvoiceVO.setBillCurrRate(taxInvoiceDTO.getBillCurrRate());
+		taxInvoiceVO.setExAmount(taxInvoiceDTO.getExAmount());
+		taxInvoiceVO.setCreditDays(taxInvoiceDTO.getCreditDays());
+		taxInvoiceVO.setContactPerson(taxInvoiceDTO.getContactPerson());
+		taxInvoiceVO.setShipperInvoiceNo(taxInvoiceDTO.getShipperInvoiceNo());
+		taxInvoiceVO.setBillOfEntry(taxInvoiceDTO.getBillOfEntry());
+		taxInvoiceVO.setBillMonth(taxInvoiceDTO.getBillMonth());
+		taxInvoiceVO.setInvoiceNo(taxInvoiceDTO.getInvoiceNo());
 		taxInvoiceVO.setInvoiceDate(taxInvoiceDTO.getInvoiceDate());
-		taxInvoiceVO.setAmountInwords(taxInvoiceDTO.getAmountInwords());
-		taxInvoiceVO.setBillingRemarks(taxInvoiceDTO.getBillingRemarks());
-		taxInvoiceVO.setBillInvAmount(taxInvoiceDTO.getBillInvAmount());
-		taxInvoiceVO.setBilllcChargeAmount(taxInvoiceDTO.getBilllcChargeAmount());
-		taxInvoiceVO.setBillTaxAmount(taxInvoiceDTO.getBillTaxAmount());
-		taxInvoiceVO.setLcChargeAmount(taxInvoiceDTO.getLcChargeAmount());
-		taxInvoiceVO.setLcInvAmount(taxInvoiceDTO.getLcInvAmount());
-		taxInvoiceVO.setLcRoundOffAmount(taxInvoiceDTO.getLcRoundOffAmount());
-		taxInvoiceVO.setLcTaxableAmount(taxInvoiceDTO.getLcTaxableAmount());
-		taxInvoiceVO.setLcTaxAmount(taxInvoiceDTO.getLcTaxAmount());
+		taxInvoiceVO.setSalesType(taxInvoiceDTO.getSalesType());
+		taxInvoiceVO.setModifiedBy(taxInvoiceDTO.getCreatedBy());
+
+		if (ObjectUtils.isNotEmpty(taxInvoiceVO.getId())) {
+			List<TaxInvoiceDetailsVO> taxInvoiceDetailsVO1 = taxInvoiceDetailsRepo.findByTaxInvoiceVO(taxInvoiceVO);
+			taxInvoiceDetailsRepo.deleteAll(taxInvoiceDetailsVO1);
+		}
+		BigDecimal totalChargeAmountLC = BigDecimal.ZERO;
+		BigDecimal totalChargeAmountBC = BigDecimal.ZERO;
+		BigDecimal totalTaxAmountLC = BigDecimal.ZERO;
+		BigDecimal totalTaxAmountBC = BigDecimal.ZERO;
+		BigDecimal totalInvAmountLC = BigDecimal.ZERO;
+		BigDecimal totalInvAmountBC = BigDecimal.ZERO;
+		
+		List<TaxInvoiceDetailsVO> taxInvoiceDetailsVOs = new ArrayList<>();
+		for (TaxInvoiceDetailsDTO taxInvoiceDetailsDTO : taxInvoiceDTO.getTaxInvoiceDetailsDTO()) {
+
+			TaxInvoiceDetailsVO taxInvoiceDetailsVO = new TaxInvoiceDetailsVO();
+			taxInvoiceDetailsVO.setChargeType(taxInvoiceDetailsDTO.getChargeType());
+			taxInvoiceDetailsVO.setChargeCode(taxInvoiceDetailsDTO.getChargeCode());
+			taxInvoiceDetailsVO.setGovChargeCode(taxInvoiceDetailsDTO.getGovChargeCode());
+			taxInvoiceDetailsVO.setLedger(taxInvoiceDetailsDTO.getLedger());
+			taxInvoiceDetailsVO.setChargeName(taxInvoiceDetailsDTO.getChargeName());
+			taxInvoiceDetailsVO.setTaxable(taxInvoiceDetailsDTO.getTaxable());
+			taxInvoiceDetailsVO.setQty(taxInvoiceDetailsDTO.getQty());
+			taxInvoiceDetailsVO.setRate(taxInvoiceDetailsDTO.getRate());
+			taxInvoiceDetailsVO.setCurrency(taxInvoiceDetailsDTO.getCurrency());
+			taxInvoiceDetailsVO.setExRate(taxInvoiceDetailsDTO.getExRate());
+			taxInvoiceDetailsVO.setExempted(taxInvoiceDetailsDTO.getExempted());
+			taxInvoiceDetailsVO.setSac(taxInvoiceDetailsDTO.getSac());
+			taxInvoiceDetailsVO.setGSTPercent(taxInvoiceDetailsDTO.getGSTPercent());
+
+			BigDecimal fcAmount;
+			BigDecimal lcAmount;
+			BigDecimal tlcAmount;
+			BigDecimal billAmount;
+			BigDecimal gstAmount;
+
+			
+
+			if (!taxInvoiceDetailsDTO.getCurrency().equals("INR")) {
+				BigDecimal rate = taxInvoiceDetailsDTO.getRate(); // BigDecimal type is expected here
+				BigDecimal qty = BigDecimal.valueOf(taxInvoiceDetailsDTO.getQty()); // Convert qty to BigDecimal
+
+				fcAmount = rate.multiply(qty);
+
+				taxInvoiceDetailsVO.setFcAmount(fcAmount);
+
+			} else {
+				fcAmount = BigDecimal.valueOf(0.00);
+			}
+
+			BigDecimal exRate = taxInvoiceDetailsDTO.getExRate();// Assuming getExRate() returns BigDecimal
+			BigDecimal qty=BigDecimal.valueOf(taxInvoiceDetailsDTO.getQty());
+			BigDecimal rate=taxInvoiceDetailsDTO.getRate();
+			lcAmount = exRate.multiply(qty.multiply(rate));
+			taxInvoiceDetailsVO.setLcAmount(lcAmount);
+			totalChargeAmountLC = totalChargeAmountLC.add(lcAmount);
+
+			BigDecimal gstPercent = BigDecimal.valueOf(taxInvoiceDetailsDTO.getGSTPercent()); // Convert GSTPercent to
+																								// BigDecimal
+			tlcAmount = lcAmount.multiply(gstPercent).divide(BigDecimal.valueOf(100));
+			taxInvoiceDetailsVO.setTlcAmount(tlcAmount);
+
+			billAmount = lcAmount.divide(exRate, RoundingMode.HALF_UP); // Ensure you specify a RoundingMode when
+																		// dividing
+			taxInvoiceDetailsVO.setBillAmount(billAmount);
+			totalChargeAmountBC = totalChargeAmountBC.add(billAmount);
+
+			gstAmount = lcAmount.multiply(gstPercent).divide(BigDecimal.valueOf(100));
+			taxInvoiceDetailsVO.setGstAmount(gstAmount);
+			totalTaxAmountLC = totalTaxAmountLC.add(gstAmount);
+			totalTaxAmountBC = totalTaxAmountBC.add(gstAmount);
+
+			
+			taxInvoiceDetailsVO.setTaxInvoiceVO(taxInvoiceVO);
+			taxInvoiceDetailsVOs.add(taxInvoiceDetailsVO);
+
+		}
+
+		totalInvAmountLC = totalChargeAmountLC.add(totalTaxAmountLC);
+		totalInvAmountBC = totalChargeAmountBC.add(totalTaxAmountBC);
+		
+		taxInvoiceVO.setTotalChargeAmountLc(totalChargeAmountLC);
+		taxInvoiceVO.setTotalChargeAmountBc(totalChargeAmountBC);
+		taxInvoiceVO.setTotalTaxAmountLc(totalTaxAmountLC);
+		taxInvoiceVO.setTotalTaxAmountBc(totalTaxAmountBC);
+		
+		BigDecimal originalTotalInvAmountLC = totalChargeAmountLC.add(totalTaxAmountLC); // Store the original value before rounding
+		BigDecimal roundedTotalInvAmountLC = totalInvAmountLC.setScale(0, RoundingMode.HALF_UP);
+		BigDecimal roundOffAmountLC = roundedTotalInvAmountLC.subtract(originalTotalInvAmountLC);
+		taxInvoiceVO.setTotalInvAmountLc(roundedTotalInvAmountLC);
+		taxInvoiceVO.setRoundOffAmountLc(roundOffAmountLC);
+		
+		BigDecimal roundedTotalInvAmountBC = totalInvAmountBC.setScale(0, RoundingMode.HALF_UP);
+		taxInvoiceVO.setTotalInvAmountBc(roundedTotalInvAmountBC);		
+		
+		taxInvoiceVO.setTaxInvoiceDetailsVO(taxInvoiceDetailsVOs);
+
 	}
 
 	@Override
@@ -2396,10 +2438,9 @@ public class TransactionServiceImpl implements TransactionService {
 	public List<GlOpeningBalanceVO> getGlOpeningBalanceByActive() {
 		return glOpeningBalanceRepo.findGlOpeningBalanceByActive();
 	}
-	
 
 ///Reconcile
-	
+
 	@Override
 	public List<ReconcileVO> getAllReconcileByOrgId(Long orgId) {
 		List<ReconcileVO> reconcileVO = new ArrayList<>();
@@ -2412,7 +2453,7 @@ public class TransactionServiceImpl implements TransactionService {
 		}
 		return reconcileVO;
 	}
-	
+
 	@Override
 	public List<ReconcileVO> getAllReconcileById(Long id) {
 		List<ReconcileVO> reconcileVO = new ArrayList<>();
@@ -2426,12 +2467,10 @@ public class TransactionServiceImpl implements TransactionService {
 		return reconcileVO;
 	}
 
-
-
 	@Override
 	public ReconcileVO updateCreateReconcile(@Valid ReconcileDTO reconcileDTO) throws ApplicationException {
 		ReconcileVO reconcileVO = new ReconcileVO();
-		//		boolean isUpdate = false;
+		// boolean isUpdate = false;
 		if (ObjectUtils.isNotEmpty(reconcileDTO.getId())) {
 			boolean isUpdate = true;
 			reconcileVO = reconcileRepo.findById(reconcileDTO.getId())
@@ -2446,7 +2485,8 @@ public class TransactionServiceImpl implements TransactionService {
 		if (reconcileDTO.getWithdrawalsReconcileDTO() != null) {
 			for (WithdrawalsReconcileDTO withdrawalsReconcileDTO : reconcileDTO.getWithdrawalsReconcileDTO()) {
 				WithdrawalsReconcileVO withdrawalsReconcileVO;
-				if (withdrawalsReconcileDTO.getId() != null && ObjectUtils.isNotEmpty(withdrawalsReconcileDTO.getId())) {
+				if (withdrawalsReconcileDTO.getId() != null
+						&& ObjectUtils.isNotEmpty(withdrawalsReconcileDTO.getId())) {
 					withdrawalsReconcileVO = withdrawalsReconcileRepo.findById(withdrawalsReconcileDTO.getId())
 							.orElse(new WithdrawalsReconcileVO());
 				} else {
@@ -2461,8 +2501,8 @@ public class TransactionServiceImpl implements TransactionService {
 				withdrawalsReconcileVO.setPaymentName(withdrawalsReconcileDTO.getPaymentName());
 				withdrawalsReconcileVO.setNarration(withdrawalsReconcileDTO.getNarration());
 				withdrawalsReconcileVO.setReconcileVO(reconcileVO);
-				withdrawalsReconcileVOs.add(withdrawalsReconcileVO)	;
-				}
+				withdrawalsReconcileVOs.add(withdrawalsReconcileVO);
+			}
 		}
 
 		List<DepositsReconcileVO> depositsReconcileVOs = new ArrayList<>();
@@ -2484,53 +2524,52 @@ public class TransactionServiceImpl implements TransactionService {
 				depositsReconcileVO.setPaymentName(depositsReconcileDTO.getPaymentName());
 				depositsReconcileVO.setNarration(depositsReconcileDTO.getNarration());
 				depositsReconcileVO.setReconcileVO(reconcileVO);
-			     depositsReconcileVOs.add(depositsReconcileVO)	;
-			     }
+				depositsReconcileVOs.add(depositsReconcileVO);
+			}
 		}
 
 		getReconcileVOFromReconcileDTO(reconcileDTO, reconcileVO);
 		reconcileVO.setWithdrawalsReconcileVO(withdrawalsReconcileVOs);
-		reconcileVO.setDepositsReconcileVO(depositsReconcileVOs);	
+		reconcileVO.setDepositsReconcileVO(depositsReconcileVOs);
 		return reconcileRepo.save(reconcileVO);
-		}
+	}
 
 	private void getReconcileVOFromReconcileDTO(@Valid ReconcileDTO reconcileDTO, ReconcileVO reconcileVO) {
-		//			// Finyr
-		//			int finyr = taxInvoiceRepo.findFinyr();
-		//			// DocId
-		//			String taxInvoice = "AI" + finyr + taxInvoiceRepo.findDocId();
-		//			taxInvoiceVO.setDocId(taxInvoice);
-		//			taxInvoiceRepo.nextSeq();
-		//			// InvoiceNo
-		//			String invoiceNo = "AI" + finyr + "INV" + taxInvoiceRepo.findInvoiceNo();
-		//			taxInvoiceVO.setInvoiceNo(invoiceNo);	
-		//			taxInvoiceRepo.nextSeqInvoice();
-	
-	    reconcileVO.setBranch(reconcileDTO.getBranch());
-	    reconcileVO.setDocId(reconcileDTO.getDocId());
-	    reconcileVO.setDocDate(reconcileDTO.getDocDate());
-	    reconcileVO.setBankStmtDate(reconcileDTO.getBankStmtDate());
-	    reconcileVO.setBankAccount(reconcileDTO.getBankAccount());
-	    reconcileVO.setLastReconciledOn(reconcileDTO.getLastReconciledOn());
-	    reconcileVO.setClearedDate(reconcileDTO.getClearedDate());
-	    reconcileVO.setLedgerBalance(reconcileDTO.getLedgerBalance());
-	    reconcileVO.setBeginingBalance(reconcileDTO.getBeginingBalance());
-	    reconcileVO.setEndingBalance(reconcileDTO.getEndingBalance());
-	    reconcileVO.setTotalWithdrawal(reconcileDTO.getTotalWithdrawal());
-	    reconcileVO.setTotalDeposit(reconcileDTO.getTotalDeposit());
-	    reconcileVO.setSummaryEndingBalance(reconcileDTO.getSummaryEndingBalance());
-	    reconcileVO.setClearedBalance(reconcileDTO.getClearedBalance());
-	    reconcileVO.setDifference(reconcileDTO.getDifference());
-	    reconcileVO.setNarration(reconcileDTO.getNarration());
-	    reconcileVO.setOrgId(reconcileDTO.getOrgId());
-	    reconcileVO.setActive(reconcileDTO.isActive());
+		// // Finyr
+		// int finyr = taxInvoiceRepo.findFinyr();
+		// // DocId
+		// String taxInvoice = "AI" + finyr + taxInvoiceRepo.findDocId();
+		// taxInvoiceVO.setDocId(taxInvoice);
+		// taxInvoiceRepo.nextSeq();
+		// // InvoiceNo
+		// String invoiceNo = "AI" + finyr + "INV" + taxInvoiceRepo.findInvoiceNo();
+		// taxInvoiceVO.setInvoiceNo(invoiceNo);
+		// taxInvoiceRepo.nextSeqInvoice();
+
+		reconcileVO.setBranch(reconcileDTO.getBranch());
+		reconcileVO.setDocId(reconcileDTO.getDocId());
+		reconcileVO.setDocDate(reconcileDTO.getDocDate());
+		reconcileVO.setBankStmtDate(reconcileDTO.getBankStmtDate());
+		reconcileVO.setBankAccount(reconcileDTO.getBankAccount());
+		reconcileVO.setLastReconciledOn(reconcileDTO.getLastReconciledOn());
+		reconcileVO.setClearedDate(reconcileDTO.getClearedDate());
+		reconcileVO.setLedgerBalance(reconcileDTO.getLedgerBalance());
+		reconcileVO.setBeginingBalance(reconcileDTO.getBeginingBalance());
+		reconcileVO.setEndingBalance(reconcileDTO.getEndingBalance());
+		reconcileVO.setTotalWithdrawal(reconcileDTO.getTotalWithdrawal());
+		reconcileVO.setTotalDeposit(reconcileDTO.getTotalDeposit());
+		reconcileVO.setSummaryEndingBalance(reconcileDTO.getSummaryEndingBalance());
+		reconcileVO.setClearedBalance(reconcileDTO.getClearedBalance());
+		reconcileVO.setDifference(reconcileDTO.getDifference());
+		reconcileVO.setNarration(reconcileDTO.getNarration());
+		reconcileVO.setOrgId(reconcileDTO.getOrgId());
+		reconcileVO.setActive(reconcileDTO.isActive());
 	}
 
 	@Override
 	public List<ReconcileVO> getReconcileByActive() {
-		
+
 		return reconcileRepo.findReconcileByActive();
 	}
 
-	
 }
