@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import com.base.basesetup.entity.TaxInvoiceDetailsVO;
 import com.base.basesetup.entity.TaxInvoiceVO;
 
 public interface TaxInvoiceRepo extends JpaRepository<TaxInvoiceVO, Long> {
@@ -49,5 +50,6 @@ public interface TaxInvoiceRepo extends JpaRepository<TaxInvoiceVO, Long> {
 
 	@Query(nativeQuery = true, value = "select * from taxinvoice where orgid=?1 and docid=?2")
 	List<TaxInvoiceVO> findAllTaxInvoiceByDocId(Long orgId, String docId);
+
 
 }

@@ -2,8 +2,6 @@ package com.base.basesetup.entity;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -14,7 +12,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.PrePersist;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -38,102 +35,117 @@ public class TaxInvoiceVO {
 	@SequenceGenerator(name = "taxinvoicegen", sequenceName = "taxinvoiceseq", initialValue = 1000000001, allocationSize = 1)
 	@Column(name = "taxinvoiceid")
 	private Long id;
-	@Column(name = "headercolumns")
-	private String headerColumns;
+	@Column(name = "orgid")
+	private Long orgId;
+	@Column(name = "branch")
+	private String branch;
+	@Column(name = "branchcode")
+	private String branchCode;
+	@Column(name = "finyear")
+	private String finYear;
+	@Column(name = "createdby")
+	private String createdBy;
+	@Column(name = "modifiedby")
+	private String modifiedBy;
+	@Column(name = "active")
+	private boolean active=true;
+	@Column(name = "cancel")
+	private boolean cancel=false;
+	@Column(name = "cancelremarks")
+	private String cancelRemarks;
+	@Column(name = "biztype")
+	private String bizType;
+	@Column(name = "bizmode")
+	private String bizMode;
 	@Column(name = "partyname")
 	private String partyName;
 	@Column(name = "partycode")
 	private String partyCode;
 	@Column(name = "partytype")
 	private String partyType;
-	@Column(name = "addresstype")
-	private String addressType;
+	@Column(name = "stateno")
+	private String stateNo;
+	@Column(name = "statecode")
+	private String stateCode;
 	@Column(name = "recipientgstin")
 	private String recipientGSTIN;
 	@Column(name = "placeofsupply")
 	private String placeOfSupply;
+	@Column(name = "addresstype")
+	private String addressType;
 	@Column(name = "address")
 	private String address;
 	@Column(name = "pincode")
-	private String pincode;
+	private String pinCode;
 	@Column(name = "status")
 	private String status;
 	@Column(name = "gsttype")
-	private String GSTType;
-	@Column(name = "duedate")
-	private LocalDate dueDate;
-	@Column(name = "billcurr")
-	private String billCurr;
-	@Column(name = "salestype")
-	private String salesType;
-	@Column(name = "orgid")
-	private Long orgId;
-	@Column(name = "active")
-	private boolean active;
-	@Column(name = "modifiedby")
-	private String updatedBy;
-	@Column(name = "createdby")
-	private String createdBy;
-	@Column(name = "cancel")
-	private boolean cancel;
-	@Column(name = "cancelremarks")
-	private String cancelRemarks;
+	private String gstType;
 	@Column(name = "docid")
 	private String docId;
 	@Column(name = "docdate")
-	private LocalDateTime docDate;
+	private LocalDate docDate= LocalDate.now();
+	@Column(name = "supplierbillno")
+	private String supplierBillNo;
+	@Column(name = "supplierbilldate")
+	private LocalDate supplierBillDate;
+	@Column(name = "billcurr")
+	private String billCurr;
+	@Column(name = "billcurrrate")
+	private BigDecimal billCurrRate;
+	@Column(name = "examount")
+	private BigDecimal exAmount;
+	@Column(name = "creditdays")
+	private int creditDays;
+	@Column(name = "contactperson")
+	private String contactPerson;
+	@Column(name = "shipperinvoiceno")
+	private String shipperInvoiceNo;
+	@Column(name = "billofentry")
+	private String billOfEntry;
+	@Column(name = "billmonth")
+	private String billMonth;
+	
+	
 	@Column(name = "invoiceno")
 	private String invoiceNo;
 	@Column(name = "invoicedate")
-	private LocalDateTime invoiceDate;
-	@Column(name = "finyr")
-	private String finyr;
+	private LocalDate invoiceDate;
+	@Column(name = "salestype")
+	private String salesType;
 
-	@Column(name = "lcchargeamount")
-	private BigDecimal lcChargeAmount;
-	@Column(name = "lctaxamount")
-	private BigDecimal lcTaxAmount;
-	@Column(name = "lcinvamount")
-	private BigDecimal lcInvAmount;
-	@Column(name = "lcroundoffamount")
-	private BigDecimal lcRoundOffAmount;
-	@Column(name = "billchargeamount")
-	private BigDecimal billlcChargeAmount;
-	@Column(name = "billtaxamount")
-	private BigDecimal billTaxAmount;
-	@Column(name = "billinvamount")
-	private BigDecimal billInvAmount;
-	@Column(name = "lctaxableamount")
-	private BigDecimal lcTaxableAmount;
+	@Column(name = "totalchargeamountlc")
+	private BigDecimal totalChargeAmountLc;
+	@Column(name = "totaltaxamountlc")
+	private BigDecimal totalTaxAmountLc;
+	@Column(name = "totalinvamountlc")
+	private BigDecimal totalInvAmountLc;
+	@Column(name = "roundoffamountlc")
+	private BigDecimal roundOffAmountLc;
+	@Column(name = "totalchargeamountbc")
+	private BigDecimal totalChargeAmountBc;
+	@Column(name = "totaltaxamountbc")
+	private BigDecimal totalTaxAmountBc;
+	@Column(name = "totalinvamountbc")
+	private BigDecimal totalInvAmountBc;
+	@Column(name = "totaltaxableamountlc")
+	private BigDecimal totalTaxableAmountLc;
 	@Column(name = "amountinwords")
-	private String amountInwords;
+	private String amountInWords;
 	@Column(name = "billingremarks")
 	private String billingRemarks;
 
-	@PrePersist
-	private void setDefaultFinyr() {
-		// Execute the logic to set the default value for finyr
-		String fyFull = calculateFinyr();
-		this.finyr = fyFull;
-	}
+	
 
-	private String calculateFinyr() {
-		// Logic to calculate finyr based on the provided SQL query
-		String currentMonthDay = LocalDate.now().format(DateTimeFormatter.ofPattern("MMdd"));
-		String fyFull = (currentMonthDay.compareTo("0331") > 0)
-				? LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy"))
-				: LocalDate.now().minusYears(1).format(DateTimeFormatter.ofPattern("yyyy"));
-		return fyFull;
-	}
 
 	@OneToMany(mappedBy = "taxInvoiceVO", cascade = CascadeType.ALL)
 	@JsonManagedReference
-	List<ChargerTaxInvoiceVO> chargerTaxInvoiceVO;
+	List<TaxInvoiceDetailsVO> taxInvoiceDetailsVO;
 
 	
 	@OneToMany(mappedBy = "taxInvoiceVO", cascade = CascadeType.ALL)
 	@JsonManagedReference
-	List<GstTaxInvoiceVO> gstTaxInvoiceVO;
+	List<TaxInvoiceGstVO> taxInvoiceGstVO;
 
 	@Embedded
 	@Builder.Default

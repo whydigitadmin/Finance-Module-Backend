@@ -11,11 +11,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class GstTaxInvoiceDTO {
-	private Long id;
+public class TaxInvoiceGstDTO {
+	
 	private String gstChargeAcc;
 	private String gstSubledgerCode;
-	private BigDecimal gstBdBillAmount;
+	private BigDecimal gstDbBillAmount;
 	private BigDecimal gstCrBillAmount;
 	private BigDecimal gstDbLcAmount;
 	private BigDecimal gstCrLcAmount;

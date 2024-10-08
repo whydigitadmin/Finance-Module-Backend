@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PartyVendorEvaluationDTO {
 	private Long id;
-	private String whoBroughtVentor;
+	private String whoBroughtVendor;
 	private String whatBasisVendorSelected;
 	private String justification;
 	private String slaPoints;

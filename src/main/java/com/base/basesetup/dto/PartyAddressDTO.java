@@ -15,9 +15,9 @@ public class PartyAddressDTO {
 	private String stateGstIn;
 	private String cityName;
 	private String addressType;
-	private String addressline1;
-	private String addressline2;
-	private String addressline3;
+	private String addressLine1;
+	private String addressLine2;
+	private String addressLine3;
 	private String pincode;
 	private String contactPerson;
 	private String contactPhoneNo;

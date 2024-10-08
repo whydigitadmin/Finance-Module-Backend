@@ -41,6 +41,7 @@ import com.base.basesetup.dto.PaymentVoucherDTO;
 import com.base.basesetup.dto.ReceiptReversalDTO;
 import com.base.basesetup.dto.ReconcileBankDTO;
 import com.base.basesetup.dto.ReconcileCorpBankDTO;
+import com.base.basesetup.dto.ReconcileDTO;
 import com.base.basesetup.dto.ResponseDTO;
 import com.base.basesetup.dto.TaxInvoiceDTO;
 import com.base.basesetup.entity.ArApAdjustmentOffSetVO;
@@ -61,6 +62,7 @@ import com.base.basesetup.entity.PaymentVoucherVO;
 import com.base.basesetup.entity.ReceiptReversalVO;
 import com.base.basesetup.entity.ReconcileBankVO;
 import com.base.basesetup.entity.ReconcileCorpBankVO;
+import com.base.basesetup.entity.ReconcileVO;
 import com.base.basesetup.entity.TaxInvoiceVO;
 import com.base.basesetup.service.TransactionService;
 
@@ -130,35 +132,21 @@ public class TransactionController extends BaseController {
 	}
 
 	@PutMapping("/updateCreateTaxInvoice")
-	public ResponseEntity<ResponseDTO> updateCreateTaxInvoice(@Valid @RequestBody TaxInvoiceDTO taxInvoiceDTO) {
+	public ResponseEntity<ResponseDTO> updateCreateTaxInvoice(@RequestBody TaxInvoiceDTO taxInvoiceDTO) {
 		String methodName = "updateCreateTaxInvoice()";
-
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
 		String errorMsg = null;
 		Map<String, Object> responseObjectsMap = new HashMap<>();
 		ResponseDTO responseDTO = null;
-
 		try {
-			TaxInvoiceVO taxInvoiceVO = transactionService.updateCreateTaxInvoice(taxInvoiceDTO);
-			boolean isUpdate = taxInvoiceDTO.getId() != null;
-
-			if (taxInvoiceVO != null) {
-				responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
-						isUpdate ? "TaxInvoice updated successfully" : "TaxInvoice created successfully");
-				responseObjectsMap.put("taxInvoiceVO", taxInvoiceVO);
-				responseDTO = createServiceResponse(responseObjectsMap);
-			} else {
-				errorMsg = isUpdate ? "TaxInvoice not found for ID: " + taxInvoiceDTO.getId()
-						: "TaxInvoice creation failed";
-				responseDTO = createServiceResponseError(responseObjectsMap,
-						isUpdate ? "TaxInvoice update failed" : "TaxInvoice creation failed", errorMsg);
-			}
+			Map<String, Object> taxInvoiceVO = transactionService.updateCreateTaxInvoice(taxInvoiceDTO);
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, taxInvoiceVO.get("message"));
+			responseObjectsMap.put("taxInvoiceVO", taxInvoiceVO.get("taxInvoiceVO"));
+			responseDTO = createServiceResponse(responseObjectsMap);
 		} catch (Exception e) {
 			errorMsg = e.getMessage();
-			boolean isUpdate = taxInvoiceDTO.getId() != null;
 			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
-			responseDTO = createServiceResponseError(responseObjectsMap,
-					isUpdate ? "TaxInvoice update failed" : "TaxInvoice creation failed", errorMsg);
+			responseDTO = createServiceResponseError(responseObjectsMap, errorMsg, errorMsg);
 		}
 		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
 		return ResponseEntity.ok().body(responseDTO);
