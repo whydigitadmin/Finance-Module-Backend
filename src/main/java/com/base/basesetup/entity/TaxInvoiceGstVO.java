@@ -20,23 +20,23 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "gsttaxinvoice")
+@Table(name = "taxinvoicegst")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class GstTaxInvoiceVO {
+public class TaxInvoiceGstVO {
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "gsttaxinvoicegen")
-	@SequenceGenerator(name = "gsttaxinvoicegen", sequenceName = "gsttaxinvoiceVO", initialValue = 1000000001, allocationSize = 1)
-	@Column(name = "gsttaxinvoiceid")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "taxinvoicegstgen")
+	@SequenceGenerator(name = "taxinvoicegstgen", sequenceName = "taxinvoicegstseq", initialValue = 1000000001, allocationSize = 1)
+	@Column(name = "taxinvoicegstid")
 	private Long id;
 	@Column(name = "gstchargeacc")
 	private String gstChargeAcc;
-	@Column(name = "gstsubledgecode")
+	@Column(name = "gstsubledgercode")
 	private String gstSubledgerCode;
-	@Column(name = "gstbdbillamount")
-	private BigDecimal gstBdBillAmount;
+	@Column(name = "gstdbbillamount")
+	private BigDecimal gstDbBillAmount;
 	@Column(name = "gstcrbillamount")
 	private BigDecimal gstCrBillAmount;
 	@Column(name = "gstdblcamount")

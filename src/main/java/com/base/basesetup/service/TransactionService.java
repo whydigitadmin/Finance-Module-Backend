@@ -1,11 +1,14 @@
 package com.base.basesetup.service;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
 import javax.validation.Valid;
 
+import org.apache.poi.EncryptedDocumentException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.base.basesetup.dto.ArApAdjustmentOffSetDTO;
 import com.base.basesetup.dto.ArapAdjustmentsDTO;
@@ -23,7 +26,8 @@ import com.base.basesetup.dto.IrnCreditDTO;
 import com.base.basesetup.dto.PaymentReversalDTO;
 import com.base.basesetup.dto.PaymentVoucherDTO;
 import com.base.basesetup.dto.ReceiptReversalDTO;
-import com.base.basesetup.dto.ReconciliationSummaryDTO;
+import com.base.basesetup.dto.ReconcileBankDTO;
+import com.base.basesetup.dto.ReconcileCorpBankDTO;
 import com.base.basesetup.dto.TaxInvoiceDTO;
 import com.base.basesetup.entity.ArApAdjustmentOffSetVO;
 import com.base.basesetup.entity.ArapAdjustmentsVO;
@@ -41,7 +45,8 @@ import com.base.basesetup.entity.IrnCreditVO;
 import com.base.basesetup.entity.PaymentReversalVO;
 import com.base.basesetup.entity.PaymentVoucherVO;
 import com.base.basesetup.entity.ReceiptReversalVO;
-import com.base.basesetup.entity.ReconciliationSummaryVO;
+import com.base.basesetup.entity.ReconcileBankVO;
+import com.base.basesetup.entity.ReconcileCorpBankVO;
 import com.base.basesetup.entity.TaxInvoiceVO;
 import com.base.basesetup.exception.ApplicationException;
 
@@ -51,7 +56,7 @@ public interface TransactionService {
 //	TaxInvoice
 	List<TaxInvoiceVO> getAllTaxInvoiceByOrgId(Long orgId);
 
-	TaxInvoiceVO updateCreateTaxInvoice(@Valid TaxInvoiceDTO taxInvoiceDTO) throws ApplicationException;
+	Map<String, Object> updateCreateTaxInvoice(TaxInvoiceDTO taxInvoiceDTO) throws ApplicationException;
 
 	List<TaxInvoiceVO> getAllTaxInvoiceById(Long id);
 
@@ -88,8 +93,16 @@ public interface TransactionService {
 	List<BrsOpeningVO> getAllBrsOpeningById(Long id);
 
 	List<BrsOpeningVO> getBrsOpeningByActive();
-	
-	List<Map<String,Object>> getBranchForBrsOpening(Long orgId);
+
+	List<Map<String, Object>> getBranchForBrsOpening(Long orgId);
+
+	void ExcelUploadForBrs(MultipartFile[] files, Long orgId, String createdBy,
+			String customer, String client, String finYear, String branch, String branchCode)
+			throws ApplicationException, EncryptedDocumentException, IOException;
+
+	int getTotalRows();
+
+	int getSuccessfulUploads();
 
 //	ChartCostCenter
 	List<ChartCostCenterVO> getAllChartCostCenterByOrgId(Long orgId);
@@ -205,12 +218,12 @@ public interface TransactionService {
 
 	List<ArApAdjustmentOffSetVO> getArApAdjustmentOffSetByActive();
 
-	
-	//GlOpeningBalance
+	// GlOpeningBalance
 	List<GlOpeningBalanceVO> getAllGlOpeningBalanceByOrgId(Long orgId);
-	
-	GlOpeningBalanceVO updateCreateGlOpeningBalance(@Valid GlOpeningBalanceDTO glOpeningBalanceDTO) throws ApplicationException;
-	
+
+	GlOpeningBalanceVO updateCreateGlOpeningBalance(@Valid GlOpeningBalanceDTO glOpeningBalanceDTO)
+			throws ApplicationException;
+
 	List<GlOpeningBalanceVO> getAllGlOpeningBalanceById(Long id);
 
 	List<GlOpeningBalanceVO> getGlOpeningBalanceByActive();
@@ -223,5 +236,22 @@ public interface TransactionService {
 //
 //	ReconciliationSummaryVO updateCreateReconciliationSummary(@Valid ReconciliationSummaryDTO reconciliationSummaryDTO);
 
+	//ReconcileBank
+		List<ReconcileBankVO> getAllReconcileBankByOrgId(Long orgId);
+		
+		ReconcileBankVO updateCreateReconcileBank(@Valid ReconcileBankDTO reconcileBankDTO) throws ApplicationException;
+		
+		List<ReconcileBankVO> getAllReconcileBankById(Long id);
+		
+		List<ReconcileBankVO> getReconcileBankByActive();
+		
+		//ReconcileCorpBank
+	    List<ReconcileCorpBankVO> getAllReconcileCorpBankByOrgId(Long orgId);
+		
+	    ReconcileCorpBankVO updateCreateReconcileCorpBank(@Valid ReconcileCorpBankDTO reconcileCorpBankDTO) throws ApplicationException;
+		
+		List<ReconcileCorpBankVO> getAllReconcileCorpBankById(Long id);
+		
+		List<ReconcileCorpBankVO> getReconcileCorpBankByActive();
 	
 }
