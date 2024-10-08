@@ -1,6 +1,6 @@
 package com.base.basesetup.dto;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
@@ -13,9 +13,9 @@ import lombok.NoArgsConstructor;
 public class ReconcileCorpBankDTO {
 	private Long id;
 	private String docId;
-	private LocalDateTime docDate;
+	private LocalDate docDate;
 	private String bankAccount;
-	private LocalDateTime bankStmtDate;
+	private LocalDate bankStmtDate;
 	private String remarks;
 	
 	private Long orgId;

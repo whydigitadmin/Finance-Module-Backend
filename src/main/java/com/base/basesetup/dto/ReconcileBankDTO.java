@@ -1,6 +1,6 @@
 package com.base.basesetup.dto;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
@@ -12,8 +12,8 @@ import lombok.NoArgsConstructor;
 public class ReconcileBankDTO {
 	private Long id;
 	private String docId;
-	private LocalDateTime docDate;
-	private LocalDateTime bankStmtDate;
+	private LocalDate docDate;
+	private LocalDate bankStmtDate;
 	private String bankAccount;
 	private Long orgId;
 	private boolean active;

@@ -1,5 +1,6 @@
 package com.base.basesetup.entity;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import javax.persistence.Column;
@@ -34,11 +35,11 @@ public class ParticularsReconcileVO {
 	@Column(name="voucherno")
 	private String voucherNo;
 	@Column(name="voucherdate")
-	private LocalDateTime voucherDate;
+	private LocalDate voucherDate;
 	@Column(name="chequeno")
 	private String chequeNo;
 	@Column(name="chequedate")
-	private LocalDateTime chequeDate;
+	private LocalDate chequeDate;
 	@Column(name="deposit")
 	private BigDecimal deposit;
 	@Column(name="withdrawal")

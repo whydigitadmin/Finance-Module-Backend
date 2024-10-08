@@ -428,7 +428,8 @@ public class TransactionServiceImpl implements TransactionService {
 				taxInvoiceDetailsVO.setFcAmount(fcAmount);
 
 			} else {
-				fcAmount = BigDecimal.valueOf(0.00);
+				fcAmount= BigDecimal.valueOf(0.00);
+				taxInvoiceDetailsVO.setFcAmount(fcAmount);
 			}
 
 			BigDecimal exRate = taxInvoiceDetailsDTO.getExRate();// Assuming getExRate() returns BigDecimal
