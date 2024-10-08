@@ -2,6 +2,7 @@ package com.base.basesetup.entity;
 
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -37,11 +38,11 @@ public class ReconcileBankVO {
 	@Column(name = "docid")
 	private String docId;
 	@Column(name = "docdate")
-	private LocalDateTime docDate;
+	private LocalDate docDate;
 	@Column(name="bankaccount")
 	private String bankAccount;
 	@Column(name = "bankstmtdate")
-	private LocalDateTime bankStmtDate;
+	private LocalDate bankStmtDate;
 	@Column(name="remarks")
 	private String remarks;
 	@Column(name="totaldeposit")
@@ -61,33 +62,7 @@ public class ReconcileBankVO {
 	@Column(name = "cancelremarks")
 	private String cancelRemarks;
 	
-//	@Column(name = "invoiceno")
-//	private String invoiceNo;
-//	@Column(name = "invoicedate")
-//	private LocalDateTime invoiceDate;
-//	@Column(name = "finyr")
-//	private String finyr;
-	
-	
-	
-	
-	
-	
-//	@PrePersist
-//	private void setDefaultFinyr() {
-//		// Execute the logic to set the default value for finyr
-//		String fyFull = calculateFinyr();
-//		this.finyr = fyFull;
-//	}
-//
-//	private String calculateFinyr() {
-//		// Logic to calculate finyr based on the provided SQL query
-//		String currentMonthDay = LocalDate.now().format(DateTimeFormatter.ofPattern("MMdd"));
-//		String fyFull = (currentMonthDay.compareTo("0331") > 0)
-//				? LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy"))
-//				: LocalDate.now().minusYears(1).format(DateTimeFormatter.ofPattern("yyyy"));
-//		return fyFull;
-//	}
+
 	
 	
 	
