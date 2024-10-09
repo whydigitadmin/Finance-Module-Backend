@@ -1,7 +1,7 @@
 package com.base.basesetup.entity;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -35,57 +35,81 @@ public class ReceiptReceivableVO {
 	@SequenceGenerator(name = "receiptreceivablegen", sequenceName = "receiptreceivableseq", initialValue = 1000000001, allocationSize = 1)
 	@Column(name = "receiptreceivableid")
 	private Long id;
-	@Column(name = "branch")
-	private String branch;
-	@Column(name = "receipttype")
-	private String receiptType;
-	@Column(name = "docdate")
-	private LocalDateTime docDate;
-	@Column(name = "docid")
+
+	// Receipt fields
+	@Column(name = "docid", length = 50)
 	private String docId;
-	@Column(name = "modeofpayment")
-	private String modeOfPayment;
-	@Column(name = "bankcashac")
-	private String bankCashAc;
-	@Column(name="currency")
-	private String currency;
-	@Column(name = "exrates")
-	private BigDecimal exRates;
-	@Column(name = "balance")
-	private String balance;
-	@Column(name = "receivedfrom")
+	@Column(name = "docdate")
+	private LocalDate docDate;
+	@Column(name = "type", length = 50)
+	private String type;
+	@Column(name = "customername", length = 150)
+	private String customerName;
+	@Column(name = "customercode", length = 50)
+	private String customerCode;
+	@Column(name = "bankcashacc", length = 50)
+	private String bankCashAcc;
+	@Column(name = "receiptamt", precision = 10, scale = 2)
+	private BigDecimal receiptAmt;
+	@Column(name = "bankchargeacc", length = 50)
+	private String bankChargeAcc;
+	@Column(name = "bankcharges", precision = 10, scale = 2)
+	private BigDecimal bankCharges;
+	@Column(name = "incurrencybnkchargs", length = 5)
+	private String inCurrencyBnkChargs;
+	@Column(name = "tdsamt", precision = 10, scale = 2)
+	private BigDecimal tdsAmt;
+	@Column(name = "incurrencytdsamt", length = 5)
+	private String inCurrencyTdsAmt;
+	@Column(name = "chequebank", length = 20)
+	private String chequeBank;
+	@Column(name = "receipttype", length = 20)
+	private String receiptType;
+	@Column(name = "chequeutino", length = 10)
+	private String chequeUtiNo;
+	@Column(name = "chequeutidt")
+	private LocalDate chequeUtiDt;
+	@Column(name = "receivedfrom", length = 100)
 	private String receivedFrom;
-	@Column(name="cheqddcardbank")
-	private String cheqDdCardBank;
-	@Column(name="cheqddcardno")
-	private String cheqDdCardNo;
-	@Column(name="cheqdddate")
-	private LocalDateTime cheqDdDate;
-	@Column(name="reconciled")
-	private boolean reconciled;
-	@Column(name = "orgid")
-	private Long orgId;
+
+	// Common Fields
+	@Column(name = "branch", length = 25)
+	private String branch;
+	@Column(name = "branchcode", length = 5)
+	private String branchCode;
+	@Column(name = "customer", length = 100)
+	private String customer;
+	@Column(name = "client", length = 30)
+	private String client;
+	@Column(name = "createdby", length = 25)
+	private String createdBy;
+	@Column(name = "createdon")
+	private LocalDate createdOn;
+	@Column(name = "modifyedby", length = 25)
+	private String updatedBy;
+	@Column(name = "modifyedon")
+	private LocalDate updatedOn;
 	@Column(name = "active")
 	private boolean active;
-	@Column(name = "modifiedby")
-	private String updatedBy;
-	@Column(name = "createdby")
-	private String createdBy;
 	@Column(name = "cancel")
 	private boolean cancel;
-	@Column(name = "cancelremarks")
+	@Column(name = "cancelremarks", length = 25)
 	private String cancelRemarks;
-	
-	
-	@Column(name="netamount")
-	private BigDecimal netAmount;
-	@Column(name="remarks")
-	private String remarks;
-	
-	@OneToMany(mappedBy = "receiptReceivableVO",cascade = CascadeType.ALL)
+	@Column(name = "finyear", length = 5)
+	private String finYear;
+	@Column(name = "screencode", length = 5)
+	private String screenCode;
+	@Column(name = "screenname", length = 25)
+	private String screenName;
+	@Column(name = "ipno", length = 15)
+	private String ipNo;
+	@Column(name = "latitude", length = 100)
+	private String latitude;
+
+	@OneToMany(mappedBy = "receiptReceivableVO", cascade = CascadeType.ALL)
 	@JsonManagedReference
-	List<ParticularsAccountReceiptVO>particularsAccountReceiptVO;
-	
+	List<ParticularsAccountReceiptVO> particularsAccountReceiptVO;
+
 	@Embedded
 	@Builder.Default
 	private CreatedUpdatedDate commonDate = new CreatedUpdatedDate();

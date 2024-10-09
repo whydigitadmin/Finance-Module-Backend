@@ -1,4 +1,5 @@
 package com.base.basesetup.controller;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -590,11 +591,10 @@ public class TransactionController extends BaseController {
 //		return new ResponseEntity<>("File uploaded successfully", HttpStatus.OK);
 //	}
 
-	
 	@PostMapping("/excelUploadForBrs")
 	public ResponseEntity<ResponseDTO> ExcelUploadForBrs(@RequestParam MultipartFile[] files,
-		 @RequestParam(required = false) Long orgId,
-			@RequestParam(required = false) String createdBy, String customer, String client, String finYear, String branch, String branchCode) {
+			@RequestParam(required = false) Long orgId, @RequestParam(required = false) String createdBy,
+			String customer, String client, String finYear, String branch, String branchCode) {
 		String methodName = "ExcelUploadForBrs()";
 		int totalRows = 0;
 		Map<String, Object> responseObjectsMap = new HashMap<>();
@@ -602,7 +602,8 @@ public class TransactionController extends BaseController {
 		ResponseDTO responseDTO = null;
 		try {
 			// Call service method to process Excel upload
-			transactionService.ExcelUploadForBrs(files, orgId, createdBy, customer,  client,  finYear,  branch,  branchCode);
+			transactionService.ExcelUploadForBrs(files, orgId, createdBy, customer, client, finYear, branch,
+					branchCode);
 
 			// Retrieve the counts after processing
 			totalRows = transactionService.getTotalRows(); // Get total rows processed
@@ -630,7 +631,7 @@ public class TransactionController extends BaseController {
 		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
 		return ResponseEntity.ok().body(responseDTO);
 	}
-	
+
 //	ChartCostCenter
 	@GetMapping("/getAllChartCostCenterByOrgId")
 	public ResponseEntity<ResponseDTO> getAllChartCostCenterByOrgId(@RequestParam(required = false) Long orgId) {
@@ -2181,8 +2182,8 @@ public class TransactionController extends BaseController {
 
 	}
 
-	//ReconcileBank
-	
+	// ReconcileBank
+
 	@GetMapping("/getAllReconcileBankByOrgId")
 	public ResponseEntity<ResponseDTO> getAllReconcileBankByOrgId(@RequestParam(required = false) Long orgId) {
 		String methodName = "getAllReconcileBankByOrgId()";
@@ -2198,7 +2199,8 @@ public class TransactionController extends BaseController {
 			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
 		}
 		if (StringUtils.isBlank(errorMsg)) {
-			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "ReconcileBank information get successfully By OrgId");
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+					"ReconcileBank information get successfully By OrgId");
 			responseObjectsMap.put("reconcileBankVO", reconcileBankVO);
 			responseDTO = createServiceResponse(responseObjectsMap);
 		} else {
@@ -2209,7 +2211,7 @@ public class TransactionController extends BaseController {
 		return ResponseEntity.ok().body(responseDTO);
 
 	}
-	
+
 	@GetMapping("/getAllReconcileBankById")
 	public ResponseEntity<ResponseDTO> getAllReconcileBankById(@RequestParam(required = false) Long id) {
 		String methodName = "getAllReconcileBankById()";
@@ -2235,10 +2237,10 @@ public class TransactionController extends BaseController {
 		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
 		return ResponseEntity.ok().body(responseDTO);
 	}
-	
-	
+
 	@PutMapping("/updateCreateReconcileBank")
-	public ResponseEntity<ResponseDTO> updateCreateReconcileBank(@Valid @RequestBody ReconcileBankDTO reconcileBankDTO) {
+	public ResponseEntity<ResponseDTO> updateCreateReconcileBank(
+			@Valid @RequestBody ReconcileBankDTO reconcileBankDTO) {
 		String methodName = "updateCreateReconcileBank()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
 		String errorMsg = null;
@@ -2298,9 +2300,9 @@ public class TransactionController extends BaseController {
 		return ResponseEntity.ok().body(responseDTO);
 
 	}
-	
-	//reconcileCorpBank
-	
+
+	// reconcileCorpBank
+
 	@GetMapping("/getAllReconcileCorpBankByOrgId")
 	public ResponseEntity<ResponseDTO> getAllReconcileCorpBankByOrgId(@RequestParam(required = false) Long orgId) {
 		String methodName = "getAllReconcileCorpBankByOrgId()";
@@ -2316,7 +2318,8 @@ public class TransactionController extends BaseController {
 			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
 		}
 		if (StringUtils.isBlank(errorMsg)) {
-			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "ReconcileCorpBank information get successfully By OrgId");
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+					"ReconcileCorpBank information get successfully By OrgId");
 			responseObjectsMap.put("reconcileCorpBankVO", reconcileCorpBankVO);
 			responseDTO = createServiceResponse(responseObjectsMap);
 		} else {
@@ -2327,7 +2330,7 @@ public class TransactionController extends BaseController {
 		return ResponseEntity.ok().body(responseDTO);
 
 	}
-	
+
 	@GetMapping("/getAllReconcileCorpBankById")
 	public ResponseEntity<ResponseDTO> getAllReconcileCorpBankById(@RequestParam(required = false) Long id) {
 		String methodName = "getAllReconcileCorpBankById()";
@@ -2343,7 +2346,8 @@ public class TransactionController extends BaseController {
 			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
 		}
 		if (StringUtils.isBlank(errorMsg)) {
-			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "ReconcileCorpBank information get successfully By id");
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+					"ReconcileCorpBank information get successfully By id");
 			responseObjectsMap.put("reconcileCorpBankVO", reconcileCorpBankVO);
 			responseDTO = createServiceResponse(responseObjectsMap);
 		} else {
@@ -2353,10 +2357,10 @@ public class TransactionController extends BaseController {
 		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
 		return ResponseEntity.ok().body(responseDTO);
 	}
-	
-	
+
 	@PutMapping("/updateCreateReconcileCorpBank")
-	public ResponseEntity<ResponseDTO> updateCreateReconcileCorpBank(@Valid @RequestBody ReconcileCorpBankDTO reconcileCorpBankDTO) {
+	public ResponseEntity<ResponseDTO> updateCreateReconcileCorpBank(
+			@Valid @RequestBody ReconcileCorpBankDTO reconcileCorpBankDTO) {
 		String methodName = "updateCreateReconcileCorpBank()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
 		String errorMsg = null;
@@ -2364,7 +2368,8 @@ public class TransactionController extends BaseController {
 		ResponseDTO responseDTO = null;
 
 		try {
-			ReconcileCorpBankVO reconcileCorpBankVO = transactionService.updateCreateReconcileCorpBank(reconcileCorpBankDTO);
+			ReconcileCorpBankVO reconcileCorpBankVO = transactionService
+					.updateCreateReconcileCorpBank(reconcileCorpBankDTO);
 			boolean isUpdate = reconcileCorpBankDTO.getId() != null;
 
 			if (reconcileCorpBankVO != null) {
@@ -2416,5 +2421,5 @@ public class TransactionController extends BaseController {
 		return ResponseEntity.ok().body(responseDTO);
 
 	}
-	
+
 }
