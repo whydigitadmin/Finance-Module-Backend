@@ -27,6 +27,7 @@ import com.base.basesetup.dto.PaymentReversalDTO;
 import com.base.basesetup.dto.PaymentVoucherDTO;
 import com.base.basesetup.dto.ReceiptReversalDTO;
 import com.base.basesetup.dto.ReconcileBankDTO;
+import com.base.basesetup.dto.ReconcileCashDTO;
 import com.base.basesetup.dto.ReconcileCorpBankDTO;
 import com.base.basesetup.dto.TaxInvoiceDTO;
 import com.base.basesetup.entity.ArApAdjustmentOffSetVO;
@@ -46,6 +47,7 @@ import com.base.basesetup.entity.PaymentReversalVO;
 import com.base.basesetup.entity.PaymentVoucherVO;
 import com.base.basesetup.entity.ReceiptReversalVO;
 import com.base.basesetup.entity.ReconcileBankVO;
+import com.base.basesetup.entity.ReconcileCashVO;
 import com.base.basesetup.entity.ReconcileCorpBankVO;
 import com.base.basesetup.entity.TaxInvoiceVO;
 import com.base.basesetup.exception.ApplicationException;
@@ -253,5 +255,17 @@ public interface TransactionService {
 		List<ReconcileCorpBankVO> getAllReconcileCorpBankById(Long id);
 		
 		List<ReconcileCorpBankVO> getReconcileCorpBankByActive();
+		
+		//ReconcileCash
+		
+		  List<ReconcileCashVO> getAllReconcileCashByOrgId(Long orgId);
+
+		  ReconcileCashVO updateCreateReconcileCash(@Valid ReconcileCashDTO reconcileCashDTO)
+						throws ApplicationException;
+
+		  List<ReconcileCashVO> getAllReconcileCashById(Long id);
+
+		  List<ReconcileCashVO> getReconcileCashByActive();
+
 	
 }
