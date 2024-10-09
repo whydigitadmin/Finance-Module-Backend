@@ -12,14 +12,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.base.basesetup.dto.ArApBillBalanceReceivableDTO;
-import com.base.basesetup.dto.ParticularsAccountReceiptDTO;
+import com.base.basesetup.dto.ReceiptInvDetailsDTO;
 import com.base.basesetup.dto.ReceiptReceivableDTO;
 import com.base.basesetup.entity.ArApBillBalanceReceivableVO;
-import com.base.basesetup.entity.ParticularsAccountReceiptVO;
+import com.base.basesetup.entity.ReceiptInvDetailsVO;
 import com.base.basesetup.entity.ReceiptReceivableVO;
 import com.base.basesetup.exception.ApplicationException;
 import com.base.basesetup.repo.ArApBillBalanceRecievableRepo;
-import com.base.basesetup.repo.ParticularsAccountReceiptRepo;
+import com.base.basesetup.repo.ReceiptInvDetailsRepo;
 import com.base.basesetup.repo.ReceiptReceivableRepo;
 
 @Service
@@ -31,7 +31,7 @@ public class ARReceivableServiceImpl implements ARReceivableService {
 	ReceiptReceivableRepo receiptReceivableRepo;
 
 	@Autowired
-	ParticularsAccountReceiptRepo particularsAccountReceiptRepo;
+	ReceiptInvDetailsRepo receiptInvDetailsRepo;
 
 	@Autowired
 	ArApBillBalanceRecievableRepo arApBillBalanceReceivableRepo;
@@ -78,26 +78,37 @@ public class ARReceivableServiceImpl implements ARReceivableService {
 			receiptReceivableVO.setCreatedBy(receiptReceivableDTO.getCreatedBy());
 		}
 
-		List<ParticularsAccountReceiptVO> particularsAccountReceiptVOs = new ArrayList<>();
-		if (receiptReceivableDTO.getParticularsAccountReceiptDTO() != null) {
-			for (ParticularsAccountReceiptDTO particularsAccountReceiptDTO : receiptReceivableDTO
-					.getParticularsAccountReceiptDTO()) {
-				ParticularsAccountReceiptVO particularsAccountReceiptVO;
+		List<ReceiptInvDetailsVO> particularsAccountReceiptVOs = new ArrayList<>();
+		if (receiptReceivableDTO.getReceiptInvDetailaDTO() != null) {
+			for (ReceiptInvDetailsDTO particularsAccountReceiptDTO : receiptReceivableDTO.getReceiptInvDetailaDTO()) {
+				ReceiptInvDetailsVO particularsAccountReceiptVO;
 				if (particularsAccountReceiptDTO.getId() != null
 						& ObjectUtils.isEmpty(particularsAccountReceiptDTO.getId())) {
-					particularsAccountReceiptVO = particularsAccountReceiptRepo
-							.findById(particularsAccountReceiptDTO.getId()).orElse(new ParticularsAccountReceiptVO());
+					particularsAccountReceiptVO = receiptInvDetailsRepo.findById(particularsAccountReceiptDTO.getId())
+							.orElse(new ReceiptInvDetailsVO());
 				} else {
-					particularsAccountReceiptVO = new ParticularsAccountReceiptVO();
+					particularsAccountReceiptVO = new ReceiptInvDetailsVO();
 				}
-				particularsAccountReceiptVO.setFromDate(particularsAccountReceiptDTO.getFromDate());
-				particularsAccountReceiptVO.setToDate(particularsAccountReceiptDTO.getToDate());
-				particularsAccountReceiptVO.setTcs(particularsAccountReceiptDTO.getTcs());
+				particularsAccountReceiptVO.setInvNo(particularsAccountReceiptDTO.getInvNo());
+				particularsAccountReceiptVO.setInvDate(particularsAccountReceiptDTO.getInvDate());
+				particularsAccountReceiptVO.setRefNo(particularsAccountReceiptDTO.getRefNo());
+				particularsAccountReceiptVO.setRefDate(particularsAccountReceiptDTO.getRefDate());
+				particularsAccountReceiptVO.setMasterRef(particularsAccountReceiptDTO.getMasterRef());
+				particularsAccountReceiptVO.setHouseRef(particularsAccountReceiptDTO.getHouseRef());
+				particularsAccountReceiptVO.setCurrency(particularsAccountReceiptDTO.getCurrency());
+				particularsAccountReceiptVO.setExRate(particularsAccountReceiptDTO.getExRate());
+				particularsAccountReceiptVO.setAmount(particularsAccountReceiptDTO.getAmount());
+				particularsAccountReceiptVO.setChargeAmt(particularsAccountReceiptDTO.getChargeAmt());
+				particularsAccountReceiptVO.setOutstanding(particularsAccountReceiptDTO.getOutstanding());
+				particularsAccountReceiptVO.setSettled(particularsAccountReceiptDTO.getSettled());
+				particularsAccountReceiptVO.setRecExRate(particularsAccountReceiptDTO.getRecExRate());
+				particularsAccountReceiptVO.setTxnSettled(particularsAccountReceiptDTO.getTxnSettled());
+				particularsAccountReceiptVO.setGainAmt(particularsAccountReceiptDTO.getGainAmt());
 				particularsAccountReceiptVO.setReceiptReceivableVO(receiptReceivableVO);
 				particularsAccountReceiptVOs.add(particularsAccountReceiptVO);
 			}
 		}
-		receiptReceivableVO.setParticularsAccountReceiptVO(particularsAccountReceiptVOs);
+		receiptReceivableVO.setReceiptInvDetailsVO(particularsAccountReceiptVOs);
 		getReceiptReceivableVOFromReceiptReceivableDTO(receiptReceivableDTO, receiptReceivableVO);
 		return receiptReceivableRepo.save(receiptReceivableVO);
 	}
@@ -109,19 +120,14 @@ public class ARReceivableServiceImpl implements ARReceivableService {
 		receiptReceivableVO.setCustomer(receiptReceivableDTO.getCustomer());
 		receiptReceivableVO.setClient(receiptReceivableDTO.getClient());
 		receiptReceivableVO.setCreatedBy(receiptReceivableDTO.getCreatedBy());
-		receiptReceivableVO.setCreatedOn(receiptReceivableDTO.getCreatedOn());
-		receiptReceivableVO.setUpdatedBy(receiptReceivableDTO.getUpdatedBy());
-		receiptReceivableVO.setUpdatedOn(receiptReceivableDTO.getUpdatedOn());
 		receiptReceivableVO.setActive(receiptReceivableDTO.isActive());
 		receiptReceivableVO.setCancel(receiptReceivableDTO.isCancel());
 		receiptReceivableVO.setCancelRemarks(receiptReceivableDTO.getCancelRemarks());
 		receiptReceivableVO.setFinYear(receiptReceivableDTO.getFinYear());
-		receiptReceivableVO.setScreenCode(receiptReceivableDTO.getScreenCode());
-		receiptReceivableVO.setScreenName(receiptReceivableDTO.getScreenName());
+		receiptReceivableVO.setScreenCode("AR");
+		receiptReceivableVO.setScreenName("RECEIPT");
 		receiptReceivableVO.setIpNo(receiptReceivableDTO.getIpNo());
 		receiptReceivableVO.setLatitude(receiptReceivableDTO.getLatitude());
-		receiptReceivableVO.setDocId(receiptReceivableDTO.getDocId());
-		receiptReceivableVO.setDocDate(receiptReceivableDTO.getDocDate());
 		receiptReceivableVO.setType(receiptReceivableDTO.getType());
 		receiptReceivableVO.setCustomerName(receiptReceivableDTO.getCustomerName());
 		receiptReceivableVO.setCustomerCode(receiptReceivableDTO.getCustomerCode());

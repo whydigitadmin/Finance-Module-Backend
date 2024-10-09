@@ -17,8 +17,6 @@ public class ReceiptReceivableDTO {
 	private Long id;
 
 	// Receipt fields
-	private String docId;
-	private LocalDate docDate;
 	private String type;
 	private String customerName;
 	private String customerCode;
@@ -34,24 +32,19 @@ public class ReceiptReceivableDTO {
 	private String chequeUtiNo;
 	private LocalDate chequeUtiDt;
 	private String receivedFrom;
-	
+
 	// Common Fields
 	private String branch;
 	private String branchCode;
 	private String customer;
 	private String client;
 	private String createdBy;
-	private LocalDate createdOn;
-	private String updatedBy;
-	private LocalDate updatedOn;
 	private boolean active;
 	private boolean cancel;
 	private String cancelRemarks;
 	private String finYear;
-	private String screenCode;
-	private String screenName;
 	private String ipNo;
 	private String latitude;
 
-	List<ParticularsAccountReceiptDTO> particularsAccountReceiptDTO;
+	List<ReceiptInvDetailsDTO> receiptInvDetailaDTO;
 }
