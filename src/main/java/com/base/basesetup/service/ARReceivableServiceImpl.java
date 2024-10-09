@@ -24,19 +24,19 @@ import com.base.basesetup.repo.ReceiptReceivableRepo;
 
 @Service
 public class ARReceivableServiceImpl implements ARReceivableService {
-	
+
 	public static final Logger LOGGER = LoggerFactory.getLogger(ARReceivableServiceImpl.class);
-	
+
 	@Autowired
 	ReceiptReceivableRepo receiptReceivableRepo;
-	
+
 	@Autowired
 	ParticularsAccountReceiptRepo particularsAccountReceiptRepo;
-	
+
 	@Autowired
 	ArApBillBalanceRecievableRepo arApBillBalanceReceivableRepo;
 
-	//Receipt
+	// Receipt
 	@Override
 	public List<ReceiptReceivableVO> getAllReceiptReceivableByOrgId(Long orgId) {
 		List<ReceiptReceivableVO> receiptReceivableVO = new ArrayList<>();
@@ -50,7 +50,6 @@ public class ARReceivableServiceImpl implements ARReceivableService {
 		return receiptReceivableVO;
 	}
 
-	
 	@Override
 	public List<ReceiptReceivableVO> getAllReceiptReceivableById(Long id) {
 		List<ReceiptReceivableVO> receiptReceivableVO = new ArrayList<>();
@@ -63,7 +62,7 @@ public class ARReceivableServiceImpl implements ARReceivableService {
 		}
 		return receiptReceivableVO;
 	}
-	
+
 	@Override
 	public ReceiptReceivableVO updateCreateReceiptReceivable(@Valid ReceiptReceivableDTO receiptReceivableDTO)
 			throws ApplicationException {
@@ -87,8 +86,7 @@ public class ARReceivableServiceImpl implements ARReceivableService {
 				if (particularsAccountReceiptDTO.getId() != null
 						& ObjectUtils.isEmpty(particularsAccountReceiptDTO.getId())) {
 					particularsAccountReceiptVO = particularsAccountReceiptRepo
-							.findById(particularsAccountReceiptDTO.getId())
-							.orElse(new ParticularsAccountReceiptVO());
+							.findById(particularsAccountReceiptDTO.getId()).orElse(new ParticularsAccountReceiptVO());
 				} else {
 					particularsAccountReceiptVO = new ParticularsAccountReceiptVO();
 				}
@@ -107,23 +105,38 @@ public class ARReceivableServiceImpl implements ARReceivableService {
 	private void getReceiptReceivableVOFromReceiptReceivableDTO(@Valid ReceiptReceivableDTO receiptReceivableDTO,
 			ReceiptReceivableVO receiptReceivableVO) {
 		receiptReceivableVO.setBranch(receiptReceivableDTO.getBranch());
-		receiptReceivableVO.setReceiptType(receiptReceivableDTO.getReceiptType());
-		receiptReceivableVO.setDocDate(receiptReceivableDTO.getDocDate());
-		receiptReceivableVO.setDocId(receiptReceivableDTO.getDocId());
-		receiptReceivableVO.setModeOfPayment(receiptReceivableDTO.getModeOfPayment());
-		receiptReceivableVO.setBankCashAc(receiptReceivableDTO.getBankCashAc());
-		receiptReceivableVO.setCurrency(receiptReceivableDTO.getCurrency());
-		receiptReceivableVO.setExRates(receiptReceivableDTO.getExRates());
-		receiptReceivableVO.setBalance(receiptReceivableDTO.getBalance());
-		receiptReceivableVO.setReceivedFrom(receiptReceivableDTO.getReceivedFrom());
-		receiptReceivableVO.setCheqDdCardBank(receiptReceivableDTO.getCheqDdCardBank());
-		receiptReceivableVO.setCheqDdCardNo(receiptReceivableDTO.getCheqDdCardNo());
-		receiptReceivableVO.setCheqDdDate(receiptReceivableDTO.getCheqDdDate());
-		receiptReceivableVO.setNetAmount(receiptReceivableDTO.getNetAmount());
-		receiptReceivableVO.setRemarks(receiptReceivableDTO.getRemarks());
-		receiptReceivableVO.setReconciled(receiptReceivableDTO.isReconciled());
+		receiptReceivableVO.setBranchCode(receiptReceivableDTO.getBranchCode());
+		receiptReceivableVO.setCustomer(receiptReceivableDTO.getCustomer());
+		receiptReceivableVO.setClient(receiptReceivableDTO.getClient());
+		receiptReceivableVO.setCreatedBy(receiptReceivableDTO.getCreatedBy());
+		receiptReceivableVO.setCreatedOn(receiptReceivableDTO.getCreatedOn());
+		receiptReceivableVO.setUpdatedBy(receiptReceivableDTO.getUpdatedBy());
+		receiptReceivableVO.setUpdatedOn(receiptReceivableDTO.getUpdatedOn());
 		receiptReceivableVO.setActive(receiptReceivableDTO.isActive());
-		receiptReceivableVO.setOrgId(receiptReceivableDTO.getOrgId());
+		receiptReceivableVO.setCancel(receiptReceivableDTO.isCancel());
+		receiptReceivableVO.setCancelRemarks(receiptReceivableDTO.getCancelRemarks());
+		receiptReceivableVO.setFinYear(receiptReceivableDTO.getFinYear());
+		receiptReceivableVO.setScreenCode(receiptReceivableDTO.getScreenCode());
+		receiptReceivableVO.setScreenName(receiptReceivableDTO.getScreenName());
+		receiptReceivableVO.setIpNo(receiptReceivableDTO.getIpNo());
+		receiptReceivableVO.setLatitude(receiptReceivableDTO.getLatitude());
+		receiptReceivableVO.setDocId(receiptReceivableDTO.getDocId());
+		receiptReceivableVO.setDocDate(receiptReceivableDTO.getDocDate());
+		receiptReceivableVO.setType(receiptReceivableDTO.getType());
+		receiptReceivableVO.setCustomerName(receiptReceivableDTO.getCustomerName());
+		receiptReceivableVO.setCustomerCode(receiptReceivableDTO.getCustomerCode());
+		receiptReceivableVO.setBankCashAcc(receiptReceivableDTO.getBankCashAcc());
+		receiptReceivableVO.setReceiptAmt(receiptReceivableDTO.getReceiptAmt());
+		receiptReceivableVO.setBankChargeAcc(receiptReceivableDTO.getBankChargeAcc());
+		receiptReceivableVO.setBankCharges(receiptReceivableDTO.getBankCharges());
+		receiptReceivableVO.setInCurrencyBnkChargs(receiptReceivableDTO.getInCurrencyBnkChargs());
+		receiptReceivableVO.setTdsAmt(receiptReceivableDTO.getTdsAmt());
+		receiptReceivableVO.setInCurrencyTdsAmt(receiptReceivableDTO.getInCurrencyTdsAmt());
+		receiptReceivableVO.setChequeBank(receiptReceivableDTO.getChequeBank());
+		receiptReceivableVO.setReceiptType(receiptReceivableDTO.getReceiptType());
+		receiptReceivableVO.setChequeUtiNo(receiptReceivableDTO.getChequeUtiNo());
+		receiptReceivableVO.setChequeUtiDt(receiptReceivableDTO.getChequeUtiDt());
+		receiptReceivableVO.setReceivedFrom(receiptReceivableDTO.getReceivedFrom());
 	}
 
 	@Override
@@ -131,7 +144,7 @@ public class ARReceivableServiceImpl implements ARReceivableService {
 		return receiptReceivableRepo.findReceiptReceivablesByActive();
 	}
 
-	//ArApBillBalance
+	// ArApBillBalance
 	@Override
 	public List<ArApBillBalanceReceivableVO> getAllArApBillBalanceReceivableByOrgId(Long orgId) {
 		List<ArApBillBalanceReceivableVO> arApBillBalanceReceivableVO = new ArrayList<>();
@@ -145,7 +158,6 @@ public class ARReceivableServiceImpl implements ARReceivableService {
 		return arApBillBalanceReceivableVO;
 	}
 
-	
 	@Override
 	public List<ArApBillBalanceReceivableVO> getAllArApBillBalanceReceivableById(Long id) {
 		List<ArApBillBalanceReceivableVO> arApBillBalanceReceivableVO = new ArrayList<>();
@@ -158,10 +170,10 @@ public class ARReceivableServiceImpl implements ARReceivableService {
 		}
 		return arApBillBalanceReceivableVO;
 	}
-	
+
 	@Override
-	public ArApBillBalanceReceivableVO updateCreateArApBillBalanceReceivable(@Valid ArApBillBalanceReceivableDTO arApBillBalanceReceivableDTO)
-			throws ApplicationException {
+	public ArApBillBalanceReceivableVO updateCreateArApBillBalanceReceivable(
+			@Valid ArApBillBalanceReceivableDTO arApBillBalanceReceivableDTO) throws ApplicationException {
 		ArApBillBalanceReceivableVO arApBillBalanceReceivableVO = new ArApBillBalanceReceivableVO();
 		boolean isUpdate = false;
 		if (ObjectUtils.isNotEmpty(arApBillBalanceReceivableDTO.getId())) {
@@ -174,12 +186,13 @@ public class ARReceivableServiceImpl implements ARReceivableService {
 			arApBillBalanceReceivableVO.setCreatedBy(arApBillBalanceReceivableDTO.getCreatedBy());
 		}
 
-		
-		getArApBillBalanceReceivableVOFromArApBillBalanceReceivableDTO(arApBillBalanceReceivableDTO, arApBillBalanceReceivableVO);
+		getArApBillBalanceReceivableVOFromArApBillBalanceReceivableDTO(arApBillBalanceReceivableDTO,
+				arApBillBalanceReceivableVO);
 		return arApBillBalanceReceivableRepo.save(arApBillBalanceReceivableVO);
 	}
 
-	private void getArApBillBalanceReceivableVOFromArApBillBalanceReceivableDTO(@Valid ArApBillBalanceReceivableDTO arApBillBalanceReceivableDTO,
+	private void getArApBillBalanceReceivableVOFromArApBillBalanceReceivableDTO(
+			@Valid ArApBillBalanceReceivableDTO arApBillBalanceReceivableDTO,
 			ArApBillBalanceReceivableVO arApBillBalanceReceivableVO) {
 		arApBillBalanceReceivableVO.setBranch(arApBillBalanceReceivableDTO.getBranch());
 		arApBillBalanceReceivableVO.setPartyName(arApBillBalanceReceivableDTO.getPartyName());
@@ -202,6 +215,5 @@ public class ARReceivableServiceImpl implements ARReceivableService {
 	public List<ArApBillBalanceReceivableVO> getArApBillBalanceReceivableByActive() {
 		return arApBillBalanceReceivableRepo.findArApBillBalanceReceivableByActive();
 	}
-	
-	
+
 }
