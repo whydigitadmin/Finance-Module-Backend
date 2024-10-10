@@ -16,6 +16,7 @@ import javax.persistence.Table;
 
 import com.base.basesetup.dto.CreatedUpdatedDate;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -40,12 +41,14 @@ public class PaymentInvDtlsVO {
     private String invNo;
 
     @Column(name = "invdate")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     private LocalDate invDate; 
 
     @Column(name = "refno", length = 30)
     private String refNo;
 
     @Column(name = "refdate")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     private LocalDate refDate; 
 
     @Column(name = "masterref", length = 30)
