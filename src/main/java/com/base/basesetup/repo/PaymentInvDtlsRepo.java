@@ -5,12 +5,12 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.base.basesetup.entity.AccountParticularsVO;
+import com.base.basesetup.entity.PaymentInvDtlsVO;
 import com.base.basesetup.entity.PaymentVO;
 
 @Repository
-public interface AccountParticularsRepo extends JpaRepository<AccountParticularsVO, Long>{
+public interface PaymentInvDtlsRepo extends JpaRepository<PaymentInvDtlsVO, Long>{
 
-	List<AccountParticularsVO> findByPaymentVO(PaymentVO paymentVO);
+	List<PaymentInvDtlsVO> findByPaymentVO(PaymentVO paymentVO);
 
 }

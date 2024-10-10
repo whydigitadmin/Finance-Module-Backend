@@ -128,6 +128,8 @@ public class ARReceivableServiceImpl implements ARReceivableService {
 		receiptReceivableVO.setScreenName("RECEIPT");
 		receiptReceivableVO.setIpNo(receiptReceivableDTO.getIpNo());
 		receiptReceivableVO.setLatitude(receiptReceivableDTO.getLatitude());
+		receiptReceivableVO.setDocId(receiptReceivableDTO.getDocId());
+		receiptReceivableVO.setDocDate(receiptReceivableDTO.getDocDate());
 		receiptReceivableVO.setType(receiptReceivableDTO.getType());
 		receiptReceivableVO.setCustomerName(receiptReceivableDTO.getCustomerName());
 		receiptReceivableVO.setCustomerCode(receiptReceivableDTO.getCustomerCode());

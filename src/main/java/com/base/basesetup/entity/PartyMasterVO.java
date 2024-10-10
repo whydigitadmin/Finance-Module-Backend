@@ -35,6 +35,8 @@ public class PartyMasterVO {
 	private Long id;
 	@Column(name = "partytype")
 	private String partyType;
+	@Column(name = "customertype")
+	private String customerType;
 	@Column(name = "partycode")
 	private String partyCode;
 	@Column(name = "partyname")

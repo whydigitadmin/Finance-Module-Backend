@@ -17,6 +17,8 @@ public class ReceiptReceivableDTO {
 	private Long id;
 
 	// Receipt fields
+	private String docId;
+	private LocalDate docDate;
 	private String type;
 	private String customerName;
 	private String customerCode;
