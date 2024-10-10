@@ -2,7 +2,10 @@ package com.base.basesetup.dto;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -36,6 +39,7 @@ public class TaxInvoiceDTO {
 	private String status;
 	private String gstType;
 	private String supplierBillNo;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	private LocalDate supplierBillDate;
 	private String billCurr;
 	private BigDecimal billCurrRate;
@@ -53,4 +57,6 @@ public class TaxInvoiceDTO {
 	List<TaxInvoiceDetailsDTO> taxInvoiceDetailsDTO;
 
 	List<TaxInvoiceGstDTO> taxInvoiceGstDTO;
+	
+	
 }

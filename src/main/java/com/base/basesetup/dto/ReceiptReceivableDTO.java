@@ -41,9 +41,7 @@ public class ReceiptReceivableDTO {
 	private String customer;
 	private String client;
 	private String createdBy;
-	private LocalDate createdOn;
 	private String updatedBy;
-	private LocalDate updatedOn;
 	private boolean active;
 	private boolean cancel;
 	private String cancelRemarks;

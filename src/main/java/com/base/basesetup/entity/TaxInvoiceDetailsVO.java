@@ -31,41 +31,41 @@ public class TaxInvoiceDetailsVO {
 	@SequenceGenerator(name = "taxinvoicedetailsgen", sequenceName = "taxinvoicedetailsseq", initialValue = 1000000001, allocationSize = 1)
 	@Column(name = "taxinvoicedetailsid")
 	private Long id;
-	@Column(name = "chargetype")
+	@Column(name = "chargetype",length = 30)
 	private String chargeType;
-	@Column(name = "chargecode")
+	@Column(name = "chargecode",length = 30)
 	private String chargeCode;
-	@Column(name = "govchargecode")
+	@Column(name = "govchargecode",length = 10)
 	private String govChargeCode;
-	@Column(name = "ledger")
+	@Column(name = "ledger",length = 150)
 	private String ledger;
-	@Column(name = "chargename")
+	@Column(name = "chargename",length = 150)
 	private String chargeName;
-	@Column(name = "taxable")
+	@Column(name = "taxable",length = 10)
 	private String taxable;
 	@Column(name = "qty")
 	private int qty;
-	@Column(name = "rate")
+	@Column(name = "rate", precision = 10, scale = 2)
 	private BigDecimal rate;
-	@Column(name = "currency")
+	@Column(name = "currency",length = 10)
 	private String currency;
-	@Column(name = "exrate")
+	@Column(name = "exrate", precision = 10, scale = 2)
 	private BigDecimal exRate;
-	@Column(name = "exempted")
+	@Column(name = "exempted", precision = 10, scale = 2)
 	private String exempted;
-	@Column(name = "fcamount")
+	@Column(name = "fcamount", precision = 10, scale = 2)
 	private BigDecimal fcAmount;
-	@Column(name = "lcamount")
+	@Column(name = "lcamount", precision = 10, scale = 2)
 	private BigDecimal lcAmount;
-	@Column(name = "tlcamount")
+	@Column(name = "tlcamount", precision = 10, scale = 2)
 	private BigDecimal tlcAmount;
-	@Column(name = "billamount")
+	@Column(name = "billamount", precision = 10, scale = 2)
 	private BigDecimal billAmount;
-	@Column(name = "sac")
+	@Column(name = "sac",length = 30)
 	private String sac;
 	@Column(name = "gstpercent")
 	private int GSTPercent;
-	@Column(name = "gstamount")
+	@Column(name = "gstamount", precision = 10, scale = 2)
 	private BigDecimal gstAmount;
 
 	@ManyToOne

@@ -31,17 +31,17 @@ public class TaxInvoiceGstVO {
 	@SequenceGenerator(name = "taxinvoicegstgen", sequenceName = "taxinvoicegstseq", initialValue = 1000000001, allocationSize = 1)
 	@Column(name = "taxinvoicegstid")
 	private Long id;
-	@Column(name = "gstchargeacc")
+	@Column(name = "gstchargeacc",length = 150)
 	private String gstChargeAcc;
-	@Column(name = "gstsubledgercode")
+	@Column(name = "gstsubledgercode",length = 150)
 	private String gstSubledgerCode;
-	@Column(name = "gstdbbillamount")
+	@Column(name = "gstdbbillamount", precision = 10, scale = 2)
 	private BigDecimal gstDbBillAmount;
-	@Column(name = "gstcrbillamount")
+	@Column(name = "gstcrbillamount", precision = 10, scale = 2)
 	private BigDecimal gstCrBillAmount;
-	@Column(name = "gstdblcamount")
+	@Column(name = "gstdblcamount", precision = 10, scale = 2)
 	private BigDecimal gstDbLcAmount;
-	@Column(name = "gstcrlcamount")
+	@Column(name = "gstcrlcamount", precision = 10, scale = 2)
 	private BigDecimal gstCrLcAmount;
 
 	@ManyToOne

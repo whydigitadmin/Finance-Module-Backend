@@ -83,12 +83,8 @@ public class ReceiptReceivableVO {
 	private String client;
 	@Column(name = "createdby", length = 25)
 	private String createdBy;
-	@Column(name = "createdon")
-	private LocalDate createdOn;
 	@Column(name = "modifyedby", length = 25)
 	private String updatedBy;
-	@Column(name = "modifyedon")
-	private LocalDate updatedOn;
 	@Column(name = "active")
 	private boolean active;
 	@Column(name = "cancel")
