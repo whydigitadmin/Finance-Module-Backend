@@ -1,6 +1,6 @@
 package com.base.basesetup.entity;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -32,9 +32,9 @@ public class ParticularsAccountReceiptVO {
 	@Column(name = "particularsaccountreceiptid")
 	private Long id;
 	@Column(name="fromdate")
-	private LocalDateTime fromDate;
+	private LocalDate fromDate;
 	@Column(name="todate")
-	private LocalDateTime toDate;
+	private LocalDate toDate;
 	@Column(name="tcs")
     private Long tcs;
 	

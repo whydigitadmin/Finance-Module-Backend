@@ -1,7 +1,7 @@
 package com.base.basesetup.dto;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
@@ -17,7 +17,7 @@ public class ReceiptReceivableDTO {
 	private Long id;
 	private String branch;
 	private String receiptType;
-	private LocalDateTime docDate;
+	private LocalDate docDate;
 	private String docId;
 	private String modeOfPayment;
 	private String bankCashAc;
@@ -27,7 +27,7 @@ public class ReceiptReceivableDTO {
 	private String receivedFrom;
 	private String cheqDdCardBank;
 	private String cheqDdCardNo;
-	private LocalDateTime cheqDdDate;
+	private LocalDate cheqDdDate;
 	private boolean reconciled;
 	private Long orgId;
 	private boolean active;

@@ -1,7 +1,7 @@
 package com.base.basesetup.entity;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -40,7 +40,7 @@ public class ReceiptReceivableVO {
 	@Column(name = "receipttype")
 	private String receiptType;
 	@Column(name = "docdate")
-	private LocalDateTime docDate;
+	private LocalDate docDate;
 	@Column(name = "docid")
 	private String docId;
 	@Column(name = "modeofpayment")
@@ -60,9 +60,16 @@ public class ReceiptReceivableVO {
 	@Column(name="cheqddcardno")
 	private String cheqDdCardNo;
 	@Column(name="cheqdddate")
-	private LocalDateTime cheqDdDate;
+	private LocalDate cheqDdDate;
 	@Column(name="reconciled")
 	private boolean reconciled;
+	
+	@Builder.Default
+	@Column(name = "screencode")
+	private String screenCode="RT";
+	@Builder.Default
+	@Column(name="screenname")
+	private String screenName="RECEIPT";
 	@Column(name = "orgid")
 	private Long orgId;
 	@Column(name = "active")

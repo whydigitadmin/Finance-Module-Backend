@@ -1,20 +1,18 @@
 package com.base.basesetup.dto;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class ParticularsAccountReceiptDTO {
 	private Long id;
-	private LocalDateTime fromDate;
-	private LocalDateTime toDate;
+	private LocalDate fromDate;
+	private LocalDate toDate;
     private Long tcs;
 
 }
