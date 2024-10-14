@@ -34,7 +34,7 @@ public class ReceiptReceivableDTO {
 	private String chequeUtiNo;
 	private LocalDate chequeUtiDt;
 	private String receivedFrom;
-	
+
 	// Common Fields
 	private String branch;
 	private String branchCode;
@@ -46,10 +46,8 @@ public class ReceiptReceivableDTO {
 	private boolean cancel;
 	private String cancelRemarks;
 	private String finYear;
-	private String screenCode;
-	private String screenName;
 	private String ipNo;
 	private String latitude;
 
-	List<ParticularsAccountReceiptDTO> particularsAccountReceiptDTO;
+	List<ReceiptInvDetailsDTO> receiptInvDetailaDTO;
 }

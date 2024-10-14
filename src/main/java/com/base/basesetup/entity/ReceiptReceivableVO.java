@@ -104,7 +104,7 @@ public class ReceiptReceivableVO {
 
 	@OneToMany(mappedBy = "receiptReceivableVO", cascade = CascadeType.ALL)
 	@JsonManagedReference
-	List<ParticularsAccountReceiptVO> particularsAccountReceiptVO;
+	List<ReceiptInvDetailsVO> receiptInvDetailsVO;
 
 	@Embedded
 	@Builder.Default
