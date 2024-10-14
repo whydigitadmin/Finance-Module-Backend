@@ -2,7 +2,6 @@ package com.base.basesetup.service;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -66,6 +65,7 @@ import com.base.basesetup.dto.ReconcileCashDTO;
 import com.base.basesetup.dto.ReconcileCorpBankDTO;
 import com.base.basesetup.dto.TaxInvoiceDTO;
 import com.base.basesetup.dto.TaxInvoiceDetailsDTO;
+import com.base.basesetup.dto.TdsCostInvoiceDTO;
 import com.base.basesetup.entity.ArApAdjustmentOffSetVO;
 import com.base.basesetup.entity.ArApOffSetInvoiceDetailsVO;
 import com.base.basesetup.entity.ArapAdjustmentsVO;
@@ -104,6 +104,7 @@ import com.base.basesetup.entity.ReconcileCorpBankVO;
 import com.base.basesetup.entity.TaxInvoiceDetailsVO;
 import com.base.basesetup.entity.TaxInvoiceGstVO;
 import com.base.basesetup.entity.TaxInvoiceVO;
+import com.base.basesetup.entity.TdsCostInvoiceVO;
 import com.base.basesetup.exception.ApplicationException;
 import com.base.basesetup.repo.ArApAdjustmentOffSetRepo;
 import com.base.basesetup.repo.ArApOffSetInvoiceDetailsRepo;
@@ -145,20 +146,14 @@ import com.base.basesetup.repo.ReconcileBankRepo;
 import com.base.basesetup.repo.ReconcileCashRepo;
 import com.base.basesetup.repo.ReconcileCorpBankRepo;
 import com.base.basesetup.repo.ReconciliationSummaryRepo;
-import com.base.basesetup.repo.TaxInvoiceDetailsRepo;
-import com.base.basesetup.repo.TaxInvoiceGstRepo;
-import com.base.basesetup.repo.TaxInvoiceRepo;
 import com.base.basesetup.repo.TdsCostInvoiceRepo;
 
 @Service
 public class TransactionServiceImpl implements TransactionService {
+	
+	
 	public static final Logger LOGGER = LoggerFactory.getLogger(TransactionServiceImpl.class);
-	@Autowired
-	TaxInvoiceRepo taxInvoiceRepo;
-
-	@Autowired
-	TaxInvoiceDetailsRepo taxInvoiceDetailsRepo;
-
+	
 	@Autowired
 	IrnCreditRepo irnCreditRepo;
 
@@ -204,8 +199,6 @@ public class TransactionServiceImpl implements TransactionService {
 	@Autowired
 	CostInvoiceRepo costInvoiceRepo;
 
-	@Autowired
-	TaxInvoiceGstRepo taxInvoiceGstRepo;
 
 	@Autowired
 	TdsCostInvoiceRepo tdsCostInvoiceRepo;
@@ -504,7 +497,8 @@ public class TransactionServiceImpl implements TransactionService {
 	public List<TaxInvoiceVO> getAllTaxInvoiceByDocId(Long orgId, String docId) {
 		return taxInvoiceRepo.findAllTaxInvoiceByDocId(orgId, docId);
 	}
-	// IrnCredit
+
+  // IrnCredit
 
 	@Override
 	public List<IrnCreditVO> getAllIrnCreditByOrgId(Long orgId) {

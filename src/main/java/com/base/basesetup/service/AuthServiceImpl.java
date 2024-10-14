@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -196,7 +198,7 @@ public class AuthServiceImpl implements AuthService {
 	}
 
 	@Override
-	public UserResponseDTO login(LoginFormDTO loginRequest) {
+	public UserResponseDTO login(LoginFormDTO loginRequest, HttpServletRequest request) {
 		String methodName = "login()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
 		if (ObjectUtils.isEmpty(loginRequest) || StringUtils.isBlank(loginRequest.getUserName())
@@ -208,7 +210,7 @@ public class AuthServiceImpl implements AuthService {
 
 		if (ObjectUtils.isNotEmpty(userVO)) {
 			if (compareEncodedPasswordWithEncryptedPassword(loginRequest.getPassword(), userVO.getPassword())) {
-				updateUserLoginInformation(userVO);
+				updateUserLoginInformation(userVO,request);
 			} else {
 				throw new ApplicationContextException(UserConstants.ERRROR_MSG_PASSWORD_MISMATCH);
 			}
@@ -382,12 +384,13 @@ public class AuthServiceImpl implements AuthService {
 
 	/**
 	 * @param userVO
+	 * @param request 
 	 */
-	private void updateUserLoginInformation(UserVO userVO) {
+	private void updateUserLoginInformation(UserVO userVO, HttpServletRequest request) {
 		try {
 			userVO.setLoginStatus(true);
 			userRepo.save(userVO);
-			userService.createUserAction(userVO.getUserName(), userVO.getId(), UserConstants.USER_ACTION_TYPE_LOGIN);
+			userService.createUserLoginAction(userVO.getUserName(), userVO.getId(), UserConstants.USER_ACTION_TYPE_LOGIN,request);
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage());
 			throw new ApplicationContextException(UserConstants.ERRROR_MSG_UNABLE_TO_UPDATE_USER_INFORMATION);

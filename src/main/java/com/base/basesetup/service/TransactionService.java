@@ -51,18 +51,7 @@ import com.base.basesetup.exception.ApplicationException;
 @Service
 public interface TransactionService {
 
-//	TaxInvoice
-	List<TaxInvoiceVO> getAllTaxInvoiceByOrgId(Long orgId);
 
-	Map<String, Object> updateCreateTaxInvoice(TaxInvoiceDTO taxInvoiceDTO) throws ApplicationException;
-
-	List<TaxInvoiceVO> getAllTaxInvoiceById(Long id);
-
-	List<TaxInvoiceVO> getTaxInvoiceByActive();
-
-	List<TaxInvoiceVO> getAllTaxInvoiceDocIdByOrgId(Long orgId);
-
-	List<TaxInvoiceVO> getAllTaxInvoiceByDocId(Long orgId, String docId);
 
 //	IrnCredit
 	List<IrnCreditVO> getAllIrnCreditByOrgId(Long orgId);
