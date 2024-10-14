@@ -21,7 +21,7 @@ public class PaymentDTO {
 	private String partyCode;
 	private String partyName;
 	private String gstState;
-	private String gstn;
+	private String gstin;
 	private String bankCashAcc;
 	private BigDecimal paymentAmt;
 	private String tdsAcc;

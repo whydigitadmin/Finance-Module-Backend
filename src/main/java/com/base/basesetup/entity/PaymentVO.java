@@ -16,6 +16,8 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.base.basesetup.dto.CreatedUpdatedDate;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.AllArgsConstructor;
@@ -43,7 +45,9 @@ public class PaymentVO {
     @Column(name = "docid", length = 50)
     private String docId;
 
+    
     @Column(name = "docdate")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     private LocalDate docDate;
 
     @Column(name = "type", length = 50)
@@ -58,8 +62,8 @@ public class PaymentVO {
     @Column(name = "gststate", length = 50)
     private String gstState;
 
-    @Column(name = "gstn", length = 50)
-    private String gstn;
+    @Column(name = "gstin", length = 50)
+    private String gstin;
 
     @Column(name = "bankcashacc", length = 50)
     private String bankCashAcc;
