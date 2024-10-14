@@ -202,20 +202,35 @@ public class ARReceivableServiceImpl implements ARReceivableService {
 	private void getArApBillBalanceReceivableVOFromArApBillBalanceReceivableDTO(
 			@Valid ArApBillBalanceReceivableDTO arApBillBalanceReceivableDTO,
 			ArApBillBalanceReceivableVO arApBillBalanceReceivableVO) {
-		arApBillBalanceReceivableVO.setBranch(arApBillBalanceReceivableDTO.getBranch());
-		arApBillBalanceReceivableVO.setPartyName(arApBillBalanceReceivableDTO.getPartyName());
-		arApBillBalanceReceivableVO.setPartyCode(arApBillBalanceReceivableDTO.getPartyCode());
-		arApBillBalanceReceivableVO.setCurrency(arApBillBalanceReceivableDTO.getCurrency());
-		arApBillBalanceReceivableVO.setCreditDays(arApBillBalanceReceivableDTO.getCreditDays());
-		arApBillBalanceReceivableVO.setBillNo(arApBillBalanceReceivableDTO.getBillNo());
-		arApBillBalanceReceivableVO.setBillDate(arApBillBalanceReceivableDTO.getBillDate());
-		arApBillBalanceReceivableVO.setBillExRate(arApBillBalanceReceivableDTO.getBillExRate());
-		arApBillBalanceReceivableVO.setSupplierRefNo(arApBillBalanceReceivableDTO.getSupplierRefNo());
-		arApBillBalanceReceivableVO.setSupplierRefDate(arApBillBalanceReceivableDTO.getSupplierRefDate());
-		arApBillBalanceReceivableVO.setDueDate(arApBillBalanceReceivableDTO.getDueDate());
-		arApBillBalanceReceivableVO.setDebitAmount(arApBillBalanceReceivableDTO.getDebitAmount());
-		arApBillBalanceReceivableVO.setCreditAmount(arApBillBalanceReceivableDTO.getCreditAmount());
-		arApBillBalanceReceivableVO.setActive(arApBillBalanceReceivableDTO.isActive());
+		 arApBillBalanceReceivableVO.setDocNo(arApBillBalanceReceivableDTO.getDocNo());
+		    arApBillBalanceReceivableVO.setAccName(arApBillBalanceReceivableDTO.getAccName());
+		    arApBillBalanceReceivableVO.setPartyName(arApBillBalanceReceivableDTO.getPartyName());
+		    arApBillBalanceReceivableVO.setPartyCode(arApBillBalanceReceivableDTO.getPartyCode());
+		    arApBillBalanceReceivableVO.setCreditDays(arApBillBalanceReceivableDTO.getCreditDays());
+		    arApBillBalanceReceivableVO.setDocType(arApBillBalanceReceivableDTO.getDocType());
+		    arApBillBalanceReceivableVO.setCurrency(arApBillBalanceReceivableDTO.getCurrency());
+		    arApBillBalanceReceivableVO.setYearEndExRate(arApBillBalanceReceivableDTO.getYearEndExRate());
+		    arApBillBalanceReceivableVO.setBillExRate(arApBillBalanceReceivableDTO.getBillExRate());
+		    arApBillBalanceReceivableVO.setPostBillExRate(arApBillBalanceReceivableDTO.isPostBillExRate());
+		    arApBillBalanceReceivableVO.setBillNo(arApBillBalanceReceivableDTO.getBillNo());
+		    arApBillBalanceReceivableVO.setBillDate(arApBillBalanceReceivableDTO.getBillDate());
+		    arApBillBalanceReceivableVO.setSuppRefNo(arApBillBalanceReceivableDTO.getSuppRefNo());
+		    arApBillBalanceReceivableVO.setSuppRefDate(arApBillBalanceReceivableDTO.getSuppRefDate());
+		    arApBillBalanceReceivableVO.setDueDate(arApBillBalanceReceivableDTO.getDueDate());
+		    arApBillBalanceReceivableVO.setDebitAmt(arApBillBalanceReceivableDTO.getDebitAmt());
+		    arApBillBalanceReceivableVO.setCreditAmt(arApBillBalanceReceivableDTO.getCreditAmt());
+		    arApBillBalanceReceivableVO.setActive(arApBillBalanceReceivableDTO.isActive());
+		    arApBillBalanceReceivableVO.setBranch(arApBillBalanceReceivableDTO.getBranch());
+		    arApBillBalanceReceivableVO.setBranchCode(arApBillBalanceReceivableDTO.getBranchCode());
+		    arApBillBalanceReceivableVO.setCreatedBy(arApBillBalanceReceivableDTO.getCreatedBy());
+		    arApBillBalanceReceivableVO.setUpdatedBy(arApBillBalanceReceivableDTO.getUpdatedBy());
+		    arApBillBalanceReceivableVO.setCancel(arApBillBalanceReceivableDTO.isCancel());
+		    arApBillBalanceReceivableVO.setCancelRemarks(arApBillBalanceReceivableDTO.getCancelRemarks());
+		    arApBillBalanceReceivableVO.setFinYear(arApBillBalanceReceivableDTO.getFinYear());
+		    arApBillBalanceReceivableVO.setScreenCode(arApBillBalanceReceivableDTO.getScreenCode());
+		    arApBillBalanceReceivableVO.setScreenName(arApBillBalanceReceivableDTO.getScreenName());
+		    arApBillBalanceReceivableVO.setIpNo(arApBillBalanceReceivableDTO.getIpNo());
+		    arApBillBalanceReceivableVO.setLatitude(arApBillBalanceReceivableDTO.getLatitude());
 		arApBillBalanceReceivableVO.setOrgId(arApBillBalanceReceivableDTO.getOrgId());
 	}
 
