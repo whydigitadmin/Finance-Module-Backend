@@ -1,6 +1,5 @@
 package com.base.basesetup.entity;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import javax.persistence.Column;
@@ -27,78 +26,83 @@ import lombok.NoArgsConstructor;
 @Builder
 public class ArapDetailsVO {
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "taxinvoicegen")
-	@SequenceGenerator(name = "taxinvoicegen", sequenceName = "taxinvoiceseq", initialValue = 1000000001, allocationSize = 1)
-	@Column(name = "taxinvoiceid")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "arapdetailsgen")
+	@SequenceGenerator(name = "arapdetailsgen", sequenceName = "arapdetailsseq", initialValue = 1000000001, allocationSize = 1)
+	@Column(name = "arapdetailsid")
 	private Long id;
-	@Column(name = "branch")
+	@Column(name = "branch",length =25)
 	private String branch;
-	@Column(name = "finyr")
-	private String finyr;
-	@Column(name = "sourcetransid")
+	@Column(name = "finyear",length =10)
+	private String finYear;
+	@Column(name = "sourcetransid",length =50)
 	private String sourceTransid;
-	@Column(name = "docid")
+	@Column(name = "docid",length =25)
 	private String docId;
-	@Column(name = "refno")
+	@Column(name = "refno",length =50)
 	private String refNo;
-	@Column(name = "accountname")
-	private String accountName;
-	@Column(name = "currency")
+	@Column(name = "accname",length =50)
+	private String accName;
+	@Column(name = "currency",length =15)
 	private String currency;
-	@Column(name = "accountcurrency")
-	private String accountCurrency;
-	@Column(name = "account")
-	private String account;
-	@Column(name = "exrate")
-	private BigDecimal exRate;
-	@Column(name = "amount")
-	private String amount;
-	@Column(name = "baseamount")
-	private String baseAmount;
-	@Column(name = "nativeamount")
-	private String nativeAmount;
-	@Column(name = "mno")
-	private String mno;
-	@Column(name = "chargableAmount")
-	private String chargableAmount;
+	@Column(name = "acccurrency",length =15)
+	private String accCurrency;
+	@Column(name = "exrate",precision =10,scale = 2)
+	private float exRate;
+	@Column(name = "amount",precision =10,scale = 2)
+	private float amount;
+	@Column(name = "baseamt",precision =10,scale = 2)
+	private float baseAmt;
+	@Column(name = "nativeamt",precision =10,scale = 2)
+	private float nativeAmt;
+	@Column(name = "chargableamt",precision =10,scale = 2)
+	private float chargableAmt;
 	@Column(name = "gstflag")
-	private String gstFlag;
-	@Column(name = "doctypecode")
+	private boolean gstFlag;
+	@Column(name = "doctypecode",length =50)
 	private String docTypeCode;
-	@Column(name = "subtypecode")
+	@Column(name = "subtypecode",length =50)
 	private String subTypeCode;
-	@Column(name = "subledgerdivision")
+	@Column(name = "subledgerdivision",length =50)
 	private String subLedgerDivision;
 	@Column(name = "docdate")
 	private LocalDateTime docDate;
-	@Column(name = "supprefno")
+	@Column(name = "supprefno",length =50)
 	private String suppRefNo;
 	@Column(name = "refdate")
 	private LocalDateTime refDate;
-	@Column(name = "supprefdate")
-	private LocalDateTime suppRefDate;
-	@Column(name = "subledgercode")
+	@Column(name = "suprefdate")
+	private LocalDateTime supRefDate;
+	@Column(name = "subledgercode",length =50)
 	private String subLedgerCode;
-	@Column(name = "creditdays")
+	@Column(name = "creditdays",length =10)
 	private String creditDays;
 	@Column(name = "duedate")
 	private LocalDateTime dueDate;
-	@Column(name = "tdsamount")
-	private String tdsAmount;
-	@Column(name = "hno")
+	@Column(name = "tdsamt",precision =10,scale = 2)
+	private float TDSAmt;
+	@Column(name = "hno",length =50)
 	private String hno;
-	@Column(name = "orgid")
+	@Column(name = "orgid",length =15)
 	private Long orgId;
 	@Column(name = "active")
 	private boolean active;
 	@Column(name = "cancel")
 	private boolean cancel;
-	@Column(name = "cancelremarks")
+	@Column(name = "cancelremarks",length =50)
 	private String canelRemarks;
-	@Column(name = "createdby")
+	@Column(name = "createdby",length =25)
 	private String createdBy;
-	@Column(name = "modifiedby")
+	@Column(name = "modifiedby",length =25)
 	private String updatedBy;
+	@Column(name = "Screencode",length =10)
+	private String ScreenCode="AD";
+	@Column(name = "Screenname",length =25)
+	private String ScreenName="ARAP";
+	@Column(name = "ipno",length =15)
+	private String ipNo;
+	@Column(name = "latitude",length =100)
+	private String latitude;
+
 
 	@Embedded
 	@Builder.Default

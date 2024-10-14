@@ -16,6 +16,8 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.base.basesetup.dto.CreatedUpdatedDate;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.AllArgsConstructor;
@@ -37,61 +39,119 @@ public class PaymentVO {
 	@Column(name = "paymentid")
 	private Long id;
 	
-	@Column(name = "branch")
-	private String branch;
-	@Column(name = "paymenttype")
-	private String paymentType;
-	@Column(name = "docdate")
-	private LocalDate docdate;
-	@Column(name = "docid")
-	private String docId;
-	@Column(name = "bank")
-	private String bank;
-	@Column(name = "balance")
-	private BigDecimal balance;
-	@Column(name = "currency")
-	private String currency;
-	@Column(name = "exrate")
-	private String exRate;
-	@Column(name = "refdate")
-	private LocalDate refDate;
-	@Column(name = "refno")
-	private String refNo;
-	@Column(name = "reconciled")
-	private boolean reconciled;
-	@Column(name = "payeetype")
-	private String payeeType;
-	@Column(name = "payeename")
-	private String payeeName;
-	@Column(name = "modeofpayment")
-	private String modeOfPayment;
-	@Column(name = "chqbook")
-	private String chqBook;
-	@Column(name = "chqcardno")
-	private String chqCardNo;
-	@Column(name = "chqdddt")
-	private String chqDdDt;
-	@Column(name = "netamount")
-	private String netAmount;
-	@Column(name = "remarks")
-	private String remarks;
-
 	@Column(name = "orgid")
 	private Long orgId;
-	@Column(name = "active")
-	private boolean active;
-	@Column(name = "cancel")
-	private boolean cancel;
-	@Column(name = "canelremarks")
-	private String cancelRemarks;
-	@Column(name = "createdby")
-	private String createdBy;
-	@Column(name = "modifiedby")
-	private String updatedBy;
+
+    @Column(name = "paymenttype", length = 20)
+    private String paymentType;
+
+    @Column(name = "bankchargeacc", length = 50)
+    private String bankChargeAcc;
+
+    @Column(name = "docid", length = 50)
+    private String docId;
+
+    @Column(name = "docdate")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+    private LocalDate docDate;
+
+    @Column(name = "bankcharges", precision = 10, scale = 2)
+    private BigDecimal bankCharges;
+
+    @Column(name = "bankincurrency", length = 10)
+    private String bankInCurrency;
+
+    @Column(name = "type", length = 50)
+    private String type;
+
+    @Column(name = "partycode", length = 50)
+    private String partyCode;
+
+    @Column(name = "servicetaxamt", precision = 10, scale = 2)
+    private BigDecimal serviceTaxAmt;
+
+    @Column(name = "staxincurrency", length = 10)
+    private String sTaxInCurrency;
+
+    @Column(name = "partyname", length = 150)
+    private String partyName;
+
+    @Column(name = "chequebank", length = 50)
+    private String chequeBank;
+
+    @Column(name = "gststate", length = 50)
+    private String gstState;
+
+    @Column(name = "gstin", length = 50)
+    private String gstIn;
+
+    @Column(name = "chequeno", length = 20)
+    private String chequeNo;
+
+    @Column(name = "chequedate")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+    private LocalDate chequeDate;
+
+    @Column(name = "bankcashacc", length = 50)
+    private String bankCashAcc;
+
+    @Column(name = "payto", length = 150)
+    private String payTo;
+
+    @Column(name = "paymentamt", precision = 10, scale = 2)
+    private BigDecimal paymentAmt;
+
+    @Column(name = "tdsacc", length = 50)
+    private String tdsAcc;
+
+    @Column(name = "tdsamt", precision = 10, scale = 2)
+    private BigDecimal tdsAmt;
+
+    @Column(name = "currency", length = 100)
+    private String currency;
+
+    @Column(name = "currencyamt", precision = 10, scale = 2)
+    private BigDecimal currencyAmt;
+    
+    @Column(name = "branch", length = 25)
+    private String branch;
+
+    @Column(name = "branchcode", length = 20)
+    private String branchCode;
+
+    @Column(name = "createdby", length = 25)
+    private String createdBy;
+
+    @Column(name = "modifyby", length = 25)
+    private String updatedBy;
+
+    @Column(name = "active")
+    private boolean active;
+
+    @Column(name = "cancel")
+    private boolean cancel;
+
+    @Column(name = "cancelremarks", length = 50)
+    private String cancelRemarks;
+
+    @Column(name = "finyear", length = 5)
+    private String finYear;
+
+    @Column(name = "screencode", length = 5)
+    private String screenCode;
+
+    @Column(name = "screenname", length = 25)
+    private String screenName;
+
+    @Column(name = "ipno", length = 15)
+    private String ipNo;
+
+    @Column(name = "latitude", length = 100)
+    private String latitude;
 	
 	@OneToMany(mappedBy = "paymentVO", cascade = CascadeType.ALL)
 	@JsonManagedReference
-	private List<AccountParticularsVO> accountParticularsVO;
+	private List<PaymentInvDtlsVO> paymentInvDtlsVO;
 	
 
 	@Embedded

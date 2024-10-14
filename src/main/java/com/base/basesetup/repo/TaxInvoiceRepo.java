@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import com.base.basesetup.entity.TaxInvoiceDetailsVO;
 import com.base.basesetup.entity.TaxInvoiceVO;
 
 public interface TaxInvoiceRepo extends JpaRepository<TaxInvoiceVO, Long> {
@@ -18,14 +17,8 @@ public interface TaxInvoiceRepo extends JpaRepository<TaxInvoiceVO, Long> {
 
 	boolean existsByInvoiceNoAndOrgIdAndId(String invoiceNo, Long orgId, Long id);
 
-	@Query(nativeQuery = true, value = "select * from taxinvoice where orgid=?1")
-	List<TaxInvoiceVO> getAllTaxInvoiceByOrgId(Long orgId);
-
-	@Query(nativeQuery = true, value = "select * from taxinvoice where taxinvoiceid=?1")
-	List<TaxInvoiceVO> getAllTaxInvoiceById(Long id);
-																																										
-	@Query(nativeQuery = true, value = "select * from taxinvoice where active =1")
-	List<TaxInvoiceVO> findTaxInvoiceByActive();
+	@Query(value = "select a from TaxInvoiceVO a where a.orgId=?1 and a.finYear=?2 and a.branchCode=?3 order by a.docId desc")
+	List<TaxInvoiceVO> getAllTaxInvoiceByOrgId(Long orgId, String finYear, String branchCode);																																										
 
 	@Query(nativeQuery = true, value = "SELECT RIGHT(\r\n" + "    IF(\r\n"
 			+ "        DATE_FORMAT(CURDATE(), '%m%d') > '0331', \r\n" + "        DATE_FORMAT(CURDATE(), '%Y'), \r\n"
@@ -45,11 +38,13 @@ public interface TaxInvoiceRepo extends JpaRepository<TaxInvoiceVO, Long> {
 	@Query(nativeQuery = true, value = "CALL next_taxinvoiceno_sequence_value()")
 	void nextSeqInvoice();
 
-	@Query(nativeQuery = true, value = "SELECT * FROM taxinvoice where orgid=?1")
-	List<TaxInvoiceVO> findAllTaxInvoiceDocIdByOrgId(Long orgId);
+	
 
 	@Query(nativeQuery = true, value = "select * from taxinvoice where orgid=?1 and docid=?2")
-	List<TaxInvoiceVO> findAllTaxInvoiceByDocId(Long orgId, String docId);
+	TaxInvoiceVO findAllTaxInvoiceByDocId(Long orgId, String docId);
+
+	@Query(nativeQuery = true, value = "select a from TaxInvoiceVO a where a.Id=?1")
+	TaxInvoiceVO getTaxInvoiceById(Long id);
 
 
 }

@@ -3,8 +3,6 @@ package com.base.basesetup.dto;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-import javax.persistence.Column;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,22 +12,38 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ArApBillBalanceReceivableDTO {
 
-private Long id;
-private String branch;
-private String partyName;
-private String partyCode;
-private String currency;
-private String creditDays;
-private String billNo;
-private LocalDate billDate;
-private String billExRate;
-private String supplierRefNo;
-private LocalDate supplierRefDate;
-private LocalDate dueDate;
-private BigDecimal debitAmount;
-private BigDecimal creditAmount;
-private Long orgId;
-private boolean active;
-private String createdBy;
-private String updatedBy;
+	private Long id;
+	private String docNo;
+	private String accName;
+	private String partyName;
+	private String partyCode;
+	private int creditDays;
+	private String docType;
+	private String currency;
+	private BigDecimal yearEndExRate;
+	private BigDecimal billExRate;
+	private boolean postBillExRate;
+	private Long billNo;
+	private LocalDate billDate;
+	private String suppRefNo;
+	private LocalDate suppRefDate;
+	private LocalDate dueDate;
+	private BigDecimal debitAmt;
+	private BigDecimal creditAmt;
+	private String voucherNo;
+
+	// Common Fields
+	private Long orgId;
+	private String branch;
+	private String branchCode;
+	private String createdBy;
+	private String updatedBy;
+	private boolean active;
+	private boolean cancel;
+	private String cancelRemarks;
+	private String finYear;
+	private String screenCode;
+	private String screenName;
+	private String ipNo;
+	private String latitude;
 }

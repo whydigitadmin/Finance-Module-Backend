@@ -1,7 +1,5 @@
 package com.base.basesetup.dto;
 
-import java.time.LocalDate;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,10 +7,12 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ParticularsAccountReceiptDTO {
+public class ScreenNamesDTO {
+	
 	private Long id;
-	private LocalDate fromDate;
-	private LocalDate toDate;
-    private Long tcs;
+	private String screenName;
+	private  String screenCode;
+	private boolean active;
+	private String createdBy;
 
 }

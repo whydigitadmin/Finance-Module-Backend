@@ -17,6 +17,7 @@ import com.base.basesetup.dto.DocumentTypesMappingDTO;
 import com.base.basesetup.dto.FinScreenDTO;
 import com.base.basesetup.dto.FinancialYearDTO;
 import com.base.basesetup.dto.RegionDTO;
+import com.base.basesetup.dto.ScreenNamesDTO;
 import com.base.basesetup.dto.StateDTO;
 import com.base.basesetup.entity.CityVO;
 import com.base.basesetup.entity.CompanyVO;
@@ -27,6 +28,7 @@ import com.base.basesetup.entity.DocumentTypesMappingVO;
 import com.base.basesetup.entity.FinScreenVO;
 import com.base.basesetup.entity.FinancialYearVO;
 import com.base.basesetup.entity.RegionVO;
+import com.base.basesetup.entity.ScreenNamesVO;
 import com.base.basesetup.entity.StateVO;
 import com.base.basesetup.exception.ApplicationException;
 
@@ -111,7 +113,6 @@ public interface CommonMasterService {
 
 	List<Map<String, Object>> getFinYrAndFinYrIdByOrgId(Long orgId);
 
-
 //	FinScreen
 	List<FinScreenVO> getFinScreenById(Long id);
 
@@ -138,5 +139,13 @@ public interface CommonMasterService {
 
 	List<Map<String, Object>> getAllDocumentTypesMappingDetailsByDocumentType(String branch, String branchCode,
 			String finYr, Long orgId, String finyrId);
+
+	
+	// Screen Names
+	Map<String, Object> createUpdateScreenNames(ScreenNamesDTO screenNamesDTO) throws ApplicationException;
+
+	List<ScreenNamesVO> getAllScreenNames();
+
+	ScreenNamesVO getScreenNamesById(Long id) throws ApplicationException;
 
 }

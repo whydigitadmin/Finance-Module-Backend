@@ -1,10 +1,10 @@
 package com.base.basesetup.service;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.Date;
-import java.util.List;
-import java.util.stream.Collectors;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -17,30 +17,12 @@ import org.springframework.stereotype.Service;
 
 import com.base.basesetup.common.CommonConstant;
 import com.base.basesetup.common.UserConstants;
-import com.base.basesetup.dto.BranchAccessDTO;
-import com.base.basesetup.dto.ChangePasswordFormDTO;
-import com.base.basesetup.dto.CreateUserFormDTO;
-import com.base.basesetup.dto.LoginFormDTO;
-import com.base.basesetup.dto.RefreshTokenDTO;
-import com.base.basesetup.dto.ResetPasswordFormDTO;
-import com.base.basesetup.dto.SignUpFormDTO;
-import com.base.basesetup.dto.UserResponseDTO;
-import com.base.basesetup.dto.UserRoleDTO;
-import com.base.basesetup.entity.BranchAccessVO;
-import com.base.basesetup.entity.GlobalParameterVO;
-import com.base.basesetup.entity.TokenVO;
 import com.base.basesetup.entity.UserActionVO;
-import com.base.basesetup.entity.UserRolesVO;
 import com.base.basesetup.entity.UserVO;
-import com.base.basesetup.exception.ApplicationException;
-import com.base.basesetup.repo.BranchAccessRepo;
-import com.base.basesetup.repo.GlobalParameterRepo;
 import com.base.basesetup.repo.TokenRepo;
 import com.base.basesetup.repo.UserActionRepo;
 import com.base.basesetup.repo.UserRepo;
-import com.base.basesetup.repo.UserRoleRepo;
 import com.base.basesetup.security.TokenProvider;
-import com.base.basesetup.util.CryptoUtils;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -92,6 +74,41 @@ public class UserServiceImpl implements UserService {
 			throw new ApplicationContextException(UserConstants.ERRROR_MSG_INVALID_USER_NAME);
 		}
 	}
+
+
+
+	@Override
+	public void createUserLoginAction(String userName, Long userId, String actionType, HttpServletRequest request) {
+		try {
+			UserActionVO userActionVO = new UserActionVO();
+			userActionVO.setUserName(userName);
+			userActionVO.setUserId(userId);
+			userActionVO.setActionType(actionType);
+			String clientIp = request.getHeader("X-Forwarded-For");
+			if (clientIp == null || clientIp.isEmpty()) {
+				clientIp = request.getRemoteAddr();
+			}
+			// Validate and ensure it's an IPv4 address
+			if (isValidIPv4(clientIp)) {
+				userActionVO.setLoginIp(clientIp);
+			} 
+			userActionRepo.save(userActionVO);
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage());
+		}
+		
+	}
+
+
+
+	private boolean isValidIPv4(String ip) {
+        try {
+            InetAddress inetAddress = InetAddress.getByName(ip);
+            return inetAddress.getHostAddress().equals(ip) && ip.indexOf(':') == -1; // Check for no colons
+        } catch (UnknownHostException e) {
+            return false;
+        }
+    }
 
 	
 

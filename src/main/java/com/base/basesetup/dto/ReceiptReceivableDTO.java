@@ -15,25 +15,39 @@ import lombok.NoArgsConstructor;
 @Builder
 public class ReceiptReceivableDTO {
 	private Long id;
-	private String branch;
-	private String receiptType;
-	private LocalDate docDate;
-	private String docId;
-	private String modeOfPayment;
-	private String bankCashAc;
-	private String currency;
-	private BigDecimal exRates;
-	private String balance;
-	private String receivedFrom;
-	private String cheqDdCardBank;
-	private String cheqDdCardNo;
-	private LocalDate cheqDdDate;
-	private boolean reconciled;
-	private Long orgId;
-	private boolean active;
-	private String createdBy;
-	private BigDecimal netAmount;
-	private String remarks;
 
-	List<ParticularsAccountReceiptDTO> particularsAccountReceiptDTO;
+	// Receipt fields
+	private String docId;
+	private LocalDate docDate;
+	private String type;
+	private String customerName;
+	private String customerCode;
+	private String bankCashAcc;
+	private BigDecimal receiptAmt;
+	private String bankChargeAcc;
+	private BigDecimal bankCharges;
+	private String inCurrencyBnkChargs;
+	private BigDecimal tdsAmt;
+	private String inCurrencyTdsAmt;
+	private String chequeBank;
+	private String receiptType;
+	private String chequeUtiNo;
+	private LocalDate chequeUtiDt;
+	private String receivedFrom;
+
+	// Common Fields
+	private String branch;
+	private String branchCode;
+	private String customer;
+	private String client;
+	private String createdBy;
+	private String updatedBy;
+	private boolean active;
+	private boolean cancel;
+	private String cancelRemarks;
+	private String finYear;
+	private String ipNo;
+	private String latitude;
+
+	List<ReceiptInvDetailsDTO> receiptInvDetailaDTO;
 }
