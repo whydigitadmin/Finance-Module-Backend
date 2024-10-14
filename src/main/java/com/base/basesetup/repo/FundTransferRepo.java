@@ -14,10 +14,10 @@ public interface FundTransferRepo extends JpaRepository<FundTransferVO, Long> {
 	@Query(nativeQuery = true, value = "select * from fundtransfer where orgid=?1")
 	List<FundTransferVO> getAllFundTransferByOrgId(Long orgId);
 
-	@Query(nativeQuery = true, value = "select * from fundtransfer where fundtransferid=1?")
-	List<FundTransferVO> getAllFundTransferById(Long id);
+	@Query(nativeQuery = true, value = "select * from fundtransfer where fundtransferid=?1")
+	List<FundTransferVO> getAllFundTransferById(Long id); 
 
-	@Query(nativeQuery = true, value = "select * from fundtransfer where active =1")
-	List<FundTransferVO> findFundTransferByActive();
+	@Query(nativeQuery = true, value = "select * from fundtransfer where active =?1")
+	List<FundTransferVO> findFundTransferByActive();							
 
-}
+} 
