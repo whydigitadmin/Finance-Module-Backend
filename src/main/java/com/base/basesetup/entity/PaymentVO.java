@@ -62,8 +62,8 @@ public class PaymentVO {
     @Column(name = "gststate", length = 50)
     private String gstState;
 
-    @Column(name = "gstn", length = 50)
-    private String gstn;
+    @Column(name = "gstin", length = 50)
+    private String gstin;
 
     @Column(name = "bankcashacc", length = 50)
     private String bankCashAcc;
