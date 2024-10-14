@@ -55,7 +55,6 @@ public class AccountVO {
 	private boolean block;
 	@Column(name = "isitcapplicable")
 	private boolean isItcApplicable;
-
 	@Column(name = "companyname")
 	private String companyName;
 	@Column(name = "atype")

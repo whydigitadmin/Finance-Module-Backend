@@ -1,6 +1,6 @@
 package com.base.basesetup.entity;
-
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import javax.persistence.Column;
@@ -21,36 +21,37 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "depositsreconcile")
+@Table(name = "particularsreconcile")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class DepositsReconcileVO {
+public class ParticularsReconcileVO {
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "depositsreconcilegen")
-	@SequenceGenerator(name = "depositsreconcilegen", sequenceName = "depositsreconcileseq", initialValue = 1000000001, allocationSize = 1)
-	@Column(name = "depositsreconcileid")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "particularsreconcilegen")
+	@SequenceGenerator(name = "particularsreconcilegen", sequenceName = "particularsreconcileseq", initialValue = 1000000001, allocationSize = 1)
+	@Column(name = "particularsreconcileid")
 	private Long id;
 	@Column(name="voucherno")
 	private String voucherNo;
 	@Column(name="voucherdate")
-	private LocalDateTime voucherDate;
-	@Column(name="chqddno")
-	private String chqDdNo;
-	@Column(name="chqdddate")
-	private LocalDateTime chqDdDate;
-	@Column(name = "cleareddate")
-	private LocalDateTime clearedDate;
-	@Column(name="paymentamt")
-	private BigDecimal paymentAmt;
-	@Column(name="paymentname")
-	private String paymentName;
-	@Column(name="narration")
-	private String narration;
+	private LocalDate voucherDate;
+	@Column(name="chequeno")
+	private String chequeNo;
+	@Column(name="chequedate")
+	private LocalDate chequeDate;
+	@Column(name="deposit")
+	private BigDecimal deposit;
+	@Column(name="withdrawal")
+	private BigDecimal withdrawal;
+	@Column(name="bankref")
+	private String bankRef;
 	
 	@ManyToOne
 	@JsonBackReference
-	@JoinColumn(name = "reconcileid")
-	ReconcileVO reconcileVO;
+	@JoinColumn(name="reconcilebankid")
+	ReconcileBankVO reconcileBankVO;
+	
+	
+
 }

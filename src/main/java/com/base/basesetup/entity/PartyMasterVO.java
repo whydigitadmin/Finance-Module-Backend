@@ -35,6 +35,8 @@ public class PartyMasterVO {
 	private Long id;
 	@Column(name = "partytype")
 	private String partyType;
+	@Column(name = "customertype")
+	private String customerType;
 	@Column(name = "partycode")
 	private String partyCode;
 	@Column(name = "partyname")
@@ -49,8 +51,8 @@ public class PartyMasterVO {
 	private String agentName;
 	@Column(name = "accountstype")
 	private String accountsType;
-	@Column(name = "bussinesstype")
-	private String bussinessType;
+	@Column(name = "businesstype")
+	private String businessType;
 	@Column(name = "carriercode")
 	private String carrierCode;
 	@Column(name = "suppliertype")
@@ -77,10 +79,10 @@ public class PartyMasterVO {
 	private String airWayBillCode;
 	@Column(name = "airlinecode")
 	private String airlineCode;
-	@Column(name = "bussinesscategory")
-	private String bussinessCategory;
-	@Column(name = "bussinesscategory1")
-	private String bussinessCategory1;
+	@Column(name = "businesscategory")
+	private String businessCategory;
+	@Column(name = "businesscategory1")
+	private String businessCategory1;
 	@Column(name = "country")
 	private String country;
 	@Column(name = "remarks")
@@ -109,7 +111,7 @@ public class PartyMasterVO {
 	@Column(name = "accountno")
 	private String accountNo;
 	@Column(name = "accountype")
-	private String accounType;
+	private String accountType;
 	@Column(name = "ifsccode")
 	private String ifscCode;
 	@Column(name = "swift")

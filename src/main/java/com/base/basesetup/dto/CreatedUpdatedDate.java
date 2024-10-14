@@ -30,18 +30,18 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CreatedUpdatedDate {
 
-	@DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss a")
+	@DateTimeFormat(pattern = "dd-MM-yyyy hh:mm:ss a")
 	@Column(name="createdon",length = 25)
 	private String createdon;
 
-	@DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss a")
+	@DateTimeFormat(pattern = "dd-MM-yyyy hh:mm:ss a")
 	@Column(name="modifiedon",length = 25)
 	private String modifiedon;
 
 	@PrePersist
 	public void onSave() {
 		Date currentDate = new Date();
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss a");
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss a");
 		this.createdon = dateFormat.format(currentDate);
 		this.modifiedon = dateFormat.format(currentDate);
 	}
@@ -49,7 +49,7 @@ public class CreatedUpdatedDate {
 	@PostLoad
 	public void onUpdate() {
 		Date currentDate = new Date();
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss a");
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss a");
 		this.modifiedon = dateFormat.format(currentDate);
 	}
 

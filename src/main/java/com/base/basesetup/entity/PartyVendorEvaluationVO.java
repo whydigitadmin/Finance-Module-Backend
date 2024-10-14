@@ -31,8 +31,8 @@ public class PartyVendorEvaluationVO {
 	@SequenceGenerator(name = "partyvendorevaluationgen", sequenceName = "partyvendorevaluationseq", initialValue = 1000000001, allocationSize = 1)
 	@Column(name = "partyvendorevaluationid")
 	private Long id;
-	@Column(name = "whobroughtventor")
-	private String whoBroughtVentor;
+	@Column(name = "whobroughtvendor")
+	private String whoBroughtVendor;
 	@Column(name = "whatbasisvendorselected")
 	private String whatBasisVendorSelected;
 	@Column(name = "justification")

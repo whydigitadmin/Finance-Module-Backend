@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 public class PartyMasterDTO {
 	private Long id;
 	private String partyType;
+	private String customerType;
 	private String partyCode;
 	private String partyName;
 	private String gstPartyName;
@@ -19,7 +20,7 @@ public class PartyMasterDTO {
 	private String customerCategory;
 	private String agentName;
 	private String accountsType;
-	private String bussinessType;
+	private String businessType;
 	private String carrierCode;
 	private String supplierType;
 	private String salesPerson;
@@ -33,8 +34,8 @@ public class PartyMasterDTO {
 	private String currency;
 	private String airWayBillCode;
 	private String airlineCode;
-	private String bussinessCategory;
-	private String bussinessCategory1;
+	private String businessCategory;
+	private String businessCategory1;
 	private String country;
 	private String remarks;
 	private String compoundingScheme;
@@ -50,7 +51,7 @@ public class PartyMasterDTO {
 	private String branch;
 	private String addressOfBranch;
 	private String accountNo;
-	private String accounType;
+	private String accountType;
 	private String ifscCode;
 	private String swift;
 
@@ -59,7 +60,7 @@ public class PartyMasterDTO {
     private boolean active;
     
     List<PartyStateDTO> partyStateDTO;
-    List<PartyAddressDTO> partyAdressDTO;
+    List<PartyAddressDTO> partyAddressDTO;
     List<PartyDetailsOfDirectorsDTO> partyDetailsOfDirectorsDTO;
     List<PartySpecialTDSDTO> partySpecialTDSDTO;
     List<PartyChargesExemptionDTO> partyChargesExemptionDTO;

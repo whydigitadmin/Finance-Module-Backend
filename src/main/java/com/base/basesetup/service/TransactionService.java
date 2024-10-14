@@ -26,10 +26,9 @@ import com.base.basesetup.dto.IrnCreditDTO;
 import com.base.basesetup.dto.PaymentReversalDTO;
 import com.base.basesetup.dto.PaymentVoucherDTO;
 import com.base.basesetup.dto.ReceiptReversalDTO;
-import com.base.basesetup.dto.ReconcileDTO;
-
-import com.base.basesetup.dto.ReconciliationSummaryDTO;
-
+import com.base.basesetup.dto.ReconcileBankDTO;
+import com.base.basesetup.dto.ReconcileCashDTO;
+import com.base.basesetup.dto.ReconcileCorpBankDTO;
 import com.base.basesetup.dto.TaxInvoiceDTO;
 import com.base.basesetup.entity.ArApAdjustmentOffSetVO;
 import com.base.basesetup.entity.ArapAdjustmentsVO;
@@ -47,11 +46,9 @@ import com.base.basesetup.entity.IrnCreditVO;
 import com.base.basesetup.entity.PaymentReversalVO;
 import com.base.basesetup.entity.PaymentVoucherVO;
 import com.base.basesetup.entity.ReceiptReversalVO;
-
-import com.base.basesetup.entity.ReconcileVO;
-
-import com.base.basesetup.entity.ReconciliationSummaryVO;
-
+import com.base.basesetup.entity.ReconcileBankVO;
+import com.base.basesetup.entity.ReconcileCashVO;
+import com.base.basesetup.entity.ReconcileCorpBankVO;
 import com.base.basesetup.entity.TaxInvoiceVO;
 import com.base.basesetup.exception.ApplicationException;
 
@@ -61,7 +58,7 @@ public interface TransactionService {
 //	TaxInvoice
 	List<TaxInvoiceVO> getAllTaxInvoiceByOrgId(Long orgId);
 
-	TaxInvoiceVO updateCreateTaxInvoice(@Valid TaxInvoiceDTO taxInvoiceDTO) throws ApplicationException;
+	Map<String, Object> updateCreateTaxInvoice(TaxInvoiceDTO taxInvoiceDTO) throws ApplicationException;
 
 	List<TaxInvoiceVO> getAllTaxInvoiceById(Long id);
 
@@ -241,13 +238,34 @@ public interface TransactionService {
 //
 //	ReconciliationSummaryVO updateCreateReconciliationSummary(@Valid ReconciliationSummaryDTO reconciliationSummaryDTO);
 
-	//Reconcile
-	List<ReconcileVO> getAllReconcileByOrgId(Long orgId);
-	
-	ReconcileVO updateCreateReconcile(@Valid ReconcileDTO reconcileDTO) throws ApplicationException;
-	
-	List<ReconcileVO> getAllReconcileById(Long id);
-	
-	List<ReconcileVO> getReconcileByActive();
+	//ReconcileBank
+		List<ReconcileBankVO> getAllReconcileBankByOrgId(Long orgId);
+		
+		ReconcileBankVO updateCreateReconcileBank(@Valid ReconcileBankDTO reconcileBankDTO) throws ApplicationException;
+		
+		List<ReconcileBankVO> getAllReconcileBankById(Long id);
+		
+		List<ReconcileBankVO> getReconcileBankByActive();
+		
+		//ReconcileCorpBank
+	    List<ReconcileCorpBankVO> getAllReconcileCorpBankByOrgId(Long orgId);
+		
+	    ReconcileCorpBankVO updateCreateReconcileCorpBank(@Valid ReconcileCorpBankDTO reconcileCorpBankDTO) throws ApplicationException;
+		
+		List<ReconcileCorpBankVO> getAllReconcileCorpBankById(Long id);
+		
+		List<ReconcileCorpBankVO> getReconcileCorpBankByActive();
+		
+		//ReconcileCash
+		
+		  List<ReconcileCashVO> getAllReconcileCashByOrgId(Long orgId);
+
+		  ReconcileCashVO updateCreateReconcileCash(@Valid ReconcileCashDTO reconcileCashDTO)
+						throws ApplicationException;
+
+		  List<ReconcileCashVO> getAllReconcileCashById(Long id);
+
+		  List<ReconcileCashVO> getReconcileCashByActive();
+
 	
 }

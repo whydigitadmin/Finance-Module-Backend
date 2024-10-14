@@ -11,12 +11,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.base.basesetup.dto.AccountParticularsDTO;
 import com.base.basesetup.dto.PaymentDTO;
-import com.base.basesetup.entity.AccountParticularsVO;
+import com.base.basesetup.dto.PaymentInvDtlsDTO;
+import com.base.basesetup.entity.PaymentInvDtlsVO;
 import com.base.basesetup.entity.PaymentVO;
 import com.base.basesetup.exception.ApplicationException;
-import com.base.basesetup.repo.AccountParticularsRepo;
+import com.base.basesetup.repo.PaymentInvDtlsRepo;
 import com.base.basesetup.repo.PaymentRepo;
 
 @Service
@@ -29,7 +29,7 @@ public class PayableServiceImpl implements PayableService{
 	PaymentRepo paymentRepo;
 	
 	@Autowired
-	AccountParticularsRepo accountParticularsRepo;
+	PaymentInvDtlsRepo paymentInvDtlsRepo;
 	
 	@Override
 	public List<PaymentVO> getAllPaymentByOrgId(Long orgId) {
@@ -67,63 +67,80 @@ public class PayableServiceImpl implements PayableService{
 			paymentVO = paymentRepo.findById(paymentDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid Payment details"));
 			paymentVO.setUpdatedBy(paymentDTO.getCreatedBy());
+
 		} else {
 			paymentVO.setUpdatedBy(paymentDTO.getCreatedBy());
 			paymentVO.setCreatedBy(paymentDTO.getCreatedBy());
+
 		}
 
 		 if(ObjectUtils.isNotEmpty(paymentDTO.getId())){
-				List<AccountParticularsVO> accountParticularsVOList = accountParticularsRepo.findByPaymentVO(paymentVO);
-				accountParticularsRepo.deleteAll(accountParticularsVOList);
+				List<PaymentInvDtlsVO> paymentInvDtlsVOList = paymentInvDtlsRepo.findByPaymentVO(paymentVO);
+				paymentInvDtlsRepo.deleteAll(paymentInvDtlsVOList);
 				 }
-				List<AccountParticularsVO> accountParticularsVOs= new ArrayList<>();
-				if(paymentDTO.getAccountParticularsDTO()!=null) {
-					for(AccountParticularsDTO accountParticularsDTO : paymentDTO.getAccountParticularsDTO()) {
-						AccountParticularsVO accountParticularsVO = new AccountParticularsVO();
-						accountParticularsVO.setAccountName(accountParticularsDTO.getAccountName());
-						accountParticularsVO.setSubledger(accountParticularsDTO.getSubledger());
-						accountParticularsVO.setCrAmount(accountParticularsDTO.getCrAmount());
-						accountParticularsVO.setDbAmount(accountParticularsDTO.getDbAmount());
-						accountParticularsVO.setNarration(accountParticularsDTO.getNarration());
-						accountParticularsVO.setAccountName(accountParticularsDTO.getAccountName());
+				List<PaymentInvDtlsVO> paymentInvDtlsVOs= new ArrayList<>();
+				if(paymentDTO.getPaymentInvDtlsDTO()!=null) {
+					for(PaymentInvDtlsDTO paymentInvDtlsDTO : paymentDTO.getPaymentInvDtlsDTO()) {
+						PaymentInvDtlsVO paymentInvDtlsVO = new PaymentInvDtlsVO();
+						paymentInvDtlsVO.setInvNo(paymentInvDtlsDTO.getInvNo());
+						paymentInvDtlsVO.setInvDate(paymentInvDtlsDTO.getInvDate());
+						paymentInvDtlsVO.setRefNo(paymentInvDtlsDTO.getRefNo());
+						paymentInvDtlsVO.setRefDate(paymentInvDtlsDTO.getRefDate());
+						paymentInvDtlsVO.setSupplierRefNo(paymentInvDtlsDTO.getSupplierRefNo());
+						paymentInvDtlsVO.setSupplierRefDate(paymentInvDtlsDTO.getSupplierRefDate());
+						paymentInvDtlsVO.setCurrency(paymentInvDtlsDTO.getCurrency());
+						paymentInvDtlsVO.setExRate(paymentInvDtlsDTO.getExRate());
+						paymentInvDtlsVO.setAmount(paymentInvDtlsDTO.getAmount());
+						paymentInvDtlsVO.setChargeAmt(paymentInvDtlsDTO.getChargeAmt());
+						paymentInvDtlsVO.setOutstanding(paymentInvDtlsDTO.getOutstanding());
+						paymentInvDtlsVO.setSettled(paymentInvDtlsDTO.getSettled());
+						paymentInvDtlsVO.setPayExRate(paymentInvDtlsDTO.getPayExRate());
+						paymentInvDtlsVO.setTxnSettled(paymentInvDtlsDTO.getTxnSettled());
+						paymentInvDtlsVO.setGainOrLossAmt(paymentInvDtlsDTO.getGainOrLossAmt());
+						paymentInvDtlsVO.setRemarks(paymentInvDtlsDTO.getRemarks());
 
-						accountParticularsVO.setPaymentVO(paymentVO);;
-						accountParticularsVOs.add(accountParticularsVO);
+						paymentInvDtlsVO.setPaymentVO(paymentVO);;
+						paymentInvDtlsVOs.add(paymentInvDtlsVO);
 						
 					}
 				}
 		getPaymentVOFromPaymentDTO(paymentDTO,paymentVO);
-		paymentVO.setAccountParticularsVO(accountParticularsVOs);;
+		paymentVO.setPaymentInvDtlsVO(paymentInvDtlsVOs);;
 		return paymentRepo.save(paymentVO);
 	}
 
 	private void getPaymentVOFromPaymentDTO(
 			@Valid PaymentDTO paymentDTO, PaymentVO paymentVO) {
 
-		paymentVO.setBranch(paymentDTO.getBranch());
-		paymentVO.setPaymentType(paymentDTO.getPaymentType());
-		paymentVO.setDocdate(paymentDTO.getDocdate());
 		paymentVO.setDocId(paymentDTO.getDocId());
-		paymentVO.setBank(paymentDTO.getBank());
-		paymentVO.setBalance(paymentDTO.getBalance());
+		paymentVO.setDocDate(paymentDTO.getDocDate());
+		paymentVO.setType(paymentDTO.getType());
+		paymentVO.setPartyCode(paymentDTO.getPartyCode());
+		paymentVO.setPartyName(paymentDTO.getPartyName());
+		paymentVO.setGstState(paymentDTO.getGstState());
+		paymentVO.setGstin(paymentDTO.getGstin());
+		paymentVO.setBankCashAcc(paymentDTO.getBankCashAcc());
+		paymentVO.setPaymentAmt(paymentDTO.getPaymentAmt());
+		paymentVO.setTdsAcc(paymentDTO.getTdsAcc());
+		paymentVO.setTdsAmt(paymentDTO.getTdsAmt());
+		paymentVO.setBankChargeAcc(paymentDTO.getBankChargeAcc());
+		paymentVO.setServiceTaxAmt(paymentDTO.getServiceTaxAmt());
+		paymentVO.setChequeBank(paymentDTO.getChequeBank());
+		paymentVO.setChequeNo(paymentDTO.getChequeNo());
+		paymentVO.setPayTo(paymentDTO.getPayTo());
 		paymentVO.setCurrency(paymentDTO.getCurrency());
-		paymentVO.setExRate(paymentDTO.getExRate());
-		paymentVO.setRefDate(paymentDTO.getRefDate());
-		paymentVO.setRefNo(paymentDTO.getRefNo());
-		paymentVO.setReconciled(paymentDTO.isReconciled());
-		paymentVO.setPayeeType(paymentDTO.getPayeeType());
-		paymentVO.setPayeeName(paymentDTO.getPayeeName());
-		paymentVO.setModeOfPayment(paymentDTO.getModeOfPayment());
-		paymentVO.setChqBook(paymentDTO.getChqBook());
-		paymentVO.setChqCardNo(paymentDTO.getChqCardNo());
-		paymentVO.setChqDdDt(paymentDTO.getChqDdDt());
-		paymentVO.setNetAmount(paymentDTO.getNetAmount());
-		paymentVO.setRemarks(paymentDTO.getRemarks());
-		paymentVO.setOrgId(paymentDTO.getOrgId());
+		paymentVO.setCurrencyAmt(paymentDTO.getCurrencyAmt());
+		paymentVO.setBranch(paymentDTO.getBranch());
+		paymentVO.setBranchCode(paymentDTO.getBranchCode());
+		paymentVO.setActive(paymentDTO.isActive());
 		paymentVO.setCancel(paymentDTO.isCancel());
 		paymentVO.setCancelRemarks(paymentDTO.getCancelRemarks());
-		paymentVO.setActive(paymentDTO.isActive());
-
+		paymentVO.setFinYear(paymentDTO.getFinYear());
+		paymentVO.setScreenCode("AP");
+		paymentVO.setScreenName("PAYMENT");
+		paymentVO.setIpNo(paymentDTO.getIpNo());
+		paymentVO.setLatitude(paymentDTO.getLatitude());
+		paymentVO.setOrgId(paymentDTO.getOrgId());
 
 	}
 
