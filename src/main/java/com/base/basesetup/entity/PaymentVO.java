@@ -42,13 +42,24 @@ public class PaymentVO {
 	@Column(name = "orgid")
 	private Long orgId;
 
+    @Column(name = "paymenttype", length = 20)
+    private String paymentType;
+
+    @Column(name = "bankchargeacc", length = 50)
+    private String bankChargeAcc;
+
     @Column(name = "docid", length = 50)
     private String docId;
 
-    
     @Column(name = "docdate")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     private LocalDate docDate;
+
+    @Column(name = "bankcharges", precision = 10, scale = 2)
+    private BigDecimal bankCharges;
+
+    @Column(name = "bankincurrency", length = 10)
+    private String bankInCurrency;
 
     @Column(name = "type", length = 50)
     private String type;
@@ -56,17 +67,36 @@ public class PaymentVO {
     @Column(name = "partycode", length = 50)
     private String partyCode;
 
+    @Column(name = "servicetaxamt", precision = 10, scale = 2)
+    private BigDecimal serviceTaxAmt;
+
+    @Column(name = "staxincurrency", length = 10)
+    private String sTaxInCurrency;
+
     @Column(name = "partyname", length = 150)
     private String partyName;
+
+    @Column(name = "chequebank", length = 50)
+    private String chequeBank;
 
     @Column(name = "gststate", length = 50)
     private String gstState;
 
     @Column(name = "gstin", length = 50)
-    private String gstin;
+    private String gstIn;
+
+    @Column(name = "chequeno", length = 20)
+    private String chequeNo;
+
+    @Column(name = "chequedate")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+    private LocalDate chequeDate;
 
     @Column(name = "bankcashacc", length = 50)
     private String bankCashAcc;
+
+    @Column(name = "payto", length = 150)
+    private String payTo;
 
     @Column(name = "paymentamt", precision = 10, scale = 2)
     private BigDecimal paymentAmt;
@@ -77,27 +107,12 @@ public class PaymentVO {
     @Column(name = "tdsamt", precision = 10, scale = 2)
     private BigDecimal tdsAmt;
 
-    @Column(name = "bankchargeacc", length = 50)
-    private String bankChargeAcc;
-
-    @Column(name = "servicetaxamt", precision = 10, scale = 2)
-    private BigDecimal serviceTaxAmt;
-
-    @Column(name = "chequebank", length = 50)
-    private String chequeBank;
-
-    @Column(name = "chequeno", length = 20)
-    private String chequeNo;
-
-    @Column(name = "payto", length = 150)
-    private String payTo;
-
     @Column(name = "currency", length = 100)
     private String currency;
 
     @Column(name = "currencyamt", precision = 10, scale = 2)
     private BigDecimal currencyAmt;
-
+    
     @Column(name = "branch", length = 25)
     private String branch;
 
