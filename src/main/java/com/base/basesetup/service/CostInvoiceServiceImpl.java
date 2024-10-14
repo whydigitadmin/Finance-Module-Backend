@@ -144,8 +144,6 @@ public class CostInvoiceServiceImpl implements CostInvoiceService {
 		costInvoiceVO.setCustomer(costInvoiceDTO.getCustomer());
 		costInvoiceVO.setClient(costInvoiceDTO.getClient());
 		costInvoiceVO.setFinYear(costInvoiceDTO.getFinYear());
-		costInvoiceVO.setScreenCode(costInvoiceDTO.getScreenCode());
-		costInvoiceVO.setScreenName(costInvoiceDTO.getScreenName());
 		costInvoiceVO.setIpNo(costInvoiceDTO.getIpNo());
 		costInvoiceVO.setLatitude(costInvoiceDTO.getLatitude());
 

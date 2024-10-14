@@ -101,9 +101,9 @@ public class CostInvoiceVO {
 	@Column(name = "finyear",length =10)
 	private String finYear;
 	@Column(name = "screencode",length =10)
-	private String screenCode;
+	private String screenCode="CI";
 	@Column(name = "screenname",length =25)
-	private String screenName;
+	private String screenName="CostInvoice";
 	@Column(name = "ipno",length =10)
 	private String ipNo;
 	@Column(name = "latitude",length =100)

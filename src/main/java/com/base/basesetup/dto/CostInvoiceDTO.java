@@ -43,8 +43,6 @@ public class CostInvoiceDTO {
 	private String customer;
 	private String client;
 	private String finYear;
-	private String screenCode;
-	private String screenName;
 	private String ipNo;
 	private String latitude;
 
