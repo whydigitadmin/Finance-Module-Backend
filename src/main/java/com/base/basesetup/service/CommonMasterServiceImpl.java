@@ -29,6 +29,7 @@ import com.base.basesetup.dto.FinScreenDTO;
 import com.base.basesetup.dto.FinancialYearDTO;
 import com.base.basesetup.dto.RegionDTO;
 import com.base.basesetup.dto.Role;
+import com.base.basesetup.dto.ScreenNamesDTO;
 import com.base.basesetup.dto.StateDTO;
 import com.base.basesetup.entity.CityVO;
 import com.base.basesetup.entity.CompanyVO;
@@ -41,6 +42,7 @@ import com.base.basesetup.entity.EmployeeVO;
 import com.base.basesetup.entity.FinScreenVO;
 import com.base.basesetup.entity.FinancialYearVO;
 import com.base.basesetup.entity.RegionVO;
+import com.base.basesetup.entity.ScreenNamesVO;
 import com.base.basesetup.entity.StateVO;
 import com.base.basesetup.entity.UserVO;
 import com.base.basesetup.exception.ApplicationException;
@@ -57,6 +59,7 @@ import com.base.basesetup.repo.FinancialYearRepo;
 import com.base.basesetup.repo.RegionRepo;
 import com.base.basesetup.repo.ResponsibilitiesRepo;
 import com.base.basesetup.repo.RoleRepo;
+import com.base.basesetup.repo.ScreenNamesRepo;
 import com.base.basesetup.repo.StateRepo;
 import com.base.basesetup.repo.UserRepo;
 import com.base.basesetup.util.CryptoUtils;
@@ -113,6 +116,9 @@ public class CommonMasterServiceImpl implements CommonMasterService {
 
 	@Autowired
 	DocumentTypesMappingDetailsRepo documentTypesMappingDetailsRepo;
+	
+	@Autowired
+	ScreenNamesRepo screenNamesRepo;
 
 	// Company
 
@@ -1126,6 +1132,81 @@ public class CommonMasterServiceImpl implements CommonMasterService {
 	public void deleteCurrency(Long currencyid) {
 		currencyRepo.deleteById(currencyid);
 
+	}
+	
+	
+	@Override
+	public Map<String, Object> createUpdateScreenNames(ScreenNamesDTO screenNamesDTO) throws ApplicationException {
+		ScreenNamesVO screenNamesVO = new ScreenNamesVO();
+		String message = null;
+
+		if (ObjectUtils.isEmpty(screenNamesDTO.getId())) {
+
+			// Validate if responsibility already exists by responsibility name
+			if (screenNamesRepo.existsByScreenName(screenNamesDTO.getScreenName())) {
+				throw new ApplicationException("Screen Name already exists");
+			}
+			if (screenNamesRepo.existsByScreenCode(screenNamesDTO.getScreenCode())) {
+				throw new ApplicationException("Screen Code already exists");
+			}
+
+			screenNamesVO.setCreatedBy(screenNamesDTO.getCreatedBy());
+			screenNamesVO.setUpdatedBy(screenNamesDTO.getCreatedBy());
+			screenNamesVO.setActive(screenNamesDTO.isActive());
+			screenNamesVO.setScreenCode(screenNamesDTO.getScreenCode());
+			screenNamesVO.setScreenName(screenNamesDTO.getScreenName());
+			// Set the values from screenNamesDTO to responsibilityVO
+			message = "ScreenName Created successfully";
+
+		} else {
+
+			// Retrieve the existing ResponsibilityVO from the repository
+			screenNamesVO = screenNamesRepo.findById(screenNamesDTO.getId())
+					.orElseThrow(() -> new ApplicationException("Screen Name not found"));
+
+			// Validate and update unique fields if changed
+			if (!screenNamesVO.getScreenName().equalsIgnoreCase(screenNamesDTO.getScreenName())) {
+				if (screenNamesRepo.existsByScreenName(screenNamesDTO.getScreenName())) {
+					throw new ApplicationException("Screen Name already exists");
+				}
+				screenNamesVO.setScreenName(screenNamesDTO.getScreenName());
+			}
+			if (!screenNamesVO.getScreenCode().equalsIgnoreCase(screenNamesDTO.getScreenCode())) {
+				if (screenNamesRepo.existsByScreenCode(screenNamesDTO.getScreenCode())) {
+					throw new ApplicationException("Screen Code already exists");
+				}
+				screenNamesVO.setScreenCode(screenNamesDTO.getScreenCode());
+			}
+			screenNamesVO.setActive(screenNamesDTO.isActive());
+			screenNamesVO.setUpdatedBy(screenNamesDTO.getCreatedBy());
+			// Update the remaining fields from screenNamesDTO to responsibilityVO
+			message = "ScreenName Updated successfully";
+		}
+
+		screenNamesRepo.save(screenNamesVO);
+		Map<String, Object> response = new HashMap<>();
+		response.put("screenNamesVO", screenNamesVO);
+		response.put("message", message);
+		return response;
+	}
+
+	@Override
+	public List<ScreenNamesVO> getAllScreenNames() {
+
+		return screenNamesRepo.findAll();
+	}
+
+	@Override
+	public ScreenNamesVO getScreenNamesById(Long id) throws ApplicationException {
+
+		if (ObjectUtils.isEmpty(id)) {
+			throw new ApplicationException("Invalid Company Id");
+		}
+
+		ScreenNamesVO screenNamesVO = screenNamesRepo.findById(id)
+				.orElseThrow(() -> new ApplicationException("Screen Name not found for Id: " + id));
+
+		return screenNamesVO;
 	}
 
 }

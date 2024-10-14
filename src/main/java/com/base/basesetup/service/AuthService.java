@@ -3,6 +3,8 @@ package com.base.basesetup.service;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.stereotype.Service;
 
 import com.base.basesetup.dto.ChangePasswordFormDTO;
@@ -23,7 +25,7 @@ public interface AuthService {
 
 	public void signup(SignUpFormDTO signUpRequest);
 
-	public UserResponseDTO login(LoginFormDTO loginRequest);
+	public UserResponseDTO login(LoginFormDTO loginRequest, HttpServletRequest request);
 
 	public void logout(String userName);
 

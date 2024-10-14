@@ -33,6 +33,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class TaxInvoiceVO {
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "taxinvoicegen")
 	@SequenceGenerator(name = "taxinvoicegen", sequenceName = "taxinvoiceseq", initialValue = 1000000001, allocationSize = 1)
