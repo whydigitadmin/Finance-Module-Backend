@@ -658,7 +658,7 @@ public class AuthServiceImpl implements AuthService {
 	public UserVO getUserByUserName(String userName) {
 		String methodName = "getUserByUserName()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
-		if (StringUtils.isNotEmpty(userName)) {
+		if (StringUtils.isNotEmpty(userName)) {    
 			UserVO userVO = userRepo.findByUserName(userName);
 			if (ObjectUtils.isEmpty(userVO)) {
 				throw new ApplicationContextException(UserConstants.ERRROR_MSG_USER_INFORMATION_NOT_FOUND);

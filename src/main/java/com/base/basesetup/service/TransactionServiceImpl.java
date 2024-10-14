@@ -11,7 +11,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
@@ -34,13 +33,10 @@ import org.springframework.web.multipart.MultipartFile;
 import com.base.basesetup.dto.ArApAdjustmentOffSetDTO;
 import com.base.basesetup.dto.ArApOffSetInvoiceDetailsDTO;
 import com.base.basesetup.dto.ArapAdjustmentsDTO;
-import com.base.basesetup.dto.ArapDetailsDTO;
 import com.base.basesetup.dto.BrsOpeningDTO;
-import com.base.basesetup.dto.ChargerCostInvoiceDTO;
 import com.base.basesetup.dto.ChargerDebitNoteDTO;
 import com.base.basesetup.dto.ChargerIrnCreditDTO;
 import com.base.basesetup.dto.ChartCostCenterDTO;
-import com.base.basesetup.dto.CostInvoiceDTO;
 import com.base.basesetup.dto.DailyMonthlyExRatesDTO;
 import com.base.basesetup.dto.DailyMonthlyExRatesDtlDTO;
 import com.base.basesetup.dto.DebitNoteDTO;
@@ -70,19 +66,14 @@ import com.base.basesetup.dto.ReconcileCashDTO;
 import com.base.basesetup.dto.ReconcileCorpBankDTO;
 import com.base.basesetup.dto.TaxInvoiceDTO;
 import com.base.basesetup.dto.TaxInvoiceDetailsDTO;
-import com.base.basesetup.dto.TaxInvoiceGstDTO;
-import com.base.basesetup.dto.TdsCostInvoiceDTO;
 import com.base.basesetup.entity.ArApAdjustmentOffSetVO;
 import com.base.basesetup.entity.ArApOffSetInvoiceDetailsVO;
 import com.base.basesetup.entity.ArapAdjustmentsVO;
-import com.base.basesetup.entity.ArapDetailsVO;
 import com.base.basesetup.entity.BrsExcelUploadVO;
 import com.base.basesetup.entity.BrsOpeningVO;
-import com.base.basesetup.entity.ChargerCostInvoiceVO;
 import com.base.basesetup.entity.ChargerDebitNoteVO;
 import com.base.basesetup.entity.ChargerIrnCreditVO;
 import com.base.basesetup.entity.ChartCostCenterVO;
-import com.base.basesetup.entity.CostInvoiceVO;
 import com.base.basesetup.entity.DailyMonthlyExRatesDtlVO;
 import com.base.basesetup.entity.DailyMonthlyExRatesVO;
 import com.base.basesetup.entity.DebitNoteVO;
@@ -113,7 +104,6 @@ import com.base.basesetup.entity.ReconcileCorpBankVO;
 import com.base.basesetup.entity.TaxInvoiceDetailsVO;
 import com.base.basesetup.entity.TaxInvoiceGstVO;
 import com.base.basesetup.entity.TaxInvoiceVO;
-import com.base.basesetup.entity.TdsCostInvoiceVO;
 import com.base.basesetup.exception.ApplicationException;
 import com.base.basesetup.repo.ArApAdjustmentOffSetRepo;
 import com.base.basesetup.repo.ArApOffSetInvoiceDetailsRepo;
@@ -340,7 +330,6 @@ public class TransactionServiceImpl implements TransactionService {
 			message = "Tax Invoice Created Successfully";
 		}
 
-		
 		taxInvoiceRepo.save(taxInvoiceVO);
 		Map<String, Object> response = new HashMap<>();
 		response.put("taxInvoiceVO", taxInvoiceVO);
@@ -479,7 +468,7 @@ public class TransactionServiceImpl implements TransactionService {
 			taxInvoiceGstVOList.add(taxInvoiceGstVO);
 		}
 		taxInvoiceVO.setTaxInvoiceGstVO(taxInvoiceGstVOList);
-		
+
 		totalInvAmountLC = totalChargeAmountLC.add(totalTaxAmountLC);
 		totalInvAmountBC = totalChargeAmountBC.add(totalTaxAmountBC);
 
@@ -1277,153 +1266,6 @@ public class TransactionServiceImpl implements TransactionService {
 
 	}
 
-	// costInvoice
-
-	@Override
-	public List<CostInvoiceVO> getAllCostInvoiceByOrgId(Long orgId) {
-		List<CostInvoiceVO> costInvoiceVO = new ArrayList<>();
-		if (ObjectUtils.isNotEmpty(orgId)) {
-			LOGGER.info("Successfully Received  CostInvoice BY OrgId : {}", orgId);
-			costInvoiceVO = costInvoiceRepo.getAllCostInvoiceByOrgId(orgId);
-		} else {
-			LOGGER.info("Successfully Received  CostInvoice For All OrgId.");
-			costInvoiceVO = costInvoiceRepo.findAll();
-		}
-		return costInvoiceVO;
-	}
-
-	@Override
-	public List<CostInvoiceVO> getAllCostInvoiceById(Long id) {
-		List<CostInvoiceVO> costInvoiceVO = new ArrayList<>();
-		if (ObjectUtils.isNotEmpty(id)) {
-			LOGGER.info("Successfully Received  CostInvoice BY Id : {}", id);
-			costInvoiceVO = costInvoiceRepo.getAllCostInvoiceById(id);
-		} else {
-			LOGGER.info("Successfully Received CostInvoice For All Id.");
-			costInvoiceVO = costInvoiceRepo.findAll();
-		}
-		return costInvoiceVO;
-	}
-
-	@Override
-	public CostInvoiceVO updateCreateCostInvoice(@Valid CostInvoiceDTO costInvoiceDTO) throws ApplicationException {
-		CostInvoiceVO costInvoiceVO = new CostInvoiceVO();
-		// boolean isUpdate = false;
-		if (ObjectUtils.isNotEmpty(costInvoiceDTO.getId())) {
-			boolean isUpdate = true;
-			costInvoiceVO = costInvoiceRepo.findById(costInvoiceDTO.getId())
-					.orElseThrow(() -> new ApplicationException("Invalid CostInvoice details"));
-			costInvoiceVO.setUpdatedBy(costInvoiceDTO.getCreatedBy());
-		} else {
-			costInvoiceVO.setUpdatedBy(costInvoiceDTO.getCreatedBy());
-			costInvoiceVO.setCreatedBy(costInvoiceDTO.getCreatedBy());
-		}
-
-		List<ChargerCostInvoiceVO> chargerCostInvoiceVOs = new ArrayList<>();
-		if (costInvoiceDTO.getChargerCostInvoiceDTO() != null) {
-			for (ChargerCostInvoiceDTO chargerCostInvoiceDTO : costInvoiceDTO.getChargerCostInvoiceDTO()) {
-				ChargerCostInvoiceVO chargerCostInvoiceVO;
-				if (chargerCostInvoiceDTO.getId() != null && ObjectUtils.isNotEmpty(chargerCostInvoiceDTO.getId())) {
-					chargerCostInvoiceVO = chargerCostInvoiceRepo.findById(chargerCostInvoiceDTO.getId())
-							.orElse(new ChargerCostInvoiceVO());
-				} else {
-					chargerCostInvoiceVO = new ChargerCostInvoiceVO();
-				}
-				chargerCostInvoiceVO.setChargeName(chargerCostInvoiceDTO.getChargeName());
-				chargerCostInvoiceVO.setChargeCode(chargerCostInvoiceDTO.getChargeCode());
-				chargerCostInvoiceVO.setChargeLedger(chargerCostInvoiceDTO.getChargeLedger());
-				chargerCostInvoiceVO.setGsac(chargerCostInvoiceDTO.getGsac());
-				chargerCostInvoiceVO.setContType(chargerCostInvoiceDTO.getContType());
-				chargerCostInvoiceVO.setCurrency(chargerCostInvoiceDTO.getCurrency());
-				chargerCostInvoiceVO.setRate(chargerCostInvoiceDTO.getRate());
-				chargerCostInvoiceVO.setGstPercentage(chargerCostInvoiceDTO.getGstPercentage());
-				chargerCostInvoiceVO.setExRate(chargerCostInvoiceDTO.getExRate());
-				chargerCostInvoiceVO.setFcAmount(chargerCostInvoiceDTO.getFcAmount());
-				chargerCostInvoiceVO.setLcAmount(chargerCostInvoiceDTO.getLcAmount());
-				chargerCostInvoiceVO.setBillAmount(chargerCostInvoiceDTO.getBillAmount());
-				chargerCostInvoiceVO.setCostInvoiceVO(costInvoiceVO);
-				chargerCostInvoiceVOs.add(chargerCostInvoiceVO);
-			}
-		}
-
-		List<TdsCostInvoiceVO> tdsCostInvoiceVOs = new ArrayList<>();
-		if (costInvoiceDTO.getTdsCostInvoiceDTO() != null) {
-			for (TdsCostInvoiceDTO tdsCostInvoiceDTO : costInvoiceDTO.getTdsCostInvoiceDTO()) {
-				TdsCostInvoiceVO tdsCostInvoiceVO;
-				if (tdsCostInvoiceDTO.getId() != null & ObjectUtils.isEmpty(tdsCostInvoiceDTO.getId())) {
-					tdsCostInvoiceVO = tdsCostInvoiceRepo.findById(tdsCostInvoiceDTO.getId())
-							.orElse(new TdsCostInvoiceVO());
-				} else {
-					tdsCostInvoiceVO = new TdsCostInvoiceVO();
-				}
-				tdsCostInvoiceVO.setTdsWh(tdsCostInvoiceDTO.getTdsWh());
-				tdsCostInvoiceVO.setTdsWhPercent(tdsCostInvoiceDTO.getTdsWhPercent());
-				tdsCostInvoiceVO.setSection(tdsCostInvoiceDTO.getSection());
-				tdsCostInvoiceVO.setTotalTds(tdsCostInvoiceDTO.getTotalTds());
-				tdsCostInvoiceVO.setCostInvoiceVO(costInvoiceVO);
-				tdsCostInvoiceVOs.add(tdsCostInvoiceVO);
-			}
-		}
-
-		getCostInvoiceVOFromCostInvoiceDTO(costInvoiceDTO, costInvoiceVO);
-		costInvoiceVO.setChargerCostInvoiceVO(chargerCostInvoiceVOs);
-		costInvoiceVO.setTdsCostInvoiceVO(tdsCostInvoiceVOs);
-		return costInvoiceRepo.save(costInvoiceVO);
-	}
-
-	private void getCostInvoiceVOFromCostInvoiceDTO(@Valid CostInvoiceDTO costInvoiceDTO, CostInvoiceVO costInvoiceVO) {
-		// // Finyr
-		// int finyr = taxInvoiceRepo.findFinyr();
-		// // DocId
-		// String taxInvoice = "AI" + finyr + taxInvoiceRepo.findDocId();
-		// taxInvoiceVO.setDocId(taxInvoice);
-		// taxInvoiceRepo.nextSeq();
-		// // InvoiceNo
-		// String invoiceNo = "AI" + finyr + "INV" + taxInvoiceRepo.findInvoiceNo();
-		// taxInvoiceVO.setInvoiceNo(invoiceNo);
-		// taxInvoiceRepo.nextSeqInvoice();
-		costInvoiceVO.setMode(costInvoiceDTO.getMode());
-		costInvoiceVO.setProduct(costInvoiceDTO.getProduct());
-		costInvoiceVO.setPurVchNo(costInvoiceDTO.getPurVchNo());
-		costInvoiceVO.setPurVchDt(costInvoiceDTO.getPurVchDt());
-		costInvoiceVO.setCostInvoiceNo(costInvoiceDTO.getCostInvoiceNo());
-		costInvoiceVO.setDate(costInvoiceDTO.getDate());
-		costInvoiceVO.setSupplierBillNo(costInvoiceDTO.getSupplierBillNo());
-		costInvoiceVO.setSuppliertType(costInvoiceDTO.getSuppliertType());
-		costInvoiceVO.setSupplierCode(costInvoiceDTO.getSupplierCode());
-		costInvoiceVO.setCreditDays(costInvoiceDTO.getCreditDays());
-		costInvoiceVO.setDueDate(costInvoiceDTO.getDueDate());
-		costInvoiceVO.setSupplierName(costInvoiceDTO.getSupplierName());
-		costInvoiceVO.setCurrency(costInvoiceDTO.getCurrency());
-		costInvoiceVO.setExRate(costInvoiceDTO.getExRate());
-		costInvoiceVO.setSupplierGstIn(costInvoiceDTO.getSupplierGstIn());
-		costInvoiceVO.setRemarks(costInvoiceDTO.getRemarks());
-		costInvoiceVO.setAddress(costInvoiceDTO.getAddress());
-		costInvoiceVO.setOtherInfo(costInvoiceDTO.getOtherInfo());
-		costInvoiceVO.setShipperRefNo(costInvoiceDTO.getShipperRefNo());
-		costInvoiceVO.setGstType(costInvoiceDTO.getGstType());
-		costInvoiceVO.setPayment(costInvoiceDTO.getPayment());
-		costInvoiceVO.setAccrualId(costInvoiceDTO.getAccrualId());
-		costInvoiceVO.setUtrReference(costInvoiceDTO.getUtrReference());
-		costInvoiceVO.setCostType(costInvoiceDTO.getCostType());
-		costInvoiceVO.setJobStatus(costInvoiceDTO.getJobStatus());
-		costInvoiceVO.setOrgId(costInvoiceDTO.getOrgId());
-		costInvoiceVO.setActive(costInvoiceDTO.isActive());
-		costInvoiceVO.setBillCurrTotChargeAmt(costInvoiceDTO.getBillCurrTotChargeAmt());
-		costInvoiceVO.setBillCurrActBillAmt(costInvoiceDTO.getBillCurrActBillAmt());
-		costInvoiceVO.setBillCurrNetAmt(costInvoiceDTO.getBillCurrNetAmt());
-		costInvoiceVO.setLcTotChargeAmt(costInvoiceDTO.getLcTotChargeAmt());
-		costInvoiceVO.setLcActBillAmt(costInvoiceDTO.getLcActBillAmt());
-		costInvoiceVO.setLcNetAmt(costInvoiceDTO.getLcNetAmt());
-		costInvoiceVO.setRoundOff(costInvoiceDTO.getRoundOff());
-		costInvoiceVO.setLcGstInputAmt(costInvoiceDTO.getLcGstInputAmt());
-	}
-
-	@Override
-	public List<CostInvoiceVO> getCostInvoiceByActive() {
-		return costInvoiceRepo.findCostInvoiceByActive();
-	}
-
 	// DebitNote
 
 	@Override
@@ -1790,96 +1632,6 @@ public class TransactionServiceImpl implements TransactionService {
 
 	public List<PaymentVoucherVO> getPaymentVoucherByActive() {
 		return paymentVoucherRepo.findPaymentVoucherByActive();
-	}
-
-	// ArapDetails
-
-	@Override
-	public List<ArapDetailsVO> getAllArapDetailsByOrgId(Long orgId) {
-		List<ArapDetailsVO> arapDetailsVO = new ArrayList<>();
-		if (ObjectUtils.isNotEmpty(orgId)) {
-			LOGGER.info("Successfully Received ArapDetails BY OrgId : {}", orgId);
-			arapDetailsVO = arapDetailsRepo.getAllArapDetailsByOrgId(orgId);
-		} else {
-			LOGGER.info("Successfully Received ArapDetails For All OrgId.");
-			arapDetailsVO = arapDetailsRepo.findAll();
-		}
-		return arapDetailsVO;
-	}
-
-	@Override
-	public List<ArapDetailsVO> getAllArapDetailsById(Long id) {
-		List<ArapDetailsVO> arapDetailsVO = new ArrayList<>();
-		if (ObjectUtils.isNotEmpty(id)) {
-			LOGGER.info("Successfully Received ArapDetails BY Id : {}", id);
-			arapDetailsVO = arapDetailsRepo.getAllArapDetailsById(id);
-		} else {
-			LOGGER.info("Successfully Received ArapDetails For All Id.");
-			arapDetailsVO = arapDetailsRepo.findAll();
-		}
-		return arapDetailsVO;
-	}
-
-	@Override
-	public ArapDetailsVO updateCreateArapDetails(@Valid ArapDetailsDTO arapDetailsDTO) throws ApplicationException {
-		ArapDetailsVO arapDetailsVO = new ArapDetailsVO();
-		boolean isUpdate = false;
-		if (ObjectUtils.isNotEmpty(arapDetailsDTO.getId())) {
-			isUpdate = true;
-			arapDetailsVO = arapDetailsRepo.findById(arapDetailsDTO.getId())
-					.orElseThrow(() -> new ApplicationException("Invalid ARAP Details details"));
-			arapDetailsVO.setUpdatedBy(arapDetailsDTO.getCreatedBy());
-		} else {
-			arapDetailsVO.setUpdatedBy(arapDetailsDTO.getCreatedBy());
-			arapDetailsVO.setCreatedBy(arapDetailsDTO.getCreatedBy());
-		}
-
-		getArapDetailsVOFromArapDetailsDTO(arapDetailsDTO, arapDetailsVO);
-		return arapDetailsRepo.save(arapDetailsVO);
-	}
-
-	private void getArapDetailsVOFromArapDetailsDTO(@Valid ArapDetailsDTO arapDetailsDTO, ArapDetailsVO arapDetailsVO) {
-		// // Finyr
-		// int finyr = paymentVoucherRepo.findFinyr();
-		// // DocId
-		// String paymentVoucher = "PV" + finyr + paymentVoucherRepo.findDocId();
-		// paymentVoucherRepo.setDocId(paymentVoucher);
-		// paymentVoucherRepo.nextSeq();
-		arapDetailsVO.setBranch(arapDetailsDTO.getBranch());
-		arapDetailsVO.setFinyr(arapDetailsDTO.getFinyr());
-		arapDetailsVO.setSourceTransid(arapDetailsDTO.getSourceTransid());
-		arapDetailsVO.setDocId(arapDetailsDTO.getDocId());
-		arapDetailsVO.setRefNo(arapDetailsDTO.getRefNo());
-		arapDetailsVO.setAccountName(arapDetailsDTO.getAccountName());
-		arapDetailsVO.setCurrency(arapDetailsDTO.getCurrency());
-		arapDetailsVO.setAccountCurrency(arapDetailsDTO.getAccountCurrency());
-		arapDetailsVO.setAccount(arapDetailsDTO.getAccount());
-		arapDetailsVO.setExRate(arapDetailsDTO.getExRate());
-		arapDetailsVO.setAmount(arapDetailsDTO.getAmount());
-		arapDetailsVO.setBaseAmount(arapDetailsDTO.getBaseAmount());
-		arapDetailsVO.setNativeAmount(arapDetailsDTO.getNativeAmount());
-		arapDetailsVO.setMno(arapDetailsDTO.getMno());
-		arapDetailsVO.setChargableAmount(arapDetailsDTO.getChargableAmount());
-		arapDetailsVO.setGstFlag(arapDetailsDTO.getGstFlag());
-		arapDetailsVO.setDocTypeCode(arapDetailsDTO.getDocTypeCode());
-		arapDetailsVO.setSubTypeCode(arapDetailsDTO.getSubTypeCode());
-		arapDetailsVO.setSubLedgerDivision(arapDetailsDTO.getSubLedgerDivision());
-		arapDetailsVO.setDocDate(arapDetailsDTO.getDocDate());
-		arapDetailsVO.setSuppRefNo(arapDetailsDTO.getSuppRefNo());
-		arapDetailsVO.setRefDate(arapDetailsDTO.getRefDate());
-		arapDetailsVO.setSuppRefDate(arapDetailsDTO.getSuppRefDate());
-		arapDetailsVO.setSubLedgerCode(arapDetailsDTO.getSubLedgerCode());
-		arapDetailsVO.setCreditDays(arapDetailsDTO.getCreditDays());
-		arapDetailsVO.setDueDate(arapDetailsDTO.getDueDate());
-		arapDetailsVO.setTdsAmount(arapDetailsDTO.getTdsAmount());
-		arapDetailsVO.setHno(arapDetailsDTO.getHno());
-		arapDetailsVO.setOrgId(arapDetailsDTO.getOrgId());
-		arapDetailsVO.setActive(arapDetailsDTO.isActive());
-	}
-
-	@Override
-	public List<ArapDetailsVO> getArapDetailsByActive() {
-		return arapDetailsRepo.findArapDetailsByActive();
 	}
 
 	// ArapAdjustments

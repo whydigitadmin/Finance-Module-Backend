@@ -1,7 +1,5 @@
 package com.base.basesetup.entity;
 
-import java.math.BigDecimal;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -31,34 +29,32 @@ public class ChargerCostInvoiceVO {
 	@SequenceGenerator(name = "chargercostinvoicegen", sequenceName = "chargercostinvoiceseq", initialValue = 1000000001, allocationSize = 1)
 	@Column(name = "chargercostinvoiceid")
 	private Long id;
-	@Column(name = "chargername")
+	@Column(name = "houseno",length =20)
+	private String houseNo;
+	@Column(name = "jobno",length =20)
+	private String jobNo;
+	@Column(name = "subjobno",length =20)
+	private String subJobNo;
+	@Column(name = "chargername",length =150)
 	private String chargeName;
-	@Column(name = "chargecode")
+	@Column(name = "chargecode",length =10)
 	private String chargeCode;
-	@Column(name = "chargeledger")
+	@Column(name = "chargeledger",length =150)
 	private String chargeLedger;
-	@Column(name = "gsac")
+	@Column(name = "gsac",length =15)
 	private String gsac;
-	@Column(name = "conttype")
+	@Column(name = "conttype",length =10)
 	private String contType;
-	@Column(name = "currency")
-	private String currency;
-	@Column(name = "exrate")
-	private String exRate;
-	@Column(name = "rate")
-	private String rate;
-	@Column(name = "gstpercentage")
-	private BigDecimal gstPercentage;
-	@Column(name = "fcamount")
-	private BigDecimal fcAmount;
-	@Column(name = "lcAmount")
-	private BigDecimal lcAmount;
-	@Column(name = "billamount")
-	private BigDecimal billAmount;
+	@Column(name = "currency",precision =10,scale =2)
+	private float currency;
+	@Column(name = "exrate",precision =10,scale =2)
+	private int exRate;
+	@Column(name = "gst",length =10)
+	private int gst;
 
 	@ManyToOne
 	@JsonBackReference
-	@JoinColumn(name = "costinvoice_id")
+	@JoinColumn(name = "costinvoiceid")
 	CostInvoiceVO costInvoiceVO;
 	
 

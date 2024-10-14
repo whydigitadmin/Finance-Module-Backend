@@ -1,6 +1,5 @@
 package com.base.basesetup.entity;
 
-import java.math.BigDecimal;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -21,8 +20,8 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "tdscostinvoice")
-@Data
 @NoArgsConstructor
+@Data
 @AllArgsConstructor
 @Builder
 public class TdsCostInvoiceVO {
@@ -31,17 +30,17 @@ public class TdsCostInvoiceVO {
 	@SequenceGenerator(name = "tdscostinvoicegen", sequenceName = "tdscostinvoiceseq", initialValue = 1000000001, allocationSize = 1)
 	@Column(name = "tdscostinvoiceid")
 	private Long id;
-	@Column(name = "tdswh")
-	private String tdsWh;
-	@Column(name = "tdsWpercent")
-	private BigDecimal tdsWhPercent;
-	@Column(name = "section")
+	@Column(name = "tdswithholding",length =10)
+	private String tdsWithHolding;
+	@Column(name = "tdswithholdingper",precision =10,scale = 2)
+	private float tdsWithHoldingPer;
+	@Column(name = "section",length =10)
 	private String section;
-	@Column(name = "totaltds")
-	private String totalTds;
+	@Column(name = "totaltds",precision =10,scale = 2)
+	private int totTdsWhAmnt;
 	
 	@ManyToOne
 	@JsonBackReference
-	@JoinColumn(name = "costinvoice_id")
+	@JoinColumn(name = "costinvoiceid")
 	CostInvoiceVO costInvoiceVO;
 }

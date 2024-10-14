@@ -1,6 +1,5 @@
 package com.base.basesetup.entity;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -17,7 +16,7 @@ import javax.persistence.Table;
 
 import com.base.basesetup.dto.CreatedUpdatedDate;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-
+ 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -35,85 +34,82 @@ public class CostInvoiceVO {
 	@SequenceGenerator(name = "costinvoicegen", sequenceName = "costinvoiceseq", initialValue = 1000000001, allocationSize = 1)
 	@Column(name = "costinvoiceid")
 	private Long id;
-	@Column(name = "mode")
+	@Column(name = "mode",length =10)
 	private String mode;
-	@Column(name = "product")
+	@Column(name = "product",length =50)
 	private String product;
-	@Column(name = "purvchno")
-	private String purVchNo;
-	@Column(name = "purvchdt")
-	private LocalDate purVchDt;
-	@Column(name = "costinvoiceno")
+	@Column(name = "purvoucherno",length =50)
+	private String purVoucherNo;
+	@Column(name = "purvoucherdate")
+	private LocalDate purVoucherDate;
+	@Column(name = "costinvoiceno",length =50)
 	private String costInvoiceNo;
-	@Column(name = "date")
-	private LocalDate date;
-	@Column(name = "supplierbillno")
+	@Column(name = "costinvoicedate")
+	private LocalDate costInvoiceDate;
+	@Column(name = "supplierbillno",length =50)
 	private String supplierBillNo;
-	@Column(name = "suppliertype")
+	@Column(name = "suppliertype",length =10)
 	private String suppliertType;
-	@Column(name = "suppliercode")
+	@Column(name = "suppliercode",length =15)
 	private String supplierCode;
-	@Column(name = "creditdays")
-	private String creditDays;
+	@Column(name = "creditdays",length =10)
+	private int creditDays;
 	@Column(name = "duedate")
 	private LocalDate dueDate;
-	@Column(name = "suppliername")
+	@Column(name = "suppliername",length =150)
 	private String supplierName;
-	@Column(name = "currency")
+	@Column(name = "supplierplace",length =15)
+	private String supplierPlace;
+	@Column(name = "currency",length =10)
 	private String currency;
-	@Column(name = "exrate")
-	private String exRate;
-	@Column(name = "suppliergstin")
+	@Column(name = "exrate",precision = 10,scale = 2)
+	private float exRate;
+	@Column(name = "suppliergstin",length =10)
 	private String supplierGstIn;
-	@Column(name = "remarks")
+	@Column(name = "suppliergstincode",length =15)
+	private String supplierGstInCode;
+	@Column(name = "remarks",length =150)
 	private String remarks;
-	@Column(name = "address")
+	@Column(name = "address",length =150)
 	private String address;
-	@Column(name = "otherinfo")
+	@Column(name = "otherinfo",length =150)
 	private String otherInfo;
-	@Column(name = "shipperrefno")
+	@Column(name = "shipperrefno",length =25)
 	private String shipperRefNo;
-	@Column(name = "gstType")
+	@Column(name = "gsttype",length =15)
 	private String gstType;
-	@Column(name = "payment")
-	private String payment;
-	@Column(name = "accrualid")
-	private String accrualId;
-	@Column(name = "utrReference")
-	private String utrReference;
-	@Column(name = "costtype")
-	private String costType;
-	@Column(name = "jobstatus")
-	private String jobStatus;
-	@Column(name = "orgid")
+	@Column(name = "orgid",length =15)
 	private Long orgId;
 	@Column(name = "active")
 	private boolean active;
-	@Column(name = "modifiedby")
+	@Column(name = "modifiedby",length =25)
 	private String updatedBy;
-	@Column(name = "createdby")
+	@Column(name = "createdby",length =25)
 	private String createdBy;
 	@Column(name = "cancel")
 	private boolean cancel;
-	@Column(name = "cancelremarks")
+	@Column(name = "cancelremarks",length =25)
 	private String cancelRemarks;
-	@Column(name = "billcurrtotchargeamt")
-	private BigDecimal billCurrTotChargeAmt;
-	@Column(name = "billcurractbillamt")
-	private BigDecimal billCurrActBillAmt;
-	@Column(name = "billcurrnetamt")
-	private BigDecimal billCurrNetAmt;
-	@Column(name = "lctotchargeamt")
-	private BigDecimal lcTotChargeAmt;
-	@Column(name = "lcactbillamt")
-	private BigDecimal lcActBillAmt;
-	@Column(name = "lcnetamt")
-	private BigDecimal lcNetAmt;
-	@Column(name = "roundoff")
-	private String roundOff;
-	@Column(name = "lcgstinputamt")
-	private BigDecimal lcGstInputAmt;
-
+	@Column(name = "branch",length =25)
+	private String branch;
+	@Column(name = "branchcode",length =10)
+	private String branchCode;
+	@Column(name = "customer",length =100)
+	private String customer;
+	@Column(name = "client",length =30)
+	private String client;
+	@Column(name = "finyear",length =10)
+	private String finYear;
+	@Column(name = "screencode",length =10)
+	private String screenCode;
+	@Column(name = "screenname",length =25)
+	private String screenName;
+	@Column(name = "ipno",length =10)
+	private String ipNo;
+	@Column(name = "latitude",length =100)
+	private String latitude;
+	
+ 
 	@OneToMany(mappedBy = "costInvoiceVO", cascade = CascadeType.ALL)
 	@JsonManagedReference
 	List<ChargerCostInvoiceVO> chargerCostInvoiceVO;
@@ -121,6 +117,11 @@ public class CostInvoiceVO {
 	@OneToMany(mappedBy = "costInvoiceVO", cascade = CascadeType.ALL)
 	@JsonManagedReference
 	List<TdsCostInvoiceVO> tdsCostInvoiceVO;
+	
+	
+	@OneToMany(mappedBy ="costInvoiceVO",cascade = CascadeType.ALL)
+	@JsonManagedReference
+	List<CostInvSummaryVO> costInvSummaryVO ;
 
 	@Embedded
 	@Builder.Default
