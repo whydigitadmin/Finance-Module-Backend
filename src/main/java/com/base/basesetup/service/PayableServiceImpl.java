@@ -112,24 +112,30 @@ public class PayableServiceImpl implements PayableService{
 	private void getPaymentVOFromPaymentDTO(
 			@Valid PaymentDTO paymentDTO, PaymentVO paymentVO) {
 
+		paymentVO.setPaymentType(paymentDTO.getPaymentType());
+		paymentVO.setBankChargeAcc(paymentDTO.getBankChargeAcc());
 		paymentVO.setDocId(paymentDTO.getDocId());
 		paymentVO.setDocDate(paymentDTO.getDocDate());
+		paymentVO.setBankCharges(paymentDTO.getBankCharges());
+		paymentVO.setBankInCurrency(paymentDTO.getBankInCurrency());
 		paymentVO.setType(paymentDTO.getType());
 		paymentVO.setPartyCode(paymentDTO.getPartyCode());
+		paymentVO.setServiceTaxAmt(paymentDTO.getServiceTaxAmt());
+		paymentVO.setSTaxInCurrency(paymentDTO.getSTaxInCurrency());
 		paymentVO.setPartyName(paymentDTO.getPartyName());
+		paymentVO.setChequeBank(paymentDTO.getChequeBank());
 		paymentVO.setGstState(paymentDTO.getGstState());
-		paymentVO.setGstin(paymentDTO.getGstin());
+		paymentVO.setGstIn(paymentDTO.getGstIn());
+		paymentVO.setChequeNo(paymentDTO.getChequeNo());
+		paymentVO.setChequeDate(paymentDTO.getChequeDate());
 		paymentVO.setBankCashAcc(paymentDTO.getBankCashAcc());
+		paymentVO.setPayTo(paymentDTO.getPayTo());
 		paymentVO.setPaymentAmt(paymentDTO.getPaymentAmt());
 		paymentVO.setTdsAcc(paymentDTO.getTdsAcc());
 		paymentVO.setTdsAmt(paymentDTO.getTdsAmt());
-		paymentVO.setBankChargeAcc(paymentDTO.getBankChargeAcc());
-		paymentVO.setServiceTaxAmt(paymentDTO.getServiceTaxAmt());
-		paymentVO.setChequeBank(paymentDTO.getChequeBank());
-		paymentVO.setChequeNo(paymentDTO.getChequeNo());
-		paymentVO.setPayTo(paymentDTO.getPayTo());
 		paymentVO.setCurrency(paymentDTO.getCurrency());
 		paymentVO.setCurrencyAmt(paymentDTO.getCurrencyAmt());
+
 		paymentVO.setBranch(paymentDTO.getBranch());
 		paymentVO.setBranchCode(paymentDTO.getBranchCode());
 		paymentVO.setActive(paymentDTO.isActive());
