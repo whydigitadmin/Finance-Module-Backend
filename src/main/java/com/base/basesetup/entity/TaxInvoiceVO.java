@@ -1,6 +1,7 @@
 package com.base.basesetup.entity;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -18,6 +19,7 @@ import javax.persistence.Table;
 import com.base.basesetup.dto.CreatedUpdatedDate;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -162,6 +164,62 @@ public class TaxInvoiceVO {
 	private CreatedUpdatedDate commonDate = new CreatedUpdatedDate();
 	
 	
+	// Formatted getters for BigDecimal fields
+    @JsonProperty("totalChargeAmountLc")
+    public String getFormattedTotalChargeAmountLc() {
+        return totalChargeAmountLc != null 
+            ? totalChargeAmountLc.setScale(2, RoundingMode.HALF_UP).toString() 
+            : "0.00";
+    }
+
+    @JsonProperty("totalTaxAmountLc")
+    public String getFormattedTotalTaxAmountLc() {
+        return totalTaxAmountLc != null 
+            ? totalTaxAmountLc.setScale(2, RoundingMode.HALF_UP).toString() 
+            : "0.00";
+    }
+
+    @JsonProperty("totalInvAmountLc")
+    public String getFormattedTotalInvAmountLc() {
+        return totalInvAmountLc != null 
+            ? totalInvAmountLc.setScale(2, RoundingMode.HALF_UP).toString() 
+            : "0.00";
+    }
+
+    @JsonProperty("roundOffAmountLc")
+    public String getFormattedRoundOffAmountLc() {
+        return roundOffAmountLc != null 
+            ? roundOffAmountLc.setScale(2, RoundingMode.HALF_UP).toString() 
+            : "0.00";
+    }
+
+    @JsonProperty("totalChargeAmountBc")
+    public String getFormattedTotalChargeAmountBc() {
+        return totalChargeAmountBc != null 
+            ? totalChargeAmountBc.setScale(2, RoundingMode.HALF_UP).toString() 
+            : "0.00";
+    }
+
+    @JsonProperty("totalTaxAmountBc")
+    public String getFormattedTotalTaxAmountBc() {
+        return totalTaxAmountBc != null 
+            ? totalTaxAmountBc.setScale(2, RoundingMode.HALF_UP).toString() 
+            : "0.00";
+    }
+
+    @JsonProperty("totalInvAmountBc")
+    public String getFormattedTotalInvAmountBc() {
+        return totalInvAmountBc != null 
+            ? totalInvAmountBc.setScale(2, RoundingMode.HALF_UP).toString() 
+            : "0.00";
+    }
+
+    @JsonProperty("totalTaxableAmountLc")
+    public String getFormattedTotalTaxableAmountLc() {
+        return totalTaxableAmountLc != null 
+            ? totalTaxableAmountLc.setScale(2, RoundingMode.HALF_UP).toString() 
+            : "0.00";
+    }
 
    
 }

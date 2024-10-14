@@ -2,7 +2,6 @@ package com.base.basesetup.dto;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -56,7 +55,7 @@ public class TaxInvoiceDTO {
 	
 	List<TaxInvoiceDetailsDTO> taxInvoiceDetailsDTO;
 
-	List<TaxInvoiceGstDTO> taxInvoiceGstDTO;
+	
 	
 	
 }
