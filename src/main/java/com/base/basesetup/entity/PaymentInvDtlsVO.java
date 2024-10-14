@@ -51,11 +51,12 @@ public class PaymentInvDtlsVO {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     private LocalDate refDate; 
 
-    @Column(name = "masterref", length = 30)
-    private String masterRef;
+    @Column(name = "supplierrefno", length = 30)
+    private String supplierRefNo;
 
-    @Column(name = "houseref", length = 30)
-    private String houseRef;
+    @Column(name = "supplierrefdate")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+    private LocalDate supplierRefDate;
 
     @Column(name = "currency", length = 5)
     private String currency;

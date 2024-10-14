@@ -86,8 +86,8 @@ public class PayableServiceImpl implements PayableService{
 						paymentInvDtlsVO.setInvDate(paymentInvDtlsDTO.getInvDate());
 						paymentInvDtlsVO.setRefNo(paymentInvDtlsDTO.getRefNo());
 						paymentInvDtlsVO.setRefDate(paymentInvDtlsDTO.getRefDate());
-						paymentInvDtlsVO.setMasterRef(paymentInvDtlsDTO.getMasterRef());
-						paymentInvDtlsVO.setHouseRef(paymentInvDtlsDTO.getHouseRef());
+						paymentInvDtlsVO.setSupplierRefNo(paymentInvDtlsDTO.getSupplierRefNo());
+						paymentInvDtlsVO.setSupplierRefDate(paymentInvDtlsDTO.getSupplierRefDate());
 						paymentInvDtlsVO.setCurrency(paymentInvDtlsDTO.getCurrency());
 						paymentInvDtlsVO.setExRate(paymentInvDtlsDTO.getExRate());
 						paymentInvDtlsVO.setAmount(paymentInvDtlsDTO.getAmount());
