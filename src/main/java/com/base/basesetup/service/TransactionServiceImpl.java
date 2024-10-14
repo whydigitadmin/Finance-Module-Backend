@@ -560,7 +560,7 @@ public class TransactionServiceImpl implements TransactionService {
 				if (chargerIrnCreditDTO.getId() != null && ObjectUtils.isNotEmpty(chargerIrnCreditDTO.getId())) {
 					chargerIrnCreditVO = chargerIrnCreditRepo.findById(chargerIrnCreditDTO.getId())
 							.orElse(new ChargerIrnCreditVO());
-				} else {
+				} else {	
 					chargerIrnCreditVO = new ChargerIrnCreditVO();
 				}
 				chargerIrnCreditVO.setType(chargerIrnCreditDTO.getType());
@@ -2560,7 +2560,7 @@ public class TransactionServiceImpl implements TransactionService {
 				LOGGER.info("Successfully Received  ReconcileCorpBank BY OrgId : {}", orgId);
 				reconcileCorpBankVO = reconcileCorpBankRepo.getAllReconcileCorpBankByOrgId(orgId);
 			} else {
-				LOGGER.info("Successfully Received  ReconcileBank For All OrgId.");
+				LOGGER.info("Successfully Received  ReconcileCorpBank For All OrgId.");
 				reconcileCorpBankVO = reconcileCorpBankRepo.findAll();
 			}
 			return reconcileCorpBankVO;
