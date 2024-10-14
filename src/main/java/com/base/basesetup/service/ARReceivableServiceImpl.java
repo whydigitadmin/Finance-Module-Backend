@@ -120,6 +120,9 @@ public class ARReceivableServiceImpl implements ARReceivableService {
 		receiptReceivableVO.setCustomer(receiptReceivableDTO.getCustomer());
 		receiptReceivableVO.setClient(receiptReceivableDTO.getClient());
 		receiptReceivableVO.setCreatedBy(receiptReceivableDTO.getCreatedBy());
+
+		receiptReceivableVO.setUpdatedBy(receiptReceivableDTO.getUpdatedBy());
+
 		receiptReceivableVO.setActive(receiptReceivableDTO.isActive());
 		receiptReceivableVO.setCancel(receiptReceivableDTO.isCancel());
 		receiptReceivableVO.setCancelRemarks(receiptReceivableDTO.getCancelRemarks());

@@ -22,9 +22,9 @@ public class PaymentInvDtlsDTO {
 
 	private LocalDate refDate;
 
-	private String masterRef;
+	private String supplierRefNo;
 
-	private String houseRef;
+	private LocalDate supplierRefDate;
 
 	private String currency;
 
@@ -45,7 +45,5 @@ public class PaymentInvDtlsDTO {
 	private BigDecimal gainOrLossAmt;
 
 	private String remarks;
-
-	
 
 }

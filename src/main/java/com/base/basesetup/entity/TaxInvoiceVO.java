@@ -1,6 +1,7 @@
 package com.base.basesetup.entity;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -16,7 +17,9 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.base.basesetup.dto.CreatedUpdatedDate;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -37,102 +40,111 @@ public class TaxInvoiceVO {
 	private Long id;
 	@Column(name = "orgid")
 	private Long orgId;
-	@Column(name = "branch")
+	@Column(name = "branch",length = 30)
 	private String branch;
-	@Column(name = "branchcode")
+	@Column(name = "branchcode",length = 10)
 	private String branchCode;
-	@Column(name = "finyear")
+	@Column(name = "finyear",length =10)
 	private String finYear;
-	@Column(name = "createdby")
+	@Column(name = "createdby",length = 30)
 	private String createdBy;
-	@Column(name = "modifiedby")
+	@Column(name = "modifiedby",length = 30)
 	private String modifiedBy;
 	@Column(name = "active")
 	private boolean active=true;
 	@Column(name = "cancel")
 	private boolean cancel=false;
-	@Column(name = "cancelremarks")
+	@Column(name = "cancelremarks",length = 150)
 	private String cancelRemarks;
-	@Column(name = "biztype")
+	@Column(name = "biztype",length = 10)
 	private String bizType;
-	@Column(name = "bizmode")
+	@Column(name = "bizmode",length = 30)
 	private String bizMode;
-	@Column(name = "partyname")
+	@Column(name = "partyname",length = 150)
 	private String partyName;
-	@Column(name = "partycode")
+	@Column(name = "partycode",length = 10)
 	private String partyCode;
-	@Column(name = "partytype")
+	@Column(name = "partytype",length = 30)
 	private String partyType;
-	@Column(name = "stateno")
+	@Column(name = "stateno",length = 30)
 	private String stateNo;
-	@Column(name = "statecode")
+	@Column(name = "statecode",length = 10)
 	private String stateCode;
-	@Column(name = "recipientgstin")
+	@Column(name = "recipientgstin",length = 30)
 	private String recipientGSTIN;
-	@Column(name = "placeofsupply")
+	@Column(name = "placeofsupply",length = 30)
 	private String placeOfSupply;
-	@Column(name = "addresstype")
+	@Column(name = "addresstype",length = 30)
 	private String addressType;
-	@Column(name = "address")
+	@Column(name = "address",length = 150)
 	private String address;
-	@Column(name = "pincode")
+	@Column(name = "pincode",length = 10)
 	private String pinCode;
-	@Column(name = "status")
+	@Column(name = "status",length = 30)
 	private String status;
-	@Column(name = "gsttype")
+	@Column(name = "gsttype",length = 30)
 	private String gstType;
-	@Column(name = "docid")
+	@Column(name = "docid",length = 30)
 	private String docId;
+	@Column(name = "screencode",length = 30)
+	private String screenCode="TI";
+	@Column(name = "screenname",length = 30)
+	private String screenName="TAX INVOICE";
+
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	@Column(name = "docdate")
 	private LocalDate docDate= LocalDate.now();
-	@Column(name = "supplierbillno")
+	@Column(name = "supplierbillno",length = 30)
 	private String supplierBillNo;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	@Column(name = "supplierbilldate")
 	private LocalDate supplierBillDate;
-	@Column(name = "billcurr")
+	@Column(name = "billcurr",length = 30)
 	private String billCurr;
-	@Column(name = "billcurrrate")
+	@Column(name = "billcurrrate", precision = 10, scale = 2)
 	private BigDecimal billCurrRate;
-	@Column(name = "examount")
+	@Column(name = "examount", precision = 10, scale = 2)
 	private BigDecimal exAmount;
-	@Column(name = "creditdays")
+	@Column(name = "creditdays",length = 5)
 	private int creditDays;
-	@Column(name = "contactperson")
+	@Column(name = "contactperson",length = 30)
 	private String contactPerson;
-	@Column(name = "shipperinvoiceno")
+	@Column(name = "shipperinvoiceno",length = 30)
 	private String shipperInvoiceNo;
-	@Column(name = "billofentry")
+	@Column(name = "billofentry",length = 30)
 	private String billOfEntry;
-	@Column(name = "billmonth")
+	@Column(name = "billmonth",length = 30)
 	private String billMonth;
 	
 	
-	@Column(name = "invoiceno")
+	@Column(name = "invoiceno",length = 30)
 	private String invoiceNo;
+
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	@Column(name = "invoicedate")
 	private LocalDate invoiceDate;
-	@Column(name = "salestype")
+	@Column(name = "salestype",length = 30)
 	private String salesType;
 
-	@Column(name = "totalchargeamountlc")
+	@Column(name = "totalchargeamountlc", precision = 10, scale = 2)
 	private BigDecimal totalChargeAmountLc;
-	@Column(name = "totaltaxamountlc")
+	@Column(name = "totaltaxamountlc", precision = 10, scale = 2)
 	private BigDecimal totalTaxAmountLc;
-	@Column(name = "totalinvamountlc")
+	@Column(name = "totalinvamountlc", precision = 10, scale = 2)
 	private BigDecimal totalInvAmountLc;
-	@Column(name = "roundoffamountlc")
+	@Column(name = "roundoffamountlc", precision = 10, scale = 2)
 	private BigDecimal roundOffAmountLc;
-	@Column(name = "totalchargeamountbc")
+	@Column(name = "totalchargeamountbc", precision = 10, scale = 2)
 	private BigDecimal totalChargeAmountBc;
-	@Column(name = "totaltaxamountbc")
+	@Column(name = "totaltaxamountbc", precision = 10, scale = 2)
 	private BigDecimal totalTaxAmountBc;
-	@Column(name = "totalinvamountbc")
+	@Column(name = "totalinvamountbc", precision = 10, scale = 2)
 	private BigDecimal totalInvAmountBc;
-	@Column(name = "totaltaxableamountlc")
+	@Column(name = "totaltaxableamountlc", precision = 10, scale = 2)
 	private BigDecimal totalTaxableAmountLc;
-	@Column(name = "amountinwords")
+	@Column(name = "amountinwords",length = 150)
 	private String amountInWords;
-	@Column(name = "billingremarks")
+	@Column(name = "billingremarks",length = 30)
 	private String billingRemarks;
 
 	
@@ -150,4 +162,64 @@ public class TaxInvoiceVO {
 	@Embedded
 	@Builder.Default
 	private CreatedUpdatedDate commonDate = new CreatedUpdatedDate();
+	
+	
+	// Formatted getters for BigDecimal fields
+    @JsonProperty("totalChargeAmountLc")
+    public String getFormattedTotalChargeAmountLc() {
+        return totalChargeAmountLc != null 
+            ? totalChargeAmountLc.setScale(2, RoundingMode.HALF_UP).toString() 
+            : "0.00";
+    }
+
+    @JsonProperty("totalTaxAmountLc")
+    public String getFormattedTotalTaxAmountLc() {
+        return totalTaxAmountLc != null 
+            ? totalTaxAmountLc.setScale(2, RoundingMode.HALF_UP).toString() 
+            : "0.00";
+    }
+
+    @JsonProperty("totalInvAmountLc")
+    public String getFormattedTotalInvAmountLc() {
+        return totalInvAmountLc != null 
+            ? totalInvAmountLc.setScale(2, RoundingMode.HALF_UP).toString() 
+            : "0.00";
+    }
+
+    @JsonProperty("roundOffAmountLc")
+    public String getFormattedRoundOffAmountLc() {
+        return roundOffAmountLc != null 
+            ? roundOffAmountLc.setScale(2, RoundingMode.HALF_UP).toString() 
+            : "0.00";
+    }
+
+    @JsonProperty("totalChargeAmountBc")
+    public String getFormattedTotalChargeAmountBc() {
+        return totalChargeAmountBc != null 
+            ? totalChargeAmountBc.setScale(2, RoundingMode.HALF_UP).toString() 
+            : "0.00";
+    }
+
+    @JsonProperty("totalTaxAmountBc")
+    public String getFormattedTotalTaxAmountBc() {
+        return totalTaxAmountBc != null 
+            ? totalTaxAmountBc.setScale(2, RoundingMode.HALF_UP).toString() 
+            : "0.00";
+    }
+
+    @JsonProperty("totalInvAmountBc")
+    public String getFormattedTotalInvAmountBc() {
+        return totalInvAmountBc != null 
+            ? totalInvAmountBc.setScale(2, RoundingMode.HALF_UP).toString() 
+            : "0.00";
+    }
+
+    @JsonProperty("totalTaxableAmountLc")
+    public String getFormattedTotalTaxableAmountLc() {
+        return totalTaxableAmountLc != null 
+            ? totalTaxableAmountLc.setScale(2, RoundingMode.HALF_UP).toString() 
+            : "0.00";
+    }
+
+   
 }

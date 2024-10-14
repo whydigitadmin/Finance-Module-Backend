@@ -142,7 +142,7 @@ public class TransactionController extends BaseController {
 		try {
 			Map<String, Object> taxInvoiceVO = transactionService.updateCreateTaxInvoice(taxInvoiceDTO);
 			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, taxInvoiceVO.get("message"));
-			responseObjectsMap.put("taxInvoiceVO", taxInvoiceVO.get("taxInvoiceVO"));
+			responseObjectsMap.put("taxVO", taxInvoiceVO.get("taxInvoiceVO"));
 			responseDTO = createServiceResponse(responseObjectsMap);
 		} catch (Exception e) {
 			errorMsg = e.getMessage();
