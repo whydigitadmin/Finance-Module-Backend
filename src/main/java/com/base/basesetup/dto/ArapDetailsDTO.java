@@ -2,7 +2,7 @@ package com.base.basesetup.dto;
 
 import java.time.LocalDateTime;
 
-import javax.persistence.Column;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -31,12 +31,16 @@ public class ArapDetailsDTO {
 	private String docTypeCode;
 	private String subTypeCode;
 	private String subLedgerDivision;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	private LocalDateTime docDate;
 	private String suppRefNo;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	private LocalDateTime refDate;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	private LocalDateTime supRefDate;
 	private String subLedgerCode;
 	private String creditDays;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	private LocalDateTime dueDate;
 	private float TDSAmt;
 	private String hno;

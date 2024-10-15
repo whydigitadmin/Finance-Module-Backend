@@ -50,6 +50,7 @@ public class TaxInvoiceDTO {
 	private String billOfEntry;
 	private String billMonth;
 	private String invoiceNo;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	private LocalDate invoiceDate;
 	private String salesType;
 	

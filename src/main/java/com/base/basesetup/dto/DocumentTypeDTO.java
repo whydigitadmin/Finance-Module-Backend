@@ -12,8 +12,8 @@ public class DocumentTypeDTO {
 	private Long id;
 	private String screenCode;
 	private String screenName;
+	private String description;
 	private String docCode;
 	private String createdBy;
-	private boolean active;
 	private Long orgId;
 }
