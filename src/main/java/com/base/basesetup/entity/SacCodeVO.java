@@ -39,6 +39,13 @@ public class SacCodeVO {
 	private String chapter;
 	@Column(name = "product")
 	private String product;
+	
+	@Builder.Default
+	@Column(name = "screencode")
+	private String screenCode="HSC";
+	@Builder.Default
+	@Column(name="screenname")
+	private String screenName="HSN SAC CODE";
 	@Column(name = "createdby")
 	private String createdBy;
 	@Column(name = "modifiedby")

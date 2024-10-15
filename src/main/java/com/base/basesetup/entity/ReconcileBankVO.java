@@ -49,6 +49,13 @@ public class ReconcileBankVO {
 	private BigDecimal totalDeposit;
 	@Column(name="totalwithdrawal")
 	private BigDecimal totalWithdrawal;
+	
+	@Builder.Default
+	@Column(name = "screencode")
+	private String screenCode="RB";
+	@Builder.Default
+	@Column(name="screenname")
+	private String screenName="RECONCILE BANK";
 	@Column(name = "orgid")
 	private Long orgId;
 	@Column(name = "active")
