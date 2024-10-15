@@ -43,6 +43,12 @@ public class ReconcileCorpBankVO {
 	@Column(name="remarks")
 	private String remarks;
 	
+	@Builder.Default
+	@Column(name = "screencode")
+	private String screenCode="RC";
+	@Builder.Default
+	@Column(name="screenname")
+	private String screenName="RECONCILE CORP";
 	@Column(name = "orgid")
 	private Long orgId;
 	@Column(name = "active")

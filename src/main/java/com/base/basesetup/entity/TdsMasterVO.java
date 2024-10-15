@@ -40,6 +40,12 @@ public class TdsMasterVO {
 	@Column(name = "sectionname")
 	private String sectionName;
 	
+	@Builder.Default
+	@Column(name = "screencode")
+	private String screenCode="TM";
+	@Builder.Default
+	@Column(name="screenname")
+	private String screenName="TDS MASTER";
 	@Column(name = "createdby")
 	private String createdBy;
 	@Column(name = "modifiedby")

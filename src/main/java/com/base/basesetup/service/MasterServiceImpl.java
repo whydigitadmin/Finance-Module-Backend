@@ -1071,7 +1071,7 @@ public class MasterServiceImpl implements MasterService {
 			LOGGER.info("Successfully Received  SacCode Information BY OrgId : {}", orgId);
 			sacCodeVO = sacCodeRepo.getAllSacCodeByOrgId(orgId);
 		} else {
-			LOGGER.info("Successfully Received  HsnSacCode Information For All OrgId.");
+			LOGGER.info("Successfully Received  SacCode Information For All OrgId.");
 			sacCodeVO = sacCodeRepo.findAll();
 		}
 		return sacCodeVO;
