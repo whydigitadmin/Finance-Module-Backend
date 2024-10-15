@@ -15,6 +15,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.base.basesetup.dto.CreatedUpdatedDate;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
  
 import lombok.AllArgsConstructor;
@@ -40,11 +41,13 @@ public class CostInvoiceVO {
 	private String product;
 	@Column(name = "purvoucherno",length =50)
 	private String purVoucherNo;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	@Column(name = "purvoucherdate")
 	private LocalDate purVoucherDate;
 	@Column(name = "costinvoiceno",length =50)
 	private String costInvoiceNo;
 	@Column(name = "costinvoicedate")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	private LocalDate costInvoiceDate;
 	@Column(name = "supplierbillno",length =50)
 	private String supplierBillNo;
@@ -54,6 +57,7 @@ public class CostInvoiceVO {
 	private String supplierCode;
 	@Column(name = "creditdays",length =10)
 	private int creditDays;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	@Column(name = "duedate")
 	private LocalDate dueDate;
 	@Column(name = "suppliername",length =150)

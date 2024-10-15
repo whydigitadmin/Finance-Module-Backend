@@ -12,6 +12,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.base.basesetup.dto.CreatedUpdatedDate;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -64,18 +65,22 @@ public class ArapDetailsVO {
 	private String subTypeCode;
 	@Column(name = "subledgerdivision",length =50)
 	private String subLedgerDivision;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	@Column(name = "docdate")
 	private LocalDateTime docDate;
 	@Column(name = "supprefno",length =50)
 	private String suppRefNo;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	@Column(name = "refdate")
 	private LocalDateTime refDate;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	@Column(name = "suprefdate")
 	private LocalDateTime supRefDate;
 	@Column(name = "subledgercode",length =50)
 	private String subLedgerCode;
 	@Column(name = "creditdays",length =10)
 	private String creditDays;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	@Column(name = "duedate")
 	private LocalDateTime dueDate;
 	@Column(name = "tdsamt",precision =10,scale = 2)
