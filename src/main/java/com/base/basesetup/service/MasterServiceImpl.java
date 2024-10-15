@@ -1732,7 +1732,7 @@ public class MasterServiceImpl implements MasterService {
 					partyStateVO.setContactPerson(partyStateDTO.getContactPerson());
 					partyStateVO.setContactPhoneNo(partyStateDTO.getContactPhoneNo());
 					partyStateVO.setContactEmail(partyStateDTO.getContactEmail());
-					partyStateVO.setStateCode(partyStateDTO.isStateCode());
+					partyStateVO.setStateCode(partyStateDTO.getStateCode());
 					partyStateVO.setPartyMasterVO(partyMasterVO);
 					partyStateVOs.add(partyStateVO);
 				}
