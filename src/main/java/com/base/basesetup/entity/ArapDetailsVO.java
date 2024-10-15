@@ -107,6 +107,8 @@ public class ArapDetailsVO {
 	private String ipNo;
 	@Column(name = "latitude",length =100)
 	private String latitude;
+	@Column(name = "subledgername",length =50)
+	private String subLedgerName;
 
 
 	@Embedded
