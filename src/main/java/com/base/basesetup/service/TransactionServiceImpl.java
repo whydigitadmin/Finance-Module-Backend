@@ -11,7 +11,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
@@ -70,7 +69,6 @@ import com.base.basesetup.dto.ReconcileCashDTO;
 import com.base.basesetup.dto.ReconcileCorpBankDTO;
 import com.base.basesetup.dto.TaxInvoiceDTO;
 import com.base.basesetup.dto.TaxInvoiceDetailsDTO;
-import com.base.basesetup.dto.TaxInvoiceGstDTO;
 import com.base.basesetup.dto.TdsCostInvoiceDTO;
 import com.base.basesetup.entity.ArApAdjustmentOffSetVO;
 import com.base.basesetup.entity.ArApOffSetInvoiceDetailsVO;
@@ -1258,6 +1256,8 @@ public class TransactionServiceImpl implements TransactionService {
 		generalJournalVO.setRemarks(generalJournalDTO.getRemarks());
 		generalJournalVO.setCurrency(generalJournalDTO.getCurrency());
 		generalJournalVO.setExRate(generalJournalDTO.getExRate());
+		
+
 		generalJournalVO.setRefNo(generalJournalDTO.getRefNo());
 		generalJournalVO.setRefDate(generalJournalDTO.getRefDate());
 		generalJournalVO.setOrgId(generalJournalDTO.getOrgId());
