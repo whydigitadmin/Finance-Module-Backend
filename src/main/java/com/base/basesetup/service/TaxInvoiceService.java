@@ -21,4 +21,6 @@ public interface TaxInvoiceService {
 
 	TaxInvoiceVO getTaxInvoiceByDocId(Long orgId, String docId);
 
+	String getTaxInvoiceDocId(Long orgId, String finYear, String branch, String branchCode);
+
 }

@@ -7,16 +7,14 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class DocumentTypesMappingDetailsDTO {
+public class DocumentTypeMappingDetailsDTO {
 	
-	private Long id;
-	private String screenName;
 	private String screenCode;
-	private String finYear;
+	private String screenName;
+	private String docCode;
 	private String branch;
 	private String branchCode;
-	private String finyearId;
-	private String docCode;
-	private String prefix;
-	private String lastNo;
+	private String prefixField;
+	private String finYear;
+	private String finYearIdentifier;
 }

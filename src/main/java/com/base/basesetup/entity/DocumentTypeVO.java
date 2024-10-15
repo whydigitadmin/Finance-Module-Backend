@@ -28,22 +28,28 @@ public class DocumentTypeVO {
 	@SequenceGenerator(name = "documenttypegen", sequenceName = "documenttypeseq", initialValue = 1000000001, allocationSize = 1)
 	@Column(name = "documenttypeid")
 	private Long id;
-	@Column(name = "screencode")
-	private String screenCode;
-	@Column(name = "screenname")
-	private String screenName;
-	@Column(name = "doccode")
-	private String docCode;
-	@Column(name = "createdby")
-	private String createdBy;
-	@Column(name = "updatedby")
-	private String updatedBy;
-	@Column(name = "active")
-	private boolean active;
-	@Column(name = "orgid")
-	private Long orgId;
 	
+	@Column(name = "screencode",length =10)
+	private String screenCode;
+	
+	@Column(name = "screenname",length =150)
+	private String screenName;
+	
+	@Column(name = "description",length =150)
+	private String description;
+	
+	@Column(name = "doccode",length =25)
+	private String docCode;
+	
+	@Column(name = "createdby",length =25)
+	private String createdBy;
+	
+	@Column(name = "modifiedby",length =25)
+	private String updatedBy;
+	
+	@Column(name="orgid")
+	private Long orgId;
+		
 	@Embedded
-	@Builder.Default
 	private CreatedUpdatedDate commonDate = new CreatedUpdatedDate();
 }
