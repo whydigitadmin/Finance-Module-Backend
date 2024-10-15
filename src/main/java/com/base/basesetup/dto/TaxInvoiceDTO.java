@@ -38,7 +38,6 @@ public class TaxInvoiceDTO {
 	private String status;
 	private String gstType;
 	private String supplierBillNo;
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	private LocalDate supplierBillDate;
 	private String billCurr;
 	private BigDecimal billCurrRate;

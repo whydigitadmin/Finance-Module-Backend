@@ -11,17 +11,21 @@ import org.apache.commons.lang3.ObjectUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.base.basesetup.dto.TaxInvoiceDTO;
 import com.base.basesetup.dto.TaxInvoiceDetailsDTO;
+import com.base.basesetup.entity.DocumentTypeMappingDetailsVO;
 import com.base.basesetup.entity.TaxInvoiceDetailsVO;
 import com.base.basesetup.entity.TaxInvoiceGstVO;
 import com.base.basesetup.entity.TaxInvoiceVO;
 import com.base.basesetup.exception.ApplicationException;
+import com.base.basesetup.repo.DocumentTypeMappingDetailsRepo;
 import com.base.basesetup.repo.TaxInvoiceDetailsRepo;
 import com.base.basesetup.repo.TaxInvoiceGstRepo;
 import com.base.basesetup.repo.TaxInvoiceRepo;
 
+@Service
 public class TaxInvoiceServiceImpl implements TaxInvoiceService {
 	
 	public static final Logger LOGGER = LoggerFactory.getLogger(TaxInvoiceServiceImpl.class);
@@ -34,6 +38,9 @@ public class TaxInvoiceServiceImpl implements TaxInvoiceService {
 	
 	@Autowired
 	TaxInvoiceGstRepo taxInvoiceGstRepo;
+	
+	@Autowired
+	DocumentTypeMappingDetailsRepo documentTypeMappingDetailsRepo;
 
 	
 	// TaxInvoice
@@ -56,6 +63,7 @@ public class TaxInvoiceServiceImpl implements TaxInvoiceService {
 
 		@Override
 		public Map<String, Object> updateCreateTaxInvoice(TaxInvoiceDTO taxInvoiceDTO) throws ApplicationException {
+			String screenCode = "TI";
 			TaxInvoiceVO taxInvoiceVO = new TaxInvoiceVO();
 			String message;
 			if (ObjectUtils.isNotEmpty(taxInvoiceDTO.getId())) {
@@ -65,7 +73,19 @@ public class TaxInvoiceServiceImpl implements TaxInvoiceService {
 				taxInvoiceVO.setModifiedBy(taxInvoiceDTO.getCreatedBy());
 				createUpdateTaxInvoiceVOByTaxInvoiceDTO(taxInvoiceDTO, taxInvoiceVO);
 				message = "Tax Invoice Updated Successfully";
-			} else {
+			} else {				
+				// GETDOCID API
+				String docId = taxInvoiceRepo.getTaxInvoiceDocId(taxInvoiceDTO.getOrgId(), taxInvoiceDTO.getFinYear(),
+						taxInvoiceDTO.getBranchCode(), screenCode);
+				taxInvoiceVO.setDocId(docId);
+
+				// GETDOCID LASTNO +1
+				DocumentTypeMappingDetailsVO documentTypeMappingDetailsVO = documentTypeMappingDetailsRepo
+						.findByOrgIdAndFinYearAndBranchCodeAndScreenCode(taxInvoiceDTO.getOrgId(),
+								taxInvoiceDTO.getFinYear(), taxInvoiceDTO.getBranchCode(),
+								screenCode);
+				documentTypeMappingDetailsVO.setLastno(documentTypeMappingDetailsVO.getLastno() + 1);
+				documentTypeMappingDetailsRepo.save(documentTypeMappingDetailsVO);
 
 				taxInvoiceVO.setCreatedBy(taxInvoiceDTO.getCreatedBy());
 				taxInvoiceVO.setModifiedBy(taxInvoiceDTO.getCreatedBy());
@@ -242,6 +262,13 @@ public class TaxInvoiceServiceImpl implements TaxInvoiceService {
 		@Override
 		public TaxInvoiceVO getTaxInvoiceByDocId(Long orgId, String docId) {
 			return taxInvoiceRepo.findAllTaxInvoiceByDocId(orgId, docId);
+		}
+		
+		@Override
+		public String getTaxInvoiceDocId(Long orgId, String finYear, String branch, String branchCode) {
+			String ScreenCode = "TI";
+			String result = taxInvoiceRepo.getTaxInvoiceDocId(orgId, finYear, branchCode, ScreenCode);
+			return result;
 		}
 
 }
