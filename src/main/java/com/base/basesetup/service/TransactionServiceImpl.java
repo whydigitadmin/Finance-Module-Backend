@@ -1046,7 +1046,10 @@ public class TransactionServiceImpl implements TransactionService {
 
 	}
 
+
+
 	
+
 
 	
 	// DebitNote
@@ -1417,8 +1420,7 @@ public class TransactionServiceImpl implements TransactionService {
 		return paymentVoucherRepo.findPaymentVoucherByActive();
 	}
 
-	
-	
+
 	// ReceiptReversal
 
 	@Override
