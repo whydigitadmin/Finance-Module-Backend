@@ -129,7 +129,7 @@ public class ArApDetailsServiceImpl implements ArApDetailsService {
 		arapDetailsVO.setCreatedBy(arapDetailsDTO.getCreatedBy());
 		arapDetailsVO.setIpNo(arapDetailsDTO.getIpNo());
 		arapDetailsVO.setLatitude(arapDetailsDTO.getLatitude());
-
+		arapDetailsVO.setSubLedgerName(arapDetailsDTO.getSubLedgerName());
 		return arapDetailsVO;
 
 	}

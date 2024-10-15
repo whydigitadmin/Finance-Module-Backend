@@ -149,15 +149,7 @@ public interface TransactionService {
 	List<PaymentVoucherVO> getPaymentVoucherByActive();
 
 
-//	ArapAdjustments
-	List<ArapAdjustmentsVO> getAllArapAdjustmentsByOrgId(Long orgId);
 
-	ArapAdjustmentsVO updateCreateArapAdjustments(@Valid ArapAdjustmentsDTO arapAdjustmentsDTO)
-			throws ApplicationException;
-
-	List<ArapAdjustmentsVO> getAllArapAdjustmentsById(Long id);
-
-	List<ArapAdjustmentsVO> getArapAdjustmentsByActive();
 
 //	ReceiptReversal
 	List<ReceiptReversalVO> getAllReceiptReversalByOrgId(Long orgId);

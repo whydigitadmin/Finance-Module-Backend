@@ -1,6 +1,5 @@
 package com.base.basesetup.entity;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import javax.persistence.Column;
@@ -13,6 +12,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.base.basesetup.dto.CreatedUpdatedDate;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -31,58 +31,79 @@ public class ArapAdjustmentsVO {
 	@SequenceGenerator(name = "arapadjustmentsgen", sequenceName = "arapadjustmentsseq", initialValue = 1000000001, allocationSize = 1)
 	@Column(name = "arapadjustmentsid")
 	private Long id;
-	@Column(name = "branch")
+	@Column(name = "branch",length =25)
 	private String branch;
-	@Column(name = "finyr")
-	private String finyr;
-	@Column(name = "sourcetransid")
-	private String sourceTransId;
-	@Column(name = "docid")
+	@Column(name = "finyear",length =20)
+	private String finYear;
+	@Column(name = "source",length =50)
+	private String source;
+	@Column(name = "docid",length =50)
 	private String docId;
-	@Column(name = "refno")
+	@Column(name = "refno",length =50)
 	private String refNo;
-	@Column(name = "accountname")
+	@Column(name = "accountname",length =50)
 	private String accountName;
-	@Column(name = "currency")
+	@Column(name = "currency",length =20)
 	private String currency;
-	@Column(name = "accountcurrency")
-	private String accountCurrency;
-	@Column(name = "aexrate")
-	private BigDecimal aexRate;
-	@Column(name = "amount")
-	private String amount;
-	@Column(name = "baseamount")
-	private String baseAmount;
-	@Column(name = "nativeamount")
-	private String nativeAmount;
-	@Column(name = "offdocid")
+	@Column(name = "acccurrency",length =20)
+	private String accCurrency;
+	@Column(name = "baseamt",precision = 10,scale =2)
+	private float baseAmnt;
+	@Column(name = "nativeamt",precision = 10,scale =2)
+	private float nativeAmt;
+	@Column(name = "offdocid",length =50)
 	private String offDocId;
-	@Column(name = "vouchertype")
+	@Column(name = "vouchertype",length =50)
 	private String voucherType;
-	@Column(name = "subtypecode")
-	private String subTypeCode;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	@Column(name = "docdate")
 	private LocalDateTime docDate;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	@Column(name = "refdate")
 	private LocalDateTime refDate;
-	@Column(name = "subledgercode")
+	@Column(name = "subledgercode",length =50)
 	private String subLedgerCode;
-	@Column(name = "exrate")
-	private BigDecimal exRate;
-	@Column(name = "creditdays")
+	@Column(name = "exrate",precision = 10,scale =2)
+	private float exRate;
+	@Column(name = "creditdays",length =10)
 	private String creditDays;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	@Column(name = "duedate")
 	private LocalDateTime dueDate;
-	@Column(name = "orgid")
+	@Column(name = "orgid",length =20)
 	private Long orgId;
 	@Column(name = "active")
 	private boolean active;
 	@Column(name = "cancel")
 	private boolean cancel;
-	@Column(name = "createdby")
+	@Column(name = "createdby",length =25)
 	private String createdBy;
-	@Column(name = "modifiedby")
+	@Column(name = "modifiedby",length =25)
 	private String updatedBy;
+	@Column(name = "branchcode",length =20)
+	private String branchCode;
+	@Column(name = "screencode",length =10)
+	private String screenCode;
+	@Column(name = "screenname",length =25)
+	private String screenName;
+	@Column(name = "ipno",length =15)
+	private String ipNo;
+	@Column(name = "latitude",length =100)
+	private String latitude;
+	@Column(name = "transid",length =50)
+	private String transId;
+	@Column(name = "chargeableamt",precision = 10,scale =2)
+	private float chargeableAmt;
+	@Column(name = "tdsamt",precision = 10,scale =2)
+	private float tdsAmt;
+	@Column(name ="gstflag")
+	private boolean gstFlag;
+	@Column(name = "officedocid",length =50)
+	private String officeDocId;
+	@Column(name = "subledgername",length =50)
+	private String subLedgerName;
+	
+
 
 	@Embedded
 	@Builder.Default
