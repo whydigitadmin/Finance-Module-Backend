@@ -83,9 +83,9 @@ public class ArapAdjustmentsVO {
 	@Column(name = "branchcode",length =20)
 	private String branchCode;
 	@Column(name = "screencode",length =10)
-	private String screenCode;
+	private String screenCode="AA";
 	@Column(name = "screenname",length =25)
-	private String screenName;
+	private String screenName="ARAPAdJUSTMENTS";
 	@Column(name = "ipno",length =15)
 	private String ipNo;
 	@Column(name = "latitude",length =100)
