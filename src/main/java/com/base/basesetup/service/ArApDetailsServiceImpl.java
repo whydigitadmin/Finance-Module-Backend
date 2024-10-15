@@ -59,7 +59,7 @@ public class ArApDetailsServiceImpl implements ArApDetailsService {
 		return arapDetailsRepo.findArapDetailsByActive();
 	}
 
-	@Override
+	@Override 
 	public Map<String, Object> createupdateArapDetails(@Valid ArapDetailsDTO arapDetailsDTO)
 			throws ApplicationException {
 
