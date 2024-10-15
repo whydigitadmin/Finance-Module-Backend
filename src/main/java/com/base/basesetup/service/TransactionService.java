@@ -12,10 +12,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.base.basesetup.dto.ArApAdjustmentOffSetDTO;
 import com.base.basesetup.dto.ArapAdjustmentsDTO;
-import com.base.basesetup.dto.ArapDetailsDTO;
 import com.base.basesetup.dto.BrsOpeningDTO;
 import com.base.basesetup.dto.ChartCostCenterDTO;
-import com.base.basesetup.dto.CostInvoiceDTO;
 import com.base.basesetup.dto.DailyMonthlyExRatesDTO;
 import com.base.basesetup.dto.DebitNoteDTO;
 import com.base.basesetup.dto.FundTransferDTO;
@@ -32,10 +30,8 @@ import com.base.basesetup.dto.ReconcileCorpBankDTO;
 import com.base.basesetup.dto.TaxInvoiceDTO;
 import com.base.basesetup.entity.ArApAdjustmentOffSetVO;
 import com.base.basesetup.entity.ArapAdjustmentsVO;
-import com.base.basesetup.entity.ArapDetailsVO;
 import com.base.basesetup.entity.BrsOpeningVO;
 import com.base.basesetup.entity.ChartCostCenterVO;
-import com.base.basesetup.entity.CostInvoiceVO;
 import com.base.basesetup.entity.DailyMonthlyExRatesVO;
 import com.base.basesetup.entity.DebitNoteVO;
 import com.base.basesetup.entity.FundTransferVO;
@@ -123,15 +119,7 @@ public interface TransactionService {
 
 	List<GeneralJournalVO> getGeneralJournalByActive();
 
-// CostInvoice
-	List<CostInvoiceVO> getAllCostInvoiceByOrgId(Long orgId);
-
-	CostInvoiceVO updateCreateCostInvoice(@Valid CostInvoiceDTO costInvoiceDTO) throws ApplicationException;
-
-	List<CostInvoiceVO> getAllCostInvoiceById(Long id);
-
-	List<CostInvoiceVO> getCostInvoiceByActive();
-
+	
 // DebitNote
 	List<DebitNoteVO> getAllDebitNoteByOrgId(Long orgId);
 
@@ -160,14 +148,6 @@ public interface TransactionService {
 
 	List<PaymentVoucherVO> getPaymentVoucherByActive();
 
-//	ArapDetails
-	List<ArapDetailsVO> getAllArapDetailsByOrgId(Long orgId);
-
-	ArapDetailsVO updateCreateArapDetails(@Valid ArapDetailsDTO arapDetailsDTO) throws ApplicationException;
-
-	List<ArapDetailsVO> getAllArapDetailsById(Long id);
-
-	List<ArapDetailsVO> getArapDetailsByActive();
 
 //	ArapAdjustments
 	List<ArapAdjustmentsVO> getAllArapAdjustmentsByOrgId(Long orgId);
