@@ -1047,6 +1047,11 @@ public class TransactionServiceImpl implements TransactionService {
 	}
 
 
+
+	
+
+
+	
 	// DebitNote
 
 	@Override
@@ -1415,91 +1420,6 @@ public class TransactionServiceImpl implements TransactionService {
 		return paymentVoucherRepo.findPaymentVoucherByActive();
 	}
 
-
-	// ArapAdjustments
-
-	@Override
-	public List<ArapAdjustmentsVO> getAllArapAdjustmentsByOrgId(Long orgId) {
-		List<ArapAdjustmentsVO> arapAdjustmentsVO = new ArrayList<>();
-		if (ObjectUtils.isNotEmpty(orgId)) {
-			LOGGER.info("Successfully Received ArapAdjustments BY OrgId : {}", orgId);
-			arapAdjustmentsVO = arapAdjustmentsRepo.getAllArapAdjustmentsByOrgId(orgId);
-		} else {
-			LOGGER.info("Successfully Received ArapAdjustments For All OrgId.");
-			arapAdjustmentsVO = arapAdjustmentsRepo.findAll();
-		}
-		return arapAdjustmentsVO;
-	}
-
-	@Override
-	public List<ArapAdjustmentsVO> getAllArapAdjustmentsById(Long id) {
-		List<ArapAdjustmentsVO> arapAdjustmentsVO = new ArrayList<>();
-		if (ObjectUtils.isNotEmpty(id)) {
-			LOGGER.info("Successfully Received ArapAdjustments BY Id : {}", id);
-			arapAdjustmentsVO = arapAdjustmentsRepo.getAllArapAdjustmentsById(id);
-		} else {
-			LOGGER.info("Successfully Received ArapAdjustments For All Id.");
-			arapAdjustmentsVO = arapAdjustmentsRepo.findAll();
-		}
-		return arapAdjustmentsVO;
-	}
-
-	@Override
-	public ArapAdjustmentsVO updateCreateArapAdjustments(@Valid ArapAdjustmentsDTO arapAdjustmentsDTO)
-			throws ApplicationException {
-		ArapAdjustmentsVO arapAdjustmentsVO = new ArapAdjustmentsVO();
-		boolean isUpdate = false;
-		if (ObjectUtils.isNotEmpty(arapAdjustmentsDTO.getId())) {
-			isUpdate = true;
-			arapAdjustmentsVO = arapAdjustmentsRepo.findById(arapAdjustmentsDTO.getId())
-					.orElseThrow(() -> new ApplicationException("Invalid ARAP adjustments details"));
-			arapAdjustmentsVO.setUpdatedBy(arapAdjustmentsDTO.getCreatedBy());
-		} else {
-			arapAdjustmentsVO.setUpdatedBy(arapAdjustmentsDTO.getCreatedBy());
-			arapAdjustmentsVO.setCreatedBy(arapAdjustmentsDTO.getCreatedBy());
-		}
-
-		getArapAdjustmentsVOFromArapAdjustmentsDTO(arapAdjustmentsDTO, arapAdjustmentsVO);
-		return arapAdjustmentsRepo.save(arapAdjustmentsVO);
-	}
-
-	private void getArapAdjustmentsVOFromArapAdjustmentsDTO(@Valid ArapAdjustmentsDTO arapAdjustmentsDTO,
-			ArapAdjustmentsVO arapAdjustmentsVO) {
-		// // Finyr
-		// int finyr = paymentVoucherRepo.findFinyr();
-		// // DocId
-		// String paymentVoucher = "PV" + finyr + paymentVoucherRepo.findDocId();
-		// paymentVoucherRepo.setDocId(paymentVoucher);
-		// paymentVoucherRepo.nextSeq();
-		arapAdjustmentsVO.setBranch(arapAdjustmentsDTO.getBranch());
-		arapAdjustmentsVO.setFinyr(arapAdjustmentsDTO.getFinyr());
-		arapAdjustmentsVO.setSourceTransId(arapAdjustmentsDTO.getSourceTransId());
-		arapAdjustmentsVO.setDocId(arapAdjustmentsDTO.getDocId());
-		arapAdjustmentsVO.setRefNo(arapAdjustmentsDTO.getRefNo());
-		arapAdjustmentsVO.setAccountName(arapAdjustmentsDTO.getAccountName());
-		arapAdjustmentsVO.setCurrency(arapAdjustmentsDTO.getCurrency());
-		arapAdjustmentsVO.setAccountCurrency(arapAdjustmentsDTO.getAccountCurrency());
-		arapAdjustmentsVO.setExRate(arapAdjustmentsDTO.getExRate());
-		arapAdjustmentsVO.setAmount(arapAdjustmentsDTO.getAmount());
-		arapAdjustmentsVO.setBaseAmount(arapAdjustmentsDTO.getBaseAmount());
-		arapAdjustmentsVO.setNativeAmount(arapAdjustmentsDTO.getNativeAmount());
-		arapAdjustmentsVO.setOffDocId(arapAdjustmentsDTO.getOffDocId());
-		arapAdjustmentsVO.setVoucherType(arapAdjustmentsDTO.getVoucherType());
-		arapAdjustmentsVO.setSubTypeCode(arapAdjustmentsDTO.getSubTypeCode());
-		arapAdjustmentsVO.setDocDate(arapAdjustmentsDTO.getDocDate());
-		arapAdjustmentsVO.setRefDate(arapAdjustmentsDTO.getRefDate());
-		arapAdjustmentsVO.setSubLedgerCode(arapAdjustmentsDTO.getSubLedgerCode());
-		arapAdjustmentsVO.setCreditDays(arapAdjustmentsDTO.getCreditDays());
-		arapAdjustmentsVO.setDueDate(arapAdjustmentsDTO.getDueDate());
-		arapAdjustmentsVO.setAexRate(arapAdjustmentsDTO.getAexRate());
-		arapAdjustmentsVO.setOrgId(arapAdjustmentsDTO.getOrgId());
-		arapAdjustmentsVO.setActive(arapAdjustmentsDTO.isActive());
-	}
-
-	@Override
-	public List<ArapAdjustmentsVO> getArapAdjustmentsByActive() {
-		return arapAdjustmentsRepo.findArapAdjustmentsByActive();
-	}
 
 	// ReceiptReversal
 
