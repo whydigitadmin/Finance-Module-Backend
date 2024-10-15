@@ -154,7 +154,6 @@ import com.base.basesetup.repo.ReceiptReversalRepo;
 import com.base.basesetup.repo.ReconcileBankRepo;
 import com.base.basesetup.repo.ReconcileCashRepo;
 import com.base.basesetup.repo.ReconcileCorpBankRepo;
-import com.base.basesetup.repo.ReconciliationSummaryRepo;
 import com.base.basesetup.repo.TaxInvoiceDetailsRepo;
 import com.base.basesetup.repo.TaxInvoiceGstRepo;
 import com.base.basesetup.repo.TaxInvoiceRepo;
@@ -288,8 +287,6 @@ public class TransactionServiceImpl implements TransactionService {
 
 	@Autowired
 	BrsExcelUploadRepo brsExcelUploadRepo;
-
-	ReconciliationSummaryRepo reconciliationSummaryRepo;
 
 	@Autowired
 	ReconcileCashRepo reconcileCashRepo;
