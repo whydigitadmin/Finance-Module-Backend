@@ -258,7 +258,7 @@ public class TaxInvoiceServiceImpl implements TaxInvoiceService {
 
 		}
 
-
+ 
 		@Override
 		public TaxInvoiceVO getTaxInvoiceByDocId(Long orgId, String docId) {
 			return taxInvoiceRepo.findAllTaxInvoiceByDocId(orgId, docId);

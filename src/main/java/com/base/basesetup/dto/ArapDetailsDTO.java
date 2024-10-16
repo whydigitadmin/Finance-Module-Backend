@@ -49,6 +49,7 @@ public class ArapDetailsDTO {
 	private String createdBy;
 	private String ipNo;
 	private String latitude;
+	private String subLedgerName;
 
 
 }
