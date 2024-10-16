@@ -281,7 +281,6 @@ public class TransactionServiceImpl implements TransactionService {
 	BrsExcelUploadRepo brsExcelUploadRepo;
 
 
-	ReconciliationSummaryRepo reconciliationSummaryRepo;
 	
 
 	@Autowired

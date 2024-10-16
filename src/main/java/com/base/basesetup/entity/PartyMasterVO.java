@@ -113,8 +113,7 @@ public class PartyMasterVO {
 	private String nameOfBank;
 	@Column(name = "branch")
 	private String branch;
-	@Column(name = "branchc"
-			+ "ode")
+	@Column(name = "branchcode")
 	private String branchCode;
 	@Column(name = "addressofbranch")
 	private String addressOfBranch;
