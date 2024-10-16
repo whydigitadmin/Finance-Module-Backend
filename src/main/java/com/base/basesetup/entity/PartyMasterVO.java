@@ -113,6 +113,9 @@ public class PartyMasterVO {
 	private String nameOfBank;
 	@Column(name = "branch")
 	private String branch;
+	@Column(name = "branchc"
+			+ "ode")
+	private String branchCode;
 	@Column(name = "addressofbranch")
 	private String addressOfBranch;
 	@Column(name = "accountno")
@@ -137,6 +140,8 @@ public class PartyMasterVO {
 	private Long orgId;
 	@Column(name="active")
     private boolean active;
+	@Column(name="finyear")
+    private String finYear;
 	
 	@OneToMany(mappedBy = "partyMasterVO",cascade = CascadeType.ALL)
 	@JsonManagedReference

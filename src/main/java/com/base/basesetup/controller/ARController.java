@@ -27,17 +27,17 @@ import com.base.basesetup.dto.ReceiptReceivableDTO;
 import com.base.basesetup.dto.ResponseDTO;
 import com.base.basesetup.entity.ArApBillBalanceReceivableVO;
 import com.base.basesetup.entity.ReceiptReceivableVO;
-import com.base.basesetup.service.ARReceivableService;
+import com.base.basesetup.service.ARService;
 
 @CrossOrigin
 @RestController
 @RequestMapping("/api/arreceivable")
-public class ARReceivableController extends BaseController {
+public class ARController extends BaseController {
 
-	public static final Logger LOGGER = LoggerFactory.getLogger(ARReceivableController.class);
+	public static final Logger LOGGER = LoggerFactory.getLogger(ARController.class);
 
 	@Autowired
-	ARReceivableService arReceivableService;
+	ARService arReceivableService;
 
 	// Receipt
 
@@ -159,6 +159,34 @@ public class ARReceivableController extends BaseController {
 		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
 		return ResponseEntity.ok().body(responseDTO);
 
+	}
+
+	@GetMapping("/getCustomerNameAndCodeForReceipt")
+	public ResponseEntity<ResponseDTO> getCustomerNameAndCodeForReceipt(@RequestParam Long orgId,
+			@RequestParam String branch, @RequestParam String branchCode, @RequestParam String finYear) {
+		String methodName = "getCustomerNameAndCodeForReceipt()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		List<Map<String, Object>> customer = new ArrayList<>();
+		try {
+			customer = arReceivableService.getCustomerNameAndCodeForReceipt(orgId, branch, branchCode, finYear);
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+					"Customer name and code information get successfully");
+			responseObjectsMap.put("PartyMasterVO", customer);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					"Customer name and code information receive failed", errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
 	}
 
 	// ArApBillBalance

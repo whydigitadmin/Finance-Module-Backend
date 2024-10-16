@@ -1,6 +1,7 @@
 package com.base.basesetup.service;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.validation.Valid;
 
@@ -13,7 +14,7 @@ import com.base.basesetup.entity.ReceiptReceivableVO;
 import com.base.basesetup.exception.ApplicationException;
 
 @Service
-public interface ARReceivableService {
+public interface ARService {
 
 	// Receipt
 	List<ReceiptReceivableVO> getAllReceiptReceivableByOrgId(Long orgId);
@@ -25,6 +26,9 @@ public interface ARReceivableService {
 
 	List<ReceiptReceivableVO> getReceiptReceivableByActive();
 
+	List<Map<String, Object>> getCustomerNameAndCodeForReceipt(Long orgId, String branch, String branchCode,
+			String finYear);
+
 //	ARApBillBalance
 	List<ArApBillBalanceReceivableVO> getAllArApBillBalanceReceivableByOrgId(Long orgId);
 
@@ -34,6 +38,5 @@ public interface ARReceivableService {
 			@Valid ArApBillBalanceReceivableDTO arApBillBalanceReceivableDTO) throws ApplicationException;
 
 	List<ArApBillBalanceReceivableVO> getArApBillBalanceReceivableByActive();
-
 
 }
