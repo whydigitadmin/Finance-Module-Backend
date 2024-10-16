@@ -75,7 +75,7 @@ public class ReceiptReceivableVO {
 	// Common Fields
 	@Column(name = "branch", length = 25)
 	private String branch;
-	@Column(name = "branchcode", length = 5)
+	@Column(name = "chcode", length = 5)
 	private String branchCode;
 	@Column(name = "customer", length = 100)
 	private String customer;
@@ -101,6 +101,12 @@ public class ReceiptReceivableVO {
 	private String ipNo;
 	@Column(name = "latitude", length = 100)
 	private String latitude;
+	@Column(name = "receiptType1", length = 100)
+	private String receiptType1;
+	@Column(name = "currency", length = 100)
+	private String currency;
+	@Column(name = "currentamount", length = 100)
+	private String currencyAmount;
 
 	@OneToMany(mappedBy = "receiptReceivableVO", cascade = CascadeType.ALL)
 	@JsonManagedReference
