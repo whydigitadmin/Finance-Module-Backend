@@ -33,6 +33,13 @@ public class PartyMasterVO {
 	@SequenceGenerator(name = "partymastergen", sequenceName = "partymasterseq", initialValue = 1000000001, allocationSize = 1)
 	@Column(name = "partymasterid")
 	private Long id;
+	
+    @Column(name = "screencode", length = 5)
+    private String screenCode = "PM";
+
+    @Column(name = "screenname", length = 25)
+    private String screenName = "PARTYMASTER";
+    
 	@Column(name = "partytype")
 	private String partyType;
 	@Column(name = "customertype")
