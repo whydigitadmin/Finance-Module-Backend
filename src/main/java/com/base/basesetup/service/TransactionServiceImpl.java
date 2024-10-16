@@ -67,9 +67,7 @@ import com.base.basesetup.dto.ReceiptReversalDTO;
 import com.base.basesetup.dto.ReconcileBankDTO;
 import com.base.basesetup.dto.ReconcileCashDTO;
 import com.base.basesetup.dto.ReconcileCorpBankDTO;
-import com.base.basesetup.dto.TaxInvoiceDTO;
-import com.base.basesetup.dto.TaxInvoiceDetailsDTO;
-import com.base.basesetup.dto.TdsCostInvoiceDTO;
+
 import com.base.basesetup.entity.ArApAdjustmentOffSetVO;
 import com.base.basesetup.entity.ArApOffSetInvoiceDetailsVO;
 import com.base.basesetup.entity.ArapAdjustmentsVO;
@@ -108,10 +106,6 @@ import com.base.basesetup.entity.ReceiptReversalVO;
 import com.base.basesetup.entity.ReconcileBankVO;
 import com.base.basesetup.entity.ReconcileCashVO;
 import com.base.basesetup.entity.ReconcileCorpBankVO;
-import com.base.basesetup.entity.TaxInvoiceDetailsVO;
-import com.base.basesetup.entity.TaxInvoiceGstVO;
-import com.base.basesetup.entity.TaxInvoiceVO;
-import com.base.basesetup.entity.TdsCostInvoiceVO;
 import com.base.basesetup.exception.ApplicationException;
 import com.base.basesetup.repo.ArApAdjustmentOffSetRepo;
 import com.base.basesetup.repo.ArApOffSetInvoiceDetailsRepo;
@@ -167,17 +161,20 @@ public class TransactionServiceImpl implements TransactionService {
 	TaxInvoiceDetailsRepo taxInvoiceDetailsRepo;
 
 	@Autowired
-	IrnCreditRepo irnCreditRepo;
+	TaxInvoiceGstRepo gstTaxInvoiceRepo;
 
+	@Autowired
+	IrnCreditRepo irnCreditRepo;
+	
 	@Autowired
 	ReconcileBankRepo reconcileBankRepo;
-
+	
 	@Autowired
 	ParticularsReconcileRepo particularsReconcileRepo;
-
+	
 	@Autowired
 	ParticularsReconcileCorpBankRepo particularsReconcileCorpBankRepo;
-
+	
 	@Autowired
 	ReconcileCorpBankRepo reconcileCorpBankRepo;
 
@@ -210,9 +207,6 @@ public class TransactionServiceImpl implements TransactionService {
 
 	@Autowired
 	CostInvoiceRepo costInvoiceRepo;
-
-	@Autowired
-	TaxInvoiceGstRepo taxInvoiceGstRepo;
 
 	@Autowired
 	TdsCostInvoiceRepo tdsCostInvoiceRepo;
@@ -286,231 +280,13 @@ public class TransactionServiceImpl implements TransactionService {
 	@Autowired
 	BrsExcelUploadRepo brsExcelUploadRepo;
 
+
+	ReconciliationSummaryRepo reconciliationSummaryRepo;
+	
+
 	@Autowired
 	ReconcileCashRepo reconcileCashRepo;
 
-	// TaxInvoice
-	@Override
-	public List<TaxInvoiceVO> getAllTaxInvoiceByOrgId(Long orgId) {
-		List<TaxInvoiceVO> taxInvoiceVO = new ArrayList<>();
-		if (ObjectUtils.isNotEmpty(orgId)) {
-			LOGGER.info("Successfully Received  TaxInvoice BY OrgId: {}", orgId);
-			taxInvoiceVO = taxInvoiceRepo.getAllTaxInvoiceByOrgId(orgId);
-		} else {
-			LOGGER.info("Successfully Received  TaxInvoice For All OrgId.");
-			taxInvoiceVO = taxInvoiceRepo.findAll();
-		}
-		return taxInvoiceVO;
-	}
-
-	@Override
-	public List<TaxInvoiceVO> getAllTaxInvoiceById(Long id) {
-		List<TaxInvoiceVO> taxInvoiceVO = new ArrayList<>();
-		if (ObjectUtils.isNotEmpty(id)) {
-			LOGGER.info("Successfully Received  TaxInvoice BY Id : {}", id);
-			taxInvoiceVO = taxInvoiceRepo.getAllTaxInvoiceById(id);
-		} else {
-			LOGGER.info("Successfully Received  TaxInvoice For All Id.");
-			taxInvoiceVO = taxInvoiceRepo.findAll();
-		}
-		return taxInvoiceVO;
-	}
-
-	@Override
-	public Map<String, Object> updateCreateTaxInvoice(TaxInvoiceDTO taxInvoiceDTO) throws ApplicationException {
-		TaxInvoiceVO taxInvoiceVO = new TaxInvoiceVO();
-		String message;
-		if (ObjectUtils.isNotEmpty(taxInvoiceDTO.getId())) {
-			taxInvoiceVO = taxInvoiceRepo.findById(taxInvoiceVO.getId())
-					.orElseThrow(() -> new ApplicationException("Tax Invoice not found"));
-
-			taxInvoiceVO.setModifiedBy(taxInvoiceDTO.getCreatedBy());
-			createUpdateTaxInvoiceVOByTaxInvoiceDTO(taxInvoiceDTO, taxInvoiceVO);
-			message = "Tax Invoice Updated Successfully";
-		} else {
-
-			taxInvoiceVO.setCreatedBy(taxInvoiceDTO.getCreatedBy());
-			taxInvoiceVO.setModifiedBy(taxInvoiceDTO.getCreatedBy());
-			createUpdateTaxInvoiceVOByTaxInvoiceDTO(taxInvoiceDTO, taxInvoiceVO);
-			message = "Tax Invoice Created Successfully";
-		}
-
-		
-		taxInvoiceRepo.save(taxInvoiceVO);
-		Map<String, Object> response = new HashMap<>();
-		response.put("taxInvoiceVO", taxInvoiceVO);
-		response.put("message", message);
-		return response;
-	}
-
-	private void createUpdateTaxInvoiceVOByTaxInvoiceDTO(TaxInvoiceDTO taxInvoiceDTO, TaxInvoiceVO taxInvoiceVO) {
-
-		// Map fields from DTO to VO
-		taxInvoiceVO.setOrgId(taxInvoiceDTO.getOrgId());
-		taxInvoiceVO.setBranch(taxInvoiceDTO.getBranch());
-		taxInvoiceVO.setBranchCode(taxInvoiceDTO.getBranchCode());
-		taxInvoiceVO.setFinYear(taxInvoiceDTO.getFinYear());
-		taxInvoiceVO.setCreatedBy(taxInvoiceDTO.getCreatedBy());
-		taxInvoiceVO.setBizType(taxInvoiceDTO.getBizType());
-		taxInvoiceVO.setBizMode(taxInvoiceDTO.getBizMode());
-		taxInvoiceVO.setPartyName(taxInvoiceDTO.getPartyName());
-		taxInvoiceVO.setPartyCode(taxInvoiceDTO.getPartyCode());
-		taxInvoiceVO.setPartyType(taxInvoiceDTO.getPartyType());
-		taxInvoiceVO.setStateNo(taxInvoiceDTO.getStateNo());
-		taxInvoiceVO.setStateCode(taxInvoiceDTO.getStateCode());
-		taxInvoiceVO.setRecipientGSTIN(taxInvoiceDTO.getRecipientGSTIN());
-		taxInvoiceVO.setPlaceOfSupply(taxInvoiceDTO.getPlaceOfSupply());
-		taxInvoiceVO.setAddressType(taxInvoiceDTO.getAddressType());
-		taxInvoiceVO.setAddress(taxInvoiceDTO.getAddress());
-		taxInvoiceVO.setPinCode(taxInvoiceDTO.getPinCode());
-		taxInvoiceVO.setStatus(taxInvoiceDTO.getStatus());
-		taxInvoiceVO.setGstType(taxInvoiceDTO.getGstType());
-		taxInvoiceVO.setSupplierBillNo(taxInvoiceDTO.getSupplierBillNo());
-		taxInvoiceVO.setSupplierBillDate(taxInvoiceDTO.getSupplierBillDate());
-		taxInvoiceVO.setBillCurr(taxInvoiceDTO.getBillCurr());
-		taxInvoiceVO.setBillCurrRate(taxInvoiceDTO.getBillCurrRate());
-		taxInvoiceVO.setExAmount(taxInvoiceDTO.getExAmount());
-		taxInvoiceVO.setCreditDays(taxInvoiceDTO.getCreditDays());
-		taxInvoiceVO.setContactPerson(taxInvoiceDTO.getContactPerson());
-		taxInvoiceVO.setShipperInvoiceNo(taxInvoiceDTO.getShipperInvoiceNo());
-		taxInvoiceVO.setBillOfEntry(taxInvoiceDTO.getBillOfEntry());
-		taxInvoiceVO.setBillMonth(taxInvoiceDTO.getBillMonth());
-		taxInvoiceVO.setInvoiceNo(taxInvoiceDTO.getInvoiceNo());
-		taxInvoiceVO.setInvoiceDate(taxInvoiceDTO.getInvoiceDate());
-		taxInvoiceVO.setSalesType(taxInvoiceDTO.getSalesType());
-		taxInvoiceVO.setModifiedBy(taxInvoiceDTO.getCreatedBy());
-
-		if (ObjectUtils.isNotEmpty(taxInvoiceVO.getId())) {
-			List<TaxInvoiceDetailsVO> taxInvoiceDetailsVO1 = taxInvoiceDetailsRepo.findByTaxInvoiceVO(taxInvoiceVO);
-			taxInvoiceDetailsRepo.deleteAll(taxInvoiceDetailsVO1);
-		}
-		BigDecimal totalChargeAmountLC = BigDecimal.ZERO;
-		BigDecimal totalChargeAmountBC = BigDecimal.ZERO;
-		BigDecimal totalTaxAmountLC = BigDecimal.ZERO;
-		BigDecimal totalTaxAmountBC = BigDecimal.ZERO;
-		BigDecimal totalInvAmountLC = BigDecimal.ZERO;
-		BigDecimal totalInvAmountBC = BigDecimal.ZERO;
-
-		List<TaxInvoiceDetailsVO> taxInvoiceDetailsVOs = new ArrayList<>();
-		for (TaxInvoiceDetailsDTO taxInvoiceDetailsDTO : taxInvoiceDTO.getTaxInvoiceDetailsDTO()) {
-
-			TaxInvoiceDetailsVO taxInvoiceDetailsVO = new TaxInvoiceDetailsVO();
-			taxInvoiceDetailsVO.setChargeType(taxInvoiceDetailsDTO.getChargeType());
-			taxInvoiceDetailsVO.setChargeCode(taxInvoiceDetailsDTO.getChargeCode());
-			taxInvoiceDetailsVO.setGovChargeCode(taxInvoiceDetailsDTO.getGovChargeCode());
-			taxInvoiceDetailsVO.setLedger(taxInvoiceDetailsDTO.getLedger());
-			taxInvoiceDetailsVO.setChargeName(taxInvoiceDetailsDTO.getChargeName());
-			taxInvoiceDetailsVO.setTaxable(taxInvoiceDetailsDTO.getTaxable());
-			taxInvoiceDetailsVO.setQty(taxInvoiceDetailsDTO.getQty());
-			taxInvoiceDetailsVO.setRate(taxInvoiceDetailsDTO.getRate());
-			taxInvoiceDetailsVO.setCurrency(taxInvoiceDetailsDTO.getCurrency());
-			taxInvoiceDetailsVO.setExRate(taxInvoiceDetailsDTO.getExRate());
-			taxInvoiceDetailsVO.setExempted(taxInvoiceDetailsDTO.getExempted());
-			taxInvoiceDetailsVO.setSac(taxInvoiceDetailsDTO.getSac());
-			taxInvoiceDetailsVO.setGSTPercent(taxInvoiceDetailsDTO.getGSTPercent());
-
-			BigDecimal fcAmount;
-			BigDecimal lcAmount;
-			BigDecimal tlcAmount;
-			BigDecimal billAmount;
-			BigDecimal gstAmount;
-
-			if (!taxInvoiceDetailsDTO.getCurrency().equals("INR")) {
-				BigDecimal rate = taxInvoiceDetailsDTO.getRate(); // BigDecimal type is expected here
-				BigDecimal qty = BigDecimal.valueOf(taxInvoiceDetailsDTO.getQty()); // Convert qty to BigDecimal
-
-				fcAmount = rate.multiply(qty);
-
-				taxInvoiceDetailsVO.setFcAmount(fcAmount);
-
-			} else {
-				fcAmount = BigDecimal.valueOf(0.00);
-				taxInvoiceDetailsVO.setFcAmount(fcAmount);
-			}
-
-			BigDecimal exRate = taxInvoiceDetailsDTO.getExRate();// Assuming getExRate() returns BigDecimal
-			BigDecimal qty = BigDecimal.valueOf(taxInvoiceDetailsDTO.getQty());
-			BigDecimal rate = taxInvoiceDetailsDTO.getRate();
-			lcAmount = exRate.multiply(qty.multiply(rate));
-			taxInvoiceDetailsVO.setLcAmount(lcAmount);
-			totalChargeAmountLC = totalChargeAmountLC.add(lcAmount);
-
-			BigDecimal gstPercent = BigDecimal.valueOf(taxInvoiceDetailsDTO.getGSTPercent()); // Convert GSTPercent to
-																								// BigDecimal
-			tlcAmount = lcAmount.multiply(gstPercent).divide(BigDecimal.valueOf(100));
-			taxInvoiceDetailsVO.setTlcAmount(tlcAmount);
-
-			billAmount = lcAmount.divide(exRate, RoundingMode.HALF_UP); // Ensure you specify a RoundingMode when
-																		// dividing
-			taxInvoiceDetailsVO.setBillAmount(billAmount);
-			totalChargeAmountBC = totalChargeAmountBC.add(billAmount);
-
-			gstAmount = lcAmount.multiply(gstPercent).divide(BigDecimal.valueOf(100));
-			taxInvoiceDetailsVO.setGstAmount(gstAmount);
-			totalTaxAmountLC = totalTaxAmountLC.add(gstAmount);
-			totalTaxAmountBC = totalTaxAmountBC.add(gstAmount);
-
-			taxInvoiceDetailsVO.setTaxInvoiceVO(taxInvoiceVO);
-			taxInvoiceDetailsVOs.add(taxInvoiceDetailsVO);
-		}
-
-		Map<String, BigDecimal> ledgerSumMap = new HashMap<>();
-		for (TaxInvoiceDetailsVO detailsVO : taxInvoiceDetailsVOs) {
-			String ledger = detailsVO.getLedger();
-			BigDecimal lcAmount = detailsVO.getLcAmount();
-
-			ledgerSumMap.put(ledger, ledgerSumMap.getOrDefault(ledger, BigDecimal.ZERO).add(lcAmount));
-		}
-		List<TaxInvoiceGstVO> taxInvoiceGstVOList = new ArrayList<>();
-		for (Map.Entry<String, BigDecimal> entry : ledgerSumMap.entrySet()) {
-			TaxInvoiceGstVO taxInvoiceGstVO = new TaxInvoiceGstVO();
-			taxInvoiceGstVO.setGstChargeAcc(entry.getKey());
-			taxInvoiceGstVO.setGstCrLcAmount(entry.getValue());
-			taxInvoiceGstVO.setGstDbBillAmount(BigDecimal.ZERO);
-			taxInvoiceGstVO.setGstDbLcAmount(BigDecimal.ZERO);
-			taxInvoiceGstVO.setGstSubledgerCode("None");
-			taxInvoiceGstVO.setGstCrBillAmount(entry.getValue());
-			taxInvoiceGstVO.setTaxInvoiceVO(taxInvoiceVO);
-			taxInvoiceGstVOList.add(taxInvoiceGstVO);
-		}
-		taxInvoiceVO.setTaxInvoiceGstVO(taxInvoiceGstVOList);
-		
-		totalInvAmountLC = totalChargeAmountLC.add(totalTaxAmountLC);
-		totalInvAmountBC = totalChargeAmountBC.add(totalTaxAmountBC);
-
-		taxInvoiceVO.setTotalChargeAmountLc(totalChargeAmountLC);
-		taxInvoiceVO.setTotalChargeAmountBc(totalChargeAmountBC);
-		taxInvoiceVO.setTotalTaxAmountLc(totalTaxAmountLC);
-		taxInvoiceVO.setTotalTaxAmountBc(totalTaxAmountBC);
-
-		BigDecimal originalTotalInvAmountLC = totalChargeAmountLC.add(totalTaxAmountLC);
-		BigDecimal roundedTotalInvAmountLC = totalInvAmountLC.setScale(0, RoundingMode.HALF_UP);
-		BigDecimal roundOffAmountLC = roundedTotalInvAmountLC.subtract(originalTotalInvAmountLC);
-		taxInvoiceVO.setTotalInvAmountLc(roundedTotalInvAmountLC);
-		taxInvoiceVO.setRoundOffAmountLc(roundOffAmountLC);
-
-		BigDecimal roundedTotalInvAmountBC = totalInvAmountBC.setScale(0, RoundingMode.HALF_UP);
-		taxInvoiceVO.setTotalInvAmountBc(roundedTotalInvAmountBC);
-
-		taxInvoiceVO.setTaxInvoiceDetailsVO(taxInvoiceDetailsVOs);
-
-	}
-
-	@Override
-	public List<TaxInvoiceVO> getTaxInvoiceByActive() {
-		return taxInvoiceRepo.findTaxInvoiceByActive();
-	}
-
-	@Override
-	public List<TaxInvoiceVO> getAllTaxInvoiceDocIdByOrgId(Long orgId) {
-		return taxInvoiceRepo.findAllTaxInvoiceDocIdByOrgId(orgId);
-	}
-
-	@Override
-	public List<TaxInvoiceVO> getAllTaxInvoiceByDocId(Long orgId, String docId) {
-		return taxInvoiceRepo.findAllTaxInvoiceByDocId(orgId, docId);
-	}
-	// IrnCredit
 
 	@Override
 	public List<IrnCreditVO> getAllIrnCreditByOrgId(Long orgId) {
@@ -576,7 +352,7 @@ public class TransactionServiceImpl implements TransactionService {
 				if (chargerIrnCreditDTO.getId() != null && ObjectUtils.isNotEmpty(chargerIrnCreditDTO.getId())) {
 					chargerIrnCreditVO = chargerIrnCreditRepo.findById(chargerIrnCreditDTO.getId())
 							.orElse(new ChargerIrnCreditVO());
-				} else {
+				} else {	
 					chargerIrnCreditVO = new ChargerIrnCreditVO();
 				}
 				chargerIrnCreditVO.setType(chargerIrnCreditDTO.getType());
@@ -1274,153 +1050,12 @@ public class TransactionServiceImpl implements TransactionService {
 
 	}
 
-	// costInvoice
 
-	@Override
-	public List<CostInvoiceVO> getAllCostInvoiceByOrgId(Long orgId) {
-		List<CostInvoiceVO> costInvoiceVO = new ArrayList<>();
-		if (ObjectUtils.isNotEmpty(orgId)) {
-			LOGGER.info("Successfully Received  CostInvoice BY OrgId : {}", orgId);
-			costInvoiceVO = costInvoiceRepo.getAllCostInvoiceByOrgId(orgId);
-		} else {
-			LOGGER.info("Successfully Received  CostInvoice For All OrgId.");
-			costInvoiceVO = costInvoiceRepo.findAll();
-		}
-		return costInvoiceVO;
-	}
 
-	@Override
-	public List<CostInvoiceVO> getAllCostInvoiceById(Long id) {
-		List<CostInvoiceVO> costInvoiceVO = new ArrayList<>();
-		if (ObjectUtils.isNotEmpty(id)) {
-			LOGGER.info("Successfully Received  CostInvoice BY Id : {}", id);
-			costInvoiceVO = costInvoiceRepo.getAllCostInvoiceById(id);
-		} else {
-			LOGGER.info("Successfully Received CostInvoice For All Id.");
-			costInvoiceVO = costInvoiceRepo.findAll();
-		}
-		return costInvoiceVO;
-	}
+	
 
-	@Override
-	public CostInvoiceVO updateCreateCostInvoice(@Valid CostInvoiceDTO costInvoiceDTO) throws ApplicationException {
-		CostInvoiceVO costInvoiceVO = new CostInvoiceVO();
-		// boolean isUpdate = false;
-		if (ObjectUtils.isNotEmpty(costInvoiceDTO.getId())) {
-			boolean isUpdate = true;
-			costInvoiceVO = costInvoiceRepo.findById(costInvoiceDTO.getId())
-					.orElseThrow(() -> new ApplicationException("Invalid CostInvoice details"));
-			costInvoiceVO.setUpdatedBy(costInvoiceDTO.getCreatedBy());
-		} else {
-			costInvoiceVO.setUpdatedBy(costInvoiceDTO.getCreatedBy());
-			costInvoiceVO.setCreatedBy(costInvoiceDTO.getCreatedBy());
-		}
 
-		List<ChargerCostInvoiceVO> chargerCostInvoiceVOs = new ArrayList<>();
-		if (costInvoiceDTO.getChargerCostInvoiceDTO() != null) {
-			for (ChargerCostInvoiceDTO chargerCostInvoiceDTO : costInvoiceDTO.getChargerCostInvoiceDTO()) {
-				ChargerCostInvoiceVO chargerCostInvoiceVO;
-				if (chargerCostInvoiceDTO.getId() != null && ObjectUtils.isNotEmpty(chargerCostInvoiceDTO.getId())) {
-					chargerCostInvoiceVO = chargerCostInvoiceRepo.findById(chargerCostInvoiceDTO.getId())
-							.orElse(new ChargerCostInvoiceVO());
-				} else {
-					chargerCostInvoiceVO = new ChargerCostInvoiceVO();
-				}
-				chargerCostInvoiceVO.setChargeName(chargerCostInvoiceDTO.getChargeName());
-				chargerCostInvoiceVO.setChargeCode(chargerCostInvoiceDTO.getChargeCode());
-				chargerCostInvoiceVO.setChargeLedger(chargerCostInvoiceDTO.getChargeLedger());
-				chargerCostInvoiceVO.setGsac(chargerCostInvoiceDTO.getGsac());
-				chargerCostInvoiceVO.setContType(chargerCostInvoiceDTO.getContType());
-				chargerCostInvoiceVO.setCurrency(chargerCostInvoiceDTO.getCurrency());
-				chargerCostInvoiceVO.setRate(chargerCostInvoiceDTO.getRate());
-				chargerCostInvoiceVO.setGstPercentage(chargerCostInvoiceDTO.getGstPercentage());
-				chargerCostInvoiceVO.setExRate(chargerCostInvoiceDTO.getExRate());
-				chargerCostInvoiceVO.setFcAmount(chargerCostInvoiceDTO.getFcAmount());
-				chargerCostInvoiceVO.setLcAmount(chargerCostInvoiceDTO.getLcAmount());
-				chargerCostInvoiceVO.setBillAmount(chargerCostInvoiceDTO.getBillAmount());
-				chargerCostInvoiceVO.setCostInvoiceVO(costInvoiceVO);
-				chargerCostInvoiceVOs.add(chargerCostInvoiceVO);
-			}
-		}
-
-		List<TdsCostInvoiceVO> tdsCostInvoiceVOs = new ArrayList<>();
-		if (costInvoiceDTO.getTdsCostInvoiceDTO() != null) {
-			for (TdsCostInvoiceDTO tdsCostInvoiceDTO : costInvoiceDTO.getTdsCostInvoiceDTO()) {
-				TdsCostInvoiceVO tdsCostInvoiceVO;
-				if (tdsCostInvoiceDTO.getId() != null & ObjectUtils.isEmpty(tdsCostInvoiceDTO.getId())) {
-					tdsCostInvoiceVO = tdsCostInvoiceRepo.findById(tdsCostInvoiceDTO.getId())
-							.orElse(new TdsCostInvoiceVO());
-				} else {
-					tdsCostInvoiceVO = new TdsCostInvoiceVO();
-				}
-				tdsCostInvoiceVO.setTdsWh(tdsCostInvoiceDTO.getTdsWh());
-				tdsCostInvoiceVO.setTdsWhPercent(tdsCostInvoiceDTO.getTdsWhPercent());
-				tdsCostInvoiceVO.setSection(tdsCostInvoiceDTO.getSection());
-				tdsCostInvoiceVO.setTotalTds(tdsCostInvoiceDTO.getTotalTds());
-				tdsCostInvoiceVO.setCostInvoiceVO(costInvoiceVO);
-				tdsCostInvoiceVOs.add(tdsCostInvoiceVO);
-			}
-		}
-
-		getCostInvoiceVOFromCostInvoiceDTO(costInvoiceDTO, costInvoiceVO);
-		costInvoiceVO.setChargerCostInvoiceVO(chargerCostInvoiceVOs);
-		costInvoiceVO.setTdsCostInvoiceVO(tdsCostInvoiceVOs);
-		return costInvoiceRepo.save(costInvoiceVO);
-	}
-
-	private void getCostInvoiceVOFromCostInvoiceDTO(@Valid CostInvoiceDTO costInvoiceDTO, CostInvoiceVO costInvoiceVO) {
-		// // Finyr
-		// int finyr = taxInvoiceRepo.findFinyr();
-		// // DocId
-		// String taxInvoice = "AI" + finyr + taxInvoiceRepo.findDocId();
-		// taxInvoiceVO.setDocId(taxInvoice);
-		// taxInvoiceRepo.nextSeq();
-		// // InvoiceNo
-		// String invoiceNo = "AI" + finyr + "INV" + taxInvoiceRepo.findInvoiceNo();
-		// taxInvoiceVO.setInvoiceNo(invoiceNo);
-		// taxInvoiceRepo.nextSeqInvoice();
-		costInvoiceVO.setMode(costInvoiceDTO.getMode());
-		costInvoiceVO.setProduct(costInvoiceDTO.getProduct());
-		costInvoiceVO.setPurVchNo(costInvoiceDTO.getPurVchNo());
-		costInvoiceVO.setPurVchDt(costInvoiceDTO.getPurVchDt());
-		costInvoiceVO.setCostInvoiceNo(costInvoiceDTO.getCostInvoiceNo());
-		costInvoiceVO.setDate(costInvoiceDTO.getDate());
-		costInvoiceVO.setSupplierBillNo(costInvoiceDTO.getSupplierBillNo());
-		costInvoiceVO.setSuppliertType(costInvoiceDTO.getSuppliertType());
-		costInvoiceVO.setSupplierCode(costInvoiceDTO.getSupplierCode());
-		costInvoiceVO.setCreditDays(costInvoiceDTO.getCreditDays());
-		costInvoiceVO.setDueDate(costInvoiceDTO.getDueDate());
-		costInvoiceVO.setSupplierName(costInvoiceDTO.getSupplierName());
-		costInvoiceVO.setCurrency(costInvoiceDTO.getCurrency());
-		costInvoiceVO.setExRate(costInvoiceDTO.getExRate());
-		costInvoiceVO.setSupplierGstIn(costInvoiceDTO.getSupplierGstIn());
-		costInvoiceVO.setRemarks(costInvoiceDTO.getRemarks());
-		costInvoiceVO.setAddress(costInvoiceDTO.getAddress());
-		costInvoiceVO.setOtherInfo(costInvoiceDTO.getOtherInfo());
-		costInvoiceVO.setShipperRefNo(costInvoiceDTO.getShipperRefNo());
-		costInvoiceVO.setGstType(costInvoiceDTO.getGstType());
-		costInvoiceVO.setPayment(costInvoiceDTO.getPayment());
-		costInvoiceVO.setAccrualId(costInvoiceDTO.getAccrualId());
-		costInvoiceVO.setUtrReference(costInvoiceDTO.getUtrReference());
-		costInvoiceVO.setCostType(costInvoiceDTO.getCostType());
-		costInvoiceVO.setJobStatus(costInvoiceDTO.getJobStatus());
-		costInvoiceVO.setOrgId(costInvoiceDTO.getOrgId());
-		costInvoiceVO.setActive(costInvoiceDTO.isActive());
-		costInvoiceVO.setBillCurrTotChargeAmt(costInvoiceDTO.getBillCurrTotChargeAmt());
-		costInvoiceVO.setBillCurrActBillAmt(costInvoiceDTO.getBillCurrActBillAmt());
-		costInvoiceVO.setBillCurrNetAmt(costInvoiceDTO.getBillCurrNetAmt());
-		costInvoiceVO.setLcTotChargeAmt(costInvoiceDTO.getLcTotChargeAmt());
-		costInvoiceVO.setLcActBillAmt(costInvoiceDTO.getLcActBillAmt());
-		costInvoiceVO.setLcNetAmt(costInvoiceDTO.getLcNetAmt());
-		costInvoiceVO.setRoundOff(costInvoiceDTO.getRoundOff());
-		costInvoiceVO.setLcGstInputAmt(costInvoiceDTO.getLcGstInputAmt());
-	}
-
-	@Override
-	public List<CostInvoiceVO> getCostInvoiceByActive() {
-		return costInvoiceRepo.findCostInvoiceByActive();
-	}
-
+	
 	// DebitNote
 
 	@Override
@@ -1789,180 +1424,6 @@ public class TransactionServiceImpl implements TransactionService {
 		return paymentVoucherRepo.findPaymentVoucherByActive();
 	}
 
-	// ArapDetails
-
-	@Override
-	public List<ArapDetailsVO> getAllArapDetailsByOrgId(Long orgId) {
-		List<ArapDetailsVO> arapDetailsVO = new ArrayList<>();
-		if (ObjectUtils.isNotEmpty(orgId)) {
-			LOGGER.info("Successfully Received ArapDetails BY OrgId : {}", orgId);
-			arapDetailsVO = arapDetailsRepo.getAllArapDetailsByOrgId(orgId);
-		} else {
-			LOGGER.info("Successfully Received ArapDetails For All OrgId.");
-			arapDetailsVO = arapDetailsRepo.findAll();
-		}
-		return arapDetailsVO;
-	}
-
-	@Override
-	public List<ArapDetailsVO> getAllArapDetailsById(Long id) {
-		List<ArapDetailsVO> arapDetailsVO = new ArrayList<>();
-		if (ObjectUtils.isNotEmpty(id)) {
-			LOGGER.info("Successfully Received ArapDetails BY Id : {}", id);
-			arapDetailsVO = arapDetailsRepo.getAllArapDetailsById(id);
-		} else {
-			LOGGER.info("Successfully Received ArapDetails For All Id.");
-			arapDetailsVO = arapDetailsRepo.findAll();
-		}
-		return arapDetailsVO;
-	}
-
-	@Override
-	public ArapDetailsVO updateCreateArapDetails(@Valid ArapDetailsDTO arapDetailsDTO) throws ApplicationException {
-		ArapDetailsVO arapDetailsVO = new ArapDetailsVO();
-		boolean isUpdate = false;
-		if (ObjectUtils.isNotEmpty(arapDetailsDTO.getId())) {
-			isUpdate = true;
-			arapDetailsVO = arapDetailsRepo.findById(arapDetailsDTO.getId())
-					.orElseThrow(() -> new ApplicationException("Invalid ARAP Details details"));
-			arapDetailsVO.setUpdatedBy(arapDetailsDTO.getCreatedBy());
-		} else {
-			arapDetailsVO.setUpdatedBy(arapDetailsDTO.getCreatedBy());
-			arapDetailsVO.setCreatedBy(arapDetailsDTO.getCreatedBy());
-		}
-
-		getArapDetailsVOFromArapDetailsDTO(arapDetailsDTO, arapDetailsVO);
-		return arapDetailsRepo.save(arapDetailsVO);
-	}
-
-	private void getArapDetailsVOFromArapDetailsDTO(@Valid ArapDetailsDTO arapDetailsDTO, ArapDetailsVO arapDetailsVO) {
-		// // Finyr
-		// int finyr = paymentVoucherRepo.findFinyr();
-		// // DocId
-		// String paymentVoucher = "PV" + finyr + paymentVoucherRepo.findDocId();
-		// paymentVoucherRepo.setDocId(paymentVoucher);
-		// paymentVoucherRepo.nextSeq();
-		arapDetailsVO.setBranch(arapDetailsDTO.getBranch());
-		arapDetailsVO.setFinyr(arapDetailsDTO.getFinyr());
-		arapDetailsVO.setSourceTransid(arapDetailsDTO.getSourceTransid());
-		arapDetailsVO.setDocId(arapDetailsDTO.getDocId());
-		arapDetailsVO.setRefNo(arapDetailsDTO.getRefNo());
-		arapDetailsVO.setAccountName(arapDetailsDTO.getAccountName());
-		arapDetailsVO.setCurrency(arapDetailsDTO.getCurrency());
-		arapDetailsVO.setAccountCurrency(arapDetailsDTO.getAccountCurrency());
-		arapDetailsVO.setAccount(arapDetailsDTO.getAccount());
-		arapDetailsVO.setExRate(arapDetailsDTO.getExRate());
-		arapDetailsVO.setAmount(arapDetailsDTO.getAmount());
-		arapDetailsVO.setBaseAmount(arapDetailsDTO.getBaseAmount());
-		arapDetailsVO.setNativeAmount(arapDetailsDTO.getNativeAmount());
-		arapDetailsVO.setMno(arapDetailsDTO.getMno());
-		arapDetailsVO.setChargableAmount(arapDetailsDTO.getChargableAmount());
-		arapDetailsVO.setGstFlag(arapDetailsDTO.getGstFlag());
-		arapDetailsVO.setDocTypeCode(arapDetailsDTO.getDocTypeCode());
-		arapDetailsVO.setSubTypeCode(arapDetailsDTO.getSubTypeCode());
-		arapDetailsVO.setSubLedgerDivision(arapDetailsDTO.getSubLedgerDivision());
-		arapDetailsVO.setDocDate(arapDetailsDTO.getDocDate());
-		arapDetailsVO.setSuppRefNo(arapDetailsDTO.getSuppRefNo());
-		arapDetailsVO.setRefDate(arapDetailsDTO.getRefDate());
-		arapDetailsVO.setSuppRefDate(arapDetailsDTO.getSuppRefDate());
-		arapDetailsVO.setSubLedgerCode(arapDetailsDTO.getSubLedgerCode());
-		arapDetailsVO.setCreditDays(arapDetailsDTO.getCreditDays());
-		arapDetailsVO.setDueDate(arapDetailsDTO.getDueDate());
-		arapDetailsVO.setTdsAmount(arapDetailsDTO.getTdsAmount());
-		arapDetailsVO.setHno(arapDetailsDTO.getHno());
-		arapDetailsVO.setOrgId(arapDetailsDTO.getOrgId());
-		arapDetailsVO.setActive(arapDetailsDTO.isActive());
-	}
-
-	@Override
-	public List<ArapDetailsVO> getArapDetailsByActive() {
-		return arapDetailsRepo.findArapDetailsByActive();
-	}
-
-	// ArapAdjustments
-
-	@Override
-	public List<ArapAdjustmentsVO> getAllArapAdjustmentsByOrgId(Long orgId) {
-		List<ArapAdjustmentsVO> arapAdjustmentsVO = new ArrayList<>();
-		if (ObjectUtils.isNotEmpty(orgId)) {
-			LOGGER.info("Successfully Received ArapAdjustments BY OrgId : {}", orgId);
-			arapAdjustmentsVO = arapAdjustmentsRepo.getAllArapAdjustmentsByOrgId(orgId);
-		} else {
-			LOGGER.info("Successfully Received ArapAdjustments For All OrgId.");
-			arapAdjustmentsVO = arapAdjustmentsRepo.findAll();
-		}
-		return arapAdjustmentsVO;
-	}
-
-	@Override
-	public List<ArapAdjustmentsVO> getAllArapAdjustmentsById(Long id) {
-		List<ArapAdjustmentsVO> arapAdjustmentsVO = new ArrayList<>();
-		if (ObjectUtils.isNotEmpty(id)) {
-			LOGGER.info("Successfully Received ArapAdjustments BY Id : {}", id);
-			arapAdjustmentsVO = arapAdjustmentsRepo.getAllArapAdjustmentsById(id);
-		} else {
-			LOGGER.info("Successfully Received ArapAdjustments For All Id.");
-			arapAdjustmentsVO = arapAdjustmentsRepo.findAll();
-		}
-		return arapAdjustmentsVO;
-	}
-
-	@Override
-	public ArapAdjustmentsVO updateCreateArapAdjustments(@Valid ArapAdjustmentsDTO arapAdjustmentsDTO)
-			throws ApplicationException {
-		ArapAdjustmentsVO arapAdjustmentsVO = new ArapAdjustmentsVO();
-		boolean isUpdate = false;
-		if (ObjectUtils.isNotEmpty(arapAdjustmentsDTO.getId())) {
-			isUpdate = true;
-			arapAdjustmentsVO = arapAdjustmentsRepo.findById(arapAdjustmentsDTO.getId())
-					.orElseThrow(() -> new ApplicationException("Invalid ARAP adjustments details"));
-			arapAdjustmentsVO.setUpdatedBy(arapAdjustmentsDTO.getCreatedBy());
-		} else {
-			arapAdjustmentsVO.setUpdatedBy(arapAdjustmentsDTO.getCreatedBy());
-			arapAdjustmentsVO.setCreatedBy(arapAdjustmentsDTO.getCreatedBy());
-		}
-
-		getArapAdjustmentsVOFromArapAdjustmentsDTO(arapAdjustmentsDTO, arapAdjustmentsVO);
-		return arapAdjustmentsRepo.save(arapAdjustmentsVO);
-	}
-
-	private void getArapAdjustmentsVOFromArapAdjustmentsDTO(@Valid ArapAdjustmentsDTO arapAdjustmentsDTO,
-			ArapAdjustmentsVO arapAdjustmentsVO) {
-		// // Finyr
-		// int finyr = paymentVoucherRepo.findFinyr();
-		// // DocId
-		// String paymentVoucher = "PV" + finyr + paymentVoucherRepo.findDocId();
-		// paymentVoucherRepo.setDocId(paymentVoucher);
-		// paymentVoucherRepo.nextSeq();
-		arapAdjustmentsVO.setBranch(arapAdjustmentsDTO.getBranch());
-		arapAdjustmentsVO.setFinyr(arapAdjustmentsDTO.getFinyr());
-		arapAdjustmentsVO.setSourceTransId(arapAdjustmentsDTO.getSourceTransId());
-		arapAdjustmentsVO.setDocId(arapAdjustmentsDTO.getDocId());
-		arapAdjustmentsVO.setRefNo(arapAdjustmentsDTO.getRefNo());
-		arapAdjustmentsVO.setAccountName(arapAdjustmentsDTO.getAccountName());
-		arapAdjustmentsVO.setCurrency(arapAdjustmentsDTO.getCurrency());
-		arapAdjustmentsVO.setAccountCurrency(arapAdjustmentsDTO.getAccountCurrency());
-		arapAdjustmentsVO.setExRate(arapAdjustmentsDTO.getExRate());
-		arapAdjustmentsVO.setAmount(arapAdjustmentsDTO.getAmount());
-		arapAdjustmentsVO.setBaseAmount(arapAdjustmentsDTO.getBaseAmount());
-		arapAdjustmentsVO.setNativeAmount(arapAdjustmentsDTO.getNativeAmount());
-		arapAdjustmentsVO.setOffDocId(arapAdjustmentsDTO.getOffDocId());
-		arapAdjustmentsVO.setVoucherType(arapAdjustmentsDTO.getVoucherType());
-		arapAdjustmentsVO.setSubTypeCode(arapAdjustmentsDTO.getSubTypeCode());
-		arapAdjustmentsVO.setDocDate(arapAdjustmentsDTO.getDocDate());
-		arapAdjustmentsVO.setRefDate(arapAdjustmentsDTO.getRefDate());
-		arapAdjustmentsVO.setSubLedgerCode(arapAdjustmentsDTO.getSubLedgerCode());
-		arapAdjustmentsVO.setCreditDays(arapAdjustmentsDTO.getCreditDays());
-		arapAdjustmentsVO.setDueDate(arapAdjustmentsDTO.getDueDate());
-		arapAdjustmentsVO.setAexRate(arapAdjustmentsDTO.getAexRate());
-		arapAdjustmentsVO.setOrgId(arapAdjustmentsDTO.getOrgId());
-		arapAdjustmentsVO.setActive(arapAdjustmentsDTO.isActive());
-	}
-
-	@Override
-	public List<ArapAdjustmentsVO> getArapAdjustmentsByActive() {
-		return arapAdjustmentsRepo.findArapAdjustmentsByActive();
-	}
 
 	// ReceiptReversal
 
@@ -2468,293 +1929,291 @@ public class TransactionServiceImpl implements TransactionService {
 		return glOpeningBalanceRepo.findGlOpeningBalanceByActive();
 	}
 
-	/// ReconcileBank
 
-	@Override
-	public List<ReconcileBankVO> getAllReconcileBankByOrgId(Long orgId) {
-		List<ReconcileBankVO> reconcileBankVO = new ArrayList<>();
-		if (ObjectUtils.isNotEmpty(orgId)) {
-			LOGGER.info("Successfully Received  ReconcileBank BY OrgId : {}", orgId);
-			reconcileBankVO = reconcileBankRepo.getAllReconcileBankByOrgId(orgId);
-		} else {
-			LOGGER.info("Successfully Received  ReconcileBank For All OrgId.");
-			reconcileBankVO = reconcileBankRepo.findAll();
-		}
-		return reconcileBankVO;
-	}
-
-	@Override
-	public List<ReconcileBankVO> getAllReconcileBankById(Long id) {
-		List<ReconcileBankVO> reconcileBankVO = new ArrayList<>();
-		if (ObjectUtils.isNotEmpty(id)) {
-			LOGGER.info("Successfully Received  ReconcileBank BY Id : {}", id);
-			reconcileBankVO = reconcileBankRepo.getAllReconcileBankById(id);
-		} else {
-			LOGGER.info("Successfully Received ReconcileBank For All Id.");
-			reconcileBankVO = reconcileBankRepo.findAll();
-		}
-		return reconcileBankVO;
-	}
-
-	@Override
-	public ReconcileBankVO updateCreateReconcileBank(@Valid ReconcileBankDTO reconcileBankDTO)
-			throws ApplicationException {
-		ReconcileBankVO reconcileBankVO = new ReconcileBankVO();
-		// boolean isUpdate = false;
-		if (ObjectUtils.isNotEmpty(reconcileBankDTO.getId())) {
-			boolean isUpdate = true;
-			reconcileBankVO = reconcileBankRepo.findById(reconcileBankDTO.getId())
-					.orElseThrow(() -> new ApplicationException("Invalid ReconcileBank details"));
-			reconcileBankVO.setUpdatedBy(reconcileBankDTO.getCreatedBy());
-		} else {
-			reconcileBankVO.setUpdatedBy(reconcileBankDTO.getCreatedBy());
-			reconcileBankVO.setCreatedBy(reconcileBankDTO.getCreatedBy());
-		}
-
-		List<ParticularsReconcileVO> particularsReconcileVOs = new ArrayList<>();
-		if (reconcileBankDTO.getParticularsReconcileDTO() != null) {
-			for (ParticularsReconcileDTO particularsReconcileDTO : reconcileBankDTO.getParticularsReconcileDTO()) {
-				ParticularsReconcileVO particularsReconcileVO;
-				if (particularsReconcileDTO.getId() != null
-						&& ObjectUtils.isNotEmpty(particularsReconcileDTO.getId())) {
-					particularsReconcileVO = particularsReconcileRepo.findById(particularsReconcileDTO.getId())
-							.orElse(new ParticularsReconcileVO());
-				} else {
-					particularsReconcileVO = new ParticularsReconcileVO();
-				}
-				particularsReconcileVO.setVoucherNo(particularsReconcileDTO.getVoucherNo());
-				particularsReconcileVO.setVoucherDate(particularsReconcileDTO.getVoucherDate());
-				particularsReconcileVO.setChequeNo(particularsReconcileDTO.getChequeNo());
-				particularsReconcileVO.setChequeDate(particularsReconcileDTO.getChequeDate());
-				particularsReconcileVO.setDeposit(particularsReconcileDTO.getDeposit());
-				particularsReconcileVO.setWithdrawal(particularsReconcileDTO.getWithdrawal());
-				particularsReconcileVO.setBankRef(particularsReconcileDTO.getBankRef());
-				particularsReconcileVO.setReconcileBankVO(reconcileBankVO);
-				particularsReconcileVOs.add(particularsReconcileVO);
+  ///ReconcileBank
+	
+		@Override
+		public List<ReconcileBankVO> getAllReconcileBankByOrgId(Long orgId) {
+			List<ReconcileBankVO> reconcileBankVO = new ArrayList<>();
+			if (ObjectUtils.isNotEmpty(orgId)) {
+				LOGGER.info("Successfully Received  ReconcileBank BY OrgId : {}", orgId);
+				reconcileBankVO = reconcileBankRepo.getAllReconcileBankByOrgId(orgId);
+			} else {
+				LOGGER.info("Successfully Received  ReconcileBank For All OrgId.");
+				reconcileBankVO = reconcileBankRepo.findAll();
 			}
+			return reconcileBankVO;
 		}
-
-		getReconcileBankVOFromReconcileBankDTO(reconcileBankDTO, reconcileBankVO);
-		reconcileBankVO.setParticularsReconcileVO(particularsReconcileVOs);
-		return reconcileBankRepo.save(reconcileBankVO);
-	}
-
-	private void getReconcileBankVOFromReconcileBankDTO(@Valid ReconcileBankDTO reconcileBankDTO,
-			ReconcileBankVO reconcileBankVO) {
-		// // Finyr
-		// int finyr = taxInvoiceRepo.findFinyr();
-		// // DocId
-		// String taxInvoice = "AI" + finyr + taxInvoiceRepo.findDocId();
-		// taxInvoiceVO.setDocId(taxInvoice);
-		// taxInvoiceRepo.nextSeq();
-		// // InvoiceNo
-		// String invoiceNo = "AI" + finyr + "INV" + taxInvoiceRepo.findInvoiceNo();
-		// taxInvoiceVO.setInvoiceNo(invoiceNo);
-		// taxInvoiceRepo.nextSeqInvoice();
-
-		reconcileBankVO.setDocId(reconcileBankDTO.getDocId());
-		reconcileBankVO.setDocDate(reconcileBankDTO.getDocDate());
-		reconcileBankVO.setBankStmtDate(reconcileBankDTO.getBankStmtDate());
-		reconcileBankVO.setBankAccount(reconcileBankDTO.getBankAccount());
-		reconcileBankVO.setRemarks(reconcileBankDTO.getRemarks());
-		reconcileBankVO.setTotalWithdrawal(reconcileBankDTO.getTotalWithdrawal());
-		reconcileBankVO.setTotalDeposit(reconcileBankDTO.getTotalDeposit());
-		reconcileBankVO.setOrgId(reconcileBankDTO.getOrgId());
-		reconcileBankVO.setActive(reconcileBankDTO.isActive());
-	}
-
-	@Override
-	public List<ReconcileBankVO> getReconcileBankByActive() {
-
-		return reconcileBankRepo.findReconcileBankByActive();
-
-	}
-
-	// ReconcileCorpBank
-
-	@Override
-	public List<ReconcileCorpBankVO> getAllReconcileCorpBankByOrgId(Long orgId) {
-		List<ReconcileCorpBankVO> reconcileCorpBankVO = new ArrayList<>();
-		if (ObjectUtils.isNotEmpty(orgId)) {
-			LOGGER.info("Successfully Received  ReconcileCorpBank BY OrgId : {}", orgId);
-			reconcileCorpBankVO = reconcileCorpBankRepo.getAllReconcileCorpBankByOrgId(orgId);
-		} else {
-			LOGGER.info("Successfully Received  ReconcileBank For All OrgId.");
-			reconcileCorpBankVO = reconcileCorpBankRepo.findAll();
-		}
-		return reconcileCorpBankVO;
-	}
-
-	@Override
-	public List<ReconcileCorpBankVO> getAllReconcileCorpBankById(Long id) {
-		List<ReconcileCorpBankVO> reconcileCorpBankVO = new ArrayList<>();
-		if (ObjectUtils.isNotEmpty(id)) {
-			LOGGER.info("Successfully Received  ReconcileCorpBank BY Id : {}", id);
-			reconcileCorpBankVO = reconcileCorpBankRepo.getAllReconcileCorpBankById(id);
-		} else {
-			LOGGER.info("Successfully Received ReconcileCorpBank For All Id.");
-			reconcileCorpBankVO = reconcileCorpBankRepo.findAll();
-		}
-		return reconcileCorpBankVO;
-	}
-
-	@Override
-	public ReconcileCorpBankVO updateCreateReconcileCorpBank(@Valid ReconcileCorpBankDTO reconcileCorpBankDTO)
-			throws ApplicationException {
-		ReconcileCorpBankVO reconcileCorpBankVO = new ReconcileCorpBankVO();
-		// boolean isUpdate = false;
-		if (ObjectUtils.isNotEmpty(reconcileCorpBankDTO.getId())) {
-			boolean isUpdate = true;
-			reconcileCorpBankVO = reconcileCorpBankRepo.findById(reconcileCorpBankDTO.getId())
-					.orElseThrow(() -> new ApplicationException("Invalid ReconcileCorpBank details"));
-			reconcileCorpBankVO.setUpdatedBy(reconcileCorpBankDTO.getCreatedBy());
-		} else {
-			reconcileCorpBankVO.setUpdatedBy(reconcileCorpBankDTO.getCreatedBy());
-			reconcileCorpBankVO.setCreatedBy(reconcileCorpBankDTO.getCreatedBy());
-		}
-
-		List<ParticularsReconcileCorpBankVO> particularsReconcileCorpBankVOs = new ArrayList<>();
-		if (reconcileCorpBankDTO.getParticularsReconcileCorpBankDTO() != null) {
-			for (ParticularsReconcileCorpBankDTO particularsReconcileCorpBankDTO : reconcileCorpBankDTO
-					.getParticularsReconcileCorpBankDTO()) {
-				ParticularsReconcileCorpBankVO particularsReconcileCorpBankVO;
-				if (particularsReconcileCorpBankDTO.getId() != null
-						&& ObjectUtils.isNotEmpty(particularsReconcileCorpBankDTO.getId())) {
-					particularsReconcileCorpBankVO = particularsReconcileCorpBankRepo
-							.findById(particularsReconcileCorpBankDTO.getId())
-							.orElse(new ParticularsReconcileCorpBankVO());
-				} else {
-					particularsReconcileCorpBankVO = new ParticularsReconcileCorpBankVO();
-				}
-				particularsReconcileCorpBankVO.setVoucherNo(particularsReconcileCorpBankDTO.getVoucherNo());
-				particularsReconcileCorpBankVO.setVoucherDate(particularsReconcileCorpBankDTO.getVoucherDate());
-				particularsReconcileCorpBankVO.setChequeNo(particularsReconcileCorpBankDTO.getChequeNo());
-				particularsReconcileCorpBankVO.setChequeDate(particularsReconcileCorpBankDTO.getChequeDate());
-				particularsReconcileCorpBankVO.setDeposit(particularsReconcileCorpBankDTO.getDeposit());
-				particularsReconcileCorpBankVO.setWithdrawal(particularsReconcileCorpBankDTO.getWithdrawal());
-				particularsReconcileCorpBankVO.setBankRef(particularsReconcileCorpBankDTO.getBankRef());
-				particularsReconcileCorpBankVO.setReconcileCorpBankVO(reconcileCorpBankVO);
-				particularsReconcileCorpBankVOs.add(particularsReconcileCorpBankVO);
+		
+		@Override
+		public List<ReconcileBankVO> getAllReconcileBankById(Long id) {
+			List<ReconcileBankVO> reconcileBankVO = new ArrayList<>();
+			if (ObjectUtils.isNotEmpty(id)) {
+				LOGGER.info("Successfully Received  ReconcileBank BY Id : {}", id);
+				reconcileBankVO = reconcileBankRepo.getAllReconcileBankById(id);
+			} else {
+				LOGGER.info("Successfully Received ReconcileBank For All Id.");
+				reconcileBankVO = reconcileBankRepo.findAll();
 			}
+			return reconcileBankVO;
 		}
 
-		getReconcileCorpBankVOFromReconcileCorpBankDTO(reconcileCorpBankDTO, reconcileCorpBankVO);
-		reconcileCorpBankVO.setParticularsReconcileCorpBankVO(particularsReconcileCorpBankVOs);
-		return reconcileCorpBankRepo.save(reconcileCorpBankVO);
-	}
+		@Override
+		public ReconcileBankVO updateCreateReconcileBank(@Valid ReconcileBankDTO reconcileBankDTO) throws ApplicationException {
+			ReconcileBankVO reconcileBankVO = new ReconcileBankVO();
+			//		boolean isUpdate = false;
+			if (ObjectUtils.isNotEmpty(reconcileBankDTO.getId())) {
+				boolean isUpdate = true;
+				reconcileBankVO = reconcileBankRepo.findById(reconcileBankDTO.getId())
+						.orElseThrow(() -> new ApplicationException("Invalid ReconcileBank details"));
+				reconcileBankVO.setUpdatedBy(reconcileBankDTO.getCreatedBy());
+			} else {
+				reconcileBankVO.setUpdatedBy(reconcileBankDTO.getCreatedBy());
+				reconcileBankVO.setCreatedBy(reconcileBankDTO.getCreatedBy());
+			}
 
-	private void getReconcileCorpBankVOFromReconcileCorpBankDTO(@Valid ReconcileCorpBankDTO reconcileCorpBankDTO,
-			ReconcileCorpBankVO reconcileCorpBankVO) {
-		// // Finyr
-		// int finyr = taxInvoiceRepo.findFinyr();
-		// // DocId
-		// String taxInvoice = "AI" + finyr + taxInvoiceRepo.findDocId();
-		// taxInvoiceVO.setDocId(taxInvoice);
-		// taxInvoiceRepo.nextSeq();
-		// // InvoiceNo
-		// String invoiceNo = "AI" + finyr + "INV" + taxInvoiceRepo.findInvoiceNo();
-		// taxInvoiceVO.setInvoiceNo(invoiceNo);
-		// taxInvoiceRepo.nextSeqInvoice();
+			List<ParticularsReconcileVO> particularsReconcileVOs = new ArrayList<>();
+			if (reconcileBankDTO.getParticularsReconcileDTO() != null) {
+				for (ParticularsReconcileDTO particularsReconcileDTO : reconcileBankDTO.getParticularsReconcileDTO()) {
+					ParticularsReconcileVO particularsReconcileVO;
+					if (particularsReconcileDTO.getId() != null && ObjectUtils.isNotEmpty(particularsReconcileDTO.getId())) {
+						particularsReconcileVO = particularsReconcileRepo.findById(particularsReconcileDTO.getId())
+								.orElse(new ParticularsReconcileVO());
+					} else {
+						particularsReconcileVO = new ParticularsReconcileVO();
+					}
+					particularsReconcileVO.setVoucherNo(particularsReconcileDTO.getVoucherNo());
+					particularsReconcileVO.setVoucherDate(particularsReconcileDTO.getVoucherDate());
+					particularsReconcileVO.setChequeNo(particularsReconcileDTO.getChequeNo());
+					particularsReconcileVO.setChequeDate(particularsReconcileDTO.getChequeDate());			
+					particularsReconcileVO.setDeposit(particularsReconcileDTO.getDeposit());
+					particularsReconcileVO.setWithdrawal(particularsReconcileDTO.getWithdrawal());
+					particularsReconcileVO.setBankRef(particularsReconcileDTO.getBankRef())	;	
+				    particularsReconcileVO.setReconcileBankVO(reconcileBankVO);
+					particularsReconcileVOs.add(particularsReconcileVO);
+					}
+			}
 
-		reconcileCorpBankVO.setDocId(reconcileCorpBankDTO.getDocId());
-		reconcileCorpBankVO.setDocDate(reconcileCorpBankDTO.getDocDate());
-		reconcileCorpBankVO.setBankStmtDate(reconcileCorpBankDTO.getBankStmtDate());
-		reconcileCorpBankVO.setBankAccount(reconcileCorpBankDTO.getBankAccount());
-		reconcileCorpBankVO.setRemarks(reconcileCorpBankDTO.getRemarks());
-		reconcileCorpBankVO.setOrgId(reconcileCorpBankDTO.getOrgId());
-		reconcileCorpBankVO.setActive(reconcileCorpBankDTO.isActive());
-	}
+			
+			getReconcileBankVOFromReconcileBankDTO(reconcileBankDTO, reconcileBankVO);
+			reconcileBankVO.setParticularsReconcileVO(particularsReconcileVOs);
+			return reconcileBankRepo.save(reconcileBankVO);
+			}
 
-	@Override
-	public List<ReconcileCorpBankVO> getReconcileCorpBankByActive() {
-
-		return reconcileCorpBankRepo.findReconcileCorpBankByActive();
-	}
-
-	// ReconcileCash
-
-	@Override
-	public List<ReconcileCashVO> getAllReconcileCashByOrgId(Long orgId) {
-		List<ReconcileCashVO> reconcileCashVO = new ArrayList<>();
-		if (ObjectUtils.isNotEmpty(orgId)) {
-			LOGGER.info("Successfully Received ReconcileCash BY OrgId : {}", orgId);
-			reconcileCashVO = reconcileCashRepo.getAllReconcileCashByOrgId(orgId);
-		} else {
-			LOGGER.info("Successfully Received ReconcileCash For All OrgId.");
-			reconcileCashVO = reconcileCashRepo.findAll();
-		}
-		return reconcileCashVO;
-	}
-
-	@Override
-	public List<ReconcileCashVO> getAllReconcileCashById(Long id) {
-		List<ReconcileCashVO> reconcileCashVO = new ArrayList<>();
-		if (ObjectUtils.isNotEmpty(id)) {
-			LOGGER.info("Successfully Received ReconcileCash BY Id : {}", id);
-			reconcileCashVO = reconcileCashRepo.getAllReconcileCashById(id);
-		} else {
-			LOGGER.info("Successfully Received ReconcileCash For All Id.");
-			reconcileCashVO = reconcileCashRepo.findAll();
-		}
-		return reconcileCashVO;
-	}
-
-	@Override
-	public ReconcileCashVO updateCreateReconcileCash(@Valid ReconcileCashDTO reconcileCashDTO)
-			throws ApplicationException {
-		ReconcileCashVO reconcileCashVO = new ReconcileCashVO();
-		boolean isUpdate = false;
-		if (ObjectUtils.isNotEmpty(reconcileCashDTO.getId())) {
-			isUpdate = true;
-			reconcileCashVO = reconcileCashRepo.findById(reconcileCashDTO.getId())
-					.orElseThrow(() -> new ApplicationException("Invalid ReconcileCash details"));
-			reconcileCashVO.setUpdatedBy(reconcileCashDTO.getCreatedBy());
-		} else {
-			reconcileCashVO.setUpdatedBy(reconcileCashDTO.getCreatedBy());
-			reconcileCashVO.setCreatedBy(reconcileCashDTO.getCreatedBy());
+		private void getReconcileBankVOFromReconcileBankDTO(@Valid ReconcileBankDTO reconcileBankDTO, ReconcileBankVO reconcileBankVO) {
+			//			// Finyr
+			//			int finyr = taxInvoiceRepo.findFinyr();
+			//			// DocId
+			//			String taxInvoice = "AI" + finyr + taxInvoiceRepo.findDocId();
+			//			taxInvoiceVO.setDocId(taxInvoice);
+			//			taxInvoiceRepo.nextSeq();
+			//			// InvoiceNo
+			//			String invoiceNo = "AI" + finyr + "INV" + taxInvoiceRepo.findInvoiceNo();
+			//			taxInvoiceVO.setInvoiceNo(invoiceNo);	
+			//			taxInvoiceRepo.nextSeqInvoice();
+		
+			reconcileBankVO.setDocId(reconcileBankDTO.getDocId());
+			reconcileBankVO.setDocDate(reconcileBankDTO.getDocDate());
+			reconcileBankVO.setBankStmtDate(reconcileBankDTO.getBankStmtDate());
+			reconcileBankVO.setBankAccount(reconcileBankDTO.getBankAccount());
+			reconcileBankVO.setRemarks(reconcileBankDTO.getRemarks());
+			reconcileBankVO.setTotalWithdrawal(reconcileBankDTO.getTotalWithdrawal());
+			reconcileBankVO.setTotalDeposit(reconcileBankDTO.getTotalDeposit());
+			reconcileBankVO.setOrgId(reconcileBankDTO.getOrgId());
+			reconcileBankVO.setActive(reconcileBankDTO.isActive());
 		}
 
-		getReconcileCashVOFromReconcileCashDTO(reconcileCashDTO, reconcileCashVO);
-		return reconcileCashRepo.save(reconcileCashVO);
-	}
+		@Override
+		public List<ReconcileBankVO> getReconcileBankByActive() {
+			
+			return reconcileBankRepo.findReconcileBankByActive();
 
-	private void getReconcileCashVOFromReconcileCashDTO(@Valid ReconcileCashDTO reconcileCashDTO,
-			ReconcileCashVO reconcileCashVO) {
-		// // Finyr
-		// int finyr = paymentVoucherRepo.findFinyr();
-		// // DocId
-		// String paymentVoucher = "PV" + finyr + paymentVoucherRepo.findDocId();
-		// paymentVoucherRepo.setDocId(paymentVoucher);
-		// paymentVoucherRepo.nextSeq();
-		reconcileCashVO.setDocId(reconcileCashDTO.getDocId());
-		reconcileCashVO.setDocDate(reconcileCashDTO.getDocDate());
-		reconcileCashVO.setCashAccount(reconcileCashDTO.getCashAccount());
-		reconcileCashVO.setBalanceAsPerBooks(reconcileCashDTO.getBalanceAsPerBooks());
-		reconcileCashVO.setDn1(reconcileCashDTO.getDn1());
-		reconcileCashVO.setDn2(reconcileCashDTO.getDn2());
-		reconcileCashVO.setDn3(reconcileCashDTO.getDn3());
-		reconcileCashVO.setDn4(reconcileCashDTO.getDn4());
-		reconcileCashVO.setDn5(reconcileCashDTO.getDn5());
-		reconcileCashVO.setDn6(reconcileCashDTO.getDn6());
-		reconcileCashVO.setDn7(reconcileCashDTO.getDn7());
-		reconcileCashVO.setDn8(reconcileCashDTO.getDn8());
-		reconcileCashVO.setDn1Amt(reconcileCashDTO.getDn1Amt());
-		reconcileCashVO.setDn2Amt(reconcileCashDTO.getDn2Amt());
-		reconcileCashVO.setDn3Amt(reconcileCashDTO.getDn3Amt());
-		reconcileCashVO.setDn4Amt(reconcileCashDTO.getDn4Amt());
-		reconcileCashVO.setDn5Amt(reconcileCashDTO.getDn5Amt());
-		reconcileCashVO.setDn6Amt(reconcileCashDTO.getDn6Amt());
-		reconcileCashVO.setDn7Amt(reconcileCashDTO.getDn7Amt());
-		reconcileCashVO.setDn8Amt(reconcileCashDTO.getDn8Amt());
-		reconcileCashVO.setTotalPhyAmount(reconcileCashDTO.getTotalPhyAmount());
-		reconcileCashVO.setDifferenceAmount(reconcileCashDTO.getDifferenceAmount());
-		reconcileCashVO.setRemarks(reconcileCashDTO.getRemarks());
-		reconcileCashVO.setOrgId(reconcileCashDTO.getOrgId());
-		reconcileCashVO.setActive(reconcileCashDTO.isActive());
-	}
+		}
 
-	@Override
-	public List<ReconcileCashVO> getReconcileCashByActive() {
-		return reconcileCashRepo.findReconcileCashByActive();
-	}
-}
+		//ReconcileCorpBank
+		
+		@Override
+		public List<ReconcileCorpBankVO> getAllReconcileCorpBankByOrgId(Long orgId) {
+			List<ReconcileCorpBankVO> reconcileCorpBankVO = new ArrayList<>();
+			if (ObjectUtils.isNotEmpty(orgId)) {
+				LOGGER.info("Successfully Received  ReconcileCorpBank BY OrgId : {}", orgId);
+				reconcileCorpBankVO = reconcileCorpBankRepo.getAllReconcileCorpBankByOrgId(orgId);
+			} else {
+				LOGGER.info("Successfully Received  ReconcileCorpBank For All OrgId.");
+				reconcileCorpBankVO = reconcileCorpBankRepo.findAll();
+			}
+			return reconcileCorpBankVO;
+		}
+		
+		@Override
+		public List<ReconcileCorpBankVO> getAllReconcileCorpBankById(Long id) {
+			List<ReconcileCorpBankVO> reconcileCorpBankVO = new ArrayList<>();
+			if (ObjectUtils.isNotEmpty(id)) {
+				LOGGER.info("Successfully Received  ReconcileCorpBank BY Id : {}", id);
+				reconcileCorpBankVO = reconcileCorpBankRepo.getAllReconcileCorpBankById(id);
+			} else {
+				LOGGER.info("Successfully Received ReconcileCorpBank For All Id.");
+				reconcileCorpBankVO = reconcileCorpBankRepo.findAll();
+			}
+			return reconcileCorpBankVO;
+		}
+		
+		@Override
+		public ReconcileCorpBankVO updateCreateReconcileCorpBank(@Valid ReconcileCorpBankDTO reconcileCorpBankDTO)
+				throws ApplicationException {
+			ReconcileCorpBankVO reconcileCorpBankVO = new ReconcileCorpBankVO();
+			//		boolean isUpdate = false;
+			if (ObjectUtils.isNotEmpty(reconcileCorpBankDTO.getId())) {
+				boolean isUpdate = true;
+				reconcileCorpBankVO = reconcileCorpBankRepo.findById(reconcileCorpBankDTO.getId())
+						.orElseThrow(() -> new ApplicationException("Invalid ReconcileCorpBank details"));
+				reconcileCorpBankVO.setUpdatedBy(reconcileCorpBankDTO.getCreatedBy());
+			} else {
+				reconcileCorpBankVO.setUpdatedBy(reconcileCorpBankDTO.getCreatedBy());
+				reconcileCorpBankVO.setCreatedBy(reconcileCorpBankDTO.getCreatedBy());
+			}
+
+			List<ParticularsReconcileCorpBankVO> particularsReconcileCorpBankVOs = new ArrayList<>();
+			if (reconcileCorpBankDTO.getParticularsReconcileCorpBankDTO() != null) {
+				for (ParticularsReconcileCorpBankDTO particularsReconcileCorpBankDTO : reconcileCorpBankDTO.getParticularsReconcileCorpBankDTO()) {
+					ParticularsReconcileCorpBankVO particularsReconcileCorpBankVO;
+					if (particularsReconcileCorpBankDTO.getId() != null && ObjectUtils.isNotEmpty(particularsReconcileCorpBankDTO.getId())) {
+						particularsReconcileCorpBankVO = particularsReconcileCorpBankRepo.findById(particularsReconcileCorpBankDTO.getId())
+								.orElse(new ParticularsReconcileCorpBankVO());
+					} else {
+						particularsReconcileCorpBankVO = new ParticularsReconcileCorpBankVO();
+					}
+					particularsReconcileCorpBankVO.setVoucherNo(particularsReconcileCorpBankDTO.getVoucherNo());
+					particularsReconcileCorpBankVO.setVoucherDate(particularsReconcileCorpBankDTO.getVoucherDate());
+					particularsReconcileCorpBankVO.setChequeNo(particularsReconcileCorpBankDTO.getChequeNo());
+					particularsReconcileCorpBankVO.setChequeDate(particularsReconcileCorpBankDTO.getChequeDate());			
+					particularsReconcileCorpBankVO.setDeposit(particularsReconcileCorpBankDTO.getDeposit());
+					particularsReconcileCorpBankVO.setWithdrawal(particularsReconcileCorpBankDTO.getWithdrawal());
+					particularsReconcileCorpBankVO.setBankRef(particularsReconcileCorpBankDTO.getBankRef())	;	
+					particularsReconcileCorpBankVO.setReconcileCorpBankVO(reconcileCorpBankVO);
+					particularsReconcileCorpBankVOs.add(particularsReconcileCorpBankVO);
+					}
+			}
+
+			
+			getReconcileCorpBankVOFromReconcileCorpBankDTO(reconcileCorpBankDTO, reconcileCorpBankVO);
+			reconcileCorpBankVO.setParticularsReconcileCorpBankVO(particularsReconcileCorpBankVOs);
+			return reconcileCorpBankRepo.save(reconcileCorpBankVO);
+			}
+
+		private void getReconcileCorpBankVOFromReconcileCorpBankDTO(@Valid ReconcileCorpBankDTO reconcileCorpBankDTO, ReconcileCorpBankVO reconcileCorpBankVO) {
+			//			// Finyr
+			//			int finyr = taxInvoiceRepo.findFinyr();
+			//			// DocId
+			//			String taxInvoice = "AI" + finyr + taxInvoiceRepo.findDocId();
+			//			taxInvoiceVO.setDocId(taxInvoice);
+			//			taxInvoiceRepo.nextSeq();
+			//			// InvoiceNo
+			//			String invoiceNo = "AI" + finyr + "INV" + taxInvoiceRepo.findInvoiceNo();
+			//			taxInvoiceVO.setInvoiceNo(invoiceNo);	
+			//			taxInvoiceRepo.nextSeqInvoice();
+		
+			reconcileCorpBankVO.setDocId(reconcileCorpBankDTO.getDocId());
+			reconcileCorpBankVO.setDocDate(reconcileCorpBankDTO.getDocDate());
+			reconcileCorpBankVO.setBankStmtDate(reconcileCorpBankDTO.getBankStmtDate());
+			reconcileCorpBankVO.setBankAccount(reconcileCorpBankDTO.getBankAccount());
+			reconcileCorpBankVO.setRemarks(reconcileCorpBankDTO.getRemarks());
+			reconcileCorpBankVO.setOrgId(reconcileCorpBankDTO.getOrgId());
+			reconcileCorpBankVO.setActive(reconcileCorpBankDTO.isActive());
+		}
+		@Override
+		public List<ReconcileCorpBankVO> getReconcileCorpBankByActive() {
+			
+	 		return reconcileCorpBankRepo.findReconcileCorpBankByActive();
+		}
+		
+		
+		//ReconcileCash
+		
+				@Override
+				public List<ReconcileCashVO> getAllReconcileCashByOrgId(Long orgId) {
+					List<ReconcileCashVO> reconcileCashVO = new ArrayList<>();
+					if (ObjectUtils.isNotEmpty(orgId)) {
+						LOGGER.info("Successfully Received ReconcileCash BY OrgId : {}", orgId);
+						reconcileCashVO = reconcileCashRepo.getAllReconcileCashByOrgId(orgId);
+					} else {
+						LOGGER.info("Successfully Received ReconcileCash For All OrgId.");
+						reconcileCashVO = reconcileCashRepo.findAll();
+					}
+					return reconcileCashVO;
+				}
+
+				@Override
+				public List<ReconcileCashVO> getAllReconcileCashById(Long id) {
+					List<ReconcileCashVO> reconcileCashVO = new ArrayList<>();
+					if (ObjectUtils.isNotEmpty(id)) {
+						LOGGER.info("Successfully Received ReconcileCash BY Id : {}", id);
+						reconcileCashVO = reconcileCashRepo.getAllReconcileCashById(id);
+					} else {
+						LOGGER.info("Successfully Received ReconcileCash For All Id.");
+						reconcileCashVO = reconcileCashRepo.findAll();
+					}
+					return reconcileCashVO;
+				}
+
+				@Override
+				public ReconcileCashVO updateCreateReconcileCash(@Valid ReconcileCashDTO reconcileCashDTO)
+						throws ApplicationException {
+					ReconcileCashVO reconcileCashVO = new ReconcileCashVO();
+					boolean isUpdate = false;
+					if (ObjectUtils.isNotEmpty(reconcileCashDTO.getId())) {
+						isUpdate = true;
+						reconcileCashVO = reconcileCashRepo.findById(reconcileCashDTO.getId())
+								.orElseThrow(() -> new ApplicationException("Invalid ReconcileCash details"));
+						reconcileCashVO.setUpdatedBy(reconcileCashDTO.getCreatedBy());
+					} else {
+						reconcileCashVO.setUpdatedBy(reconcileCashDTO.getCreatedBy());
+						reconcileCashVO.setCreatedBy(reconcileCashDTO.getCreatedBy());
+					}
+
+					getReconcileCashVOFromReconcileCashDTO(reconcileCashDTO, reconcileCashVO);
+					return reconcileCashRepo.save(reconcileCashVO);
+				}
+
+				private void getReconcileCashVOFromReconcileCashDTO(@Valid ReconcileCashDTO reconcileCashDTO,
+						ReconcileCashVO reconcileCashVO) {
+					// // Finyr
+					// int finyr = paymentVoucherRepo.findFinyr();
+					// // DocId
+					// String paymentVoucher = "PV" + finyr + paymentVoucherRepo.findDocId();
+					// paymentVoucherRepo.setDocId(paymentVoucher);
+					// paymentVoucherRepo.nextSeq();
+					reconcileCashVO.setDocId(reconcileCashDTO.getDocId());
+					reconcileCashVO.setDocDate(reconcileCashDTO.getDocDate());
+					reconcileCashVO.setCashAccount(reconcileCashDTO.getCashAccount());
+					reconcileCashVO.setBalanceAsPerBooks(reconcileCashDTO.getBalanceAsPerBooks());
+					reconcileCashVO.setDn1(reconcileCashDTO.getDn1());
+					reconcileCashVO.setDn2(reconcileCashDTO.getDn2());
+					reconcileCashVO.setDn3(reconcileCashDTO.getDn3());
+					reconcileCashVO.setDn4(reconcileCashDTO.getDn4());
+					reconcileCashVO.setDn5(reconcileCashDTO.getDn5());
+					reconcileCashVO.setDn6(reconcileCashDTO.getDn6());
+					reconcileCashVO.setDn7(reconcileCashDTO.getDn7());
+					reconcileCashVO.setDn8(reconcileCashDTO.getDn8());
+					reconcileCashVO.setDn1Amt(reconcileCashDTO.getDn1Amt());
+					reconcileCashVO.setDn2Amt(reconcileCashDTO.getDn2Amt());
+					reconcileCashVO.setDn3Amt(reconcileCashDTO.getDn3Amt());
+					reconcileCashVO.setDn4Amt(reconcileCashDTO.getDn4Amt());
+					reconcileCashVO.setDn5Amt(reconcileCashDTO.getDn5Amt());
+					reconcileCashVO.setDn6Amt(reconcileCashDTO.getDn6Amt());
+					reconcileCashVO.setDn7Amt(reconcileCashDTO.getDn7Amt());
+					reconcileCashVO.setDn8Amt(reconcileCashDTO.getDn8Amt());
+					reconcileCashVO.setTotalPhyAmount(reconcileCashDTO.getTotalPhyAmount());
+					reconcileCashVO.setDifferenceAmount(reconcileCashDTO.getDifferenceAmount());
+					reconcileCashVO.setRemarks(reconcileCashDTO.getRemarks());
+					reconcileCashVO.setOrgId(reconcileCashDTO.getOrgId());
+					reconcileCashVO.setActive(reconcileCashDTO.isActive());
+				}
+
+				@Override
+				public List<ReconcileCashVO> getReconcileCashByActive() {
+					return reconcileCashRepo.findReconcileCashByActive();
+				}
+		}
+
+

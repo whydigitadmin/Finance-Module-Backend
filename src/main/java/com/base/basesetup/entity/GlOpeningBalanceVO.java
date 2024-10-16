@@ -1,7 +1,7 @@
 package com.base.basesetup.entity;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -38,7 +38,7 @@ public class GlOpeningBalanceVO {
 	@Column(name = "branch")
 	private String branch;
 	@Column(name = "docdate")
-	private LocalDateTime docDate;
+	private LocalDate docDate;
 	@Column(name = "docid")
 	private String docId;
 	@Column(name="currency")
@@ -48,13 +48,19 @@ public class GlOpeningBalanceVO {
 	@Column(name = "refno")
 	private String refNo;
 	@Column(name = "refdate")
-	private LocalDateTime refDate;
+	private LocalDate refDate;
 	@Column(name = "supprefno")
 	private String suppRefNo;
 	@Column(name = "supprefdate")
-	private LocalDateTime suppRefDate;
+	private LocalDate suppRefDate;
 	@Column(name = "remarks")
 	private String remarks;
+	@Builder.Default
+	@Column(name = "screencode")
+	private String screenCode="GOB";
+	@Builder.Default
+	@Column(name="screenname")
+	private String screenName="GL OPENING BALANCE";
 	@Column(name = "orgid")
 	private Long orgId;
 	@Column(name = "active")

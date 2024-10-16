@@ -26,11 +26,14 @@ public class UserActionVO {
 	private long userId;
 	private String actionType;
 	private Date actionDate;
+	private String loginIp;
 	
 	@PrePersist
 	public void onSave() {
 		Date currentDate = new Date();
 		this.actionDate = currentDate;
 	}
+
+	
 	
 }

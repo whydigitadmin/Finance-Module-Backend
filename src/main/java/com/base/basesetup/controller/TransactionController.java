@@ -1,5 +1,4 @@
 package com.base.basesetup.controller;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -26,10 +25,8 @@ import com.base.basesetup.common.CommonConstant;
 import com.base.basesetup.common.UserConstants;
 import com.base.basesetup.dto.ArApAdjustmentOffSetDTO;
 import com.base.basesetup.dto.ArapAdjustmentsDTO;
-import com.base.basesetup.dto.ArapDetailsDTO;
 import com.base.basesetup.dto.BrsOpeningDTO;
 import com.base.basesetup.dto.ChartCostCenterDTO;
-import com.base.basesetup.dto.CostInvoiceDTO;
 import com.base.basesetup.dto.DailyMonthlyExRatesDTO;
 import com.base.basesetup.dto.DebitNoteDTO;
 import com.base.basesetup.dto.FundTransferDTO;
@@ -44,13 +41,10 @@ import com.base.basesetup.dto.ReconcileBankDTO;
 import com.base.basesetup.dto.ReconcileCashDTO;
 import com.base.basesetup.dto.ReconcileCorpBankDTO;
 import com.base.basesetup.dto.ResponseDTO;
-import com.base.basesetup.dto.TaxInvoiceDTO;
 import com.base.basesetup.entity.ArApAdjustmentOffSetVO;
 import com.base.basesetup.entity.ArapAdjustmentsVO;
-import com.base.basesetup.entity.ArapDetailsVO;
 import com.base.basesetup.entity.BrsOpeningVO;
 import com.base.basesetup.entity.ChartCostCenterVO;
-import com.base.basesetup.entity.CostInvoiceVO;
 import com.base.basesetup.entity.DailyMonthlyExRatesVO;
 import com.base.basesetup.entity.DebitNoteVO;
 import com.base.basesetup.entity.FundTransferVO;
@@ -64,7 +58,6 @@ import com.base.basesetup.entity.ReceiptReversalVO;
 import com.base.basesetup.entity.ReconcileBankVO;
 import com.base.basesetup.entity.ReconcileCashVO;
 import com.base.basesetup.entity.ReconcileCorpBankVO;
-import com.base.basesetup.entity.TaxInvoiceVO;
 import com.base.basesetup.service.TransactionService;
 
 @CrossOrigin
@@ -73,166 +66,9 @@ import com.base.basesetup.service.TransactionService;
 public class TransactionController extends BaseController {
 
 	public static final Logger LOGGER = LoggerFactory.getLogger(TransactionController.class);
-
+	
 	@Autowired
 	TransactionService transactionService;
-
-	// TaxInvoice
-
-	@GetMapping("/getAllTaxInvoiceByOrgId")
-	public ResponseEntity<ResponseDTO> getAllTaxInvoiceByOrgId(@RequestParam(required = false) Long orgId) {
-		String methodName = "getAllTaxInvoiceByOrgId()";
-		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
-		String errorMsg = null;
-		Map<String, Object> responseObjectsMap = new HashMap<>();
-		ResponseDTO responseDTO = null;
-		List<TaxInvoiceVO> taxInvoiceVO = new ArrayList<>();
-		try {
-			taxInvoiceVO = transactionService.getAllTaxInvoiceByOrgId(orgId);
-		} catch (Exception e) {
-			errorMsg = e.getMessage();
-			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
-		}
-		if (StringUtils.isBlank(errorMsg)) {
-			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "TaxInvoice information get successfully ByOrgId");
-			responseObjectsMap.put("taxInvoiceVO", taxInvoiceVO);
-			responseDTO = createServiceResponse(responseObjectsMap);
-		} else {
-			responseDTO = createServiceResponseError(responseObjectsMap, "TaxInvoice information receive failedByOrgId",
-					errorMsg);
-		}
-		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
-		return ResponseEntity.ok().body(responseDTO);
-
-	}
-
-	@GetMapping("/getAllTaxInvoiceById")
-	public ResponseEntity<ResponseDTO> getAllTaxInvoiceById(@RequestParam(required = false) Long id) {
-		String methodName = "getAllTaxInvoiceById()";
-		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
-		String errorMsg = null;
-		Map<String, Object> responseObjectsMap = new HashMap<>();
-		ResponseDTO responseDTO = null;
-		List<TaxInvoiceVO> taxInvoiceVO = new ArrayList<>();
-		try {
-			taxInvoiceVO = transactionService.getAllTaxInvoiceById(id);
-		} catch (Exception e) {
-			errorMsg = e.getMessage();
-			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
-		}
-		if (StringUtils.isBlank(errorMsg)) {
-			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "TaxInvoice information get successfully By id");
-			responseObjectsMap.put("taxInvoiceVO", taxInvoiceVO);
-			responseDTO = createServiceResponse(responseObjectsMap);
-		} else {
-			responseDTO = createServiceResponseError(responseObjectsMap, "TaxInvoice information receive failedByOrgId",
-					errorMsg);
-		}
-		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
-		return ResponseEntity.ok().body(responseDTO);
-	}
-
-	@PutMapping("/updateCreateTaxInvoice")
-	public ResponseEntity<ResponseDTO> updateCreateTaxInvoice(@RequestBody TaxInvoiceDTO taxInvoiceDTO) {
-		String methodName = "updateCreateTaxInvoice()";
-		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
-		String errorMsg = null;
-		Map<String, Object> responseObjectsMap = new HashMap<>();
-		ResponseDTO responseDTO = null;
-		try {
-			Map<String, Object> taxInvoiceVO = transactionService.updateCreateTaxInvoice(taxInvoiceDTO);
-			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, taxInvoiceVO.get("message"));
-			responseObjectsMap.put("taxVO", taxInvoiceVO.get("taxInvoiceVO"));
-			responseDTO = createServiceResponse(responseObjectsMap);
-		} catch (Exception e) {
-			errorMsg = e.getMessage();
-			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
-			responseDTO = createServiceResponseError(responseObjectsMap, errorMsg, errorMsg);
-		}
-		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
-		return ResponseEntity.ok().body(responseDTO);
-	}
-
-	@GetMapping("/getTaxInvoiceByActive")
-	public ResponseEntity<ResponseDTO> getTaxInvoiceByActive() {
-		String methodName = "getTaxInvoiceByActive()";
-		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
-		String errorMsg = null;
-		Map<String, Object> responseObjectsMap = new HashMap<>();
-		ResponseDTO responseDTO = null;
-		List<TaxInvoiceVO> taxInvoiceVO = new ArrayList<>();
-		try {
-			taxInvoiceVO = transactionService.getTaxInvoiceByActive();
-		} catch (Exception e) {
-			errorMsg = e.getMessage();
-			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
-		}
-		if (StringUtils.isBlank(errorMsg)) {
-			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "TaxInvoice information get successfully By Active");
-			responseObjectsMap.put("taxInvoiceVO", taxInvoiceVO);
-			responseDTO = createServiceResponse(responseObjectsMap);
-		} else {
-			responseDTO = createServiceResponseError(responseObjectsMap,
-					"TaxInvoice information receive failed By Active", errorMsg);
-		}
-		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
-		return ResponseEntity.ok().body(responseDTO);
-
-	}
-
-	@GetMapping("/getAllTaxInvoiceDocIdByOrgId")
-	public ResponseEntity<ResponseDTO> getAllTaxInvoiceDocIdByOrgId(@RequestParam Long orgId) {
-		String methodName = "getAllTaxInvoiceDocIdByOrgId()";
-		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
-		String errorMsg = null;
-		Map<String, Object> responseObjectsMap = new HashMap<>();
-		ResponseDTO responseDTO = null;
-		List<TaxInvoiceVO> taxInvoiceVO = new ArrayList<>();
-		try {
-			taxInvoiceVO = transactionService.getAllTaxInvoiceDocIdByOrgId(orgId);
-		} catch (Exception e) {
-			errorMsg = e.getMessage();
-			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
-		}
-		if (StringUtils.isBlank(errorMsg)) {
-			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "OriginBill information get successfully By docid");
-			responseObjectsMap.put("taxInvoiceVO", taxInvoiceVO);
-			responseDTO = createServiceResponse(responseObjectsMap);
-		} else {
-			responseDTO = createServiceResponseError(responseObjectsMap,
-					"OriginBill information receive failed By docid", errorMsg);
-		}
-		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
-		return ResponseEntity.ok().body(responseDTO);
-
-	}
-
-	@GetMapping("/getAllTaxInvoiceByDocIdAndOrgId")
-	public ResponseEntity<ResponseDTO> getAllTaxInvoiceByDocId(@RequestParam Long orgId, @RequestParam String docId) {
-		String methodName = "getAllTaxInvoiceByDocId()";
-		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
-		String errorMsg = null;
-		Map<String, Object> responseObjectsMap = new HashMap<>();
-		ResponseDTO responseDTO = null;
-		List<TaxInvoiceVO> taxInvoiceVO = new ArrayList<>();
-		try {
-			taxInvoiceVO = transactionService.getAllTaxInvoiceByDocId(orgId, docId);
-		} catch (Exception e) {
-			errorMsg = e.getMessage();
-			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
-		}
-		if (StringUtils.isBlank(errorMsg)) {
-			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "OriginBill information get successfully By docid");
-			responseObjectsMap.put("taxInvoiceVO", taxInvoiceVO);
-			responseDTO = createServiceResponse(responseObjectsMap);
-		} else {
-			responseDTO = createServiceResponseError(responseObjectsMap,
-					"OriginBill information receive failed By docid", errorMsg);
-		}
-		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
-		return ResponseEntity.ok().body(responseDTO);
-
-	}
 	// IrnCredit
 
 	@GetMapping("/getAllIrnCreditByOrgId")
@@ -593,10 +429,11 @@ public class TransactionController extends BaseController {
 //		return new ResponseEntity<>("File uploaded successfully", HttpStatus.OK);
 //	}
 
+	
 	@PostMapping("/excelUploadForBrs")
 	public ResponseEntity<ResponseDTO> ExcelUploadForBrs(@RequestParam MultipartFile[] files,
-			@RequestParam(required = false) Long orgId, @RequestParam(required = false) String createdBy,
-			String customer, String client, String finYear, String branch, String branchCode) {
+		 @RequestParam(required = false) Long orgId,
+			@RequestParam(required = false) String createdBy, String customer, String client, String finYear, String branch, String branchCode) {
 		String methodName = "ExcelUploadForBrs()";
 		int totalRows = 0;
 		Map<String, Object> responseObjectsMap = new HashMap<>();
@@ -604,8 +441,7 @@ public class TransactionController extends BaseController {
 		ResponseDTO responseDTO = null;
 		try {
 			// Call service method to process Excel upload
-			transactionService.ExcelUploadForBrs(files, orgId, createdBy, customer, client, finYear, branch,
-					branchCode);
+			transactionService.ExcelUploadForBrs(files, orgId, createdBy, customer,  client,  finYear,  branch,  branchCode);
 
 			// Retrieve the counts after processing
 			totalRows = transactionService.getTotalRows(); // Get total rows processed
@@ -633,7 +469,7 @@ public class TransactionController extends BaseController {
 		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
 		return ResponseEntity.ok().body(responseDTO);
 	}
-
+	
 //	ChartCostCenter
 	@GetMapping("/getAllChartCostCenterByOrgId")
 	public ResponseEntity<ResponseDTO> getAllChartCostCenterByOrgId(@RequestParam(required = false) Long orgId) {
@@ -980,122 +816,7 @@ public class TransactionController extends BaseController {
 		return ResponseEntity.ok().body(responseDTO);
 	}
 
-	// CostInvoice
-
-	@GetMapping("/getAllCostInvoiceByOrgId")
-	public ResponseEntity<ResponseDTO> getAllCostInvoiceByOrgId(@RequestParam(required = false) Long orgId) {
-		String methodName = "getAllCostInvoiceByOrgId()";
-		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
-		String errorMsg = null;
-		Map<String, Object> responseObjectsMap = new HashMap<>();
-		ResponseDTO responseDTO = null;
-		List<CostInvoiceVO> costInvoiceVO = new ArrayList<>();
-		try {
-			costInvoiceVO = transactionService.getAllCostInvoiceByOrgId(orgId);
-		} catch (Exception e) {
-			errorMsg = e.getMessage();
-			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
-		}
-		if (StringUtils.isBlank(errorMsg)) {
-			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "CostInvoice information get successfully By OrgId");
-			responseObjectsMap.put("costInvoiceVO", costInvoiceVO);
-			responseDTO = createServiceResponse(responseObjectsMap);
-		} else {
-			responseDTO = createServiceResponseError(responseObjectsMap,
-					"CostInvoice information receive failed By OrgId", errorMsg);
-		}
-		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
-		return ResponseEntity.ok().body(responseDTO);
-
-	}
-
-	@GetMapping("/getAllCostInvoiceById")
-	public ResponseEntity<ResponseDTO> getAllCostInvoiceById(@RequestParam(required = false) Long id) {
-		String methodName = "getAllCostInvoiceById()";
-		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
-		String errorMsg = null;
-		Map<String, Object> responseObjectsMap = new HashMap<>();
-		ResponseDTO responseDTO = null;
-		List<CostInvoiceVO> costInvoiceVO = new ArrayList<>();
-		try {
-			costInvoiceVO = transactionService.getAllCostInvoiceById(id);
-		} catch (Exception e) {
-			errorMsg = e.getMessage();
-			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
-		}
-		if (StringUtils.isBlank(errorMsg)) {
-			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "CostInvoice information get successfully By id");
-			responseObjectsMap.put("costInvoiceVO", costInvoiceVO);
-			responseDTO = createServiceResponse(responseObjectsMap);
-		} else {
-			responseDTO = createServiceResponseError(responseObjectsMap,
-					"CostInvoice information receive failed By OrgId", errorMsg);
-		}
-		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
-		return ResponseEntity.ok().body(responseDTO);
-	}
-
-	@PutMapping("/updateCreateCostInvoice")
-	public ResponseEntity<ResponseDTO> updateCreateCostInvoice(@Valid @RequestBody CostInvoiceDTO costInvoiceDTO) {
-		String methodName = "updateCreateCostInvoice()";
-		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
-		String errorMsg = null;
-		Map<String, Object> responseObjectsMap = new HashMap<>();
-		ResponseDTO responseDTO = null;
-
-		try {
-			CostInvoiceVO costInvoiceVO = transactionService.updateCreateCostInvoice(costInvoiceDTO);
-			boolean isUpdate = costInvoiceDTO.getId() != null;
-
-			if (costInvoiceVO != null) {
-				responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
-						isUpdate ? "CostInvoice updated successfully" : "CostInvoice created successfully");
-				responseObjectsMap.put("costInvoiceVO", costInvoiceVO);
-				responseDTO = createServiceResponse(responseObjectsMap);
-			} else {
-				errorMsg = isUpdate ? "CostInvoice not found for ID: " + costInvoiceDTO.getId()
-						: "CostInvoice creation failed";
-				responseDTO = createServiceResponseError(responseObjectsMap,
-						isUpdate ? "CostInvoice update failed" : "CostInvoice creation failed", errorMsg);
-			}
-		} catch (Exception e) {
-			errorMsg = e.getMessage();
-			boolean isUpdate = costInvoiceDTO.getId() != null;
-			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
-			responseDTO = createServiceResponseError(responseObjectsMap,
-					isUpdate ? "CostInvoice update failed" : "CostInvoice creation failed", errorMsg);
-		}
-
-		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
-		return ResponseEntity.ok().body(responseDTO);
-	}
-
-	@GetMapping("/getCostInvoiceByActive")
-	public ResponseEntity<ResponseDTO> getCostInvoiceByActive() {
-		String methodName = "getCostInvoiceByActive()";
-		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
-		String errorMsg = null;
-		Map<String, Object> responseObjectsMap = new HashMap<>();
-		ResponseDTO responseDTO = null;
-		List<CostInvoiceVO> costInvoiceVO = new ArrayList<>();
-		try {
-			costInvoiceVO = transactionService.getCostInvoiceByActive();
-		} catch (Exception e) {
-			errorMsg = e.getMessage();
-			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
-		}
-		if (StringUtils.isBlank(errorMsg)) {
-			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "CostInvoice information get successfully By Active");
-			responseObjectsMap.put("costInvoiceVO", costInvoiceVO);
-			responseDTO = createServiceResponse(responseObjectsMap);
-		} else {
-			responseDTO = createServiceResponseError(responseObjectsMap,
-					"CostInvoice information receive failed By Active", errorMsg);
-		}
-		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
-		return ResponseEntity.ok().body(responseDTO);
-
-	}
+	
 
 	// DebitNote
 
@@ -1456,244 +1177,8 @@ public class TransactionController extends BaseController {
 
 	}
 
-	// ArapDetails
 
-	@GetMapping("/getAllArapDetailsByOrgId")
-	public ResponseEntity<ResponseDTO> getAllArapDetailsByOrgId(@RequestParam(required = false) Long orgId) {
-		String methodName = "getAllArapDetailsByOrgId()";
-		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
-		String errorMsg = null;
-		Map<String, Object> responseObjectsMap = new HashMap<>();
-		ResponseDTO responseDTO = null;
-		List<ArapDetailsVO> arapDetailsVO = new ArrayList<>();
-		try {
-			arapDetailsVO = transactionService.getAllArapDetailsByOrgId(orgId);
-		} catch (Exception e) {
-			errorMsg = e.getMessage();
-			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
-		}
-		if (StringUtils.isBlank(errorMsg)) {
-			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "ArapDetails information get successfully By OrgId");
-			responseObjectsMap.put("arapDetailsVO", arapDetailsVO);
-			responseDTO = createServiceResponse(responseObjectsMap);
-		} else {
-			responseDTO = createServiceResponseError(responseObjectsMap,
-					"ArapDetails information receive failed By OrgId", errorMsg);
-		}
-		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
-		return ResponseEntity.ok().body(responseDTO);
-
-	}
-
-	@GetMapping("/getAllArapDetailsById")
-	public ResponseEntity<ResponseDTO> getAllArapDetailsById(@RequestParam(required = false) Long id) {
-		String methodName = "getAllArapDetailsById()";
-		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
-		String errorMsg = null;
-		Map<String, Object> responseObjectsMap = new HashMap<>();
-		ResponseDTO responseDTO = null;
-		List<ArapDetailsVO> arapDetailsVO = new ArrayList<>();
-		try {
-			arapDetailsVO = transactionService.getAllArapDetailsById(id);
-		} catch (Exception e) {
-			errorMsg = e.getMessage();
-			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
-		}
-		if (StringUtils.isBlank(errorMsg)) {
-			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "ArapDetails information get successfully By id");
-			responseObjectsMap.put("arapDetailsVO", arapDetailsVO);
-			responseDTO = createServiceResponse(responseObjectsMap);
-		} else {
-			responseDTO = createServiceResponseError(responseObjectsMap,
-					"ArapDetails information receive failed By OrgId", errorMsg);
-		}
-		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
-		return ResponseEntity.ok().body(responseDTO);
-	}
-
-	@PutMapping("/updateCreateArapDetails")
-	public ResponseEntity<ResponseDTO> updateCreateArapDetails(@Valid @RequestBody ArapDetailsDTO arapDetailsDTO) {
-		String methodName = "updateCreateArapDetails()";
-
-		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
-		String errorMsg = null;
-		Map<String, Object> responseObjectsMap = new HashMap<>();
-		ResponseDTO responseDTO = null;
-
-		try {
-			ArapDetailsVO arapDetailsVO = transactionService.updateCreateArapDetails(arapDetailsDTO);
-			boolean isUpdate = arapDetailsDTO.getId() != null;
-
-			if (arapDetailsVO != null) {
-				responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
-						isUpdate ? "ArapDetails updated successfully" : "ArapDetails created successfully");
-				responseObjectsMap.put("arapDetailsVO", arapDetailsVO);
-				responseDTO = createServiceResponse(responseObjectsMap);
-			} else {
-				errorMsg = isUpdate ? "ArapDetails not found for ID: " + arapDetailsDTO.getId()
-						: "ArapDetails creation failed";
-				responseDTO = createServiceResponseError(responseObjectsMap,
-						isUpdate ? "ArapDetails update failed" : "ArapDetails creation failed", errorMsg);
-			}
-		} catch (Exception e) {
-			errorMsg = e.getMessage();
-			boolean isUpdate = arapDetailsDTO.getId() != null;
-			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
-			responseDTO = createServiceResponseError(responseObjectsMap,
-					isUpdate ? "ArapDetails update failed" : "ArapDetails creation failed", errorMsg);
-		}
-
-		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
-		return ResponseEntity.ok().body(responseDTO);
-	}
-
-	@GetMapping("/getArapDetailsByActive")
-	public ResponseEntity<ResponseDTO> getArapDetailsByActive() {
-		String methodName = "getArapDetailsByActive()";
-		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
-		String errorMsg = null;
-		Map<String, Object> responseObjectsMap = new HashMap<>();
-		ResponseDTO responseDTO = null;
-		List<ArapDetailsVO> arapDetailsVO = new ArrayList<>();
-		try {
-			arapDetailsVO = transactionService.getArapDetailsByActive();
-		} catch (Exception e) {
-			errorMsg = e.getMessage();
-			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
-		}
-		if (StringUtils.isBlank(errorMsg)) {
-			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "ArapDetails information get successfully By Active");
-			responseObjectsMap.put("arapDetailsVO", arapDetailsVO);
-			responseDTO = createServiceResponse(responseObjectsMap);
-		} else {
-			responseDTO = createServiceResponseError(responseObjectsMap,
-					"ArapDetails information receive failed By Active", errorMsg);
-		}
-		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
-		return ResponseEntity.ok().body(responseDTO);
-
-	}
-
-	// ArapAdjustments
-
-	@GetMapping("/getAllArapAdjustmentsByOrgId")
-	public ResponseEntity<ResponseDTO> getAllArapAdjustmentsByOrgId(@RequestParam(required = false) Long orgId) {
-		String methodName = "getAllArapAdjustmentsByOrgId()";
-		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
-		String errorMsg = null;
-		Map<String, Object> responseObjectsMap = new HashMap<>();
-		ResponseDTO responseDTO = null;
-		List<ArapAdjustmentsVO> arapAdjustmentsVO = new ArrayList<>();
-		try {
-			arapAdjustmentsVO = transactionService.getAllArapAdjustmentsByOrgId(orgId);
-		} catch (Exception e) {
-			errorMsg = e.getMessage();
-			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
-		}
-		if (StringUtils.isBlank(errorMsg)) {
-			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
-					"ArapAdjustments information get successfully By OrgId");
-			responseObjectsMap.put("arapAdjustmentsVO", arapAdjustmentsVO);
-			responseDTO = createServiceResponse(responseObjectsMap);
-		} else {
-			responseDTO = createServiceResponseError(responseObjectsMap,
-					"ArapAdjustments information receive failed By OrgId", errorMsg);
-		}
-		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
-		return ResponseEntity.ok().body(responseDTO);
-
-	}
-
-	@GetMapping("/getAllArapAdjustmentsById")
-	public ResponseEntity<ResponseDTO> getAllArapAdjustmentsById(@RequestParam(required = false) Long id) {
-		String methodName = "getAllArapAdjustmentsById()";
-		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
-		String errorMsg = null;
-		Map<String, Object> responseObjectsMap = new HashMap<>();
-		ResponseDTO responseDTO = null;
-		List<ArapAdjustmentsVO> arapAdjustmentsVO = new ArrayList<>();
-		try {
-			arapAdjustmentsVO = transactionService.getAllArapAdjustmentsById(id);
-		} catch (Exception e) {
-			errorMsg = e.getMessage();
-			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
-		}
-		if (StringUtils.isBlank(errorMsg)) {
-			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "ArapAdjustments information get successfully By id");
-			responseObjectsMap.put("arapAdjustmentsVO", arapAdjustmentsVO);
-			responseDTO = createServiceResponse(responseObjectsMap);
-		} else {
-			responseDTO = createServiceResponseError(responseObjectsMap,
-					"ArapAdjustments information receive failed By OrgId", errorMsg);
-		}
-		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
-		return ResponseEntity.ok().body(responseDTO);
-	}
-
-	@PutMapping("/updateCreateArapAdjustments")
-	public ResponseEntity<ResponseDTO> updateCreateArapAdjustments(
-			@Valid @RequestBody ArapAdjustmentsDTO arapAdjustmentsDTO) {
-		String methodName = "updateCreateArapAdjustments()";
-
-		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
-		String errorMsg = null;
-		Map<String, Object> responseObjectsMap = new HashMap<>();
-		ResponseDTO responseDTO = null;
-
-		try {
-			ArapAdjustmentsVO arapAdjustmentsVO = transactionService.updateCreateArapAdjustments(arapAdjustmentsDTO);
-			boolean isUpdate = arapAdjustmentsDTO.getId() != null;
-
-			if (arapAdjustmentsVO != null) {
-				responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
-						isUpdate ? "ArapAdjustments updated successfully" : "ArapAdjustments created successfully");
-				responseObjectsMap.put("arapAdjustmentsVO", arapAdjustmentsVO);
-				responseDTO = createServiceResponse(responseObjectsMap);
-			} else {
-				errorMsg = isUpdate ? "ArapAdjustments not found for ID: " + arapAdjustmentsDTO.getId()
-						: "ArapAdjustments creation failed";
-				responseDTO = createServiceResponseError(responseObjectsMap,
-						isUpdate ? "ArapAdjustments update failed" : "ArapAdjustments creation failed", errorMsg);
-			}
-		} catch (Exception e) {
-			errorMsg = e.getMessage();
-			boolean isUpdate = arapAdjustmentsDTO.getId() != null;
-			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
-			responseDTO = createServiceResponseError(responseObjectsMap,
-					isUpdate ? "ArapAdjustments update failed" : "ArapAdjustments creation failed", errorMsg);
-		}
-
-		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
-		return ResponseEntity.ok().body(responseDTO);
-	}
-
-	@GetMapping("/getArapAdjustmentsByActive")
-	public ResponseEntity<ResponseDTO> getArapAdjustmentsByActive() {
-		String methodName = "getArapAdjustmentsByActive()";
-		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
-		String errorMsg = null;
-		Map<String, Object> responseObjectsMap = new HashMap<>();
-		ResponseDTO responseDTO = null;
-		List<ArapAdjustmentsVO> arapAdjustmentsVO = new ArrayList<>();
-		try {
-			arapAdjustmentsVO = transactionService.getArapAdjustmentsByActive();
-		} catch (Exception e) {
-			errorMsg = e.getMessage();
-			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
-		}
-		if (StringUtils.isBlank(errorMsg)) {
-			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
-					"ArapAdjustments information get successfully By Active");
-			responseObjectsMap.put("arapAdjustmentsVO", arapAdjustmentsVO);
-			responseDTO = createServiceResponse(responseObjectsMap);
-		} else {
-			responseDTO = createServiceResponseError(responseObjectsMap,
-					"ArapAdjustments information receive failed By Active", errorMsg);
-		}
-		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
-		return ResponseEntity.ok().body(responseDTO);
-
-	}
+	
 
 	// ReceiptReversal
 
@@ -2184,8 +1669,8 @@ public class TransactionController extends BaseController {
 
 	}
 
-	// ReconcileBank
-
+	//ReconcileBank
+	
 	@GetMapping("/getAllReconcileBankByOrgId")
 	public ResponseEntity<ResponseDTO> getAllReconcileBankByOrgId(@RequestParam(required = false) Long orgId) {
 		String methodName = "getAllReconcileBankByOrgId()";
@@ -2201,8 +1686,7 @@ public class TransactionController extends BaseController {
 			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
 		}
 		if (StringUtils.isBlank(errorMsg)) {
-			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
-					"ReconcileBank information get successfully By OrgId");
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "ReconcileBank information get successfully By OrgId");
 			responseObjectsMap.put("reconcileBankVO", reconcileBankVO);
 			responseDTO = createServiceResponse(responseObjectsMap);
 		} else {
@@ -2213,7 +1697,7 @@ public class TransactionController extends BaseController {
 		return ResponseEntity.ok().body(responseDTO);
 
 	}
-
+	
 	@GetMapping("/getAllReconcileBankById")
 	public ResponseEntity<ResponseDTO> getAllReconcileBankById(@RequestParam(required = false) Long id) {
 		String methodName = "getAllReconcileBankById()";
@@ -2239,10 +1723,10 @@ public class TransactionController extends BaseController {
 		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
 		return ResponseEntity.ok().body(responseDTO);
 	}
-
+	
+	
 	@PutMapping("/updateCreateReconcileBank")
-	public ResponseEntity<ResponseDTO> updateCreateReconcileBank(
-			@Valid @RequestBody ReconcileBankDTO reconcileBankDTO) {
+	public ResponseEntity<ResponseDTO> updateCreateReconcileBank(@Valid @RequestBody ReconcileBankDTO reconcileBankDTO) {
 		String methodName = "updateCreateReconcileBank()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
 		String errorMsg = null;
@@ -2302,9 +1786,9 @@ public class TransactionController extends BaseController {
 		return ResponseEntity.ok().body(responseDTO);
 
 	}
-
-	// reconcileCorpBank
-
+	
+	//reconcileCorpBank
+	
 	@GetMapping("/getAllReconcileCorpBankByOrgId")
 	public ResponseEntity<ResponseDTO> getAllReconcileCorpBankByOrgId(@RequestParam(required = false) Long orgId) {
 		String methodName = "getAllReconcileCorpBankByOrgId()";
@@ -2320,8 +1804,7 @@ public class TransactionController extends BaseController {
 			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
 		}
 		if (StringUtils.isBlank(errorMsg)) {
-			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
-					"ReconcileCorpBank information get successfully By OrgId");
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "ReconcileCorpBank information get successfully By OrgId");
 			responseObjectsMap.put("reconcileCorpBankVO", reconcileCorpBankVO);
 			responseDTO = createServiceResponse(responseObjectsMap);
 		} else {
@@ -2332,7 +1815,7 @@ public class TransactionController extends BaseController {
 		return ResponseEntity.ok().body(responseDTO);
 
 	}
-
+	
 	@GetMapping("/getAllReconcileCorpBankById")
 	public ResponseEntity<ResponseDTO> getAllReconcileCorpBankById(@RequestParam(required = false) Long id) {
 		String methodName = "getAllReconcileCorpBankById()";
@@ -2348,8 +1831,7 @@ public class TransactionController extends BaseController {
 			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
 		}
 		if (StringUtils.isBlank(errorMsg)) {
-			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
-					"ReconcileCorpBank information get successfully By id");
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "ReconcileCorpBank information get successfully By id");
 			responseObjectsMap.put("reconcileCorpBankVO", reconcileCorpBankVO);
 			responseDTO = createServiceResponse(responseObjectsMap);
 		} else {
@@ -2359,10 +1841,10 @@ public class TransactionController extends BaseController {
 		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
 		return ResponseEntity.ok().body(responseDTO);
 	}
-
+	
+	
 	@PutMapping("/updateCreateReconcileCorpBank")
-	public ResponseEntity<ResponseDTO> updateCreateReconcileCorpBank(
-			@Valid @RequestBody ReconcileCorpBankDTO reconcileCorpBankDTO) {
+	public ResponseEntity<ResponseDTO> updateCreateReconcileCorpBank(@Valid @RequestBody ReconcileCorpBankDTO reconcileCorpBankDTO) {
 		String methodName = "updateCreateReconcileCorpBank()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
 		String errorMsg = null;
@@ -2370,8 +1852,7 @@ public class TransactionController extends BaseController {
 		ResponseDTO responseDTO = null;
 
 		try {
-			ReconcileCorpBankVO reconcileCorpBankVO = transactionService
-					.updateCreateReconcileCorpBank(reconcileCorpBankDTO);
+			ReconcileCorpBankVO reconcileCorpBankVO = transactionService.updateCreateReconcileCorpBank(reconcileCorpBankDTO);
 			boolean isUpdate = reconcileCorpBankDTO.getId() != null;
 
 			if (reconcileCorpBankVO != null) {
