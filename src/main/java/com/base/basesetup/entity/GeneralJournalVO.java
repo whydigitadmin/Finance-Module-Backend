@@ -1,7 +1,7 @@
 package com.base.basesetup.entity;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -16,6 +16,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.base.basesetup.dto.CreatedUpdatedDate;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.AllArgsConstructor;
@@ -38,7 +39,8 @@ public class GeneralJournalVO {
 	@Column(name = "vouchersubtype")
 	private String voucherSubType;
 	@Column(name = "docdate")
-	private LocalDateTime docDate;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+	private LocalDate docDate;
 	@Column(name = "docid")
 	private String docId;
 	
@@ -49,7 +51,14 @@ public class GeneralJournalVO {
 	@Column(name = "refno")
 	private String refNo;
 	@Column(name = "refdate")
-	private LocalDateTime refDate;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+	private LocalDate refDate;
+	
+    @Column(name = "screencode", length = 5)
+    private String screenCode= "GJ";
+
+    @Column(name = "screenname", length = 25)
+    private String screenName = "GENERALJOURNAL";
 
 	@Column(name = "remarks")
 	private String remarks;

@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
+import javax.persistence.Column;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -48,6 +50,9 @@ public class ReceiptReceivableDTO {
 	private String finYear;
 	private String ipNo;
 	private String latitude;
+	private String receiptType1;
+	private String currency;
+	private String currencyAmount;
 
 	List<ReceiptInvDetailsDTO> receiptInvDetailaDTO;
 }

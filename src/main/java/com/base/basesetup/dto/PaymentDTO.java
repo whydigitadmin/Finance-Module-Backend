@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,7 +19,8 @@ public class PaymentDTO {
 	private Long orgId;
 	private String paymentType;               
     private String bankChargeAcc;           
-    private String docId;                     
+    private String docId;  
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     private LocalDate docDate;                
     private BigDecimal bankCharges;           
     private String bankInCurrency;           
@@ -29,7 +32,8 @@ public class PaymentDTO {
     private String chequeBank;                 
     private String gstState;                   
     private String gstIn;                      
-    private String chequeNo;                   
+    private String chequeNo;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     private LocalDate chequeDate;              
     private String bankCashAcc;               
     private String payTo;                      
@@ -42,7 +46,7 @@ public class PaymentDTO {
 	private String branch;
 	private String branchCode;
 	private String createdBy;
-	private LocalDate createdOn;
+   
 	private boolean active;
 	private boolean cancel;
 	private String cancelRemarks;

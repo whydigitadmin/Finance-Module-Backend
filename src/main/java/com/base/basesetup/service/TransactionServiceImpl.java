@@ -67,6 +67,7 @@ import com.base.basesetup.dto.ReceiptReversalDTO;
 import com.base.basesetup.dto.ReconcileBankDTO;
 import com.base.basesetup.dto.ReconcileCashDTO;
 import com.base.basesetup.dto.ReconcileCorpBankDTO;
+
 import com.base.basesetup.entity.ArApAdjustmentOffSetVO;
 import com.base.basesetup.entity.ArApOffSetInvoiceDetailsVO;
 import com.base.basesetup.entity.ArapAdjustmentsVO;
@@ -145,7 +146,6 @@ import com.base.basesetup.repo.ReceiptReversalRepo;
 import com.base.basesetup.repo.ReconcileBankRepo;
 import com.base.basesetup.repo.ReconcileCashRepo;
 import com.base.basesetup.repo.ReconcileCorpBankRepo;
-import com.base.basesetup.repo.ReconciliationSummaryRepo;
 import com.base.basesetup.repo.TaxInvoiceDetailsRepo;
 import com.base.basesetup.repo.TaxInvoiceGstRepo;
 import com.base.basesetup.repo.TaxInvoiceRepo;
@@ -280,8 +280,9 @@ public class TransactionServiceImpl implements TransactionService {
 	@Autowired
 	BrsExcelUploadRepo brsExcelUploadRepo;
 
-	ReconciliationSummaryRepo reconciliationSummaryRepo;
+
 	
+
 	@Autowired
 	ReconcileCashRepo reconcileCashRepo;
 
@@ -1030,6 +1031,8 @@ public class TransactionServiceImpl implements TransactionService {
 		generalJournalVO.setRemarks(generalJournalDTO.getRemarks());
 		generalJournalVO.setCurrency(generalJournalDTO.getCurrency());
 		generalJournalVO.setExRate(generalJournalDTO.getExRate());
+		
+
 		generalJournalVO.setRefNo(generalJournalDTO.getRefNo());
 		generalJournalVO.setRefDate(generalJournalDTO.getRefDate());
 		generalJournalVO.setOrgId(generalJournalDTO.getOrgId());
