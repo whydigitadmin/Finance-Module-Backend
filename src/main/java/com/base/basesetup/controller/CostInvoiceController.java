@@ -25,6 +25,7 @@ import com.base.basesetup.common.UserConstants;
 import com.base.basesetup.dto.CostInvoiceDTO;
 import com.base.basesetup.dto.ResponseDTO;
 import com.base.basesetup.entity.CostInvoiceVO;
+import com.base.basesetup.entity.TaxInvoiceVO;
 import com.base.basesetup.service.CostInvoiceService;
 
 @CrossOrigin
@@ -141,5 +142,63 @@ public class CostInvoiceController extends BaseController{
 
 		}
 
-	
+		@GetMapping("/getCostInvoiceByDocId")
+		public ResponseEntity<ResponseDTO> getCostInvoiceByDocId(@RequestParam Long orgId, @RequestParam String docId) {
+			String methodName = "getCostInvoiceByDocId()";
+			LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+			String errorMsg = null;
+			Map<String, Object> responseObjectsMap = new HashMap<>();
+			ResponseDTO responseDTO = null;
+			CostInvoiceVO costInvoiceVO = new CostInvoiceVO();
+			try {
+				costInvoiceVO = costInvoiceService.getCostInvoiceByDocId(orgId, docId);
+			} catch (Exception e) {
+				errorMsg = e.getMessage();
+				LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+			}
+			if (StringUtils.isBlank(errorMsg)) {
+				responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "OriginBill information get successfully By docid");
+				responseObjectsMap.put("costInvoiceVO", costInvoiceVO);
+				responseDTO = createServiceResponse(responseObjectsMap);
+			} else {
+				responseDTO = createServiceResponseError(responseObjectsMap,
+						"OriginBill information receive failed By docid", errorMsg);
+			}
+			LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+			return ResponseEntity.ok().body(responseDTO);
+
+		}
+		
+		@GetMapping("/getCostInvoiceDocId")
+		public ResponseEntity<ResponseDTO> getCostInvoiceDocId(@RequestParam Long orgId, @RequestParam String finYear,
+				@RequestParam String branch, @RequestParam String branchCode) {
+
+			String methodName = "getCostInvoiceDocId()";
+			LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+			String errorMsg = null;
+			Map<String, Object> responseObjectsMap = new HashMap<>();
+			ResponseDTO responseDTO = null;
+			String mapp = "";
+
+			try {
+				mapp = costInvoiceService.getCostInvoiceDocId(orgId, finYear, branch, branchCode);
+			} catch (Exception e) {
+				errorMsg = e.getMessage();
+				LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+			}
+
+			if (StringUtils.isBlank(errorMsg)) {
+				responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "CostInvoiceDocId information retrieved successfully");
+				responseObjectsMap.put("taxInvoiceDocId", mapp);
+				responseDTO = createServiceResponse(responseObjectsMap);
+			} else {
+				responseDTO = createServiceResponseError(responseObjectsMap,
+						"Failed to retrieve CostInvoice Docid information", errorMsg);
+			}
+
+			LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+			return ResponseEntity.ok().body(responseDTO);
+		}
+
+		
 }

@@ -2,7 +2,6 @@ package com.base.basesetup.service;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -32,14 +31,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.base.basesetup.dto.ArApAdjustmentOffSetDTO;
 import com.base.basesetup.dto.ArApOffSetInvoiceDetailsDTO;
-import com.base.basesetup.dto.ArapAdjustmentsDTO;
-import com.base.basesetup.dto.ArapDetailsDTO;
 import com.base.basesetup.dto.BrsOpeningDTO;
-import com.base.basesetup.dto.ChargerCostInvoiceDTO;
 import com.base.basesetup.dto.ChargerDebitNoteDTO;
 import com.base.basesetup.dto.ChargerIrnCreditDTO;
 import com.base.basesetup.dto.ChartCostCenterDTO;
-import com.base.basesetup.dto.CostInvoiceDTO;
 import com.base.basesetup.dto.DailyMonthlyExRatesDTO;
 import com.base.basesetup.dto.DailyMonthlyExRatesDtlDTO;
 import com.base.basesetup.dto.DebitNoteDTO;
@@ -67,18 +62,13 @@ import com.base.basesetup.dto.ReceiptReversalDTO;
 import com.base.basesetup.dto.ReconcileBankDTO;
 import com.base.basesetup.dto.ReconcileCashDTO;
 import com.base.basesetup.dto.ReconcileCorpBankDTO;
-
 import com.base.basesetup.entity.ArApAdjustmentOffSetVO;
 import com.base.basesetup.entity.ArApOffSetInvoiceDetailsVO;
-import com.base.basesetup.entity.ArapAdjustmentsVO;
-import com.base.basesetup.entity.ArapDetailsVO;
 import com.base.basesetup.entity.BrsExcelUploadVO;
 import com.base.basesetup.entity.BrsOpeningVO;
-import com.base.basesetup.entity.ChargerCostInvoiceVO;
 import com.base.basesetup.entity.ChargerDebitNoteVO;
 import com.base.basesetup.entity.ChargerIrnCreditVO;
 import com.base.basesetup.entity.ChartCostCenterVO;
-import com.base.basesetup.entity.CostInvoiceVO;
 import com.base.basesetup.entity.DailyMonthlyExRatesDtlVO;
 import com.base.basesetup.entity.DailyMonthlyExRatesVO;
 import com.base.basesetup.entity.DebitNoteVO;
@@ -280,8 +270,8 @@ public class TransactionServiceImpl implements TransactionService {
 	@Autowired
 	BrsExcelUploadRepo brsExcelUploadRepo;
 
-
-	ReconciliationSummaryRepo reconciliationSummaryRepo;
+//	@Autowired
+//	ReconciliationSummaryRepo reconciliationSummaryRepo;
 	
 
 	@Autowired
