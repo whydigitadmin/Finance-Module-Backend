@@ -9,5 +9,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PartyCurrencyMappingDTO {
 	private Long id;
-	private String transactionCurrency;
+    private String transCurrency;
 }

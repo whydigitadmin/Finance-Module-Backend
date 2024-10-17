@@ -10,11 +10,12 @@ import lombok.NoArgsConstructor;
 public class PartySpecialTDSDTO {
 	
 	private Long id;
-	private String tdsSection;
-	private String rateForm;
-	private String rateTo;
-	private String tdsPercentage;
-	private String surPercentage;
-	private String edPercentage;
-	private String tdsCertificateNo;
+	private String tdsWithSec;
+	private Long rateFrom;
+	private Long rateTo;
+	private Long tdsWithPer;
+	private Long surchargePer;
+	private Long edPercentage;
+	private String tdsCertifiNo;
+
 }
