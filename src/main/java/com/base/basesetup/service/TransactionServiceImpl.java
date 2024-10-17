@@ -2,7 +2,6 @@ package com.base.basesetup.service;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -33,13 +32,10 @@ import org.springframework.web.multipart.MultipartFile;
 import com.base.basesetup.dto.ArApAdjustmentOffSetDTO;
 import com.base.basesetup.dto.ArApOffSetInvoiceDetailsDTO;
 import com.base.basesetup.dto.ArapAdjustmentsDTO;
-import com.base.basesetup.dto.ArapDetailsDTO;
 import com.base.basesetup.dto.BrsOpeningDTO;
-import com.base.basesetup.dto.ChargerCostInvoiceDTO;
 import com.base.basesetup.dto.ChargerDebitNoteDTO;
 import com.base.basesetup.dto.ChargerIrnCreditDTO;
 import com.base.basesetup.dto.ChartCostCenterDTO;
-import com.base.basesetup.dto.CostInvoiceDTO;
 import com.base.basesetup.dto.DailyMonthlyExRatesDTO;
 import com.base.basesetup.dto.DailyMonthlyExRatesDtlDTO;
 import com.base.basesetup.dto.DebitNoteDTO;
@@ -70,14 +66,11 @@ import com.base.basesetup.dto.ReconcileCorpBankDTO;
 import com.base.basesetup.entity.ArApAdjustmentOffSetVO;
 import com.base.basesetup.entity.ArApOffSetInvoiceDetailsVO;
 import com.base.basesetup.entity.ArapAdjustmentsVO;
-import com.base.basesetup.entity.ArapDetailsVO;
 import com.base.basesetup.entity.BrsExcelUploadVO;
 import com.base.basesetup.entity.BrsOpeningVO;
-import com.base.basesetup.entity.ChargerCostInvoiceVO;
 import com.base.basesetup.entity.ChargerDebitNoteVO;
 import com.base.basesetup.entity.ChargerIrnCreditVO;
 import com.base.basesetup.entity.ChartCostCenterVO;
-import com.base.basesetup.entity.CostInvoiceVO;
 import com.base.basesetup.entity.DailyMonthlyExRatesDtlVO;
 import com.base.basesetup.entity.DailyMonthlyExRatesVO;
 import com.base.basesetup.entity.DebitNoteVO;
@@ -931,7 +924,7 @@ public class TransactionServiceImpl implements TransactionService {
 		fundTransferVO.setReferenceNo(fundTransferDTO.getReferenceNo());
 		fundTransferVO.setReferenceDate(fundTransferDTO.getReferenceDate());
 		fundTransferVO.setFromAccount(fundTransferDTO.getFromAccount());
-		fundTransferVO.setBalance(fundTransferDTO.getBalance());
+		fundTransferVO.setBalance(fundTransferDTO.getBalance());																																																																																															
 		fundTransferVO.setCurrency(fundTransferDTO.getCurrency());
 		fundTransferVO.setExRate(fundTransferDTO.getExRate());
 		fundTransferVO.setToBranch(fundTransferDTO.getToBranch());
@@ -2069,6 +2062,7 @@ public class TransactionServiceImpl implements TransactionService {
 					particularsReconcileVOs.add(particularsReconcileVO);
 					}
 			}
+			
 
 			
 			getReconcileBankVOFromReconcileBankDTO(reconcileBankDTO, reconcileBankVO);
@@ -2097,6 +2091,14 @@ public class TransactionServiceImpl implements TransactionService {
 			reconcileBankVO.setTotalDeposit(reconcileBankDTO.getTotalDeposit());
 			reconcileBankVO.setOrgId(reconcileBankDTO.getOrgId());
 			reconcileBankVO.setActive(reconcileBankDTO.isActive());
+			reconcileBankVO.setCancel(reconcileBankDTO.isCancel());
+			reconcileBankVO.setBranch(reconcileBankDTO.getBranch());
+			reconcileBankVO.setBranchCode(reconcileBankDTO.getBranchCode());
+			reconcileBankVO.setCancelRemarks(reconcileBankDTO.getCancelRemarks());
+			reconcileBankVO.setFinYear(reconcileBankDTO.getFinYear());
+			reconcileBankVO.setIpNo(reconcileBankDTO.getIpNo());
+			reconcileBankVO.setLatitude(reconcileBankDTO.getLatitude());
+			reconcileBankVO.setRemarks(reconcileBankDTO.getRemarks());	
 		}
 
 		@Override
@@ -2196,6 +2198,14 @@ public class TransactionServiceImpl implements TransactionService {
 			reconcileCorpBankVO.setRemarks(reconcileCorpBankDTO.getRemarks());
 			reconcileCorpBankVO.setOrgId(reconcileCorpBankDTO.getOrgId());
 			reconcileCorpBankVO.setActive(reconcileCorpBankDTO.isActive());
+			reconcileCorpBankVO.setCancel(reconcileCorpBankDTO.isCancel());
+			reconcileCorpBankVO.setBranch(reconcileCorpBankDTO.getBranch());
+			reconcileCorpBankVO.setBranchCode(reconcileCorpBankDTO.getBranchCode());
+			reconcileCorpBankVO.setCancelRemarks(reconcileCorpBankDTO.getCancelRemarks());
+			reconcileCorpBankVO.setFinYear(reconcileCorpBankDTO.getFinYear());
+			reconcileCorpBankVO.setIpNo(reconcileCorpBankDTO.getIpNo());
+			reconcileCorpBankVO.setLatitude(reconcileCorpBankDTO.getLatitude());
+			reconcileCorpBankVO.setRemarks(reconcileCorpBankDTO.getRemarks());
 		}
 		@Override
 		public List<ReconcileCorpBankVO> getReconcileCorpBankByActive() {
@@ -2284,6 +2294,13 @@ public class TransactionServiceImpl implements TransactionService {
 					reconcileCashVO.setRemarks(reconcileCashDTO.getRemarks());
 					reconcileCashVO.setOrgId(reconcileCashDTO.getOrgId());
 					reconcileCashVO.setActive(reconcileCashDTO.isActive());
+					reconcileCashVO.setCancel(reconcileCashDTO.isCancel());
+					reconcileCashVO.setBranch(reconcileCashDTO.getBranch());
+					reconcileCashVO.setBranchCode(reconcileCashDTO.getBranchCode());
+					reconcileCashVO.setCancelRemarks(reconcileCashDTO.getCancelRemarks());
+					reconcileCashVO.setFinYear(reconcileCashDTO.getFinYear());
+					reconcileCashVO.setIpNo(reconcileCashDTO.getIpNo());
+					reconcileCashVO.setLatitude(reconcileCashDTO.getLatitude());
 				}
 
 				@Override

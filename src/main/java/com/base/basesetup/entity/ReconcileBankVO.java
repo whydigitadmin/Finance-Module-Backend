@@ -3,7 +3,6 @@ package com.base.basesetup.entity;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -16,6 +15,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.AllArgsConstructor;
@@ -35,45 +35,56 @@ public class ReconcileBankVO {
 	@SequenceGenerator(name = "reconcilebankgen", sequenceName = "reconcilebankseq", initialValue = 1000000001, allocationSize = 1)
 	@Column(name = "reconcilebankid")
 	private Long id;
-	@Column(name = "docid")
+	@Column(name = "docid",length = 25)
 	private String docId;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	@Column(name = "docdate")
 	private LocalDate docDate;
-	@Column(name="bankaccount")
+	@Column(name="bankaccount",length = 30)
 	private String bankAccount;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	@Column(name = "bankstmtdate")
 	private LocalDate bankStmtDate;
-	@Column(name="remarks")
+	@Column(name="remarks",length = 150)
 	private String remarks;
-	@Column(name="totaldeposit")
+	@Column(name="totaldeposit",precision = 10,scale = 2)
 	private BigDecimal totalDeposit;
-	@Column(name="totalwithdrawal")
+	@Column(name="totalwithdrawal",precision = 10,scale = 2)
 	private BigDecimal totalWithdrawal;
 	
+	//default fieldss
 	@Builder.Default
-	@Column(name = "screencode")
+	@Column(name = "screencode",length = 5)
 	private String screenCode="RB";
 	@Builder.Default
-	@Column(name="screenname")
+	@Column(name="screenname",length = 20)
 	private String screenName="RECONCILE BANK";
 	@Column(name = "orgid")
 	private Long orgId;
+	@Column(name = "branch", length = 25)
+	private String branch;
+	@Column(name = "branchcode", length = 20)
+	private String branchCode;
+	@Column(name = "createdby", length = 25)
+	private String createdBy;
+	@Column(name = "modifiedby", length = 25)
+	private String updatedBy;
 	@Column(name = "active")
 	private boolean active;
-	@Column(name = "modifiedby")
-	private String updatedBy;
-	@Column(name = "createdby")
-	private String createdBy;
 	@Column(name = "cancel")
 	private boolean cancel;
-	@Column(name = "cancelremarks")
+	@Column(name = "cancelremarks", length = 50)
 	private String cancelRemarks;
-	
+	@Column(name = "finyear", length = 5)
+	private String finYear;
+	@Column(name = "ipno", length = 15)
+	private String ipNo;
+	@Column(name = "latitude", length = 100)
+	private String latitude;
 
 	
 	
-	
-	
+
 	
 	@OneToMany(mappedBy = "reconcileBankVO",cascade = CascadeType.ALL)
 	@JsonManagedReference
