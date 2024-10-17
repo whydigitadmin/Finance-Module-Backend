@@ -38,5 +38,9 @@ public interface ARService {
 			@Valid ArApBillBalanceReceivableDTO arApBillBalanceReceivableDTO) throws ApplicationException;
 
 	List<ArApBillBalanceReceivableVO> getArApBillBalanceReceivableByActive();
+	
+// 	ReceiptRegister
+	List<Map<String, Object>> getAllReceiptRegister(Long orgId, String branch, String branchCode,
+			String finYear,String fromDate,String toDate,String subLedgerName);
 
 }

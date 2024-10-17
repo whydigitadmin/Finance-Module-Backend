@@ -51,6 +51,8 @@ public class ReceiptReceivableVO {
 	private String bankCashAcc;
 	@Column(name = "receiptamt", precision = 10, scale = 2)
 	private BigDecimal receiptAmt;
+	@Column(name = "taxamt", precision = 10, scale = 2)
+	private BigDecimal taxAmt;
 	@Column(name = "bankchargeacc", length = 50)
 	private String bankChargeAcc;
 	@Column(name = "bankcharges", precision = 10, scale = 2)
@@ -107,6 +109,8 @@ public class ReceiptReceivableVO {
 	private String currency;
 	@Column(name = "currentamount", length = 100)
 	private String currencyAmount;
+	@Column(name = "orgid")
+	private Long orgId;
 
 	@OneToMany(mappedBy = "receiptReceivableVO", cascade = CascadeType.ALL)
 	@JsonManagedReference

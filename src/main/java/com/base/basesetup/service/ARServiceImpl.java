@@ -107,6 +107,8 @@ public class ARServiceImpl implements ARService {
 				particularsAccountReceiptVO.setRecExRate(particularsAccountReceiptDTO.getRecExRate());
 				particularsAccountReceiptVO.setTxnSettled(particularsAccountReceiptDTO.getTxnSettled());
 				particularsAccountReceiptVO.setGainAmt(particularsAccountReceiptDTO.getGainAmt());
+				particularsAccountReceiptVO.setFromDate(particularsAccountReceiptDTO.getFromDate());
+				particularsAccountReceiptVO.setToDate(particularsAccountReceiptDTO.getToDate());
 				particularsAccountReceiptVO.setReceiptReceivableVO(receiptReceivableVO);
 				particularsAccountReceiptVOs.add(particularsAccountReceiptVO);
 			}
@@ -154,6 +156,10 @@ public class ARServiceImpl implements ARService {
 		receiptReceivableVO.setReceiptType1(receiptReceivableDTO.getReceiptType1());
 		receiptReceivableVO.setCurrency(receiptReceivableDTO.getCurrency());
 		receiptReceivableVO.setCurrencyAmount(receiptReceivableDTO.getCurrencyAmount());
+		receiptReceivableVO.setTaxAmt(receiptReceivableDTO.getTaxAmt());
+		receiptReceivableVO.setBranchCode(receiptReceivableDTO.getBranchCode());
+		receiptReceivableVO.setOrgId(receiptReceivableDTO.getOrgId());
+
 	}
 
 	@Override
@@ -268,6 +274,45 @@ public class ARServiceImpl implements ARService {
 	@Override
 	public List<ArApBillBalanceReceivableVO> getArApBillBalanceReceivableByActive() {
 		return arApBillBalanceReceivableRepo.findArApBillBalanceReceivableByActive();
+	}
+
+	@Override
+	public List<Map<String, Object>> getAllReceiptRegister(Long orgId, String branch, String branchCode, String finYear,
+			String fromDate, String toDate, String subLedgerName) {
+		Set<Object[]> register = receiptReceivableRepo.findAllReceiptRegister(orgId, branch, branchCode,
+				finYear, fromDate, toDate, subLedgerName);
+		return getRegister(register);
+	}
+
+	private List<Map<String, Object>> getRegister(Set<Object[]> getRegister) {
+		List<Map<String, Object>> doctypeMappingDetails = new ArrayList<>();
+		for (Object[] sup : getRegister) {
+			Map<String, Object> doctype = new HashMap<>();
+			doctype.put("docId", sup[0] != null ? sup[0].toString() : "");
+			doctype.put("docDate", sup[1] != null ? sup[1].toString() : "");
+			doctype.put("subLedgerName", sup[2] != null ? sup[2].toString() : "");
+			doctype.put("bankCash", sup[3] != null ? sup[3].toString() : "");
+			doctype.put("receiptAmount", sup[4] != null ? sup[4].toString() : "");
+			doctype.put("bankCharges", sup[5] != null ? sup[5].toString() : "");
+			doctype.put("taxAmount", sup[6] != null ? sup[6].toString() : "");
+			doctype.put("tdsAmount", sup[7] != null ? sup[7].toString() : "");
+			doctype.put("invoiceNo", sup[8] != null ? sup[8].toString() : "");
+			doctype.put("invoiceDate", sup[9] != null ? sup[9].toString() : "");
+			doctype.put("refNo", sup[10] != null ? sup[10].toString() : "");
+			doctype.put("refDate", sup[11] != null ? sup[11].toString() : "");
+			doctype.put("chequeBank", sup[12] != null ? sup[12].toString() : "");
+			doctype.put("chequeNo", sup[13] != null ? sup[13].toString() : "");
+			doctype.put("amount", sup[14] != null ? sup[14].toString() : "");
+			doctype.put("outstanding", sup[15] != null ? sup[15].toString() : "");
+			doctype.put("setteled", sup[16] != null ? sup[16].toString() : "");
+			doctype.put("createdOn", sup[17] != null ? sup[17].toString() : "");
+			doctype.put("createdBy", sup[18] != null ? sup[18].toString() : "");
+			
+			
+			doctypeMappingDetails.add(doctype);
+		}
+
+		return doctypeMappingDetails;
 	}
 
 }

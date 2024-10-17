@@ -58,6 +58,7 @@ public class PartyMasterDTO {
 	private String createdBy;
 	private Long orgId;
     private boolean active;
+    
     private String branchCode;
     private String finYear;
     

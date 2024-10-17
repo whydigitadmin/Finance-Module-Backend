@@ -311,4 +311,33 @@ public class ARController extends BaseController {
 
 	}
 
+	@GetMapping("/getAllReceiptRegister")
+	public ResponseEntity<ResponseDTO> getAllReceiptRegister(@RequestParam Long orgId, @RequestParam String branch,
+			@RequestParam String branchCode, @RequestParam String finYear, @RequestParam String fromDate,
+			@RequestParam String toDate, @RequestParam String subLedgerName) {
+		String methodName = "getAllReceiptRegister()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		List<Map<String, Object>> customer = new ArrayList<>();
+		try {
+			customer = arReceivableService.getAllReceiptRegister(orgId, branch, branchCode, finYear, fromDate, toDate,
+					subLedgerName);
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "Receipt Register information get successfully");
+			responseObjectsMap.put("PartyMasterVO", customer);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap, "Receipt Register information receive failed",
+					errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+	}
+
 }

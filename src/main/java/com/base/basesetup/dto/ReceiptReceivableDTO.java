@@ -4,8 +4,6 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
-import javax.persistence.Column;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -30,6 +28,7 @@ public class ReceiptReceivableDTO {
 	private BigDecimal bankCharges;
 	private String inCurrencyBnkChargs;
 	private BigDecimal tdsAmt;
+	private BigDecimal taxAmt;
 	private String inCurrencyTdsAmt;
 	private String chequeBank;
 	private String receiptType;
@@ -53,6 +52,7 @@ public class ReceiptReceivableDTO {
 	private String receiptType1;
 	private String currency;
 	private String currencyAmount;
+	private Long orgId;
 
 	List<ReceiptInvDetailsDTO> receiptInvDetailaDTO;
 }
