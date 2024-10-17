@@ -17,7 +17,6 @@ import javax.persistence.Table;
 
 import com.base.basesetup.dto.CreatedUpdatedDate;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.AllArgsConstructor;
@@ -138,10 +137,10 @@ public class PaymentVO {
     private String finYear;
 
     @Column(name = "screencode", length = 5)
-    private String screenCode;
+    private String screenCode = "PT";
 
     @Column(name = "screenname", length = 25)
-    private String screenName;
+    private String screenName = "PAYMENT";
 
     @Column(name = "ipno", length = 15)
     private String ipNo;

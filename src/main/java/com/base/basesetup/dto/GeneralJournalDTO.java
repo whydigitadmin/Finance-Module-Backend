@@ -1,10 +1,10 @@
 package com.base.basesetup.dto;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
-import javax.persistence.Column;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,13 +18,15 @@ import lombok.NoArgsConstructor;
 public class GeneralJournalDTO {
 	private Long id;
 	private String voucherSubType;
-	private LocalDateTime docDate;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+	private LocalDate docDate;
 	private String docId;
 	
 	private String currency;
 	private String exRate;
 	private String refNo;
-	private LocalDateTime refDate;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+	private LocalDate refDate;
 
 	private String remarks;
 	private Long orgId;
