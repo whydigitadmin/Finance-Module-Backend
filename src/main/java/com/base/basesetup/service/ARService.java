@@ -8,23 +8,23 @@ import javax.validation.Valid;
 import org.springframework.stereotype.Service;
 
 import com.base.basesetup.dto.ArApBillBalanceReceivableDTO;
-import com.base.basesetup.dto.ReceiptReceivableDTO;
+import com.base.basesetup.dto.ReceiptDTO;
 import com.base.basesetup.entity.ArApBillBalanceReceivableVO;
-import com.base.basesetup.entity.ReceiptReceivableVO;
+import com.base.basesetup.entity.ReceiptVO;
 import com.base.basesetup.exception.ApplicationException;
 
 @Service
 public interface ARService {
 
 	// Receipt
-	List<ReceiptReceivableVO> getAllReceiptReceivableByOrgId(Long orgId);
+	List<ReceiptVO> getAllReceiptReceivableByOrgId(Long orgId);
 
-	ReceiptReceivableVO updateCreateReceiptReceivable(@Valid ReceiptReceivableDTO receiptReceivableDTO)
+	ReceiptVO updateCreateReceiptReceivable(@Valid ReceiptDTO receiptReceivableDTO)
 			throws ApplicationException;
 
-	List<ReceiptReceivableVO> getAllReceiptReceivableById(Long id);
+	List<ReceiptVO> getAllReceiptReceivableById(Long id);
 
-	List<ReceiptReceivableVO> getReceiptReceivableByActive();
+	List<ReceiptVO> getReceiptReceivableByActive();
 
 	List<Map<String, Object>> getCustomerNameAndCodeForReceipt(Long orgId, String branch, String branchCode,
 			String finYear);

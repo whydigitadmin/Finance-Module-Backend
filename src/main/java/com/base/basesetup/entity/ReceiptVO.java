@@ -25,16 +25,16 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "receiptreceivable")
+@Table(name = "receipt")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ReceiptReceivableVO {
+public class ReceiptVO {
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "receiptreceivablegen")
-	@SequenceGenerator(name = "receiptreceivablegen", sequenceName = "receiptreceivableseq", initialValue = 1000000001, allocationSize = 1)
-	@Column(name = "receiptreceivableid")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "receiptgen")
+	@SequenceGenerator(name = "receiptgen", sequenceName = "receiptseq", initialValue = 1000000001, allocationSize = 1)
+	@Column(name = "receiptid")
 	private Long id;
 
 	// Receipt fields
@@ -115,7 +115,7 @@ public class ReceiptReceivableVO {
 	@Column(name = "orgid")
 	private Long orgId;
 
-	@OneToMany(mappedBy = "receiptReceivableVO", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "receiptVO", cascade = CascadeType.ALL)
 	@JsonManagedReference
 	List<ReceiptInvDetailsVO> receiptInvDetailsVO;
 

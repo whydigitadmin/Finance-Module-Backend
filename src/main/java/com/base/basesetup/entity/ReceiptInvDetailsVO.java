@@ -88,7 +88,7 @@ public class ReceiptInvDetailsVO {
 
 	@ManyToOne
 	@JsonBackReference
-	@JoinColumn(name = "receiptreceivableid")
-	ReceiptReceivableVO receiptReceivableVO;
+	@JoinColumn(name = "receiptid")
+	ReceiptVO receiptVO;
 
 }
