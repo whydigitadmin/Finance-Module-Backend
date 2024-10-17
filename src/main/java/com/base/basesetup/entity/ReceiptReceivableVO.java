@@ -16,6 +16,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.base.basesetup.dto.CreatedUpdatedDate;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.AllArgsConstructor;
@@ -39,6 +40,7 @@ public class ReceiptReceivableVO {
 	// Receipt fields
 	@Column(name = "docid", length = 50)
 	private String docId;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	@Column(name = "docdate")
 	private LocalDate docDate;
 	@Column(name = "type", length = 50)
@@ -69,6 +71,7 @@ public class ReceiptReceivableVO {
 	private String receiptType;
 	@Column(name = "chequeutino", length = 10)
 	private String chequeUtiNo;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	@Column(name = "chequeutidt")
 	private LocalDate chequeUtiDt;
 	@Column(name = "receivedfrom", length = 100)
