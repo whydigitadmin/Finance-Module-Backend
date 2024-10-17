@@ -32,31 +32,35 @@ public class PartyAddressVO {
 	@Column(name = "partyaddressid")
 	private Long id;
 	
-	@Column(name = "state")
-	private String state;
-	@Column(name = "businessplace")
-	private String businessPlace;
-	@Column(name = "stategstin")
-	private String stateGstIn;
-	@Column(name = "cityname")
-	private String cityName;
-	@Column(name = "addresstype")
-	private String addressType;
-	@Column(name = "addressline1")
-	private String addressLine1;
-	@Column(name = "addressline2")
-	private String addressLine2;
-	@Column(name = "addressline3")
-	private String addressLine3;
-	@Column(name = "pincode")
-	private String pincode;
-	@Column(name = "contactperson")
-	private String contactPerson;
-	@Column(name = "contactphoneno")
-	private String contactPhoneNo;
-	@Column(name = "contactemail")
-	private String contactEmail;
-	
+	@Column(name = "state", length = 25)
+    private String state;
+
+    @Column(name = "businessplace", length = 20) // Corrected from bussPlace
+    private String businessPlace;
+
+    @Column(name = "stategstin", length = 15) // Corrected from stateGSTIN
+    private String stateGstIn;
+
+    @Column(name = "city", length = 30)
+    private String city;
+
+    @Column(name = "addresstype", length = 30)
+    private String addressType;
+
+    @Column(name = "addressline1", length = 50)
+    private String addressLine1;
+
+    @Column(name = "addressline2", length = 50)
+    private String addressLine2;
+
+    @Column(name = "addressline3", length = 50)
+    private String addressLine3;
+
+    @Column(name = "pincode") 
+    private Long pincode;
+
+    @Column(name = "contact", length = 15) 
+    private String contact;
 
 	@ManyToOne
 	@JoinColumn(name = "partymasterid")

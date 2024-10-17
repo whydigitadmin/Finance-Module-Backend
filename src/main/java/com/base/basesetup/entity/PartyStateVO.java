@@ -31,20 +31,28 @@ public class PartyStateVO {
 	@SequenceGenerator(name = "partystategen", sequenceName = "partystateseq", initialValue = 1000000001, allocationSize = 1)
 	@Column(name = "partystateid")
 	private Long id;
-	@Column(name = "state")
+	
+	@Column(name = "state", length = 25)
 	private String state;
-	@Column(name = "gstin")
+
+	@Column(name = "gstin", length = 15)
 	private String gstIn;
+
 	@Column(name = "stateno")
-	private String stateNo;
-	@Column(name = "contactperson")
+	private Long stateNo;
+
+	@Column(name = "contactperson", length = 150)
 	private String contactPerson;
-	@Column(name = "contactphoneno")
-	private String contactPhoneNo;
-	@Column(name = "contactemail")
-	private String contactEmail;
-	@Column(name = "statecode")
+
+	@Column(name = "contactphoneno", length = 15)
+	private String contactPhoneNo; 
+
+	@Column(name = "email", length = 50)
+	private String email;
+
+	@Column(name = "statecode", length = 3)
 	private String stateCode;
+
 	
 	@ManyToOne
 	@JoinColumn(name = "partymasterid")

@@ -1731,7 +1731,7 @@ public class MasterServiceImpl implements MasterService {
 					partyStateVO.setStateNo(partyStateDTO.getStateNo());
 					partyStateVO.setContactPerson(partyStateDTO.getContactPerson());
 					partyStateVO.setContactPhoneNo(partyStateDTO.getContactPhoneNo());
-					partyStateVO.setContactEmail(partyStateDTO.getContactEmail());
+					partyStateVO.setEmail(partyStateDTO.getEmail());
 					partyStateVO.setStateCode(partyStateDTO.getStateCode());
 					partyStateVO.setPartyMasterVO(partyMasterVO);
 					partyStateVOs.add(partyStateVO);
@@ -1748,15 +1748,14 @@ public class MasterServiceImpl implements MasterService {
 					partyAddressVO.setState(partyAddressDTO.getState());
 					partyAddressVO.setStateGstIn(partyAddressDTO.getStateGstIn());
 					partyAddressVO.setBusinessPlace(partyAddressDTO.getBusinessPlace());
-					partyAddressVO.setCityName(partyAddressDTO.getCityName());
+					partyAddressVO.setCity(partyAddressDTO.getCity()); // Changed from cityName to city
 					partyAddressVO.setAddressType(partyAddressDTO.getAddressType());
 					partyAddressVO.setAddressLine1(partyAddressDTO.getAddressLine1());
 					partyAddressVO.setAddressLine2(partyAddressDTO.getAddressLine2());
 					partyAddressVO.setAddressLine3(partyAddressDTO.getAddressLine3());
-					partyAddressVO.setPincode( partyAddressDTO.getPincode());
-					partyAddressVO.setContactPerson(partyAddressDTO.getContactPerson());
-					partyAddressVO.setContactPhoneNo(partyAddressDTO.getContactPhoneNo());
-					partyAddressVO.setContactEmail(partyAddressDTO.getContactEmail());
+					partyAddressVO.setPincode(partyAddressDTO.getPincode());
+					partyAddressVO.setContact(partyAddressDTO.getContact()); // Changed from contactPerson to contact
+
 					partyAddressVO.setPartyMasterVO(partyMasterVO);
 					partyAddressVOs.add(partyAddressVO);
 				}
@@ -1786,13 +1785,13 @@ public class MasterServiceImpl implements MasterService {
 			if(partyMasterDTO.getPartySpecialTDSDTO()!=null) {
 				for(PartySpecialTDSDTO partySpecialTDSDTO : partyMasterDTO.getPartySpecialTDSDTO()) {
 					PartySpecialTDSVO partySpecialTDSVO = new PartySpecialTDSVO();
-					partySpecialTDSVO.setTdsSection(partySpecialTDSDTO.getTdsSection());
-					partySpecialTDSVO.setRateForm(partySpecialTDSDTO.getRateForm());
+					partySpecialTDSVO.setTdsWithSec(partySpecialTDSDTO.getTdsWithSec());
+					partySpecialTDSVO.setRateFrom(partySpecialTDSDTO.getRateFrom());
 					partySpecialTDSVO.setRateTo(partySpecialTDSDTO.getRateTo());
-					partySpecialTDSVO.setTdsPercentage(partySpecialTDSDTO.getTdsPercentage());
-					partySpecialTDSVO.setSurPercentage(partySpecialTDSDTO.getSurPercentage());
+					partySpecialTDSVO.setTdsWithPer(partySpecialTDSDTO.getTdsWithPer());
+					partySpecialTDSVO.setSurchargePer(partySpecialTDSDTO.getSurchargePer());
 					partySpecialTDSVO.setEdPercentage(partySpecialTDSDTO.getEdPercentage());
-					partySpecialTDSVO.setTdsCertificateNo(partySpecialTDSDTO.getTdsCertificateNo());
+					partySpecialTDSVO.setTdsCertifiNo(partySpecialTDSDTO.getTdsCertifiNo());
 					partySpecialTDSVO.setPartyMasterVO(partyMasterVO);
 					partySpecialTDSVOs.add(partySpecialTDSVO);
 					
@@ -1806,8 +1805,8 @@ public class MasterServiceImpl implements MasterService {
 			if(partyMasterDTO.getPartyChargesExemptionDTO()!=null) {
 				for(PartyChargesExemptionDTO partyChargesExemptionDTO : partyMasterDTO.getPartyChargesExemptionDTO()) {
 					PartyChargesExemptionVO partyChargesExemptionVO = new PartyChargesExemptionVO();
-					partyChargesExemptionVO.setTdsSection(partyChargesExemptionDTO.getTdsSection());
-					partyChargesExemptionVO.setCharge(partyChargesExemptionDTO.getCharge());
+					partyChargesExemptionVO.setTdsWithSec(partyChargesExemptionDTO.getTdsWithSec());
+					partyChargesExemptionVO.setCharges(partyChargesExemptionDTO.getCharges());
 					partyChargesExemptionVO.setPartyMasterVO(partyMasterVO);
 					partyChargesExemptionVOs.add(partyChargesExemptionVO);
 					
@@ -1821,7 +1820,7 @@ public class MasterServiceImpl implements MasterService {
 			if(partyMasterDTO.getPartyCurrencyMappingDTO()!=null) {
 				for(PartyCurrencyMappingDTO partyCurrencyMappingDTO : partyMasterDTO.getPartyCurrencyMappingDTO()) {
 					PartyCurrencyMappingVO partyCurrencyMappingVO = new PartyCurrencyMappingVO();
-					partyCurrencyMappingVO.setTransactionCurrency(partyCurrencyMappingDTO.getTransactionCurrency());
+					partyCurrencyMappingVO.setTransCurrency(partyCurrencyMappingDTO.getTransCurrency());
 					partyCurrencyMappingVO.setPartyMasterVO(partyMasterVO);
 					partyCurrencyMappingVOs.add(partyCurrencyMappingVO);
 					
@@ -1854,7 +1853,7 @@ public class MasterServiceImpl implements MasterService {
 			if(partyMasterDTO.getPartyTdsExemptedDTO()!=null) {
 				for( PartyTdsExemptedDTO partyTdsExemptedDTO : partyMasterDTO.getPartyTdsExemptedDTO()) {
 					PartyTdsExemptedVO partyTdsExemptedVO = new PartyTdsExemptedVO();
-					partyTdsExemptedVO.setTdsExemptedCertificate(partyTdsExemptedDTO.getTdsExemptedCertificate());
+					partyTdsExemptedVO.setTdsExempCerti(partyTdsExemptedDTO.getTdsExempCerti());
 					partyTdsExemptedVO.setValue(partyTdsExemptedDTO.getValue());
 					partyTdsExemptedVO.setFinYear(partyTdsExemptedDTO.getFinYear());
 					partyTdsExemptedVO.setPartyMasterVO(partyMasterVO);
@@ -1913,47 +1912,43 @@ public class MasterServiceImpl implements MasterService {
 			partyMasterVO.setPartyName(partyMasterDTO.getPartyName());
 			partyMasterVO.setGstPartyName(partyMasterDTO.getGstPartyName());
 			partyMasterVO.setCompany(partyMasterDTO.getCompany());
-			partyMasterVO.setCustomerCategory(partyMasterDTO.getCustomerCategory());
 			partyMasterVO.setAgentName(partyMasterDTO.getAgentName());
-			partyMasterVO.setAccountsType(partyMasterDTO.getAccountsType());
-			partyMasterVO.setBusinessType(partyMasterDTO.getBusinessType());
+			partyMasterVO.setAccountType(partyMasterDTO.getAccountType());
+			partyMasterVO.setBussinessType(partyMasterDTO.getBussinessType());
 			partyMasterVO.setCarrierCode(partyMasterDTO.getCarrierCode());
 			partyMasterVO.setSupplierType(partyMasterDTO.getSupplierType());
 			partyMasterVO.setSalesPerson(partyMasterDTO.getSalesPerson());
-			partyMasterVO.setSalesPerson1(partyMasterDTO.getSalesPerson1());
-			partyMasterVO.setCustomerCategory(partyMasterDTO.getCustomerCategory());
-			partyMasterVO.setCustomerCoordinator1(partyMasterDTO.getCustomerCoordinator1());
-			partyMasterVO.setCustomerCoordinator(partyMasterDTO.getCustomerCoordinator());
+			partyMasterVO.setCustomerCoord(partyMasterDTO.getCustomerCoord());
 			partyMasterVO.setAccountName(partyMasterDTO.getAccountName());
-			partyMasterVO.setAccountType(partyMasterDTO.getAccountType());
+			partyMasterVO.setGstRegistered(partyMasterDTO.getGstRegistered());
+			partyMasterVO.setGstIn(partyMasterDTO.getGstIn());
 			partyMasterVO.setCreditLimit(partyMasterDTO.getCreditLimit());
 			partyMasterVO.setCreditDays(partyMasterDTO.getCreditDays());
-			partyMasterVO.setControllingOffice(partyMasterDTO.getControllingOffice());
-			partyMasterVO.setCurrency(partyMasterDTO.getCurrency());
-			partyMasterVO.setAirWayBillCode(partyMasterDTO.getAirWayBillCode());
-			partyMasterVO.setAirlineCode(partyMasterDTO.getAirlineCode());
-			partyMasterVO.setBusinessCategory(partyMasterDTO.getBusinessCategory());
-			partyMasterVO.setBusinessCategory1(partyMasterDTO.getBusinessCategory1());
-			partyMasterVO.setCountry(partyMasterDTO.getCountry());
-			partyMasterVO.setRemarks(partyMasterDTO.getRemarks());
-			partyMasterVO.setCompoundingScheme(partyMasterDTO.getCompoundingScheme());
-			partyMasterVO.setGstRegistration(partyMasterDTO.getGstRegistration());
-			partyMasterVO.setPanName(partyMasterDTO.getPanName());
 			partyMasterVO.setPanNo(partyMasterDTO.getPanNo());
+			partyMasterVO.setControllingOff(partyMasterDTO.getControllingOff());
+			partyMasterVO.setCurrency(partyMasterDTO.getCurrency());
+			partyMasterVO.setPanName(partyMasterDTO.getPanName());
+			partyMasterVO.setAirwayBillNo(partyMasterDTO.getAirwayBillNo());
+			partyMasterVO.setAirLineCode(partyMasterDTO.getAirLineCode());
 			partyMasterVO.setTanNo(partyMasterDTO.getTanNo());
+			partyMasterVO.setBussinessCate(partyMasterDTO.getBussinessCate());
+			partyMasterVO.setCountry(partyMasterDTO.getCountry());
 			partyMasterVO.setCaf(partyMasterDTO.getCaf());
-			partyMasterVO.setPsu(partyMasterDTO.getPsu());
+			partyMasterVO.setRemarks(partyMasterDTO.getRemarks());
+			partyMasterVO.setCompoundScheme(partyMasterDTO.getCompoundScheme());
+			partyMasterVO.setPsuGovOrg(partyMasterDTO.getPsuGovOrg());
 			partyMasterVO.setNameOfBank(partyMasterDTO.getNameOfBank());
 			partyMasterVO.setBranch(partyMasterDTO.getBranch());
-			partyMasterVO.setAddressOfBranch(partyMasterDTO.getAddressOfBranch());
+			partyMasterVO.setAddressBank(partyMasterDTO.getAddressBank());
 			partyMasterVO.setAccountNo(partyMasterDTO.getAccountNo());
-			partyMasterVO.setAccountsType(partyMasterDTO.getAccountsType());
+			partyMasterVO.setAccType(partyMasterDTO.getAccType());
 			partyMasterVO.setIfscCode(partyMasterDTO.getIfscCode());
 			partyMasterVO.setSwift(partyMasterDTO.getSwift());
 			partyMasterVO.setActive(partyMasterDTO.isActive());
 			partyMasterVO.setOrgId(partyMasterDTO.getOrgId());
 			partyMasterVO.setFinYear(partyMasterDTO.getFinYear());
 			partyMasterVO.setBranchCode(partyMasterDTO.getBranchCode());
+
 
 		}
 		
