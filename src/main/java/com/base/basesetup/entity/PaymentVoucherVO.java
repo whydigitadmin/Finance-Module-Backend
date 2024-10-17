@@ -1,8 +1,6 @@
 package com.base.basesetup.entity;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -38,23 +36,20 @@ public class PaymentVoucherVO {
 	@SequenceGenerator(name = "paymentvouchergen", sequenceName = "paymentvoucherseq", initialValue = 1000000001, allocationSize = 1)
 	@Column(name = "paymentvoucherid")
 	private Long id;
-	@Column(name = "vehiclesubtype")
+	@Column(name = "vehiclesubtype",length=30)
 	private String vehicleSubType;
 	@Column(name = "referenceno")
 	private String referenceNo;
-	@Column(name = "currency")
-	private String currency;
 	@Column(name = "docId")
 	private String docid;
 	@Column(name = "referencedate")
-	private LocalDateTime referenceDate;
-	@Column(name = "exrate")
-	private BigDecimal exRate;
+	private LocalDate referenceDate;
 	@Column(name = "docdate")
-	private LocalDateTime docDate;
+	private LocalDate docDate=LocalDate.now();;
 	@Column(name = "remarks")
 	private String remarks;
-	private String finyr;
+	@Column(name = "finyear")
+	private String finyear;
 	@Column(name = "orgid")
 	private Long orgId;
 	@Column(name = "active")
@@ -67,14 +62,33 @@ public class PaymentVoucherVO {
 	private String createdBy;
 	@Column(name = "modifiedby")
 	private String updatedBy;
-	@Column(name = "totaldebitamount")
-	private BigDecimal totalDebitAmount;
-	@Column(name = "totalcreditamount")
-	private BigDecimal totalCreditAmount;
+	@Column(name = "chequeno")
+	private String chequeNo;
+	@Column(name = "chequedate")
+	private String chequeDate;
+	@Column(name = "chequebank")
+	private String chequeBank;
+	@Column(name = "branch")
+	private String branch;
+	@Column(name = "branchcode")
+	private String branchCode;
+	@Column(name = "screencode")
+	private String screenCode;
+	@Column(name = "screenname")
+	private String screenName;
+	@Column(name = "currency")
+	private String currency;
 
 	@OneToMany(mappedBy = "paymentVoucherVO", cascade = CascadeType.ALL)
 	@JsonManagedReference
 	List<ParticularsPaymentVoucherVO> particularsPaymentVoucherVO;
+	
+	@OneToMany(mappedBy = "paymentVoucherVO", cascade = CascadeType.ALL)
+	@JsonManagedReference
+	List<PaymentSummaryVO> paymentSummaryVO;
+	
+	
+	
 
 	@Embedded
 	@Builder.Default
@@ -84,7 +98,7 @@ public class PaymentVoucherVO {
 	private void setDefaultFinyr() {
 		// Execute the logic to set the default value for finyr
 		String fyFull = calculateFinyr();
-		this.finyr = fyFull; 
+		this.finyear = fyFull; 
 	}
 
 	private String calculateFinyr() {

@@ -1379,6 +1379,9 @@ public class TransactionServiceImpl implements TransactionService {
 				particularsPaymentVoucherVO.setCredit(particularsPaymentVoucherDTO.getCredit());
 				particularsPaymentVoucherVO.setNarration(particularsPaymentVoucherDTO.getNarration());
 				particularsPaymentVoucherVO.setPaymentVoucherVO(paymentVoucherVO);
+				particularsPaymentVoucherVO.setPaymentVoucherVO(paymentVoucherVO);
+				
+				
 				particularsPaymentVoucherVOs.add(particularsPaymentVoucherVO);
 			}
 		}
@@ -1396,16 +1399,11 @@ public class TransactionServiceImpl implements TransactionService {
 		String paymentVoucher = "PV" + finyr + paymentVoucherRepo.findDocId();
 		paymentVoucherVO.setDocid(paymentVoucher);
 		paymentVoucherRepo.nextSeq();
-		paymentVoucherVO.setDocid(paymentVoucherDTO.getDocid());
 		paymentVoucherVO.setVehicleSubType(paymentVoucherDTO.getVehicleSubType());
 		paymentVoucherVO.setReferenceNo(paymentVoucherDTO.getReferenceNo());
 		paymentVoucherVO.setCurrency(paymentVoucherDTO.getCurrency());
-		paymentVoucherVO.setDocDate(paymentVoucherDTO.getDocDate());
 		paymentVoucherVO.setReferenceDate(paymentVoucherDTO.getReferenceDate());
-		paymentVoucherVO.setExRate(paymentVoucherDTO.getExRate());
 		paymentVoucherVO.setRemarks(paymentVoucherDTO.getRemarks());
-		paymentVoucherVO.setTotalDebitAmount(paymentVoucherDTO.getTotalDebitAmount());
-		paymentVoucherVO.setTotalCreditAmount(paymentVoucherDTO.getTotalCreditAmount());
 	}
 
 	@Override

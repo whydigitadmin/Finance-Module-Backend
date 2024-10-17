@@ -1,7 +1,6 @@
 package com.base.basesetup.dto;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
@@ -15,15 +14,23 @@ public class PaymentVoucherDTO {
 	private Long id;
 	private String vehicleSubType;
 	private String referenceNo;
-	private String currency;
-	private String docid;
-	private LocalDateTime referenceDate;
-	private BigDecimal exRate;
-	private LocalDateTime docDate;
+	private LocalDate referenceDate;
 	private String remarks;
+	private String finyear;
+	private Long orgId;
+	private String cancelRemarks;
 	private String createdBy;
-	private BigDecimal totalDebitAmount;
-	private BigDecimal totalCreditAmount;
+	private String chequeNo;
+	private String chequeDate;
+	private String chequeBank;
+	private String branch;
+	private String branchCode;
+	private String screenCode;
+	private String screenName;
+	private String currency;
 
 	List<ParticularsPaymentVoucherDTO> particularsPaymentVoucherDTO;
+	
+	List<PaymentSummaryDTO> paymentSummaryDTO;
+	
 }
