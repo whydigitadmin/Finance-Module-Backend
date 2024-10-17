@@ -28,7 +28,6 @@ import com.base.basesetup.dto.CityDTO;
 import com.base.basesetup.dto.CompanyDTO;
 import com.base.basesetup.dto.CountryDTO;
 import com.base.basesetup.dto.CurrencyDTO;
-import com.base.basesetup.dto.DocumentTypeDTO;
 import com.base.basesetup.dto.FinScreenDTO;
 import com.base.basesetup.dto.FinancialYearDTO;
 import com.base.basesetup.dto.RegionDTO;
@@ -39,7 +38,6 @@ import com.base.basesetup.entity.CityVO;
 import com.base.basesetup.entity.CompanyVO;
 import com.base.basesetup.entity.CountryVO;
 import com.base.basesetup.entity.CurrencyVO;
-import com.base.basesetup.entity.DocumentTypeVO;
 import com.base.basesetup.entity.FinScreenVO;
 import com.base.basesetup.entity.FinancialYearVO;
 import com.base.basesetup.entity.RegionVO;
@@ -615,7 +613,6 @@ public class CommonMasterController extends BaseController {
 		return ResponseEntity.ok().body(responseDTO);
 	}
 
-
 	// FinacialYear
 	@GetMapping("/getFinancialYearById")
 	public ResponseEntity<ResponseDTO> getFinancialYearById(@RequestParam(required = false) Long id) {
@@ -731,7 +728,6 @@ public class CommonMasterController extends BaseController {
 		return ResponseEntity.ok().body(responseDTO);
 	}
 
-
 //	 FinScreen
 	@GetMapping("/getFinScreenById")
 	public ResponseEntity<ResponseDTO> getFinScreenById(@RequestParam(required = false) Long id) {
@@ -844,8 +840,7 @@ public class CommonMasterController extends BaseController {
 		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
 		return ResponseEntity.ok().body(responseDTO);
 	}
-	
-	
+
 	// Screen Names
 	@PutMapping("/createUpdateScreenNames")
 	public ResponseEntity<ResponseDTO> createUpdateScreenNames(@RequestBody ScreenNamesDTO screenNamesDTO) {

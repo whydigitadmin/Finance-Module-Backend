@@ -159,6 +159,8 @@ public class ARServiceImpl implements ARService {
 		receiptVO.setTaxAmt(receiptDTO.getTaxAmt());
 		receiptVO.setBranchCode(receiptDTO.getBranchCode());
 		receiptVO.setOrgId(receiptDTO.getOrgId());
+		receiptVO.setNetAmount(receiptDTO.getNetAmount());
+		receiptVO.setRemarks(receiptDTO.getRemarks());
 
 	}
 

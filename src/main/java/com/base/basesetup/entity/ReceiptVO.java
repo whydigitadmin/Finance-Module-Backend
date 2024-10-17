@@ -76,6 +76,11 @@ public class ReceiptVO {
 	private LocalDate chequeUtiDt;
 	@Column(name = "receivedfrom", length = 100)
 	private String receivedFrom;
+	@Column(name = "netamount", length = 100)
+	private String netAmount;
+	@Column(name = "remarks", length = 100)
+	private String remarks;
+	
 
 	// Common Fields
 	@Column(name = "branch", length = 25)

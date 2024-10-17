@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
+import javax.persistence.Column;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -35,6 +37,8 @@ public class ReceiptDTO {
 	private String chequeUtiNo;
 	private LocalDate chequeUtiDt;
 	private String receivedFrom;
+	private String netAmount;
+	private String remarks;
 
 	// Common Fields
 	private String branch;
