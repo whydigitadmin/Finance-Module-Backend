@@ -31,6 +31,7 @@ public class ArApBillBalanceReceivableDTO {
 	private BigDecimal debitAmt;
 	private BigDecimal creditAmt;
 	private String voucherNo;
+	private boolean adjustmentDone;
 
 	// Common Fields
 	private Long orgId;

@@ -33,6 +33,13 @@ public class PartyMasterVO {
 	@SequenceGenerator(name = "partymastergen", sequenceName = "partymasterseq", initialValue = 1000000001, allocationSize = 1)
 	@Column(name = "partymasterid")
 	private Long id;
+	
+    @Column(name = "screencode", length = 5)
+    private String screenCode = "PM";
+
+    @Column(name = "screenname", length = 25)
+    private String screenName = "PARTYMASTER";
+    
 	@Column(name = "partytype")
 	private String partyType;
 	@Column(name = "customertype")
@@ -106,6 +113,8 @@ public class PartyMasterVO {
 	private String nameOfBank;
 	@Column(name = "branch")
 	private String branch;
+	@Column(name = "branchcode")
+	private String branchCode;
 	@Column(name = "addressofbranch")
 	private String addressOfBranch;
 	@Column(name = "accountno")
@@ -130,6 +139,8 @@ public class PartyMasterVO {
 	private Long orgId;
 	@Column(name="active")
     private boolean active;
+	@Column(name="finyear")
+    private String finYear;
 	
 	@OneToMany(mappedBy = "partyMasterVO",cascade = CascadeType.ALL)
 	@JsonManagedReference

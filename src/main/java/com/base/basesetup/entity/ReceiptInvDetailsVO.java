@@ -80,6 +80,12 @@ public class ReceiptInvDetailsVO {
 	@Column(name = "gainamt", precision = 10, scale = 2)
 	private BigDecimal gainAmt;
 
+	@Column(name = "fromdate")
+	private LocalDate fromDate;
+
+	@Column(name = "todate")
+	private LocalDate toDate;
+
 	@ManyToOne
 	@JsonBackReference
 	@JoinColumn(name = "receiptreceivableid")

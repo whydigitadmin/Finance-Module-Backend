@@ -31,7 +31,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.base.basesetup.dto.ArApAdjustmentOffSetDTO;
 import com.base.basesetup.dto.ArApOffSetInvoiceDetailsDTO;
-import com.base.basesetup.dto.ArapAdjustmentsDTO;
 import com.base.basesetup.dto.BrsOpeningDTO;
 import com.base.basesetup.dto.ChargerDebitNoteDTO;
 import com.base.basesetup.dto.ChargerIrnCreditDTO;
@@ -65,7 +64,6 @@ import com.base.basesetup.dto.ReconcileCashDTO;
 import com.base.basesetup.dto.ReconcileCorpBankDTO;
 import com.base.basesetup.entity.ArApAdjustmentOffSetVO;
 import com.base.basesetup.entity.ArApOffSetInvoiceDetailsVO;
-import com.base.basesetup.entity.ArapAdjustmentsVO;
 import com.base.basesetup.entity.BrsExcelUploadVO;
 import com.base.basesetup.entity.BrsOpeningVO;
 import com.base.basesetup.entity.ChargerDebitNoteVO;
@@ -138,7 +136,6 @@ import com.base.basesetup.repo.ReceiptReversalRepo;
 import com.base.basesetup.repo.ReconcileBankRepo;
 import com.base.basesetup.repo.ReconcileCashRepo;
 import com.base.basesetup.repo.ReconcileCorpBankRepo;
-import com.base.basesetup.repo.ReconciliationSummaryRepo;
 import com.base.basesetup.repo.TaxInvoiceDetailsRepo;
 import com.base.basesetup.repo.TaxInvoiceGstRepo;
 import com.base.basesetup.repo.TaxInvoiceRepo;
@@ -273,8 +270,9 @@ public class TransactionServiceImpl implements TransactionService {
 	@Autowired
 	BrsExcelUploadRepo brsExcelUploadRepo;
 
-	ReconciliationSummaryRepo reconciliationSummaryRepo;
-	
+//	@Autowired
+//	ReconciliationSummaryRepo reconciliationSummaryRepo;
+
 	@Autowired
 	ReconcileCashRepo reconcileCashRepo;
 
@@ -1023,6 +1021,8 @@ public class TransactionServiceImpl implements TransactionService {
 		generalJournalVO.setRemarks(generalJournalDTO.getRemarks());
 		generalJournalVO.setCurrency(generalJournalDTO.getCurrency());
 		generalJournalVO.setExRate(generalJournalDTO.getExRate());
+		
+
 		generalJournalVO.setRefNo(generalJournalDTO.getRefNo());
 		generalJournalVO.setRefDate(generalJournalDTO.getRefDate());
 		generalJournalVO.setOrgId(generalJournalDTO.getOrgId());
@@ -1040,6 +1040,11 @@ public class TransactionServiceImpl implements TransactionService {
 	}
 
 
+
+	
+
+
+	
 	// DebitNote
 
 	@Override
@@ -1408,91 +1413,6 @@ public class TransactionServiceImpl implements TransactionService {
 		return paymentVoucherRepo.findPaymentVoucherByActive();
 	}
 
-
-	// ArapAdjustments
-
-	@Override
-	public List<ArapAdjustmentsVO> getAllArapAdjustmentsByOrgId(Long orgId) {
-		List<ArapAdjustmentsVO> arapAdjustmentsVO = new ArrayList<>();
-		if (ObjectUtils.isNotEmpty(orgId)) {
-			LOGGER.info("Successfully Received ArapAdjustments BY OrgId : {}", orgId);
-			arapAdjustmentsVO = arapAdjustmentsRepo.getAllArapAdjustmentsByOrgId(orgId);
-		} else {
-			LOGGER.info("Successfully Received ArapAdjustments For All OrgId.");
-			arapAdjustmentsVO = arapAdjustmentsRepo.findAll();
-		}
-		return arapAdjustmentsVO;
-	}
-
-	@Override
-	public List<ArapAdjustmentsVO> getAllArapAdjustmentsById(Long id) {
-		List<ArapAdjustmentsVO> arapAdjustmentsVO = new ArrayList<>();
-		if (ObjectUtils.isNotEmpty(id)) {
-			LOGGER.info("Successfully Received ArapAdjustments BY Id : {}", id);
-			arapAdjustmentsVO = arapAdjustmentsRepo.getAllArapAdjustmentsById(id);
-		} else {
-			LOGGER.info("Successfully Received ArapAdjustments For All Id.");
-			arapAdjustmentsVO = arapAdjustmentsRepo.findAll();
-		}
-		return arapAdjustmentsVO;
-	}
-
-	@Override
-	public ArapAdjustmentsVO updateCreateArapAdjustments(@Valid ArapAdjustmentsDTO arapAdjustmentsDTO)
-			throws ApplicationException {
-		ArapAdjustmentsVO arapAdjustmentsVO = new ArapAdjustmentsVO();
-		boolean isUpdate = false;
-		if (ObjectUtils.isNotEmpty(arapAdjustmentsDTO.getId())) {
-			isUpdate = true;
-			arapAdjustmentsVO = arapAdjustmentsRepo.findById(arapAdjustmentsDTO.getId())
-					.orElseThrow(() -> new ApplicationException("Invalid ARAP adjustments details"));
-			arapAdjustmentsVO.setUpdatedBy(arapAdjustmentsDTO.getCreatedBy());
-		} else {
-			arapAdjustmentsVO.setUpdatedBy(arapAdjustmentsDTO.getCreatedBy());
-			arapAdjustmentsVO.setCreatedBy(arapAdjustmentsDTO.getCreatedBy());
-		}
-
-		getArapAdjustmentsVOFromArapAdjustmentsDTO(arapAdjustmentsDTO, arapAdjustmentsVO);
-		return arapAdjustmentsRepo.save(arapAdjustmentsVO);
-	}
-
-	private void getArapAdjustmentsVOFromArapAdjustmentsDTO(@Valid ArapAdjustmentsDTO arapAdjustmentsDTO,
-			ArapAdjustmentsVO arapAdjustmentsVO) {
-		// // Finyr
-		// int finyr = paymentVoucherRepo.findFinyr();
-		// // DocId
-		// String paymentVoucher = "PV" + finyr + paymentVoucherRepo.findDocId();
-		// paymentVoucherRepo.setDocId(paymentVoucher);
-		// paymentVoucherRepo.nextSeq();
-		arapAdjustmentsVO.setBranch(arapAdjustmentsDTO.getBranch());
-		arapAdjustmentsVO.setFinyr(arapAdjustmentsDTO.getFinyr());
-		arapAdjustmentsVO.setSourceTransId(arapAdjustmentsDTO.getSourceTransId());
-		arapAdjustmentsVO.setDocId(arapAdjustmentsDTO.getDocId());
-		arapAdjustmentsVO.setRefNo(arapAdjustmentsDTO.getRefNo());
-		arapAdjustmentsVO.setAccountName(arapAdjustmentsDTO.getAccountName());
-		arapAdjustmentsVO.setCurrency(arapAdjustmentsDTO.getCurrency());
-		arapAdjustmentsVO.setAccountCurrency(arapAdjustmentsDTO.getAccountCurrency());
-		arapAdjustmentsVO.setExRate(arapAdjustmentsDTO.getExRate());
-		arapAdjustmentsVO.setAmount(arapAdjustmentsDTO.getAmount());
-		arapAdjustmentsVO.setBaseAmount(arapAdjustmentsDTO.getBaseAmount());
-		arapAdjustmentsVO.setNativeAmount(arapAdjustmentsDTO.getNativeAmount());
-		arapAdjustmentsVO.setOffDocId(arapAdjustmentsDTO.getOffDocId());
-		arapAdjustmentsVO.setVoucherType(arapAdjustmentsDTO.getVoucherType());
-		arapAdjustmentsVO.setSubTypeCode(arapAdjustmentsDTO.getSubTypeCode());
-		arapAdjustmentsVO.setDocDate(arapAdjustmentsDTO.getDocDate());
-		arapAdjustmentsVO.setRefDate(arapAdjustmentsDTO.getRefDate());
-		arapAdjustmentsVO.setSubLedgerCode(arapAdjustmentsDTO.getSubLedgerCode());
-		arapAdjustmentsVO.setCreditDays(arapAdjustmentsDTO.getCreditDays());
-		arapAdjustmentsVO.setDueDate(arapAdjustmentsDTO.getDueDate());
-		arapAdjustmentsVO.setAexRate(arapAdjustmentsDTO.getAexRate());
-		arapAdjustmentsVO.setOrgId(arapAdjustmentsDTO.getOrgId());
-		arapAdjustmentsVO.setActive(arapAdjustmentsDTO.isActive());
-	}
-
-	@Override
-	public List<ArapAdjustmentsVO> getArapAdjustmentsByActive() {
-		return arapAdjustmentsRepo.findArapAdjustmentsByActive();
-	}
 
 	// ReceiptReversal
 

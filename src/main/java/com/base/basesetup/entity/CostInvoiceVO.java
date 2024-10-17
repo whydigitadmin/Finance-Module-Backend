@@ -107,11 +107,16 @@ public class CostInvoiceVO {
 	@Column(name = "screencode",length =10)
 	private String screenCode="CI";
 	@Column(name = "screenname",length =25)
-	private String screenName="CostInvoice";
+	private String screenName="Cost Invoice";
 	@Column(name = "ipno",length =10)
 	private String ipNo;
 	@Column(name = "latitude",length =100)
 	private String latitude;
+	@Column(name = "docid",length =30)
+	private String docId;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+	@Column(name = "docdate")
+	private LocalDate docDate=LocalDate.now();
 	
  
 	@OneToMany(mappedBy = "costInvoiceVO", cascade = CascadeType.ALL)

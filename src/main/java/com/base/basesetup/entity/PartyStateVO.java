@@ -42,9 +42,9 @@ public class PartyStateVO {
 	@Column(name = "contactphoneno")
 	private String contactPhoneNo;
 	@Column(name = "contactemail")
-	private int contactEmail;
+	private String contactEmail;
 	@Column(name = "statecode")
-	private boolean stateCode;
+	private String stateCode;
 	
 	@ManyToOne
 	@JoinColumn(name = "partymasterid")
