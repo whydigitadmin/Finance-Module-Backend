@@ -23,10 +23,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.base.basesetup.common.CommonConstant;
 import com.base.basesetup.common.UserConstants;
 import com.base.basesetup.dto.ArApBillBalanceReceivableDTO;
-import com.base.basesetup.dto.ReceiptReceivableDTO;
+import com.base.basesetup.dto.ReceiptDTO;
 import com.base.basesetup.dto.ResponseDTO;
 import com.base.basesetup.entity.ArApBillBalanceReceivableVO;
-import com.base.basesetup.entity.ReceiptReceivableVO;
+import com.base.basesetup.entity.ReceiptVO;
 import com.base.basesetup.service.ARService;
 
 @CrossOrigin
@@ -48,7 +48,7 @@ public class ARController extends BaseController {
 		String errorMsg = null;
 		Map<String, Object> responseObjectsMap = new HashMap<>();
 		ResponseDTO responseDTO = null;
-		List<ReceiptReceivableVO> receiptReceivableVO = new ArrayList<>();
+		List<ReceiptVO> receiptReceivableVO = new ArrayList<>();
 		try {
 			receiptReceivableVO = arReceivableService.getAllReceiptReceivableByOrgId(orgId);
 		} catch (Exception e) {
@@ -76,7 +76,7 @@ public class ARController extends BaseController {
 		String errorMsg = null;
 		Map<String, Object> responseObjectsMap = new HashMap<>();
 		ResponseDTO responseDTO = null;
-		List<ReceiptReceivableVO> receiptReceivableVO = new ArrayList<>();
+		List<ReceiptVO> receiptReceivableVO = new ArrayList<>();
 		try {
 			receiptReceivableVO = arReceivableService.getAllReceiptReceivableById(id);
 		} catch (Exception e) {
@@ -98,7 +98,7 @@ public class ARController extends BaseController {
 
 	@PutMapping("/updateCreateReceiptReceivable")
 	public ResponseEntity<ResponseDTO> updateCreateReceiptReceivable(
-			@Valid @RequestBody ReceiptReceivableDTO receiptReceivableDTO) {
+			@Valid @RequestBody ReceiptDTO receiptReceivableDTO) {
 		String methodName = "updateCreateReceiptReceivable()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
 		String errorMsg = null;
@@ -106,7 +106,7 @@ public class ARController extends BaseController {
 		ResponseDTO responseDTO = null;
 
 		try {
-			ReceiptReceivableVO receiptReceivableVO = arReceivableService
+			ReceiptVO receiptReceivableVO = arReceivableService
 					.updateCreateReceiptReceivable(receiptReceivableDTO);
 			boolean isUpdate = receiptReceivableDTO.getId() != null;
 
@@ -140,7 +140,7 @@ public class ARController extends BaseController {
 		String errorMsg = null;
 		Map<String, Object> responseObjectsMap = new HashMap<>();
 		ResponseDTO responseDTO = null;
-		List<ReceiptReceivableVO> receiptReceivableVO = new ArrayList<>();
+		List<ReceiptVO> receiptReceivableVO = new ArrayList<>();
 		try {
 			receiptReceivableVO = arReceivableService.getReceiptReceivableByActive();
 		} catch (Exception e) {
@@ -309,6 +309,35 @@ public class ARController extends BaseController {
 		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
 		return ResponseEntity.ok().body(responseDTO);
 
+	}
+
+	@GetMapping("/getAllReceiptRegister")
+	public ResponseEntity<ResponseDTO> getAllReceiptRegister(@RequestParam Long orgId, @RequestParam String branch,
+			@RequestParam String branchCode, @RequestParam String finYear, @RequestParam String fromDate,
+			@RequestParam String toDate, @RequestParam String subLedgerName) {
+		String methodName = "getAllReceiptRegister()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		List<Map<String, Object>> customer = new ArrayList<>();
+		try {
+			customer = arReceivableService.getAllReceiptRegister(orgId, branch, branchCode, finYear, fromDate, toDate,
+					subLedgerName);
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "Receipt Register information get successfully");
+			responseObjectsMap.put("PartyMasterVO", customer);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap, "Receipt Register information receive failed",
+					errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
 	}
 
 }

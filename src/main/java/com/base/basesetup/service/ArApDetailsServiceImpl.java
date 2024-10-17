@@ -15,8 +15,11 @@ import org.springframework.stereotype.Service;
 
 import com.base.basesetup.dto.ArapDetailsDTO;
 import com.base.basesetup.entity.ArapDetailsVO;
+import com.base.basesetup.entity.CostInvoiceVO;
+import com.base.basesetup.entity.DocumentTypeMappingDetailsVO;
 import com.base.basesetup.exception.ApplicationException;
 import com.base.basesetup.repo.ArapDetailsRepo;
+import com.base.basesetup.repo.DocumentTypeMappingDetailsRepo;
 
 @Service
 public class ArApDetailsServiceImpl implements ArApDetailsService {
@@ -25,6 +28,9 @@ public class ArApDetailsServiceImpl implements ArApDetailsService {
 
 	@Autowired
 	ArapDetailsRepo arapDetailsRepo;
+	
+	@Autowired
+	DocumentTypeMappingDetailsRepo documentTypeMappingDetailsRepo;
 
 	// ArapDetails
 
@@ -62,7 +68,7 @@ public class ArApDetailsServiceImpl implements ArApDetailsService {
 	@Override 
 	public Map<String, Object> createupdateArapDetails(@Valid ArapDetailsDTO arapDetailsDTO)
 			throws ApplicationException {
-
+      String screenCode="AD";
 		ArapDetailsVO arapDetailsVO;
 
 		String message = null;
@@ -70,6 +76,19 @@ public class ArApDetailsServiceImpl implements ArApDetailsService {
 		if (ObjectUtils.isEmpty(arapDetailsDTO.getId())) {
 
 			arapDetailsVO = new ArapDetailsVO();
+			
+			// GETDOCID API
+						String docId = arapDetailsRepo.getArapDetailsDocId(arapDetailsDTO.getOrgId(), arapDetailsDTO.getFinYear(),
+								arapDetailsDTO.getBranchCode(), screenCode);
+						arapDetailsVO.setDocId(docId);
+
+						// GETDOCID LASTNO +1
+						DocumentTypeMappingDetailsVO documentTypeMappingDetailsVO = documentTypeMappingDetailsRepo
+								.findByOrgIdAndFinYearAndBranchCodeAndScreenCode(arapDetailsDTO.getOrgId(),
+										arapDetailsDTO.getFinYear(), arapDetailsDTO.getBranchCode(),
+										screenCode);
+						documentTypeMappingDetailsVO.setLastno(documentTypeMappingDetailsVO.getLastno() + 1);
+						documentTypeMappingDetailsRepo.save(documentTypeMappingDetailsVO);
 
 			arapDetailsVO.setCreatedBy(arapDetailsDTO.getCreatedBy());
 			arapDetailsVO.setUpdatedBy(arapDetailsDTO.getCreatedBy());
@@ -115,7 +134,6 @@ public class ArApDetailsServiceImpl implements ArApDetailsService {
 		arapDetailsVO.setDocTypeCode(arapDetailsDTO.getDocTypeCode());
 		arapDetailsVO.setSubTypeCode(arapDetailsDTO.getSubTypeCode());
 		arapDetailsVO.setSubLedgerDivision(arapDetailsDTO.getSubLedgerDivision());
-		arapDetailsVO.setDocDate(arapDetailsDTO.getDocDate());
 		arapDetailsVO.setSuppRefNo(arapDetailsDTO.getSuppRefNo());
 		arapDetailsVO.setRefDate(arapDetailsDTO.getRefDate());
 		arapDetailsVO.setSupRefDate(arapDetailsDTO.getSupRefDate());
@@ -130,8 +148,22 @@ public class ArApDetailsServiceImpl implements ArApDetailsService {
 		arapDetailsVO.setIpNo(arapDetailsDTO.getIpNo());
 		arapDetailsVO.setLatitude(arapDetailsDTO.getLatitude());
 		arapDetailsVO.setSubLedgerName(arapDetailsDTO.getSubLedgerName());
+		arapDetailsVO.setBranchCode(arapDetailsDTO.getBranchCode()); 
 		return arapDetailsVO;
 
 	}
 
-}
+	@Override
+	public ArapDetailsVO getArapDetailsByDocId(Long orgId, String docId) {
+		return arapDetailsRepo.findArapDetailsByDocId(orgId, docId);
+	}
+
+	@Override
+	public String getArapDetailsDocId(Long orgId, String finYear, String branch, String branchCode) {
+		String ScreenCode = "AD";
+		String result = arapDetailsRepo.getArapDetailsDocId(orgId, finYear, branchCode, ScreenCode);
+		return result;
+	}
+	}
+
+

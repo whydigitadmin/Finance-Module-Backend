@@ -50,6 +50,7 @@ public class ArapDetailsDTO {
 	private String ipNo;
 	private String latitude;
 	private String subLedgerName;
+	private String branchCode;
 
 
 }

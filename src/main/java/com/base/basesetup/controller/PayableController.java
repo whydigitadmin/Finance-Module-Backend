@@ -27,7 +27,7 @@ import com.base.basesetup.dto.ResponseDTO;
 import com.base.basesetup.dto.TaxInvoiceDTO;
 import com.base.basesetup.entity.PaymentVO;
 import com.base.basesetup.entity.TaxInvoiceVO;
-import com.base.basesetup.service.PayableService;
+import com.base.basesetup.service.APService;
 
 @CrossOrigin
 @RestController
@@ -35,7 +35,7 @@ import com.base.basesetup.service.PayableService;
 public class PayableController extends BaseController{
 
 	@Autowired
-	PayableService payableService;
+	APService payableService;
 	
 	public static final Logger LOGGER = LoggerFactory.getLogger(PayableController.class);
 

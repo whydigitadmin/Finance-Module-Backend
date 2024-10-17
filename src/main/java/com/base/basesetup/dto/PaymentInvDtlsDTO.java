@@ -50,5 +50,9 @@ public class PaymentInvDtlsDTO {
 	private BigDecimal gainOrLossAmt;
 
 	private String remarks;
+	
+	private LocalDate fromDate;
+
+	private LocalDate toDate;
 
 }

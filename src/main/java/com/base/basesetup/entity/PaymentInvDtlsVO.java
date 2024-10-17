@@ -36,59 +36,66 @@ public class PaymentInvDtlsVO {
 	@SequenceGenerator(name = "paymentinvdtlsgen", sequenceName = "paymentinvdtlsseq", initialValue = 1000000001, allocationSize = 1)
 	@Column(name = "paymentinvdtlsid")
 	private Long id;
-	
+
 	@Column(name = "invno", length = 30)
-    private String invNo;
+	private String invNo;
 
-    @Column(name = "invdate")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
-    private LocalDate invDate; 
+	@Column(name = "invdate")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+	private LocalDate invDate;
 
-    @Column(name = "refno", length = 30)
-    private String refNo;
+	@Column(name = "refno", length = 30)
+	private String refNo;
 
-    @Column(name = "refdate")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
-    private LocalDate refDate; 
+	@Column(name = "refdate")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+	private LocalDate refDate;
 
-    @Column(name = "supplierrefno", length = 30)
-    private String supplierRefNo;
+	@Column(name = "supplierrefno", length = 30)
+	private String supplierRefNo;
 
-    @Column(name = "supplierrefdate")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
-    private LocalDate supplierRefDate;
+	@Column(name = "supplierrefdate")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+	private LocalDate supplierRefDate;
 
-    @Column(name = "currency", length = 5)
-    private String currency;
+	@Column(name = "currency", length = 5)
+	private String currency;
 
-    @Column(name = "exrate", precision = 10, scale = 5)
-    private BigDecimal exRate;
+	@Column(name = "exrate", precision = 10, scale = 5)
+	private BigDecimal exRate;
 
-    @Column(name = "amount", precision = 10, scale = 2)
-    private BigDecimal amount;
+	@Column(name = "amount", precision = 10, scale = 2)
+	private BigDecimal amount;
 
-    @Column(name = "chargeamt", precision = 10, scale = 2)
-    private BigDecimal chargeAmt;
+	@Column(name = "chargeamt", precision = 10, scale = 2)
+	private BigDecimal chargeAmt;
 
-    @Column(name = "outstanding", precision = 10, scale = 2)
-    private BigDecimal outstanding;
+	@Column(name = "outstanding", precision = 10, scale = 2)
+	private BigDecimal outstanding;
 
-    @Column(name = "settled", precision = 10, scale = 2)
-    private BigDecimal settled;
+	@Column(name = "settled", precision = 10, scale = 2)
+	private BigDecimal settled;
 
-    @Column(name = "payexrate", precision = 10, scale = 2)
-    private BigDecimal payExRate;
+	@Column(name = "payexrate", precision = 10, scale = 2)
+	private BigDecimal payExRate;
 
-    @Column(name = "txnsettled", precision = 10, scale = 2)
-    private BigDecimal txnSettled;
+	@Column(name = "txnsettled", precision = 10, scale = 2)
+	private BigDecimal txnSettled;
 
-    @Column(name = "gainorlossamt", precision = 10, scale = 2)
-    private BigDecimal gainOrLossAmt;
+	@Column(name = "gainorlossamt", precision = 10, scale = 2)
+	private BigDecimal gainOrLossAmt;
 
-    @Column(name = "remarks", length = 150)
-    private String remarks;
+	@Column(name = "remarks", length = 150)
+	private String remarks;
 
-	
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+	@Column(name = "fromdate")
+	private LocalDate fromDate;
+
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+	@Column(name = "todate")
+	private LocalDate toDate;
+
 	@ManyToOne
 	@JoinColumn(name = "paymentid")
 	@JsonBackReference

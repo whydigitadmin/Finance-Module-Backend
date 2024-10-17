@@ -61,8 +61,6 @@ public class PartyMasterDTO {
 	private String ipNo;
 	private String latitude;
 	private Long orgId;
-
-
     
     List<PartyStateDTO> partyStateDTO;
     List<PartyAddressDTO> partyAddressDTO;
