@@ -229,8 +229,7 @@ public class MasterServiceImpl implements MasterService {
 	@Autowired
 	PartyVendorEvaluationRepo partyVendorEvaluationRepo;
 	
-	@Autowired
-	PartyTypeRepo partyTypeRepo;
+
 
 	// Branch
 
@@ -1958,64 +1957,7 @@ public class MasterServiceImpl implements MasterService {
 		}
 		
 		
-		//PartyType
-		
-		@Override
-		public PartyTypeVO createUpdatePartyType(@Valid PartyTypeDTO partyTypeDTO) throws ApplicationException {
-			PartyTypeVO partyTypeVO = new PartyTypeVO();
-			boolean isUpdate = false;
-			if (ObjectUtils.isNotEmpty(partyTypeDTO.getId())) {
-				isUpdate = true;
-				partyTypeVO = partyTypeRepo.findById(partyTypeDTO.getId())
-						.orElseThrow(() -> new ApplicationException("Invalid PartyType details"));
-				partyTypeVO.setUpdatedBy(partyTypeDTO.getCreatedBy());
-			} else {
-				if (partyTypeRepo.existsByPartyTypeAndOrgId(partyTypeDTO.getPartyType(), partyTypeDTO.getOrgId())) {
-					throw new ApplicationException("The given value PartyType already exists.");
-				}
-				if (partyTypeRepo.existsByPartyTypeCodeAndOrgId(partyTypeDTO.getPartyTypeCode(),
-						partyTypeDTO.getOrgId())) {
-					throw new ApplicationException("The given value PartyTypeCode already exists.");
-				}
-				partyTypeVO.setUpdatedBy(partyTypeDTO.getCreatedBy());
-				partyTypeVO.setCreatedBy(partyTypeDTO.getCreatedBy());
-			}
-			if (isUpdate) {
-				PartyTypeVO partyType = partyTypeRepo.findById(partyTypeDTO.getId()).orElse(null);
-				if (!partyType.getPartyType().equalsIgnoreCase(partyTypeDTO.getPartyType())) {
-					if (partyTypeRepo.existsByPartyTypeAndOrgId(partyTypeDTO.getPartyType(), partyTypeDTO.getOrgId())) {
-						throw new ApplicationException("The given value PartyType already exists.");
-					}
-				}
-				if (!partyType.getPartyTypeCode().equalsIgnoreCase(partyTypeDTO.getPartyTypeCode())) {
-					if (partyTypeRepo.existsByPartyTypeCodeAndOrgId(partyTypeDTO.getPartyTypeCode(),
-							partyTypeDTO.getOrgId())) {
-						throw new ApplicationException("The given value PartyTypeCode already exists.");
-					}
-				}
-			}
-			getPartyTypeVOFromPartyTypeDTO(partyTypeDTO, partyTypeVO);
-			return partyTypeRepo.save(partyTypeVO);
-		}
 
-		private void getPartyTypeVOFromPartyTypeDTO(@Valid PartyTypeDTO partyTypeDTO, PartyTypeVO partyTypeVO) {
-//			partyTypeVO.setPartyType(partyTypeDTO.getPartyType());
-			String partyType = partyTypeDTO.getPartyType(); 
-            if (partyType != null) {
-            	partyTypeVO.setPartyType(partyType.toUpperCase()); // Set field to uppercase
-            }
-//			partyTypeVO.setPartyTypeCode(partyTypeDTO.getPartyTypeCode());
-			String partyTypeCode = partyTypeDTO.getPartyTypeCode(); 
-            if (partyTypeCode != null) {
-            	partyTypeVO.setPartyTypeCode(partyTypeCode.toUpperCase()); // Set field to uppercase
-            }
-			partyTypeVO.setCancel(partyTypeDTO.isCancel());
-			partyTypeVO.setOrgId(partyTypeDTO.getOrgId());
-			partyTypeVO.setActive(partyTypeDTO.isActive());
-			partyTypeVO.setCancelRemarks(partyTypeDTO.getCancelRemarks());
-
-
-		}
 		
 		
 	       
