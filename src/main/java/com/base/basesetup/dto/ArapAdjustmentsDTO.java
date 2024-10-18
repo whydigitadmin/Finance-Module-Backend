@@ -1,6 +1,6 @@
 package com.base.basesetup.dto;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -27,14 +27,14 @@ public class ArapAdjustmentsDTO {
 	private String offDocId;
 	private String voucherType;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
-	private LocalDateTime docDate;
+	private LocalDate docDate;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
-	private LocalDateTime refDate;
+	private LocalDate refDate;
 	private String subLedgerCode;
 	private float exRate;
 	private String creditDays;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
-	private LocalDateTime dueDate;
+	private LocalDate dueDate;
 	private Long orgId;
 	private String createdBy;
 	private String branchCode;
