@@ -35,6 +35,7 @@ public class ArapAdjustmentsDTO {
 	private String creditDays;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	private LocalDate dueDate;
+	
 	private Long orgId;
 	private String createdBy;
 	private String branchCode;
