@@ -171,6 +171,8 @@ public interface MasterService {
 
 //	ChargeTypeRequest
 	List<ChargeTypeRequestVO> getAllChargeTypeRequestByOrgId(Long orgId);
+	
+	List<Map<String,Object>>getChargeType(Long orgId);
 
 	ChargeTypeRequestVO updateCreateChargeTypeRequest(@Valid ChargeTypeRequestDTO chargeTypeRequestDTO)
 			throws ApplicationException;
