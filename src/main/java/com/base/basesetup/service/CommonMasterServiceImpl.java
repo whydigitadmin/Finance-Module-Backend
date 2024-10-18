@@ -373,8 +373,8 @@ public class CommonMasterServiceImpl implements CommonMasterService {
 
 		for (Object[] finScreen : getFinScreen) {
 			Map<String, Object> branchMap = new HashMap<>();
-			branchMap.put("screenName", finScreen[0] != null ? finScreen[0].toString() : "");
-			branchMap.put("screenCode", finScreen[1] != null ? finScreen[1].toString() : "");
+			branchMap.put("screenCode", finScreen[0] != null ? finScreen[0].toString() : "");
+			branchMap.put("screenName", finScreen[1] != null ? finScreen[1].toString() : "");
 			finScreenList.add(branchMap);
 		}
 		return finScreenList;
