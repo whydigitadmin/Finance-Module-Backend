@@ -52,6 +52,8 @@ public class PartyTypeVO {
     @Column(name = "cancel")
     private boolean cancel;
 
+    
+    
     @Column(name = "cancelremarks", length = 50)
     private String cancelRemarks;
 
