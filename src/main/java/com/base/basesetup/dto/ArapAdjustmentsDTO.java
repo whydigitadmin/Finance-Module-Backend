@@ -27,8 +27,6 @@ public class ArapAdjustmentsDTO {
 	private String offDocId;
 	private String voucherType;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
-	private LocalDateTime docDate;
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	private LocalDateTime refDate;
 	private String subLedgerCode;
 	private float exRate;
