@@ -311,6 +311,7 @@ public class ARController extends BaseController {
 
 	}
 
+	//Receipt Register
 	@GetMapping("/getAllReceiptRegister")
 	public ResponseEntity<ResponseDTO> getAllReceiptRegister(@RequestParam Long orgId, @RequestParam String branch,
 			@RequestParam String branchCode, @RequestParam String finYear, @RequestParam String fromDate,
