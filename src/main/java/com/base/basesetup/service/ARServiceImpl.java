@@ -125,9 +125,6 @@ public class ARServiceImpl implements ARService {
 		receiptVO.setCustomer(receiptDTO.getCustomer());
 		receiptVO.setClient(receiptDTO.getClient());
 		receiptVO.setCreatedBy(receiptDTO.getCreatedBy());
-
-		receiptVO.setUpdatedBy(receiptDTO.getUpdatedBy());
-
 		receiptVO.setActive(receiptDTO.isActive());
 		receiptVO.setCancel(receiptDTO.isCancel());
 		receiptVO.setCancelRemarks(receiptDTO.getCancelRemarks());
@@ -136,8 +133,6 @@ public class ARServiceImpl implements ARService {
 		receiptVO.setScreenName("RECEIPT");
 		receiptVO.setIpNo(receiptDTO.getIpNo());
 		receiptVO.setLatitude(receiptDTO.getLatitude());
-		receiptVO.setDocId(receiptDTO.getDocId());
-		receiptVO.setDocDate(receiptDTO.getDocDate());
 		receiptVO.setType(receiptDTO.getType());
 		receiptVO.setCustomerName(receiptDTO.getCustomerName());
 		receiptVO.setCustomerCode(receiptDTO.getCustomerCode());
@@ -239,7 +234,6 @@ public class ARServiceImpl implements ARService {
 	private void getArApBillBalanceReceivableVOFromArApBillBalanceReceivableDTO(
 			@Valid ArApBillBalanceReceivableDTO arApBillBalanceReceivableDTO,
 			ArApBillBalanceReceivableVO arApBillBalanceReceivableVO) {
-		arApBillBalanceReceivableVO.setDocNo(arApBillBalanceReceivableDTO.getDocNo());
 		arApBillBalanceReceivableVO.setAccName(arApBillBalanceReceivableDTO.getAccName());
 		arApBillBalanceReceivableVO.setPartyName(arApBillBalanceReceivableDTO.getPartyName());
 		arApBillBalanceReceivableVO.setPartyCode(arApBillBalanceReceivableDTO.getPartyCode());
@@ -262,7 +256,6 @@ public class ARServiceImpl implements ARService {
 		arApBillBalanceReceivableVO.setBranch(arApBillBalanceReceivableDTO.getBranch());
 		arApBillBalanceReceivableVO.setBranchCode(arApBillBalanceReceivableDTO.getBranchCode());
 		arApBillBalanceReceivableVO.setCreatedBy(arApBillBalanceReceivableDTO.getCreatedBy());
-		arApBillBalanceReceivableVO.setUpdatedBy(arApBillBalanceReceivableDTO.getUpdatedBy());
 		arApBillBalanceReceivableVO.setCancel(arApBillBalanceReceivableDTO.isCancel());
 		arApBillBalanceReceivableVO.setCancelRemarks(arApBillBalanceReceivableDTO.getCancelRemarks());
 		arApBillBalanceReceivableVO.setFinYear(arApBillBalanceReceivableDTO.getFinYear());

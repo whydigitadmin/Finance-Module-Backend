@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
-import javax.persistence.Column;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,8 +19,6 @@ public class ReceiptDTO {
 	private Long id;
 
 	// Receipt fields
-	private String docId;
-	private LocalDate docDate;
 	private String type;
 	private String customerName;
 	private String customerCode;
@@ -35,6 +33,7 @@ public class ReceiptDTO {
 	private String chequeBank;
 	private String receiptType;
 	private String chequeUtiNo;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	private LocalDate chequeUtiDt;
 	private String receivedFrom;
 	private String netAmount;
@@ -46,7 +45,6 @@ public class ReceiptDTO {
 	private String customer;
 	private String client;
 	private String createdBy;
-	private String updatedBy;
 	private boolean active;
 	private boolean cancel;
 	private String cancelRemarks;
