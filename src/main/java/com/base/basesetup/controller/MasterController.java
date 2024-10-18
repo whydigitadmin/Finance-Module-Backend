@@ -33,6 +33,7 @@ import com.base.basesetup.dto.ExRatesDTO;
 import com.base.basesetup.dto.GroupLedgerDTO;
 import com.base.basesetup.dto.ListOfValuesDTO;
 import com.base.basesetup.dto.PartyMasterDTO;
+import com.base.basesetup.dto.PartyTypeDTO;
 import com.base.basesetup.dto.ResponseDTO;
 import com.base.basesetup.dto.SacCodeDTO;
 import com.base.basesetup.dto.SetTaxRateDTO;
@@ -50,6 +51,7 @@ import com.base.basesetup.entity.ExRatesVO;
 import com.base.basesetup.entity.GroupLedgerVO;
 import com.base.basesetup.entity.ListOfValuesVO;
 import com.base.basesetup.entity.PartyMasterVO;
+import com.base.basesetup.entity.PartyTypeVO;
 import com.base.basesetup.entity.SacCodeVO;
 import com.base.basesetup.entity.SetTaxRateVO;
 import com.base.basesetup.entity.SubLedgerAccountVO;
@@ -1749,6 +1751,66 @@ public class MasterController extends BaseController {
 			LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
 			return ResponseEntity.ok().body(responseDTO);
 		}
+		
+		//PARTYTYPE
+		
+	
+		@PutMapping("/createUpdatePartyType")
+		public ResponseEntity<ResponseDTO> createUpdatePartyType(@Valid @RequestBody PartyTypeDTO partyTypeDTO) {
+		    String methodName = "createUpdatePartyType()";
+
+		    LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		    String errorMsg = null;
+		    Map<String, Object> responseObjectsMap = new HashMap<>();
+		    ResponseDTO responseDTO = null;
+
+		    try {
+		        PartyTypeVO partyTypeVO = masterService.createUpdatePartyType(partyTypeDTO);
+		        boolean isUpdate = partyTypeDTO.getId() != null;
+		        
+		        if (partyTypeVO != null) {
+		            responseObjectsMap.put(CommonConstant.STRING_MESSAGE, isUpdate ? "PartyType updated successfully" : "PartyType created successfully");
+		            responseObjectsMap.put("partyTypeVO", partyTypeVO);
+		            responseDTO = createServiceResponse(responseObjectsMap);
+		        } else {
+		            errorMsg = isUpdate ? "PartyType not found for ID: " + partyTypeDTO.getId() : "PartyType creation failed";
+		            responseDTO = createServiceResponseError(responseObjectsMap, isUpdate ? "PartyType update failed" : "PartyType creation failed", errorMsg);
+		        }
+		    } catch (Exception e) {
+		        errorMsg = e.getMessage();
+		        boolean isUpdate = partyTypeDTO.getId() != null;
+		        LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		        responseDTO = createServiceResponseError(responseObjectsMap, isUpdate ? "PartyType update failed" : "PartyType creation failed", errorMsg);
+		    }
+		    LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		    return ResponseEntity.ok().body(responseDTO);
+		}
+
+//		@GetMapping("/getPartyTypeById")
+//		public ResponseEntity<ResponseDTO> getPartyTypeById(@RequestParam(required = false) Long id) {
+//			String methodName = "getPartyTypeById()";
+//			LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+//			String errorMsg = null;
+//			Map<String, Object> responseObjectsMap = new HashMap<>();
+//			ResponseDTO responseDTO = null;
+//			List<CostCenterVO> costCenterVO = new ArrayList<>();
+//			try {
+//				costCenterVO = masterService.getPartyTypeById(id);
+//			} catch (Exception e) {
+//				errorMsg = e.getMessage();
+//				LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+//			}
+//			if (StringUtils.isBlank(errorMsg)) {
+//				responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "CostCenter information get successfully By Id");
+//				responseObjectsMap.put("costCenterVO", costCenterVO);
+//				responseDTO = createServiceResponse(responseObjectsMap);
+//			} else {
+//				responseDTO = createServiceResponseError(responseObjectsMap, "CostCenter information receive failed By Id",
+//						errorMsg);
+//			}
+//			LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+//			return ResponseEntity.ok().body(responseDTO);
+//		}
 
 
 }
