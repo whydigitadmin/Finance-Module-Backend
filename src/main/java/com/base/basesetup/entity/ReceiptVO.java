@@ -85,7 +85,7 @@ public class ReceiptVO {
 	// Common Fields
 	@Column(name = "branch", length = 25)
 	private String branch;
-	@Column(name = "chcode", length = 5)
+	@Column(name = "branchcode", length = 5)
 	private String branchCode;
 	@Column(name = "customer", length = 100)
 	private String customer;
