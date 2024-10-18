@@ -120,8 +120,8 @@ public class ArapAdjustmentsServiceImpl implements ArapAdjustmentsService{
 	    arapAdjustmentsVO.setTransId(arapAdjustmentsDTO.getTransId());
 	    arapAdjustmentsVO.setChargeableAmt(arapAdjustmentsDTO.getChargeableAmt());
 	    arapAdjustmentsVO.setTdsAmt(arapAdjustmentsDTO.getTdsAmt());
-	    arapAdjustmentsVO.setOfficeDocId(arapAdjustmentsDTO.getOfficeDocId());
 	    arapAdjustmentsVO.setSubLedgerName(arapAdjustmentsDTO.getSubLedgerName());
+	    arapAdjustmentsVO.setGstFlag(arapAdjustmentsDTO.isGstFlag());
 		
         return arapAdjustmentsVO;
 	}
