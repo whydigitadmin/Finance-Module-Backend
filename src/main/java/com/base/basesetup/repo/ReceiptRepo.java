@@ -15,7 +15,7 @@ public interface ReceiptRepo extends JpaRepository<ReceiptVO, Long> {
 	@Query(nativeQuery = true, value = "select * from receipt where orgid=?1")
 	List<ReceiptVO> getAllReceiptReceivableByOrgId(Long orgId);
 
-	@Query(nativeQuery = true, value = "select * from receipt where receiptreceivableid=?1")
+	@Query(nativeQuery = true, value = "select * from receipt where receiptid=?1")
 	List<ReceiptVO> getAllReceiptReceivableById(Long id);
 
 	@Query(nativeQuery = true, value = "select * from receipt where active=1")

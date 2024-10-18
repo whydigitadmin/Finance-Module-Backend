@@ -10,21 +10,17 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class FinancialYearDTO {
+
 	private Long id;
-	private Long orgId;
-	private boolean active;
-	private Long sno;
-	private String finYr;
-	private String finYrId;
-	private String finYrIdentifier;
+	private int finYear;
+	private Long finYearId;
+	private String finYearIdentifier;
 	private LocalDate startDate;
 	private LocalDate endDate;
-	private boolean currentFinYr;
+	private boolean currentFinYear;
 	private boolean closed;
-	private boolean open;
-	private boolean action;
-	private String company;
-	private String userId;
+	private Long orgId;
 	private String createdBy;
+	private boolean active;
 
 }

@@ -26,54 +26,38 @@ import lombok.NoArgsConstructor;
 public class FinancialYearVO {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "financialyeargen")
-	@SequenceGenerator(name = "financialyeargen", sequenceName = "financialyearseq", initialValue = 1000000001, allocationSize = 1)
-	@Column(name = "financialyearid")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "financialyearegen")
+	@SequenceGenerator(name = "financialyearegen", sequenceName = "financialyearseq", initialValue = 1000000001, allocationSize = 1)
+	@Column(name = "finyearid")
 	private Long id;
-	@Column(name = "orgid")
-	private Long orgId;
-	@Column(name = "active")
-	private boolean active;
-	@Column(name = "cancel")
-	private Long cancel;
-	@Column(name = "cancelremarks")
-	private Long cancelRemarks;
-	@Column(name = "sno")
-	private Long sno;
-	@Column(name = "finyr")
-	private String finYr;
-	@Column(name="finyrid")
-	private String finYrId;
-	@Column(name = "finyridentifier")
-	private String finYrIdentifier;
+	@Column(name = "financialyearid")
+	private Long finYearId;
+	@Column(name = "finyear")
+	private int finYear;
+	@Column(name = "finyearidentifier")
+	private String finYearIdentifier;
 	@Column(name = "startdate")
 	private LocalDate startDate;
 	@Column(name = "enddate")
 	private LocalDate endDate;
-	@Column(name = "currentfinyr")
-	private boolean currentFinYr;
+	@Column(name = "currentfinyear")
+	private boolean currentFinYear;
 	@Column(name = "closed")
 	private boolean closed;
-	@Column(name = "open")
-	private boolean open;
-	@Column(name="action")
-	private boolean action;
-	@Column(name = "company")
-	private String company;
-	@Column(name = "dupchk")
-	private String dupchk;
-	@Column(name = "userid")
-	private String userId;
+	@Column(name = "orgid")
+	private Long orgId;
 	@Column(name = "createdby")
 	private String createdBy;
 	@Column(name = "modifiedby")
-	private String  updatedBy;
-	
+	private String updatedBy;
+	private boolean active;
 
 	@JsonGetter("active")
 	public String getActive() {
 		return active ? "Active" : "In-Active";
 	}
+
 	@Embedded
 	private CreatedUpdatedDate commonDate = new CreatedUpdatedDate();
+
 }

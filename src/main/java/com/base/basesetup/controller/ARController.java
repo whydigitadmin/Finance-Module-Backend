@@ -41,7 +41,7 @@ public class ARController extends BaseController {
 
 	// Receipt
 
-	@GetMapping("/getAllReceiptReceivableByOrgId")
+	@GetMapping("/getAllReceiptByOrgId")
 	public ResponseEntity<ResponseDTO> getAllReceiptReceivableByOrgId(@RequestParam(required = false) Long orgId) {
 		String methodName = "getAllReceiptReceivableByOrgId()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
@@ -69,7 +69,7 @@ public class ARController extends BaseController {
 
 	}
 
-	@GetMapping("/getAllReceiptReceivableById")
+	@GetMapping("/getAllReceiptById")
 	public ResponseEntity<ResponseDTO> getAllReceiptReceivableById(@RequestParam(required = false) Long id) {
 		String methodName = "getAllReceiptReceivableById()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
@@ -96,7 +96,7 @@ public class ARController extends BaseController {
 		return ResponseEntity.ok().body(responseDTO);
 	}
 
-	@PutMapping("/updateCreateReceiptReceivable")
+	@PutMapping("/updateCreateReceipt")
 	public ResponseEntity<ResponseDTO> updateCreateReceiptReceivable(
 			@Valid @RequestBody ReceiptDTO receiptReceivableDTO) {
 		String methodName = "updateCreateReceiptReceivable()";
@@ -133,7 +133,7 @@ public class ARController extends BaseController {
 		return ResponseEntity.ok().body(responseDTO);
 	}
 
-	@GetMapping("/getReceiptReceivableByActive")
+	@GetMapping("/getReceiptByActive")
 	public ResponseEntity<ResponseDTO> getReceiptReceivableByActive() {
 		String methodName = "getReceiptReceivableByActive()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
@@ -311,6 +311,7 @@ public class ARController extends BaseController {
 
 	}
 
+	//Receipt Register
 	@GetMapping("/getAllReceiptRegister")
 	public ResponseEntity<ResponseDTO> getAllReceiptRegister(@RequestParam Long orgId, @RequestParam String branch,
 			@RequestParam String branchCode, @RequestParam String finYear, @RequestParam String fromDate,
