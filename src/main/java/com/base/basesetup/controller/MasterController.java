@@ -1778,39 +1778,7 @@ public class MasterController extends BaseController {
 			return ResponseEntity.ok().body(responseDTO);
 		}
 		
-		//PARTYTYPE
 		
-	
-		@PutMapping("/createUpdatePartyType")
-		public ResponseEntity<ResponseDTO> createUpdatePartyType(@Valid @RequestBody PartyTypeDTO partyTypeDTO) {
-		    String methodName = "createUpdatePartyType()";
-
-		    LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
-		    String errorMsg = null;
-		    Map<String, Object> responseObjectsMap = new HashMap<>();
-		    ResponseDTO responseDTO = null;
-
-		    try {
-		        PartyTypeVO partyTypeVO = masterService.createUpdatePartyType(partyTypeDTO);
-		        boolean isUpdate = partyTypeDTO.getId() != null;
-		        
-		        if (partyTypeVO != null) {
-		            responseObjectsMap.put(CommonConstant.STRING_MESSAGE, isUpdate ? "PartyType updated successfully" : "PartyType created successfully");
-		            responseObjectsMap.put("partyTypeVO", partyTypeVO);
-		            responseDTO = createServiceResponse(responseObjectsMap);
-		        } else {
-		            errorMsg = isUpdate ? "PartyType not found for ID: " + partyTypeDTO.getId() : "PartyType creation failed";
-		            responseDTO = createServiceResponseError(responseObjectsMap, isUpdate ? "PartyType update failed" : "PartyType creation failed", errorMsg);
-		        }
-		    } catch (Exception e) {
-		        errorMsg = e.getMessage();
-		        boolean isUpdate = partyTypeDTO.getId() != null;
-		        LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
-		        responseDTO = createServiceResponseError(responseObjectsMap, isUpdate ? "PartyType update failed" : "PartyType creation failed", errorMsg);
-		    }
-		    LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
-		    return ResponseEntity.ok().body(responseDTO);
-		}
 
 
 
