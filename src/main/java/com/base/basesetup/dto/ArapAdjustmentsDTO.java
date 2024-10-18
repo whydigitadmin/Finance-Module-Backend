@@ -43,6 +43,6 @@ public class ArapAdjustmentsDTO {
 	private String transId;
 	private float chargeableAmt;
 	private float tdsAmt;
-	private String officeDocId;
 	private String subLedgerName;
+	private boolean gstFlag;
 }
