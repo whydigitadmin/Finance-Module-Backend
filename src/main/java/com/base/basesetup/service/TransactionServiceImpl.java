@@ -1372,7 +1372,7 @@ public class TransactionServiceImpl implements TransactionService {
 					particularsPaymentVoucherVO = new ParticularsPaymentVoucherVO();
 				}
 				particularsPaymentVoucherVO.setAccountName(particularsPaymentVoucherDTO.getAccountName());
-				particularsPaymentVoucherVO.setSubLedgerName(particularsPaymentVoucherDTO.getSubLedgerCode());
+				particularsPaymentVoucherVO.setSubLedgerCode(particularsPaymentVoucherDTO.getSubLedgerCode());
 				particularsPaymentVoucherVO.setSubLedgerName(particularsPaymentVoucherDTO.getSubLedgerName());
 				particularsPaymentVoucherVO.setDebit(particularsPaymentVoucherDTO.getDebit());
 				particularsPaymentVoucherVO.setCredit(particularsPaymentVoucherDTO.getCredit());
@@ -1389,26 +1389,36 @@ public class TransactionServiceImpl implements TransactionService {
 
 	private void getPaymentVoucherVOFromPaymentVoucherDTO(@Valid PaymentVoucherDTO paymentVoucherDTO,
 			PaymentVoucherVO paymentVoucherVO) {
-		// // Finyr
-		int finyr = paymentVoucherRepo.findFinyr();
-		// DocId
-		String paymentVoucher = "PV" + finyr + paymentVoucherRepo.findDocId();
-		paymentVoucherVO.setDocid(paymentVoucher);
-		paymentVoucherRepo.nextSeq();
-		paymentVoucherVO.setDocid(paymentVoucherDTO.getDocid());
+//		// // Finyr
+//		int finyr = paymentVoucherRepo.findFinyr();
+//		// DocId
+//		String paymentVoucher = "PV" + finyr + paymentVoucherRepo.findDocId();
+//		paymentVoucherVO.setDocid(paymentVoucher);
+//		paymentVoucherRepo.nextSeq();
+		paymentVoucherVO.setDocId(paymentVoucherDTO.getDocId());
 		paymentVoucherVO.setVehicleSubType(paymentVoucherDTO.getVehicleSubType());
 		paymentVoucherVO.setReferenceNo(paymentVoucherDTO.getReferenceNo());
 		paymentVoucherVO.setCurrency(paymentVoucherDTO.getCurrency());
 		paymentVoucherVO.setDocDate(paymentVoucherDTO.getDocDate());
 		paymentVoucherVO.setReferenceDate(paymentVoucherDTO.getReferenceDate());
 		paymentVoucherVO.setExRate(paymentVoucherDTO.getExRate());
-		paymentVoucherVO.setRemarks(paymentVoucherDTO.getRemarks());
+		paymentVoucherVO.setChequeNo(paymentVoucherDTO.getChequeNo());
+		paymentVoucherVO.setChequeDate(paymentVoucherDTO.getChequeDate());
+		paymentVoucherVO.setChequeBank(paymentVoucherDTO.getChequeBank());
+		paymentVoucherVO.setOrgId(paymentVoucherDTO.getOrgId());
+		paymentVoucherVO.setActive(paymentVoucherDTO.isActive());
+		paymentVoucherVO.setCancel(paymentVoucherDTO.isCancel());
+		paymentVoucherVO.setBranch(paymentVoucherDTO.getBranch());
+		paymentVoucherVO.setBranchCode(paymentVoucherDTO.getBranchCode());
+		paymentVoucherVO.setCancelRemarks(paymentVoucherDTO.getCancelRemarks());
+		paymentVoucherVO.setIpNo(paymentVoucherDTO.getIpNo());
+		paymentVoucherVO.setLatitude(paymentVoucherDTO.getLatitude());
+		paymentVoucherVO.setRemarks(paymentVoucherDTO.getRemarks().toUpperCase());
 		paymentVoucherVO.setTotalDebitAmount(paymentVoucherDTO.getTotalDebitAmount());
 		paymentVoucherVO.setTotalCreditAmount(paymentVoucherDTO.getTotalCreditAmount());
 	}
 
 	@Override
-
 	public List<PaymentVoucherVO> getPaymentVoucherByActive() {
 		return paymentVoucherRepo.findPaymentVoucherByActive();
 	}

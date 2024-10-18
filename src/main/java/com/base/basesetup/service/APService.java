@@ -1,6 +1,7 @@
 package com.base.basesetup.service;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.validation.Valid;
 
@@ -20,7 +21,7 @@ public interface APService {
 	PaymentVO updateCreatePayment(@Valid PaymentDTO paymentDTO) throws ApplicationException;
 
 // 	PaymentRegister
-//	List<Map<String, Object>> getAllPaymentRegister(Long orgId, String branch, String branchCode,
-//			String finYear,String fromDate,String toDate,String subLedgerName);
+	List<Map<String, Object>> getAllPaymentRegister(Long orgId, String branch, String branchCode,
+			String finYear,String fromDate,String toDate,String subLedgerName);
 
 }

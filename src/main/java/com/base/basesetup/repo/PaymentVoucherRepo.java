@@ -24,10 +24,12 @@ public interface PaymentVoucherRepo extends JpaRepository<PaymentVoucherVO, Long
 			+ ") AS finyr")
 	int findFinyr();
 
-	@Query(nativeQuery = true, value = "select sequence_value from paymentvoucherseq;")
+
+
+	@Query(nativeQuery = true, value = "select sequence_value from paymentvoucherseq")
 	String findDocId();
 
-	@Query(nativeQuery = true, value = "CALL next_paymentvoucher_sequence_value();")
+	@Query(nativeQuery = true, value = "CALL next_paymentvoucher_sequence_value()")
  	void nextSeq();
 
 }
