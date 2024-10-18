@@ -61,6 +61,7 @@ import com.base.basesetup.entity.ChargeTypeRequestVO;
 import com.base.basesetup.entity.ChequeBookDetailsVO;
 import com.base.basesetup.entity.ChequeBookVO;
 import com.base.basesetup.entity.CostCenterVO;
+import com.base.basesetup.entity.DocumentTypeMappingDetailsVO;
 import com.base.basesetup.entity.EmployeeVO;
 import com.base.basesetup.entity.ExRatesVO;
 import com.base.basesetup.entity.GroupLedgerVO;
@@ -230,6 +231,8 @@ public class MasterServiceImpl implements MasterService {
 	@Autowired
 	PartyVendorEvaluationRepo partyVendorEvaluationRepo;
 
+	@Autowired
+	PartyTypeRepo partyTypeRepo;
 	// Branch
 
 	@Override
@@ -1734,6 +1737,17 @@ public class MasterServiceImpl implements MasterService {
 			partyMasterVO.setUpdatedBy(partyMasterDTO.getCreatedBy());
 		} 
 		else {
+			// GETDOCID API
+			String docId = partyTypeRepo.getPartyTypeDocId(partyMasterDTO.getOrgId(), partyMasterDTO.getPartyType());
+			partyMasterVO.setPartyCode(docId);
+
+			// GETDOCID LASTNO +1
+			PartyTypeVO partyTypeVO = partyTypeRepo
+					.findByOrgIdAndPartyType(partyMasterDTO.getOrgId(),
+							partyMasterDTO.getPartyType());
+			partyTypeVO.setLastNo(partyTypeVO.getLastNo() + 1);
+			partyTypeRepo.save(partyTypeVO);
+
 			partyMasterVO.setCreatedBy(partyMasterDTO.getCreatedBy());
 			partyMasterVO.setUpdatedBy(partyMasterDTO.getCreatedBy());
 		}
@@ -1929,7 +1943,6 @@ public class MasterServiceImpl implements MasterService {
 			PartyMasterVO partyMasterVO) {
 		partyMasterVO.setPartyType(partyMasterDTO.getPartyType());
 		partyMasterVO.setCustomerType(partyMasterDTO.getCustomerType());
-		partyMasterVO.setPartyCode(partyMasterDTO.getPartyCode());
 		partyMasterVO.setPartyName(partyMasterDTO.getPartyName());
 		partyMasterVO.setGstPartyName(partyMasterDTO.getGstPartyName());
 		partyMasterVO.setCompany(partyMasterDTO.getCompany());
