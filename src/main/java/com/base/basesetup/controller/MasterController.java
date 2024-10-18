@@ -1786,31 +1786,7 @@ public class MasterController extends BaseController {
 		    return ResponseEntity.ok().body(responseDTO);
 		}
 
-//		@GetMapping("/getPartyTypeById")
-//		public ResponseEntity<ResponseDTO> getPartyTypeById(@RequestParam(required = false) Long id) {
-//			String methodName = "getPartyTypeById()";
-//			LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
-//			String errorMsg = null;
-//			Map<String, Object> responseObjectsMap = new HashMap<>();
-//			ResponseDTO responseDTO = null;
-//			List<CostCenterVO> costCenterVO = new ArrayList<>();
-//			try {
-//				costCenterVO = masterService.getPartyTypeById(id);
-//			} catch (Exception e) {
-//				errorMsg = e.getMessage();
-//				LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
-//			}
-//			if (StringUtils.isBlank(errorMsg)) {
-//				responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "CostCenter information get successfully By Id");
-//				responseObjectsMap.put("costCenterVO", costCenterVO);
-//				responseDTO = createServiceResponse(responseObjectsMap);
-//			} else {
-//				responseDTO = createServiceResponseError(responseObjectsMap, "CostCenter information receive failed By Id",
-//						errorMsg);
-//			}
-//			LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
-//			return ResponseEntity.ok().body(responseDTO);
-//		}
+
 
 
 }

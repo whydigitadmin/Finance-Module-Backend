@@ -19,9 +19,6 @@ public class PaymentDTO {
 	private Long orgId;
 	private String paymentType;
 	private String bankChargeAcc;
-	private String docId;
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
-	private LocalDate docDate;
 	private BigDecimal bankCharges;
 	private String bankInCurrency;
 	private String type;

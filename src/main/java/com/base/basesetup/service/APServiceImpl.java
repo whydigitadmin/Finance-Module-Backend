@@ -118,8 +118,7 @@ public class APServiceImpl implements APService {
 
 		paymentVO.setPaymentType(paymentDTO.getPaymentType());
 		paymentVO.setBankChargeAcc(paymentDTO.getBankChargeAcc());
-		paymentVO.setDocId(paymentDTO.getDocId());
-		paymentVO.setDocDate(paymentDTO.getDocDate());
+		
 		paymentVO.setBankCharges(paymentDTO.getBankCharges());
 		paymentVO.setBankInCurrency(paymentDTO.getBankInCurrency());
 		paymentVO.setType(paymentDTO.getType());
