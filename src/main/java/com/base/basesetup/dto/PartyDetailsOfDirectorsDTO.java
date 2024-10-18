@@ -9,8 +9,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PartyDetailsOfDirectorsDTO {
     private Long id;
-	private String name;
-	private String designation;
-	private String phone;
-	private String email;
+    private String name;
+    private String designation;
+    private String phone; 
+    private String email;
+
 }

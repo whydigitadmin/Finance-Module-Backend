@@ -20,11 +20,13 @@ import com.base.basesetup.dto.TdsCostInvoiceDTO;
 import com.base.basesetup.entity.ChargerCostInvoiceVO;
 import com.base.basesetup.entity.CostInvSummaryVO;
 import com.base.basesetup.entity.CostInvoiceVO;
+import com.base.basesetup.entity.DocumentTypeMappingDetailsVO;
 import com.base.basesetup.entity.TdsCostInvoiceVO;
 import com.base.basesetup.exception.ApplicationException;
 import com.base.basesetup.repo.ChargerCostInvoiceRepo;
 import com.base.basesetup.repo.CostInvSummaryRepo;
 import com.base.basesetup.repo.CostInvoiceRepo;
+import com.base.basesetup.repo.DocumentTypeMappingDetailsRepo;
 import com.base.basesetup.repo.TdsCostInvoiceRepo;
 
 @Service
@@ -43,6 +45,8 @@ public class CostInvoiceServiceImpl implements CostInvoiceService {
 
 	@Autowired
 	CostInvSummaryRepo costInvSummaryRepo;
+	@Autowired
+	DocumentTypeMappingDetailsRepo documentTypeMappingDetailsRepo;
 
 	// costInvoice
 
@@ -80,13 +84,27 @@ public class CostInvoiceServiceImpl implements CostInvoiceService {
 	@Override
 	public Map<String, Object> updateCreateCostInvoice(@Valid CostInvoiceDTO costInvoiceDTO)
 			throws ApplicationException {
-
+		String screenCode = "cI";
 		CostInvoiceVO costInvoiceVO;
 		String message = null;
 
 		if (ObjectUtils.isEmpty(costInvoiceDTO.getId())) {
 
 			costInvoiceVO = new CostInvoiceVO();
+			
+			// GETDOCID API
+			String docId = costInvoiceRepo.getCostInvoiceDocId(costInvoiceDTO.getOrgId(), costInvoiceDTO.getFinYear(),
+					costInvoiceDTO.getBranchCode(), screenCode);
+			costInvoiceVO.setDocId(docId);
+
+			// GETDOCID LASTNO +1
+			DocumentTypeMappingDetailsVO documentTypeMappingDetailsVO = documentTypeMappingDetailsRepo
+					.findByOrgIdAndFinYearAndBranchCodeAndScreenCode(costInvoiceDTO.getOrgId(),
+							costInvoiceDTO.getFinYear(), costInvoiceDTO.getBranchCode(),
+							screenCode);
+			documentTypeMappingDetailsVO.setLastno(documentTypeMappingDetailsVO.getLastno() + 1);
+			documentTypeMappingDetailsRepo.save(documentTypeMappingDetailsVO);
+			
 			costInvoiceVO.setCreatedBy(costInvoiceDTO.getCreatedBy());
 			costInvoiceVO.setUpdatedBy(costInvoiceDTO.getCreatedBy());
 
@@ -215,6 +233,18 @@ public class CostInvoiceServiceImpl implements CostInvoiceService {
 
 		return costInvoiceVO;
 
+	}
+
+	@Override
+	public CostInvoiceVO getCostInvoiceByDocId(Long orgId, String docId) {
+		return costInvoiceRepo.findAllCostInvoiceByDocId(orgId, docId);
+	}
+
+	@Override
+	public String getCostInvoiceDocId(Long orgId, String finYear, String branch, String branchCode) {
+		String ScreenCode = "CI";
+		String result = costInvoiceRepo.getCostInvoiceDocId(orgId, finYear, branchCode, ScreenCode);
+		return result;
 	}
 
 }

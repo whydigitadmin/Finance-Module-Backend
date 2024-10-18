@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PartyChargesExemptionDTO {
 	private Long id;
-	private String tdsSection;
-	private String charge;
+	private String tdsWithSec;
+
+	private String charges;
 }

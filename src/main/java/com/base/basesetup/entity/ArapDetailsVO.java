@@ -1,5 +1,6 @@
 package com.base.basesetup.entity;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import javax.persistence.Column;
@@ -67,7 +68,7 @@ public class ArapDetailsVO {
 	private String subLedgerDivision;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	@Column(name = "docdate")
-	private LocalDateTime docDate;
+	private LocalDate docDate=LocalDate.now();
 	@Column(name = "supprefno",length =50)
 	private String suppRefNo;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
@@ -102,13 +103,16 @@ public class ArapDetailsVO {
 	@Column(name = "Screencode",length =10)
 	private String ScreenCode="AD";
 	@Column(name = "Screenname",length =25)
-	private String ScreenName="ARAP";
+	private String ScreenName="ARAP Details";
 	@Column(name = "ipno",length =15)
 	private String ipNo;
 	@Column(name = "latitude",length =100)
 	private String latitude;
 	@Column(name = "subledgername",length =50)
 	private String subLedgerName;
+	@Column(name = "branchcode",length =20)
+	private String branchCode;
+	
 
 
 	@Embedded

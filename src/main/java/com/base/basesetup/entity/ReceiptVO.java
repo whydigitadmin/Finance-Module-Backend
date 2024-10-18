@@ -16,6 +16,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.base.basesetup.dto.CreatedUpdatedDate;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.AllArgsConstructor;
@@ -24,21 +25,22 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "receiptreceivable")
+@Table(name = "receipt")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ReceiptReceivableVO {
+public class ReceiptVO {
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "receiptreceivablegen")
-	@SequenceGenerator(name = "receiptreceivablegen", sequenceName = "receiptreceivableseq", initialValue = 1000000001, allocationSize = 1)
-	@Column(name = "receiptreceivableid")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "receiptgen")
+	@SequenceGenerator(name = "receiptgen", sequenceName = "receiptseq", initialValue = 1000000001, allocationSize = 1)
+	@Column(name = "receiptid")
 	private Long id;
 
 	// Receipt fields
 	@Column(name = "docid", length = 50)
 	private String docId;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	@Column(name = "docdate")
 	private LocalDate docDate;
 	@Column(name = "type", length = 50)
@@ -51,6 +53,8 @@ public class ReceiptReceivableVO {
 	private String bankCashAcc;
 	@Column(name = "receiptamt", precision = 10, scale = 2)
 	private BigDecimal receiptAmt;
+	@Column(name = "taxamt", precision = 10, scale = 2)
+	private BigDecimal taxAmt;
 	@Column(name = "bankchargeacc", length = 50)
 	private String bankChargeAcc;
 	@Column(name = "bankcharges", precision = 10, scale = 2)
@@ -67,10 +71,16 @@ public class ReceiptReceivableVO {
 	private String receiptType;
 	@Column(name = "chequeutino", length = 10)
 	private String chequeUtiNo;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	@Column(name = "chequeutidt")
 	private LocalDate chequeUtiDt;
 	@Column(name = "receivedfrom", length = 100)
 	private String receivedFrom;
+	@Column(name = "netamount", length = 100)
+	private String netAmount;
+	@Column(name = "remarks", length = 100)
+	private String remarks;
+	
 
 	// Common Fields
 	@Column(name = "branch", length = 25)
@@ -107,8 +117,10 @@ public class ReceiptReceivableVO {
 	private String currency;
 	@Column(name = "currentamount", length = 100)
 	private String currencyAmount;
+	@Column(name = "orgid")
+	private Long orgId;
 
-	@OneToMany(mappedBy = "receiptReceivableVO", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "receiptVO", cascade = CascadeType.ALL)
 	@JsonManagedReference
 	List<ReceiptInvDetailsVO> receiptInvDetailsVO;
 

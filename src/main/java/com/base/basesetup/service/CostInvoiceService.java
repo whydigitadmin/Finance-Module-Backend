@@ -23,4 +23,8 @@ public interface CostInvoiceService {
 
 	List<CostInvoiceVO> getCostInvoiceByActive();
 
+	CostInvoiceVO getCostInvoiceByDocId(Long orgId, String docId);
+
+	String getCostInvoiceDocId(Long orgId, String finYear, String branch, String branchCode);
+
 }

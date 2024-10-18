@@ -15,35 +15,33 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name="screenname")
+@Table(name = "screenname")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class ScreenNamesVO {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "screennamegen")
 	@SequenceGenerator(name = "screennamegen", sequenceName = "screennameseq", initialValue = 1000000001, allocationSize = 1)
 	@Column(name = "screennameid")
 	private Long id;
-	
-	@Column(name="screenname",length =25)
+
+	@Column(name = "screenname", length = 25)
 	private String screenName;
-	
-	@Column(name="screencode",length =10)
-	private  String screenCode;
-	
+
+	@Column(name = "screencode", length = 10)
+	private String screenCode;
+
 	private boolean active;
-	@Column(name="createdby",length =25)
+	@Column(name = "createdby", length = 25)
 	private String createdBy;
-	@Column(name="modifiedby",length =25)
+	@Column(name = "modifiedby", length = 25)
 	private String updatedBy;
-	
-	
+
 	@JsonGetter("active")
-    public String getActive() {
-        return active ? "Active" : "In-Active";
-    }
+	public String getActive() {
+		return active ? "Active" : "In-Active";
+	}
 
 }
-

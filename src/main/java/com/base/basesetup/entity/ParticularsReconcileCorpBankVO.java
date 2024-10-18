@@ -14,6 +14,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -32,24 +33,25 @@ public class ParticularsReconcileCorpBankVO {
 	@SequenceGenerator(name = "particularsreconcilecorpbankgen", sequenceName = "particularsreconcilecorpbankseq", initialValue = 1000000001, allocationSize = 1)
 	@Column(name = "particularsreconcilecorpbankid")
 	private Long id;
-	@Column(name="voucherno")
+	@Column(name="voucherno",length = 30)
 	private String voucherNo;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	@Column(name="voucherdate")
 	private LocalDate voucherDate;
-	@Column(name="chequeno")
+	@Column(name="chequeno",length = 30)
 	private String chequeNo;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	@Column(name="chequedate")
 	private LocalDate chequeDate;
-	@Column(name="deposit")
+	@Column(name="deposit",precision = 10,scale = 2)
 	private BigDecimal deposit;
-	@Column(name="withdrawal")
-	private BigDecimal withdrawal;
-	@Column(name="bankref")
+	@Column(name="withdrawal",precision = 10,scale = 2)
+	private BigDecimal withdrawal;                     
+	@Column(name="bankref",length=25)
 	private String bankRef;
-	
+	                       
 	@ManyToOne
 	@JsonBackReference
 	@JoinColumn(name="reconcilecorpbankid")
    ReconcileCorpBankVO reconcileCorpBankVO;
 }
-	

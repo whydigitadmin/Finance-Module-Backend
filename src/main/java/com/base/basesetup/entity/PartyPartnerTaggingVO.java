@@ -31,7 +31,7 @@ public class PartyPartnerTaggingVO {
 	@SequenceGenerator(name = "partypartnertagginggen", sequenceName = "partypartnertaggingseq", initialValue = 1000000001, allocationSize = 1)
 	@Column(name = "partypartnertaggingid")
 	private Long id;
-	@Column(name = "partnername")
+	@Column(name = "partnername",length = 150)
 	private String partnerName;
 	
 	@ManyToOne

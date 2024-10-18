@@ -31,17 +31,17 @@ public class ParticularsPaymentVoucherVO {
 	@SequenceGenerator(name = "particularspaymentvouchergen", sequenceName = "particularspaymentvoucherseq", initialValue = 1000000001, allocationSize = 1)
 	@Column(name = "particularspaymentvoucherid")
 	private Long id;
-	@Column(name = "accountname")
+	@Column(name = "accountname",length = 50)
 	private String accountName;
-	@Column(name = "subledgername")
+	@Column(name = "subledgername",length = 50)
 	private String subLedgerName;
-	@Column(name = "subledgercode")
+	@Column(name = "subledgercode",length = 50)
 	private String subLedgerCode;
-	@Column(name = "debit")
+	@Column(name = "debit",precision = 10,scale = 2)
 	private BigDecimal debit;
-	@Column(name = "credit")
+	@Column(name = "credit",precision = 10,scale = 2)
 	private BigDecimal credit;
-	@Column(name = "narration")
+	@Column(name = "narration",length = 150)
 	private String narration;
 	
 	@ManyToOne
