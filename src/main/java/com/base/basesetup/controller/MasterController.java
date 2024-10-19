@@ -33,6 +33,7 @@ import com.base.basesetup.dto.ExRatesDTO;
 import com.base.basesetup.dto.GroupLedgerDTO;
 import com.base.basesetup.dto.ListOfValuesDTO;
 import com.base.basesetup.dto.PartyMasterDTO;
+import com.base.basesetup.dto.PartyTypeDTO;
 import com.base.basesetup.dto.ResponseDTO;
 import com.base.basesetup.dto.SacCodeDTO;
 import com.base.basesetup.dto.SetTaxRateDTO;
@@ -50,6 +51,7 @@ import com.base.basesetup.entity.ExRatesVO;
 import com.base.basesetup.entity.GroupLedgerVO;
 import com.base.basesetup.entity.ListOfValuesVO;
 import com.base.basesetup.entity.PartyMasterVO;
+import com.base.basesetup.entity.PartyTypeVO;
 import com.base.basesetup.entity.SacCodeVO;
 import com.base.basesetup.entity.SetTaxRateVO;
 import com.base.basesetup.entity.SubLedgerAccountVO;
@@ -1378,6 +1380,32 @@ public class MasterController extends BaseController {
 	}
 
 	// ChargeTypeRequest
+	
+	@GetMapping("/getChargeType")
+	public ResponseEntity<ResponseDTO> getChargeTypeFromListOfValues(@RequestParam Long orgId) {
+		String methodName = "getChargeTypeFromListOfValues()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		List<Map<String, Object>> chargeTypeDetails = new ArrayList<>();
+		try {
+			chargeTypeDetails = masterService.getChargeType(orgId);
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "Charge Type information get successfully");
+			responseObjectsMap.put("chargeTypeDetails", chargeTypeDetails);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap, "Charge Type information receive failed",
+					errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+	}
 
 	@GetMapping("/getAllChargeTypeRequestByOrgId")
 	public ResponseEntity<ResponseDTO> getAllChargeTypeRequestByOrgId(@RequestParam(required = false) Long orgId) {
@@ -1749,6 +1777,10 @@ public class MasterController extends BaseController {
 			LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
 			return ResponseEntity.ok().body(responseDTO);
 		}
+		
+		
+
+
 
 
 }

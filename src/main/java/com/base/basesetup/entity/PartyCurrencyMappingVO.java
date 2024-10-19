@@ -31,15 +31,14 @@ public class PartyCurrencyMappingVO {
 	@SequenceGenerator(name = "partycurrencymappinggen", sequenceName = "partycurrencymappinggenseq", initialValue = 1000000001, allocationSize = 1)
 	@Column(name = "partycurrencymappinggenid")
 	private Long id;
-	@Column(name = "transactioncurrency")
-	private String transactionCurrency;
-	
-	
+	@Column(name = "transCurrency", length = 15)
+	private String transCurrency;
+
 	@ManyToOne
 	@JoinColumn(name = "partymasterid")
 	@JsonBackReference
 	private PartyMasterVO partyMasterVO;
-	
+
 	@Embedded
 	@Builder.Default
 	private CreatedUpdatedDate commonDate = new CreatedUpdatedDate();

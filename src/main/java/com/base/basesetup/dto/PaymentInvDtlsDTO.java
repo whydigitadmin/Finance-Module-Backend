@@ -50,5 +50,11 @@ public class PaymentInvDtlsDTO {
 	private BigDecimal gainOrLossAmt;
 
 	private String remarks;
+	
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+	private LocalDate fromDate;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+	private LocalDate toDate;
 
 }

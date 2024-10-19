@@ -9,9 +9,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PartyVendorEvaluationDTO {
 	private Long id;
-	private String whoBroughtVendor;
-	private String whatBasisVendorSelected;
+	private String boughVendor;
+	private String basicVenSelected;
 	private String justification;
 	private String slaPoints;
-	private String commonAgreedTerms;
+	private String commAgreedTerm;
 }

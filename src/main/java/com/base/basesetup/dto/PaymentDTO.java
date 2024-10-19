@@ -17,36 +17,34 @@ public class PaymentDTO {
 
 	private Long id;
 	private Long orgId;
-	private String paymentType;               
-    private String bankChargeAcc;           
-    private String docId;  
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
-    private LocalDate docDate;                
-    private BigDecimal bankCharges;           
-    private String bankInCurrency;           
-    private String type;                       
-    private String partyCode;                 
-    private BigDecimal serviceTaxAmt;        
-    private String sTaxInCurrency;           
-    private String partyName;                  
-    private String chequeBank;                 
-    private String gstState;                   
-    private String gstIn;                      
-    private String chequeNo;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
-    private LocalDate chequeDate;              
-    private String bankCashAcc;               
-    private String payTo;                      
-    private BigDecimal paymentAmt;            
-    private String tdsAcc;                     
-    private BigDecimal tdsAmt;                
-    private String currency;                  
-    private BigDecimal currencyAmt;           
+	private String paymentType;
+	private String bankChargeAcc;
+	private BigDecimal bankCharges;
+	private String bankInCurrency;
+	private String type;
+	private String partyCode;
+	private BigDecimal serviceTaxAmt;
+	private String sTaxInCurrency;
+	private String partyName;
+	private String chequeBank;
+	private String gstState;
+	private String gstIn;
+	private String chequeNo;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+	private LocalDate chequeDate;
+	private String bankCashAcc;
+	private String payTo;
+	private BigDecimal paymentAmt;
+	private String tdsAcc;
+	private BigDecimal tdsAmt;
+	private BigDecimal receiptAmt;
+	private String currency;
+	private BigDecimal currencyAmt;
 
 	private String branch;
 	private String branchCode;
 	private String createdBy;
-   
+
 	private boolean active;
 	private boolean cancel;
 	private String cancelRemarks;

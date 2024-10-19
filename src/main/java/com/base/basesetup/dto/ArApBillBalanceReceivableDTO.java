@@ -3,6 +3,8 @@ package com.base.basesetup.dto;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,7 +15,6 @@ import lombok.NoArgsConstructor;
 public class ArApBillBalanceReceivableDTO {
 
 	private Long id;
-	private String docNo;
 	private String accName;
 	private String partyName;
 	private String partyCode;
@@ -24,9 +25,12 @@ public class ArApBillBalanceReceivableDTO {
 	private BigDecimal billExRate;
 	private boolean postBillExRate;
 	private Long billNo;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	private LocalDate billDate;
 	private String suppRefNo;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	private LocalDate suppRefDate;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	private LocalDate dueDate;
 	private BigDecimal debitAmt;
 	private BigDecimal creditAmt;
@@ -38,7 +42,6 @@ public class ArApBillBalanceReceivableDTO {
 	private String branch;
 	private String branchCode;
 	private String createdBy;
-	private String updatedBy;
 	private boolean active;
 	private boolean cancel;
 	private String cancelRemarks;

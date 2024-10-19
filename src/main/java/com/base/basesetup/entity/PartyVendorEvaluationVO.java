@@ -31,22 +31,27 @@ public class PartyVendorEvaluationVO {
 	@SequenceGenerator(name = "partyvendorevaluationgen", sequenceName = "partyvendorevaluationseq", initialValue = 1000000001, allocationSize = 1)
 	@Column(name = "partyvendorevaluationid")
 	private Long id;
-	@Column(name = "whobroughtvendor")
-	private String whoBroughtVendor;
-	@Column(name = "whatbasisvendorselected")
-	private String whatBasisVendorSelected;
-	@Column(name = "justification")
-	private String justification;
-	@Column(name = "slapoints")
-	private String slaPoints;
-	@Column(name = "commonagreedterms")
-	private String commonAgreedTerms;
 	
+	@Column(name = "boughvendor", length = 150)
+	private String boughVendor;
+
+	@Column(name = "basicvenselected", length = 50)
+	private String basicVenSelected;
+
+	@Column(name = "justification", length = 50)
+	private String justification;
+
+	@Column(name = "slapoints", length = 50)
+	private String slaPoints;
+
+	@Column(name = "commagreedterm", length = 50)
+	private String commAgreedTerm;
+
 	@OneToOne
 	@JoinColumn(name = "partymasterid")
 	@JsonBackReference
 	private PartyMasterVO partyMasterVO;
-	
+
 	@Embedded
 	@Builder.Default
 	private CreatedUpdatedDate commonDate = new CreatedUpdatedDate();

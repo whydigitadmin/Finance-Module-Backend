@@ -1,26 +1,26 @@
 package com.base.basesetup.dto;
 
-import java.time.LocalDate;
+import javax.persistence.Column;
+
+import com.base.basesetup.entity.PartyTypeVO;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class FinancialYearDTO {
+@Builder
+public class PartyTypeDTO {
 
 	private Long id;
-	private int finYear;
-	private Long finYearId;
-	private String finYearIdentifier;
-	private LocalDate startDate;
-	private LocalDate endDate;
-	private boolean currentFinYear;
-	private boolean closed;
+	private String partyType;
+	private String partyTypeCode;
 	private Long orgId;
 	private String createdBy;
 	private boolean active;
-
+	private boolean cancel;
+	private String cancelRemarks;
 }
