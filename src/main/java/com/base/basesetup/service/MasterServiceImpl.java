@@ -63,7 +63,6 @@ import com.base.basesetup.entity.ChequeBookVO;
 import com.base.basesetup.entity.CostCenterVO;
 import com.base.basesetup.entity.DocumentTypeMappingDetailsVO;
 import com.base.basesetup.entity.EmployeeVO;
-import com.base.basesetup.entity.ExRatesVO;
 import com.base.basesetup.entity.GroupLedgerVO;
 import com.base.basesetup.entity.ListOfValues1VO;
 import com.base.basesetup.entity.ListOfValuesVO;
@@ -99,7 +98,6 @@ import com.base.basesetup.repo.ChequeBookDetailsRepo;
 import com.base.basesetup.repo.ChequeBookRepo;
 import com.base.basesetup.repo.CostCenterRepo;
 import com.base.basesetup.repo.EmployeeRepo;
-import com.base.basesetup.repo.ExRatesRepo;
 import com.base.basesetup.repo.GroupLedgerRepo;
 import com.base.basesetup.repo.ListOfValues1Repo;
 import com.base.basesetup.repo.ListOfValuesRepo;
@@ -174,8 +172,6 @@ public class MasterServiceImpl implements MasterService {
 	@Autowired
 	SacCodeRepo sacCodeRepo;
 
-	@Autowired
-	ExRatesRepo exRatesRepo;
 
 	@Autowired
 	SubLedgerAccountRepo subLedgerAccountRepo;
@@ -409,6 +405,7 @@ public class MasterServiceImpl implements MasterService {
 		employeeVO.setDesignation(employeeDTO.getDesignation());
 		employeeVO.setDateOfBirth(employeeDTO.getDateOfBirth());
 		employeeVO.setJoiningDate(employeeDTO.getJoiningdate());
+		employeeDTO.setEmail(employeeDTO.getEmail());
 		employeeVO.setOrgId(employeeDTO.getOrgId());
 		employeeVO.setCancel(employeeDTO.isCancel());
 		employeeVO.setActive(employeeDTO.isActive());
@@ -1004,10 +1001,6 @@ public class MasterServiceImpl implements MasterService {
 					.orElseThrow(() -> new ApplicationException("Invalid GroupLedger details"));
 			groupLedgerVO.setUpdatedBy(groupLedgerDTO.getCreatedBy());
 		} else {
-			if (groupLedgerRepo.existsByAccountCodeAndOrgId(groupLedgerDTO.getAccountCode(),
-					groupLedgerDTO.getOrgId())) {
-				throw new ApplicationException("The given Account Code already exists.");
-			}
 			if (groupLedgerRepo.existsByAccountGroupNameAndOrgId(groupLedgerDTO.getAccountGroupName(),
 					groupLedgerDTO.getOrgId())) {
 				throw new ApplicationException("The given Account Group Name already exists.");
@@ -1017,16 +1010,10 @@ public class MasterServiceImpl implements MasterService {
 		}
 		if (isUpdate) {
 			GroupLedgerVO groupLedger = groupLedgerRepo.findById(groupLedgerDTO.getId()).orElse(null);
-			if (!groupLedger.getAccountCode().equalsIgnoreCase(groupLedgerDTO.getAccountCode())) {
-				if (groupLedgerRepo.existsByAccountCodeAndOrgIdAndId(groupLedgerDTO.getAccountCode(),
-						groupLedgerDTO.getOrgId(), groupLedgerDTO.getId())) {
-					throw new ApplicationException("The given Account name already exists.");
-				}
-			}
 			if (!groupLedger.getGroupName().equals(groupLedgerDTO.getGroupName())) {
-				if (groupLedgerRepo.existsByAccountGroupNameAndOrgIdAndId(groupLedgerDTO.getAccountGroupName(),
-						groupLedgerDTO.getOrgId(), groupLedgerDTO.getId())) {
-					throw new ApplicationException("The given Account Code already exists.");
+				if (groupLedgerRepo.existsByAccountGroupNameAndOrgId(groupLedgerDTO.getAccountGroupName(),
+						groupLedgerDTO.getOrgId())) {
+					throw new ApplicationException("The given Account Group Name already exists.");
 				}
 			}
 		}
@@ -1037,17 +1024,30 @@ public class MasterServiceImpl implements MasterService {
 	private void getGroupLedgerVOFromGroupLedgerDTO(@Valid GroupLedgerDTO groupLedgerDTO, GroupLedgerVO groupLedgerVO) {
 		groupLedgerVO.setGroupName(groupLedgerDTO.getGroupName());
 		groupLedgerVO.setOrgId(groupLedgerDTO.getOrgId());
-		groupLedgerVO.setAccountCode(groupLedgerDTO.getAccountCode());
 		groupLedgerVO.setCoaList(groupLedgerDTO.getCoaList());
-		groupLedgerVO.setGstTaxFlag(groupLedgerDTO.getGstTaxflag());
 		groupLedgerVO.setType(groupLedgerDTO.getType());
 		groupLedgerVO.setCategory(groupLedgerDTO.getCategory());
 		groupLedgerVO.setCurrency(groupLedgerDTO.getCurrency());
-		groupLedgerVO.setBranch(groupLedgerDTO.getBranch());
 		groupLedgerVO.setActive(groupLedgerDTO.isActive());
 		groupLedgerVO.setInterBranchAc(true);
 		groupLedgerVO.setControllAc(true);
 		groupLedgerVO.setAccountGroupName(groupLedgerDTO.getAccountGroupName());
+	}
+	
+	@Override
+	public List<Map<String, Object>> getGroupName(Long orgId) {
+		Set<Object[]>groupDetails=groupLedgerRepo.getGroupDetails(orgId);
+		return group(groupDetails);
+	}
+
+	private List<Map<String, Object>> group(Set<Object[]> groupDetails) {
+		List<Map<String, Object>> groupdetails1 = new ArrayList<>();
+		for (Object[] fs : groupDetails) {
+			Map<String, Object> part = new HashMap<>();
+			part.put("groupName", fs[0] != null ? fs[0].toString() : "");
+			groupdetails1.add(part);
+		}
+		return groupdetails1;
 	}
 
 	@Override
@@ -1141,67 +1141,6 @@ public class MasterServiceImpl implements MasterService {
 //		return sacCodeRepo.findsacCodeByActive();
 //
 //	}
-	// ExRates
-
-	@Override
-	public List<ExRatesVO> getAllExRatesById(Long id) {
-		List<ExRatesVO> exRatesVO = new ArrayList<>();
-		if (ObjectUtils.isNotEmpty(id)) {
-			LOGGER.info("Successfully Received  ExRates Information BY Id : {}", id);
-			exRatesVO = exRatesRepo.getAllExRatesById(id);
-		} else {
-			LOGGER.info("Successfully Received  ExRates Information For All Id.");
-			exRatesVO = exRatesRepo.findAll();
-		}
-		return exRatesVO;
-	}
-
-	@Override
-	public List<ExRatesVO> getAllExRatesByOrgId(Long orgId) {
-		List<ExRatesVO> exRatesVO = new ArrayList<>();
-		if (ObjectUtils.isNotEmpty(orgId)) {
-			LOGGER.info("Successfully Received  ExRates Information BY OrgId : {}", orgId);
-			exRatesVO = exRatesRepo.getAllExRatesByOrgId(orgId);
-		} else {
-			LOGGER.info("Successfully Received  ExRates Information For All OrgId.");
-			exRatesVO = exRatesRepo.findAll();
-		}
-		return exRatesVO;
-	}
-
-	@Override
-	public ExRatesVO updateCreateExRates(@Valid ExRatesDTO exRatesDTO) throws ApplicationException {
-		ExRatesVO exRatesVO = new ExRatesVO();
-		boolean isUpdate = false;
-		if (ObjectUtils.isNotEmpty(exRatesDTO.getId())) {
-			isUpdate = true;
-			exRatesVO = exRatesRepo.findById(exRatesDTO.getId())
-					.orElseThrow(() -> new ApplicationException("Invalid ExRates details"));
-			exRatesVO.setUpdatedBy(exRatesDTO.getCreatedBy());
-		} else {
-			exRatesVO.setUpdatedBy(exRatesDTO.getCreatedBy());
-			exRatesVO.setCreatedBy(exRatesDTO.getCreatedBy());
-		}
-		getExRatesVOFromExRatesDTO(exRatesDTO, exRatesVO);
-		return exRatesRepo.save(exRatesVO);
-	}
-
-	private void getExRatesVOFromExRatesDTO(@Valid ExRatesDTO exRatesDTO, ExRatesVO exRatesVO) {
-		exRatesVO.setDocDate(exRatesDTO.getDocDate());
-		exRatesVO.setDocMonth(exRatesDTO.getDocMonth());
-		exRatesVO.setCurrency(exRatesDTO.getCurrency());
-		exRatesVO.setSellRate(exRatesDTO.getSellRate());
-		exRatesVO.setBuyRate(exRatesDTO.getBuyRate());
-		exRatesVO.setAvgRate(exRatesDTO.getAvgRate());
-		exRatesVO.setOrgId(exRatesDTO.getOrgId());
-		exRatesVO.setActive(exRatesDTO.isActive());
-	}
-
-	@Override
-	public List<ExRatesVO> getExRatesByActive() {
-		return exRatesRepo.findExRatesByActive();
-
-	}
 
 	// SubLedgerAccount
 
@@ -2004,4 +1943,5 @@ public class MasterServiceImpl implements MasterService {
 		}
 		return details1;
 	}
+
 }

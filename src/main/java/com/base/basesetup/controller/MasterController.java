@@ -29,11 +29,9 @@ import com.base.basesetup.dto.ChargeTypeRequestDTO;
 import com.base.basesetup.dto.ChequeBookDTO;
 import com.base.basesetup.dto.CostCenterDTO;
 import com.base.basesetup.dto.EmployeeDTO;
-import com.base.basesetup.dto.ExRatesDTO;
 import com.base.basesetup.dto.GroupLedgerDTO;
 import com.base.basesetup.dto.ListOfValuesDTO;
 import com.base.basesetup.dto.PartyMasterDTO;
-import com.base.basesetup.dto.PartyTypeDTO;
 import com.base.basesetup.dto.ResponseDTO;
 import com.base.basesetup.dto.SacCodeDTO;
 import com.base.basesetup.dto.SetTaxRateDTO;
@@ -47,11 +45,9 @@ import com.base.basesetup.entity.ChargeTypeRequestVO;
 import com.base.basesetup.entity.ChequeBookVO;
 import com.base.basesetup.entity.CostCenterVO;
 import com.base.basesetup.entity.EmployeeVO;
-import com.base.basesetup.entity.ExRatesVO;
 import com.base.basesetup.entity.GroupLedgerVO;
 import com.base.basesetup.entity.ListOfValuesVO;
 import com.base.basesetup.entity.PartyMasterVO;
-import com.base.basesetup.entity.PartyTypeVO;
 import com.base.basesetup.entity.SacCodeVO;
 import com.base.basesetup.entity.SetTaxRateVO;
 import com.base.basesetup.entity.SubLedgerAccountVO;
@@ -840,6 +836,37 @@ public class MasterController extends BaseController {
 		return ResponseEntity.ok().body(responseDTO);
 
 	}
+	
+	@GetMapping("/getGroupNameByOrgId")
+	public ResponseEntity<ResponseDTO> getGroupNameByOrgId(
+			@RequestParam Long orgid) {
+
+		String methodName = "getGroupNameByOrgId()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		List<Map<String, Object>> groupName = new ArrayList<>();
+		try {
+			groupName = masterService.getGroupName(orgid);
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+					"Group Name information get  successfully By OrgId");
+			responseObjectsMap.put("groupNameDetails", groupName);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					"Group Name information receive PartyMaster failed By OrgId", errorMsg);
+		}
+
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+	}
 
 	@GetMapping("/getAllGroupLedgerById")
 	public ResponseEntity<ResponseDTO> getAllGroupLedgerById(@RequestParam(required = false) Long id) {
@@ -1039,117 +1066,6 @@ public class MasterController extends BaseController {
 //
 //	}
 
-	// ExRates
-	@GetMapping("/getAllExRatesByOrgId")
-	public ResponseEntity<ResponseDTO> getAllExRatesByOrgId(@RequestParam(required = false) Long orgId) {
-		String methodName = "getAllExRatesByOrgId()";
-		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
-		String errorMsg = null;
-		Map<String, Object> responseObjectsMap = new HashMap<>();
-		ResponseDTO responseDTO = null;
-		List<ExRatesVO> exRatesVO = new ArrayList<>();
-		try {
-			exRatesVO = masterService.getAllExRatesByOrgId(orgId);
-		} catch (Exception e) {
-			errorMsg = e.getMessage();
-			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
-		}
-		if (StringUtils.isBlank(errorMsg)) {
-			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "ExRates information get successfully ByOrgId");
-			responseObjectsMap.put("exRatesVO", exRatesVO);
-			responseDTO = createServiceResponse(responseObjectsMap);
-		} else {
-			responseDTO = createServiceResponseError(responseObjectsMap, "ExRates information receive failed By OrgId",
-					errorMsg);
-		}
-		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
-		return ResponseEntity.ok().body(responseDTO);
-
-	}
-
-	@GetMapping("/getAllExRatesById")
-	public ResponseEntity<ResponseDTO> getAllExRatesById(@RequestParam(required = false) Long id) {
-		String methodName = "getAllExRatesById()";
-		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
-		String errorMsg = null;
-		Map<String, Object> responseObjectsMap = new HashMap<>();
-		ResponseDTO responseDTO = null;
-		List<ExRatesVO> exRatesVO = new ArrayList<>();
-		try {
-			exRatesVO = masterService.getAllExRatesById(id);
-		} catch (Exception e) {
-			errorMsg = e.getMessage();
-			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
-		}
-		if (StringUtils.isBlank(errorMsg)) {
-			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "ExRates information get successfully By OrgId");
-			responseObjectsMap.put("exRatesVO", exRatesVO);
-			responseDTO = createServiceResponse(responseObjectsMap);
-		} else {
-			responseDTO = createServiceResponseError(responseObjectsMap, "ExRates information receive failed By OrgId",
-					errorMsg);
-		}
-		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
-		return ResponseEntity.ok().body(responseDTO);
-
-	}
-
-	@PutMapping("/updateCreateExRates")
-	public ResponseEntity<ResponseDTO> updateCreateExRates(@Valid @RequestBody ExRatesDTO exRatesDTO) {
-	    String methodName = "updateCreateExRates()";
-
-	    LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
-	    String errorMsg = null;
-	    Map<String, Object> responseObjectsMap = new HashMap<>();
-	    ResponseDTO responseDTO = null;
-
-	    try {
-	        ExRatesVO exRatesVO = masterService.updateCreateExRates(exRatesDTO);
-	        boolean isUpdate = exRatesDTO.getId() != null;
-	        if (exRatesVO != null) {
-	            responseObjectsMap.put(CommonConstant.STRING_MESSAGE, isUpdate ? "ExRates updated successfully" : "ExRates created successfully");
-	            responseObjectsMap.put("exRatesVO", exRatesVO);
-	            responseDTO = createServiceResponse(responseObjectsMap);
-	        } else {
-	            errorMsg = isUpdate ? "ExRates not found for ID: " + exRatesDTO.getId() : "ExRates creation failed";
-	            responseDTO = createServiceResponseError(responseObjectsMap, isUpdate ? "ExRates update failed" : "ExRates creation failed", errorMsg);
-	        }
-	    } catch (Exception e) {
-	        errorMsg = e.getMessage();
-	        boolean isUpdate = exRatesDTO.getId() != null;
-	        LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
-	        responseDTO = createServiceResponseError(responseObjectsMap, isUpdate ? "ExRates update failed" : "ExRates creation failed", errorMsg);
-	    }
-	    LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
-	    return ResponseEntity.ok().body(responseDTO);
-	}
-
-	@GetMapping("/getExRatesByActive")
-	public ResponseEntity<ResponseDTO> getExRatesByActive() {
-		String methodName = "getExRatesByActive()";
-		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
-		String errorMsg = null;
-		Map<String, Object> responseObjectsMap = new HashMap<>();
-		ResponseDTO responseDTO = null;
-		List<ExRatesVO> exRatesVO = new ArrayList<>();
-		try {
-			exRatesVO = masterService.getExRatesByActive();
-		} catch (Exception e) {
-			errorMsg = e.getMessage();
-			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
-		}
-		if (StringUtils.isBlank(errorMsg)) {
-			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "ExRates information get successfully By Active");
-			responseObjectsMap.put("exRatesVO", exRatesVO);
-			responseDTO = createServiceResponse(responseObjectsMap);
-		} else {
-			responseDTO = createServiceResponseError(responseObjectsMap, "ExRates information receive failed By Active",
-					errorMsg);
-		}
-		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
-		return ResponseEntity.ok().body(responseDTO);
-
-	}
 	// SubLedgerAccount
 
 	@GetMapping("/getAllSubLedgerAccountByOrgId")
