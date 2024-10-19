@@ -21,4 +21,6 @@ public interface ReconcileBankRepo extends JpaRepository<ReconcileBankVO, Long> 
 
 	@Query(nativeQuery = true, value = "select * from reconcilebank where active=1")
 	List<ReconcileBankVO> findReconcileBankByActive();
+
+	
 }

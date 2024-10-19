@@ -922,7 +922,7 @@ public class TransactionServiceImpl implements TransactionService {
 		fundTransferVO.setReferenceNo(fundTransferDTO.getReferenceNo());
 		fundTransferVO.setReferenceDate(fundTransferDTO.getReferenceDate());
 		fundTransferVO.setFromAccount(fundTransferDTO.getFromAccount());
-		fundTransferVO.setBalance(fundTransferDTO.getBalance());
+		fundTransferVO.setBalance(fundTransferDTO.getBalance());																																																																																															
 		fundTransferVO.setCurrency(fundTransferDTO.getCurrency());
 		fundTransferVO.setExRate(fundTransferDTO.getExRate());
 		fundTransferVO.setToBranch(fundTransferDTO.getToBranch());
@@ -1372,7 +1372,7 @@ public class TransactionServiceImpl implements TransactionService {
 					particularsPaymentVoucherVO = new ParticularsPaymentVoucherVO();
 				}
 				particularsPaymentVoucherVO.setAccountName(particularsPaymentVoucherDTO.getAccountName());
-				particularsPaymentVoucherVO.setSubLedgerName(particularsPaymentVoucherDTO.getSubLedgerCode());
+				particularsPaymentVoucherVO.setSubLedgerCode(particularsPaymentVoucherDTO.getSubLedgerCode());
 				particularsPaymentVoucherVO.setSubLedgerName(particularsPaymentVoucherDTO.getSubLedgerName());
 				particularsPaymentVoucherVO.setDebit(particularsPaymentVoucherDTO.getDebit());
 				particularsPaymentVoucherVO.setCredit(particularsPaymentVoucherDTO.getCredit());
@@ -1392,21 +1392,40 @@ public class TransactionServiceImpl implements TransactionService {
 
 	private void getPaymentVoucherVOFromPaymentVoucherDTO(@Valid PaymentVoucherDTO paymentVoucherDTO,
 			PaymentVoucherVO paymentVoucherVO) {
+
 		// // Finyr
 		int finyr = paymentVoucherRepo.findFinyr();
 		// DocId
 		String paymentVoucher = "PV" + finyr + paymentVoucherRepo.findDocId();
 		paymentVoucherVO.setDocid(paymentVoucher);
 		paymentVoucherRepo.nextSeq();
+
 		paymentVoucherVO.setVehicleSubType(paymentVoucherDTO.getVehicleSubType());
 		paymentVoucherVO.setReferenceNo(paymentVoucherDTO.getReferenceNo());
 		paymentVoucherVO.setCurrency(paymentVoucherDTO.getCurrency());
 		paymentVoucherVO.setReferenceDate(paymentVoucherDTO.getReferenceDate());
+
+		paymentVoucherVO.setExRate(paymentVoucherDTO.getExRate());
+		paymentVoucherVO.setChequeNo(paymentVoucherDTO.getChequeNo());
+		paymentVoucherVO.setChequeDate(paymentVoucherDTO.getChequeDate());
+		paymentVoucherVO.setChequeBank(paymentVoucherDTO.getChequeBank());
+		paymentVoucherVO.setOrgId(paymentVoucherDTO.getOrgId());
+		paymentVoucherVO.setActive(paymentVoucherDTO.isActive());
+		paymentVoucherVO.setCancel(paymentVoucherDTO.isCancel());
+		paymentVoucherVO.setBranch(paymentVoucherDTO.getBranch());
+		paymentVoucherVO.setBranchCode(paymentVoucherDTO.getBranchCode());
+		paymentVoucherVO.setCancelRemarks(paymentVoucherDTO.getCancelRemarks());
+		paymentVoucherVO.setIpNo(paymentVoucherDTO.getIpNo());
+		paymentVoucherVO.setLatitude(paymentVoucherDTO.getLatitude());
+		paymentVoucherVO.setRemarks(paymentVoucherDTO.getRemarks().toUpperCase());
+		paymentVoucherVO.setTotalDebitAmount(paymentVoucherDTO.getTotalDebitAmount());
+		paymentVoucherVO.setTotalCreditAmount(paymentVoucherDTO.getTotalCreditAmount());
+
 		paymentVoucherVO.setRemarks(paymentVoucherDTO.getRemarks());
+
 	}
 
 	@Override
-
 	public List<PaymentVoucherVO> getPaymentVoucherByActive() {
 		return paymentVoucherRepo.findPaymentVoucherByActive();
 	}
@@ -1980,6 +1999,7 @@ public class TransactionServiceImpl implements TransactionService {
 					particularsReconcileVOs.add(particularsReconcileVO);
 					}
 			}
+			
 
 			
 			getReconcileBankVOFromReconcileBankDTO(reconcileBankDTO, reconcileBankVO);
@@ -2008,6 +2028,14 @@ public class TransactionServiceImpl implements TransactionService {
 			reconcileBankVO.setTotalDeposit(reconcileBankDTO.getTotalDeposit());
 			reconcileBankVO.setOrgId(reconcileBankDTO.getOrgId());
 			reconcileBankVO.setActive(reconcileBankDTO.isActive());
+			reconcileBankVO.setCancel(reconcileBankDTO.isCancel());
+			reconcileBankVO.setBranch(reconcileBankDTO.getBranch());
+			reconcileBankVO.setBranchCode(reconcileBankDTO.getBranchCode());
+			reconcileBankVO.setCancelRemarks(reconcileBankDTO.getCancelRemarks());
+			reconcileBankVO.setFinYear(reconcileBankDTO.getFinYear());
+			reconcileBankVO.setIpNo(reconcileBankDTO.getIpNo());
+			reconcileBankVO.setLatitude(reconcileBankDTO.getLatitude());
+			reconcileBankVO.setRemarks(reconcileBankDTO.getRemarks());	
 		}
 
 		@Override
@@ -2107,6 +2135,14 @@ public class TransactionServiceImpl implements TransactionService {
 			reconcileCorpBankVO.setRemarks(reconcileCorpBankDTO.getRemarks());
 			reconcileCorpBankVO.setOrgId(reconcileCorpBankDTO.getOrgId());
 			reconcileCorpBankVO.setActive(reconcileCorpBankDTO.isActive());
+			reconcileCorpBankVO.setCancel(reconcileCorpBankDTO.isCancel());
+			reconcileCorpBankVO.setBranch(reconcileCorpBankDTO.getBranch());
+			reconcileCorpBankVO.setBranchCode(reconcileCorpBankDTO.getBranchCode());
+			reconcileCorpBankVO.setCancelRemarks(reconcileCorpBankDTO.getCancelRemarks());
+			reconcileCorpBankVO.setFinYear(reconcileCorpBankDTO.getFinYear());
+			reconcileCorpBankVO.setIpNo(reconcileCorpBankDTO.getIpNo());
+			reconcileCorpBankVO.setLatitude(reconcileCorpBankDTO.getLatitude());
+			reconcileCorpBankVO.setRemarks(reconcileCorpBankDTO.getRemarks());
 		}
 		@Override
 		public List<ReconcileCorpBankVO> getReconcileCorpBankByActive() {
@@ -2195,6 +2231,13 @@ public class TransactionServiceImpl implements TransactionService {
 					reconcileCashVO.setRemarks(reconcileCashDTO.getRemarks());
 					reconcileCashVO.setOrgId(reconcileCashDTO.getOrgId());
 					reconcileCashVO.setActive(reconcileCashDTO.isActive());
+					reconcileCashVO.setCancel(reconcileCashDTO.isCancel());
+					reconcileCashVO.setBranch(reconcileCashDTO.getBranch());
+					reconcileCashVO.setBranchCode(reconcileCashDTO.getBranchCode());
+					reconcileCashVO.setCancelRemarks(reconcileCashDTO.getCancelRemarks());
+					reconcileCashVO.setFinYear(reconcileCashDTO.getFinYear());
+					reconcileCashVO.setIpNo(reconcileCashDTO.getIpNo());
+					reconcileCashVO.setLatitude(reconcileCashDTO.getLatitude());
 				}
 
 				@Override

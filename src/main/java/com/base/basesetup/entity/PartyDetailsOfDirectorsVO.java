@@ -31,14 +31,17 @@ public class PartyDetailsOfDirectorsVO {
 	@SequenceGenerator(name = "partydetailsgen", sequenceName = "partydetailsseq", initialValue = 1000000001, allocationSize = 1)
 	@Column(name = "partydetailsid")
 	private Long id;
-	@Column(name = "name")
-	private String name;
-	@Column(name = "designation")
-	private String designation;
-	@Column(name = "phone")
-	private String phone;
-	@Column(name = "email")
-	private String email;
+	@Column(name = "name", length = 150)
+    private String name;
+
+    @Column(name = "designation", length = 25)
+    private String designation;
+
+    @Column(name = "phone",length = 15)
+    private String phone; 
+
+    @Column(name = "email", length = 30)
+    private String email;
 	
 	@ManyToOne
 	@JoinColumn(name = "partymasterid")

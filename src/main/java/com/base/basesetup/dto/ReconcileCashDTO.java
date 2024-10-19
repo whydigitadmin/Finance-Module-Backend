@@ -35,7 +35,15 @@ public class ReconcileCashDTO {
 	private int totalPhyAmount ;
 	private BigDecimal differenceAmount;
 	private String remarks;
+	
 	private Long orgId;
-	private boolean active;
+	private String branch;
+	private String branchCode;
 	private String createdBy;
+	private boolean active;
+	private boolean cancel;
+	private String cancelRemarks;
+	private String finYear;
+	private String ipNo;
+	private String latitude;
 }

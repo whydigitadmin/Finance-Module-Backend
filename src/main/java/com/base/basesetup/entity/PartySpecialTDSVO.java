@@ -31,27 +31,33 @@ public class PartySpecialTDSVO {
 	@SequenceGenerator(name = "partyspecialtdsgen", sequenceName = "partyspecialtdsseq", initialValue = 1000000001, allocationSize = 1)
 	@Column(name = "partyspecialtdsid")
 	private Long id;
-	@Column(name = "tdssection")
-	private String tdsSection;
-	@Column(name = "rateform")
-	private String rateForm;
+	
+	@Column(name = "tdswithsec", length = 150)
+	private String tdsWithSec;
+
+	@Column(name = "ratefrom")
+	private Long rateFrom;
+
 	@Column(name = "rateto")
-	private String rateTo;
-	@Column(name = "tdspercentage")
-	private String tdsPercentage;
-	@Column(name = "surpercentage")
-	private String surPercentage;
+	private Long rateTo;
+
+	@Column(name = "tdswithper")
+	private Long tdsWithPer;
+
+	@Column(name = "surchargeper")
+	private Long surchargePer;
+
 	@Column(name = "edpercentage")
-	private String edPercentage;
-	@Column(name = "tdscertificateno")
-	private String tdsCertificateNo;
-	
-	
+	private Long edPercentage;
+
+	@Column(name = "tdscertifino", length = 50)
+	private String tdsCertifiNo;
+
 	@ManyToOne
 	@JoinColumn(name = "partymasterid")
 	@JsonBackReference
 	private PartyMasterVO partyMasterVO;
-	
+
 	@Embedded
 	@Builder.Default
 	private CreatedUpdatedDate commonDate = new CreatedUpdatedDate();

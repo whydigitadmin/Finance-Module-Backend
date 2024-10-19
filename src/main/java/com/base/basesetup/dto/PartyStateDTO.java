@@ -11,9 +11,10 @@ public class PartyStateDTO {
 	private Long id;
 	private String state;
 	private String gstIn;
-	private String stateNo;
+	private Long stateNo;
 	private String contactPerson;
-	private String contactPhoneNo;
-	private String contactEmail;
+	private String contactPhoneNo; 
+	private String email;
 	private String stateCode;
+
 }

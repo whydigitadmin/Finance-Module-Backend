@@ -10,6 +10,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.base.basesetup.dto.CreatedUpdatedDate;
+import com.fasterxml.jackson.annotation.JsonGetter;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -38,6 +39,11 @@ public class FinScreenVO {
 	private String createdBy;
 	@Column(name = "updatedby")
 	private String updatedBy;
+	
+	@JsonGetter("active")
+	public String getActive() {
+		return active ? "Active" : "In-Active";
+	}
 	
 	@Embedded
 	@Builder.Default

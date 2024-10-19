@@ -17,6 +17,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.base.basesetup.dto.CreatedUpdatedDate;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.AllArgsConstructor;
@@ -36,28 +37,68 @@ public class PaymentVoucherVO {
 	@SequenceGenerator(name = "paymentvouchergen", sequenceName = "paymentvoucherseq", initialValue = 1000000001, allocationSize = 1)
 	@Column(name = "paymentvoucherid")
 	private Long id;
-	@Column(name = "vehiclesubtype",length=30)
+
+	@Column(name = "vehiclesubtype",length = 30)
 	private String vehicleSubType;
-	@Column(name = "referenceno")
+	@Column(name = "referenceno",length = 10)
 	private String referenceNo;
-	@Column(name = "docId")
-	private String docid;
+
+	@Column(name = "currency",length = 10)
+	private String currency;
+	@Column(name = "docid",length = 50)
+	private String docId;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	@Column(name = "referencedate")
 	private LocalDate referenceDate;
+	@Column(name = "exrate",precision = 10,scale = 2)
+	private BigDecimal exRate;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	@Column(name = "docdate")
-	private LocalDate docDate=LocalDate.now();;
-	@Column(name = "remarks")
+	private LocalDate docDate;
+	@Column(name="chequeno",length = 25)
+	private String chequeNo;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+	@Column(name = "chequedate")
+	private LocalDate chequeDate;
+	@Column(name="chequebank",length = 50)
+	private String chequeBank;
+	@Column(name = "remarks",length = 50)
 	private String remarks;
-	@Column(name = "finyear")
-	private String finyear;
+	private String finyr;
+	//default fields 
+	@Builder.Default
+	@Column(name = "screencode",length = 5)
+	private String screenCode="PV";
+	@Builder.Default
+	@Column(name="screenname",length = 20)
+	private String screenName="PAYMENT VOUCHER";
+
 	@Column(name = "orgid")
 	private Long orgId;
+	@Column(name = "branch", length = 25)
+	private String branch;
+	@Column(name = "branchcode", length = 20)
+	private String branchCode;
+	@Column(name = "createdby", length = 25)
+	private String createdBy;
+	@Column(name = "modifiedby", length = 25)
+	private String updatedBy;
 	@Column(name = "active")
 	private boolean active;
 	@Column(name = "cancel")
 	private boolean cancel;
-	@Column(name = "canelremarks")
+	@Column(name = "cancelremarks", length = 50)
 	private String cancelRemarks;
+
+	@Column(name = "ipno", length = 15)
+	private String ipNo;
+	@Column(name = "latitude", length = 100)
+	private String latitude;
+	@Column(name = "totaldebitamount",precision = 10,scale = 2)
+	private BigDecimal totalDebitAmount;
+	@Column(name = "totalcreditamount",precision = 10,scale = 2)
+	private BigDecimal totalCreditAmount;
+
 	@Column(name = "createdby")
 	private String createdBy;
 	@Column(name = "modifiedby")
@@ -78,6 +119,7 @@ public class PaymentVoucherVO {
 	private String screenName;
 	@Column(name = "currency")
 	private String currency;
+
 
 	@OneToMany(mappedBy = "paymentVoucherVO", cascade = CascadeType.ALL)
 	@JsonManagedReference

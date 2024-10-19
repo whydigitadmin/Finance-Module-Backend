@@ -66,18 +66,18 @@ public class ArApBillBalanceReceivableVO {
 	@Column(name = "billno", precision = 10)
 	private Long billNo;
 
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	@Column(name = "billdate")
 	private LocalDate billDate;
 
 	@Column(name = "supprefno", length = 25)
 	private String suppRefNo;
 
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	@Column(name = "supprefdate")
 	private LocalDate suppRefDate;
 
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	@Column(name = "duedate")
 	private LocalDate dueDate;
 
