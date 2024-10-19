@@ -69,7 +69,7 @@ public class CostDebitNoteVO {
 	private String product;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	@Column(name = "docdate")
-	private LocalDate docDate;
+	private LocalDate docDate=LocalDate.now();
 
 	@Column(name = "vohno", length = 50)
 	private String vohNo;

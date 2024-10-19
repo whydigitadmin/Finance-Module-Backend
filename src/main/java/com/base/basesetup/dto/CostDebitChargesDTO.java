@@ -1,9 +1,5 @@
 package com.base.basesetup.dto;
 
-import javax.persistence.Column;
-
-import com.base.basesetup.entity.CostDebitChargesVO;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,7 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CostDebitChargesDTO {
 
-	private Long costDebitChargesId;
+	private Long id;
 
 	private String jobType;
 
@@ -32,15 +28,11 @@ public class CostDebitChargesDTO {
 
 	private String applyOn;
 
-	private boolean tax;
-
 	private String currency;
 
 	private double exRate;
 	
 	private double rate;
-
-	private boolean exampted;
 
 	private double fcAmt;
 

@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CostDebitNoteSummaryDTO {
 
-private Long costDebitNoteSummaryId;
-	
+	private Long Id;
+
 	private double totChargesBillCurrAmt;
 
 	private double totChargesLCAmt;
@@ -24,5 +24,5 @@ private Long costDebitNoteSummaryId;
 	private double netLCAmt;
 
 	private String amtInWords;
-	
+
 }

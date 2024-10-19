@@ -67,7 +67,7 @@ public class ArApDetailsServiceImpl implements ArApDetailsService {
 
 	@Override 
 	public Map<String, Object> createupdateArapDetails(@Valid ArapDetailsDTO arapDetailsDTO)
-			throws ApplicationException {\
+			throws ApplicationException {
 		String screenCode="AD";
 		ArapDetailsVO arapDetailsVO;
 

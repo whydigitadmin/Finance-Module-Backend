@@ -14,13 +14,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CostDebitNoteDTO {
 
-	private Long costDebitNoteId;
+	private Long id;
 	private String branch;
 	private String branchCode;
 	private String createdBy;
-	private String modifyBy;
-	private boolean active;
-	private boolean cancel;
 	private String cancelRemarks;
 	private String finYear;
 	private String screenCode;
@@ -31,8 +28,6 @@ public class CostDebitNoteDTO {
 	private String docNo;
 	private String subType;
 	private String product;
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
-	private LocalDate docDate;
 	private String vohNo;
 	private String vohDate; 
 	private String partyType;
@@ -44,7 +39,6 @@ public class CostDebitNoteDTO {
 	private int creditDays;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	private LocalDate dueDate;
-	private boolean taxExampt;
 	private String address;
 	private String currency;
 	private double exRate;
