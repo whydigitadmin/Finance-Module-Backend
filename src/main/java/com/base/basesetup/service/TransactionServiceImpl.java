@@ -1397,7 +1397,7 @@ public class TransactionServiceImpl implements TransactionService {
 		int finyr = paymentVoucherRepo.findFinyr();
 		// DocId
 		String paymentVoucher = "PV" + finyr + paymentVoucherRepo.findDocId();
-		paymentVoucherVO.setDocid(paymentVoucher);
+		paymentVoucherVO.setDocId(paymentVoucher);
 		paymentVoucherRepo.nextSeq();
 
 		paymentVoucherVO.setVehicleSubType(paymentVoucherDTO.getVehicleSubType());

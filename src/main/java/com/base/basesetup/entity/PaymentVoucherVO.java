@@ -1,5 +1,7 @@
 package com.base.basesetup.entity;
 
+import java.math.BigDecimal;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -43,8 +45,6 @@ public class PaymentVoucherVO {
 	@Column(name = "referenceno",length = 10)
 	private String referenceNo;
 
-	@Column(name = "currency",length = 10)
-	private String currency;
 	@Column(name = "docid",length = 50)
 	private String docId;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
@@ -64,7 +64,8 @@ public class PaymentVoucherVO {
 	private String chequeBank;
 	@Column(name = "remarks",length = 50)
 	private String remarks;
-	private String finyr;
+	@Column(name = "finyear")
+	private String finYear;
 	//default fields 
 	@Builder.Default
 	@Column(name = "screencode",length = 5)
@@ -99,24 +100,6 @@ public class PaymentVoucherVO {
 	@Column(name = "totalcreditamount",precision = 10,scale = 2)
 	private BigDecimal totalCreditAmount;
 
-	@Column(name = "createdby")
-	private String createdBy;
-	@Column(name = "modifiedby")
-	private String updatedBy;
-	@Column(name = "chequeno")
-	private String chequeNo;
-	@Column(name = "chequedate")
-	private String chequeDate;
-	@Column(name = "chequebank")
-	private String chequeBank;
-	@Column(name = "branch")
-	private String branch;
-	@Column(name = "branchcode")
-	private String branchCode;
-	@Column(name = "screencode")
-	private String screenCode;
-	@Column(name = "screenname")
-	private String screenName;
 	@Column(name = "currency")
 	private String currency;
 
@@ -140,7 +123,7 @@ public class PaymentVoucherVO {
 	private void setDefaultFinyr() {
 		// Execute the logic to set the default value for finyr
 		String fyFull = calculateFinyr();
-		this.finyear = fyFull; 
+		this.finYear = fyFull; 
 	}
 
 	private String calculateFinyr() {
