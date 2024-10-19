@@ -1,5 +1,6 @@
 package com.base.basesetup.entity;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -64,7 +65,7 @@ public class PaymentVoucherVO {
 	private String chequeBank;
 	@Column(name = "remarks",length = 50)
 	private String remarks;
-	private String finyr;
+	private String finyear;
 	//default fields 
 	@Builder.Default
 	@Column(name = "screencode",length = 5)
@@ -99,26 +100,6 @@ public class PaymentVoucherVO {
 	@Column(name = "totalcreditamount",precision = 10,scale = 2)
 	private BigDecimal totalCreditAmount;
 
-	@Column(name = "createdby")
-	private String createdBy;
-	@Column(name = "modifiedby")
-	private String updatedBy;
-	@Column(name = "chequeno")
-	private String chequeNo;
-	@Column(name = "chequedate")
-	private String chequeDate;
-	@Column(name = "chequebank")
-	private String chequeBank;
-	@Column(name = "branch")
-	private String branch;
-	@Column(name = "branchcode")
-	private String branchCode;
-	@Column(name = "screencode")
-	private String screenCode;
-	@Column(name = "screenname")
-	private String screenName;
-	@Column(name = "currency")
-	private String currency;
 
 
 	@OneToMany(mappedBy = "paymentVoucherVO", cascade = CascadeType.ALL)
