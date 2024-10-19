@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ArApBillBalanceReceivableDTO {
+public class ArBillBalanceDTO {
 
 	private Long id;
 	private String accName;
@@ -46,8 +46,6 @@ public class ArApBillBalanceReceivableDTO {
 	private boolean cancel;
 	private String cancelRemarks;
 	private String finYear;
-	private String screenCode;
-	private String screenName;
 	private String ipNo;
 	private String latitude;
 }

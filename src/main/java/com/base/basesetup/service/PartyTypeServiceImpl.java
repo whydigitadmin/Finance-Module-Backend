@@ -1,8 +1,12 @@
 package com.base.basesetup.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 import org.apache.commons.lang3.ObjectUtils;
@@ -108,6 +112,25 @@ public class PartyTypeServiceImpl implements PartyTypeService {
 		}
 		return partyTypeVO;
 	}
+	
+	@Override
+	@Transactional
+	public List<Map<String, Object>> getPartyCodeByOrgIdAndPartyType(Long orgid,String partytype) {
+
+		Set<Object[]> result = partyTypeRepo.findPartyCodeByOrgIdAndPartyType(orgid,partytype);
+		return getPartyCodeByOrgIdAndPartyType(result);
+	}
+
+	private List<Map<String, Object>> getPartyCodeByOrgIdAndPartyType(Set<Object[]> result) {
+		List<Map<String, Object>> details1 = new ArrayList<>();
+		for (Object[] fs : result) {
+			Map<String, Object> part = new HashMap<>();
+			part.put("partCode", fs[0] != null ? fs[0].toString() : "");
+			details1.add(part);
+		}
+		return details1;
+	}
+
 
 
 }

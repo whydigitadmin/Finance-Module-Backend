@@ -38,32 +38,32 @@ public class ReceiptVO {
 	private Long id;
 
 	// Receipt fields
-	@Column(name = "docid", length = 50)
+	@Column(name = "docid")
 	private String docId;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	@Column(name = "docdate")
 	private LocalDate docDate;
-	@Column(name = "type", length = 50)
+	@Column(name = "type")
 	private String type;
-	@Column(name = "customername", length = 150)
+	@Column(name = "customername")
 	private String customerName;
-	@Column(name = "customercode", length = 50)
+	@Column(name = "customercode")
 	private String customerCode;
-	@Column(name = "bankcashacc", length = 50)
+	@Column(name = "bankcashacc")
 	private String bankCashAcc;
-	@Column(name = "receiptamt", precision = 10, scale = 2)
+	@Column(name = "receiptamt")
 	private BigDecimal receiptAmt;
-	@Column(name = "taxamt", precision = 10, scale = 2)
+	@Column(name = "taxamt")
 	private BigDecimal taxAmt;
-	@Column(name = "bankchargeacc", length = 50)
+	@Column(name = "bankchargeacc")
 	private String bankChargeAcc;
-	@Column(name = "bankcharges", precision = 10, scale = 2)
+	@Column(name = "bankcharges")
 	private BigDecimal bankCharges;
-	@Column(name = "incurrencybnkchargs", length = 5)
+	@Column(name = "incurrencybnkchargs")
 	private String inCurrencyBnkChargs;
-	@Column(name = "tdsamt", precision = 10, scale = 2)
+	@Column(name = "tdsamt")
 	private BigDecimal tdsAmt;
-	@Column(name = "incurrencytdsamt", length = 5)
+	@Column(name = "incurrencytdsamt")
 	private String inCurrencyTdsAmt;
 	@Column(name = "chequebank", length = 20)
 	private String chequeBank;
@@ -71,51 +71,51 @@ public class ReceiptVO {
 	private String receiptType;
 	@Column(name = "chequeutino", length = 10)
 	private String chequeUtiNo;
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	@Column(name = "chequeutidt")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	private LocalDate chequeUtiDt;
-	@Column(name = "receivedfrom", length = 100)
+	@Column(name = "receivedfrom")
 	private String receivedFrom;
-	@Column(name = "netamount", length = 100)
+	@Column(name = "netamount")
 	private String netAmount;
-	@Column(name = "remarks", length = 100)
+	@Column(name = "remarks")
 	private String remarks;
 	
 
 	// Common Fields
-	@Column(name = "branch", length = 25)
+	@Column(name = "branch")
 	private String branch;
-	@Column(name = "branchcode", length = 5)
+	@Column(name = "branchcode")
 	private String branchCode;
-	@Column(name = "customer", length = 100)
+	@Column(name = "customer")
 	private String customer;
-	@Column(name = "client", length = 30)
+	@Column(name = "client")
 	private String client;
-	@Column(name = "createdby", length = 25)
+	@Column(name = "createdby")
 	private String createdBy;
-	@Column(name = "modifyedby", length = 25)
+	@Column(name = "modifyedby")
 	private String updatedBy;
 	@Column(name = "active")
 	private boolean active;
 	@Column(name = "cancel")
 	private boolean cancel;
-	@Column(name = "cancelremarks", length = 25)
+	@Column(name = "cancelremarks")
 	private String cancelRemarks;
-	@Column(name = "finyear", length = 5)
+	@Column(name = "finyear")
 	private String finYear;
-	@Column(name = "screencode", length = 5)
+	@Column(name = "screencode")
 	private String screenCode;
-	@Column(name = "screenname", length = 25)
+	@Column(name = "screenname")
 	private String screenName;
-	@Column(name = "ipno", length = 15)
+	@Column(name = "ipno")
 	private String ipNo;
-	@Column(name = "latitude", length = 100)
+	@Column(name = "latitude")
 	private String latitude;
-	@Column(name = "receiptType1", length = 100)
+	@Column(name = "receiptType1")
 	private String receiptType1;
-	@Column(name = "currency", length = 100)
+	@Column(name = "currency")
 	private String currency;
-	@Column(name = "currentamount", length = 100)
+	@Column(name = "currentamount")
 	private String currencyAmount;
 	@Column(name = "orgid")
 	private Long orgId;
