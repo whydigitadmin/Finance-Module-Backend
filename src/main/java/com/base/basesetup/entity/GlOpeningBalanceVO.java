@@ -16,6 +16,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.base.basesetup.dto.CreatedUpdatedDate;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.AllArgsConstructor;
@@ -35,47 +36,58 @@ public class GlOpeningBalanceVO {
 	@SequenceGenerator(name = "glopeningbalancegen", sequenceName = "glopeningbalanceseq", initialValue = 1000000001, allocationSize = 1)
 	@Column(name = "glopeningbalanceid")
 	private Long id;
-	@Column(name = "branch")
-	private String branch;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	@Column(name = "docdate")
-	private LocalDate docDate;
-	@Column(name = "docid")
+	private LocalDate docDate =LocalDate.now();;
+	@Column(name = "docid",length = 50)
 	private String docId;
-	@Column(name="currency")
+	@Column(name="currency",length = 10)
 	private String currency;
-	@Column(name = "exrate")
-	private String exRate;
-	@Column(name = "refno")
+	@Column(name = "exrate",precision = 10,scale = 2)
+	private BigDecimal exRate;
+	@Column(name = "refno",length = 50)
 	private String refNo;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	@Column(name = "refdate")
 	private LocalDate refDate;
-	@Column(name = "supprefno")
+	@Column(name = "supprefno",length = 50)
 	private String suppRefNo;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	@Column(name = "supprefdate")
 	private LocalDate suppRefDate;
-	@Column(name = "remarks")
+	@Column(name = "remarks",length = 150)
 	private String remarks;
 	@Builder.Default
-	@Column(name = "screencode")
-	private String screenCode="GOB";
+	@Column(name = "screencode",length = 5)
+	private String screenCode="RCH";
 	@Builder.Default
-	@Column(name="screenname")
-	private String screenName="GL OPENING BALANCE";
+	@Column(name="screenname",length = 20)
+	private String screenName="RECONCILE CASH";
 	@Column(name = "orgid")
 	private Long orgId;
+	@Column(name = "branch", length = 25)
+	private String branch;
+	@Column(name = "branchcode", length = 20)
+	private String branchCode;
+	@Column(name = "createdby", length = 25)
+	private String createdBy;
+	@Column(name = "modifiedby", length = 25)
+	private String updatedBy;
 	@Column(name = "active")
 	private boolean active;
 	@Column(name = "cancel")
 	private boolean cancel;
-	@Column(name = "cancelremarks")
+	@Column(name = "cancelremarks", length = 50)
 	private String cancelRemarks;
-	@Column(name = "createdby")
-	private String createdBy;
-	@Column(name = "modifiedby")
-	private String updatedBy;	
-	@Column(name = "totaldebitamount")
+	@Column(name = "finyear", length = 5)
+	private String finYear;
+	@Column(name = "ipno", length = 15)
+	private String ipNo;
+	@Column(name = "latitude", length = 100)
+	private String latitude;
+	@Column(name = "totaldebitamount",precision = 10,scale = 2)
 	private BigDecimal totalDebitAmount;
-	@Column(name = "totalcreditamount")
+	@Column(name = "totalcreditamount",precision = 10,scale = 2)
 	private BigDecimal totalCreditAmount;
 
 	@OneToMany(mappedBy = "glOpeningBalanceVO", cascade = CascadeType.ALL)

@@ -101,6 +101,7 @@ public class PaymentVoucherVO {
 	@JsonManagedReference
 	List<ParticularsPaymentVoucherVO> particularsPaymentVoucherVO;
 
+	
 	@Embedded
 	@Builder.Default
 	private CreatedUpdatedDate commonDate = new CreatedUpdatedDate();
