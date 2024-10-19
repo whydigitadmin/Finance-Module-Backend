@@ -41,6 +41,5 @@ public class PaymentVoucherDTO {
 
 	List<ParticularsPaymentVoucherDTO> particularsPaymentVoucherDTO;
 
-	List<PaymentSummaryDTO> paymentSummaryDTO;
 
 }
