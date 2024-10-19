@@ -14,6 +14,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -32,18 +33,18 @@ public class ReceiptInvDetailsVO {
 	@SequenceGenerator(name = "receiptinvdetailsgen", sequenceName = "receiptinvdetailsseq", initialValue = 1000000001, allocationSize = 1)
 	@Column(name = "receiptinvdetailsid")
 	private Long id;
-	@Column(name = "receiptid")
-	private Long receiptId;
 
 	@Column(name = "invno", length = 30)
 	private String invNo;
 
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	@Column(name = "invdate")
 	private LocalDate invDate;
 
 	@Column(name = "refno", length = 30)
 	private String refNo;
 
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	@Column(name = "refdate")
 	private LocalDate refDate;
 
@@ -80,15 +81,17 @@ public class ReceiptInvDetailsVO {
 	@Column(name = "gainamt", precision = 10, scale = 2)
 	private BigDecimal gainAmt;
 
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	@Column(name = "fromdate")
 	private LocalDate fromDate;
 
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	@Column(name = "todate")
 	private LocalDate toDate;
 
 	@ManyToOne
 	@JsonBackReference
-	@JoinColumn(name = "receiptreceivableid")
-	ReceiptReceivableVO receiptReceivableVO;
+	@JoinColumn(name = "receiptid")
+	ReceiptVO receiptVO;
 
 }

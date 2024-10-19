@@ -31,16 +31,18 @@ public class PartyChargesExemptionVO {
 	@SequenceGenerator(name = "partychargesexemptiongen", sequenceName = "partychargesexemptionseq", initialValue = 1000000001, allocationSize = 1)
 	@Column(name = "partychargesexemptionid")
 	private Long id;
-	@Column(name = "tdssection")
-	private String tdsSection;
-	@Column(name = "charge")
-	private String charge;
 	
+	@Column(name = "tdswithsec", length = 15)
+	private String tdsWithSec;
+
+	@Column(name = "charges", length = 15)
+	private String charges;
+
 	@ManyToOne
 	@JoinColumn(name = "partymasterid")
 	@JsonBackReference
 	private PartyMasterVO partyMasterVO;
-	
+
 	@Embedded
 	@Builder.Default
 	private CreatedUpdatedDate commonDate = new CreatedUpdatedDate();

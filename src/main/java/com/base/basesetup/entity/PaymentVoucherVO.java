@@ -2,7 +2,6 @@ package com.base.basesetup.entity;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -39,10 +38,12 @@ public class PaymentVoucherVO {
 	@SequenceGenerator(name = "paymentvouchergen", sequenceName = "paymentvoucherseq", initialValue = 1000000001, allocationSize = 1)
 	@Column(name = "paymentvoucherid")
 	private Long id;
+
 	@Column(name = "vehiclesubtype",length = 30)
 	private String vehicleSubType;
 	@Column(name = "referenceno",length = 10)
 	private String referenceNo;
+
 	@Column(name = "currency",length = 10)
 	private String currency;
 	@Column(name = "docid",length = 50)
@@ -64,7 +65,7 @@ public class PaymentVoucherVO {
 	private String chequeBank;
 	@Column(name = "remarks",length = 50)
 	private String remarks;
-	private String finyr;
+	private String finyear;
 	//default fields 
 	@Builder.Default
 	@Column(name = "screencode",length = 5)
@@ -72,6 +73,7 @@ public class PaymentVoucherVO {
 	@Builder.Default
 	@Column(name="screenname",length = 20)
 	private String screenName="PAYMENT VOUCHER";
+
 	@Column(name = "orgid")
 	private Long orgId;
 	@Column(name = "branch", length = 25)
@@ -88,6 +90,7 @@ public class PaymentVoucherVO {
 	private boolean cancel;
 	@Column(name = "cancelremarks", length = 50)
 	private String cancelRemarks;
+
 	@Column(name = "ipno", length = 15)
 	private String ipNo;
 	@Column(name = "latitude", length = 100)
@@ -97,9 +100,18 @@ public class PaymentVoucherVO {
 	@Column(name = "totalcreditamount",precision = 10,scale = 2)
 	private BigDecimal totalCreditAmount;
 
+
+
 	@OneToMany(mappedBy = "paymentVoucherVO", cascade = CascadeType.ALL)
 	@JsonManagedReference
 	List<ParticularsPaymentVoucherVO> particularsPaymentVoucherVO;
+	
+	@OneToMany(mappedBy = "paymentVoucherVO", cascade = CascadeType.ALL)
+	@JsonManagedReference
+	List<PaymentSummaryVO> paymentSummaryVO;
+	
+	
+	
 
 	@Embedded
 	@Builder.Default
@@ -109,7 +121,7 @@ public class PaymentVoucherVO {
 	private void setDefaultFinyr() {
 		// Execute the logic to set the default value for finyr
 		String fyFull = calculateFinyr();
-		this.finyr = fyFull; 
+		this.finyear = fyFull; 
 	}
 
 	private String calculateFinyr() {

@@ -1,5 +1,6 @@
 package com.base.basesetup.entity;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -33,114 +34,157 @@ public class PartyMasterVO {
 	@SequenceGenerator(name = "partymastergen", sequenceName = "partymasterseq", initialValue = 1000000001, allocationSize = 1)
 	@Column(name = "partymasterid")
 	private Long id;
-	
+	    
+    @Column(name = "partytype", length = 15)
+    private String partyType;
+
+    @Column(name = "partycode", length = 20)
+    private String partyCode;
+
+    @Column(name = "partyname", length = 150)
+    private String partyName;
+
+    @Column(name = "gstpartyname", length = 150)
+    private String gstPartyName;
+
+    @Column(name = "customertype", length = 50)
+    private String customerType;
+
+    @Column(name = "company", length = 150)
+    private String company;
+
+    @Column(name = "agentname", length = 150)
+    private String agentName;
+
+    @Column(name = "accounttype", length = 15)
+    private String accountType;
+
+    @Column(name = "bussinesstype", length = 15)
+    private String bussinessType;
+
+    @Column(name = "carriercode", length = 25)
+    private String carrierCode;
+
+    @Column(name = "suppliertype", length = 15)
+    private String supplierType;
+
+    @Column(name = "salesperson", length = 25)
+    private String salesPerson;
+
+    @Column(name = "customercoord", length = 25)
+    private String customerCoord;
+
+    @Column(name = "accountname", length = 50)
+    private String accountName;
+
+    @Column(name = "gstregistered", length = 5)
+    private String gstRegistered;
+
+    @Column(name = "gstin", length = 15)
+    private String gstIn;
+
+    @Column(name = "creditlimit", precision = 10, scale = 2)
+    private BigDecimal creditLimit;
+
+    @Column(name = "creditdays", precision = 5)
+    private Long creditDays;
+
+    @Column(name = "panno", length = 15)
+    private String panNo;
+
+    @Column(name = "controllingoff", length = 50)
+    private String controllingOff;
+
+    @Column(name = "currency", length = 10)
+    private String currency;
+
+    @Column(name = "panname", length = 50)
+    private String panName;
+
+    @Column(name = "airwaybillno", length = 30)
+    private String airwayBillNo;
+
+    @Column(name = "airlinecode", length = 30)
+    private String airLineCode;
+
+    @Column(name = "tanno", length = 15)
+    private String tanNo;
+
+    @Column(name = "bussinesscate", length = 30)
+    private String bussinessCate;
+
+    @Column(name = "country", length = 15)
+    private String country;
+
+    @Column(name = "caf", length = 10)
+    private String caf;
+
+    @Column(name = "remarks", length = 150)
+    private String remarks;
+
+    @Column(name = "compoundscheme", length = 5)
+    private String compoundScheme;
+
+    @Column(name = "psugovorg", length = 5)
+    private String psuGovOrg;
+
+    @Column(name = "nameofbank", length = 150)
+    private String nameOfBank;
+
+    @Column(name = "addressbank", length = 150)
+    private String addressBank;
+
+    @Column(name = "accountno", length = 25)
+    private String accountNo;
+
+    @Column(name = "acctype", length = 15)
+    private String accType;
+
+    @Column(name = "ifsccode", length = 15)
+    private String IfscCode;
+
+    @Column(name = "swift", length = 15)
+    private String Swift;
+
+    // Additional fields with column mappings
+    @Column(name = "branch", length = 25)
+    private String branch;
+
+    @Column(name = "branchcode", length = 20)
+    private String branchCode;
+
+    @Column(name = "createdby", length = 25)
+    private String createdBy;
+
+    @Column(name = "modifyby", length = 25)
+    private String updatedBy;
+
+    @Column(name = "active")
+    private boolean active;
+
+    @Column(name = "cancel")
+    private boolean cancel;
+
+    @Column(name = "cancelremarks", length = 50)
+    private String cancelRemarks;
+
+    @Column(name = "finyear", length = 5)
+    private String finYear;
+
     @Column(name = "screencode", length = 5)
     private String screenCode = "PM";
 
     @Column(name = "screenname", length = 25)
     private String screenName = "PARTYMASTER";
-    
-	@Column(name = "partytype")
-	private String partyType;
-	@Column(name = "customertype")
-	private String customerType;
-	@Column(name = "partycode")
-	private String partyCode;
-	@Column(name = "partyname")
-	private String partyName;
-	@Column(name = "gstpartyname")
-	private String gstPartyName;
-	@Column(name = "company")
-	private String company;
-	@Column(name = "customercategory")
-	private String customerCategory;
-	@Column(name = "agentname")
-	private String agentName;
-	@Column(name = "accountstype")
-	private String accountsType;
-	@Column(name = "businesstype")
-	private String businessType;
-	@Column(name = "carriercode")
-	private String carrierCode;
-	@Column(name = "suppliertype")
-	private String supplierType;
-	@Column(name = "salesperson")
-	private String salesPerson;
-	@Column(name = "salesperson1")
-	private String salesPerson1;
-	@Column(name = "customercoordinator")
-	private String customerCoordinator;
-	@Column(name = "customercoordinator1")
-	private String customerCoordinator1;
-	@Column(name = "accountname")
-	private String accountName;
-	@Column(name = "creditlimit")
-	private String creditLimit;
-	@Column(name = "creditdays")
-	private String creditDays;
-	@Column(name = "controllingoffice")
-	private String controllingOffice;
-	@Column(name = "currency")
-	private String currency;
-	@Column(name = "airwaybillcode")
-	private String airWayBillCode;
-	@Column(name = "airlinecode")
-	private String airlineCode;
-	@Column(name = "businesscategory")
-	private String businessCategory;
-	@Column(name = "businesscategory1")
-	private String businessCategory1;
-	@Column(name = "country")
-	private String country;
-	@Column(name = "remarks")
-	private String remarks;
-	@Column(name = "compoundingscheme")
-	private String compoundingScheme;
-	@Column(name = "gstregistration")
-	private String gstRegistration;
-	@Column(name = "panno")
-	private String panNo;
-	@Column(name = "panname")
-	private String panName;
-	@Column(name = "tanno")
-	private String tanNo;
-	@Column(name = "caf")
-	private String caf;
-	@Column(name = "psu")
-	private String psu;
-	
-	@Column(name = "nameofbank")
-	private String nameOfBank;
-	@Column(name = "branch")
-	private String branch;
-	@Column(name = "branchcode")
-	private String branchCode;
-	@Column(name = "addressofbranch")
-	private String addressOfBranch;
-	@Column(name = "accountno")
-	private String accountNo;
-	@Column(name = "accountype")
-	private String accountType;
-	@Column(name = "ifsccode")
-	private String ifscCode;
-	@Column(name = "swift")
-	private String swift;
 
-	
-	@Column(name = "cancel")
-	private boolean cancel;
-	@Column(name = "createdby")
-	private String createdBy;
-	@Column(name = "modifiedby")
-	private String  updatedBy;
-	@Column(name = "cancelremarks")
-	private String cancelRemarks;
-	@Column(name="orgid")
-	private Long orgId;
-	@Column(name="active")
-    private boolean active;
-	@Column(name="finyear")
-    private String finYear;
+    @Column(name = "ipno", length = 15)
+    private String ipNo;
+
+    @Column(name = "latitude", length = 100)
+    private String latitude;
+
+    @Column(name = "orgid")
+    private Long orgId;
 	
 	@OneToMany(mappedBy = "partyMasterVO",cascade = CascadeType.ALL)
 	@JsonManagedReference

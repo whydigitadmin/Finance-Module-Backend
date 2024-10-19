@@ -1378,6 +1378,9 @@ public class TransactionServiceImpl implements TransactionService {
 				particularsPaymentVoucherVO.setCredit(particularsPaymentVoucherDTO.getCredit());
 				particularsPaymentVoucherVO.setNarration(particularsPaymentVoucherDTO.getNarration());
 				particularsPaymentVoucherVO.setPaymentVoucherVO(paymentVoucherVO);
+				particularsPaymentVoucherVO.setPaymentVoucherVO(paymentVoucherVO);
+				
+				
 				particularsPaymentVoucherVOs.add(particularsPaymentVoucherVO);
 			}
 		}
@@ -1389,18 +1392,13 @@ public class TransactionServiceImpl implements TransactionService {
 
 	private void getPaymentVoucherVOFromPaymentVoucherDTO(@Valid PaymentVoucherDTO paymentVoucherDTO,
 			PaymentVoucherVO paymentVoucherVO) {
-//		// // Finyr
-//		int finyr = paymentVoucherRepo.findFinyr();
-//		// DocId
-//		String paymentVoucher = "PV" + finyr + paymentVoucherRepo.findDocId();
-//		paymentVoucherVO.setDocid(paymentVoucher);
-//		paymentVoucherRepo.nextSeq();
-		paymentVoucherVO.setDocId(paymentVoucherDTO.getDocId());
+
+
 		paymentVoucherVO.setVehicleSubType(paymentVoucherDTO.getVehicleSubType());
 		paymentVoucherVO.setReferenceNo(paymentVoucherDTO.getReferenceNo());
 		paymentVoucherVO.setCurrency(paymentVoucherDTO.getCurrency());
-		paymentVoucherVO.setDocDate(paymentVoucherDTO.getDocDate());
 		paymentVoucherVO.setReferenceDate(paymentVoucherDTO.getReferenceDate());
+
 		paymentVoucherVO.setExRate(paymentVoucherDTO.getExRate());
 		paymentVoucherVO.setChequeNo(paymentVoucherDTO.getChequeNo());
 		paymentVoucherVO.setChequeDate(paymentVoucherDTO.getChequeDate());
@@ -1416,6 +1414,9 @@ public class TransactionServiceImpl implements TransactionService {
 		paymentVoucherVO.setRemarks(paymentVoucherDTO.getRemarks().toUpperCase());
 		paymentVoucherVO.setTotalDebitAmount(paymentVoucherDTO.getTotalDebitAmount());
 		paymentVoucherVO.setTotalCreditAmount(paymentVoucherDTO.getTotalCreditAmount());
+
+		paymentVoucherVO.setRemarks(paymentVoucherDTO.getRemarks());
+
 	}
 
 	@Override

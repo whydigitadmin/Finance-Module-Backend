@@ -106,7 +106,6 @@ public class ArapAdjustmentsServiceImpl implements ArapAdjustmentsService{
 	    arapAdjustmentsVO.setNativeAmt(arapAdjustmentsDTO.getNativeAmt());
 	    arapAdjustmentsVO.setOffDocId(arapAdjustmentsDTO.getOffDocId());
 	    arapAdjustmentsVO.setVoucherType(arapAdjustmentsDTO.getVoucherType());
-	    arapAdjustmentsVO.setDocDate(arapAdjustmentsDTO.getDocDate());
 	    arapAdjustmentsVO.setRefDate(arapAdjustmentsDTO.getRefDate());
 	    arapAdjustmentsVO.setSubLedgerCode(arapAdjustmentsDTO.getSubLedgerCode());
 	    arapAdjustmentsVO.setExRate(arapAdjustmentsDTO.getExRate());
@@ -120,9 +119,10 @@ public class ArapAdjustmentsServiceImpl implements ArapAdjustmentsService{
 	    arapAdjustmentsVO.setTransId(arapAdjustmentsDTO.getTransId());
 	    arapAdjustmentsVO.setChargeableAmt(arapAdjustmentsDTO.getChargeableAmt());
 	    arapAdjustmentsVO.setTdsAmt(arapAdjustmentsDTO.getTdsAmt());
-	    arapAdjustmentsVO.setOfficeDocId(arapAdjustmentsDTO.getOfficeDocId());
 	    arapAdjustmentsVO.setSubLedgerName(arapAdjustmentsDTO.getSubLedgerName());
+	    arapAdjustmentsVO.setGstFlag(arapAdjustmentsDTO.isGstFlag());
 		
+	    
         return arapAdjustmentsVO;
 	}
 	

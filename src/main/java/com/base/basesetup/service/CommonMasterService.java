@@ -100,14 +100,15 @@ public interface CommonMasterService {
 
 	void deleteCompany(Long companyid);
 
-//	Financial Year
-	List<FinancialYearVO> getFinancialYearById(Long id);
+	// FINANCIAL YEAR
 
-	List<FinancialYearVO> getFinancialYearByOrgId(Long orgid);
+	Map<String, Object> createUpdateFinYear(FinancialYearDTO financialYearDTO) throws ApplicationException;
 
-	FinancialYearVO updateCreateFinancialYear(@Valid FinancialYearDTO financialYearDTO) throws ApplicationException;
+	List<FinancialYearVO> getAllActiveFInYear(Long orgId);
 
-	List<Map<String, Object>> getFinYrAndFinYrIdByOrgId(Long orgId);
+	List<FinancialYearVO> getAllFInYearByOrgId(Long orgId);
+
+	Optional<FinancialYearVO> getAllFInYearById(Long id);
 
 //	FinScreen
 	List<FinScreenVO> getFinScreenById(Long id);
@@ -118,10 +119,6 @@ public interface CommonMasterService {
 
 	List<Map<String, Object>> getAllScreenCode();
 
-
-
-
-	
 	// Screen Names
 	Map<String, Object> createUpdateScreenNames(ScreenNamesDTO screenNamesDTO) throws ApplicationException;
 
