@@ -1,6 +1,7 @@
 package com.base.basesetup.repo;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -25,5 +26,8 @@ public interface PartyTypeRepo extends JpaRepository<PartyTypeVO, Long>{
 
 	@Query(nativeQuery = true,value="select concat(partytypecode,lpad(lastno,5,0)) AS docid from partytype where orgid=?1 and partytype=?2")
 	String getPartyTypeDocId(Long orgId, String partyType);
+
+	@Query(nativeQuery = true,value="select concat(partytypecode,lpad(lastno,5,0)) AS docid from partytype where orgid=?1 and partytype=?2")
+	Set<Object[]> findPartyCodeByOrgIdAndPartyType(Long orgid, String partytype);
 
 }
