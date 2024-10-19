@@ -34,8 +34,4 @@ public class ReceiptInvDetailsDTO {
 	private BigDecimal recExRate;
 	private BigDecimal txnSettled;
 	private BigDecimal gainAmt;
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
-	private LocalDate fromDate;
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
-	private LocalDate toDate;
 }

@@ -107,8 +107,6 @@ public class ARServiceImpl implements ARService {
 				particularsAccountReceiptVO.setRecExRate(particularsAccountReceiptDTO.getRecExRate());
 				particularsAccountReceiptVO.setTxnSettled(particularsAccountReceiptDTO.getTxnSettled());
 				particularsAccountReceiptVO.setGainAmt(particularsAccountReceiptDTO.getGainAmt());
-				particularsAccountReceiptVO.setFromDate(particularsAccountReceiptDTO.getFromDate());
-				particularsAccountReceiptVO.setToDate(particularsAccountReceiptDTO.getToDate());
 				particularsAccountReceiptVO.setReceiptVO(receiptVO);
 				particularsAccountReceiptVOs.add(particularsAccountReceiptVO);
 			}

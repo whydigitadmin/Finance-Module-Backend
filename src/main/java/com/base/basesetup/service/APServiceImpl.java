@@ -22,6 +22,7 @@ import com.base.basesetup.entity.PaymentInvDtlsVO;
 import com.base.basesetup.entity.PaymentVO;
 import com.base.basesetup.exception.ApplicationException;
 import com.base.basesetup.repo.ApBillBalanceRepo;
+import com.base.basesetup.repo.PartyMasterRepo;
 import com.base.basesetup.repo.PaymentInvDtlsRepo;
 import com.base.basesetup.repo.PaymentRepo;
 
@@ -38,6 +39,9 @@ public class APServiceImpl implements APService {
 	
 	@Autowired
 	ApBillBalanceRepo apBillBalanceRepo;
+	
+	@Autowired
+	PartyMasterRepo partyMasterRepo;
 
 	@Override
 	public List<PaymentVO> getAllPaymentByOrgId(Long orgId) {
@@ -280,6 +284,33 @@ public class APServiceImpl implements APService {
 		}
 
 		return doctypeMappingDetails;
+	}
+	
+	@Override
+	public List<Map<String, Object>> getPartyNameAndCodeForPayment(Long orgId, String branch, String branchCode,
+			String finYear) {
+		Set<Object[]> partyName = paymentRepo.findPartyNameAndCodeForPayment(orgId, branch, branchCode,
+				finYear);
+		return getPartyName(partyName);
+	}
+
+	private List<Map<String, Object>> getPartyName(Set<Object[]> customer) {
+		List<Map<String, Object>> doctypeMappingDetails = new ArrayList<>();
+		for (Object[] sup : customer) {
+			Map<String, Object> doctype = new HashMap<>();
+			doctype.put("partyName", sup[0] != null ? sup[0].toString() : "");
+			doctype.put("partyCode", sup[1] != null ? sup[1].toString() : "");
+			doctypeMappingDetails.add(doctype);
+		}
+
+		return doctypeMappingDetails;
+	}
+
+	@Override
+	public List<ApBillBalanceVO> getAllApBillBalanceByOrgId(Long orgId, String branch, String branchCode,
+			String finYear) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

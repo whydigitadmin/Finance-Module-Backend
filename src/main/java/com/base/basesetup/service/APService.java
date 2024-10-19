@@ -23,15 +23,19 @@ public interface APService {
 
 	PaymentVO updateCreatePayment(@Valid PaymentDTO paymentDTO) throws ApplicationException;
 
-//	ARBillBalance
-	List<ApBillBalanceVO> getAllApBillBalanceByOrgId(Long orgId);
+	List<Map<String, Object>> getPartyNameAndCodeForPayment(Long orgId, String branch, String branchCode,
+			String finYear);
+
+	// ARBillBalance
+	List<ApBillBalanceVO> getAllApBillBalanceByOrgId(Long orgId, String branch, String branchCode, String finYear);
 
 	List<ApBillBalanceVO> getAllApBillBalanceById(Long id);
 
-	ApBillBalanceVO updateCreateApBillBalance(@Valid ApBillBalanceDTO apBillBalanceDTO)
-			throws ApplicationException;
+	ApBillBalanceVO updateCreateApBillBalance(@Valid ApBillBalanceDTO apBillBalanceDTO) throws ApplicationException;
 
 	List<ApBillBalanceVO> getApBillBalanceByActive();
+
+	List<ApBillBalanceVO> getAllApBillBalanceByOrgId(Long orgId);
 
 // 	PaymentRegister
 	List<Map<String, Object>> getAllPaymentRegister(Long orgId, String branch, String branchCode, String finYear,

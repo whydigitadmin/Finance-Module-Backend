@@ -1987,21 +1987,5 @@ public class MasterServiceImpl implements MasterService {
 	}
 		
 	
-	@Override
-	@Transactional
-	public List<Map<String, Object>> getPartyNameByOrgId(Long orgid) {
-
-		Set<Object[]> result = partyMasterRepo.findPartyNameByOrgId(orgid);
-		return getPartyNameByOrgId(result);
-	}
-
-	private List<Map<String, Object>> getPartyNameByOrgId(Set<Object[]> result) {
-		List<Map<String, Object>> details1 = new ArrayList<>();
-		for (Object[] fs : result) {
-			Map<String, Object> part = new HashMap<>();
-			part.put("partName", fs[0] != null ? fs[0].toString() : "");
-			details1.add(part);
-		}
-		return details1;
-	}
+	
 }

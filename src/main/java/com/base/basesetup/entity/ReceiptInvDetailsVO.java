@@ -81,13 +81,6 @@ public class ReceiptInvDetailsVO {
 	@Column(name = "gainamt")
 	private BigDecimal gainAmt;
 
-	@Column(name = "fromdate")
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
-	private LocalDate fromDate;
-
-	@Column(name = "todate")
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
-	private LocalDate toDate;
 
 	@ManyToOne
 	@JsonBackReference
