@@ -1,6 +1,7 @@
 package com.base.basesetup.entity;
 
-import java.time.LocalDateTime;
+
+import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Embedded;
@@ -55,21 +56,21 @@ public class ArapAdjustmentsVO {
 	private String offDocId;
 	@Column(name = "vouchertype", length = 50)
 	private String voucherType;
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	@Column(name = "docdate")
-	private LocalDateTime docDate;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+	private LocalDate docDate;
 	@Column(name = "refdate")
-	private LocalDateTime refDate;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+	private LocalDate refDate;
 	@Column(name = "subledgercode", length = 50)
 	private String subLedgerCode;
 	@Column(name = "exrate", precision = 10, scale = 2)
 	private float exRate;
 	@Column(name = "creditdays", length = 10)
 	private String creditDays;
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	@Column(name = "duedate")
-	private LocalDateTime dueDate;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+	private LocalDate dueDate;
 	@Column(name = "orgid", length = 20)
 	private Long orgId;
 	@Column(name = "active")

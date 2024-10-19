@@ -106,7 +106,7 @@ public class ArapAdjustmentsController extends BaseController{
 			try {
 		        Map<String, Object> arapAdjustmentsVO = arapAdjustmentsService.createUpdateArapAdjustments(arapAdjustmentsDTO);
 		        responseObjectsMap.put(CommonConstant.STRING_MESSAGE, arapAdjustmentsVO.get("message"));
-		        responseObjectsMap.put("arapAdjustmentsVO", arapAdjustmentsVO.get("costInvoiceVO")); // Corrected key
+		        responseObjectsMap.put("arapAdjustmentsVO", arapAdjustmentsVO.get("arapAdjustmentsVO")); // Corrected key
 		        responseDTO = createServiceResponse(responseObjectsMap);
 		    } catch (Exception e) {
 		        errorMsg = e.getMessage();

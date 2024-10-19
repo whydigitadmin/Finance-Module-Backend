@@ -1,5 +1,12 @@
 package com.base.basesetup.service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 import org.apache.commons.lang3.ObjectUtils;
@@ -9,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.base.basesetup.dto.PartyTypeDTO;
+import com.base.basesetup.entity.PartyMasterVO;
 import com.base.basesetup.entity.PartyTypeVO;
 import com.base.basesetup.exception.ApplicationException;
 import com.base.basesetup.repo.PartyTypeRepo;
@@ -78,5 +86,51 @@ public class PartyTypeServiceImpl implements PartyTypeService {
 
 
 	}
+	
+	@Override
+	public List<PartyTypeVO> getPartyTypeById(Long id) {
+		List<PartyTypeVO> partyTypeVO = new ArrayList<>();
+		if (ObjectUtils.isNotEmpty(id)) {
+			LOGGER.info("Successfully Received  PartyType BY Id : {}", id);
+			partyTypeVO = partyTypeRepo.findPartyTypeVOById(id);
+		} else {
+			LOGGER.info("Successfully Received  PartyType For All Id.");
+			partyTypeVO = partyTypeRepo.findAll();
+		}
+		return partyTypeVO;
+	}
+
+	@Override
+	public List<PartyTypeVO> getAllPartyTypeByOrgId(Long orgid) {
+		List<PartyTypeVO> partyTypeVO = new ArrayList<>();
+		if (ObjectUtils.isNotEmpty(orgid)) {
+			LOGGER.info("Successfully Received  PartyType BY OrgId : {}", orgid);
+			partyTypeVO = partyTypeRepo.findAllPartyTypeVOByOrgId(orgid);
+		} else {
+			LOGGER.info("Successfully Received  PartyType For All OrgId.");
+			partyTypeVO = partyTypeRepo.findAll();
+		}
+		return partyTypeVO;
+	}
+	
+	@Override
+	@Transactional
+	public List<Map<String, Object>> getPartyCodeByOrgIdAndPartyType(Long orgid,String partytype) {
+
+		Set<Object[]> result = partyTypeRepo.findPartyCodeByOrgIdAndPartyType(orgid,partytype);
+		return getPartyCodeByOrgIdAndPartyType(result);
+	}
+
+	private List<Map<String, Object>> getPartyCodeByOrgIdAndPartyType(Set<Object[]> result) {
+		List<Map<String, Object>> details1 = new ArrayList<>();
+		for (Object[] fs : result) {
+			Map<String, Object> part = new HashMap<>();
+			part.put("partCode", fs[0] != null ? fs[0].toString() : "");
+			details1.add(part);
+		}
+		return details1;
+	}
+
+
 
 }
