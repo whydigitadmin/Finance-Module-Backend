@@ -123,5 +123,66 @@ public class PartyTypeController extends BaseController {
 				LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
 				return ResponseEntity.ok().body(responseDTO);
 			}
+			
+//			@GetMapping("/getPartyCodeByOrgIdAndPartyType")
+//			public ResponseEntity<ResponseDTO> getPartyCodeByOrgIdAndPartyType(@RequestParam(required = false) Long orgid,@RequestParam(required = false) String partytype) {
+//				String methodName = "getPartyCodeByOrgIdAndPartyType()";
+//				LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+//				String errorMsg = null;
+//				Map<String, Object> responseObjectsMap = new HashMap<>();
+//				ResponseDTO responseDTO = null;
+//				List<PartyTypeVO> partyTypeVO = new ArrayList<>();
+//				try {
+//					partyTypeVO = partyTypeService.getPartyCodeByOrgIdAndPartyType(orgid,partytype);
+//				} catch (Exception e) {
+//					errorMsg = e.getMessage();
+//					LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+//				}
+//				if (StringUtils.isBlank(errorMsg)) {
+//					responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "PartyType information get successfully By OrgId and PartyType");
+//					responseObjectsMap.put("partyTypeVO", partyTypeVO);
+//					responseDTO = createServiceResponse(responseObjectsMap);
+//				} else {
+//					responseDTO = createServiceResponseError(responseObjectsMap,
+//							"PartyType information receive failed By OrgId and PartyType", errorMsg);
+//				}
+//				LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+//				return ResponseEntity.ok().body(responseDTO);
+//			}
+//			
+			
+			@GetMapping("/getPartyCodeByOrgIdAndPartyType")
+			public ResponseEntity<ResponseDTO> getPartyCodeByOrgIdAndPartyType(
+					@RequestParam(required = false) Long orgid,@RequestParam(required = false) String partytype) {
+
+				String methodName = "getPartyCodeByOrgIdAndPartyType()";
+				LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+				String errorMsg = null;
+				Map<String, Object> responseObjectsMap = new HashMap<>();
+				ResponseDTO responseDTO = null;
+				List<Map<String, Object>> mov = new ArrayList<>();
+				try {
+					mov = partyTypeService.getPartyCodeByOrgIdAndPartyType(orgid,partytype);
+				} catch (Exception e) {
+					errorMsg = e.getMessage();
+					LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+				}
+
+				if (StringUtils.isBlank(errorMsg)) {
+					responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+							"PartyType information get successfully By OrgId and PartyType");
+					responseObjectsMap.put("partyTypeVO", mov);
+					responseDTO = createServiceResponse(responseObjectsMap);
+				} else {
+					responseDTO = createServiceResponseError(responseObjectsMap,
+							"PartyType information receive failed By OrgId and PartyType", errorMsg);
+				}
+
+				LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+				return ResponseEntity.ok().body(responseDTO);
+			}
+			
+			
+			
 
 }
