@@ -22,10 +22,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.base.basesetup.common.CommonConstant;
 import com.base.basesetup.common.UserConstants;
-import com.base.basesetup.dto.ArApBillBalanceReceivableDTO;
+import com.base.basesetup.dto.ArBillBalanceDTO;
 import com.base.basesetup.dto.ReceiptDTO;
 import com.base.basesetup.dto.ResponseDTO;
-import com.base.basesetup.entity.ArApBillBalanceReceivableVO;
+import com.base.basesetup.entity.ArBillBalanceVO;
 import com.base.basesetup.entity.ReceiptVO;
 import com.base.basesetup.service.ARService;
 
@@ -189,122 +189,122 @@ public class ARController extends BaseController {
 		return ResponseEntity.ok().body(responseDTO);
 	}
 
-	// ArApBillBalance
-	@GetMapping("/getAllArApBillBalanceReceivableByOrgId")
-	public ResponseEntity<ResponseDTO> getAllArApBillBalanceReceivableByOrgId(
+	// ArBillBalance
+	@GetMapping("/getAllArBillBalanceByOrgId")
+	public ResponseEntity<ResponseDTO> getAllArBillBalanceByOrgId(
 			@RequestParam(required = false) Long orgId) {
-		String methodName = "getAllArApBillBalanceReceivableByOrgId()";
+		String methodName = "getAllArBillBalanceByOrgId()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
 		String errorMsg = null;
 		Map<String, Object> responseObjectsMap = new HashMap<>();
 		ResponseDTO responseDTO = null;
-		List<ArApBillBalanceReceivableVO> arApBillBalanceVO = new ArrayList<>();
+		List<ArBillBalanceVO> arBillBalanceVO = new ArrayList<>();
 		try {
-			arApBillBalanceVO = arReceivableService.getAllArApBillBalanceReceivableByOrgId(orgId);
+			arBillBalanceVO = arReceivableService.getAllArBillBalanceByOrgId(orgId);
 		} catch (Exception e) {
 			errorMsg = e.getMessage();
 			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
 		}
 		if (StringUtils.isBlank(errorMsg)) {
 			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
-					"ArApBillBalance information get successfully By OrgId");
-			responseObjectsMap.put("arApBillBalanceReceivableVO", arApBillBalanceVO);
+					"ArBillBalance information get successfully By OrgId");
+			responseObjectsMap.put("arApBillBalanceReceivableVO", arBillBalanceVO);
 			responseDTO = createServiceResponse(responseObjectsMap);
 		} else {
 			responseDTO = createServiceResponseError(responseObjectsMap,
-					"ArApBillBalance information receive failed By OrgId", errorMsg);
+					"ArBillBalance information receive failed By OrgId", errorMsg);
 		}
 		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
 		return ResponseEntity.ok().body(responseDTO);
 
 	}
 
-	@GetMapping("/getAllArApBillBalanceReceivableById")
-	public ResponseEntity<ResponseDTO> getAllArApBillBalanceReceivableById(@RequestParam(required = false) Long id) {
-		String methodName = "getAllArApBillBalanceReceivableById()";
+	@GetMapping("/getAllArBillBalanceById")
+	public ResponseEntity<ResponseDTO> getAllArBillBalanceById(@RequestParam(required = false) Long id) {
+		String methodName = "getAllArBillBalanceById()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
 		String errorMsg = null;
 		Map<String, Object> responseObjectsMap = new HashMap<>();
 		ResponseDTO responseDTO = null;
-		List<ArApBillBalanceReceivableVO> arApBillBalanceReceivableVO = new ArrayList<>();
+		List<ArBillBalanceVO> arApBillBalanceReceivableVO = new ArrayList<>();
 		try {
-			arApBillBalanceReceivableVO = arReceivableService.getAllArApBillBalanceReceivableById(id);
+			arApBillBalanceReceivableVO = arReceivableService.getAllArBillBalanceById(id);
 		} catch (Exception e) {
 			errorMsg = e.getMessage();
 			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
 		}
 		if (StringUtils.isBlank(errorMsg)) {
 			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
-					"ArApBillBalanceReceivable information get successfully By id");
+					"ArBillBalance information get successfully By id");
 			responseObjectsMap.put("arApBillBalanceReceivableVO", arApBillBalanceReceivableVO);
 			responseDTO = createServiceResponse(responseObjectsMap);
 		} else {
 			responseDTO = createServiceResponseError(responseObjectsMap,
-					"ArApBillBalanceReceivable information receive failedByOrgId", errorMsg);
+					"ArBillBalance information receive failedByOrgId", errorMsg);
 		}
 		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
 		return ResponseEntity.ok().body(responseDTO);
 	}
 
-	@PutMapping("/updateCreateArApBillBalanceReceivable")
-	public ResponseEntity<ResponseDTO> updateCreateArApBillBalanceReceivable(
-			@Valid @RequestBody ArApBillBalanceReceivableDTO arApBillBalanceReceivableDTO) {
-		String methodName = "updateCreateArApBillBalanceReceivable()";
+	@PutMapping("/updateCreateArBillBalance")
+	public ResponseEntity<ResponseDTO> updateCreateArBillBalance(
+			@Valid @RequestBody ArBillBalanceDTO arApBillBalanceReceivableDTO) {
+		String methodName = "updateCreateArBillBalance()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
 		String errorMsg = null;
 		Map<String, Object> responseObjectsMap = new HashMap<>();
 		ResponseDTO responseDTO = null;
 
 		try {
-			ArApBillBalanceReceivableVO arApBillBalanceReceivableVO = arReceivableService
-					.updateCreateArApBillBalanceReceivable(arApBillBalanceReceivableDTO);
+			ArBillBalanceVO arApBillBalanceReceivableVO = arReceivableService
+					.updateCreateArBillBalance(arApBillBalanceReceivableDTO);
 			boolean isUpdate = arApBillBalanceReceivableDTO.getId() != null;
 
 			if (arApBillBalanceReceivableVO != null) {
 				responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
-						isUpdate ? "ArApBillBalance updated successfully" : "ArApBillBalance created successfully");
+						isUpdate ? "ArBillBalance updated successfully" : "ArBillBalance created successfully");
 				responseObjectsMap.put("arApBillBalanceReceivableVO", arApBillBalanceReceivableVO);
 				responseDTO = createServiceResponse(responseObjectsMap);
 			} else {
-				errorMsg = isUpdate ? "ArApBillBalance not found for ID: " + arApBillBalanceReceivableDTO.getId()
-						: "ArApBillBalance creation failed";
+				errorMsg = isUpdate ? "ArBillBalance not found for ID: " + arApBillBalanceReceivableDTO.getId()
+						: "ArBillBalance creation failed";
 				responseDTO = createServiceResponseError(responseObjectsMap,
-						isUpdate ? "ArApBillBalance update failed" : "ArApBillBalance creation failed", errorMsg);
+						isUpdate ? "ArBillBalance update failed" : "ArBillBalance creation failed", errorMsg);
 			}
 		} catch (Exception e) {
 			errorMsg = e.getMessage();
 			boolean isUpdate = arApBillBalanceReceivableDTO.getId() != null;
 			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
 			responseDTO = createServiceResponseError(responseObjectsMap,
-					isUpdate ? "ArApBillBalance update failed" : "ArApBillBalance creation failed", errorMsg);
+					isUpdate ? "ArBillBalance update failed" : "ArBillBalance creation failed", errorMsg);
 		}
 
 		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
 		return ResponseEntity.ok().body(responseDTO);
 	}
 
-	@GetMapping("/getArApBillBalanceReceivableByActive")
-	public ResponseEntity<ResponseDTO> getArApBillBalanceReceivableByActive() {
-		String methodName = "getArApBillBalanceReceivableByActive()";
+	@GetMapping("/getArBillBalanceByActive")
+	public ResponseEntity<ResponseDTO> getArBillBalanceByActive() {
+		String methodName = "getArBillBalanceByActive()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
 		String errorMsg = null;
 		Map<String, Object> responseObjectsMap = new HashMap<>();
 		ResponseDTO responseDTO = null;
-		List<ArApBillBalanceReceivableVO> arApBillBalanceReceivableVO = new ArrayList<>();
+		List<ArBillBalanceVO> arApBillBalanceReceivableVO = new ArrayList<>();
 		try {
-			arApBillBalanceReceivableVO = arReceivableService.getArApBillBalanceReceivableByActive();
+			arApBillBalanceReceivableVO = arReceivableService.getArBillBalanceByActive();
 		} catch (Exception e) {
 			errorMsg = e.getMessage();
 			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
 		}
 		if (StringUtils.isBlank(errorMsg)) {
 			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
-					"ArApBillBalance information get successfully By Active");
+					"ArBillBalance information get successfully By Active");
 			responseObjectsMap.put("arApBillBalanceReceivableVO", arApBillBalanceReceivableVO);
 			responseDTO = createServiceResponse(responseObjectsMap);
 		} else {
 			responseDTO = createServiceResponseError(responseObjectsMap,
-					"ArApBillBalanceReceivable receive failed By Active", errorMsg);
+					"ArBillBalance receive failed By Active", errorMsg);
 		}
 		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
 		return ResponseEntity.ok().body(responseDTO);
