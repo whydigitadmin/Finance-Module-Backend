@@ -21,20 +21,24 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "arapbillbalancerecievable")
+@Table(name = "arbillbalance")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ArApBillBalanceReceivableVO {
+public class ArBillBalanceVO {
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "arapbillbalancerecievablegen")
-	@SequenceGenerator(name = "arapbillbalancerecievablegen", sequenceName = "arapbillbalancerecievableseq", initialValue = 1000000001, allocationSize = 1)
-	@Column(name = "arapbillbalancerecievableid")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "arbillbalancegen")
+	@SequenceGenerator(name = "arbillbalancegen", sequenceName = "arbillbalanceseq", initialValue = 1000000001, allocationSize = 1)
+	@Column(name = "arbillbalanceid")
 	private Long id;
 
 	@Column(name = "docno", length = 50)
 	private String docNo;
+
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+	@Column(name = "docdate")
+	private LocalDate docDate = LocalDate.now();
 
 	@Column(name = "accname", length = 50)
 	private String accName;
@@ -97,7 +101,7 @@ public class ArApBillBalanceReceivableVO {
 
 	@Column(name = "orgid")
 	private Long orgId;
-	
+
 	@Column(name = "branch", length = 25)
 	private String branch;
 
@@ -123,10 +127,10 @@ public class ArApBillBalanceReceivableVO {
 	private String finYear;
 
 	@Column(name = "screencode", length = 5)
-	private String screenCode;
+	private String screenCode = "ARBB";
 
 	@Column(name = "screenname", length = 25)
-	private String screenName;
+	private String screenName = "AR BILL BALANCE";
 
 	@Column(name = "ipno", length = 15)
 	private String ipNo;

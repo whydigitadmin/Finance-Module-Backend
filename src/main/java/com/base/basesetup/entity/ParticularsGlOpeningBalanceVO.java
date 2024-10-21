@@ -31,17 +31,17 @@ public class ParticularsGlOpeningBalanceVO {
 	@SequenceGenerator(name = "particularsglopeningbalancegen", sequenceName = "particularsglopeningbalanceseq", initialValue = 1000000001, allocationSize = 1)
 	@Column(name = "particularsglopeningbalanceid")
 	private Long id;
-	@Column(name="accountname")
+	@Column(name="accountname",length = 150)
 	private String accountName;
-	@Column(name = "subledgercode")
+	@Column(name = "subledgercode",length = 150)
 	private BigDecimal subLedgerCode;
-	@Column(name = "debitamount")
+	@Column(name = "debitamount",precision = 10,scale = 2)
 	private BigDecimal debitAmount;
-	@Column(name = "creditamount")
+	@Column(name = "creditamount",precision = 10,scale = 2)
 	private BigDecimal creditAmount;
-	@Column(name = "debitbase")
+	@Column(name = "debitbase",precision = 10,scale = 2)
 	private BigDecimal debitBase;
-	@Column(name = "creditbase")
+	@Column(name = "creditbase",precision = 10,scale = 2)
 	private BigDecimal creditBase;
 	
 	@ManyToOne
