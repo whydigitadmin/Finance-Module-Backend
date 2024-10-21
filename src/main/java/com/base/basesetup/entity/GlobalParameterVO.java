@@ -36,10 +36,6 @@ public class GlobalParameterVO {
 	private String branch;
 	@Column(name = "branchcode")
 	private String branchcode;
-	@Column(name = "customer")
-	private String customer;
-	@Column(name = "client")
-	private String client;
 	@Column(name = "finyear")
 	private String finYear;
 	
