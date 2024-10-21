@@ -1860,18 +1860,34 @@ public class TransactionServiceImpl implements TransactionService {
 	}
 
 	@Override
-	public GlOpeningBalanceVO updateCreateGlOpeningBalance(@Valid GlOpeningBalanceDTO glOpeningBalanceDTO)
+	public Map<String, Object> updateCreateGlOpeningBalance(@Valid GlOpeningBalanceDTO glOpeningBalanceDTO)
 			throws ApplicationException {
+		String screenCode = "GOB";
 		GlOpeningBalanceVO glOpeningBalanceVO = new GlOpeningBalanceVO();
+		String message;
 		boolean isUpdate = false;
 		if (ObjectUtils.isNotEmpty(glOpeningBalanceDTO.getId())) {
 			isUpdate = true;
 			glOpeningBalanceVO = glOpeningBalanceRepo.findById(glOpeningBalanceDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid GlOpeningBalance details"));
 			glOpeningBalanceVO.setUpdatedBy(glOpeningBalanceDTO.getCreatedBy());
+			getGlOpeningBalanceVOFromGlOpeningBalanceDTO(glOpeningBalanceDTO, glOpeningBalanceVO);
+			message = "GlOpeningBalance Updated Successfully";
 		} else {
+			String docId = glOpeningBalanceRepo.getGlOpeningBalanceDocId(glOpeningBalanceDTO.getOrgId(),
+					glOpeningBalanceDTO.getFinYear(), glOpeningBalanceDTO.getBranchCode(), screenCode);
+			glOpeningBalanceVO.setDocId(docId);
+
+			// GETDOCID LASTNO +1
+			DocumentTypeMappingDetailsVO documentTypeMappingDetailsVO = documentTypeMappingDetailsRepo
+					.findByOrgIdAndFinYearAndBranchCodeAndScreenCode(glOpeningBalanceDTO.getOrgId(),
+							glOpeningBalanceDTO.getFinYear(), glOpeningBalanceDTO.getBranchCode(), screenCode);
+			documentTypeMappingDetailsVO.setLastno(documentTypeMappingDetailsVO.getLastno() + 1);
+			documentTypeMappingDetailsRepo.save(documentTypeMappingDetailsVO);
+
 			glOpeningBalanceVO.setUpdatedBy(glOpeningBalanceDTO.getCreatedBy());
 			glOpeningBalanceVO.setCreatedBy(glOpeningBalanceDTO.getCreatedBy());
+			message = "GlOpeningBalance Created Successfully";
 		}
 
 		List<ParticularsGlOpeningBalanceVO> particularsGlOpeningBalanceVOs = new ArrayList<>();
@@ -1899,7 +1915,11 @@ public class TransactionServiceImpl implements TransactionService {
 		}
 		glOpeningBalanceVO.setParticularsGlOpeningBalanceVO(particularsGlOpeningBalanceVOs);
 		getGlOpeningBalanceVOFromGlOpeningBalanceDTO(glOpeningBalanceDTO, glOpeningBalanceVO);
-		return glOpeningBalanceRepo.save(glOpeningBalanceVO);
+		glOpeningBalanceRepo.save(glOpeningBalanceVO);
+		Map<String, Object> response = new HashMap<>();
+		response.put("glOpeningBalanceVO", glOpeningBalanceVO);
+		response.put("message", message);
+		return response;
 	}
 
 	private void getGlOpeningBalanceVOFromGlOpeningBalanceDTO(@Valid GlOpeningBalanceDTO glOpeningBalanceDTO,
@@ -1924,6 +1944,20 @@ public class TransactionServiceImpl implements TransactionService {
 	public List<GlOpeningBalanceVO> getGlOpeningBalanceByActive() {
 		return glOpeningBalanceRepo.findGlOpeningBalanceByActive();
 	}
+	
+	@Override
+	public String getGlOpeningBalanceDocId(Long orgId, String finYear, String branchCode, String branch) {
+		String ScreenCode = "GOB";
+		String result = glOpeningBalanceRepo.getGlOpeningBalanceDocId(orgId, finYear, branchCode, ScreenCode);
+		return result;
+	}
+
+	@Override
+	public GlOpeningBalanceVO getGlOpeningBalanceByDocId(Long orgId, String docId) {
+		
+		return glOpeningBalanceRepo.findAllGlOpeningBalanceByDocId(orgId, docId);
+	}
+	
 
 	/// ReconcileBank
 
@@ -2198,7 +2232,7 @@ public class TransactionServiceImpl implements TransactionService {
 	}
 
 	@Override
-	public ReconcileBankVO getReconcileCorpBankByDocId(Long orgId, String docId) {
+	public ReconcileCorpBankVO getReconcileCorpBankByDocId(Long orgId, String docId) {
 		
 		return reconcileCorpBankRepo.findAllReconcileCorpBankByDocId(orgId, docId);
 	}
@@ -2233,25 +2267,42 @@ public class TransactionServiceImpl implements TransactionService {
 	}
 
 	@Override
-	public ReconcileCashVO updateCreateReconcileCash(@Valid ReconcileCashDTO reconcileCashDTO)
+	public Map<String, Object> updateCreateReconcileCash(@Valid ReconcileCashDTO reconcileCashDTO)
 			throws ApplicationException {
-		// String screenCode = "RCH";
+		 String screenCode = "RCH";
 		ReconcileCashVO reconcileCashVO = new ReconcileCashVO();
 		boolean isUpdate = false;
-
+           String message;
 		if (ObjectUtils.isNotEmpty(reconcileCashDTO.getId())) {
 			isUpdate = true;
 			reconcileCashVO = reconcileCashRepo.findById(reconcileCashDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid ReconcileCash details"));
 			reconcileCashVO.setUpdatedBy(reconcileCashDTO.getCreatedBy());
-
+			getReconcileCashVOFromReconcileCashDTO(reconcileCashDTO, reconcileCashVO);
+			message = "ReconcileCash Updated Successfully";
 		} else {
+			String docId = reconcileCashRepo.getReconcileCashDocId(reconcileCashDTO.getOrgId(),
+					reconcileCashDTO.getFinYear(), reconcileCashDTO.getBranchCode(), screenCode);
+			reconcileCashVO.setDocId(docId);
+
+			// GETDOCID LASTNO +1
+			DocumentTypeMappingDetailsVO documentTypeMappingDetailsVO = documentTypeMappingDetailsRepo
+					.findByOrgIdAndFinYearAndBranchCodeAndScreenCode(reconcileCashDTO.getOrgId(),
+							reconcileCashDTO.getFinYear(), reconcileCashDTO.getBranchCode(), screenCode);
+			documentTypeMappingDetailsVO.setLastno(documentTypeMappingDetailsVO.getLastno() + 1);
+			documentTypeMappingDetailsRepo.save(documentTypeMappingDetailsVO);
+
 			reconcileCashVO.setUpdatedBy(reconcileCashDTO.getCreatedBy());
 			reconcileCashVO.setCreatedBy(reconcileCashDTO.getCreatedBy());
+			message = "ReconcileCash Created Successfully";
 		}
-
+      
 		getReconcileCashVOFromReconcileCashDTO(reconcileCashDTO, reconcileCashVO);
-		return reconcileCashRepo.save(reconcileCashVO);
+		 reconcileCashRepo.save(reconcileCashVO);
+		 Map<String, Object> response = new HashMap<>();
+			response.put("reconcileCashVO", reconcileCashVO);
+		     response.put("message", message);
+		   return response;
 	}
 
 	private void getReconcileCashVOFromReconcileCashDTO(@Valid ReconcileCashDTO reconcileCashDTO,
@@ -2310,6 +2361,21 @@ public class TransactionServiceImpl implements TransactionService {
 	public List<ReconcileCashVO> getReconcileCashByActive() {
 		return reconcileCashRepo.findReconcileCashByActive();
 	}
+
+	@Override
+	public String getReconcileCashDocId(Long orgId, String finYear,String branch, String branchCode) {
+		String ScreenCode = "RCH";
+		String result = reconcileCashRepo.getReconcileCashDocId(orgId, finYear, branchCode,ScreenCode);
+		return result;
+
+	}
+
+	@Override
+	public ReconcileCashVO getReconcileCashByDocId(Long orgId, String docId) {
+		return reconcileCashRepo.findAllReconcileCashByDocId(orgId, docId);
+	}
+
+	
 
 	
 
