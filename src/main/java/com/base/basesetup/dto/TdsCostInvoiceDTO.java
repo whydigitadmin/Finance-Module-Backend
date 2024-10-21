@@ -12,8 +12,8 @@ import lombok.NoArgsConstructor;
 public class TdsCostInvoiceDTO {
 	private Long id;
 	private String tdsWithHolding;
-	private float tdsWithHoldingPer;
+	private Double tdsWithHoldingPer;
 	private String section;
-	private int totTdsWhAmnt;
+	private Double totTdsWhAmnt;
 
 }

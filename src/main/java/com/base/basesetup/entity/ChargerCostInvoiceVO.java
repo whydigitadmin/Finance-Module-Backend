@@ -46,11 +46,17 @@ public class ChargerCostInvoiceVO {
 	@Column(name = "conttype",length =10)
 	private String contType;
 	@Column(name = "currency",precision =10,scale =2)
-	private float currency;
+	private Double currency;
 	@Column(name = "exrate",precision =10,scale =2)
-	private int exRate;
+	private Double exRate;
 	@Column(name = "gst",length =10)
-	private int gst;
+	private Long gst;
+	@Column(name = "fcamt",precision =10,scale =2)
+	private Double fcAmt;
+	@Column(name = "lcamt",precision =10,scale =2)
+	private Double lcAmt;
+	@Column(name = "billamt",precision =10,scale =2)
+	private Double billAmt;
 
 	@ManyToOne
 	@JsonBackReference

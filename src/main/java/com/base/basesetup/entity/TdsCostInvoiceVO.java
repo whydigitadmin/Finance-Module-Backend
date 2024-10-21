@@ -33,11 +33,11 @@ public class TdsCostInvoiceVO {
 	@Column(name = "tdswithholding",length =10)
 	private String tdsWithHolding;
 	@Column(name = "tdswithholdingper",precision =10,scale = 2)
-	private float tdsWithHoldingPer;
+	private Double tdsWithHoldingPer;
 	@Column(name = "section",length =10)
 	private String section;
 	@Column(name = "totaltds",precision =10,scale = 2)
-	private int totTdsWhAmnt;
+	private Double totTdsWhAmnt;
 	
 	@ManyToOne
 	@JsonBackReference

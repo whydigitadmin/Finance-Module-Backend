@@ -17,16 +17,16 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "costdebitcharges")
+@Table(name = "costdebitnotegst")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class CostDebitNoteGstVO {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "costdebitchargesgen")
-	@SequenceGenerator(name = "costdebitchargesgen", sequenceName = "costdebitchargesseq", initialValue = 1000000001, allocationSize = 1)
-	@Column(name = "costdebitchargesid")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "costdebitnotegstgen")
+	@SequenceGenerator(name = "costdebitnotegstgen", sequenceName = "costdebitnotegstseq", initialValue = 1000000001, allocationSize = 1)
+	@Column(name = "costdebitnotegstid")
 	private Long id;
 	
 	@Column(name = "chargeacc", length = 100)

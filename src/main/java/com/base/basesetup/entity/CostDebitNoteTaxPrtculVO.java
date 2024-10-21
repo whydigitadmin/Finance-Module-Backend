@@ -25,7 +25,7 @@ public class CostDebitNoteTaxPrtculVO {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "costdebitNotetaxprtculgen")
 	@SequenceGenerator(name = "costdebitNotetaxprtculgen", sequenceName = "costdebitNotetaxprtculseq", initialValue = 1000000001, allocationSize = 1)
-	@Column(name = "costdebitnoteTaxprtculid")
+	@Column(name = "costdebitnotetaxprtculid")
 	private Long id;
 	
 	@Column(name = "tds", length = 10)

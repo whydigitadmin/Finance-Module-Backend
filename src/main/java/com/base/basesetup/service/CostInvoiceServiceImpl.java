@@ -193,6 +193,9 @@ public class CostInvoiceServiceImpl implements CostInvoiceService {
 			chargerCostInvoiceVO.setCurrency(chargerCostInvoiceDTO.getCurrency());
 			chargerCostInvoiceVO.setExRate(chargerCostInvoiceDTO.getExRate());
 			chargerCostInvoiceVO.setGst(chargerCostInvoiceDTO.getGst());
+			chargerCostInvoiceVO.setFcAmt(chargerCostInvoiceDTO.getFcAmt());
+			chargerCostInvoiceVO.setLcAmt(chargerCostInvoiceDTO.getLcAmt());
+			chargerCostInvoiceVO.setBillAmt(chargerCostInvoiceDTO.getBillAmt());
 
 			chargerCostInvoiceVO.setCostInvoiceVO(costInvoiceVO);
 			chargerCostInvoiceVOs.add(chargerCostInvoiceVO);

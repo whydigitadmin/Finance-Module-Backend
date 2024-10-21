@@ -30,21 +30,21 @@ public class CostInvSummaryVO {
 	@Column(name = "costinvsummaryid")
 	private Long id;
 	@Column(name ="totchargesbillcurramt",precision =10,scale =2)
-	private float totChargesBillCurrAmt;
+	private Double totChargesBillCurrAmt;
 	@Column(name ="totchargeslcamt",precision =10,scale =2)
-	private float totChargesLcAmt;
+	private Double totChargesLcAmt;
 	@Column(name ="actbillcurramt",precision =10,scale =2)
-	private float actBillCurrAmt;
+	private Double actBillCurrAmt;
 	@Column(name ="actbilllcamt",precision =10,scale =2)
-	private float actBillLcAmt;
+	private Double actBillLcAmt;
 	@Column(name ="netbillcurramt",precision =10,scale =2)
-	private float netBillCurrAmt;
+	private Double netBillCurrAmt;
 	@Column(name ="netbilllcamt",precision =10,scale =2)
-	private float netBillLcAmt;
+	private Double netBillLcAmt;
 	@Column(name ="roundoff",precision =10,scale =2)
-	private float roundOff;
+	private Double roundOff;
 	@Column(name ="gstinputlcamt",precision =10,scale =2)
-	private float gstInputLcAmt;
+	private Double gstInputLcAmt;
 	
 	@ManyToOne
 	@JsonBackReference

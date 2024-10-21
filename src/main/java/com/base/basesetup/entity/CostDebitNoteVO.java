@@ -15,7 +15,6 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.base.basesetup.dto.CreatedUpdatedDate;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -50,9 +49,9 @@ public class CostDebitNoteVO {
 	@Column(name = "finyear", length = 10)
 	private String finYear;
 	@Column(name = "screencode", length = 10)
-	private String screenCode;
+	private String screenCode="WDE";
 	@Column(name = "screenname", length = 25)
-	private String screenName;
+	private String screenName="COST DEBIT NOTE";
 	@Column(name = "ipno", length = 15)
 	private String ipNo;
 	@Column(name = "latitude", length = 100)
@@ -61,13 +60,15 @@ public class CostDebitNoteVO {
 	private Long orgId;
 	@Column(name = "docno", length = 50)
 	private String docNo;
+	
+	@Column(name = "docid", length = 50)
+	private String docId;
 
 	@Column(name = "subtype", length = 25)
 	private String subType;
 
 	@Column(name = "product", length = 50)
 	private String product;
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	@Column(name = "docdate")
 	private LocalDate docDate=LocalDate.now();
 
@@ -82,7 +83,6 @@ public class CostDebitNoteVO {
 
 	@Column(name = "supprefno", length = 50)
 	private String suppRefNo;
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	@Column(name = "suppdate")
 	private LocalDate suppDate;
 
@@ -94,7 +94,6 @@ public class CostDebitNoteVO {
 
 	@Column(name = "creditdays")
 	private int creditDays;
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	@Column(name = "duedate")
 	private LocalDate dueDate;
 

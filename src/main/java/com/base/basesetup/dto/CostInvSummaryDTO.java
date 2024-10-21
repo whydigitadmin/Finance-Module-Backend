@@ -12,14 +12,14 @@ import lombok.NoArgsConstructor;
 public class CostInvSummaryDTO {
 
 	private Long id;
-	private float totChargesBillCurrAmt;
-	private float totChargesLcAmt;
-	private float actBillCurrAmt;
-	private float actBillLcAmt;
-	private float netBillCurrAmt;
-	private float netBillLcAmt;
-	private float roundOff;
-	private float gstInputLcAmt;
+	private Double totChargesBillCurrAmt;
+	private Double totChargesLcAmt;
+	private Double actBillCurrAmt;
+	private Double actBillLcAmt;
+	private Double netBillCurrAmt;
+	private Double netBillLcAmt;
+	private Double roundOff;
+	private Double gstInputLcAmt;
 	
 	
 	
