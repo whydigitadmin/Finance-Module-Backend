@@ -1018,16 +1018,16 @@ public class MasterServiceImpl implements MasterService {
 	}
 
 	private void getGroupLedgerVOFromGroupLedgerDTO(@Valid GroupLedgerDTO groupLedgerDTO, GroupLedgerVO groupLedgerVO) {
-		groupLedgerVO.setGroupName(groupLedgerDTO.getGroupName());
+		groupLedgerVO.setGroupName(groupLedgerDTO.getGroupName().toUpperCase());
 		groupLedgerVO.setOrgId(groupLedgerDTO.getOrgId());
-		groupLedgerVO.setCoaList(groupLedgerDTO.getCoaList());
-		groupLedgerVO.setType(groupLedgerDTO.getType());
-		groupLedgerVO.setCategory(groupLedgerDTO.getCategory());
+		groupLedgerVO.setCoaList(groupLedgerDTO.getCoaList().toUpperCase());
+		groupLedgerVO.setType(groupLedgerDTO.getType().toUpperCase());
+		groupLedgerVO.setCategory(groupLedgerDTO.getCategory().toUpperCase());
 		groupLedgerVO.setCurrency(groupLedgerDTO.getCurrency());
 		groupLedgerVO.setActive(groupLedgerDTO.isActive());
-		groupLedgerVO.setInterBranchAc(true);
-		groupLedgerVO.setControllAc(true);
-		groupLedgerVO.setAccountGroupName(groupLedgerDTO.getAccountGroupName());
+		groupLedgerVO.setInterBranchAc(groupLedgerDTO.isInterBranchAc());
+		groupLedgerVO.setControllAc(groupLedgerDTO.isControllAc());
+		groupLedgerVO.setAccountGroupName(groupLedgerDTO.getAccountGroupName().toUpperCase());
 	}
 	
 	@Override
