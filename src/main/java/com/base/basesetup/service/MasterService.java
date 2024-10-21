@@ -18,7 +18,6 @@ import com.base.basesetup.dto.ExRatesDTO;
 import com.base.basesetup.dto.GroupLedgerDTO;
 import com.base.basesetup.dto.ListOfValuesDTO;
 import com.base.basesetup.dto.PartyMasterDTO;
-import com.base.basesetup.dto.PartyTypeDTO;
 import com.base.basesetup.dto.SacCodeDTO;
 import com.base.basesetup.dto.SetTaxRateDTO;
 import com.base.basesetup.dto.SubLedgerAccountDTO;
@@ -35,7 +34,6 @@ import com.base.basesetup.entity.ExRatesVO;
 import com.base.basesetup.entity.GroupLedgerVO;
 import com.base.basesetup.entity.ListOfValuesVO;
 import com.base.basesetup.entity.PartyMasterVO;
-import com.base.basesetup.entity.PartyTypeVO;
 import com.base.basesetup.entity.SacCodeVO;
 import com.base.basesetup.entity.SetTaxRateVO;
 import com.base.basesetup.entity.SubLedgerAccountVO;
@@ -58,7 +56,7 @@ public interface MasterService {
 	void deleteBranch(Long branchid);
 
 	// employee
-	
+
 	List<EmployeeVO> getAllEmployee();
 
 	List<EmployeeVO> getAllEmployeeByOrgId(Long orgId);
@@ -68,7 +66,7 @@ public interface MasterService {
 	Map<String, Object> createEmployee(EmployeeDTO employeeDTO) throws ApplicationException;
 
 	void deleteEmployee(Long employeeid);
-	
+
 //	SetTaxRateVO
 	List<SetTaxRateVO> getAllSetTaxRateByOrgId(Long orgId);
 
@@ -171,8 +169,8 @@ public interface MasterService {
 
 //	ChargeTypeRequest
 	List<ChargeTypeRequestVO> getAllChargeTypeRequestByOrgId(Long orgId);
-	
-	List<Map<String,Object>>getChargeType(Long orgId);
+
+	List<Map<String, Object>> getChargeType(Long orgId);
 
 	ChargeTypeRequestVO updateCreateChargeTypeRequest(@Valid ChargeTypeRequestDTO chargeTypeRequestDTO)
 			throws ApplicationException;
@@ -180,6 +178,8 @@ public interface MasterService {
 	List<ChargeTypeRequestVO> getAllChargeTypeRequestById(Long id);
 
 	List<ChargeTypeRequestVO> getChargeTypeRequestByActive();
+	
+	List<Map<String, Object>> getSalesAccountFromGroup(Long orgId, String branch, String branchCode,String finYear);
 
 //	ListOfValues
 
@@ -189,8 +189,8 @@ public interface MasterService {
 
 	ListOfValuesVO updateCreateListOfValues(@Valid ListOfValuesDTO listOfValuesDTO) throws ApplicationException;
 
-	//PartyMaster
-	
+	// PartyMaster
+
 	List<PartyMasterVO> getPartyMasterByOrgId(Long orgid);
 
 	List<PartyMasterVO> getPartyMasterById(Long id);
@@ -198,5 +198,4 @@ public interface MasterService {
 	PartyMasterVO updateCreatePartyMaster(@Valid PartyMasterDTO partyMasterDTO) throws ApplicationException;
 
 
-	
 }

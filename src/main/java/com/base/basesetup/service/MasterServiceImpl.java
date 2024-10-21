@@ -41,8 +41,6 @@ import com.base.basesetup.dto.PartySalesPersonTaggingDTO;
 import com.base.basesetup.dto.PartySpecialTDSDTO;
 import com.base.basesetup.dto.PartyStateDTO;
 import com.base.basesetup.dto.PartyTdsExemptedDTO;
-import com.base.basesetup.dto.PartyTypeDTO;
-import com.base.basesetup.dto.PartyVendorEvaluationDTO;
 import com.base.basesetup.dto.SacCodeDTO;
 import com.base.basesetup.dto.SetTaxRateDTO;
 import com.base.basesetup.dto.SubLedgerAccountDTO;
@@ -61,7 +59,6 @@ import com.base.basesetup.entity.ChargeTypeRequestVO;
 import com.base.basesetup.entity.ChequeBookDetailsVO;
 import com.base.basesetup.entity.ChequeBookVO;
 import com.base.basesetup.entity.CostCenterVO;
-import com.base.basesetup.entity.DocumentTypeMappingDetailsVO;
 import com.base.basesetup.entity.EmployeeVO;
 import com.base.basesetup.entity.ExRatesVO;
 import com.base.basesetup.entity.GroupLedgerVO;
@@ -1596,6 +1593,26 @@ public class MasterServiceImpl implements MasterService {
 
 	}
 
+	@Override
+	public List<Map<String, Object>> getSalesAccountFromGroup(Long orgId, String branch, String branchCode,
+			String finYear) {
+		Set<Object[]> register = chargeTypeRequestRepo.findSalesAccountFromGroup(orgId, branch, branchCode, finYear);
+		return getRegister(register);
+	}
+
+	private List<Map<String, Object>> getRegister(Set<Object[]> getRegister) {
+		List<Map<String, Object>> doctypeMappingDetails = new ArrayList<>();
+		for (Object[] sup : getRegister) {
+			Map<String, Object> doctype = new HashMap<>();
+			doctype.put("docId", sup[0] != null ? sup[0].toString() : "");
+			doctype.put("docDate", sup[1] != null ? sup[1].toString() : "");
+
+			doctypeMappingDetails.add(doctype);
+		}
+
+		return doctypeMappingDetails;
+	}
+
 	// ListOfValues
 
 	@Override
@@ -1726,8 +1743,7 @@ public class MasterServiceImpl implements MasterService {
 	}
 
 	@Override
-	public PartyMasterVO updateCreatePartyMaster(@Valid PartyMasterDTO partyMasterDTO)
-			throws ApplicationException {
+	public PartyMasterVO updateCreatePartyMaster(@Valid PartyMasterDTO partyMasterDTO) throws ApplicationException {
 		PartyMasterVO partyMasterVO = new PartyMasterVO();
 		boolean isUpdate = false;
 		if (ObjectUtils.isNotEmpty(partyMasterDTO.getId())) {
@@ -1735,31 +1751,29 @@ public class MasterServiceImpl implements MasterService {
 			partyMasterVO = partyMasterRepo.findById(partyMasterDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid PartyMaster Details"));
 			partyMasterVO.setUpdatedBy(partyMasterDTO.getCreatedBy());
-		} 
-		else {
+		} else {
 			// GETDOCID API
 			String docId = partyTypeRepo.getPartyTypeDocId(partyMasterDTO.getOrgId(), partyMasterDTO.getPartyType());
 			partyMasterVO.setPartyCode(docId);
 
 			// GETDOCID LASTNO +1
-			PartyTypeVO partyTypeVO = partyTypeRepo
-					.findByOrgIdAndPartyType(partyMasterDTO.getOrgId(),
-							partyMasterDTO.getPartyType());
+			PartyTypeVO partyTypeVO = partyTypeRepo.findByOrgIdAndPartyType(partyMasterDTO.getOrgId(),
+					partyMasterDTO.getPartyType());
 			partyTypeVO.setLastNo(partyTypeVO.getLastNo() + 1);
 			partyTypeRepo.save(partyTypeVO);
 
 			partyMasterVO.setCreatedBy(partyMasterDTO.getCreatedBy());
 			partyMasterVO.setUpdatedBy(partyMasterDTO.getCreatedBy());
 		}
-        partyMasterVO = partyMasterRepo.save(partyMasterVO);
-		
-        if(ObjectUtils.isNotEmpty(partyMasterDTO.getId())){
-		List<PartyStateVO> partyStateVOList = partyStateRepo.findByPartyMasterVO(partyMasterVO);
-		partyStateRepo.deleteAll(partyStateVOList);
-        }
-		List<PartyStateVO> partyStateVOs= new ArrayList<>();
-		if(partyMasterDTO.getPartyStateDTO()!=null) {
-			for(PartyStateDTO partyStateDTO : partyMasterDTO.getPartyStateDTO()) {
+		partyMasterVO = partyMasterRepo.save(partyMasterVO);
+
+		if (ObjectUtils.isNotEmpty(partyMasterDTO.getId())) {
+			List<PartyStateVO> partyStateVOList = partyStateRepo.findByPartyMasterVO(partyMasterVO);
+			partyStateRepo.deleteAll(partyStateVOList);
+		}
+		List<PartyStateVO> partyStateVOs = new ArrayList<>();
+		if (partyMasterDTO.getPartyStateDTO() != null) {
+			for (PartyStateDTO partyStateDTO : partyMasterDTO.getPartyStateDTO()) {
 				PartyStateVO partyStateVO = new PartyStateVO();
 				partyStateVO.setState(partyStateDTO.getState());
 				partyStateVO.setGstIn(partyStateDTO.getGstIn());
@@ -1772,13 +1786,13 @@ public class MasterServiceImpl implements MasterService {
 				partyStateVOs.add(partyStateVO);
 			}
 		}
-		 if(ObjectUtils.isNotEmpty(partyMasterDTO.getId())){
-		List<PartyAddressVO> partyAddressVOList = partyAddressRepo.findByPartyMasterVO(partyMasterVO);
-		partyAddressRepo.deleteAll(partyAddressVOList);
-		 }
-		List<PartyAddressVO> partyAddressVOs= new ArrayList<>();
-		if(partyMasterDTO.getPartyAddressDTO()!=null) {
-			for(PartyAddressDTO partyAddressDTO : partyMasterDTO.getPartyAddressDTO()) {
+		if (ObjectUtils.isNotEmpty(partyMasterDTO.getId())) {
+			List<PartyAddressVO> partyAddressVOList = partyAddressRepo.findByPartyMasterVO(partyMasterVO);
+			partyAddressRepo.deleteAll(partyAddressVOList);
+		}
+		List<PartyAddressVO> partyAddressVOs = new ArrayList<>();
+		if (partyMasterDTO.getPartyAddressDTO() != null) {
+			for (PartyAddressDTO partyAddressDTO : partyMasterDTO.getPartyAddressDTO()) {
 				PartyAddressVO partyAddressVO = new PartyAddressVO();
 				partyAddressVO.setState(partyAddressDTO.getState());
 				partyAddressVO.setStateGstIn(partyAddressDTO.getStateGstIn());
@@ -1795,13 +1809,15 @@ public class MasterServiceImpl implements MasterService {
 				partyAddressVOs.add(partyAddressVO);
 			}
 		}
-		 if(ObjectUtils.isNotEmpty(partyMasterDTO.getId())){
-		List<PartyDetailsOfDirectorsVO> partyDetailsOfDirectorsVOList = partyDetailsOfDirectorsRepo.findByPartyMasterVO(partyMasterVO);
-		partyDetailsOfDirectorsRepo.deleteAll(partyDetailsOfDirectorsVOList);
-		 }
-		List<PartyDetailsOfDirectorsVO> partyDetailsOfDirectorsVOs= new ArrayList<>();
-		if(partyMasterDTO.getPartyDetailsOfDirectorsDTO()!=null) {
-			for(PartyDetailsOfDirectorsDTO partyDetailsOfDirectorsDTO : partyMasterDTO.getPartyDetailsOfDirectorsDTO()) {
+		if (ObjectUtils.isNotEmpty(partyMasterDTO.getId())) {
+			List<PartyDetailsOfDirectorsVO> partyDetailsOfDirectorsVOList = partyDetailsOfDirectorsRepo
+					.findByPartyMasterVO(partyMasterVO);
+			partyDetailsOfDirectorsRepo.deleteAll(partyDetailsOfDirectorsVOList);
+		}
+		List<PartyDetailsOfDirectorsVO> partyDetailsOfDirectorsVOs = new ArrayList<>();
+		if (partyMasterDTO.getPartyDetailsOfDirectorsDTO() != null) {
+			for (PartyDetailsOfDirectorsDTO partyDetailsOfDirectorsDTO : partyMasterDTO
+					.getPartyDetailsOfDirectorsDTO()) {
 				PartyDetailsOfDirectorsVO partyDetailsOfDirectorsVO = new PartyDetailsOfDirectorsVO();
 				partyDetailsOfDirectorsVO.setName(partyDetailsOfDirectorsDTO.getName());
 				partyDetailsOfDirectorsVO.setDesignation(partyDetailsOfDirectorsDTO.getDesignation());
@@ -1809,16 +1825,16 @@ public class MasterServiceImpl implements MasterService {
 				partyDetailsOfDirectorsVO.setEmail(partyDetailsOfDirectorsDTO.getEmail());
 				partyDetailsOfDirectorsVO.setPartyMasterVO(partyMasterVO);
 				partyDetailsOfDirectorsVOs.add(partyDetailsOfDirectorsVO);
-				
+
 			}
 		}
-		 if(ObjectUtils.isNotEmpty(partyMasterDTO.getId())){
-		List<PartySpecialTDSVO> partySpecialTDSVOList = partySpecialTDSRepo.findByPartyMasterVO(partyMasterVO);
-		partySpecialTDSRepo.deleteAll(partySpecialTDSVOList);
-		 }
-		List<PartySpecialTDSVO> partySpecialTDSVOs= new ArrayList<>();
-		if(partyMasterDTO.getPartySpecialTDSDTO()!=null) {
-			for(PartySpecialTDSDTO partySpecialTDSDTO : partyMasterDTO.getPartySpecialTDSDTO()) {
+		if (ObjectUtils.isNotEmpty(partyMasterDTO.getId())) {
+			List<PartySpecialTDSVO> partySpecialTDSVOList = partySpecialTDSRepo.findByPartyMasterVO(partyMasterVO);
+			partySpecialTDSRepo.deleteAll(partySpecialTDSVOList);
+		}
+		List<PartySpecialTDSVO> partySpecialTDSVOs = new ArrayList<>();
+		if (partyMasterDTO.getPartySpecialTDSDTO() != null) {
+			for (PartySpecialTDSDTO partySpecialTDSDTO : partyMasterDTO.getPartySpecialTDSDTO()) {
 				PartySpecialTDSVO partySpecialTDSVO = new PartySpecialTDSVO();
 				partySpecialTDSVO.setTdsWithSec(partySpecialTDSDTO.getTdsWithSec());
 				partySpecialTDSVO.setRateFrom(partySpecialTDSDTO.getRateFrom());
@@ -1829,45 +1845,49 @@ public class MasterServiceImpl implements MasterService {
 				partySpecialTDSVO.setTdsCertifiNo(partySpecialTDSDTO.getTdsCertifiNo());
 				partySpecialTDSVO.setPartyMasterVO(partyMasterVO);
 				partySpecialTDSVOs.add(partySpecialTDSVO);
-				
+
 			}
 		}
-		 if(ObjectUtils.isNotEmpty(partyMasterDTO.getId())){
-		List<PartyChargesExemptionVO> partyChargesExemptionVOList = partyChargesExemptionRepo.findByPartyMasterVO(partyMasterVO);
-		partyChargesExemptionRepo.deleteAll(partyChargesExemptionVOList);
-		 }
-		List<PartyChargesExemptionVO> partyChargesExemptionVOs= new ArrayList<>();
-		if(partyMasterDTO.getPartyChargesExemptionDTO()!=null) {
-			for(PartyChargesExemptionDTO partyChargesExemptionDTO : partyMasterDTO.getPartyChargesExemptionDTO()) {
+		if (ObjectUtils.isNotEmpty(partyMasterDTO.getId())) {
+			List<PartyChargesExemptionVO> partyChargesExemptionVOList = partyChargesExemptionRepo
+					.findByPartyMasterVO(partyMasterVO);
+			partyChargesExemptionRepo.deleteAll(partyChargesExemptionVOList);
+		}
+		List<PartyChargesExemptionVO> partyChargesExemptionVOs = new ArrayList<>();
+		if (partyMasterDTO.getPartyChargesExemptionDTO() != null) {
+			for (PartyChargesExemptionDTO partyChargesExemptionDTO : partyMasterDTO.getPartyChargesExemptionDTO()) {
 				PartyChargesExemptionVO partyChargesExemptionVO = new PartyChargesExemptionVO();
 				partyChargesExemptionVO.setTdsWithSec(partyChargesExemptionDTO.getTdsWithSec());
 				partyChargesExemptionVO.setCharges(partyChargesExemptionDTO.getCharges());
 				partyChargesExemptionVO.setPartyMasterVO(partyMasterVO);
 				partyChargesExemptionVOs.add(partyChargesExemptionVO);
-				
+
 			}
 		}
-		 if(ObjectUtils.isNotEmpty(partyMasterDTO.getId())){
-		List<PartyCurrencyMappingVO> partyCurrencyMappingVOList = partyCurrencyMappingRepo.findByPartyMasterVO(partyMasterVO);
-		partyCurrencyMappingRepo.deleteAll(partyCurrencyMappingVOList);
-		 }
-		List<PartyCurrencyMappingVO> partyCurrencyMappingVOs= new ArrayList<>();
-		if(partyMasterDTO.getPartyCurrencyMappingDTO()!=null) {
-			for(PartyCurrencyMappingDTO partyCurrencyMappingDTO : partyMasterDTO.getPartyCurrencyMappingDTO()) {
+		if (ObjectUtils.isNotEmpty(partyMasterDTO.getId())) {
+			List<PartyCurrencyMappingVO> partyCurrencyMappingVOList = partyCurrencyMappingRepo
+					.findByPartyMasterVO(partyMasterVO);
+			partyCurrencyMappingRepo.deleteAll(partyCurrencyMappingVOList);
+		}
+		List<PartyCurrencyMappingVO> partyCurrencyMappingVOs = new ArrayList<>();
+		if (partyMasterDTO.getPartyCurrencyMappingDTO() != null) {
+			for (PartyCurrencyMappingDTO partyCurrencyMappingDTO : partyMasterDTO.getPartyCurrencyMappingDTO()) {
 				PartyCurrencyMappingVO partyCurrencyMappingVO = new PartyCurrencyMappingVO();
 				partyCurrencyMappingVO.setTransCurrency(partyCurrencyMappingDTO.getTransCurrency());
 				partyCurrencyMappingVO.setPartyMasterVO(partyMasterVO);
 				partyCurrencyMappingVOs.add(partyCurrencyMappingVO);
-				
+
 			}
 		}
-		 if(ObjectUtils.isNotEmpty(partyMasterDTO.getId())){
-		List<PartySalesPersonTaggingVO> partySalesPersonTaggingVOList = partySalesPersonTaggingRepo.findByPartyMasterVO(partyMasterVO);
-		partySalesPersonTaggingRepo.deleteAll(partySalesPersonTaggingVOList);
-		 }
-		List<PartySalesPersonTaggingVO> partySalesPersonTaggingVOs= new ArrayList<>();
-		if(partyMasterDTO.getPartySalesPersonTaggingDTO()!=null) {
-			for( PartySalesPersonTaggingDTO partySalesPersonTaggingDTO : partyMasterDTO.getPartySalesPersonTaggingDTO()) {
+		if (ObjectUtils.isNotEmpty(partyMasterDTO.getId())) {
+			List<PartySalesPersonTaggingVO> partySalesPersonTaggingVOList = partySalesPersonTaggingRepo
+					.findByPartyMasterVO(partyMasterVO);
+			partySalesPersonTaggingRepo.deleteAll(partySalesPersonTaggingVOList);
+		}
+		List<PartySalesPersonTaggingVO> partySalesPersonTaggingVOs = new ArrayList<>();
+		if (partyMasterDTO.getPartySalesPersonTaggingDTO() != null) {
+			for (PartySalesPersonTaggingDTO partySalesPersonTaggingDTO : partyMasterDTO
+					.getPartySalesPersonTaggingDTO()) {
 				PartySalesPersonTaggingVO partySalesPersonTaggingVO = new PartySalesPersonTaggingVO();
 				partySalesPersonTaggingVO.setSalesPerson(partySalesPersonTaggingDTO.getSalesPerson());
 				partySalesPersonTaggingVO.setEmpCode(partySalesPersonTaggingDTO.getEmpCode());
@@ -1876,71 +1896,73 @@ public class MasterServiceImpl implements MasterService {
 				partySalesPersonTaggingVO.setEffectiveTill(partySalesPersonTaggingDTO.getEffectiveTill());
 				partySalesPersonTaggingVO.setPartyMasterVO(partyMasterVO);
 				partySalesPersonTaggingVOs.add(partySalesPersonTaggingVO);
-				
+
 			}
 		}
-		
-		 if(ObjectUtils.isNotEmpty(partyMasterDTO.getId())){
-		List<PartyTdsExemptedVO> partyTdsExemptedVOList = partyTdsExemptedRepo.findByPartyMasterVO(partyMasterVO);
-		partyTdsExemptedRepo.deleteAll(partyTdsExemptedVOList);
-		 }
-		List<PartyTdsExemptedVO> partyTdsExemptedVOs= new ArrayList<>();
-		if(partyMasterDTO.getPartyTdsExemptedDTO()!=null) {
-			for( PartyTdsExemptedDTO partyTdsExemptedDTO : partyMasterDTO.getPartyTdsExemptedDTO()) {
+
+		if (ObjectUtils.isNotEmpty(partyMasterDTO.getId())) {
+			List<PartyTdsExemptedVO> partyTdsExemptedVOList = partyTdsExemptedRepo.findByPartyMasterVO(partyMasterVO);
+			partyTdsExemptedRepo.deleteAll(partyTdsExemptedVOList);
+		}
+		List<PartyTdsExemptedVO> partyTdsExemptedVOs = new ArrayList<>();
+		if (partyMasterDTO.getPartyTdsExemptedDTO() != null) {
+			for (PartyTdsExemptedDTO partyTdsExemptedDTO : partyMasterDTO.getPartyTdsExemptedDTO()) {
 				PartyTdsExemptedVO partyTdsExemptedVO = new PartyTdsExemptedVO();
 				partyTdsExemptedVO.setTdsExempCerti(partyTdsExemptedDTO.getTdsExempCerti());
 				partyTdsExemptedVO.setValue(partyTdsExemptedDTO.getValue());
 				partyTdsExemptedVO.setFinYear(partyTdsExemptedDTO.getFinYear());
 				partyTdsExemptedVO.setPartyMasterVO(partyMasterVO);
 				partyTdsExemptedVOs.add(partyTdsExemptedVO);
-				
+
 			}
 		}
-		 if(ObjectUtils.isNotEmpty(partyMasterDTO.getId())){
-		List<PartyPartnerTaggingVO> partyPartnerTaggingVOList = partyPartnerTaggingRepo.findByPartyMasterVO(partyMasterVO);
-		partyPartnerTaggingRepo.deleteAll(partyPartnerTaggingVOList);
-		 }
-		List<PartyPartnerTaggingVO> partyPartnerTaggingVOs= new ArrayList<>();
-		if(partyMasterDTO.getPartyPartnerTaggingDTO()!=null) {
-			for( PartyPartnerTaggingDTO partyPartnerTaggingDTO : partyMasterDTO.getPartyPartnerTaggingDTO()) {
+		if (ObjectUtils.isNotEmpty(partyMasterDTO.getId())) {
+			List<PartyPartnerTaggingVO> partyPartnerTaggingVOList = partyPartnerTaggingRepo
+					.findByPartyMasterVO(partyMasterVO);
+			partyPartnerTaggingRepo.deleteAll(partyPartnerTaggingVOList);
+		}
+		List<PartyPartnerTaggingVO> partyPartnerTaggingVOs = new ArrayList<>();
+		if (partyMasterDTO.getPartyPartnerTaggingDTO() != null) {
+			for (PartyPartnerTaggingDTO partyPartnerTaggingDTO : partyMasterDTO.getPartyPartnerTaggingDTO()) {
 				PartyPartnerTaggingVO partyPartnerTaggingVO = new PartyPartnerTaggingVO();
 				partyPartnerTaggingVO.setPartnerName(partyPartnerTaggingDTO.getPartnerName());
 				partyPartnerTaggingVO.setPartyMasterVO(partyMasterVO);
 				partyPartnerTaggingVOs.add(partyPartnerTaggingVO);
-				
+
 			}
 		}
-		
-		 if (ObjectUtils.isNotEmpty(partyMasterDTO.getId())) {
-		        PartyVendorEvaluationVO existingPartyVendorEvaluationVO = partyVendorEvaluationRepo.findByPartyMasterVO(partyMasterVO);
-		        if (existingPartyVendorEvaluationVO != null) {
-		            partyVendorEvaluationRepo.delete(existingPartyVendorEvaluationVO);
-		        }
-		    }
-		    PartyVendorEvaluationVO partyVendorEvaluationVO = null;
-		    if (partyMasterDTO.getPartyVendorEvaluationDTO() != null) {
-		        partyVendorEvaluationVO = new PartyVendorEvaluationVO();
-		        BeanUtils.copyProperties(partyMasterDTO.getPartyVendorEvaluationDTO(), partyVendorEvaluationVO);
-		        partyVendorEvaluationVO.setPartyMasterVO(partyMasterVO);
-		    }
-		
+
+		if (ObjectUtils.isNotEmpty(partyMasterDTO.getId())) {
+			PartyVendorEvaluationVO existingPartyVendorEvaluationVO = partyVendorEvaluationRepo
+					.findByPartyMasterVO(partyMasterVO);
+			if (existingPartyVendorEvaluationVO != null) {
+				partyVendorEvaluationRepo.delete(existingPartyVendorEvaluationVO);
+			}
+		}
+		PartyVendorEvaluationVO partyVendorEvaluationVO = null;
+		if (partyMasterDTO.getPartyVendorEvaluationDTO() != null) {
+			partyVendorEvaluationVO = new PartyVendorEvaluationVO();
+			BeanUtils.copyProperties(partyMasterDTO.getPartyVendorEvaluationDTO(), partyVendorEvaluationVO);
+			partyVendorEvaluationVO.setPartyMasterVO(partyMasterVO);
+		}
+
 		getPartyMasterVOFromPartyMasterDTO(partyMasterDTO, partyMasterVO);
-        partyMasterVO.setPartyStateVO(partyStateVOs);
-        partyMasterVO.setPartyAddressVO(partyAddressVOs);
-        partyMasterVO.setPartyDetailsOfDirectorsVO(partyDetailsOfDirectorsVOs);
-        partyMasterVO.setPartySpecialTDSVO(partySpecialTDSVOs);
-        partyMasterVO.setPartyChargesExemptionVO(partyChargesExemptionVOs);
-        partyMasterVO.setPartyCurrencyMappingVO(partyCurrencyMappingVOs);
-        partyMasterVO.setPartySalesPersonTaggingVO(partySalesPersonTaggingVOs);
-        partyMasterVO.setPartyTdsExemptedVO(partyTdsExemptedVOs);
-        partyMasterVO.setPartyPartnerTaggingVO(partyPartnerTaggingVOs);
-        if (partyVendorEvaluationVO != null) {
-            partyMasterVO.setPartyVendorEvaluationVO(partyVendorEvaluationVO);
-        }
+		partyMasterVO.setPartyStateVO(partyStateVOs);
+		partyMasterVO.setPartyAddressVO(partyAddressVOs);
+		partyMasterVO.setPartyDetailsOfDirectorsVO(partyDetailsOfDirectorsVOs);
+		partyMasterVO.setPartySpecialTDSVO(partySpecialTDSVOs);
+		partyMasterVO.setPartyChargesExemptionVO(partyChargesExemptionVOs);
+		partyMasterVO.setPartyCurrencyMappingVO(partyCurrencyMappingVOs);
+		partyMasterVO.setPartySalesPersonTaggingVO(partySalesPersonTaggingVOs);
+		partyMasterVO.setPartyTdsExemptedVO(partyTdsExemptedVOs);
+		partyMasterVO.setPartyPartnerTaggingVO(partyPartnerTaggingVOs);
+		if (partyVendorEvaluationVO != null) {
+			partyMasterVO.setPartyVendorEvaluationVO(partyVendorEvaluationVO);
+		}
 		return partyMasterRepo.save(partyMasterVO);
-	}	
-	private void getPartyMasterVOFromPartyMasterDTO(@Valid PartyMasterDTO partyMasterDTO,
-			PartyMasterVO partyMasterVO) {
+	}
+
+	private void getPartyMasterVOFromPartyMasterDTO(@Valid PartyMasterDTO partyMasterDTO, PartyMasterVO partyMasterVO) {
 		partyMasterVO.setPartyType(partyMasterDTO.getPartyType());
 		partyMasterVO.setCustomerType(partyMasterDTO.getCustomerType());
 		partyMasterVO.setPartyName(partyMasterDTO.getPartyName());
@@ -1983,9 +2005,6 @@ public class MasterServiceImpl implements MasterService {
 		partyMasterVO.setFinYear(partyMasterDTO.getFinYear());
 		partyMasterVO.setBranchCode(partyMasterDTO.getBranchCode());
 
-
 	}
-		
-	
-	
+
 }
