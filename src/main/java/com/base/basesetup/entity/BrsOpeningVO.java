@@ -1,6 +1,6 @@
 package com.base.basesetup.entity;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Embedded;
@@ -29,16 +29,14 @@ public class BrsOpeningVO {
 	@SequenceGenerator(name = "brsopeninggen", sequenceName = "brsopeningseq", initialValue = 1000000001, allocationSize = 1)
 	@Column(name = "brsopeningid")
 	private Long id;
-	@Column(name = "branch")
-	private String branch;
 	@Column(name = "billno")
 	private String billNo;
 	@Column(name = "billdate")
-	private LocalDateTime billDate;
+	private LocalDate billDate;
 	@Column(name = "chqno")
 	private String chqNo;
 	@Column(name = "chqdate")
-	private LocalDateTime chqDate;
+	private LocalDate chqDate;
 	@Column(name = "bank")
 	private String bank;
 	@Column(name = "currency")
@@ -51,18 +49,47 @@ public class BrsOpeningVO {
 	private String paymentAmount;
 	@Column(name = "reconcile")
 	private boolean reconcile;
-	@Column(name = "active")
-	private boolean active;
+
+//	Common Fields
+
 	@Column(name = "orgid")
 	private Long orgId;
-	@Column(name = "cancel")
-	private String cancel;
-	@Column(name = "cancelremarks")
-	private String cancelRemarks;
-	@Column(name = "createdby")
+
+	@Column(name = "branch", length = 25)
+	private String branch;
+
+	@Column(name = "branchcode", length = 20)
+	private String branchCode;
+
+	@Column(name = "createdby", length = 25)
 	private String createdBy;
-	@Column(name = "updatedby")
+
+	@Column(name = "modifiedby", length = 25)
 	private String updatedBy;
+
+	@Column(name = "active")
+	private boolean active;
+
+	@Column(name = "cancel")
+	private boolean cancel;
+
+	@Column(name = "cancelremarks", length = 50)
+	private String cancelRemarks;
+
+	@Column(name = "finyear", length = 5)
+	private String finYear;
+
+	@Column(name = "screencode", length = 5)
+	private String screenCode = "ARBB";
+
+	@Column(name = "screenname", length = 25)
+	private String screenName = "AR BILL BALANCE";
+
+	@Column(name = "ipno", length = 15)
+	private String ipNo;
+
+	@Column(name = "latitude", length = 100)
+	private String latitude;
 
 	@Embedded
 	private CreatedUpdatedDate commonDate = new CreatedUpdatedDate();

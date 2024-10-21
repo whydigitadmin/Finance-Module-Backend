@@ -1,6 +1,7 @@
 package com.base.basesetup.repo;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -21,4 +22,7 @@ public interface ChargeTypeRequestRepo extends JpaRepository<ChargeTypeRequestVO
 	boolean existsByChargeCodeAndOrgId(String chargeCode, Long orgId);
 
 	boolean existsByChargeDescriptionAndOrgId(String chargeDescription, Long orgId);
+
+	@Query(nativeQuery = true, value = "select * from chargetyperequest")
+	Set<Object[]> findSalesAccountFromGroup(Long orgId, String branch, String branchCode, String finYear);
 }

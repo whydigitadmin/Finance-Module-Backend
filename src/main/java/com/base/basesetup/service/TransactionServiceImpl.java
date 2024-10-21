@@ -580,7 +580,14 @@ public class TransactionServiceImpl implements TransactionService {
 		brsOpeningVO.setPaymentAmount(brsOpeningDTO.getPaymentAmount());
 		brsOpeningVO.setReconcile(brsOpeningDTO.isReconcile());
 		brsOpeningVO.setOrgId(brsOpeningDTO.getOrgId());
+		brsOpeningVO.setBranch(brsOpeningDTO.getBranch());
+		brsOpeningVO.setBranchCode(brsOpeningDTO.getBranchCode());
 		brsOpeningVO.setActive(brsOpeningDTO.isActive());
+		brsOpeningVO.setCancel(brsOpeningDTO.isCancel());
+		brsOpeningVO.setCancelRemarks(brsOpeningDTO.getCancelRemarks());
+		brsOpeningVO.setFinYear(brsOpeningDTO.getFinYear());
+		brsOpeningVO.setIpNo(brsOpeningDTO.getIpNo());
+		brsOpeningVO.setLatitude(brsOpeningDTO.getLatitude());
 	}
 
 	@Override
