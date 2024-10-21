@@ -20,7 +20,7 @@ public interface PartyMasterRepo extends JpaRepository<PartyMasterVO, Long> {
 	List<PartyMasterVO> findPartyMasterVOByOrgId(Long orgid);
 
 	@Query(nativeQuery = true, value = "select partyname from partymaster where orgid=?1")
-	Set<Object[]> findPartyNameByOrgId(Long orgid);
+	Set<Object[]> findPartyNameByOrgId(Long orgid); 
 
 }
 
