@@ -327,10 +327,26 @@ public class APServiceImpl implements APService {
 	}
 
 	@Override
+	public List<Map<String, Object>> getStateCodeByOrgIdForPayment(Long orgId) {
+		Set<Object[]> state = paymentRepo.findStateCodeByOrgIdForPayment(orgId);
+		return getStateCode(state);
+	}
+
+	private List<Map<String, Object>> getStateCode(Set<Object[]> customer) {
+		List<Map<String, Object>> state = new ArrayList<>();
+		for (Object[] sup : customer) {
+			Map<String, Object> statecode = new HashMap<>();
+			statecode.put("stateCode", sup[0] != null ? sup[0].toString() : "");
+			state.add(statecode);
+		}
+
+		return state;
+	}
+	
+	@Override
 	public List<ApBillBalanceVO> getAllApBillBalanceByOrgId(Long orgId, String branch, String branchCode,
 			String finYear) {
-		// TODO Auto-generated method stub
-		return null;
+		return apBillBalanceRepo.findAll(orgId,branch,branchCode,finYear);
 	}
 
 }
