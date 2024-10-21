@@ -9,14 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.base.basesetup.entity.GlobalParameterVO;
-import com.base.basesetup.repo.BranchAccessRepo;
 import com.base.basesetup.repo.ClientRepo;
 import com.base.basesetup.repo.CustomerRepo;
 import com.base.basesetup.repo.FinancialYearRepo;
 import com.base.basesetup.repo.GlobalParameterRepo;
 import com.base.basesetup.repo.UserBranchAccessRepo;
 import com.base.basesetup.repo.UserRepo;
-import com.base.basesetup.repo.UserRoleRepo;
 
 @Service
 public class GlobalParameterServiceImpl implements GlobalParameterService {
@@ -32,11 +30,6 @@ public class GlobalParameterServiceImpl implements GlobalParameterService {
 	@Autowired
 	UserBranchAccessRepo userBranchAccessRepo;
 
-	@Autowired
-	UserRoleRepo userRoleRepo;
-
-	@Autowired
-	BranchAccessRepo branchAccessRepo;
 
 	@Autowired
 	FinancialYearRepo financialRepo;
