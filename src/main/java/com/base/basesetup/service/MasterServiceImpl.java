@@ -1925,7 +1925,6 @@ public class MasterServiceImpl implements MasterService {
 
 	}
 		
-	
 	@Override
 	@Transactional
 	public List<Map<String, Object>> getPartyNameByOrgId(Long orgid) {

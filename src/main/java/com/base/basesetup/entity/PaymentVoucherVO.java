@@ -2,7 +2,6 @@ package com.base.basesetup.entity;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -39,39 +38,42 @@ public class PaymentVoucherVO {
 	@SequenceGenerator(name = "paymentvouchergen", sequenceName = "paymentvoucherseq", initialValue = 1000000001, allocationSize = 1)
 	@Column(name = "paymentvoucherid")
 	private Long id;
-	@Column(name = "vehiclesubtype",length = 30)
+
+	@Column(name = "vehiclesubtype", length = 30)
 	private String vehicleSubType;
-	@Column(name = "referenceno",length = 10)
+	@Column(name = "referenceno", length = 10)
 	private String referenceNo;
-	@Column(name = "currency",length = 10)
+
+	@Column(name = "currency", length = 10)
 	private String currency;
-	@Column(name = "docid",length = 50)
+	@Column(name = "docid", length = 50)
 	private String docId;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	@Column(name = "referencedate")
 	private LocalDate referenceDate;
-	@Column(name = "exrate",precision = 10,scale = 2)
+	@Column(name = "exrate", precision = 10, scale = 2)
 	private BigDecimal exRate;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	@Column(name = "docdate")
 	private LocalDate docDate;
-	@Column(name="chequeno",length = 25)
+	@Column(name = "chequeno", length = 25)
 	private String chequeNo;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	@Column(name = "chequedate")
 	private LocalDate chequeDate;
-	@Column(name="chequebank",length = 50)
+	@Column(name = "chequebank", length = 50)
 	private String chequeBank;
-	@Column(name = "remarks",length = 50)
+	@Column(name = "remarks", length = 50)
 	private String remarks;
-	private String finyr;
-	//default fields 
+	private String finyear;
+	// default fields
 	@Builder.Default
-	@Column(name = "screencode",length = 5)
-	private String screenCode="PV";
+	@Column(name = "screencode", length = 5)
+	private String screenCode = "PV";
 	@Builder.Default
-	@Column(name="screenname",length = 20)
-	private String screenName="PAYMENT VOUCHER";
+	@Column(name = "screenname", length = 20)
+	private String screenName = "PAYMENT VOUCHER";
+
 	@Column(name = "orgid")
 	private Long orgId;
 	@Column(name = "branch", length = 25)
@@ -88,13 +90,14 @@ public class PaymentVoucherVO {
 	private boolean cancel;
 	@Column(name = "cancelremarks", length = 50)
 	private String cancelRemarks;
+
 	@Column(name = "ipno", length = 15)
 	private String ipNo;
 	@Column(name = "latitude", length = 100)
 	private String latitude;
-	@Column(name = "totaldebitamount",precision = 10,scale = 2)
+	@Column(name = "totaldebitamount", precision = 10, scale = 2)
 	private BigDecimal totalDebitAmount;
-	@Column(name = "totalcreditamount",precision = 10,scale = 2)
+	@Column(name = "totalcreditamount", precision = 10, scale = 2)
 	private BigDecimal totalCreditAmount;
 
 	@OneToMany(mappedBy = "paymentVoucherVO", cascade = CascadeType.ALL)
@@ -109,7 +112,7 @@ public class PaymentVoucherVO {
 	private void setDefaultFinyr() {
 		// Execute the logic to set the default value for finyr
 		String fyFull = calculateFinyr();
-		this.finyr = fyFull; 
+		this.finyear = fyFull;
 	}
 
 	private String calculateFinyr() {

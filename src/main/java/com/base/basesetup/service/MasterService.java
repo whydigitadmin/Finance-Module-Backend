@@ -187,7 +187,6 @@ public interface MasterService {
 
 	PartyMasterVO updateCreatePartyMaster(@Valid PartyMasterDTO partyMasterDTO) throws ApplicationException;
 
-	List<Map<String, Object>> getPartyNameByOrgId(Long orgid);
 
 	
 }

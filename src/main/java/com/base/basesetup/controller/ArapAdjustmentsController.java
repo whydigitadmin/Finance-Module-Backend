@@ -30,120 +30,120 @@ import com.base.basesetup.service.ArapAdjustmentsService;
 @CrossOrigin
 @RestController
 @RequestMapping("/api/arapAdjustments")
-public class ArapAdjustmentsController extends BaseController{
+public class ArapAdjustmentsController extends BaseController {
 
 	public static final Logger LOGGER = LoggerFactory.getLogger(ArapAdjustmentsController.class);
-	
+
 	@Autowired
 	ArapAdjustmentsService arapAdjustmentsService;
-	
+
 	// ArapAdjustments
 
-		@GetMapping("/getAllArapAdjustmentsByOrgId")
-		public ResponseEntity<ResponseDTO> getAllArapAdjustmentsByOrgId(@RequestParam(required = false) Long orgId) {
-			String methodName = "getAllArapAdjustmentsByOrgId()";
-			LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
-			String errorMsg = null;
-			Map<String, Object> responseObjectsMap = new HashMap<>();
-			ResponseDTO responseDTO = null;
-			List<ArapAdjustmentsVO> arapAdjustmentsVO = new ArrayList<>();
-			try {
-				arapAdjustmentsVO = arapAdjustmentsService.getAllArapAdjustmentsByOrgId(orgId);
-			} catch (Exception e) {
-				errorMsg = e.getMessage();
-				LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
-			}
-			if (StringUtils.isBlank(errorMsg)) {
-				responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
-						"ArapAdjustments information get successfully By OrgId");
-				responseObjectsMap.put("arapAdjustmentsVO", arapAdjustmentsVO);
-				responseDTO = createServiceResponse(responseObjectsMap);
-			} else {
-				responseDTO = createServiceResponseError(responseObjectsMap,
-						"ArapAdjustments information receive failed By OrgId", errorMsg);
-			}
-			LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
-			return ResponseEntity.ok().body(responseDTO);
-
+	@GetMapping("/getAllArapAdjustmentsByOrgId")
+	public ResponseEntity<ResponseDTO> getAllArapAdjustmentsByOrgId(@RequestParam(required = false) Long orgId) {
+		String methodName = "getAllArapAdjustmentsByOrgId()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		List<ArapAdjustmentsVO> arapAdjustmentsVO = new ArrayList<>();
+		try {
+			arapAdjustmentsVO = arapAdjustmentsService.getAllArapAdjustmentsByOrgId(orgId);
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
 		}
-
-		@GetMapping("/getAllArapAdjustmentsById")
-		public ResponseEntity<ResponseDTO> getAllArapAdjustmentsById(@RequestParam(required = false) Long id) {
-			String methodName = "getAllArapAdjustmentsById()";
-			LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
-			String errorMsg = null;
-			Map<String, Object> responseObjectsMap = new HashMap<>();
-			ResponseDTO responseDTO = null;
-			List<ArapAdjustmentsVO> arapAdjustmentsVO = new ArrayList<>();
-			try {
-				arapAdjustmentsVO = arapAdjustmentsService.getAllArapAdjustmentsById(id);
-			} catch (Exception e) {
-				errorMsg = e.getMessage();
-				LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
-			}
-			if (StringUtils.isBlank(errorMsg)) {
-				responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "ArapAdjustments information get successfully By id");
-				responseObjectsMap.put("arapAdjustmentsVO", arapAdjustmentsVO);
-				responseDTO = createServiceResponse(responseObjectsMap);
-			} else {
-				responseDTO = createServiceResponseError(responseObjectsMap,
-						"ArapAdjustments information receive failed By OrgId", errorMsg);
-			}
-			LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
-			return ResponseEntity.ok().body(responseDTO);
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+					"ArapAdjustments information get successfully By OrgId");
+			responseObjectsMap.put("arapAdjustmentsVO", arapAdjustmentsVO);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					"ArapAdjustments information receive failed By OrgId", errorMsg);
 		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
 
-		@PutMapping("/updateCreateArapAdjustments")
-		public ResponseEntity<ResponseDTO> createUpdateArapAdjustments(
-				@Valid @RequestBody ArapAdjustmentsDTO arapAdjustmentsDTO) {
-			String methodName = "createUpdateArapAdjustments()";
+	}
 
-			LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
-			String errorMsg = null;
-			Map<String, Object> responseObjectsMap = new HashMap<>();
-			ResponseDTO responseDTO = null;
-
-			try {
-		        Map<String, Object> arapAdjustmentsVO = arapAdjustmentsService.createUpdateArapAdjustments(arapAdjustmentsDTO);
-		        responseObjectsMap.put(CommonConstant.STRING_MESSAGE, arapAdjustmentsVO.get("message"));
-		        responseObjectsMap.put("arapAdjustmentsVO", arapAdjustmentsVO.get("arapAdjustmentsVO")); // Corrected key
-		        responseDTO = createServiceResponse(responseObjectsMap);
-		    } catch (Exception e) {
-		        errorMsg = e.getMessage();
-		        LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
-		        responseDTO = createServiceResponseError(responseObjectsMap, errorMsg, errorMsg);
-		    }
-		    LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
-		    return ResponseEntity.ok().body(responseDTO);
+	@GetMapping("/getAllArapAdjustmentsById")
+	public ResponseEntity<ResponseDTO> getAllArapAdjustmentsById(@RequestParam(required = false) Long id) {
+		String methodName = "getAllArapAdjustmentsById()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		List<ArapAdjustmentsVO> arapAdjustmentsVO = new ArrayList<>();
+		try {
+			arapAdjustmentsVO = arapAdjustmentsService.getAllArapAdjustmentsById(id);
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
 		}
-
-
-		@GetMapping("/getArapAdjustmentsByActive")
-		public ResponseEntity<ResponseDTO> getArapAdjustmentsByActive() {
-			String methodName = "getArapAdjustmentsByActive()";
-			LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
-			String errorMsg = null;
-			Map<String, Object> responseObjectsMap = new HashMap<>();
-			ResponseDTO responseDTO = null;
-			List<ArapAdjustmentsVO> arapAdjustmentsVO = new ArrayList<>();
-			try {
-				arapAdjustmentsVO = arapAdjustmentsService.getArapAdjustmentsByActive();
-			} catch (Exception e) {
-				errorMsg = e.getMessage();
-				LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
-			}
-			if (StringUtils.isBlank(errorMsg)) {
-				responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
-						"ArapAdjustments information get successfully By Active");
-				responseObjectsMap.put("arapAdjustmentsVO", arapAdjustmentsVO);
-				responseDTO = createServiceResponse(responseObjectsMap);
-			} else {
-				responseDTO = createServiceResponseError(responseObjectsMap,
-						"ArapAdjustments information receive failed By Active", errorMsg);
-			}
-			LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
-			return ResponseEntity.ok().body(responseDTO);
-
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "ArapAdjustments information get successfully By id");
+			responseObjectsMap.put("arapAdjustmentsVO", arapAdjustmentsVO);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					"ArapAdjustments information receive failed By OrgId", errorMsg);
 		}
-	
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+	}
+
+	@PutMapping("/updateCreateArapAdjustments")
+	public ResponseEntity<ResponseDTO> createUpdateArapAdjustments(
+			@Valid @RequestBody ArapAdjustmentsDTO arapAdjustmentsDTO) {
+		String methodName = "createUpdateArapAdjustments()";
+
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+
+		try {
+			Map<String, Object> arapAdjustmentsVO = arapAdjustmentsService
+					.createUpdateArapAdjustments(arapAdjustmentsDTO);
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, arapAdjustmentsVO.get("message"));
+			responseObjectsMap.put("arapAdjustmentsVO", arapAdjustmentsVO.get("arapAdjustmentsVO")); // Corrected key
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+			responseDTO = createServiceResponseError(responseObjectsMap, errorMsg, errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+	}
+
+	@GetMapping("/getArapAdjustmentsByActive")
+	public ResponseEntity<ResponseDTO> getArapAdjustmentsByActive() {
+		String methodName = "getArapAdjustmentsByActive()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		List<ArapAdjustmentsVO> arapAdjustmentsVO = new ArrayList<>();
+		try {
+			arapAdjustmentsVO = arapAdjustmentsService.getArapAdjustmentsByActive();
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+					"ArapAdjustments information get successfully By Active");
+			responseObjectsMap.put("arapAdjustmentsVO", arapAdjustmentsVO);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					"ArapAdjustments information receive failed By Active", errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+
+	}
+
 }
