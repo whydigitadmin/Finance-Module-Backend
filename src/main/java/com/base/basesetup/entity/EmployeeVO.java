@@ -1,5 +1,7 @@
 package com.base.basesetup.entity;
 
+import java.time.LocalDate;
+
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -29,33 +31,35 @@ public class EmployeeVO {
 	@Column(name = "employeeid")
 	private Long id;
 
-	@Column(name = "employeecode")
+	@Column(name = "employeecode",length = 30)
 	private String employeeCode;
-	@Column(name = "employee")
+	@Column(name = "employee",length = 150)
 	private String employeeName;
-	@Column(name = "gender")
+	@Column(name = "gender",length = 30)
 	private String gender;
-	@Column(name = "branch")
+	@Column(name = "branch",length = 50)
 	private String branch;
-	@Column(name = "branchcode")
+	@Column(name = "email",length = 150)
+	private String email;
+	@Column(name = "branchcode",length = 30)
 	private String branchCode;
-	@Column(name = "department")
+	@Column(name = "department",length = 30)
 	private String department;
-	@Column(name = "designation")
+	@Column(name = "designation",length = 30)
 	private String designation;
 	@Column(name = "dateofbirth")
-	private String dateOfBirth;
+	private LocalDate dateOfBirth;
 	@Column(name = "joiningdate")
-	private String joiningDate;
-	@Column(name = "createdby")
+	private LocalDate joiningDate;
+	@Column(name = "createdby",length = 30)
 	private String createdBy;
-	@Column(name = "modifiedby")
+	@Column(name = "modifiedby",length = 30)
 	private String updatedBy;
 	@Column(name = "orgid")
 	private Long orgId;
 	@Column(name = "cancel")
 	private boolean cancel;
-	@Column(name = "cancelremarks")
+	@Column(name = "cancelremarks",length = 150)
 	private String cancelRemark;
 	@Column(name = "active")
 	private boolean active;
