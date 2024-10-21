@@ -51,7 +51,7 @@ public class CostDebitNoteServiceImpl implements CostDebitNoteService {
 
 	@Autowired
 	CostDebitNoteSummaryRepo costDebitNoteSummaryRepo;
-	
+
 	@Autowired
 	DocumentTypeMappingDetailsRepo documentTypeMappingDetailsRepo;
 
@@ -67,8 +67,8 @@ public class CostDebitNoteServiceImpl implements CostDebitNoteService {
 			costDebitNoteVO = new CostDebitNoteVO();
 
 			// GETDOCID API
-			String docId = costDebitNoteRepo.getCostDebitNoteDocId(costDebitNoteDTO.getOrgId(), costDebitNoteDTO.getFinYear(),
-					costDebitNoteDTO.getBranchCode(), screenCode);
+			String docId = costDebitNoteRepo.getCostDebitNoteDocId(costDebitNoteDTO.getOrgId(),
+					costDebitNoteDTO.getFinYear(), costDebitNoteDTO.getBranchCode(), screenCode);
 			costDebitNoteVO.setDocId(docId);
 
 			// GETDOCID LASTNO +1

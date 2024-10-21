@@ -25,22 +25,21 @@ import com.base.basesetup.common.UserConstants;
 import com.base.basesetup.dto.CostDebitNoteDTO;
 import com.base.basesetup.dto.ResponseDTO;
 import com.base.basesetup.entity.CostDebitNoteVO;
-import com.base.basesetup.entity.CostInvoiceVO;
 import com.base.basesetup.service.CostDebitNoteService;
 
 @CrossOrigin
 @RestController
 @RequestMapping("/api/costdebitnote")
-public class CostDebitNoteController extends BaseController{
+public class CostDebitNoteController extends BaseController {
 
 	public static final Logger LOGGER = LoggerFactory.getLogger(CostDebitNoteController.class);
-	
+
 	@Autowired
 	CostDebitNoteService costDebitNoteService;
-	
-	
+
 	@PutMapping("/updateCreateCostDebitNote")
-	public ResponseEntity<ResponseDTO> updateCreateCostDebitNote(@Valid @RequestBody CostDebitNoteDTO CostDebitNoteDTO) {
+	public ResponseEntity<ResponseDTO> updateCreateCostDebitNote(
+			@Valid @RequestBody CostDebitNoteDTO CostDebitNoteDTO) {
 		String methodName = "updateCreateCostDebitNote()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
 		String errorMsg = null;
@@ -48,19 +47,19 @@ public class CostDebitNoteController extends BaseController{
 		ResponseDTO responseDTO = null;
 
 		try {
-	        Map<String, Object> costDebitNote = costDebitNoteService.updateCreateCostDebitNote(CostDebitNoteDTO);
-	        responseObjectsMap.put(CommonConstant.STRING_MESSAGE, costDebitNote.get("message"));
-	        responseObjectsMap.put("costDebitNote", costDebitNote.get("costDebitNoteVO")); // Corrected key
-	        responseDTO = createServiceResponse(responseObjectsMap);
-	    } catch (Exception e) {
-	        errorMsg = e.getMessage();
-	        LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
-	        responseDTO = createServiceResponseError(responseObjectsMap, errorMsg, errorMsg);
-	    }
-	    LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
-	    return ResponseEntity.ok().body(responseDTO);
+			Map<String, Object> costDebitNote = costDebitNoteService.updateCreateCostDebitNote(CostDebitNoteDTO);
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, costDebitNote.get("message"));
+			responseObjectsMap.put("costDebitNote", costDebitNote.get("costDebitNoteVO")); // Corrected key
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+			responseDTO = createServiceResponseError(responseObjectsMap, errorMsg, errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
 	}
-	
+
 	@GetMapping("/getCostDebitNoteByOrgId")
 	public ResponseEntity<ResponseDTO> getCostDebitNoteByOrgId(@RequestParam(required = false) Long orgId) {
 		String methodName = "getCostDebitNoteByOrgId()";
@@ -76,7 +75,8 @@ public class CostDebitNoteController extends BaseController{
 			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
 		}
 		if (StringUtils.isBlank(errorMsg)) {
-			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "Cost DebitNote information get successfully By OrgId");
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+					"Cost DebitNote information get successfully By OrgId");
 			responseObjectsMap.put("costDebitNoteVOs", costDebitNoteVOs);
 			responseDTO = createServiceResponse(responseObjectsMap);
 		} else {
@@ -87,7 +87,7 @@ public class CostDebitNoteController extends BaseController{
 		return ResponseEntity.ok().body(responseDTO);
 
 	}
-	
+
 	@GetMapping("/getCostDebitNoteById")
 	public ResponseEntity<ResponseDTO> getCostDebitNoteById(@RequestParam(required = false) Long id) {
 		String methodName = "getCostDebitNoteById()";
@@ -114,7 +114,7 @@ public class CostDebitNoteController extends BaseController{
 		return ResponseEntity.ok().body(responseDTO);
 
 	}
-	
+
 	@GetMapping("/getActiveCostDebitNote")
 	public ResponseEntity<ResponseDTO> getActiveCostDebitNote() {
 		String methodName = "getActiveCostDebitNote()";
@@ -130,7 +130,8 @@ public class CostDebitNoteController extends BaseController{
 			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
 		}
 		if (StringUtils.isBlank(errorMsg)) {
-			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, " Active Cost DebitNote information get successfully");
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+					" Active Cost DebitNote information get successfully");
 			responseObjectsMap.put("costDebitNoteVOs", costDebitNoteVOs);
 			responseDTO = createServiceResponse(responseObjectsMap);
 		} else {
@@ -141,9 +142,10 @@ public class CostDebitNoteController extends BaseController{
 		return ResponseEntity.ok().body(responseDTO);
 
 	}
-	
+
 	@GetMapping("/getAllCostDebitNoteByDocId")
-	public ResponseEntity<ResponseDTO> getAllCostDebitNoteByDocId(@RequestParam Long orgId, @RequestParam String docId) {
+	public ResponseEntity<ResponseDTO> getAllCostDebitNoteByDocId(@RequestParam Long orgId,
+			@RequestParam String docId) {
 		String methodName = "getAllCostDebitNoteByDocId()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
 		String errorMsg = null;
@@ -168,7 +170,7 @@ public class CostDebitNoteController extends BaseController{
 		return ResponseEntity.ok().body(responseDTO);
 
 	}
-	
+
 	@GetMapping("/getCostDebitNoteDocId")
 	public ResponseEntity<ResponseDTO> getCostDebitNoteDocId(@RequestParam Long orgId, @RequestParam String finYear,
 			@RequestParam String branch, @RequestParam String branchCode) {
