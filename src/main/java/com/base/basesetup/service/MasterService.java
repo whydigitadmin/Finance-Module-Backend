@@ -14,11 +14,9 @@ import com.base.basesetup.dto.ChargeTypeRequestDTO;
 import com.base.basesetup.dto.ChequeBookDTO;
 import com.base.basesetup.dto.CostCenterDTO;
 import com.base.basesetup.dto.EmployeeDTO;
-import com.base.basesetup.dto.ExRatesDTO;
 import com.base.basesetup.dto.GroupLedgerDTO;
 import com.base.basesetup.dto.ListOfValuesDTO;
 import com.base.basesetup.dto.PartyMasterDTO;
-import com.base.basesetup.dto.PartyTypeDTO;
 import com.base.basesetup.dto.SacCodeDTO;
 import com.base.basesetup.dto.SetTaxRateDTO;
 import com.base.basesetup.dto.SubLedgerAccountDTO;
@@ -31,11 +29,9 @@ import com.base.basesetup.entity.ChargeTypeRequestVO;
 import com.base.basesetup.entity.ChequeBookVO;
 import com.base.basesetup.entity.CostCenterVO;
 import com.base.basesetup.entity.EmployeeVO;
-import com.base.basesetup.entity.ExRatesVO;
 import com.base.basesetup.entity.GroupLedgerVO;
 import com.base.basesetup.entity.ListOfValuesVO;
 import com.base.basesetup.entity.PartyMasterVO;
-import com.base.basesetup.entity.PartyTypeVO;
 import com.base.basesetup.entity.SacCodeVO;
 import com.base.basesetup.entity.SetTaxRateVO;
 import com.base.basesetup.entity.SubLedgerAccountVO;
@@ -118,6 +114,8 @@ public interface MasterService {
 	List<GroupLedgerVO> getAllGroupLedgerById(Long id);
 
 	List<GroupLedgerVO> getAllGroupLedgerByOrgId(Long orgId);
+	
+	List<Map<String,Object>>getGroupName(Long orgId);
 
 	GroupLedgerVO updateCreateGroupLedger(@Valid GroupLedgerDTO groupLedgerDTO) throws ApplicationException;
 
@@ -132,14 +130,6 @@ public interface MasterService {
 
 //	List<SacCodeVO> getSacCodeByActive();
 
-//	ExRates
-	List<ExRatesVO> getAllExRatesByOrgId(Long orgId);
-
-	ExRatesVO updateCreateExRates(@Valid ExRatesDTO exRatesDTO) throws ApplicationException;
-
-	List<ExRatesVO> getAllExRatesById(Long id);
-
-	List<ExRatesVO> getExRatesByActive();
 
 //	SubLedgerAccount
 	List<SubLedgerAccountVO> getAllSubLedgerAccountByOrgId(Long orgId);

@@ -73,8 +73,7 @@ public class GlobalParameterServiceImpl implements GlobalParameterService {
 			// If the record exists, it's a PUT operation
 			existingRecord.setBranch(globalParameterVO.getBranch());
 			existingRecord.setBranchcode(globalParameterVO.getBranchcode());
-			existingRecord.setCustomer(globalParameterVO.getCustomer());
-			existingRecord.setClient(globalParameterVO.getClient());
+			existingRecord.setFinYear(globalParameterVO.getFinYear());
 			existingRecord.setOrgId(globalParameterVO.getOrgId());
 
 			return globalParameterRepo.save(existingRecord);

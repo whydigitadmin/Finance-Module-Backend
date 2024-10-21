@@ -25,7 +25,7 @@ public interface AuthService {
 
 	public void signup(SignUpFormDTO signUpRequest);
 
-	public UserResponseDTO login(LoginFormDTO loginRequest, HttpServletRequest request);
+	public UserResponseDTO login(LoginFormDTO loginRequest, HttpServletRequest request) throws ApplicationException;
 
 	public void logout(String userName);
 
