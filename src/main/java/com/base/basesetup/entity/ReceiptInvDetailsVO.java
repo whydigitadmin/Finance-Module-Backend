@@ -34,60 +34,53 @@ public class ReceiptInvDetailsVO {
 	@Column(name = "receiptinvdetailsid")
 	private Long id;
 
-	@Column(name = "invno", length = 30)
+	@Column(name = "invno")
 	private String invNo;
 
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	@Column(name = "invdate")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	private LocalDate invDate;
 
-	@Column(name = "refno", length = 30)
+	@Column(name = "refno")
 	private String refNo;
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	@Column(name = "refdate")
 	private LocalDate refDate;
 
-	@Column(name = "masterref", length = 30)
+	@Column(name = "masterref")
 	private String masterRef;
 
-	@Column(name = "houseref", length = 30)
+	@Column(name = "houseref")
 	private String houseRef;
 
-	@Column(name = "currency", length = 5)
+	@Column(name = "currency")
 	private String currency;
 
-	@Column(name = "exrate", precision = 10, scale = 5)
+	@Column(name = "exrate")
 	private BigDecimal exRate;
 
-	@Column(name = "amount", precision = 10, scale = 2)
+	@Column(name = "amount")
 	private BigDecimal amount;
 
-	@Column(name = "chargeamt", precision = 10, scale = 2)
+	@Column(name = "chargeamt")
 	private BigDecimal chargeAmt;
 
-	@Column(name = "outstanding", precision = 10, scale = 2)
+	@Column(name = "outstanding")
 	private BigDecimal outstanding;
 
-	@Column(name = "settled", precision = 10, scale = 2)
+	@Column(name = "settled")
 	private BigDecimal settled;
 
-	@Column(name = "recexrate", precision = 10, scale = 2)
+	@Column(name = "recexrate")
 	private BigDecimal recExRate;
 
-	@Column(name = "txnsettled", precision = 10, scale = 2)
+	@Column(name = "txnsettled")
 	private BigDecimal txnSettled;
 
-	@Column(name = "gainamt", precision = 10, scale = 2)
+	@Column(name = "gainamt")
 	private BigDecimal gainAmt;
 
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
-	@Column(name = "fromdate")
-	private LocalDate fromDate;
-
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
-	@Column(name = "todate")
-	private LocalDate toDate;
 
 	@ManyToOne
 	@JsonBackReference

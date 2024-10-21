@@ -24,7 +24,6 @@ import org.springframework.web.multipart.MultipartFile;
 import com.base.basesetup.common.CommonConstant;
 import com.base.basesetup.common.UserConstants;
 import com.base.basesetup.dto.ArApAdjustmentOffSetDTO;
-import com.base.basesetup.dto.ArapAdjustmentsDTO;
 import com.base.basesetup.dto.BrsOpeningDTO;
 import com.base.basesetup.dto.ChartCostCenterDTO;
 import com.base.basesetup.dto.DailyMonthlyExRatesDTO;
@@ -42,7 +41,6 @@ import com.base.basesetup.dto.ReconcileCashDTO;
 import com.base.basesetup.dto.ReconcileCorpBankDTO;
 import com.base.basesetup.dto.ResponseDTO;
 import com.base.basesetup.entity.ArApAdjustmentOffSetVO;
-import com.base.basesetup.entity.ArapAdjustmentsVO;
 import com.base.basesetup.entity.BrsOpeningVO;
 import com.base.basesetup.entity.ChartCostCenterVO;
 import com.base.basesetup.entity.DailyMonthlyExRatesVO;
@@ -1734,7 +1732,7 @@ public class TransactionController extends BaseController {
 		ResponseDTO responseDTO = null;
 
 		try {
-			ReconcileBankVO reconcileBankVO = transactionService.updateCreateReconcileBank(reconcileBankDTO);
+			Map<String, Object> reconcileBankVO = transactionService.updateCreateReconcileBank(reconcileBankDTO);
 			boolean isUpdate = reconcileBankDTO.getId() != null;
 
 			if (reconcileBankVO != null) {
@@ -1785,6 +1783,37 @@ public class TransactionController extends BaseController {
 		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
 		return ResponseEntity.ok().body(responseDTO);
 
+	}
+	
+	@GetMapping("/getReconcileBankDocId")
+	public ResponseEntity<ResponseDTO> getReconcileBankDocId(@RequestParam Long orgId, @RequestParam String finYear,
+			@RequestParam String branch, @RequestParam String branchCode) {
+
+		String methodName = "getReconcileBankDocId()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		String mapp = "";
+
+		try {
+			mapp = transactionService.getReconcileBankDocId(orgId, finYear, branch, branchCode);
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "ReconcileBankDocId information retrieved successfully");
+			responseObjectsMap.put("reconcileBankDocId", mapp);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					"Failed to retrieve ReconcileBankDocId information", errorMsg);
+		}
+
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
 	}
 	
 	//reconcileCorpBank
@@ -1852,7 +1881,7 @@ public class TransactionController extends BaseController {
 		ResponseDTO responseDTO = null;
 
 		try {
-			ReconcileCorpBankVO reconcileCorpBankVO = transactionService.updateCreateReconcileCorpBank(reconcileCorpBankDTO);
+			Map<String, Object> reconcileCorpBankVO = transactionService.updateCreateReconcileCorpBank(reconcileCorpBankDTO);
 			boolean isUpdate = reconcileCorpBankDTO.getId() != null;
 
 			if (reconcileCorpBankVO != null) {
@@ -1904,6 +1933,38 @@ public class TransactionController extends BaseController {
 		return ResponseEntity.ok().body(responseDTO);
 
 	}
+	
+	@GetMapping("/getReconcileCorpBankDocId")
+	public ResponseEntity<ResponseDTO> getReconcileCorpBankDocId(@RequestParam Long orgId, @RequestParam String finYear,
+			@RequestParam String branch, @RequestParam String branchCode) {
+
+		String methodName = "getReconcileCorpBankDocId()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		String mapp = "";
+
+		try {
+			mapp = transactionService.getReconcileCorpBankDocId(orgId, finYear, branch, branchCode);
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "ReconcileBankDocId information retrieved successfully");
+			responseObjectsMap.put("reconcileCorpBankDocId", mapp);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					"Failed to retrieve ReconcileBankDocId information", errorMsg);
+		}
+
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+	}
+	
 	
 	//ReconcileCash
 	
@@ -2023,7 +2084,6 @@ public class TransactionController extends BaseController {
 		}
 		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
 		return ResponseEntity.ok().body(responseDTO);
-
 	}
 	
 }

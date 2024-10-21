@@ -22,8 +22,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.base.basesetup.common.CommonConstant;
 import com.base.basesetup.common.UserConstants;
+import com.base.basesetup.dto.ApBillBalanceDTO;
 import com.base.basesetup.dto.PaymentDTO;
 import com.base.basesetup.dto.ResponseDTO;
+import com.base.basesetup.entity.ApBillBalanceVO;
 import com.base.basesetup.entity.PaymentVO;
 import com.base.basesetup.service.APService;
 
@@ -33,7 +35,7 @@ import com.base.basesetup.service.APService;
 public class ApController extends BaseController {
 
 	@Autowired
-	APService payableService;
+	APService apService;
 
 	public static final Logger LOGGER = LoggerFactory.getLogger(ApController.class);
 
@@ -46,7 +48,7 @@ public class ApController extends BaseController {
 		ResponseDTO responseDTO = null;
 		List<PaymentVO> paymentVO = new ArrayList<>();
 		try {
-			paymentVO = payableService.getAllPaymentByOrgId(orgId);
+			paymentVO = apService.getAllPaymentByOrgId(orgId);
 		} catch (Exception e) {
 			errorMsg = e.getMessage();
 			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
@@ -73,7 +75,7 @@ public class ApController extends BaseController {
 		ResponseDTO responseDTO = null;
 		List<PaymentVO> paymentVO = new ArrayList<>();
 		try {
-			paymentVO = payableService.getAllPaymentById(id);
+			paymentVO = apService.getAllPaymentById(id);
 		} catch (Exception e) {
 			errorMsg = e.getMessage();
 			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
@@ -100,7 +102,7 @@ public class ApController extends BaseController {
 		ResponseDTO responseDTO = null;
 
 		try {
-			PaymentVO paymentVO = payableService.updateCreatePayment(paymentDTO);
+			PaymentVO paymentVO = apService.updateCreatePayment(paymentDTO);
 			boolean isUpdate = paymentDTO.getId() != null;
 
 			if (paymentVO != null) {
@@ -124,6 +126,125 @@ public class ApController extends BaseController {
 		return ResponseEntity.ok().body(responseDTO);
 	}
 
+	// ApBillBalance
+	@GetMapping("/getAllApBillBalanceByOrgId")
+	public ResponseEntity<ResponseDTO> getAllApBillBalanceByOrgId(@RequestParam(required = false) Long orgId) {
+		String methodName = "getAllApBillBalanceByOrgId()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		List<ApBillBalanceVO> arBillBalanceVO = new ArrayList<>();
+		try {
+			arBillBalanceVO = apService.getAllApBillBalanceByOrgId(orgId);
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+					"ApBillBalance information get successfully By OrgId");
+			responseObjectsMap.put("apBillBalanceVO", arBillBalanceVO);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					"ApBillBalance information receive failed By OrgId", errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+
+	}
+
+	@GetMapping("/getAllApBillBalanceById")
+	public ResponseEntity<ResponseDTO> getAllApBillBalanceById(@RequestParam(required = false) Long id) {
+		String methodName = "getAllApBillBalanceById()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		List<ApBillBalanceVO> apBillBalanceVO = new ArrayList<>();
+		try {
+			apBillBalanceVO = apService.getAllApBillBalanceById(id);
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "ApBillBalance information get successfully By id");
+			responseObjectsMap.put("apBillBalanceVO", apBillBalanceVO);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					"ApBillBalance information receive failedByOrgId", errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+	}
+
+	@PutMapping("/updateCreateApBillBalance")
+	public ResponseEntity<ResponseDTO> updateCreateApBillBalance(
+			@Valid @RequestBody ApBillBalanceDTO apBillBalanceDTO) {
+		String methodName = "updateCreateApBillBalance()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+
+		try {
+			ApBillBalanceVO apBillBalanceVO = apService.updateCreateApBillBalance(apBillBalanceDTO);
+			boolean isUpdate = apBillBalanceDTO.getId() != null;
+
+			if (apBillBalanceVO != null) {
+				responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+						isUpdate ? "ApBillBalance updated successfully" : "ApBillBalance created successfully");
+				responseObjectsMap.put("apBillBalanceVO", apBillBalanceVO);
+				responseDTO = createServiceResponse(responseObjectsMap);
+			} else {
+				errorMsg = isUpdate ? "ApBillBalance not found for ID: " + apBillBalanceDTO.getId()
+						: "ApBillBalance creation failed";
+				responseDTO = createServiceResponseError(responseObjectsMap,
+						isUpdate ? "ApBillBalance update failed" : "ApBillBalance creation failed", errorMsg);
+			}
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			boolean isUpdate = apBillBalanceDTO.getId() != null;
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					isUpdate ? "ApBillBalance update failed" : "ApBillBalance creation failed", errorMsg);
+		}
+
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+	}
+
+	@GetMapping("/getApBillBalanceByActive")
+	public ResponseEntity<ResponseDTO> getApBillBalanceByActive() {
+		String methodName = "getApBillBalanceByActive()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		List<ApBillBalanceVO> apBillBalanceVO = new ArrayList<>();
+		try {
+			apBillBalanceVO = apService.getApBillBalanceByActive();
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+					"ApBillBalance information get successfully By Active");
+			responseObjectsMap.put("apBillBalanceVO", apBillBalanceVO);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap, "ApBillBalance receive failed By Active",
+					errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+
+	}
+
 	// PaymentRegister
 	@GetMapping("/getAllPaymentRegister")
 	public ResponseEntity<ResponseDTO> getAllPaymentRegister(@RequestParam Long orgId, @RequestParam String branch,
@@ -136,7 +257,7 @@ public class ApController extends BaseController {
 		ResponseDTO responseDTO = null;
 		List<Map<String, Object>> customer = new ArrayList<>();
 		try {
-			customer = payableService.getAllPaymentRegister(orgId, branch, branchCode, finYear, fromDate, toDate,
+			customer = apService.getAllPaymentRegister(orgId, branch, branchCode, finYear, fromDate, toDate,
 					subLedgerName);
 		} catch (Exception e) {
 			errorMsg = e.getMessage();
@@ -153,5 +274,34 @@ public class ApController extends BaseController {
 		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
 		return ResponseEntity.ok().body(responseDTO);
 	}
+
+	@GetMapping("/getPartyNameAndCodeForPayment")
+	public ResponseEntity<ResponseDTO> getPartyNameAndCodeForPayment(@RequestParam Long orgId,
+			@RequestParam String branch, @RequestParam String branchCode, @RequestParam String finYear) {
+		String methodName = "getPartyNameAndCodeForPayment()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		List<Map<String, Object>> party = new ArrayList<>();
+		try {
+			party = apService.getPartyNameAndCodeForPayment(orgId, branch, branchCode, finYear);
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+					"Party name and code information get successfully");
+			responseObjectsMap.put("PartyMasterVO", party);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					"Party name and code information receive failed", errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+	}
+
 
 }
