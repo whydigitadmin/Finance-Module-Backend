@@ -197,6 +197,5 @@ public interface MasterService {
 
 	PartyMasterVO updateCreatePartyMaster(@Valid PartyMasterDTO partyMasterDTO) throws ApplicationException;
 
-
 	
 }

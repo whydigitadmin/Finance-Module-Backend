@@ -31,7 +31,7 @@ public class PartyCurrencyMappingVO {
 	@SequenceGenerator(name = "partycurrencymappinggen", sequenceName = "partycurrencymappinggenseq", initialValue = 1000000001, allocationSize = 1)
 	@Column(name = "partycurrencymappinggenid")
 	private Long id;
-	@Column(name = "transCurrency", length = 15)
+	@Column(name = "transcurrency", length = 15)
 	private String transCurrency;
 
 	@ManyToOne

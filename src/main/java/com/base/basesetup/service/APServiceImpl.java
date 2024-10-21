@@ -305,6 +305,26 @@ public class APServiceImpl implements APService {
 
 		return doctypeMappingDetails;
 	}
+	
+	@Override
+	public List<Map<String, Object>> getCurrencyAndTransCurrencyForPayment(Long orgId, String branch, String branchCode,
+			String finYear,String partyName) {
+		Set<Object[]> Currency = paymentRepo.findCurrencyAndTransCurrencyForPayment(orgId, branch, branchCode,
+				finYear,partyName);
+		return getCurrency(Currency);
+	}
+
+	private List<Map<String, Object>> getCurrency(Set<Object[]> customer) {
+		List<Map<String, Object>> currency = new ArrayList<>();
+		for (Object[] sup : customer) {
+			Map<String, Object> currencyname = new HashMap<>();
+			currencyname.put("currency", sup[0] != null ? sup[0].toString() : "");
+			currencyname.put("transactionCurrency", sup[0] != null ? sup[0].toString() : "");
+			currency.add(currencyname);
+		}
+
+		return currency;
+	}
 
 	@Override
 	public List<ApBillBalanceVO> getAllApBillBalanceByOrgId(Long orgId, String branch, String branchCode,
