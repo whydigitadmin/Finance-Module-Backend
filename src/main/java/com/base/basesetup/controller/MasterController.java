@@ -1437,6 +1437,64 @@ public class MasterController extends BaseController {
 		return ResponseEntity.ok().body(responseDTO);
 
 	}
+	
+	@GetMapping("/getSalesAccountFromGroup")
+	public ResponseEntity<ResponseDTO> getSalesAccountFromGroup(@RequestParam Long orgId,
+			@RequestParam String branch, @RequestParam String branchCode, @RequestParam String finYear) {
+		String methodName = "getSalesAccountFromGroup()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		List<Map<String, Object>> party = new ArrayList<>();
+		try {
+			party = masterService.getSalesAccountFromGroup(orgId, branch, branchCode, finYear);
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+					"SalesAccount information get successfully");
+			responseObjectsMap.put("PartyMasterVO", party);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					"SalesAccount information receive failed", errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+	}
+
+	
+	@GetMapping("/getPaymentAccountFromGroup")
+	public ResponseEntity<ResponseDTO> getPaymentAccountFromGroup(@RequestParam Long orgId,
+			@RequestParam String branch, @RequestParam String branchCode, @RequestParam String finYear) {
+		String methodName = "getPaymentAccountFromGroup()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		List<Map<String, Object>> party = new ArrayList<>();
+		try {
+			party = masterService.getPaymentAccountFromGroup(orgId, branch, branchCode, finYear);
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+					"PaymentAccount information get successfully");
+			responseObjectsMap.put("PartyMasterVO", party);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					"PaymentAccount information receive failed", errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+	}
+
 
 	// ListOfValues
 
@@ -1694,7 +1752,6 @@ public class MasterController extends BaseController {
 			return ResponseEntity.ok().body(responseDTO);
 		}
 		
-	
 
 
 

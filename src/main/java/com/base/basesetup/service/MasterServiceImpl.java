@@ -168,7 +168,6 @@ public class MasterServiceImpl implements MasterService {
 	@Autowired
 	SacCodeRepo sacCodeRepo;
 
-
 	@Autowired
 	SubLedgerAccountRepo subLedgerAccountRepo;
 
@@ -1030,10 +1029,10 @@ public class MasterServiceImpl implements MasterService {
 		groupLedgerVO.setControllAc(groupLedgerDTO.isControllAc());
 		groupLedgerVO.setAccountGroupName(groupLedgerDTO.getAccountGroupName().toUpperCase());
 	}
-	
+
 	@Override
 	public List<Map<String, Object>> getGroupName(Long orgId) {
-		Set<Object[]>groupDetails=groupLedgerRepo.getGroupDetails(orgId);
+		Set<Object[]> groupDetails = groupLedgerRepo.getGroupDetails(orgId);
 		return group(groupDetails);
 	}
 
@@ -1543,9 +1542,26 @@ public class MasterServiceImpl implements MasterService {
 		List<Map<String, Object>> doctypeMappingDetails = new ArrayList<>();
 		for (Object[] sup : getRegister) {
 			Map<String, Object> doctype = new HashMap<>();
-			doctype.put("docId", sup[0] != null ? sup[0].toString() : "");
-			doctype.put("docDate", sup[1] != null ? sup[1].toString() : "");
+			doctype.put("salesAccount", sup[0] != null ? sup[0].toString() : "");
+			doctypeMappingDetails.add(doctype);
+		}
 
+		return doctypeMappingDetails;
+	}
+
+	
+	@Override
+	public List<Map<String, Object>> getPaymentAccountFromGroup(Long orgId, String branch, String branchCode,
+			String finYear) {
+		Set<Object[]> payment = chargeTypeRequestRepo.findPaymentAccountFromGroup(orgId, branch, branchCode, finYear);
+		return getPayment(payment);
+	}
+
+	private List<Map<String, Object>> getPayment(Set<Object[]> getPayment) {
+		List<Map<String, Object>> doctypeMappingDetails = new ArrayList<>();
+		for (Object[] sup : getPayment) {
+			Map<String, Object> doctype = new HashMap<>();
+			doctype.put("salesAccount", sup[0] != null ? sup[0].toString() : "");
 			doctypeMappingDetails.add(doctype);
 		}
 
@@ -1945,23 +1961,6 @@ public class MasterServiceImpl implements MasterService {
 		partyMasterVO.setBranchCode(partyMasterDTO.getBranchCode());
 
 	}
-		
-	@Override
-	@Transactional
-	public List<Map<String, Object>> getPartyNameByOrgId(Long orgid) {
 
-		Set<Object[]> result = partyMasterRepo.findPartyNameByOrgId(orgid);
-		return getPartyNameByOrgId(result);
-	}
-
-	private List<Map<String, Object>> getPartyNameByOrgId(Set<Object[]> result) {
-		List<Map<String, Object>> details1 = new ArrayList<>();
-		for (Object[] fs : result) {
-			Map<String, Object> part = new HashMap<>();
-			part.put("partName", fs[0] != null ? fs[0].toString() : "");
-			details1.add(part);
-		}
-		return details1;
-	}
 
 }

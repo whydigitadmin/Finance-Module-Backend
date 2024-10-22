@@ -173,6 +173,7 @@ public interface MasterService {
 	
 	List<Map<String, Object>> getSalesAccountFromGroup(Long orgId, String branch, String branchCode,String finYear);
 
+	List<Map<String, Object>> getPaymentAccountFromGroup(Long orgId, String branch, String branchCode,String finYear);
 //	ListOfValues
 
 	List<ListOfValuesVO> getListOfValuesById(Long id);
@@ -188,8 +189,6 @@ public interface MasterService {
 	List<PartyMasterVO> getPartyMasterById(Long id);
 
 	PartyMasterVO updateCreatePartyMaster(@Valid PartyMasterDTO partyMasterDTO) throws ApplicationException;
-
-	List<Map<String, Object>> getPartyNameByOrgId(Long orgid);
 
 
 }

@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
 public class GroupLedgerDTO {
 
 	private Long id;
-	private Long orgId;
 	private String groupName;
 	private String gstTaxFlag;
 	private String coaList;
@@ -22,6 +21,19 @@ public class GroupLedgerDTO {
 	private boolean controllAc;
 	private String category;
 	private String currency;
+
+//	Common Fields
+	private Long orgId;
+	private String branch;
+	private String branchCode;
 	private String createdBy;
+	private String updatedBy;
 	private boolean active;
+	private boolean cancel;
+	private String cancelRemarks;
+	private String finYear;
+	private String screenCode;
+	private String screenName;
+	private String ipNo;
+	private String latitude;
 }

@@ -27,10 +27,8 @@ public class GroupLedgerVO {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY, generator = "groupledgergen")
 	@SequenceGenerator(name = "groupledgergen", sequenceName = "groupledgerseq", initialValue = 1000000001, allocationSize = 1)
-	@Column(name = "accountcode")
+	@Column(name = "groupledgerid")
 	private Long id;
-	@Column(name = "orgid")
-	private Long orgId;
 	@Column(name = "groupname", length = 150)
 	private String groupName;
 	@Column(name = "gsttaxflag", length = 50)
@@ -49,14 +47,47 @@ public class GroupLedgerVO {
 	private String category;
 	@Column(name = "currency", length = 50)
 	private String currency;
-	@Column(name = "createdby", length = 50)
+
+//	Common Fields
+
+	@Column(name = "orgid")
+	private Long orgId;
+
+	@Column(name = "branch", length = 25)
+	private String branch;
+
+	@Column(name = "branchcode", length = 20)
+	private String branchCode;
+
+	@Column(name = "createdby", length = 25)
 	private String createdBy;
-	@Column(name = "modifiedby", length = 50)
+
+	@Column(name = "modifiedby", length = 25)
 	private String updatedBy;
-	@Column(name = "cancelremarks", length = 150)
-	private String cancelRemarks;
-	private boolean cancel;
+
+	@Column(name = "active")
 	private boolean active;
+
+	@Column(name = "cancel")
+	private boolean cancel;
+
+	@Column(name = "cancelremarks", length = 50)
+	private String cancelRemarks;
+
+	@Column(name = "finyear", length = 5)
+	private String finYear;
+
+	@Column(name = "screencode", length = 5)
+	private String screenCode;
+
+	@Column(name = "screenname", length = 25)
+	private String screenName;
+
+	@Column(name = "ipno", length = 15)
+	private String ipNo;
+
+	@Column(name = "latitude", length = 100)
+	private String latitude;
 
 	@Embedded
 	@Builder.Default
