@@ -232,5 +232,7 @@ public interface TransactionService {
 
 		  List<ReconcileCashVO> getReconcileCashByActive();
 
+		String getGeneralJournalDocId(Long orgId, String finYear, String branch, String branchCode);
+
 	
 }
