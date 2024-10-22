@@ -41,4 +41,7 @@ public interface APService {
 	List<Map<String, Object>> getAllPaymentRegister(Long orgId, String branch, String branchCode, String finYear,
 			String fromDate, String toDate, String subLedgerName);
 
+	List<Map<String, Object>> getCurrencyAndTransCurrencyForPayment(Long orgId, String branch, String branchCode, String finYear,
+			String partyName);
+
 }
