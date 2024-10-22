@@ -58,6 +58,7 @@ import com.base.basesetup.entity.ChargeTypeRequestVO;
 import com.base.basesetup.entity.ChequeBookDetailsVO;
 import com.base.basesetup.entity.ChequeBookVO;
 import com.base.basesetup.entity.CostCenterVO;
+import com.base.basesetup.entity.DocumentTypeMappingDetailsVO;
 import com.base.basesetup.entity.EmployeeVO;
 import com.base.basesetup.entity.GroupLedgerVO;
 import com.base.basesetup.entity.ListOfValues1VO;
@@ -93,6 +94,7 @@ import com.base.basesetup.repo.ChargeTypeRequestRepo;
 import com.base.basesetup.repo.ChequeBookDetailsRepo;
 import com.base.basesetup.repo.ChequeBookRepo;
 import com.base.basesetup.repo.CostCenterRepo;
+import com.base.basesetup.repo.DocumentTypeMappingDetailsRepo;
 import com.base.basesetup.repo.EmployeeRepo;
 import com.base.basesetup.repo.GroupLedgerRepo;
 import com.base.basesetup.repo.ListOfValues1Repo;
@@ -224,6 +226,9 @@ public class MasterServiceImpl implements MasterService {
 
 	@Autowired
 	PartyTypeRepo partyTypeRepo;
+	
+	@Autowired
+	DocumentTypeMappingDetailsRepo documentTypeMappingDetailsRepo;
 	// Branch
 
 	@Override
@@ -1683,6 +1688,7 @@ public class MasterServiceImpl implements MasterService {
 	@Override
 	public PartyMasterVO updateCreatePartyMaster(@Valid PartyMasterDTO partyMasterDTO) throws ApplicationException {
 		PartyMasterVO partyMasterVO = new PartyMasterVO();
+		String screenCode ="PM";
 		boolean isUpdate = false;
 		if (ObjectUtils.isNotEmpty(partyMasterDTO.getId())) {
 			isUpdate = true;
@@ -1691,14 +1697,29 @@ public class MasterServiceImpl implements MasterService {
 			partyMasterVO.setUpdatedBy(partyMasterDTO.getCreatedBy());
 		} else {
 			// GETDOCID API
-			String docId = partyTypeRepo.getPartyTypeDocId(partyMasterDTO.getOrgId(), partyMasterDTO.getPartyType());
-			partyMasterVO.setPartyCode(docId);
+			String partyTypeDocId = partyTypeRepo.getPartyTypeDocId(partyMasterDTO.getOrgId(), partyMasterDTO.getPartyType());
+			partyMasterVO.setPartyCode(partyTypeDocId);
 
 			// GETDOCID LASTNO +1
 			PartyTypeVO partyTypeVO = partyTypeRepo.findByOrgIdAndPartyType(partyMasterDTO.getOrgId(),
 					partyMasterDTO.getPartyType());
 			partyTypeVO.setLastNo(partyTypeVO.getLastNo() + 1);
 			partyTypeRepo.save(partyTypeVO);
+			
+//			GETDOCID API
+			String docId = partyTypeRepo.getPartyMasterDocId(partyMasterDTO.getOrgId(),
+					partyMasterDTO.getFinYear(), partyMasterDTO.getBranchCode(),
+					screenCode);
+
+			partyMasterVO.setDocId(docId);
+
+
+//			// GETDOCID LASTNO +1
+			DocumentTypeMappingDetailsVO documentTypeMappingDetailsVO = documentTypeMappingDetailsRepo
+					.findByOrgIdAndFinYearAndBranchCodeAndScreenCode(partyMasterDTO.getOrgId(),
+							partyMasterDTO.getFinYear(), partyMasterDTO.getBranchCode(), screenCode);
+			documentTypeMappingDetailsVO.setLastno(documentTypeMappingDetailsVO.getLastno() + 1);
+			documentTypeMappingDetailsRepo.save(documentTypeMappingDetailsVO);
 
 			partyMasterVO.setCreatedBy(partyMasterDTO.getCreatedBy());
 			partyMasterVO.setUpdatedBy(partyMasterDTO.getCreatedBy());
@@ -1945,5 +1966,11 @@ public class MasterServiceImpl implements MasterService {
 
 	}
 
+	@Override
+	public String getPartyMasterDocId(Long orgId, String finYear, String branch, String branchCode) {
+		String ScreenCode = "PM";
+		String result = partyMasterRepo.getPartyMasterDocId(orgId, finYear, branchCode, ScreenCode);
+		return result;
+	}
 
 }

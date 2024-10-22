@@ -192,9 +192,8 @@ public interface MasterService {
 
 	PartyMasterVO updateCreatePartyMaster(@Valid PartyMasterDTO partyMasterDTO) throws ApplicationException;
 
-	
+	String getPartyMasterDocId(Long orgId, String finYear, String branch, String branchCode);
 
-	
 
 
 }
