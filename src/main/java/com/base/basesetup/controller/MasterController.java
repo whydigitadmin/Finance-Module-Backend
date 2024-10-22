@@ -1439,16 +1439,15 @@ public class MasterController extends BaseController {
 	}
 	
 	@GetMapping("/getSalesAccountFromGroup")
-	public ResponseEntity<ResponseDTO> getSalesAccountFromGroup(@RequestParam Long orgId,
-			@RequestParam String branch, @RequestParam String branchCode, @RequestParam String finYear) {
+	public ResponseEntity<ResponseDTO> getSalesAccountFromGroup(@RequestParam Long orgId) {
 		String methodName = "getSalesAccountFromGroup()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
 		String errorMsg = null;
 		Map<String, Object> responseObjectsMap = new HashMap<>();
 		ResponseDTO responseDTO = null;
-		List<Map<String, Object>> party = new ArrayList<>();
+		List<Map<String, Object>> salesAccount = new ArrayList<>();
 		try {
-			party = masterService.getSalesAccountFromGroup(orgId, branch, branchCode, finYear);
+			salesAccount = masterService.getSalesAccountFromGroup(orgId);
 		} catch (Exception e) {
 			errorMsg = e.getMessage();
 			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
@@ -1456,7 +1455,7 @@ public class MasterController extends BaseController {
 		if (StringUtils.isBlank(errorMsg)) {
 			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
 					"SalesAccount information get successfully");
-			responseObjectsMap.put("PartyMasterVO", party);
+			responseObjectsMap.put("salesAccount", salesAccount);
 			responseDTO = createServiceResponse(responseObjectsMap);
 		} else {
 			responseDTO = createServiceResponseError(responseObjectsMap,
@@ -1468,24 +1467,23 @@ public class MasterController extends BaseController {
 
 	
 	@GetMapping("/getPaymentAccountFromGroup")
-	public ResponseEntity<ResponseDTO> getPaymentAccountFromGroup(@RequestParam Long orgId,
-			@RequestParam String branch, @RequestParam String branchCode, @RequestParam String finYear) {
+	public ResponseEntity<ResponseDTO> getPaymentAccountFromGroup(@RequestParam Long orgId) {
 		String methodName = "getPaymentAccountFromGroup()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
 		String errorMsg = null;
 		Map<String, Object> responseObjectsMap = new HashMap<>();
 		ResponseDTO responseDTO = null;
-		List<Map<String, Object>> party = new ArrayList<>();
+		List<Map<String, Object>> purchaseAccount = new ArrayList<>();
 		try {
-			party = masterService.getPaymentAccountFromGroup(orgId, branch, branchCode, finYear);
+			purchaseAccount = masterService.getPaymentAccountFromGroup(orgId);
 		} catch (Exception e) {
 			errorMsg = e.getMessage();
 			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
 		}
 		if (StringUtils.isBlank(errorMsg)) {
 			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
-					"PaymentAccount information get successfully");
-			responseObjectsMap.put("PartyMasterVO", party);
+					"Payment Account information get successfully");
+			responseObjectsMap.put("purchaseAccount", purchaseAccount);
 			responseDTO = createServiceResponse(responseObjectsMap);
 		} else {
 			responseDTO = createServiceResponseError(responseObjectsMap,

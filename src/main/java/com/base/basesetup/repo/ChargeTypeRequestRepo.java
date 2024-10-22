@@ -23,9 +23,9 @@ public interface ChargeTypeRequestRepo extends JpaRepository<ChargeTypeRequestVO
 
 	boolean existsByChargeDescriptionAndOrgId(String chargeDescription, Long orgId);
 
-	@Query(nativeQuery = true, value = "select accountgroupname from groupledger where active=1 and category='RECEIVABLE' and orgid=?1 and branch=?2 and branchcode=?3 and finyear=?4")
-	Set<Object[]> findSalesAccountFromGroup(Long orgId, String branch, String branchCode, String finYear);
+	@Query(nativeQuery = true, value = "select accountgroupname from groupledger where active=1 and category in('RECEIVABLE A/C','OTHERS') and type='ACCOUNT' and orgid=?1")
+	Set<Object[]> findSalesAccountFromGroup(Long orgId);
 
-	@Query(nativeQuery = true, value = "select accountgroupname from groupledger where active=1 and category='PAYABLE' and orgid=?1 and branch=?2 and branchcode=?3 and finyear=?4")
-	Set<Object[]> findPaymentAccountFromGroup(Long orgId, String branch, String branchCode, String finYear);
+	@Query(nativeQuery = true, value = "select accountgroupname from groupledger where active=1 and category in('PAYABLE A/C','OTHERS') and type='ACCOUNT' and orgid=?1")
+	Set<Object[]> findPaymentAccountFromGroup(Long orgId);
 }

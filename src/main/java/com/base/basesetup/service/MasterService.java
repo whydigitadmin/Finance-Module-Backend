@@ -171,9 +171,9 @@ public interface MasterService {
 
 	List<ChargeTypeRequestVO> getChargeTypeRequestByActive();
 	
-	List<Map<String, Object>> getSalesAccountFromGroup(Long orgId, String branch, String branchCode,String finYear);
+	List<Map<String, Object>> getSalesAccountFromGroup(Long orgId);
 
-	List<Map<String, Object>> getPaymentAccountFromGroup(Long orgId, String branch, String branchCode,String finYear);
+	List<Map<String, Object>> getPaymentAccountFromGroup(Long orgId);
 //	ListOfValues
 
 	List<ListOfValuesVO> getListOfValuesById(Long id);
