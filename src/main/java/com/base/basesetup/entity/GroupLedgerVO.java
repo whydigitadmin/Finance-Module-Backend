@@ -24,6 +24,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class GroupLedgerVO {
 
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY, generator = "groupledgergen")
 	@SequenceGenerator(name = "groupledgergen", sequenceName = "groupledgerseq", initialValue = 1000000001, allocationSize = 1)

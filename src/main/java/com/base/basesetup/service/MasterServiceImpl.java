@@ -168,7 +168,6 @@ public class MasterServiceImpl implements MasterService {
 	@Autowired
 	SacCodeRepo sacCodeRepo;
 
-
 	@Autowired
 	SubLedgerAccountRepo subLedgerAccountRepo;
 
@@ -1018,21 +1017,22 @@ public class MasterServiceImpl implements MasterService {
 	}
 
 	private void getGroupLedgerVOFromGroupLedgerDTO(@Valid GroupLedgerDTO groupLedgerDTO, GroupLedgerVO groupLedgerVO) {
-		groupLedgerVO.setGroupName(groupLedgerDTO.getGroupName());
+		groupLedgerVO.setGroupName(groupLedgerDTO.getGroupName().toUpperCase());
 		groupLedgerVO.setOrgId(groupLedgerDTO.getOrgId());
-		groupLedgerVO.setCoaList(groupLedgerDTO.getCoaList());
-		groupLedgerVO.setType(groupLedgerDTO.getType());
-		groupLedgerVO.setCategory(groupLedgerDTO.getCategory());
+		groupLedgerVO.setCoaList(groupLedgerDTO.getCoaList().toUpperCase());
+		groupLedgerVO.setType(groupLedgerDTO.getType().toUpperCase());
+		groupLedgerVO.setCategory(groupLedgerDTO.getCategory().toUpperCase());
 		groupLedgerVO.setCurrency(groupLedgerDTO.getCurrency());
+		groupLedgerVO.setGstTaxFlag(groupLedgerDTO.getGstTaxFlag());
 		groupLedgerVO.setActive(groupLedgerDTO.isActive());
-		groupLedgerVO.setInterBranchAc(true);
-		groupLedgerVO.setControllAc(true);
-		groupLedgerVO.setAccountGroupName(groupLedgerDTO.getAccountGroupName());
+		groupLedgerVO.setInterBranchAc(groupLedgerDTO.isInterBranchAc());
+		groupLedgerVO.setControllAc(groupLedgerDTO.isControllAc());
+		groupLedgerVO.setAccountGroupName(groupLedgerDTO.getAccountGroupName().toUpperCase());
 	}
-	
+
 	@Override
 	public List<Map<String, Object>> getGroupName(Long orgId) {
-		Set<Object[]>groupDetails=groupLedgerRepo.getGroupDetails(orgId);
+		Set<Object[]> groupDetails = groupLedgerRepo.getGroupDetails(orgId);
 		return group(groupDetails);
 	}
 
@@ -1542,9 +1542,26 @@ public class MasterServiceImpl implements MasterService {
 		List<Map<String, Object>> doctypeMappingDetails = new ArrayList<>();
 		for (Object[] sup : getRegister) {
 			Map<String, Object> doctype = new HashMap<>();
-			doctype.put("docId", sup[0] != null ? sup[0].toString() : "");
-			doctype.put("docDate", sup[1] != null ? sup[1].toString() : "");
+			doctype.put("salesAccount", sup[0] != null ? sup[0].toString() : "");
+			doctypeMappingDetails.add(doctype);
+		}
 
+		return doctypeMappingDetails;
+	}
+
+	
+	@Override
+	public List<Map<String, Object>> getPaymentAccountFromGroup(Long orgId, String branch, String branchCode,
+			String finYear) {
+		Set<Object[]> payment = chargeTypeRequestRepo.findPaymentAccountFromGroup(orgId, branch, branchCode, finYear);
+		return getPayment(payment);
+	}
+
+	private List<Map<String, Object>> getPayment(Set<Object[]> getPayment) {
+		List<Map<String, Object>> doctypeMappingDetails = new ArrayList<>();
+		for (Object[] sup : getPayment) {
+			Map<String, Object> doctype = new HashMap<>();
+			doctype.put("salesAccount", sup[0] != null ? sup[0].toString() : "");
 			doctypeMappingDetails.add(doctype);
 		}
 
@@ -1944,5 +1961,6 @@ public class MasterServiceImpl implements MasterService {
 		partyMasterVO.setBranchCode(partyMasterDTO.getBranchCode());
 
 	}
+
 
 }

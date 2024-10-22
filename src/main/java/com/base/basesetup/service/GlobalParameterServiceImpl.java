@@ -9,8 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.base.basesetup.entity.GlobalParameterVO;
-import com.base.basesetup.repo.ClientRepo;
-import com.base.basesetup.repo.CustomerRepo;
 import com.base.basesetup.repo.FinancialYearRepo;
 import com.base.basesetup.repo.GlobalParameterRepo;
 import com.base.basesetup.repo.UserBranchAccessRepo;
@@ -34,11 +32,6 @@ public class GlobalParameterServiceImpl implements GlobalParameterService {
 	@Autowired
 	FinancialYearRepo financialRepo;
 
-	@Autowired
-	CustomerRepo customerRepo;
-
-	@Autowired
-	ClientRepo clientRepo;
 
 	// Global Parametre
 
@@ -84,15 +77,4 @@ public class GlobalParameterServiceImpl implements GlobalParameterService {
 		return userBranchAccessRepo.findGlobalParametersBranchByUserName(orgid, userName);
 	}
 
-	@Override
-	public Set<Object[]> getAllAccessCustomerForLogin(Long orgid, String userName, String branchcode) {
-
-		return customerRepo.findAllAccessCustomerByUserName(orgid, userName, branchcode);
-	}
-
-	@Override
-	public Set<Object[]> getAllAccessClientForLogin(Long orgid, String userName, String branchcode, String customer) {
-		// TODO Auto-generated method stub
-		return clientRepo.findAllAccessClientByUserName(orgid, userName, branchcode, customer);
-	}
 }
