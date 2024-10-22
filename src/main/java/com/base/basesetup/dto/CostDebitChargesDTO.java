@@ -1,5 +1,7 @@
 package com.base.basesetup.dto;
 
+import java.math.BigDecimal;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -30,22 +32,26 @@ public class CostDebitChargesDTO {
 
 	private String currency;
 
-	private double exRate;
+	private BigDecimal exRate;
 	
-	private double rate;
+	private BigDecimal rate;
 
-	private double fcAmt;
+	private BigDecimal fcAmt;
 
-	private double lcAmt;
+	private BigDecimal lcAmt;
 
 	private int taxPercentage;
 
-	private double tlcAmt;
+	private BigDecimal tlcAmt;
 
-	private double billAmt;
+	private BigDecimal billAmt;
 
 	private int gstPercentage;
 
-	private double gst;
+	private BigDecimal gst;
+	
+	private BigDecimal tax;
+	
+	private BigDecimal exampted;
 	
 }

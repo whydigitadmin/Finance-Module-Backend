@@ -1,5 +1,7 @@
 package com.base.basesetup.entity;
 
+import java.math.BigDecimal;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -63,34 +65,34 @@ public class CostDebitChargesVO {
 	private String currency;
 
 	@Column(name = "exrate", precision = 10, scale = 2)
-	private double exRate;
+	private BigDecimal exRate;
 
 	@Column(name = "rate", precision = 10, scale = 2)
-	private double rate;
+	private BigDecimal rate;
 
 	@Column(name = "exampted")
 	private boolean exampted;
 
 	@Column(name = "fcamt", precision = 10, scale = 2)
-	private double fcAmt;
+	private BigDecimal fcAmt;
 
 	@Column(name = "lcamt", precision = 10, scale = 2)
-	private double lcAmt;
+	private BigDecimal lcAmt;
 
 	@Column(name = "taxpercentage", precision = 3)
 	private int taxPercentage;
 
 	@Column(name = "tlcamt", precision = 10, scale = 2)
-	private double tlcAmt;
+	private BigDecimal tlcAmt;
 
 	@Column(name = "billamt", precision = 10, scale = 2)
-	private double billAmt;
+	private BigDecimal billAmt;
 
 	@Column(name = "gstpercentage", precision = 3)
 	private int gstPercentage;
 
 	@Column(name = "gst", precision = 10, scale = 2)
-	private double gst;
+	private BigDecimal gst;
 	
 	@ManyToOne
 	@JoinColumn(name="costdebitnoteid")

@@ -1,5 +1,7 @@
 package com.base.basesetup.dto;
 
+import java.math.BigDecimal;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,17 +13,17 @@ public class CostDebitNoteSummaryDTO {
 
 	private Long Id;
 
-	private double totChargesBillCurrAmt;
+	private BigDecimal totChargesBillCurrAmt;
 
-	private double totChargesLCAmt;
+	private BigDecimal totChargesLCAmt;
 
-	private double totGrossBillAmt;
+	private BigDecimal totGrossBillAmt;
 
-	private double totGrossLCAmt;
+	private BigDecimal totGrossLCAmt;
 
-	private double netBillCurrAmt;
+	private BigDecimal netBillCurrAmt;
 
-	private double netLCAmt;
+	private BigDecimal netLCAmt;
 
 	private String amtInWords;
 

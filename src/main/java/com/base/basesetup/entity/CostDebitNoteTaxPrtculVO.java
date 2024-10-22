@@ -1,5 +1,7 @@
 package com.base.basesetup.entity;
 
+import java.math.BigDecimal;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -32,13 +34,13 @@ public class CostDebitNoteTaxPrtculVO {
 	private String tds;
 
 	@Column(name = "tdspercentage", precision = 10, scale = 2)
-	private double tdsPercentage;
+	private BigDecimal tdsPercentage;
 
 	@Column(name = "section", length = 25)
 	private String section;
 
 	@Column(name = "tottdsamt", precision = 10, scale = 2)
-	private double totTDSAmt;
+	private BigDecimal totTDSAmt;
 
 	@ManyToOne
 	@JoinColumn(name="costdebitnoteid")

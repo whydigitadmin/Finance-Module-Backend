@@ -1,6 +1,8 @@
 package com.base.basesetup.entity;
 
 
+import java.math.BigDecimal;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -33,11 +35,11 @@ public class TdsCostInvoiceVO {
 	@Column(name = "tdswithholding",length =10)
 	private String tdsWithHolding;
 	@Column(name = "tdswithholdingper",precision =10,scale = 2)
-	private Double tdsWithHoldingPer;
+	private BigDecimal tdsWithHoldingPer;
 	@Column(name = "section",length =10)
 	private String section;
 	@Column(name = "totaltds",precision =10,scale = 2)
-	private Double totTdsWhAmnt;
+	private BigDecimal totTdsWhAmnt;
 	
 	@ManyToOne
 	@JsonBackReference

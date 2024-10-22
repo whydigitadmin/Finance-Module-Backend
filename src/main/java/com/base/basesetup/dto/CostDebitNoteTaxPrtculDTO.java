@@ -1,5 +1,7 @@
 package com.base.basesetup.dto;
 
+import java.math.BigDecimal;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,10 +16,10 @@ public class CostDebitNoteTaxPrtculDTO {
 	
 	private String tds;
 
-	private double tdsPercentage;
+	private BigDecimal tdsPercentage;
 
 	private String section;
 
-	private double totTDSAmt;
+	private BigDecimal totTDSAmt;
 
 }

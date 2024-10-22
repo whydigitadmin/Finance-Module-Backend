@@ -1,9 +1,8 @@
 package com.base.basesetup.dto;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -29,7 +28,7 @@ public class CostInvoiceDTO {
 	private String supplierName;
 	private String supplierPlace;
 	private String currency;
-	private Double exRate;
+	private BigDecimal exRate;
 	private String supplierGstIn;
 	private String supplierGstInCode;
 	private String remarks;

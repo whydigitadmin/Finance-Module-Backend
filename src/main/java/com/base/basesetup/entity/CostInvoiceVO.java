@@ -1,5 +1,6 @@
 package com.base.basesetup.entity;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -63,7 +64,7 @@ public class CostInvoiceVO {
 	@Column(name = "currency",length =10)
 	private String currency;
 	@Column(name = "exrate",precision = 10,scale = 2)
-	private Double exRate;
+	private BigDecimal exRate;
 	@Column(name = "suppliergstin",length =10)
 	private String supplierGstIn;
 	@Column(name = "suppliergstincode",length =15)

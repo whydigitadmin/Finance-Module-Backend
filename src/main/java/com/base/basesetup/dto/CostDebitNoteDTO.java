@@ -1,5 +1,6 @@
 package com.base.basesetup.dto;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -35,7 +36,7 @@ public class CostDebitNoteDTO {
 	private LocalDate dueDate;
 	private String address;
 	private String currency;
-	private double exRate;
+	private BigDecimal exRate;
 	private String otherInfo;
 	private String remarks;
 	private String shipRefNo;

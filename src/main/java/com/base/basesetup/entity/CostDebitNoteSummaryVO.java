@@ -1,5 +1,7 @@
 package com.base.basesetup.entity;
 
+import java.math.BigDecimal;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -30,22 +32,22 @@ public class CostDebitNoteSummaryVO {
 	private Long id;
 	
 	@Column(name = "totchargesbillcurramt", precision = 10, scale = 2)
-	private double totChargesBillCurrAmt;
+	private BigDecimal totChargesBillCurrAmt;
 
 	@Column(name = "totchargeslcamp", precision = 10, scale = 2)
-	private double totChargesLCAmt;
+	private BigDecimal totChargesLCAmt;
 
 	@Column(name = "totgrossbillamt", precision = 10, scale = 2)
-	private double totGrossBillAmt;
+	private BigDecimal totGrossBillAmt;
 
 	@Column(name = "totgrosslcamt", precision = 10, scale = 2)
-	private double totGrossLCAmt;
+	private BigDecimal totGrossLCAmt;
 
 	@Column(name = "netbillcurramt", precision = 10, scale = 2)
-	private double netBillCurrAmt;
+	private BigDecimal netBillCurrAmt;
 
 	@Column(name = "netlcamt", precision = 10, scale = 2)
-	private double netLCAmt;
+	private BigDecimal netLCAmt;
 
 	@Column(name = "amtinwords", length = 150)
 	private String amtInWords;

@@ -1,5 +1,7 @@
 package com.base.basesetup.entity;
 
+import java.math.BigDecimal;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -36,16 +38,16 @@ public class CostDebitNoteGstVO {
 	private String subLodgerCode;
 
 	@Column(name = "dbillamt", precision = 10, scale = 2)
-	private double dBillAmt;
+	private BigDecimal dBillAmt;
 
 	@Column(name = "crbillamt", precision = 10, scale = 2)
-	private double crBillAmt;
+	private BigDecimal crBillAmt;
 
 	@Column(name = "dblcamt", precision = 10, scale = 2)
-	private double dBLCAmt;
+	private BigDecimal dBLCAmt;
 
 	@Column(name = "crlcamt", precision = 10, scale = 2)
-	private double crLCAmt;
+	private BigDecimal crLCAmt;
 
 	@Column(name = "remarks", length = 150)
 	private String remarks;
