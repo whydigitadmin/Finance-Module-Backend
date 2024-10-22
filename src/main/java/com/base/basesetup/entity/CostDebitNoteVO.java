@@ -49,7 +49,7 @@ public class CostDebitNoteVO {
 	@Column(name = "finyear", length = 10)
 	private String finYear;
 	@Column(name = "screencode", length = 10)
-	private String screenCode="WDE";
+	private String screenCode="CDN";
 	@Column(name = "screenname", length = 25)
 	private String screenName="COST DEBIT NOTE";
 	@Column(name = "ipno", length = 15)

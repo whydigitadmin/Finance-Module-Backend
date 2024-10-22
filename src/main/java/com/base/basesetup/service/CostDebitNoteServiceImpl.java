@@ -60,7 +60,7 @@ public class CostDebitNoteServiceImpl implements CostDebitNoteService {
 			throws ApplicationException {
 
 		String message = null;
-		String screenCode = "WDE";
+		String screenCode = "CDN";
 		CostDebitNoteVO costDebitNoteVO;
 
 		if (ObjectUtils.isEmpty(costDebitNoteDTO.getId())) {
@@ -257,7 +257,7 @@ public class CostDebitNoteServiceImpl implements CostDebitNoteService {
 
 	@Override
 	public String getCostDebitNoteDocId(Long orgId, String finYear, String branch, String branchCode) {
-		String ScreenCode = "WDE";
+		String ScreenCode = "CDN";
 		String result = costDebitNoteRepo.getCostDebitNoteDocId(orgId, finYear, branchCode, ScreenCode);
 		return result;
 	}
