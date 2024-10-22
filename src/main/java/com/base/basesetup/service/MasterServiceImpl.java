@@ -1532,9 +1532,8 @@ public class MasterServiceImpl implements MasterService {
 	}
 
 	@Override
-	public List<Map<String, Object>> getSalesAccountFromGroup(Long orgId, String branch, String branchCode,
-			String finYear) {
-		Set<Object[]> register = chargeTypeRequestRepo.findSalesAccountFromGroup(orgId, branch, branchCode, finYear);
+	public List<Map<String, Object>> getSalesAccountFromGroup(Long orgId) {
+		Set<Object[]> register = chargeTypeRequestRepo.findSalesAccountFromGroup(orgId);
 		return getRegister(register);
 	}
 
@@ -1551,9 +1550,8 @@ public class MasterServiceImpl implements MasterService {
 
 	
 	@Override
-	public List<Map<String, Object>> getPaymentAccountFromGroup(Long orgId, String branch, String branchCode,
-			String finYear) {
-		Set<Object[]> payment = chargeTypeRequestRepo.findPaymentAccountFromGroup(orgId, branch, branchCode, finYear);
+	public List<Map<String, Object>> getPaymentAccountFromGroup(Long orgId) {
+		Set<Object[]> payment = chargeTypeRequestRepo.findPaymentAccountFromGroup(orgId);
 		return getPayment(payment);
 	}
 
@@ -1561,7 +1559,7 @@ public class MasterServiceImpl implements MasterService {
 		List<Map<String, Object>> doctypeMappingDetails = new ArrayList<>();
 		for (Object[] sup : getPayment) {
 			Map<String, Object> doctype = new HashMap<>();
-			doctype.put("salesAccount", sup[0] != null ? sup[0].toString() : "");
+			doctype.put("purchaseAccount", sup[0] != null ? sup[0].toString() : "");
 			doctypeMappingDetails.add(doctype);
 		}
 
