@@ -31,13 +31,11 @@ public class SacCodeVO {
 	private Long id;
 	@Column(name = "orgid")
 	private Long orgId;
-	@Column(name = "serviceaccountcode")
+	@Column(name = "serviceaccountcode",length = 50)
 	private String serviceAccountCode;
-	@Column(name = "sacdescription")
+	@Column(name = "sacdescription",length = 50)
 	private String sacDescription;
-	@Column(name = "chapter")
-	private String chapter;
-	@Column(name = "product")
+	@Column(name = "product",length = 50)
 	private String product;
 	
 	@Builder.Default
@@ -46,11 +44,11 @@ public class SacCodeVO {
 	@Builder.Default
 	@Column(name="screenname")
 	private String screenName="HSN SAC CODE";
-	@Column(name = "createdby")
+	@Column(name = "createdby",length = 50)
 	private String createdBy;
-	@Column(name = "modifiedby")
+	@Column(name = "modifiedby",length = 50)
 	private String updatedBy;
-	@Column(name = "cancelremarks")
+	@Column(name = "cancelremarks",length = 150)
 	private String cancelRemarks;
 	@Column(name = "cancel")
 	private boolean cancel;

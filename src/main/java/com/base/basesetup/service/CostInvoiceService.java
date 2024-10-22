@@ -15,6 +15,7 @@ import com.base.basesetup.exception.ApplicationException;
 public interface CostInvoiceService {
 
 	// CostInvoice
+	
 	List<CostInvoiceVO> getAllCostInvoiceByOrgId(Long orgId);
 
 	Map<String, Object> updateCreateCostInvoice(@Valid CostInvoiceDTO costInvoiceDTO) throws ApplicationException;

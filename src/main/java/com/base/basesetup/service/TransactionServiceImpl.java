@@ -98,6 +98,7 @@ import com.base.basesetup.entity.ReceiptReversalVO;
 import com.base.basesetup.entity.ReconcileBankVO;
 import com.base.basesetup.entity.ReconcileCashVO;
 import com.base.basesetup.entity.ReconcileCorpBankVO;
+import com.base.basesetup.entity.TaxInvoiceVO;
 import com.base.basesetup.exception.ApplicationException;
 import com.base.basesetup.repo.ArApAdjustmentOffSetRepo;
 import com.base.basesetup.repo.ArApOffSetInvoiceDetailsRepo;
@@ -989,6 +990,7 @@ public class TransactionServiceImpl implements TransactionService {
 	public GeneralJournalVO updateCreateGeneralJournal(@Valid GeneralJournalDTO generalJournalDTO)
 			throws ApplicationException {
 		GeneralJournalVO generalJournalVO = new GeneralJournalVO();
+		String screenCode= "GJ";
 		boolean isUpdate = false;
 		if (ObjectUtils.isNotEmpty(generalJournalDTO.getId())) {
 			isUpdate = true;
@@ -998,7 +1000,22 @@ public class TransactionServiceImpl implements TransactionService {
 		} else {
 			generalJournalVO.setUpdatedBy(generalJournalDTO.getCreatedBy());
 			generalJournalVO.setCreatedBy(generalJournalDTO.getCreatedBy());
-		}
+			
+//			GETDOCID API
+			String docId = generalJournalRepo.getGeneralJournalDocId(generalJournalDTO.getOrgId(),
+					generalJournalDTO.getFinYear(), generalJournalDTO.getBranchCode(),
+					screenCode);
+
+			generalJournalVO.setDocId(docId);
+
+
+//			// GETDOCID LASTNO +1
+			DocumentTypeMappingDetailsVO documentTypeMappingDetailsVO = documentTypeMappingDetailsRepo
+					.findByOrgIdAndFinYearAndBranchCodeAndScreenCode(generalJournalDTO.getOrgId(),
+							generalJournalDTO.getFinYear(), generalJournalDTO.getBranchCode(), screenCode);
+			documentTypeMappingDetailsVO.setLastno(documentTypeMappingDetailsVO.getLastno() + 1);
+			documentTypeMappingDetailsRepo.save(documentTypeMappingDetailsVO);
+	}
 
 		List<ParticularsJournalVO> particularsJournalVOs = new ArrayList<>();
 		if (generalJournalDTO.getParticularsJournalDTO() != null) {
@@ -1028,8 +1045,6 @@ public class TransactionServiceImpl implements TransactionService {
 	private void getGeneralJournalVOFromGeneralJournalDTO(@Valid GeneralJournalDTO generalJournalDTO,
 			GeneralJournalVO generalJournalVO) {
 		generalJournalVO.setVoucherSubType(generalJournalDTO.getVoucherSubType());
-		generalJournalVO.setDocDate(generalJournalDTO.getDocDate());
-		generalJournalVO.setDocId(generalJournalDTO.getDocId());
 		generalJournalVO.setRemarks(generalJournalDTO.getRemarks());
 		generalJournalVO.setCurrency(generalJournalDTO.getCurrency());
 		generalJournalVO.setExRate(generalJournalDTO.getExRate());
@@ -1037,6 +1052,10 @@ public class TransactionServiceImpl implements TransactionService {
 		generalJournalVO.setRefNo(generalJournalDTO.getRefNo());
 		generalJournalVO.setRefDate(generalJournalDTO.getRefDate());
 		generalJournalVO.setOrgId(generalJournalDTO.getOrgId());
+		generalJournalVO.setBranch(generalJournalDTO.getBranch());
+		generalJournalVO.setBranchCode(generalJournalDTO.getBranchCode());
+		generalJournalVO.setFinYear(generalJournalDTO.getFinYear());
+
 		generalJournalVO.setActive(generalJournalDTO.isActive());
 		generalJournalVO.setCancel(generalJournalDTO.isCancel());
 		generalJournalVO.setCancelRemarks(generalJournalDTO.getCancelRemarks());
@@ -1048,6 +1067,14 @@ public class TransactionServiceImpl implements TransactionService {
 	public List<GeneralJournalVO> getGeneralJournalByActive() {
 		return generalJournalRepo.findGeneralJournalByActive();
 
+	}
+	
+	
+	@Override
+	public String getGeneralJournalDocId(Long orgId, String finYear, String branch, String branchCode) {
+		String ScreenCode = "GJ";
+		String result = generalJournalRepo.getGeneralJournalByDocId(orgId, finYear, branchCode, ScreenCode);
+		return result;
 	}
 
 	// DebitNote
@@ -1397,6 +1424,13 @@ public class TransactionServiceImpl implements TransactionService {
 
 	private void getPaymentVoucherVOFromPaymentVoucherDTO(@Valid PaymentVoucherDTO paymentVoucherDTO,
 			PaymentVoucherVO paymentVoucherVO) {
+
+		// // Finyr
+		int finyr = paymentVoucherRepo.findFinyr();
+		// DocId
+		String paymentVoucher = "PV" + finyr + paymentVoucherRepo.findDocId();
+		paymentVoucherVO.setDocId(paymentVoucher);
+		paymentVoucherRepo.nextSeq();
 
 
 		paymentVoucherVO.setVehicleSubType(paymentVoucherDTO.getVehicleSubType());
