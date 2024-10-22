@@ -357,6 +357,33 @@ public class ApController extends BaseController {
 		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
 		return ResponseEntity.ok().body(responseDTO);
 	}
+	
+	@GetMapping("/getAccountGroupNameByOrgIdForPayment")
+	public ResponseEntity<ResponseDTO> getAccountGroupNameByOrgIdForPayment(@RequestParam Long orgId) {
+		String methodName = "getAccountGroupNameByOrgIdForPayment()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		List<Map<String, Object>> payment = new ArrayList<>();
+		try {
+			payment = apService.getAccountGroupNameByOrgIdForPayment(orgId);
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+					"AccountGroupName from Group information get successfully");
+			responseObjectsMap.put("PaymentVO", payment);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					"AccountGroupName from Group information receive failed", errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+	}
 
 
 }

@@ -46,4 +46,6 @@ public interface APService {
 
 	List<Map<String, Object>> getStateCodeByOrgIdForPayment(Long orgId);
 
+	List<Map<String, Object>> getAccountGroupNameByOrgIdForPayment(Long orgId);
+
 }

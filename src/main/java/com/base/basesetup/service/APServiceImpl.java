@@ -348,5 +348,22 @@ public class APServiceImpl implements APService {
 			String finYear) {
 		return apBillBalanceRepo.findAll(orgId,branch,branchCode,finYear);
 	}
+	
+	@Override
+	public List<Map<String, Object>> getAccountGroupNameByOrgIdForPayment(Long orgId) {
+		Set<Object[]> group = paymentRepo.findAccountGroupNameByOrgIdForPayment(orgId);
+		return  getAccountGroupName(group);
+	}
+
+	private List<Map<String, Object>>  getAccountGroupName(Set<Object[]> customer) {
+		List<Map<String, Object>> payment = new ArrayList<>();
+		for (Object[] sup : customer) {
+			Map<String, Object>  accountgroupname = new HashMap<>();
+			accountgroupname.put("TDSAccount", sup[0] != null ? sup[0].toString() : "");
+			payment.add(accountgroupname);
+		}
+
+		return payment;
+	}
 
 }
