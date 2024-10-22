@@ -1061,8 +1061,9 @@ public class CommonMasterServiceImpl implements CommonMasterService {
 
 	    for (Object[] currency : getFullGridCurrency) {  // Iterating over getFullGridCurrency
 	        Map<String, Object> currencyMap = new HashMap<>();
-	        currencyMap.put("currency", currency[0] != null ? currency[0].toString() : "");
-	        currencyMap.put("currencyDescription", currency[1] != null ? currency[1].toString() : "");
+	        currencyMap.put("id", currency[0] != null ? Integer.parseInt(currency[0].toString()) : 0);
+	        currencyMap.put("currency", currency[1] != null ? currency[1].toString() : "");
+	        currencyMap.put("currencyDescription", currency[2] != null ? currency[2].toString() : "");
 	        
 	        currencyList.add(currencyMap);  // Add the Map to the list
 	    }

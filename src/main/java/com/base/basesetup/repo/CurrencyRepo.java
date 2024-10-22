@@ -20,7 +20,15 @@ public interface CurrencyRepo extends JpaRepository<CurrencyVO, Long> {
 
 	boolean existsByCurrencyDescriptionAndOrgId(String currencyDescription, Long orgId);
 
-	@Query(value ="SELECT currency,currencydesc FROM currency where orgid=?1 and active=1",nativeQuery =true)
+	@Query(value ="SELECT \r\n"
+			+ "    ROW_NUMBER() OVER () AS id,\r\n"
+			+ "    currency,\r\n"
+			+ "    currencydesc \r\n"
+			+ "FROM \r\n"
+			+ "    currency \r\n"
+			+ "WHERE \r\n"
+			+ "    orgid =?1\r\n"
+			+ "    AND active = 1",nativeQuery =true)
 	Set<Object[]> findCurrencyForFullGrid(Long orgId);
 
 
