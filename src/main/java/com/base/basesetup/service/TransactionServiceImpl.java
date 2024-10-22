@@ -98,7 +98,6 @@ import com.base.basesetup.entity.ReceiptReversalVO;
 import com.base.basesetup.entity.ReconcileBankVO;
 import com.base.basesetup.entity.ReconcileCashVO;
 import com.base.basesetup.entity.ReconcileCorpBankVO;
-import com.base.basesetup.entity.TaxInvoiceVO;
 import com.base.basesetup.exception.ApplicationException;
 import com.base.basesetup.repo.ArApAdjustmentOffSetRepo;
 import com.base.basesetup.repo.ArApOffSetInvoiceDetailsRepo;
@@ -1425,12 +1424,7 @@ public class TransactionServiceImpl implements TransactionService {
 	private void getPaymentVoucherVOFromPaymentVoucherDTO(@Valid PaymentVoucherDTO paymentVoucherDTO,
 			PaymentVoucherVO paymentVoucherVO) {
 
-		// // Finyr
-		int finyr = paymentVoucherRepo.findFinyr();
-		// DocId
-		String paymentVoucher = "PV" + finyr + paymentVoucherRepo.findDocId();
-		paymentVoucherVO.setDocId(paymentVoucher);
-		paymentVoucherRepo.nextSeq();
+	
 
 
 		paymentVoucherVO.setVehicleSubType(paymentVoucherDTO.getVehicleSubType());

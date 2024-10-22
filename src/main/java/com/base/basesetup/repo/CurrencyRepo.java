@@ -28,8 +28,17 @@ public interface CurrencyRepo extends JpaRepository<CurrencyVO, Long> {
 			+ "    currency \r\n"
 			+ "WHERE \r\n"
 			+ "    orgid =?1\r\n"
-			+ "    AND active = 1",nativeQuery =true)
+			+ "    AND active = 1 group by currency,currencydesc",nativeQuery =true)
 	Set<Object[]> findCurrencyForFullGrid(Long orgId);
+
+
+
+	boolean existsByOrgIdAndCountryAndCurrencyIgnoreCase(Long orgId, String country, String currency);
+
+	boolean existsByOrgIdAndCountryAndCurrencyDescriptionIgnoreCase(Long orgId, String country,
+			String currencyDescription);
+
+	boolean existsByOrgIdAndCountryAndSubCurrencyIgnoreCase(Long orgId, String country, String subCurrency);
 
 
 

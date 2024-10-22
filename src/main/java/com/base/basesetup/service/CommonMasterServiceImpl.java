@@ -287,7 +287,6 @@ public class CommonMasterServiceImpl implements CommonMasterService {
 //
 //	}
 
-	
 	// FinScreen-----------------------------------------------------------------------------------
 	@Override
 	public List<FinScreenVO> getFinScreenById(Long id) {
@@ -787,17 +786,20 @@ public class CommonMasterServiceImpl implements CommonMasterService {
 		String message = null;
 
 		if (ObjectUtils.isEmpty(currencyDTO.getId())) {
-			if (currencyRepo.existsByCurrencyAndOrgId(currencyDTO.getCurrency(), currencyDTO.getOrgId())) {
+			if (currencyRepo.existsByOrgIdAndCountryAndCurrencyIgnoreCase(currencyDTO.getOrgId(),
+					currencyDTO.getCountry(), currencyDTO.getCurrency())) {
 				String errorMessage = String.format("This Currency:%s Already Exists in This Organization.",
 						currencyDTO.getCurrency());
 				throw new ApplicationException(errorMessage);
 			}
-			if (currencyRepo.existsByCurrencyDescriptionAndOrgId(currencyDTO.getCurrencyDescription(), currencyDTO.getOrgId())) {
+			if (currencyRepo.existsByOrgIdAndCountryAndCurrencyDescriptionIgnoreCase(currencyDTO.getOrgId(),
+					currencyDTO.getCountry(), currencyDTO.getCurrencyDescription())) {
 				String errorMessage = String.format("This CurrencyDescription:%s Already Exists in This Organization.",
 						currencyDTO.getCurrencyDescription());
 				throw new ApplicationException(errorMessage);
 			}
-			if (currencyRepo.existsBySubCurrencyAndOrgId(currencyDTO.getSubCurrency(), currencyDTO.getOrgId())) {
+			if (currencyRepo.existsByOrgIdAndCountryAndSubCurrencyIgnoreCase(currencyDTO.getOrgId(),
+					currencyDTO.getCountry(), currencyDTO.getSubCurrency())) {
 				String errorMessage = String.format("This SubCurrency:%s Already Exists in This Organization.",
 						currencyDTO.getSubCurrency());
 				throw new ApplicationException(errorMessage);
@@ -815,7 +817,8 @@ public class CommonMasterServiceImpl implements CommonMasterService {
 			currencyVO.setUpdatedBy(currencyDTO.getCreatedBy());
 
 			if (!currencyVO.getCurrency().equalsIgnoreCase(currencyDTO.getCurrency())) {
-				if (currencyRepo.existsByCurrencyAndOrgId(currencyDTO.getCurrency(), currencyDTO.getOrgId())) {
+				if (currencyRepo.existsByOrgIdAndCountryAndCurrencyIgnoreCase(currencyDTO.getOrgId(),
+						currencyDTO.getCountry(), currencyDTO.getCurrency())) {
 					String errorMessage = String.format("This Currency:%s Already Exists in This Organization.",
 							currencyDTO.getCurrency());
 					throw new ApplicationException(errorMessage);
@@ -823,21 +826,27 @@ public class CommonMasterServiceImpl implements CommonMasterService {
 				currencyVO.setCurrency(currencyDTO.getCurrency().toUpperCase());
 			}
 			if (!currencyVO.getSubCurrency().equalsIgnoreCase(currencyDTO.getSubCurrency())) {
-				if (currencyRepo.existsBySubCurrencyAndOrgId(currencyDTO.getSubCurrency(), currencyDTO.getOrgId())) {
+				if (currencyRepo.existsByOrgIdAndCountryAndSubCurrencyIgnoreCase(currencyDTO.getOrgId(),
+						currencyDTO.getCountry(), currencyDTO.getSubCurrency())) {
 					String errorMessage = String.format("This SubCurrency:%s Already Exists in This Organization.",
 							currencyDTO.getSubCurrency());
 					throw new ApplicationException(errorMessage);
 				}
-				currencyVO.setSubCurrency(currencyDTO.getSubCurrency().toUpperCase());
+				if (currencyDTO.getSubCurrency() != null) {
+					currencyVO.setSubCurrency(currencyDTO.getSubCurrency().toUpperCase());
+				}
 			}
 			if (!currencyVO.getCurrencyDescription().equalsIgnoreCase(currencyDTO.getCurrencyDescription())) {
-				if (currencyRepo.existsByCurrencyDescriptionAndOrgId(currencyDTO.getCurrencyDescription(),
-						currencyDTO.getOrgId())) {
-					String errorMessage = String.format("This CurrencyDescription:%s Already Exists in This Organization.",
+				if (currencyRepo.existsByOrgIdAndCountryAndCurrencyDescriptionIgnoreCase(currencyDTO.getOrgId(),
+						currencyDTO.getCountry(), currencyDTO.getCurrencyDescription())) {
+					String errorMessage = String.format(
+							"This CurrencyDescription:%s Already Exists in This Organization.",
 							currencyDTO.getCurrencyDescription());
 					throw new ApplicationException(errorMessage);
 				}
-				currencyVO.setCurrencyDescription(currencyDTO.getCurrencyDescription().toUpperCase());
+				if (currencyDTO.getCurrencyDescription() != null) {
+					currencyVO.setCurrencyDescription(currencyDTO.getCurrencyDescription().toUpperCase());
+				}
 			}
 			message = "Currency Updated Successfully";
 		}
@@ -853,10 +862,13 @@ public class CommonMasterServiceImpl implements CommonMasterService {
 
 	private void getCurrencyVOFromCurrencyDTO(CurrencyVO currencyVO, CurrencyDTO currencyDTO) {
 		currencyVO.setCurrency(currencyDTO.getCurrency().toUpperCase());
-		currencyVO.setSubCurrency(currencyDTO.getSubCurrency().toUpperCase());
-		currencyVO.setCurrencyDescription(currencyDTO.getCurrencyDescription().toUpperCase());
+		if (currencyDTO.getSubCurrency() != null) {
+			currencyVO.setSubCurrency(currencyDTO.getSubCurrency().toUpperCase());
+		}
+		if (currencyDTO.getCurrencyDescription() != null) {
+			currencyVO.setCurrencyDescription(currencyDTO.getCurrencyDescription().toUpperCase());
+		}
 		currencyVO.setActive(currencyDTO.isActive());
-		currencyVO.setCancel(currencyDTO.isCancel());
 		currencyVO.setCountry(currencyDTO.getCountry().toUpperCase());
 		currencyVO.setOrgId(currencyDTO.getOrgId());
 	}
@@ -1052,23 +1064,22 @@ public class CommonMasterServiceImpl implements CommonMasterService {
 
 	@Override
 	public List<Map<String, Object>> getAllCurrencyForExRate(Long orgId) {
-	    Set<Object[]> getFullGridCurrency = currencyRepo.findCurrencyForFullGrid(orgId);
-	    return getCurrency(getFullGridCurrency);  // Returning a list of Map<String, Object>
+		Set<Object[]> getFullGridCurrency = currencyRepo.findCurrencyForFullGrid(orgId);
+		return getCurrency(getFullGridCurrency); // Returning a list of Map<String, Object>
 	}
 
 	private List<Map<String, Object>> getCurrency(Set<Object[]> getFullGridCurrency) {
-	    List<Map<String, Object>> currencyList = new ArrayList<>();  // Correct variable name
+		List<Map<String, Object>> currencyList = new ArrayList<>(); // Correct variable name
 
-	    for (Object[] currency : getFullGridCurrency) {  // Iterating over getFullGridCurrency
-	        Map<String, Object> currencyMap = new HashMap<>();
-	        currencyMap.put("id", currency[0] != null ? Integer.parseInt(currency[0].toString()) : 0);
-	        currencyMap.put("currency", currency[1] != null ? currency[1].toString() : "");
-	        currencyMap.put("currencyDescription", currency[2] != null ? currency[2].toString() : "");
-	        
-	        currencyList.add(currencyMap);  // Add the Map to the list
-	    }
-	    return currencyList;
+		for (Object[] currency : getFullGridCurrency) { // Iterating over getFullGridCurrency
+			Map<String, Object> currencyMap = new HashMap<>();
+			currencyMap.put("id", currency[0] != null ? Integer.parseInt(currency[0].toString()) : 0);
+			currencyMap.put("currency", currency[1] != null ? currency[1].toString() : "");
+			currencyMap.put("currencyDescription", currency[2] != null ? currency[2].toString() : "");
+
+			currencyList.add(currencyMap); // Add the Map to the list
+		}
+		return currencyList;
 	}
-
 
 }

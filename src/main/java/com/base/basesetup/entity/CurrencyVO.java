@@ -44,7 +44,7 @@ public class CurrencyVO {
 	@Column(name = "modifiedby")
 	private String updatedBy;
 	@Column(name = "cancel")
-	private boolean cancel;
+	private boolean cancel=true;
 
 	@JsonGetter("active")
 	public String getActive() {
