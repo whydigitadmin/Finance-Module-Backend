@@ -125,6 +125,8 @@ public interface MasterService {
 	List<SacCodeVO> getAllSacCodeById(Long id);
 
 	List<SacCodeVO> getAllSacCodeByOrgId(Long orgId);
+	
+	List<SacCodeVO> getAllActiveSacCodeByOrgId(Long orgId);
 
 	SacCodeVO updateCreateSacCode(@Valid SacCodeDTO sacCodeDTO) throws ApplicationException;
 
@@ -189,6 +191,10 @@ public interface MasterService {
 	List<PartyMasterVO> getPartyMasterById(Long id);
 
 	PartyMasterVO updateCreatePartyMaster(@Valid PartyMasterDTO partyMasterDTO) throws ApplicationException;
+
+	
+
+	
 
 
 }
