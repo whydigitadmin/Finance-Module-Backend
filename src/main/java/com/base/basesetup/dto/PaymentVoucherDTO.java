@@ -3,8 +3,6 @@ package com.base.basesetup.dto;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-
 import java.util.List;
 
 import lombok.AllArgsConstructor;

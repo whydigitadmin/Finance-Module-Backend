@@ -39,8 +39,6 @@ public class UserLoginRolesVO {
 	private LocalDate startDate;
 	@Column(name="enddate")
 	private LocalDate endDate;
-	@Column(name="screenname")
-	private String screenName;
 	
 	@JsonBackReference
 	@ManyToOne

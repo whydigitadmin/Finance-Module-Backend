@@ -44,7 +44,6 @@ import com.base.basesetup.entity.UserLoginBranchAccessibleVO;
 import com.base.basesetup.entity.UserLoginRolesVO;
 import com.base.basesetup.entity.UserVO;
 import com.base.basesetup.exception.ApplicationException;
-import com.base.basesetup.repo.ClientRepo;
 import com.base.basesetup.repo.ResponsibilitiesRepo;
 import com.base.basesetup.repo.RolesRepo;
 import com.base.basesetup.repo.RolesResponsibilityRepo;
@@ -56,7 +55,6 @@ import com.base.basesetup.repo.UserLoginRolesRepo;
 import com.base.basesetup.repo.UserRepo;
 import com.base.basesetup.security.TokenProvider;
 import com.base.basesetup.util.CryptoUtils;
-
 
 @Service
 public class AuthServiceImpl implements AuthService {
@@ -78,9 +76,6 @@ public class AuthServiceImpl implements AuthService {
 	@Autowired
 	UserBranchAccessRepo branchAccessRepo;
 
-
-	@Autowired
-	ClientRepo clientRepo;
 
 	@Autowired
 	TokenProvider tokenProvider;
@@ -130,7 +125,7 @@ public class AuthServiceImpl implements AuthService {
 				signUpFormDTO.getEmail())) {
 			userVO = userRepo.findByUserNameOrEmailOrMobileNo(signUpFormDTO.getUserName(), signUpFormDTO.getEmail(),
 					signUpFormDTO.getEmail());
-		
+
 			List<UserLoginRolesVO> roles = loginRolesRepo.findByUserVO(userVO);
 			loginRolesRepo.deleteAll(roles);
 //			List<UserLoginClientAccessVO> client = clientAccessRepo.findByUserVO(userVO);
@@ -139,11 +134,13 @@ public class AuthServiceImpl implements AuthService {
 			branchAccessRepo.deleteAll(branch);
 		}
 		userVO.setUserName(signUpFormDTO.getUserName());
-		try {
-			userVO.setPassword(encoder.encode(CryptoUtils.getDecrypt(signUpFormDTO.getPassword())));
-		} catch (Exception e) {
-			LOGGER.error(e.getMessage());
-			throw new ApplicationContextException(UserConstants.ERRROR_MSG_UNABLE_TO_ENCODE_USER_PASSWORD);
+		if (ObjectUtils.isEmpty(userVO.getId())) {
+			try {
+				userVO.setPassword(encoder.encode(CryptoUtils.getDecrypt(signUpFormDTO.getPassword())));
+			} catch (Exception e) {
+				LOGGER.error(e.getMessage());
+				throw new ApplicationContextException(UserConstants.ERRROR_MSG_UNABLE_TO_ENCODE_USER_PASSWORD);
+			}
 		}
 		userVO.setEmployeeName(signUpFormDTO.getEmployeeName());
 		userVO.setNickName(signUpFormDTO.getNickName());
@@ -161,9 +158,9 @@ public class AuthServiceImpl implements AuthService {
 
 				UserLoginRolesVO loginRolesVO = new UserLoginRolesVO();
 				loginRolesVO.setRole(accessDTO.getRole());
+				loginRolesVO.setRoleId(accessDTO.getRoleId());
 				loginRolesVO.setStartDate(accessDTO.getStartDate());
 				loginRolesVO.setEndDate(accessDTO.getEndDate());
-			//	loginRolesVO.setRoleId(accessDTO.getRoleId());
 				loginRolesVO.setUserVO(userVO);
 				rolesVO.add(loginRolesVO);
 			}
@@ -198,7 +195,7 @@ public class AuthServiceImpl implements AuthService {
 	}
 
 	@Override
-	public UserResponseDTO login(LoginFormDTO loginRequest, HttpServletRequest request) {
+	public UserResponseDTO login(LoginFormDTO loginRequest, HttpServletRequest request) throws ApplicationException {
 		String methodName = "login()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
 		if (ObjectUtils.isEmpty(loginRequest) || StringUtils.isBlank(loginRequest.getUserName())
@@ -209,8 +206,12 @@ public class AuthServiceImpl implements AuthService {
 				loginRequest.getUserName());
 
 		if (ObjectUtils.isNotEmpty(userVO)) {
+			if(userVO.getActive()=="In-Active")
+			{
+				throw new ApplicationException("Your account is In-Active, Please Contact Administrator");
+			}
 			if (compareEncodedPasswordWithEncryptedPassword(loginRequest.getPassword(), userVO.getPassword())) {
-				updateUserLoginInformation(userVO,request);
+				updateUserLoginInformation(userVO, request);
 			} else {
 				throw new ApplicationContextException(UserConstants.ERRROR_MSG_PASSWORD_MISMATCH);
 			}
@@ -381,16 +382,16 @@ public class AuthServiceImpl implements AuthService {
 		return refreshTokenDTO;
 	}
 
-
 	/**
 	 * @param userVO
-	 * @param request 
+	 * @param request
 	 */
 	private void updateUserLoginInformation(UserVO userVO, HttpServletRequest request) {
 		try {
 			userVO.setLoginStatus(true);
 			userRepo.save(userVO);
-			userService.createUserLoginAction(userVO.getUserName(), userVO.getId(), UserConstants.USER_ACTION_TYPE_LOGIN,request);
+			userService.createUserLoginAction(userVO.getUserName(), userVO.getId(),
+					UserConstants.USER_ACTION_TYPE_LOGIN, request);
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage());
 			throw new ApplicationContextException(UserConstants.ERRROR_MSG_UNABLE_TO_UPDATE_USER_INFORMATION);
@@ -485,14 +486,14 @@ public class AuthServiceImpl implements AuthService {
 	// Helper method to map ResponsibilityDTO to ResponsibilityVO
 	private void mapResponsibilityDtoToResponsibilityVo(ResponsibilityDTO responsibilityDTO,
 			ResponsibilityVO responsibilityVO) {
-		responsibilityVO.setResponsibility(responsibilityDTO.getResponsibility());
+		responsibilityVO.setResponsibility(responsibilityDTO.getResponsibility().toUpperCase());
 		responsibilityVO.setOrgId(responsibilityDTO.getOrgId());
 		responsibilityVO.setActive(responsibilityDTO.isActive());
 		if (responsibilityDTO.getScreensDTO() != null) {
 			List<ScreensVO> screensVOList = new ArrayList<>();
 			for (ScreensDTO screensDTO : responsibilityDTO.getScreensDTO()) {
 				ScreensVO screensVO = new ScreensVO();
-				screensVO.setScreenName(screensDTO.getScreenName());
+				screensVO.setScreenName(screensDTO.getScreenName().toUpperCase());
 				screensVO.setOrgId(responsibilityDTO.getOrgId());
 				screensVO.setResponsibilityVO(responsibilityVO);
 				screensVOList.add(screensVO);
@@ -548,7 +549,7 @@ public class AuthServiceImpl implements AuthService {
 				if (rolesRepo.existsByRoleAndOrgId(rolesDTO.getRole(), rolesDTO.getOrgId())) {
 					throw new ApplicationException("Role already exists");
 				}
-				rolesVO.setRole(rolesDTO.getRole());
+				rolesVO.setRole(rolesDTO.getRole().toUpperCase());
 			}
 
 			List<RolesResponsibilityVO> rolesResponsibilityVOs = rolesResponsibilityRepo.findByRolesVO(rolesVO);
@@ -569,14 +570,14 @@ public class AuthServiceImpl implements AuthService {
 
 	// Helper method to map RolesDTO to RolesVO
 	private void mapRolesDtoToRolesVo(RolesDTO rolesDTO, RolesVO rolesVO) {
-		rolesVO.setRole(rolesDTO.getRole());
+		rolesVO.setRole(rolesDTO.getRole().toUpperCase());
 		rolesVO.setOrgId(rolesDTO.getOrgId());
 		rolesVO.setActive(rolesDTO.isActive());
 		if (rolesDTO.getRolesResponsibilityDTO() != null) {
 			List<RolesResponsibilityVO> rolesResponsibilityVOList = new ArrayList<>();
 			for (RolesResponsibilityDTO rolesResponsibilityDTO : rolesDTO.getRolesResponsibilityDTO()) {
 				RolesResponsibilityVO rolesResponsibilityVO = new RolesResponsibilityVO();
-				rolesResponsibilityVO.setResponsibility(rolesResponsibilityDTO.getResponsibility());
+				rolesResponsibilityVO.setResponsibility(rolesResponsibilityDTO.getResponsibility().toUpperCase());
 				rolesResponsibilityVO.setResponsibilityId(rolesResponsibilityDTO.getResponsibilityId());
 				rolesResponsibilityVO.setOrgId(rolesDTO.getOrgId());
 				rolesResponsibilityVO.setRolesVO(rolesVO);
@@ -661,7 +662,7 @@ public class AuthServiceImpl implements AuthService {
 	public UserVO getUserByUserName(String userName) {
 		String methodName = "getUserByUserName()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
-		if (StringUtils.isNotEmpty(userName)) {    
+		if (StringUtils.isNotEmpty(userName)) {
 			UserVO userVO = userRepo.findByUserName(userName);
 			if (ObjectUtils.isEmpty(userVO)) {
 				throw new ApplicationContextException(UserConstants.ERRROR_MSG_USER_INFORMATION_NOT_FOUND);

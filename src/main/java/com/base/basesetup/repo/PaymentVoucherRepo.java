@@ -23,13 +23,4 @@ public interface PaymentVoucherRepo extends JpaRepository<PaymentVoucherVO, Long
 			+ "        DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 1 YEAR), '%Y')\r\n" + "    ), \r\n" + "    2\r\n"
 			+ ") AS finyr")
 	int findFinyr();
-
-
-
-	@Query(nativeQuery = true, value = "select sequence_value from paymentvoucherseq")
-	String findDocId();
-
-	@Query(nativeQuery = true, value = "CALL next_paymentvoucher_sequence_value()")
- 	void nextSeq();
-
 }

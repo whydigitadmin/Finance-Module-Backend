@@ -32,11 +32,11 @@ public class ReconcileCashVO {
 	@SequenceGenerator(name = "reconcilecashgen", sequenceName = "reconcilecashseq", initialValue = 1000000001, allocationSize = 1)
 	@Column(name = "reconcilecashid")
 	private Long id;
-	@Column(name = "docid",length = 25)
+	@Column(name = "docid",length = 30)
 	private String docId;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	@Column(name = "docdate")
-	private LocalDate docDate;
+	private LocalDate docDate=LocalDate.now();
 	@Column(name="accountname",length=30)
 	private String cashAccount;
 	@Column(name="bookbalance",precision = 10,scale = 2)
@@ -74,7 +74,7 @@ public class ReconcileCashVO {
 	@Column(name="dn8amt",length = 10)
 	private BigDecimal dn8Amt;
 	@Column(name="totalpamount",length = 10)
-	private int totalPhyAmount ;
+	private BigDecimal totalPhyAmount ;
 	@Column(name="diffamount",length = 10)
 	private BigDecimal differenceAmount;
 	@Column(name="remarks",length = 150)
@@ -86,6 +86,7 @@ public class ReconcileCashVO {
 	@Builder.Default
 	@Column(name="screenname",length = 20)
 	private String screenName="RECONCILE CASH";
+	@Column(name = "orgid")
 	private Long orgId;
 	@Column(name = "branch", length = 25)
 	private String branch;
@@ -111,6 +112,7 @@ public class ReconcileCashVO {
 	@Embedded
 	@Builder.Default
 	private CreatedUpdatedDate commonDate = new CreatedUpdatedDate();
+
 	
 }
 

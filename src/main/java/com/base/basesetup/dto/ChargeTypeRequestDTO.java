@@ -1,7 +1,5 @@
 package com.base.basesetup.dto;
 
-import java.time.LocalDateTime;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,7 +12,6 @@ public class ChargeTypeRequestDTO {
 	private String chargeType;
 	private String chargeCode;
 	private String chargeDescription;
-	private String product;
 	private String localChargeDescripition;
 	private String serviceAccountCode;
 	private String sacDescripition;
@@ -23,19 +20,11 @@ public class ChargeTypeRequestDTO {
 	private String taxable;
 	private String taxType;
 	private String ccFeeApplicable;
-	private float taxablePercentage;
+	private int taxablePercentage;
 	private String ccJob;
 	private String govtSac;
 	private String excempted;
-	private String gstTax;
-	private String gstControl;
-	private String service;
-	private String type;
-	private String salesLedger;
-	private String purchaseLedger;
-	private LocalDateTime effromDate;
-	private LocalDateTime eftoDate;
-
+	private float gstTax;
 	private boolean active;
 	private String createdBy;
 	private Long orgId;

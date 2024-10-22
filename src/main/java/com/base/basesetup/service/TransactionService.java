@@ -202,20 +202,24 @@ public interface TransactionService {
 	//ReconcileBank
 		List<ReconcileBankVO> getAllReconcileBankByOrgId(Long orgId);
 		
-		ReconcileBankVO updateCreateReconcileBank(@Valid ReconcileBankDTO reconcileBankDTO) throws ApplicationException;
+		Map<String, Object> updateCreateReconcileBank(@Valid ReconcileBankDTO reconcileBankDTO) throws ApplicationException;
 		
 		List<ReconcileBankVO> getAllReconcileBankById(Long id);
 		
 		List<ReconcileBankVO> getReconcileBankByActive();
 		
+		String getReconcileBankDocId(Long orgId, String finYear, String branch, String branchCode);
+		
 		//ReconcileCorpBank
 	    List<ReconcileCorpBankVO> getAllReconcileCorpBankByOrgId(Long orgId);
 		
-	    ReconcileCorpBankVO updateCreateReconcileCorpBank(@Valid ReconcileCorpBankDTO reconcileCorpBankDTO) throws ApplicationException;
+	    Map<String, Object> updateCreateReconcileCorpBank(@Valid ReconcileCorpBankDTO reconcileCorpBankDTO) throws ApplicationException;
 		
 		List<ReconcileCorpBankVO> getAllReconcileCorpBankById(Long id);
 		
 		List<ReconcileCorpBankVO> getReconcileCorpBankByActive();
+		
+		String getReconcileCorpBankDocId(Long orgId, String finYear, String branchCode, String screenCode);
 		
 		//ReconcileCash
 		

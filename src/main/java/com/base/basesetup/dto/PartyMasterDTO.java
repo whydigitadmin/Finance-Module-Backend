@@ -13,7 +13,6 @@ import lombok.NoArgsConstructor;
 public class PartyMasterDTO {
 	private Long id;
 	private String partyType;
-	private String partyCode;
 	private String partyName;
 	private String gstPartyName;
 	private String customerType;
