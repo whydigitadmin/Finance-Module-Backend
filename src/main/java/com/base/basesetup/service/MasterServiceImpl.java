@@ -1024,6 +1024,7 @@ public class MasterServiceImpl implements MasterService {
 		groupLedgerVO.setType(groupLedgerDTO.getType().toUpperCase());
 		groupLedgerVO.setCategory(groupLedgerDTO.getCategory().toUpperCase());
 		groupLedgerVO.setCurrency(groupLedgerDTO.getCurrency());
+		groupLedgerVO.setGstTaxFlag(groupLedgerDTO.getGstTaxFlag());
 		groupLedgerVO.setActive(groupLedgerDTO.isActive());
 		groupLedgerVO.setInterBranchAc(groupLedgerDTO.isInterBranchAc());
 		groupLedgerVO.setControllAc(groupLedgerDTO.isControllAc());

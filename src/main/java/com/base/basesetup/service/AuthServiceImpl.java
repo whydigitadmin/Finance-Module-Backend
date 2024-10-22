@@ -44,7 +44,6 @@ import com.base.basesetup.entity.UserLoginBranchAccessibleVO;
 import com.base.basesetup.entity.UserLoginRolesVO;
 import com.base.basesetup.entity.UserVO;
 import com.base.basesetup.exception.ApplicationException;
-import com.base.basesetup.repo.ClientRepo;
 import com.base.basesetup.repo.ResponsibilitiesRepo;
 import com.base.basesetup.repo.RolesRepo;
 import com.base.basesetup.repo.RolesResponsibilityRepo;
@@ -77,8 +76,6 @@ public class AuthServiceImpl implements AuthService {
 	@Autowired
 	UserBranchAccessRepo branchAccessRepo;
 
-	@Autowired
-	ClientRepo clientRepo;
 
 	@Autowired
 	TokenProvider tokenProvider;
