@@ -1,5 +1,6 @@
 package com.base.basesetup.dto;
 
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
@@ -17,8 +18,10 @@ public class PaymentVoucherDTO {
 	private String referenceNo;
 
 	private String currency;
+	private String docId;
 	private LocalDate referenceDate;
 	private BigDecimal exRate;
+	private LocalDate docDate;
 	private String chequeNo;
 	private LocalDate chequeDate;
 	private String chequeBank;
@@ -39,7 +42,9 @@ public class PaymentVoucherDTO {
 	private String screenCode;
 	private String screenName;
 
+
 	List<ParticularsPaymentVoucherDTO> particularsPaymentVoucherDTO;
-
-
+	
+	List<PaymentSummaryDTO> paymentSummaryDTO;
+	
 }

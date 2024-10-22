@@ -17,9 +17,14 @@ public interface SacCodeRepo extends JpaRepository<SacCodeVO, Long> {
 	@Query(nativeQuery = true, name = "select * from saccode where orgid=?1")
 	List<SacCodeVO> getAllSacCodeByOrgId(Long orgId);
 
-//	boolean existsByCodeAndOrgId(String code, Long orgId);
+	boolean existsByOrgIdAndServiceAccountCodeIgnoreCase(Long orgId, String serviceAccountCode);
 
-//	boolean existsByDescriptionAndOrgId(String description, Long orgId);
+	boolean existsByOrgIdAndSacDescriptionIgnoreCase(Long orgId, String sacDescription);
+
+	@Query("SELECT s FROM SacCodeVO s WHERE s.orgId = :orgId AND s.active = true")
+	List<SacCodeVO> getAllActiveSacCodeByOrgId( Long orgId);
+
+
 
 //	@Query(nativeQuery = true,name = "select * from saccode where active=1")
 //	List<SacCodeVO> findSacCodeByActive();

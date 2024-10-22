@@ -1071,6 +1071,14 @@ public class MasterServiceImpl implements MasterService {
 		}
 		return sacCodeVO;
 	}
+	
+	@Override
+	public List<SacCodeVO> getAllActiveSacCodeByOrgId(Long orgId) {
+		List<SacCodeVO> sacCodeVO = new ArrayList<>();
+			sacCodeVO = sacCodeRepo.getAllActiveSacCodeByOrgId(orgId);
+		
+		return sacCodeVO;
+	}
 
 	@Override
 	public List<SacCodeVO> getAllSacCodeByOrgId(Long orgId) {
@@ -1088,53 +1096,42 @@ public class MasterServiceImpl implements MasterService {
 	@Override
 	public SacCodeVO updateCreateSacCode(@Valid SacCodeDTO sacCodeDTO) throws ApplicationException {
 		SacCodeVO sacCodeVO = new SacCodeVO();
-		boolean isUpdate = false;
 		if (ObjectUtils.isNotEmpty(sacCodeDTO.getId())) {
-			isUpdate = true;
 			sacCodeVO = sacCodeRepo.findById(sacCodeDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid SacCode details"));
+			if (!sacCodeVO.getServiceAccountCode().equals(sacCodeDTO.getServiceAccountCode())) {
+				if (sacCodeRepo.existsByOrgIdAndServiceAccountCodeIgnoreCase(sacCodeDTO.getOrgId(),sacCodeDTO.getServiceAccountCode())) {
+					throw new ApplicationException("This Service Account Code Already Exists.");
+				}
+			}
+			if (!sacCodeVO.getSacDescription().equals(sacCodeDTO.getSacDescription())) {
+				if (sacCodeRepo.existsByOrgIdAndSacDescriptionIgnoreCase(sacCodeDTO.getOrgId(),sacCodeDTO.getSacDescription())) {
+					throw new ApplicationException("This SAC Descipition Already Exists.");
+				}
+			}
 			sacCodeVO.setUpdatedBy(sacCodeDTO.getCreatedBy());
 		} else {
+			
+			if (sacCodeRepo.existsByOrgIdAndServiceAccountCodeIgnoreCase(sacCodeDTO.getOrgId(),sacCodeDTO.getServiceAccountCode())) {
+				throw new ApplicationException("This Service Account Code Already Exists.");
+			}
+			if (sacCodeRepo.existsByOrgIdAndSacDescriptionIgnoreCase(sacCodeDTO.getOrgId(),sacCodeDTO.getSacDescription())) {
+				throw new ApplicationException("This SAC Descipition Already Exists.");
+			}
+			
 			sacCodeVO.setUpdatedBy(sacCodeDTO.getCreatedBy());
 			sacCodeVO.setCreatedBy(sacCodeDTO.getCreatedBy());
 		}
-		// } else {
-//
-//			if (sacCodeRepo.existsByCodeAndOrgId(sacCodeDTO.getCode(), sacCodeDTO.getOrgId())) {
-//				throw new ApplicationException("The given code already exists.");
-//			}
-//			if (hsnSacCodeRepo.existsByDescriptionAndOrgId(hsnSacCodeDTO.getDescription(), hsnSacCodeDTO.getOrgId())) {
-//				throw new ApplicationException("The given Descipition exists.");
-//			}
-//		}
-//
-//		if (ObjectUtils.isNotEmpty(hsnSacCodeDTO.getId())) {
-//			SacCodeVO hsn = hsnSacCodeRepo.findById(hsnSacCodeDTO.getId()).orElse(null);
-//			if (!hsn.getCode().equals(hsnSacCodeDTO.getCode())) {
-//				if (hsnSacCodeRepo.existsByCodeAndOrgId(hsnSacCodeDTO.getCode(), hsnSacCodeDTO.getOrgId())) {
-//					throw new ApplicationException("The given code already exists.");
-//				}
-//			}
-//			if (!hsn.getDescription().equals(hsnSacCodeDTO.getDescription())) {
-//				if (hsnSacCodeRepo.existsByDescriptionAndOrgId(hsnSacCodeDTO.getDescription(),
-//						hsnSacCodeDTO.getOrgId())) {
-//					throw new ApplicationException("The given Descipition exists.");
-//				}
-//			}
-//		}
-
 		getSacCodeVOFromSacCodeDTO(sacCodeDTO, sacCodeVO);
 		return sacCodeRepo.save(sacCodeVO);
 	}
 
 	private void getSacCodeVOFromSacCodeDTO(@Valid SacCodeDTO sacCodeDTO, SacCodeVO sacCodeVO) {
 		sacCodeVO.setOrgId(sacCodeDTO.getOrgId());
-		sacCodeVO.setServiceAccountCode(sacCodeDTO.getServiceAccountCode());
+		sacCodeVO.setServiceAccountCode(sacCodeDTO.getServiceAccountCode().toUpperCase());
+		sacCodeVO.setSacDescription(sacCodeDTO.getSacDescription().toUpperCase());
 		sacCodeVO.setActive(sacCodeDTO.isActive());
-		sacCodeVO.setSacDescription(sacCodeDTO.getSacDescription());
-		sacCodeVO.setChapter(sacCodeDTO.getChapter());
-		sacCodeVO.setChapter(sacCodeDTO.getChapter());
-		sacCodeVO.setProduct(sacCodeDTO.getProduct());
+		sacCodeVO.setProduct(sacCodeDTO.getProduct().toUpperCase());
 	}
 
 //	@Override
@@ -1467,12 +1464,10 @@ public class MasterServiceImpl implements MasterService {
 					.orElseThrow(() -> new ApplicationException("Invalid ChargeTypeRequest details"));
 			chargeTypeRequestVO.setUpdatedBy(chargeTypeRequestDTO.getCreatedBy());
 		} else {
-			if (chargeTypeRequestRepo.existsByChargeDescriptionAndOrgId(chargeTypeRequestDTO.getChargeDescription(),
-					chargeTypeRequestDTO.getOrgId())) {
-				throw new ApplicationException("The given charge description already exists.");
+			if (chargeTypeRequestRepo.existsByOrgIdAndChargeDescriptionIgnoreCase(chargeTypeRequestDTO.getOrgId(),chargeTypeRequestDTO.getChargeDescription())) {
+				throw new ApplicationException("The given charge descripition already exists.");
 			}
-			if (chargeTypeRequestRepo.existsByChargeCodeAndOrgId(chargeTypeRequestDTO.getChargeCode(),
-					chargeTypeRequestDTO.getOrgId())) {
+			if (chargeTypeRequestRepo.existsByOrgIdAndChargeCodeIgnoreCase(chargeTypeRequestDTO.getOrgId(),chargeTypeRequestDTO.getChargeCode())) {
 				throw new ApplicationException("The given charge code already exists.");
 			}
 			chargeTypeRequestVO.setUpdatedBy(chargeTypeRequestDTO.getCreatedBy());
@@ -1482,14 +1477,12 @@ public class MasterServiceImpl implements MasterService {
 		if (isUpdate) {
 			ChargeTypeRequestVO charge = chargeTypeRequestRepo.findById(chargeTypeRequestDTO.getId()).orElse(null);
 			if (!charge.getChargeDescription().equals(chargeTypeRequestDTO.getChargeDescription())) {
-				if (chargeTypeRequestRepo.existsByChargeDescriptionAndOrgId(chargeTypeRequestDTO.getChargeDescription(),
-						chargeTypeRequestDTO.getOrgId())) {
+				if (chargeTypeRequestRepo.existsByOrgIdAndChargeDescriptionIgnoreCase(chargeTypeRequestDTO.getOrgId(),chargeTypeRequestDTO.getChargeDescription())) {
 					throw new ApplicationException("The given charge descripition already exists.");
 				}
 			}
 			if (!charge.getChargeCode().equals(chargeTypeRequestDTO.getChargeCode())) {
-				if (chargeTypeRequestRepo.existsByChargeCodeAndOrgId(chargeTypeRequestDTO.getChargeCode(),
-						chargeTypeRequestDTO.getOrgId())) {
+				if (chargeTypeRequestRepo.existsByOrgIdAndChargeCodeIgnoreCase(chargeTypeRequestDTO.getOrgId(),chargeTypeRequestDTO.getChargeCode())) {
 					throw new ApplicationException("The given charge code already exists.");
 				}
 			}
@@ -1501,30 +1494,22 @@ public class MasterServiceImpl implements MasterService {
 
 	private void getChargeTypeRequestVOFromChargeTypeRequestDTO(@Valid ChargeTypeRequestDTO chargeTypeRequestDTO,
 			ChargeTypeRequestVO chargeTypeRequestVO) {
-		chargeTypeRequestVO.setChargeType(chargeTypeRequestDTO.getChargeType());
-		chargeTypeRequestVO.setChargeCode(chargeTypeRequestDTO.getChargeCode());
-		chargeTypeRequestVO.setChargeDescription(chargeTypeRequestDTO.getChargeDescription());
-		chargeTypeRequestVO.setProduct(chargeTypeRequestDTO.getProduct());
-		chargeTypeRequestVO.setLocalChargeDescripition(chargeTypeRequestDTO.getLocalChargeDescripition());
-		chargeTypeRequestVO.setServiceAccountCode(chargeTypeRequestDTO.getServiceAccountCode());
-		chargeTypeRequestVO.setSacDescripition(chargeTypeRequestDTO.getSacDescripition());
-		chargeTypeRequestVO.setSalesAccount(chargeTypeRequestDTO.getSalesAccount());
-		chargeTypeRequestVO.setPurchaseAccount(chargeTypeRequestDTO.getPurchaseAccount());
-		chargeTypeRequestVO.setTaxable(chargeTypeRequestDTO.getTaxable());
-		chargeTypeRequestVO.setTaxType(chargeTypeRequestDTO.getTaxType());
-		chargeTypeRequestVO.setCcFeeApplicable(chargeTypeRequestDTO.getCcFeeApplicable());
+		chargeTypeRequestVO.setChargeType(chargeTypeRequestDTO.getChargeType().toUpperCase());
+		chargeTypeRequestVO.setChargeCode(chargeTypeRequestDTO.getChargeCode().toUpperCase());
+		chargeTypeRequestVO.setChargeDescription(chargeTypeRequestDTO.getChargeDescription().toUpperCase());
+		chargeTypeRequestVO.setLocalChargeDescripition(chargeTypeRequestDTO.getLocalChargeDescripition().toUpperCase());
+		chargeTypeRequestVO.setServiceAccountCode(chargeTypeRequestDTO.getServiceAccountCode().toUpperCase());
+		chargeTypeRequestVO.setSacDescripition(chargeTypeRequestDTO.getSacDescripition().toUpperCase());
+		chargeTypeRequestVO.setSalesAccount(chargeTypeRequestDTO.getSalesAccount().toUpperCase());
+		chargeTypeRequestVO.setPurchaseAccount(chargeTypeRequestDTO.getPurchaseAccount().toUpperCase());
+		chargeTypeRequestVO.setTaxable(chargeTypeRequestDTO.getTaxable().toUpperCase());
+		chargeTypeRequestVO.setTaxType(chargeTypeRequestDTO.getTaxType().toUpperCase());
+		chargeTypeRequestVO.setCcFeeApplicable(chargeTypeRequestDTO.getCcFeeApplicable().toUpperCase());
 		chargeTypeRequestVO.setTaxablePercentage(chargeTypeRequestDTO.getTaxablePercentage());
-		chargeTypeRequestVO.setCcJob(chargeTypeRequestDTO.getCcJob());
-		chargeTypeRequestVO.setGovtSac(chargeTypeRequestDTO.getGovtSac());
-		chargeTypeRequestVO.setExcempted(chargeTypeRequestDTO.getExcempted());
-		chargeTypeRequestVO.setGstControl(chargeTypeRequestDTO.getGstControl());
+		chargeTypeRequestVO.setCcJob(chargeTypeRequestDTO.getCcJob().toUpperCase());
+		chargeTypeRequestVO.setGovtSac(chargeTypeRequestDTO.getGovtSac().toUpperCase());
+		chargeTypeRequestVO.setExcempted(chargeTypeRequestDTO.getExcempted().toUpperCase());
 		chargeTypeRequestVO.setGstTax(chargeTypeRequestDTO.getGstTax());
-		chargeTypeRequestVO.setService(chargeTypeRequestDTO.getService());
-		chargeTypeRequestVO.setType(chargeTypeRequestDTO.getType());
-		chargeTypeRequestVO.setSalesLedger(chargeTypeRequestDTO.getSalesLedger());
-		chargeTypeRequestVO.setPurchaseLedger(chargeTypeRequestDTO.getPurchaseLedger());
-		chargeTypeRequestVO.setEffromDate(chargeTypeRequestDTO.getEffromDate());
-		chargeTypeRequestVO.setEftoDate(chargeTypeRequestDTO.getEftoDate());
 		chargeTypeRequestVO.setActive(chargeTypeRequestDTO.isActive());
 		chargeTypeRequestVO.setOrgId(chargeTypeRequestDTO.getOrgId());
 
