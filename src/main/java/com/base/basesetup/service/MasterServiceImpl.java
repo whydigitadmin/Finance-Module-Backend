@@ -1017,26 +1017,17 @@ public class MasterServiceImpl implements MasterService {
 	}
 
 	private void getGroupLedgerVOFromGroupLedgerDTO(@Valid GroupLedgerDTO groupLedgerDTO, GroupLedgerVO groupLedgerVO) {
-		groupLedgerVO.setGroupName(groupLedgerDTO.getGroupName());
-		groupLedgerVO.setCoaList(groupLedgerDTO.getCoaList());
-		groupLedgerVO.setType(groupLedgerDTO.getType());
-		groupLedgerVO.setGstTaxFlag(groupLedgerDTO.getGstTaxFlag());
-		groupLedgerVO.setCategory(groupLedgerDTO.getCategory());
+		groupLedgerVO.setGroupName(groupLedgerDTO.getGroupName().toUpperCase());
+		groupLedgerVO.setOrgId(groupLedgerDTO.getOrgId());
+		groupLedgerVO.setCoaList(groupLedgerDTO.getCoaList().toUpperCase());
+		groupLedgerVO.setType(groupLedgerDTO.getType().toUpperCase());
+		groupLedgerVO.setCategory(groupLedgerDTO.getCategory().toUpperCase());
 		groupLedgerVO.setCurrency(groupLedgerDTO.getCurrency());
+		groupLedgerVO.setGstTaxFlag(groupLedgerDTO.getGstTaxFlag());
+		groupLedgerVO.setActive(groupLedgerDTO.isActive());
 		groupLedgerVO.setInterBranchAc(groupLedgerDTO.isInterBranchAc());
 		groupLedgerVO.setControllAc(groupLedgerDTO.isControllAc());
-		groupLedgerVO.setAccountGroupName(groupLedgerDTO.getAccountGroupName());
-		groupLedgerVO.setOrgId(groupLedgerDTO.getOrgId());
-		groupLedgerVO.setBranch(groupLedgerDTO.getBranch());
-		groupLedgerVO.setBranchCode(groupLedgerDTO.getBranchCode());
-		groupLedgerVO.setActive(groupLedgerDTO.isActive());
-		groupLedgerVO.setCancel(groupLedgerDTO.isCancel());
-		groupLedgerVO.setCancelRemarks(groupLedgerDTO.getCancelRemarks());
-		groupLedgerVO.setFinYear(groupLedgerDTO.getFinYear());
-		groupLedgerVO.setScreenName("GROUP LEDGER");
-		groupLedgerVO.setScreenCode("GL");
-		groupLedgerVO.setIpNo(groupLedgerDTO.getIpNo());
-		groupLedgerVO.setLatitude(groupLedgerDTO.getLatitude());
+		groupLedgerVO.setAccountGroupName(groupLedgerDTO.getAccountGroupName().toUpperCase());
 	}
 
 	@Override

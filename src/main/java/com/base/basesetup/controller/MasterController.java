@@ -839,7 +839,7 @@ public class MasterController extends BaseController {
 	
 	@GetMapping("/getGroupNameByOrgId")
 	public ResponseEntity<ResponseDTO> getGroupNameByOrgId(
-			@RequestParam Long orgid) {
+			@RequestParam Long orgId) {
 
 		String methodName = "getGroupNameByOrgId()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
@@ -848,7 +848,7 @@ public class MasterController extends BaseController {
 		ResponseDTO responseDTO = null;
 		List<Map<String, Object>> groupName = new ArrayList<>();
 		try {
-			groupName = masterService.getGroupName(orgid);
+			groupName = masterService.getGroupName(orgId);
 		} catch (Exception e) {
 			errorMsg = e.getMessage();
 			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
