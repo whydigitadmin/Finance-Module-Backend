@@ -29,7 +29,7 @@ public interface PaymentRepo extends JpaRepository<PaymentVO, Long> {
 	Set<Object[]> findCurrencyAndTransCurrencyForPayment(Long orgId, String branch, String branchCode, String finYear,
 			String partyName);
 
-	@Query(nativeQuery = true, value = "SELECT CONCAT(statecode, '=', state) AS statecode FROM state WHERE orgid =?1 and active=1 ")
+	@Query(nativeQuery = true, value = "SELECT CONCAT(statecode, ' = ', state) AS statecode FROM state WHERE orgid =?1 and active=1 ")
 	Set<Object[]> findStateCodeByOrgIdForPayment(Long orgId);
 
 	@Query(nativeQuery = true, value = "SELECT accountgroupname FROM groupledger WHERE accountgroupname LIKE '%TDS%' and orgid =?1 and active=1 ")
