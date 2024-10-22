@@ -126,4 +126,6 @@ public interface CommonMasterService {
 
 	ScreenNamesVO getScreenNamesById(Long id) throws ApplicationException;
 
+	List<Map<String, Object>> getAllCurrencyForExRate(Long orgId);
+
 }

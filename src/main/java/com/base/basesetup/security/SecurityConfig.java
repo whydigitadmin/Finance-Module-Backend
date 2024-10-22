@@ -37,9 +37,8 @@ public class SecurityConfig {
 						"/swagger-ui.html", "/swagger-ui/*", "/api/auth/signup", "/api/auth/login", "/api/auth/logout",
 						"/api/auth/getRefreshToken", "/api/auth/**", "/api/commonmaster/**", "/api/master/**",
 						"/api/user/**", "/images/**", "/api/transaction/**", "/api/GlobalParam/**",
-
 						"/api/arreceivable/**", "/api/transaction/**", "/api/GlobalParam/**", "/api/payable/**",
-						"/api/documentType/**", "/api/taxInvoice/**", "/api/arapAdjustments/**")
+						"/api/documentType/**", "/api/taxInvoice/**", "/api/arapAdjustments/**","/api/costdebitnote/**","/api/costInvoice/**")
 
 
 				.permitAll().antMatchers("/api/**").hasAnyRole("USER", "GUEST_USER").anyRequest().authenticated();
