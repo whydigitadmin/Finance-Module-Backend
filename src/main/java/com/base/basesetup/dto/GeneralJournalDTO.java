@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
+import javax.persistence.Column;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.AllArgsConstructor;
@@ -18,10 +20,6 @@ import lombok.NoArgsConstructor;
 public class GeneralJournalDTO {
 	private Long id;
 	private String voucherSubType;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
-	private LocalDate docDate;
-	private String docId;
-	
 	private String currency;
 	private String exRate;
 	private String refNo;
@@ -34,6 +32,9 @@ public class GeneralJournalDTO {
 	private boolean cancel;
 	private String cancelRemarks;
 	private String createdBy;
+	private String branch;
+	private String branchCode;
+	private String finYear;
 	private BigDecimal totalDebitAmount;
 	private BigDecimal totalCreditAmount;
 
