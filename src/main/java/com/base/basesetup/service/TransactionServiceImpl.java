@@ -2257,7 +2257,7 @@ public class TransactionServiceImpl implements TransactionService {
 	}
 
 	@Override
-	public String getReconcileCorpBankDocId(Long orgId, String finYear, String branchCode, String screenCode) {
+	public String getReconcileCorpBankDocId(Long orgId, String finYear, String branch, String branchCode) {
 		String ScreenCode = "RC";
 		String result = reconcileCorpBankRepo.getReconcileCorpBankDocId(orgId, finYear, branchCode, ScreenCode);
 		return result;
