@@ -33,8 +33,8 @@ public class ArBillBalanceVO {
 	@Column(name = "arbillbalanceid")
 	private Long id;
 
-	@Column(name = "docno", length = 50)
-	private String docNo;
+	@Column(name = "docid", length = 50)
+	private String docId;
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	@Column(name = "docdate")
@@ -127,9 +127,11 @@ public class ArBillBalanceVO {
 	private String finYear;
 
 	@Column(name = "screencode", length = 5)
-	private String screenCode = "ARBB";
+	@Builder.Default
+	private String screenCode = "ARB";
 
 	@Column(name = "screenname", length = 25)
+	@Builder.Default
 	private String screenName = "AR BILL BALANCE";
 
 	@Column(name = "ipno", length = 15)

@@ -63,6 +63,7 @@ public class DocumentTypeMappingDetailsVO {
 	private String concatenation;
 	
 	@Column(name="lastno")
+	@Builder.Default
 	private int lastno=1;
 	
 

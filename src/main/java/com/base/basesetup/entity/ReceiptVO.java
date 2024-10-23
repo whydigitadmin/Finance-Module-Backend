@@ -42,7 +42,8 @@ public class ReceiptVO {
 	private String docId;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	@Column(name = "docdate")
-	private LocalDate docDate;
+	@Builder.Default
+	private LocalDate docDate=LocalDate.now();
 	@Column(name = "type")
 	private String type;
 	@Column(name = "customername")
