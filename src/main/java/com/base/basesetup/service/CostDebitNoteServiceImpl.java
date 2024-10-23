@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.validation.Valid;
 
@@ -133,6 +134,8 @@ public class CostDebitNoteServiceImpl implements CostDebitNoteService {
 		costDebitNoteVO.setStatus(costDebitNoteDTO.getStatus());
 		costDebitNoteVO.setOrginBill(costDebitNoteDTO.getOrginBill());
 		costDebitNoteVO.setGstType(costDebitNoteDTO.getGstType());
+		costDebitNoteVO.setCurrentDate(costDebitNoteDTO.getCurrentDate());
+		costDebitNoteVO.setCurrentDateValue(costDebitNoteDTO.getCurrentDateValue());
 
 		// Deleting existing entries if updating
 		if (costDebitNoteDTO.getId() != null) {
@@ -195,6 +198,7 @@ public class CostDebitNoteServiceImpl implements CostDebitNoteService {
 			costDebitNoteSummaryVO.setTotGrossLCAmt(costDebitNoteSummaryDTO.getTotGrossLCAmt());
 			costDebitNoteSummaryVO.setNetBillCurrAmt(costDebitNoteSummaryDTO.getNetBillCurrAmt());
 			costDebitNoteSummaryVO.setNetLCAmt(costDebitNoteSummaryDTO.getNetLCAmt());
+			costDebitNoteSummaryVO.setRoundOff(costDebitNoteSummaryDTO.getRoundOff());
 
 			costDebitNoteSummaryVO.setCostDebitNoteVO(costDebitNoteVO);
 			costDebitNoteSummaryVOs.add(costDebitNoteSummaryVO);
@@ -261,5 +265,46 @@ public class CostDebitNoteServiceImpl implements CostDebitNoteService {
 		String result = costDebitNoteRepo.getCostDebitNoteDocId(orgId, finYear, branchCode, ScreenCode);
 		return result;
 	}
+
+	@Override
+	public List<Map<String, Object>> partyDetailsForCostDebitNote(Long orgId, String branch,String finYear) {
+		Set<Object[]> getPartyMasterDetails = costDebitNoteRepo.getParty(orgId, branch,finYear);
+		return getStockLow(getPartyMasterDetails);
+	}
+
+	private List<Map<String, Object>> getStockLow(Set<Object[]> getPartyMaster) {
+		List<Map<String, Object>> gridDetails = new ArrayList<>();
+		for (Object[] grid : getPartyMaster) {
+			Map<String, Object> details = new HashMap<>();
+			details.put("partyName", grid[0] != null ? grid[0].toString() : "");
+			details.put("partyCode", grid[1] != null ? grid[1].toString() : "");
+			details.put("partyType", grid[2] != null ? grid[2].toString() : "");
+			details.put("addressType", grid[3] != null ? grid[3].toString() : "");
+			
+		}
+		return gridDetails;
+	}
+
+	@Override
+	public List<Map<String, Object>> chargeTypeDetailsForCostDebitNote(Long orgId) {
+		Set<Object[]> getChargeTypeDetails = costDebitNoteRepo.getChareDetails(orgId);
+		return getStockLow(getChargeTypeDetails);
+	}
+
+	private List<Map<String, Object>> getChargeType(Set<Object[]> getCharge) {
+		List<Map<String, Object>> gridDetails = new ArrayList<>();
+		for (Object[] grid : getCharge) {
+			Map<String, Object> details = new HashMap<>();
+			details.put("chargeType", grid[0] != null ? grid[0].toString() : "");
+			details.put("chargeCode", grid[1] != null ? grid[1].toString() : "");
+			details.put("cSac", grid[2] != null ? grid[2].toString() : "");
+			details.put("cChargeCode", grid[3] != null ? grid[3].toString() : "");
+			
+			
+			gridDetails.add(details);
+		}
+		return gridDetails;
+	}
+
 
 }

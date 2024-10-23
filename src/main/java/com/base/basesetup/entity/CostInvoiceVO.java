@@ -1,5 +1,5 @@
-package com.base.basesetup.entity;
 
+package com.base.basesetup.entity;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
@@ -49,8 +49,8 @@ public class CostInvoiceVO {
 	private LocalDate costInvoiceDate;
 	@Column(name = "supplierbillno",length =50)
 	private String supplierBillNo;
-	@Column(name = "suppliertype",length =10)
-	private String suppliertType;
+	@Column(name = "supplietype",length =10)
+	private String supplierType;
 	@Column(name = "suppliercode",length =15)
 	private String supplierCode;
 	@Column(name = "creditdays",length =10)
@@ -113,7 +113,15 @@ public class CostInvoiceVO {
 	private String docId;
 	@Column(name = "docdate")
 	private LocalDate docDate=LocalDate.now();
-	
+	@Column(name="payment",length =20 )
+	private String payment;
+	@Column(name="accuralid",length =20 )
+	private String accuralid;
+	@Column(name="utrref",length =10 )
+	private String utrRef;
+	@Column(name="costtype",length =10 )
+	private String costType;
+	 
  
 	@OneToMany(mappedBy = "costInvoiceVO", cascade = CascadeType.ALL)
 	@JsonManagedReference

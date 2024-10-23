@@ -1,6 +1,7 @@
 package com.base.basesetup.repo;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -24,5 +25,13 @@ public interface CostDebitNoteRepo extends JpaRepository<CostDebitNoteVO, Long>{
 
     @Query(nativeQuery = true, value = "select * from CostDebitNoteVO where orgId=?1 and docId=?2")
 	CostDebitNoteVO findAllCostDebitNoteByDocId(Long orgId, String docId);
+
+    @Query(nativeQuery =true,value ="select a.partyname,a.partycode,a.partytype,b.addresstype from partymaster a join partyaddress b on a.partymasterid=\r\n"
+    		+ "b.partyaddressid where orgId=?1 and branch=?2 and finyear=?3")
+	Set<Object[]> getParty(Long orgId, String branch, String finYear);
+
+	@Query(value ="select chargetype,chargecode,govtsac,serviceaccountcode from chargetyperequest WHERE \r\n"
+			+ "orgid=?1  and purchaseaccount IS NOT NULL",nativeQuery =true)
+	Set<Object[]> getChareDetails(Long orgId);
 
 }
