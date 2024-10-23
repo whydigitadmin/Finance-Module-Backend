@@ -57,8 +57,6 @@ public class PartyMasterDTO {
 	private boolean cancel;
 	private String cancelRemarks;
 	private String finYear;
-	private String ipNo;
-	private String latitude;
 	private Long orgId;
     
     List<PartyStateDTO> partyStateDTO;

@@ -18,7 +18,7 @@ public class ParticularsJournalDTO {
 	private Long id;
 	private String accountsName;
 	private String subledgerName;
-	private BigDecimal subLedgerCode;
+	private String subLedgerCode;
 	private BigDecimal debitAmount;
 	private BigDecimal creditAmount;
 	private String narration;

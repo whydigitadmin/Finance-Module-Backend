@@ -187,12 +187,6 @@ public class PartyMasterVO {
     @Column(name = "screenname", length = 25)
     private String screenName = "PARTYMASTER";
 
-    @Column(name = "ipno", length = 15)
-    private String ipNo;
-
-    @Column(name = "latitude", length = 100)
-    private String latitude;
-
     @Column(name = "orgid")
     private Long orgId;
 	

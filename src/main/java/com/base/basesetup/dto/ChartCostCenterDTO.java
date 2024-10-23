@@ -1,5 +1,7 @@
 package com.base.basesetup.dto;
 
+import java.math.BigDecimal;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,8 +13,8 @@ public class ChartCostCenterDTO {
 	private Long id;
 	private String costCenterCode;
 	private String costCenterName;
-	private Long credit;
-	private Long debit;
+	private BigDecimal credit;
+	private BigDecimal debit;
 	private Long orgId;
 	private String branch;
 	private String branchCode;

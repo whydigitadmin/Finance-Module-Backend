@@ -177,9 +177,6 @@ public class APServiceImpl implements APService {
 		paymentVO.setCancel(paymentDTO.isCancel());
 		paymentVO.setCancelRemarks(paymentDTO.getCancelRemarks());
 		paymentVO.setFinYear(paymentDTO.getFinYear());
-
-		paymentVO.setIpNo(paymentDTO.getIpNo());
-		paymentVO.setLatitude(paymentDTO.getLatitude());
 		paymentVO.setOrgId(paymentDTO.getOrgId());
 
 	}

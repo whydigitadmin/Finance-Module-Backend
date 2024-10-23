@@ -1,5 +1,6 @@
 package com.base.basesetup.entity;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import javax.persistence.Column;
@@ -39,14 +40,14 @@ public class ChartCostCenterVO {
     private LocalDate docDate = LocalDate.now();
 
 	
-	@Column(name = "costcentercode")
+	@Column(name = "costcentercode", length = 25)
 	private String costCenterCode;
-	@Column(name = "costcentername")
+	@Column(name = "costcentername", length = 50)
 	private String costCenterName;
-	@Column(name = "credit")
-	private Long credit;
-	@Column(name = "debit")
-	private Long debit;
+	@Column(name = "credit",precision = 10, scale = 2)
+	private BigDecimal credit;
+	@Column(name = "debit",precision = 10, scale = 2)
+	private BigDecimal debit;
 	@Column(name = "orgid")
 	private Long orgId;
 	
