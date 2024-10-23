@@ -59,10 +59,10 @@ public class GlOpeningBalanceVO {
 	private String remarks;
 	@Builder.Default
 	@Column(name = "screencode",length = 5)
-	private String screenCode="RCH";
+	private String screenCode="GOB";
 	@Builder.Default
 	@Column(name="screenname",length = 20)
-	private String screenName="RECONCILE CASH";
+	private String screenName="GL OPENING BALANCE";
 	@Column(name = "orgid")
 	private Long orgId;
 	@Column(name = "branch", length = 25)

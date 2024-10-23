@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -13,6 +14,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.base.basesetup.dto.CreatedUpdatedDate;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -37,7 +39,7 @@ public class ReconcileCorpBankVO {
 	private String docId;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	@Column(name = "docdate")
-	private LocalDate docDate;
+	private LocalDate docDate= LocalDate.now();
 	@Column(name="bankaccount",length = 30)
 	private String bankAccount;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
@@ -78,4 +80,9 @@ public class ReconcileCorpBankVO {
 	@OneToMany(mappedBy = "reconcileCorpBankVO",cascade = CascadeType.ALL)
 	@JsonManagedReference
 	List<ParticularsReconcileCorpBankVO> particularsReconcileCorpBankVO;
+	
+	@Embedded
+	@Builder.Default
+	private CreatedUpdatedDate commonDate = new CreatedUpdatedDate();
+
 }
