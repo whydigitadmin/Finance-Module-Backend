@@ -297,7 +297,7 @@ public class CostDebitNoteServiceImpl implements CostDebitNoteService {
 			Map<String, Object> details = new HashMap<>();
 			details.put("chargeType", grid[0] != null ? grid[0].toString() : "");
 			details.put("chargeCode", grid[1] != null ? grid[1].toString() : "");
-			details.put("cSac", grid[2] != null ? grid[2].toString() : "");
+			details.put("cSac", grid[2] != null ? grid[2].toString() : ""); 
 			details.put("cChargeCode", grid[3] != null ? grid[3].toString() : "");
 			
 			
