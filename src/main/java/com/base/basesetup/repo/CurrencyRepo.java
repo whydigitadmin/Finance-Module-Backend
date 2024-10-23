@@ -14,12 +14,6 @@ public interface CurrencyRepo extends JpaRepository<CurrencyVO, Long> {
 	@Query(value="select * FROM currency where orgid=?1",nativeQuery =true)
 	List<CurrencyVO> findAll(Long orgid);
 
-	boolean existsByCurrencyAndOrgId(String currency, Long orgId);
-
-	boolean existsBySubCurrencyAndOrgId(String subCurrency, Long orgId);
-
-	boolean existsByCurrencyDescriptionAndOrgId(String currencyDescription, Long orgId);
-
 	@Query(value ="SELECT \r\n"
 			+ "    ROW_NUMBER() OVER () AS id,\r\n"
 			+ "    currency,\r\n"
@@ -32,16 +26,12 @@ public interface CurrencyRepo extends JpaRepository<CurrencyVO, Long> {
 	Set<Object[]> findCurrencyForFullGrid(Long orgId);
 
 
-
 	boolean existsByOrgIdAndCountryAndCurrencyIgnoreCase(Long orgId, String country, String currency);
 
 	boolean existsByOrgIdAndCountryAndCurrencyDescriptionIgnoreCase(Long orgId, String country,
 			String currencyDescription);
 
 	boolean existsByOrgIdAndCountryAndSubCurrencyIgnoreCase(Long orgId, String country, String subCurrency);
-
-
-
 
 
 }
