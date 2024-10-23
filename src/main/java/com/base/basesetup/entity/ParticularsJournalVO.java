@@ -20,7 +20,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "particularsjournal")
+@Table(name = "gjparticulars")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -31,17 +31,17 @@ public class ParticularsJournalVO {
 	@SequenceGenerator(name = "particularsjournalgen", sequenceName = "particularsjournalseq", initialValue = 1000000001, allocationSize = 1)
 	@Column(name = "particularsjournalid")
 	private Long id;
-	@Column(name = "accountsname")
+	@Column(name = "accountsname",length = 50)
 	private String accountsName;
-	@Column(name = "subledgername")
+	@Column(name = "subledgername",length = 25)
 	private String subledgerName;
-	@Column(name = "subledgercode")
-	private BigDecimal subLedgerCode;
-	@Column(name = "debitamount")
+	@Column(name = "subledgercode",length = 25)
+	private String subLedgerCode;
+	@Column(name = "debitamount",precision = 10, scale = 2)
 	private BigDecimal debitAmount;
-	@Column(name = "creditamount")
+	@Column(name = "creditamount",precision = 10, scale = 2)
 	private BigDecimal creditAmount;
-	@Column(name = "narration")
+	@Column(name = "narration",length = 100)
 	private String narration;
 
 	@ManyToOne

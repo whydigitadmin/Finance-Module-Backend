@@ -18,10 +18,12 @@ import com.base.basesetup.dto.ApBillBalanceDTO;
 import com.base.basesetup.dto.PaymentDTO;
 import com.base.basesetup.dto.PaymentInvDtlsDTO;
 import com.base.basesetup.entity.ApBillBalanceVO;
+import com.base.basesetup.entity.DocumentTypeMappingDetailsVO;
 import com.base.basesetup.entity.PaymentInvDtlsVO;
 import com.base.basesetup.entity.PaymentVO;
 import com.base.basesetup.exception.ApplicationException;
 import com.base.basesetup.repo.ApBillBalanceRepo;
+import com.base.basesetup.repo.DocumentTypeMappingDetailsRepo;
 import com.base.basesetup.repo.PartyMasterRepo;
 import com.base.basesetup.repo.PaymentInvDtlsRepo;
 import com.base.basesetup.repo.PaymentRepo;
@@ -42,6 +44,9 @@ public class APServiceImpl implements APService {
 	
 	@Autowired
 	PartyMasterRepo partyMasterRepo;
+	
+	@Autowired
+	DocumentTypeMappingDetailsRepo documentTypeMappingDetailsRepo;
 
 	@Override
 	public List<PaymentVO> getAllPaymentByOrgId(Long orgId) {
@@ -73,7 +78,8 @@ public class APServiceImpl implements APService {
 	public PaymentVO updateCreatePayment(@Valid PaymentDTO paymentDTO) throws ApplicationException {
 		PaymentVO paymentVO = new PaymentVO();
 		boolean isUpdate = false;
-		if (ObjectUtils.isNotEmpty(paymentDTO.getId())) {
+		 String screenCode = "PT";		
+		 if (ObjectUtils.isNotEmpty(paymentDTO.getId())) {
 			isUpdate = true;
 			paymentVO = paymentRepo.findById(paymentDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid Payment details"));
@@ -82,8 +88,23 @@ public class APServiceImpl implements APService {
 		} else {
 			paymentVO.setUpdatedBy(paymentDTO.getCreatedBy());
 			paymentVO.setCreatedBy(paymentDTO.getCreatedBy());
+			
+//			GETDOCID API
+			String docId = paymentRepo.getPaymentDocId(paymentDTO.getOrgId(),
+					paymentDTO.getFinYear(), paymentDTO.getBranchCode(),
+					screenCode);
 
-		}
+			paymentVO.setDocId(docId);
+
+
+//			// GETDOCID LASTNO +1
+			DocumentTypeMappingDetailsVO documentTypeMappingDetailsVO = documentTypeMappingDetailsRepo
+					.findByOrgIdAndFinYearAndBranchCodeAndScreenCode(paymentDTO.getOrgId(),
+							paymentDTO.getFinYear(), paymentDTO.getBranchCode(), screenCode);
+			documentTypeMappingDetailsVO.setLastno(documentTypeMappingDetailsVO.getLastno() + 1);
+			documentTypeMappingDetailsRepo.save(documentTypeMappingDetailsVO);
+	}
+
 
 		if (ObjectUtils.isNotEmpty(paymentDTO.getId())) {
 			List<PaymentInvDtlsVO> paymentInvDtlsVOList = paymentInvDtlsRepo.findByPaymentVO(paymentVO);
@@ -113,14 +134,14 @@ public class APServiceImpl implements APService {
 				paymentInvDtlsVO.setToDate(paymentInvDtlsDTO.getToDate());
 
 				paymentInvDtlsVO.setPaymentVO(paymentVO);
-				;
+				
 				paymentInvDtlsVOs.add(paymentInvDtlsVO);
 
 			}
 		}
 		getPaymentVOFromPaymentDTO(paymentDTO, paymentVO);
 		paymentVO.setPaymentInvDtlsVO(paymentInvDtlsVOs);
-		;
+		
 		return paymentRepo.save(paymentVO);
 	}
 
@@ -156,11 +177,15 @@ public class APServiceImpl implements APService {
 		paymentVO.setCancel(paymentDTO.isCancel());
 		paymentVO.setCancelRemarks(paymentDTO.getCancelRemarks());
 		paymentVO.setFinYear(paymentDTO.getFinYear());
-
-		paymentVO.setIpNo(paymentDTO.getIpNo());
-		paymentVO.setLatitude(paymentDTO.getLatitude());
 		paymentVO.setOrgId(paymentDTO.getOrgId());
 
+	}
+	
+	@Override
+	public String getPaymentDocId(Long orgId, String finYear, String branch, String branchCode) {
+		String ScreenCode = "PT";
+		String result = paymentRepo.getPaymentByDocId(orgId, finYear, branchCode, ScreenCode);
+		return result;
 	}
 
 	// ApBillBalance
