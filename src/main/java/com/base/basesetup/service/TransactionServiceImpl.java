@@ -580,7 +580,14 @@ public class TransactionServiceImpl implements TransactionService {
 		brsOpeningVO.setPaymentAmount(brsOpeningDTO.getPaymentAmount());
 		brsOpeningVO.setReconcile(brsOpeningDTO.isReconcile());
 		brsOpeningVO.setOrgId(brsOpeningDTO.getOrgId());
+		brsOpeningVO.setBranch(brsOpeningDTO.getBranch());
+		brsOpeningVO.setBranchCode(brsOpeningDTO.getBranchCode());
 		brsOpeningVO.setActive(brsOpeningDTO.isActive());
+		brsOpeningVO.setCancel(brsOpeningDTO.isCancel());
+		brsOpeningVO.setCancelRemarks(brsOpeningDTO.getCancelRemarks());
+		brsOpeningVO.setFinYear(brsOpeningDTO.getFinYear());
+		brsOpeningVO.setIpNo(brsOpeningDTO.getIpNo());
+		brsOpeningVO.setLatitude(brsOpeningDTO.getLatitude());
 	}
 
 	@Override
@@ -982,6 +989,7 @@ public class TransactionServiceImpl implements TransactionService {
 	public GeneralJournalVO updateCreateGeneralJournal(@Valid GeneralJournalDTO generalJournalDTO)
 			throws ApplicationException {
 		GeneralJournalVO generalJournalVO = new GeneralJournalVO();
+		String screenCode= "GJ";
 		boolean isUpdate = false;
 		if (ObjectUtils.isNotEmpty(generalJournalDTO.getId())) {
 			isUpdate = true;
@@ -991,7 +999,22 @@ public class TransactionServiceImpl implements TransactionService {
 		} else {
 			generalJournalVO.setUpdatedBy(generalJournalDTO.getCreatedBy());
 			generalJournalVO.setCreatedBy(generalJournalDTO.getCreatedBy());
-		}
+			
+//			GETDOCID API
+			String docId = generalJournalRepo.getGeneralJournalDocId(generalJournalDTO.getOrgId(),
+					generalJournalDTO.getFinYear(), generalJournalDTO.getBranchCode(),
+					screenCode);
+
+			generalJournalVO.setDocId(docId);
+
+
+//			// GETDOCID LASTNO +1
+			DocumentTypeMappingDetailsVO documentTypeMappingDetailsVO = documentTypeMappingDetailsRepo
+					.findByOrgIdAndFinYearAndBranchCodeAndScreenCode(generalJournalDTO.getOrgId(),
+							generalJournalDTO.getFinYear(), generalJournalDTO.getBranchCode(), screenCode);
+			documentTypeMappingDetailsVO.setLastno(documentTypeMappingDetailsVO.getLastno() + 1);
+			documentTypeMappingDetailsRepo.save(documentTypeMappingDetailsVO);
+	}
 
 		List<ParticularsJournalVO> particularsJournalVOs = new ArrayList<>();
 		if (generalJournalDTO.getParticularsJournalDTO() != null) {
@@ -1021,8 +1044,6 @@ public class TransactionServiceImpl implements TransactionService {
 	private void getGeneralJournalVOFromGeneralJournalDTO(@Valid GeneralJournalDTO generalJournalDTO,
 			GeneralJournalVO generalJournalVO) {
 		generalJournalVO.setVoucherSubType(generalJournalDTO.getVoucherSubType());
-		generalJournalVO.setDocDate(generalJournalDTO.getDocDate());
-		generalJournalVO.setDocId(generalJournalDTO.getDocId());
 		generalJournalVO.setRemarks(generalJournalDTO.getRemarks());
 		generalJournalVO.setCurrency(generalJournalDTO.getCurrency());
 		generalJournalVO.setExRate(generalJournalDTO.getExRate());
@@ -1030,6 +1051,10 @@ public class TransactionServiceImpl implements TransactionService {
 		generalJournalVO.setRefNo(generalJournalDTO.getRefNo());
 		generalJournalVO.setRefDate(generalJournalDTO.getRefDate());
 		generalJournalVO.setOrgId(generalJournalDTO.getOrgId());
+		generalJournalVO.setBranch(generalJournalDTO.getBranch());
+		generalJournalVO.setBranchCode(generalJournalDTO.getBranchCode());
+		generalJournalVO.setFinYear(generalJournalDTO.getFinYear());
+
 		generalJournalVO.setActive(generalJournalDTO.isActive());
 		generalJournalVO.setCancel(generalJournalDTO.isCancel());
 		generalJournalVO.setCancelRemarks(generalJournalDTO.getCancelRemarks());
@@ -1041,6 +1066,14 @@ public class TransactionServiceImpl implements TransactionService {
 	public List<GeneralJournalVO> getGeneralJournalByActive() {
 		return generalJournalRepo.findGeneralJournalByActive();
 
+	}
+	
+	
+	@Override
+	public String getGeneralJournalDocId(Long orgId, String finYear, String branch, String branchCode) {
+		String ScreenCode = "GJ";
+		String result = generalJournalRepo.getGeneralJournalByDocId(orgId, finYear, branchCode, ScreenCode);
+		return result;
 	}
 
 	// DebitNote

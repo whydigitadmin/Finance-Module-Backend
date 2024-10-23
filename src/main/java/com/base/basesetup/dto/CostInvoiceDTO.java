@@ -1,9 +1,8 @@
 package com.base.basesetup.dto;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,21 +17,18 @@ public class CostInvoiceDTO {
 	private String mode;
 	private String product;
 	private String purVoucherNo;
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	private LocalDate purVoucherDate;
 	private String costInvoiceNo;
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	private LocalDate costInvoiceDate;
 	private String supplierBillNo;
 	private String suppliertType;
 	private String supplierCode;
 	private int creditDays;
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	private LocalDate dueDate;
 	private String supplierName;
 	private String supplierPlace;
 	private String currency;
-	private float exRate;
+	private BigDecimal exRate;
 	private String supplierGstIn;
 	private String supplierGstInCode;
 	private String remarks;

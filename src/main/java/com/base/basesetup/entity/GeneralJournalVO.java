@@ -39,11 +39,11 @@ public class GeneralJournalVO {
 	@Column(name = "vouchersubtype")
 	private String voucherSubType;
 	@Column(name = "docdate")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	private LocalDate docDate;
 	@Column(name = "docid")
 	private String docId;
-	
+
 	@Column(name = "currency")
 	private String currency;
 	@Column(name = "exrate")
@@ -51,38 +51,60 @@ public class GeneralJournalVO {
 	@Column(name = "refno")
 	private String refNo;
 	@Column(name = "refdate")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	private LocalDate refDate;
-	
-    @Column(name = "screencode", length = 5)
-    private String screenCode= "GJ";
 
-    @Column(name = "screenname", length = 25)
-    private String screenName = "GENERALJOURNAL";
+	@Column(name = "screencode", length = 5)
+	private String screenCode = "GJ";
+
+	@Column(name = "screenname", length = 25)
+	private String screenName = "GENERALJOURNAL";
 
 	@Column(name = "remarks")
 	private String remarks;
-	@Column(name = "orgid")
-	private Long orgId;
-	@Column(name = "active")
-	private boolean active;
-	@Column(name = "cancel")
-	private boolean cancel;
-	@Column(name = "cancelremarks")
-	private String cancelRemarks;
-	@Column(name = "createdby")
-	private String createdBy;
-	@Column(name = "modifiedby")
-	private String updatedBy;
+
 	@Column(name = "totaldebitamount")
 	private BigDecimal totalDebitAmount;
 	@Column(name = "totalcreditamount")
 	private BigDecimal totalCreditAmount;
 
+	@Column(name = "branch", length = 25)
+	private String branch;
+
+	@Column(name = "branchcode", length = 20)
+	private String branchCode;
+
+	@Column(name = "finyear", length = 5)
+	private String finYear;
+
+	@Column(name = "createdby", length = 25)
+	private String createdBy;
+
+	@Column(name = "modifyby", length = 25)
+	private String updatedBy;
+
+	@Column(name = "active")
+	private boolean active;
+
+	@Column(name = "cancel")
+	private boolean cancel;
+
+	@Column(name = "cancelremarks", length = 50)
+	private String cancelRemarks;
+
+	@Column(name = "ipno", length = 15)
+	private String ipNo;
+
+	@Column(name = "latitude", length = 100)
+	private String latitude;
+
+	@Column(name = "orgid")
+	private Long orgId;
+
 	@OneToMany(mappedBy = "generalJournalVO", cascade = CascadeType.ALL)
 	@JsonManagedReference
 	List<ParticularsJournalVO> particularsJournalVO;
-	
+
 	@Embedded
 	@Builder.Default
 	private CreatedUpdatedDate commonDate = new CreatedUpdatedDate();

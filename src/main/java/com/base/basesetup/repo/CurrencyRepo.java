@@ -1,26 +1,37 @@
 package com.base.basesetup.repo;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import com.base.basesetup.entity.CurrencyVO;
+import com.base.basesetup.entity.CurrencyVO; 
 
 public interface CurrencyRepo extends JpaRepository<CurrencyVO, Long> {
 
 
-	@Query("select a from CurrencyVO a where a.orgId=?1")
+	@Query(value="select * FROM currency where orgid=?1",nativeQuery =true)
 	List<CurrencyVO> findAll(Long orgid);
 
-	boolean existsByCurrencyAndOrgId(String currency, Long orgId);
+	@Query(value ="SELECT \r\n"
+			+ "    ROW_NUMBER() OVER () AS id,\r\n"
+			+ "    currency,\r\n"
+			+ "    currencydesc \r\n"
+			+ "FROM \r\n"
+			+ "    currency \r\n"
+			+ "WHERE \r\n"
+			+ "    orgid =?1\r\n"
+			+ "    AND active = 1 group by currency,currencydesc",nativeQuery =true)
+	Set<Object[]> findCurrencyForFullGrid(Long orgId);
 
-	boolean existsByCurrencySymbolAndOrgId(String currencySymbol, Long orgId);
 
-	boolean existsBySubCurrencyAndOrgId(String subCurrency, Long orgId);
+	boolean existsByOrgIdAndCountryAndCurrencyIgnoreCase(Long orgId, String country, String currency);
 
+	boolean existsByOrgIdAndCountryAndCurrencyDescriptionIgnoreCase(Long orgId, String country,
+			String currencyDescription);
 
-
+	boolean existsByOrgIdAndCountryAndSubCurrencyIgnoreCase(Long orgId, String country, String subCurrency);
 
 
 }

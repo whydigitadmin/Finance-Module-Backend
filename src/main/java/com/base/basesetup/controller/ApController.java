@@ -128,7 +128,7 @@ public class ApController extends BaseController {
 
 	// ApBillBalance
 	@GetMapping("/getAllApBillBalanceByOrgId")
-	public ResponseEntity<ResponseDTO> getAllApBillBalanceByOrgId(@RequestParam(required = false) Long orgId) {
+	public ResponseEntity<ResponseDTO> getAllApBillBalanceByOrgId(@RequestParam(required = false) Long orgId,@RequestParam String branch, @RequestParam String branchCode, @RequestParam String finYear) {
 		String methodName = "getAllApBillBalanceByOrgId()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
 		String errorMsg = null;
@@ -136,7 +136,7 @@ public class ApController extends BaseController {
 		ResponseDTO responseDTO = null;
 		List<ApBillBalanceVO> arBillBalanceVO = new ArrayList<>();
 		try {
-			arBillBalanceVO = apService.getAllApBillBalanceByOrgId(orgId);
+			arBillBalanceVO = apService.getAllApBillBalanceByOrgId(orgId, branch, branchCode, finYear);
 		} catch (Exception e) {
 			errorMsg = e.getMessage();
 			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
@@ -298,6 +298,88 @@ public class ApController extends BaseController {
 		} else {
 			responseDTO = createServiceResponseError(responseObjectsMap,
 					"Party name and code information receive failed", errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+	}
+	
+	@GetMapping("/getCurrencyAndTransCurrencyForPayment")
+	public ResponseEntity<ResponseDTO> getCurrencyAndTransCurrencyForPayment(@RequestParam Long orgId,
+			@RequestParam String branch, @RequestParam String branchCode, @RequestParam String finYear,@RequestParam String partyName) {
+		String methodName = "getCurrencyAndTransCurrencyForPayment()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		List<Map<String, Object>> payment = new ArrayList<>();
+		try {
+			payment = apService.getCurrencyAndTransCurrencyForPayment(orgId, branch, branchCode, finYear,partyName);
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+					"Currency information get successfully");
+			responseObjectsMap.put("PaymentVO", payment);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					"Currency information receive failed", errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+	}
+	
+	@GetMapping("/getStateCodeByOrgIdForPayment")
+	public ResponseEntity<ResponseDTO> getStateCodeByOrgIdForPayment(@RequestParam Long orgId) {
+		String methodName = "getStateCodeByOrgIdForPayment()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		List<Map<String, Object>> payment = new ArrayList<>();
+		try {
+			payment = apService.getStateCodeByOrgIdForPayment(orgId);
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+					"StateCode from statemaster information get successfully");
+			responseObjectsMap.put("PaymentVO", payment);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					"StateCode from statemaster information receive failed", errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+	}
+	
+	@GetMapping("/getAccountGroupNameByOrgIdForPayment")
+	public ResponseEntity<ResponseDTO> getAccountGroupNameByOrgIdForPayment(@RequestParam Long orgId) {
+		String methodName = "getAccountGroupNameByOrgIdForPayment()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		List<Map<String, Object>> payment = new ArrayList<>();
+		try {
+			payment = apService.getAccountGroupNameByOrgIdForPayment(orgId);
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+					"AccountGroupName from Group information get successfully");
+			responseObjectsMap.put("PaymentVO", payment);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					"AccountGroupName from Group information receive failed", errorMsg);
 		}
 		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
 		return ResponseEntity.ok().body(responseDTO);

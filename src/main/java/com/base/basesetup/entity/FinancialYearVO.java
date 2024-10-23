@@ -53,9 +53,19 @@ public class FinancialYearVO {
 	private boolean active;
 
 	@JsonGetter("active")
-	public String getActive() {
-		return active ? "Active" : "In-Active";
-	}
+    public String getActive() {
+        return active ? "Active" : "In-Active";  // If 'active' is true, return "Active", otherwise "In-Active"
+    }
+
+    @JsonGetter("closed")
+    public String getClosed() {
+        return closed ? "Yes" : "No";  // If 'cancel' is true, return "Yes", otherwise "No"
+    }
+
+    @JsonGetter("currentFinYear")
+    public String getCurrentFinYear() {
+        return currentFinYear ? "Yes" : "No";  // If 'currentFinYear' is true, return "Yes", otherwise "No"
+    }
 
 	@Embedded
 	private CreatedUpdatedDate commonDate = new CreatedUpdatedDate();

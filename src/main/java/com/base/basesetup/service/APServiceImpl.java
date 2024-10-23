@@ -305,12 +305,65 @@ public class APServiceImpl implements APService {
 
 		return doctypeMappingDetails;
 	}
+	
+	@Override
+	public List<Map<String, Object>> getCurrencyAndTransCurrencyForPayment(Long orgId, String branch, String branchCode,
+			String finYear,String partyName) {
+		Set<Object[]> Currency = paymentRepo.findCurrencyAndTransCurrencyForPayment(orgId, branch, branchCode,
+				finYear,partyName);
+		return getCurrency(Currency);
+	}
 
+	private List<Map<String, Object>> getCurrency(Set<Object[]> customer) {
+		List<Map<String, Object>> currency = new ArrayList<>();
+		for (Object[] sup : customer) {
+			Map<String, Object> currencyname = new HashMap<>();
+			currencyname.put("currency", sup[0] != null ? sup[0].toString() : "");
+			currencyname.put("transactionCurrency", sup[0] != null ? sup[0].toString() : "");
+			currency.add(currencyname);
+		}
+
+		return currency;
+	}
+
+	@Override
+	public List<Map<String, Object>> getStateCodeByOrgIdForPayment(Long orgId) {
+		Set<Object[]> state = paymentRepo.findStateCodeByOrgIdForPayment(orgId);
+		return getStateCode(state);
+	}
+
+	private List<Map<String, Object>> getStateCode(Set<Object[]> customer) {
+		List<Map<String, Object>> state = new ArrayList<>();
+		for (Object[] sup : customer) {
+			Map<String, Object> statecode = new HashMap<>();
+			statecode.put("stateCode", sup[0] != null ? sup[0].toString() : "");
+			state.add(statecode);
+		}
+
+		return state;
+	}
+	
 	@Override
 	public List<ApBillBalanceVO> getAllApBillBalanceByOrgId(Long orgId, String branch, String branchCode,
 			String finYear) {
-		// TODO Auto-generated method stub
-		return null;
+		return apBillBalanceRepo.findAll(orgId,branch,branchCode,finYear);
+	}
+	
+	@Override
+	public List<Map<String, Object>> getAccountGroupNameByOrgIdForPayment(Long orgId) {
+		Set<Object[]> group = paymentRepo.findAccountGroupNameByOrgIdForPayment(orgId);
+		return  getAccountGroupName(group);
+	}
+
+	private List<Map<String, Object>>  getAccountGroupName(Set<Object[]> customer) {
+		List<Map<String, Object>> payment = new ArrayList<>();
+		for (Object[] sup : customer) {
+			Map<String, Object>  accountgroupname = new HashMap<>();
+			accountgroupname.put("TDSAccount", sup[0] != null ? sup[0].toString() : "");
+			payment.add(accountgroupname);
+		}
+
+		return payment;
 	}
 
 }

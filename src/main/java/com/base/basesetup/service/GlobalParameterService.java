@@ -20,8 +20,5 @@ public interface GlobalParameterService {
 
 	Set<Object[]> getGlobalParametersBranchAndBranchCodeByOrgIdAndUserName(Long orgid, String userName);
 
-	Set<Object[]> getAllAccessCustomerForLogin(Long orgid, String userName, String branchcode);
-
-	Set<Object[]> getAllAccessClientForLogin(Long orgid, String userName, String branchcode, String customer);
 
 }

@@ -33,8 +33,8 @@ public class CurrencyVO {
 	private String currency;
 	@Column(name = "subcurrency")
 	private String subCurrency;
-	@Column(name = "currencysymbol")
-	private String currencySymbol;
+	@Column(name = "currencydesc")
+	private String currencyDescription;
 	@Column(name = "orgid")
 	private Long orgId;
 	@Column(name = "active")
@@ -44,7 +44,7 @@ public class CurrencyVO {
 	@Column(name = "modifiedby")
 	private String updatedBy;
 	@Column(name = "cancel")
-	private boolean cancel;
+	private boolean cancel=true;
 
 	@JsonGetter("active")
 	public String getActive() {

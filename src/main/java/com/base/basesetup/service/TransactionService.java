@@ -210,6 +210,10 @@ public interface TransactionService {
 
 	ReconcileBankVO getReconcileBankByDocId(Long orgId, String docId);
 
+
+	String getGeneralJournalDocId(Long orgId, String finYear, String branch, String branchCode);
+
+
 	// ReconcileCorpBank
 	List<ReconcileCorpBankVO> getAllReconcileCorpBankByOrgId(Long orgId);
 
@@ -233,6 +237,7 @@ public interface TransactionService {
 	List<ReconcileCashVO> getAllReconcileCashById(Long id);
 
 	List<ReconcileCashVO> getReconcileCashByActive();
+
 	
 	String getReconcileCashDocId(Long orgId, String finYear, String branch,String branchCode);
 
