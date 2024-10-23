@@ -929,26 +929,7 @@ public class TransactionServiceImpl implements TransactionService {
 	private void getFundTransferVOFromFundTransferDTO(@Valid FundTransferDTO fundTransferDTO,
 			FundTransferVO fundTransferVO) {
 		fundTransferVO.setBranch(fundTransferDTO.getBranch());
-		fundTransferVO.setDocId(fundTransferDTO.getDocId());
-		fundTransferVO.setPaymentType(fundTransferDTO.getPaymentType());
-		fundTransferVO.setDocDate(fundTransferDTO.getDocDate());
-		fundTransferVO.setReferenceNo(fundTransferDTO.getReferenceNo());
-		fundTransferVO.setReferenceDate(fundTransferDTO.getReferenceDate());
-		fundTransferVO.setFromAccount(fundTransferDTO.getFromAccount());
-		fundTransferVO.setBalance(fundTransferDTO.getBalance());
-		fundTransferVO.setCurrency(fundTransferDTO.getCurrency());
-		fundTransferVO.setExRate(fundTransferDTO.getExRate());
-		fundTransferVO.setToBranch(fundTransferDTO.getToBranch());
-		fundTransferVO.setToBank(fundTransferDTO.getToBank());
-		fundTransferVO.setChequeBook(fundTransferDTO.getChequeBook());
-		fundTransferVO.setChequeNo(fundTransferDTO.getChequeNo());
-		fundTransferVO.setChequeDate(fundTransferDTO.getChequeDate());
-		fundTransferVO.setPaymentAmount(fundTransferDTO.getPaymentAmount());
-		fundTransferVO.setConversionRate(fundTransferDTO.getConversionRate());
-		fundTransferVO.setReceiptAmount(fundTransferDTO.getReceiptAmount());
-		fundTransferVO.setGainLoss(fundTransferDTO.getGainLoss());
-		fundTransferVO.setRemarks(fundTransferDTO.getRemarks());
-		fundTransferVO.setActive(fundTransferDTO.isActive());
+		
 		fundTransferVO.setOrgId(fundTransferDTO.getOrgId());
 
 	}
