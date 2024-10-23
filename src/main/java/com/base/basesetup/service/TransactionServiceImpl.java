@@ -1425,14 +1425,6 @@ public class TransactionServiceImpl implements TransactionService {
 	private void getPaymentVoucherVOFromPaymentVoucherDTO(@Valid PaymentVoucherDTO paymentVoucherDTO,
 			PaymentVoucherVO paymentVoucherVO) {
 
-		// // Finyr
-		int finyr = paymentVoucherRepo.findFinyr();
-		// DocId
-		String paymentVoucher = "PV" + finyr + paymentVoucherRepo.findDocId();
-		paymentVoucherVO.setDocId(paymentVoucher);
-		paymentVoucherRepo.nextSeq();
-
-
 		paymentVoucherVO.setVehicleSubType(paymentVoucherDTO.getVehicleSubType());
 		paymentVoucherVO.setReferenceNo(paymentVoucherDTO.getReferenceNo());
 		paymentVoucherVO.setCurrency(paymentVoucherDTO.getCurrency());
@@ -1453,7 +1445,6 @@ public class TransactionServiceImpl implements TransactionService {
 		paymentVoucherVO.setRemarks(paymentVoucherDTO.getRemarks().toUpperCase());
 		paymentVoucherVO.setTotalDebitAmount(paymentVoucherDTO.getTotalDebitAmount());
 		paymentVoucherVO.setTotalCreditAmount(paymentVoucherDTO.getTotalCreditAmount());
-
 		paymentVoucherVO.setRemarks(paymentVoucherDTO.getRemarks());
 
 	}
