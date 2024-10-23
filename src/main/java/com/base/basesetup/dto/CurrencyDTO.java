@@ -19,5 +19,4 @@ public class CurrencyDTO {
 	private Long orgId;
 	private boolean active;
 	private String createdBy;
-	private boolean cancel;
 }
