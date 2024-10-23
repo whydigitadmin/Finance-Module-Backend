@@ -38,11 +38,14 @@ public class GeneralJournalVO {
 	private Long id;
 	@Column(name = "vouchersubtype")
 	private String voucherSubType;
-	@Column(name = "docdate")
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
-	private LocalDate docDate;
-	@Column(name = "docid")
-	private String docId;
+	
+	@Column(name = "docid", length = 50)
+    private String docId;
+
+    @Column(name = "docdate")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+    private LocalDate docDate = LocalDate.now();
+
 
 	@Column(name = "currency")
 	private String currency;

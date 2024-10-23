@@ -243,4 +243,6 @@ public interface TransactionService {
 
 	ReconcileCashVO getReconcileCashByDocId(Long orgId, String docId);
 
+	String getChartCostCenterDocId(Long orgId, String finYear, String branch, String branchCode);
+
 }

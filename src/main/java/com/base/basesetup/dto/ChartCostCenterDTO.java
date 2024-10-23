@@ -14,7 +14,12 @@ public class ChartCostCenterDTO {
 	private Long credit;
 	private Long debit;
 	private Long orgId;
-	private boolean active;
+	private String branch;
+	private String branchCode;
 	private String createdBy;
+	private boolean active;
+	private boolean cancel;
+	private String cancelRemarks;
+	private String finYear;
 
 }
