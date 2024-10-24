@@ -6,6 +6,7 @@ import java.util.Map;
 import org.springframework.stereotype.Service;
 
 import com.base.basesetup.dto.TaxInvoiceDTO;
+import com.base.basesetup.entity.PartyMasterVO;
 import com.base.basesetup.entity.TaxInvoiceVO;
 import com.base.basesetup.exception.ApplicationException;
 
@@ -28,5 +29,9 @@ public interface TaxInvoiceService {
 	List<Map<String, Object>> getChargeCodeByChargeType(Long orgId, String chargeType);
 
 	List<Map<String, Object>> getCurrencyAndExrates(Long orgId);
+
+	List<PartyMasterVO> getAllPartyByPartyType(Long orgId, String partyType);
+
+	List<Map<String, Object>> getPartyStateCodeDetails(Long orgId, Long id);
 
 }

@@ -17,12 +17,14 @@ import org.springframework.stereotype.Service;
 import com.base.basesetup.dto.TaxInvoiceDTO;
 import com.base.basesetup.dto.TaxInvoiceDetailsDTO;
 import com.base.basesetup.entity.DocumentTypeMappingDetailsVO;
+import com.base.basesetup.entity.PartyMasterVO;
 import com.base.basesetup.entity.TaxInvoiceDetailsVO;
 import com.base.basesetup.entity.TaxInvoiceGstVO;
 import com.base.basesetup.entity.TaxInvoiceVO;
 import com.base.basesetup.exception.ApplicationException;
 import com.base.basesetup.repo.ChargeTypeRequestRepo;
 import com.base.basesetup.repo.DocumentTypeMappingDetailsRepo;
+import com.base.basesetup.repo.PartyMasterRepo;
 import com.base.basesetup.repo.TaxInvoiceDetailsRepo;
 import com.base.basesetup.repo.TaxInvoiceGstRepo;
 import com.base.basesetup.repo.TaxInvoiceRepo;
@@ -40,6 +42,9 @@ public class TaxInvoiceServiceImpl implements TaxInvoiceService {
 
 	@Autowired
 	TaxInvoiceGstRepo taxInvoiceGstRepo;
+	
+	@Autowired
+	PartyMasterRepo partyMasterRepo;
 
 	@Autowired
 	DocumentTypeMappingDetailsRepo documentTypeMappingDetailsRepo;
@@ -291,7 +296,8 @@ public class TaxInvoiceServiceImpl implements TaxInvoiceService {
 
 	@Override
 	public List<Map<String, Object>> getChargeCodeByChargeType(Long orgId, String chargeType) {
-		Set<Object[]> chCode = chargeTypeRequestRepo.getActiveChargCodeByOrgIdAndChargeTypeIgnoreCase(orgId, chargeType);
+		Set<Object[]> chCode = chargeTypeRequestRepo.getActiveChargCodeByOrgIdAndChargeTypeIgnoreCase(orgId,
+				chargeType);
 		return getChargeCode(chCode);
 	}
 
@@ -314,7 +320,7 @@ public class TaxInvoiceServiceImpl implements TaxInvoiceService {
 		return List1;
 
 	}
-	
+
 	@Override
 	public List<Map<String, Object>> getCurrencyAndExrates(Long orgId) {
 		Set<Object[]> currency = taxInvoiceRepo.getCurrencyAndExrateDetails(orgId);
@@ -333,8 +339,30 @@ public class TaxInvoiceServiceImpl implements TaxInvoiceService {
 		}
 		return List1;
 	}
-	
-	
-	
 
+	@Override
+	public List<PartyMasterVO> getAllPartyByPartyType(Long orgId, String partyType) {
+		
+		return partyMasterRepo.findByOrgIdAndPartyTypeIgnoreCase(orgId,partyType);
+
+	}
+
+	
+	@Override
+	public List<Map<String, Object>> getPartyStateCodeDetails(Long orgId,Long id) {
+		Set<Object[]> getStateDetails = taxInvoiceRepo.getStateCodeDetails(orgId,id);
+		return getState(getStateDetails);
+	}
+
+	private List<Map<String, Object>> getState(Set<Object[]> getStateDetails) {
+		List<Map<String, Object>> List1 = new ArrayList<>();
+		for (Object[] ch : getStateDetails) {
+			Map<String, Object> map = new HashMap<>();
+			map.put("stateCode", ch[0] != null ? ch[0].toString() : ""); // Empty string if null
+			map.put("recipientGSTIN", ch[1] != null ? ch[1].toString() : "");
+			map.put("stateNo", ch[2] != null ? ch[2].toString() : "");
+			List1.add(map);
+		}
+		return List1;
+	}
 }

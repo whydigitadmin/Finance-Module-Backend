@@ -33,5 +33,9 @@ public interface TaxInvoiceRepo extends JpaRepository<TaxInvoiceVO, Long> {
 	@Query(nativeQuery = true,value="select currency,currencydescripition,buyingexrate,sellingexrate from vw_exrates where orgid=?1")
 	Set<Object[]> getCurrencyAndExrateDetails(Long orgId);
 
+	@Query(nativeQuery = true,value = "select a.statecode,a.gstin,concat(a.stateno,' - ',a.state)stateno from partystate a,partymaster b where a.partymasterid=b.partymasterid and b.orgid=?1 and b.partymasterid=?2\r\n"
+			+ "group by a.statecode,a.gstin,concat(a.stateno,' - ',a.state)")
+	Set<Object[]> getStateCodeDetails(Long orgId, Long id);
+
 
 }
