@@ -343,8 +343,8 @@ public class APServiceImpl implements APService {
 		List<Map<String, Object>> currency = new ArrayList<>();
 		for (Object[] sup : customer) {
 			Map<String, Object> currencyname = new HashMap<>();
-			currencyname.put("currency", sup[0] != null ? sup[0].toString() : "");
-			currencyname.put("transactionCurrency", sup[0] != null ? sup[0].toString() : "");
+			currencyname.put("inCurrency", sup[0] != null ? sup[0].toString() : "");
+//			currencyname.put("transactionCurrency", sup[0] != null ? sup[0].toString() : "");
 			currency.add(currencyname);
 		}
 
