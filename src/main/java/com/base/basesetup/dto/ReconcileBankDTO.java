@@ -1,5 +1,4 @@
 package com.base.basesetup.dto;
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -22,10 +21,6 @@ public class ReconcileBankDTO {
 	private String branchCode;
 	private String createdBy;
 	private String finYear;
-
-	
-	private BigDecimal totalWithdrawal;
-	private BigDecimal totalDeposit;
 	private String remarks;
 	
 	List<ParticularsReconcileDTO> particularsReconcileDTO;
