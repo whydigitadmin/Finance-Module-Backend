@@ -79,6 +79,8 @@ public class FundTransferVO {
 	private String branchAcc;
 	@Column(name = "narration",length =150)
 	private String narration;
+	@Column(name = "amtbase",precision =10,scale =2)
+	private BigDecimal amtBase;
  
 	
 

@@ -30,7 +30,7 @@ public class CostDebitNoteTaxPrtculVO {
 	@Column(name = "costdebitnotetaxprtculid")
 	private Long id;
 	
-	@Column(name = "tds", length = 10)
+	@Column(name = "tds", length = 25)
 	private String tds;
 
 	@Column(name = "tdspercentage", precision = 10, scale = 2)

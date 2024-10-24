@@ -243,7 +243,7 @@ public class CostDebitNoteServiceImpl implements CostDebitNoteService {
 
 		return costDebitNoteRepo.getByCostDebitNoteByOrgId(orgId);
 	}
-
+ 
 	@Override
 	public List<CostDebitNoteVO> getCostDebitNoteById(Long id) {
 		return costDebitNoteRepo.getByCostDebitNoteById(id);
@@ -266,45 +266,75 @@ public class CostDebitNoteServiceImpl implements CostDebitNoteService {
 		return result;
 	}
 
-	@Override
-	public List<Map<String, Object>> partyDetailsForCostDebitNote(Long orgId, String branch,String finYear) {
-		Set<Object[]> getPartyMasterDetails = costDebitNoteRepo.getParty(orgId, branch,finYear);
-		return getStockLow(getPartyMasterDetails);
-	}
+	
 
-	private List<Map<String, Object>> getStockLow(Set<Object[]> getPartyMaster) {
-		List<Map<String, Object>> gridDetails = new ArrayList<>();
-		for (Object[] grid : getPartyMaster) {
-			Map<String, Object> details = new HashMap<>();
-			details.put("partyName", grid[0] != null ? grid[0].toString() : "");
-			details.put("partyCode", grid[1] != null ? grid[1].toString() : "");
-			details.put("partyType", grid[2] != null ? grid[2].toString() : "");
-			details.put("addressType", grid[3] != null ? grid[3].toString() : "");
-			
-		}
-		return gridDetails;
-	}
 
 	@Override
 	public List<Map<String, Object>> chargeTypeDetailsForCostDebitNote(Long orgId) {
-		Set<Object[]> getChargeTypeDetails = costDebitNoteRepo.getChareDetails(orgId);
-		return getStockLow(getChargeTypeDetails);
+	    Set<Object[]> getChargeTypeDetails = costDebitNoteRepo.getChareDetails(orgId);
+	    return getChargeType(getChargeTypeDetails);  // Call the correct method
 	}
 
 	private List<Map<String, Object>> getChargeType(Set<Object[]> getCharge) {
-		List<Map<String, Object>> gridDetails = new ArrayList<>();
-		for (Object[] grid : getCharge) {
-			Map<String, Object> details = new HashMap<>();
-			details.put("chargeType", grid[0] != null ? grid[0].toString() : "");
-			details.put("chargeCode", grid[1] != null ? grid[1].toString() : "");
-			details.put("cSac", grid[2] != null ? grid[2].toString() : ""); 
-			details.put("cChargeCode", grid[3] != null ? grid[3].toString() : "");
-			
-			
-			gridDetails.add(details);
-		}
-		return gridDetails;
+	    List<Map<String, Object>> gridDetails = new ArrayList<>();
+	    for (Object[] grid : getCharge) {
+	        Map<String, Object> details = new HashMap<>();
+	        details.put("chargeType", grid[0] != null ? grid[0].toString() : "");
+	        details.put("chargeCode", grid[1] != null ? grid[1].toString() : "");
+	        details.put("govtSac", grid[2] != null ? grid[2].toString() : "");
+	        details.put("serviceAccountCode", grid[3] != null ? grid[3].toString() : "");  // Updated to match "serviceAccountCode"
+	        
+	        gridDetails.add(details);
+	    }
+	    return gridDetails;
 	}
 
+	@Override
+	public List<Map<String, Object>> partyDetailsForCostDebitNote(Long orgId, String branch, String finYear) {
+	    // Fetch party details from the repository
+	    Set<Object[]> getPartyTypeDetails = costDebitNoteRepo.getParty(orgId, branch, finYear);
+	    // Return processed party details
+	    return getPartyDetails(getPartyTypeDetails);
+	}
+
+	private List<Map<String, Object>> getPartyDetails(Set<Object[]> getPartyInformation) {
+	    List<Map<String, Object>> gridDetails = new ArrayList<>();
+	    // Iterate through the result set
+	    for (Object[] grid : getPartyInformation) {
+	       
+	            Map<String, Object> details = new HashMap<>();
+	            details.put("partyName", grid[0] != null ? grid[0].toString() : "");
+	            details.put("partyCode", grid[1] != null ? grid[1].toString() : "");
+	            details.put("partyType", grid[2] != null ? grid[2].toString() : "");
+	            details.put("addressType", grid[3] != null ? grid[3].toString() : "");
+
+	            gridDetails.add(details);
+	       
+	    }
+	    return gridDetails;  // Return the list of party details
+	}
+
+	@Override
+	public List<Map<String, Object>> getAllDocIdForCostInvoice(Long orgId) {
+		  Set<Object[]> getAllDocId = costDebitNoteRepo.getDocIdForCI(orgId);
+		    // Return processed party details
+		    return getAllCIDocId(getAllDocId);
+		}
+
+		private List<Map<String, Object>> getAllCIDocId(Set<Object[]> getDocIdInformation) {
+		    List<Map<String, Object>> gridDetails = new ArrayList<>();
+		    // Iterate through the result set
+		    for (Object[] grid : getDocIdInformation) {
+		       
+		            Map<String, Object> details = new HashMap<>();
+		            details.put("docId", grid[0] != null ? grid[0].toString() : "");
+		            gridDetails.add(details);
+		       
+		    }
+		    return gridDetails;  // Return the list of party details
+		}
+
+
+	
 
 }

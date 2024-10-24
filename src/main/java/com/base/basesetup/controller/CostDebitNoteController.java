@@ -258,4 +258,30 @@ public class CostDebitNoteController extends BaseController {
 		return ResponseEntity.ok().body(responseDTO);
 	}
 	
+	@GetMapping("/getAllDocIdForCostInvoice")
+	public ResponseEntity<ResponseDTO> getAllDocIdForCostInvoice(@RequestParam Long orgId) {
+		String methodName = "getAllDocIdForCostInvoice()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		List<Map<String, Object>> docId = new ArrayList<>();
+		try {
+			docId = costDebitNoteService.getAllDocIdForCostInvoice(orgId);
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "All DocId For CostInvoice information get successfully");
+			responseObjectsMap.put("costInvoiceDocId", docId);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap, "All DocId For CostInvoice Details information receive failed",
+					errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+	}
+	
 }

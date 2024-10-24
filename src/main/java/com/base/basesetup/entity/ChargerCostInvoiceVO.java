@@ -51,7 +51,7 @@ public class ChargerCostInvoiceVO {
 	private String currency;
 	@Column(name = "exrate",precision =10,scale =2)
 	private BigDecimal exRate;
-	@Column(name = "gst",length =25)
+	@Column(name = "gst",length =45)
 	private String gst;
 	@Column(name = "fcamt",precision =10,scale =2)
 	private BigDecimal fcAmt;

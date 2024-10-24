@@ -28,7 +28,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@Builder  
 public class CostInvoiceVO {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "costinvoicegen")

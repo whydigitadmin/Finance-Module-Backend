@@ -634,6 +634,7 @@ public class TransactionController extends BaseController {
 		return ResponseEntity.ok().body(responseDTO);
 	}
 
+
 	@PutMapping("/updateCreateFundTransfer")
 	public ResponseEntity<ResponseDTO> updateCreateFundTransfer(@Valid @RequestBody FundTransferDTO fundTransferDTO) {
 		String methodName = "updateCreateFundTransfer()";
@@ -643,37 +644,25 @@ public class TransactionController extends BaseController {
 		ResponseDTO responseDTO = null;
 
 		try {
-			FundTransferVO fundTransferVO = transactionService.updateCreateFundTransfer(fundTransferDTO);
-			boolean isUpdate = fundTransferDTO.getId() != null;
-
-			if (fundTransferVO != null) {
-				responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
-						isUpdate ? "FundTransfer updated successfully" : "FundTransfer created successfully");
-				responseObjectsMap.put("fundTransferVO", fundTransferVO);
-				responseDTO = createServiceResponse(responseObjectsMap);
-			} else {
-				errorMsg = isUpdate ? "FundTransfer not found for ID: " + fundTransferDTO.getId()
-						: "FundTransfer creation failed";
-				responseDTO = createServiceResponseError(responseObjectsMap,
-						isUpdate ? "FundTransfer update failed" : "FundTransfer creation failed", errorMsg);
-			}
-		} catch (Exception e) {
-			errorMsg = e.getMessage();
-			boolean isUpdate = fundTransferDTO.getId() != null;
-			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
-			responseDTO = createServiceResponseError(responseObjectsMap,
-					isUpdate ? "FundTransfer update failed" : "FundTransfer creation failed", errorMsg);
-		}
-
-		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
-		return ResponseEntity.ok().body(responseDTO);
+	        Map<String, Object> fundTransferVO = transactionService.updateCreateFundTransfer(fundTransferDTO);
+	        responseObjectsMap.put(CommonConstant.STRING_MESSAGE, fundTransferVO.get("message"));
+	        responseObjectsMap.put("fundTransferVO", fundTransferVO.get("fundTransferVO")); // Corrected key
+	        responseDTO = createServiceResponse(responseObjectsMap);
+	    } catch (Exception e) {
+	        errorMsg = e.getMessage();
+	        LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+	        responseDTO = createServiceResponseError(responseObjectsMap, errorMsg, errorMsg);
+	    }
+	    LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+	    return ResponseEntity.ok().body(responseDTO);
 	}
 
+	
 	@GetMapping("/getFundTransferByActive")
 	public ResponseEntity<ResponseDTO> getFundTransferByActive() {
 		String methodName = "getFundTransferByActive()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
-		String errorMsg = null;
+		String errorMsg = null; 
 		Map<String, Object> responseObjectsMap = new HashMap<>();
 		ResponseDTO responseDTO = null;
 		List<FundTransferVO> fundTransferVO = new ArrayList<>();
@@ -696,6 +685,66 @@ public class TransactionController extends BaseController {
 		return ResponseEntity.ok().body(responseDTO);
 	}
 
+	@GetMapping("/getFundTranferByDocId")
+	public ResponseEntity<ResponseDTO> getFundTranferByDocId(@RequestParam Long orgId, @RequestParam String docId) {
+		String methodName = "getFundTranferByDocId()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		FundTransferVO fundTransferVO = new FundTransferVO();
+		try {
+			fundTransferVO = transactionService.getFundTranferByDocId(orgId, docId);
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "Fund Tranfer Docid information get successfully");
+			responseObjectsMap.put("fundTransferVO", fundTransferVO);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					"Fund Tranfer Docid information receive failed By docid", errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+
+	}
+	
+	@GetMapping("/getFundTranferDocId")
+	public ResponseEntity<ResponseDTO> getFundTranferDocId(@RequestParam Long orgId, @RequestParam String finYear,
+			@RequestParam String branch, @RequestParam String branchCode) {
+
+		String methodName = "getFundTranferDocId()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		String mapp = "";
+
+		try {
+			mapp = transactionService.getFundTranferDocId(orgId, finYear, branch, branchCode);
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "Fund Tranfer Docid information retrieved successfully");
+			responseObjectsMap.put("fundTransferDocId", mapp);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					"Failed to retrieve Fund Tranfer Docid information", errorMsg);
+		}
+
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+	}
+
+	
+	
 //	GeneralJournal
 	@GetMapping("/getAllGeneralJournalByOrgId")
 	public ResponseEntity<ResponseDTO> getAllGeneralJournalByOrgId(@RequestParam(required = false) Long orgId) {
@@ -2116,5 +2165,6 @@ public class TransactionController extends BaseController {
 		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
 		return ResponseEntity.ok().body(responseDTO);
 	}
+	
 	
 }
