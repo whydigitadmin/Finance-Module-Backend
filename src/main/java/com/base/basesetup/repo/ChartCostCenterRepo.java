@@ -18,4 +18,10 @@ public interface ChartCostCenterRepo extends JpaRepository<ChartCostCenterVO, Lo
 	@Query(nativeQuery = true, value = "select * from chartcostcenter where active=1")
 	List<ChartCostCenterVO> findChartCostCenterByActive();
 
+	@Query(nativeQuery = true,value="select concat(prefixfield,lpad(lastno,5,0)) AS docid from documenttypemappingdetails where orgid=?1 and finyear=?2 and branchcode=?3 and screencode=?4")
+	String getPartyMasterDocId(Long orgId, String finYear, String branchCode, String screenCode);
+
+	@Query(nativeQuery = true,value="select concat(prefixfield,lpad(lastno,5,0)) AS docid from documenttypemappingdetails where orgid=?1 and finyear=?2 and branchcode=?3 and screencode=?4")
+	String getChartCostCenterDocId(Long orgId, String finYear, String branchCode, String screenCode);
+
 }

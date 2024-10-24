@@ -52,7 +52,7 @@ public class PaymentVO {
 
     @Column(name = "docdate")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
-    private LocalDate docDate;
+    private LocalDate docDate = LocalDate.now();
 
     @Column(name = "bankcharges", precision = 10, scale = 2)
     private BigDecimal bankCharges;
@@ -144,12 +144,6 @@ public class PaymentVO {
 
     @Column(name = "screenname", length = 25)
     private String screenName = "PAYMENT";
-
-    @Column(name = "ipno", length = 15)
-    private String ipNo;
-
-    @Column(name = "latitude", length = 100)
-    private String latitude;
 	
 	@OneToMany(mappedBy = "paymentVO", cascade = CascadeType.ALL)
 	@JsonManagedReference

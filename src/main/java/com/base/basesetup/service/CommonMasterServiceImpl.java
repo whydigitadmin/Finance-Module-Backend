@@ -289,46 +289,33 @@ public class CommonMasterServiceImpl implements CommonMasterService {
 
 	// FinScreen-----------------------------------------------------------------------------------
 	@Override
-	public List<FinScreenVO> getFinScreenById(Long id) {
-		List<FinScreenVO> finScreenVO = new ArrayList<>();
+	public List<ScreenNamesVO> getFinScreenById(Long id) {
+		List<ScreenNamesVO> finScreenVO = new ArrayList<>();
 		if (ObjectUtils.isNotEmpty(id)) {
 			LOGGER.info("Successfully Received FinScreen BY Id : {}", id);
-			finScreenVO = finScreenRepo.findFinScreenById(id);
+			finScreenVO = screenNamesRepo.findFinScreenById(id);
 		} else {
 			LOGGER.info("Successfully Received FinScreen For All Id.");
-			finScreenVO = finScreenRepo.findAll();
+			finScreenVO = screenNamesRepo.findAll();
 		}
 		return finScreenVO;
 	}
 
 	@Override
-	public List<FinScreenVO> getFinScreenByOrgId(Long orgId) {
-		List<FinScreenVO> finScreenVO = new ArrayList<>();
-		if (ObjectUtils.isNotEmpty(orgId)) {
-			LOGGER.info("Successfully Received FinScreen BY OrgId : {}", orgId);
-			finScreenVO = finScreenRepo.findFinScreenByOrgId(orgId);
-		} else {
-			LOGGER.info("Successfully Received FinScreen For All OrgId.");
-			finScreenVO = finScreenRepo.findAll();
-		}
-		return finScreenVO;
-	}
-
-	@Override
-	public FinScreenVO updateCreateFinScreen(@Valid FinScreenDTO finScreenDTO) throws ApplicationException {
-		FinScreenVO finScreenVO = new FinScreenVO();
+	public ScreenNamesVO updateCreateFinScreen(@Valid FinScreenDTO finScreenDTO) throws ApplicationException {
+		ScreenNamesVO finScreenVO = new ScreenNamesVO();
 		boolean isUpdate = false;
 		if (ObjectUtils.isNotEmpty(finScreenDTO.getId())) {
 			isUpdate = true;
-			finScreenVO = finScreenRepo.findById(finScreenDTO.getId())
+			finScreenVO = screenNamesRepo.findById(finScreenDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid FinScreen Details"));
 			finScreenVO.setUpdatedBy(finScreenDTO.getCreatedBy());
 
 		} else {
-			if (finScreenRepo.existsByScreenName(finScreenDTO.getScreenName())) {
+			if (screenNamesRepo.existsByScreenName(finScreenDTO.getScreenName())) {
 				throw new ApplicationException("The given Screen name already exists.");
 			}
-			if (finScreenRepo.existsByScreenCode(finScreenDTO.getScreenCode())) {
+			if (screenNamesRepo.existsByScreenCode(finScreenDTO.getScreenCode())) {
 				throw new ApplicationException("The given Screen code already exists.");
 			}
 			finScreenVO.setUpdatedBy(finScreenDTO.getCreatedBy());
@@ -337,23 +324,23 @@ public class CommonMasterServiceImpl implements CommonMasterService {
 
 		// update check
 		if (isUpdate) {
-			FinScreenVO finScreen = finScreenRepo.findById(finScreenDTO.getId()).orElse(null);
+			ScreenNamesVO finScreen = screenNamesRepo.findById(finScreenDTO.getId()).orElse(null);
 			if (!finScreen.getScreenName().equalsIgnoreCase(finScreenDTO.getScreenName())) {
-				if (finScreenRepo.existsByScreenName(finScreenDTO.getScreenName())) {
+				if (screenNamesRepo.existsByScreenName(finScreenDTO.getScreenName())) {
 					throw new ApplicationException("The given Screen name already exists.");
 				}
 			}
 			if (!finScreen.getScreenCode().equals(finScreenDTO.getScreenCode())) {
-				if (finScreenRepo.existsByScreenCode(finScreenDTO.getScreenCode())) {
+				if (screenNamesRepo.existsByScreenCode(finScreenDTO.getScreenCode())) {
 					throw new ApplicationException("The given Screen code already exists");
 				}
 			}
 		}
 		getFinScreenVOFromFinScreenDTO(finScreenDTO, finScreenVO);
-		return finScreenRepo.save(finScreenVO);
+		return screenNamesRepo.save(finScreenVO);
 	}
 
-	private void getFinScreenVOFromFinScreenDTO(@Valid FinScreenDTO finScreenDTO, FinScreenVO finScreenVO)
+	private void getFinScreenVOFromFinScreenDTO(@Valid FinScreenDTO finScreenDTO, ScreenNamesVO finScreenVO)
 			throws ApplicationException {
 
 		finScreenVO.setActive(finScreenDTO.isActive());
@@ -362,8 +349,8 @@ public class CommonMasterServiceImpl implements CommonMasterService {
 	}
 
 	@Override
-	public List<Map<String, Object>> getAllScreenCode() {
-		Set<Object[]> getFinScreen = finScreenRepo.findAllScreenCode();
+	public List<Map<String, Object>> getAllScreenCode(Long orgId) {
+		Set<Object[]> getFinScreen = finScreenRepo.findAllScreenCode(orgId);
 		return getScreen(getFinScreen);
 	}
 

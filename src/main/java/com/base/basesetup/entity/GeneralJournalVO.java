@@ -36,19 +36,22 @@ public class GeneralJournalVO {
 	@SequenceGenerator(name = "generaljournalgen", sequenceName = "generaljournalseq", initialValue = 1000000001, allocationSize = 1)
 	@Column(name = "generaljournalid")
 	private Long id;
-	@Column(name = "vouchersubtype")
+	@Column(name = "vouchersubtype", length = 25)
 	private String voucherSubType;
-	@Column(name = "docdate")
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
-	private LocalDate docDate;
-	@Column(name = "docid")
-	private String docId;
+	
+	@Column(name = "docid", length = 50)
+    private String docId;
 
-	@Column(name = "currency")
+    @Column(name = "docdate")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+    private LocalDate docDate = LocalDate.now();
+
+
+	@Column(name = "currency", length = 10)
 	private String currency;
-	@Column(name = "exrate")
-	private String exRate;
-	@Column(name = "refno")
+	@Column(name = "exrate",precision = 10, scale = 2)
+	private BigDecimal exRate;
+	@Column(name = "refno", length = 50)
 	private String refNo;
 	@Column(name = "refdate")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
@@ -60,12 +63,12 @@ public class GeneralJournalVO {
 	@Column(name = "screenname", length = 25)
 	private String screenName = "GENERALJOURNAL";
 
-	@Column(name = "remarks")
+	@Column(name = "remarks", length = 150)
 	private String remarks;
 
-	@Column(name = "totaldebitamount")
+	@Column(name = "totaldebitamount",precision = 10, scale = 2)
 	private BigDecimal totalDebitAmount;
-	@Column(name = "totalcreditamount")
+	@Column(name = "totalcreditamount",precision = 10, scale = 2)
 	private BigDecimal totalCreditAmount;
 
 	@Column(name = "branch", length = 25)
@@ -91,12 +94,6 @@ public class GeneralJournalVO {
 
 	@Column(name = "cancelremarks", length = 50)
 	private String cancelRemarks;
-
-	@Column(name = "ipno", length = 15)
-	private String ipNo;
-
-	@Column(name = "latitude", length = 100)
-	private String latitude;
 
 	@Column(name = "orgid")
 	private Long orgId;

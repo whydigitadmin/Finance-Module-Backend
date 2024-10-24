@@ -837,6 +837,8 @@ public class TransactionServiceImpl implements TransactionService {
 		for (ChartCostCenterDTO chartCostCenterDTO : chartCostCenterDTOList) {
 			ChartCostCenterVO chartCostCenterVO = new ChartCostCenterVO();
 			boolean isUpdate = false;
+		    String screenCode = "CCC";
+
 
 			// Check if the DTO contains an ID for update operation
 			if (ObjectUtils.isNotEmpty(chartCostCenterDTO.getId())) {
@@ -851,6 +853,22 @@ public class TransactionServiceImpl implements TransactionService {
 				chartCostCenterVO = new ChartCostCenterVO();
 				chartCostCenterVO.setCreatedBy(chartCostCenterDTO.getCreatedBy());
 				chartCostCenterVO.setUpdatedBy(chartCostCenterDTO.getCreatedBy());
+				
+//				GETDOCID API
+				String docId = chartCostCenterRepo.getPartyMasterDocId(chartCostCenterDTO.getOrgId(),
+						chartCostCenterDTO.getFinYear(), chartCostCenterDTO.getBranchCode(),
+						screenCode);
+
+				chartCostCenterVO.setDocId(docId);
+
+
+//				// GETDOCID LASTNO +1
+				DocumentTypeMappingDetailsVO documentTypeMappingDetailsVO = documentTypeMappingDetailsRepo
+						.findByOrgIdAndFinYearAndBranchCodeAndScreenCode(chartCostCenterDTO.getOrgId(),
+								chartCostCenterDTO.getFinYear(), chartCostCenterDTO.getBranchCode(), screenCode);
+				documentTypeMappingDetailsVO.setLastno(documentTypeMappingDetailsVO.getLastno() + 1);
+				documentTypeMappingDetailsRepo.save(documentTypeMappingDetailsVO);
+
 			}
 
 			// Map fields from DTO to VO
@@ -872,6 +890,13 @@ public class TransactionServiceImpl implements TransactionService {
 		chartCostCenterVO.setDebit(chartCostCenterDTO.getDebit());
 		chartCostCenterVO.setOrgId(chartCostCenterDTO.getOrgId());
 		chartCostCenterVO.setActive(chartCostCenterDTO.isActive());
+		chartCostCenterVO.setCancel(chartCostCenterDTO.isCancel());
+		chartCostCenterVO.setCancelRemarks(chartCostCenterDTO.getCancelRemarks());
+		chartCostCenterVO.setBranch(chartCostCenterDTO.getBranch());
+		chartCostCenterVO.setBranchCode(chartCostCenterDTO.getBranchCode());
+		chartCostCenterVO.setFinYear(chartCostCenterDTO.getFinYear());
+
+
 	}
 
 	@Override
@@ -879,6 +904,13 @@ public class TransactionServiceImpl implements TransactionService {
 		return chartCostCenterRepo.findChartCostCenterByActive();
 	}
 
+	@Override
+	public String getChartCostCenterDocId(Long orgId, String finYear, String branch, String branchCode) {
+		String ScreenCode = "CCC";
+		String result = chartCostCenterRepo.getChartCostCenterDocId(orgId, finYear, branchCode, ScreenCode);
+		return result;
+	}
+	
 	// FundTransfer
 
 	@Override
@@ -2256,7 +2288,7 @@ public class TransactionServiceImpl implements TransactionService {
 	}
 
 	@Override
-	public String getReconcileCorpBankDocId(Long orgId, String finYear, String branchCode, String screenCode) {
+	public String getReconcileCorpBankDocId(Long orgId, String finYear, String branch, String branchCode) {
 		String ScreenCode = "RC";
 		String result = reconcileCorpBankRepo.getReconcileCorpBankDocId(orgId, finYear, branchCode, ScreenCode);
 		return result;
