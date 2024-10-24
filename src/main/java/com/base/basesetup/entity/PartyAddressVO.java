@@ -35,10 +35,10 @@ public class PartyAddressVO {
 	@Column(name = "state", length = 25)
     private String state;
 
-    @Column(name = "businessplace", length = 20) // Corrected from bussPlace
+    @Column(name = "businessplace", length = 20) 
     private String businessPlace;
 
-    @Column(name = "stategstin", length = 15) // Corrected from stateGSTIN
+    @Column(name = "stategstin", length = 15) 
     private String stateGstIn;
 
     @Column(name = "city", length = 30)
