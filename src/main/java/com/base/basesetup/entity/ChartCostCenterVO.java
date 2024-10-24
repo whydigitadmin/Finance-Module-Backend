@@ -36,7 +36,6 @@ public class ChartCostCenterVO {
     private String docId;
 
     @Column(name = "docdate")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     private LocalDate docDate = LocalDate.now();
 
 	

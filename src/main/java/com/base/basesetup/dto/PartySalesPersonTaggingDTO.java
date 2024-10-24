@@ -21,10 +21,8 @@ public class PartySalesPersonTaggingDTO {
 
 	private String salesBranch;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	private LocalDate effectiveFrom;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	private LocalDate effectiveTill;
 }
 

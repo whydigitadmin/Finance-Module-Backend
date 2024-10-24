@@ -51,7 +51,6 @@ public class PaymentVO {
     private String docId;
 
     @Column(name = "docdate")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     private LocalDate docDate = LocalDate.now();
 
     @Column(name = "bankcharges", precision = 10, scale = 2)
@@ -88,7 +87,6 @@ public class PaymentVO {
     private String chequeNo;
 
     @Column(name = "chequedate")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     private LocalDate chequeDate;
 
     @Column(name = "bankcashacc", length = 50)

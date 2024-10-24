@@ -23,7 +23,6 @@ public class GeneralJournalDTO {
 	private String currency;
 	private BigDecimal exRate;
 	private String refNo;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	private LocalDate refDate;
 
 	private String remarks;

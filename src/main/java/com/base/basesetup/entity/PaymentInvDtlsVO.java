@@ -41,21 +41,18 @@ public class PaymentInvDtlsVO {
 	private String invNo;
 
 	@Column(name = "invdate")
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	private LocalDate invDate;
 
 	@Column(name = "refno", length = 30)
 	private String refNo;
 
 	@Column(name = "refdate")
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	private LocalDate refDate;
 
 	@Column(name = "supplierrefno", length = 30)
 	private String supplierRefNo;
 
 	@Column(name = "supplierrefdate")
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	private LocalDate supplierRefDate;
 
 	@Column(name = "currency", length = 5)
@@ -89,11 +86,9 @@ public class PaymentInvDtlsVO {
 	private String remarks;
 
 	@Column(name = "fromdate")
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	private LocalDate fromDate;
 
 	@Column(name = "todate")
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	private LocalDate toDate;
 
 	@ManyToOne

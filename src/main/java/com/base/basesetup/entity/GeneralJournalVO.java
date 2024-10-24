@@ -43,7 +43,6 @@ public class GeneralJournalVO {
     private String docId;
 
     @Column(name = "docdate")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     private LocalDate docDate = LocalDate.now();
 
 
@@ -54,7 +53,6 @@ public class GeneralJournalVO {
 	@Column(name = "refno", length = 50)
 	private String refNo;
 	@Column(name = "refdate")
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	private LocalDate refDate;
 
 	@Column(name = "screencode", length = 5)
