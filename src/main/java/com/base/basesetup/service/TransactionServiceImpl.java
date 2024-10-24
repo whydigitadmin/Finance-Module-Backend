@@ -512,7 +512,14 @@ public class TransactionServiceImpl implements TransactionService {
 	private void getDailyMonthlyExRatesVOFromDailyMonthlyExRatesDTO(
 			@Valid DailyMonthlyExRatesDTO dailyMonthlyExRatesDTO, DailyMonthlyExRatesVO dailyMonthlyExRatesVO) {
 		dailyMonthlyExRatesVO.setDate(dailyMonthlyExRatesDTO.getDate());
-		dailyMonthlyExRatesVO.setMonth(dailyMonthlyExRatesDTO.getMonth());
+		LocalDate date = LocalDate.parse(dailyMonthlyExRatesDTO.getMonth());
+
+	    // Define a formatter to convert to "MMMM yyyy" format (e.g., March 2024)
+	    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM yyyy");
+
+	    // Format the date and set it to the VO
+	    String formattedDate = date.format(formatter);
+	    dailyMonthlyExRatesVO.setMonth(formattedDate);
 		dailyMonthlyExRatesVO.setActive(dailyMonthlyExRatesDTO.isActive());
 		dailyMonthlyExRatesVO.setOrgId(dailyMonthlyExRatesDTO.getOrgId());
 	}

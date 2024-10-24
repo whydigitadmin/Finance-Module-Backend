@@ -23,4 +23,10 @@ public interface TaxInvoiceService {
 
 	String getTaxInvoiceDocId(Long orgId, String finYear, String branch, String branchCode);
 
+	List<Map<String, Object>> getChargeType(Long orgId);
+
+	List<Map<String, Object>> getChargeCodeByChargeType(Long orgId, String chargeType);
+
+	List<Map<String, Object>> getCurrencyAndExrates(Long orgId);
+
 }
