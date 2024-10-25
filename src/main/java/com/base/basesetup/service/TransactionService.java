@@ -129,11 +129,15 @@ public interface TransactionService {
 // PaymentVoucher
 	List<PaymentVoucherVO> getAllPaymentVoucherByOrgId(Long orgId);
 
-	PaymentVoucherVO updateCreatePaymentVoucher(@Valid PaymentVoucherDTO paymentVoucherDTO) throws ApplicationException;
+	Map<String, Object> updateCreatePaymentVoucher(@Valid PaymentVoucherDTO paymentVoucherDTO) throws ApplicationException;
 
 	List<PaymentVoucherVO> getAllPaymentVoucherById(Long id);
 
 	List<PaymentVoucherVO> getPaymentVoucherByActive();
+	
+	PaymentVoucherVO getpaymentVoucherByDocId(Long orgId, String docId);
+
+	String getpaymentVoucherDocId(Long orgId, String finYear, String branch, String branchCode);
 
 //	ReceiptReversal
 	List<ReceiptReversalVO> getAllReceiptReversalByOrgId(Long orgId);
@@ -238,5 +242,7 @@ public interface TransactionService {
 	ReconcileCashVO getReconcileCashByDocId(Long orgId, String docId);
 
 	String getChartCostCenterDocId(Long orgId, String finYear, String branch, String branchCode);
+
+	
 
 }

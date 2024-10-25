@@ -43,9 +43,6 @@ import com.base.basesetup.dto.GeneralJournalDTO;
 import com.base.basesetup.dto.GlOpeningBalanceDTO;
 import com.base.basesetup.dto.GstDebitNoteDTO;
 import com.base.basesetup.dto.GstSalesVoucherDTO;
-import com.base.basesetup.dto.IrnCreditChargesDTO;
-import com.base.basesetup.dto.IrnCreditDTO;
-import com.base.basesetup.dto.IrnCreditGstDTO;
 import com.base.basesetup.dto.ParticularsDebitNoteDTO;
 import com.base.basesetup.dto.ParticularsGlOpeningBalanceDTO;
 import com.base.basesetup.dto.ParticularsGstVoucherDTO;
@@ -78,9 +75,6 @@ import com.base.basesetup.entity.GeneralJournalVO;
 import com.base.basesetup.entity.GlOpeningBalanceVO;
 import com.base.basesetup.entity.GstDebitNoteVO;
 import com.base.basesetup.entity.GstSalesVoucherVO;
-import com.base.basesetup.entity.IrnCreditChargesVO;
-import com.base.basesetup.entity.IrnCreditGstVO;
-import com.base.basesetup.entity.IrnCreditVO;
 import com.base.basesetup.entity.ParticularsDebitNoteVO;
 import com.base.basesetup.entity.ParticularsGlOpeningBalanceVO;
 import com.base.basesetup.entity.ParticularsGstVoucherVO;
@@ -281,7 +275,11 @@ public class TransactionServiceImpl implements TransactionService {
 
 	@Autowired
 	DocumentTypeMappingDetailsRepo documentTypeMappingDetailsRepo;
+	
+	@Autowired
+	ParticularsPaymentVoucherRepo ParticularsPaymentVoucherRepo;
 
+	
 	// DailyMonthlyExRates
 	@Override
 	public List<DailyMonthlyExRatesVO> getAllDailyMonthlyExRatesById(Long id) {
@@ -354,12 +352,12 @@ public class TransactionServiceImpl implements TransactionService {
 		dailyMonthlyExRatesVO.setDate(dailyMonthlyExRatesDTO.getDate());
 		LocalDate date = LocalDate.parse(dailyMonthlyExRatesDTO.getMonth());
 
-	    // Define a formatter to convert to "MMMM yyyy" format (e.g., March 2024)
-	    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM yyyy");
+		// Define a formatter to convert to "MMMM yyyy" format (e.g., March 2024)
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM yyyy");
 
-	    // Format the date and set it to the VO
-	    String formattedDate = date.format(formatter);
-	    dailyMonthlyExRatesVO.setMonth(formattedDate);
+		// Format the date and set it to the VO
+		String formattedDate = date.format(formatter);
+		dailyMonthlyExRatesVO.setMonth(formattedDate);
 		dailyMonthlyExRatesVO.setActive(dailyMonthlyExRatesDTO.isActive());
 		dailyMonthlyExRatesVO.setOrgId(dailyMonthlyExRatesDTO.getOrgId());
 	}
@@ -802,17 +800,19 @@ public class TransactionServiceImpl implements TransactionService {
 	}
 
 	@Override
-	public Map<String, Object> updateCreateFundTransfer(@Valid FundTransferDTO fundTransferDTO) throws ApplicationException {
+	public Map<String, Object> updateCreateFundTransfer(@Valid FundTransferDTO fundTransferDTO)
+			throws ApplicationException {
 		FundTransferVO fundTransferVO = new FundTransferVO();
-		String message=null;
-		String screenCode="FT";
+		String message = null;
+		String screenCode = "FT";
+
 		if (ObjectUtils.isEmpty(fundTransferDTO.getId())) {
 
 			fundTransferVO = new FundTransferVO();
 
 			// GETDOCID API
-			String docId = fundTransferRepo.getFundTranferDocId(fundTransferDTO.getOrgId(), fundTransferDTO.getFinYear(),
-					fundTransferDTO.getBranchCode(), screenCode);
+			String docId = fundTransferRepo.getFundTranferDocId(fundTransferDTO.getOrgId(),
+					fundTransferDTO.getFinYear(), fundTransferDTO.getBranchCode(), screenCode);
 			fundTransferVO.setDocId(docId);
 
 			// GETDOCID LASTNO +1
@@ -826,6 +826,7 @@ public class TransactionServiceImpl implements TransactionService {
 			fundTransferVO.setUpdatedBy(fundTransferDTO.getCreatedBy());
 
 			message = "FundTransfer Creation Successfully";
+
 		}
 
 		else {
@@ -836,10 +837,9 @@ public class TransactionServiceImpl implements TransactionService {
 			message = "FundTransfer Updation Successfully";
 		}
 
-
 		getFundTransferVOFromFundTransferDTO(fundTransferDTO, fundTransferVO);
 		fundTransferRepo.save(fundTransferVO);
-		
+
 		Map<String, Object> response = new HashMap<>();
 		response.put("fundTransferVO", fundTransferVO);
 		response.put("message", message);
@@ -858,15 +858,15 @@ public class TransactionServiceImpl implements TransactionService {
 		fundTransferVO.setCancelRemarks(fundTransferDTO.getCancelRemarks());
 		fundTransferVO.setBranchCode(fundTransferDTO.getBranchCode());
 		fundTransferVO.setFinYear(fundTransferDTO.getFinYear());
-	    fundTransferVO.setIpNo(fundTransferDTO.getIpNo());
-	    fundTransferVO.setLatitude(fundTransferDTO.getLatitude());
-	    fundTransferVO.setMode(fundTransferDTO.getMode());
-	    fundTransferVO.setDocNo(fundTransferDTO.getDocNo());
-	    fundTransferVO.setCorpAccount(fundTransferDTO.getCorpAccount());
-	    fundTransferVO.setTransferTo(fundTransferDTO.getTransferTo());
-	    fundTransferVO.setBranchAcc(fundTransferDTO.getBranchAcc());
-	    fundTransferVO.setAmtBase(fundTransferDTO.getAmtBase());
-	    fundTransferVO.setNarration(fundTransferDTO.getNarration());
+		fundTransferVO.setIpNo(fundTransferDTO.getIpNo());
+		fundTransferVO.setLatitude(fundTransferDTO.getLatitude());
+		fundTransferVO.setMode(fundTransferDTO.getMode());
+		fundTransferVO.setDocNo(fundTransferDTO.getDocNo());
+		fundTransferVO.setCorpAccount(fundTransferDTO.getCorpAccount());
+		fundTransferVO.setTransferTo(fundTransferDTO.getTransferTo());
+		fundTransferVO.setBranchAcc(fundTransferDTO.getBranchAcc());
+		fundTransferVO.setAmtBase(fundTransferDTO.getAmtBase());
+		fundTransferVO.setNarration(fundTransferDTO.getNarration());
 
 	}
 
@@ -1291,61 +1291,54 @@ public class TransactionServiceImpl implements TransactionService {
 	}
 
 	@Override
-	public PaymentVoucherVO updateCreatePaymentVoucher(@Valid PaymentVoucherDTO paymentVoucherDTO)
+	public Map<String, Object> updateCreatePaymentVoucher(@Valid PaymentVoucherDTO paymentVoucherDTO)
 			throws ApplicationException {
-		PaymentVoucherVO paymentVoucherVO = new PaymentVoucherVO();
-		boolean isUpdate = false;
-		if (ObjectUtils.isNotEmpty(paymentVoucherDTO.getId())) {
-			isUpdate = true;
+		PaymentVoucherVO paymentVoucherVO;
+		String message = null;
+		String screenCode = "PV";
+
+		if (ObjectUtils.isEmpty(paymentVoucherDTO.getId())) {
+			paymentVoucherVO = new PaymentVoucherVO();
+
+			// GETDOCID API
+			String docId = paymentVoucherRepo.getpaymentVoucherDocId(paymentVoucherDTO.getOrgId(),
+					paymentVoucherDTO.getFinyear(), paymentVoucherDTO.getBranchCode(), screenCode);
+			paymentVoucherVO.setDocId(docId);
+
+			// GETDOCID LASTNO +1
+			DocumentTypeMappingDetailsVO documentTypeMappingDetailsVO = documentTypeMappingDetailsRepo
+					.findByOrgIdAndFinYearAndBranchCodeAndScreenCode(paymentVoucherDTO.getOrgId(),
+							paymentVoucherDTO.getFinyear(), paymentVoucherDTO.getBranchCode(), screenCode);
+			documentTypeMappingDetailsVO.setLastno(documentTypeMappingDetailsVO.getLastno() + 1);
+			documentTypeMappingDetailsRepo.save(documentTypeMappingDetailsVO);
+
+			paymentVoucherVO.setCreatedBy(paymentVoucherDTO.getCreatedBy());
+			paymentVoucherVO.setUpdatedBy(paymentVoucherDTO.getCreatedBy());
+
+			paymentVoucherVO.setUpdatedBy(paymentVoucherDTO.getCreatedBy());
+//			paymentVoucherVO.setCreatedBy(paymentVoucherDTO.getCreatedBy());
+
+		} else {
 			paymentVoucherVO = paymentVoucherRepo.findById(paymentVoucherDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid PaymentVoucher details"));
 			paymentVoucherVO.setUpdatedBy(paymentVoucherDTO.getCreatedBy());
-		} else {
+
 			paymentVoucherVO.setUpdatedBy(paymentVoucherDTO.getCreatedBy());
-			paymentVoucherVO.setCreatedBy(paymentVoucherDTO.getCreatedBy());
 		}
 
-		List<ParticularsPaymentVoucherVO> particularsPaymentVoucherVOs = new ArrayList<>();
-		if (paymentVoucherDTO.getParticularsPaymentVoucherDTO() != null) {
-			for (ParticularsPaymentVoucherDTO particularsPaymentVoucherDTO : paymentVoucherDTO
-					.getParticularsPaymentVoucherDTO()) {
-				ParticularsPaymentVoucherVO particularsPaymentVoucherVO;
-				if (particularsPaymentVoucherDTO.getId() != null
-						& ObjectUtils.isEmpty(particularsPaymentVoucherDTO.getId())) {
-					particularsPaymentVoucherVO = particularsPaymentVoucherRepo
-							.findById(particularsPaymentVoucherDTO.getId()).orElse(new ParticularsPaymentVoucherVO());
-				} else {
-					particularsPaymentVoucherVO = new ParticularsPaymentVoucherVO();
-				}
-				particularsPaymentVoucherVO.setAccountName(particularsPaymentVoucherDTO.getAccountName());
-				particularsPaymentVoucherVO.setSubLedgerCode(particularsPaymentVoucherDTO.getSubLedgerCode());
-				particularsPaymentVoucherVO.setSubLedgerName(particularsPaymentVoucherDTO.getSubLedgerName());
-				particularsPaymentVoucherVO.setDebit(particularsPaymentVoucherDTO.getDebit());
-				particularsPaymentVoucherVO.setCredit(particularsPaymentVoucherDTO.getCredit());
-				particularsPaymentVoucherVO.setNarration(particularsPaymentVoucherDTO.getNarration());
-				particularsPaymentVoucherVO.setPaymentVoucherVO(paymentVoucherVO);
-				particularsPaymentVoucherVO.setPaymentVoucherVO(paymentVoucherVO);
-
-				particularsPaymentVoucherVOs.add(particularsPaymentVoucherVO);
-			}
-		}
 
 		getPaymentVoucherVOFromPaymentVoucherDTO(paymentVoucherDTO, paymentVoucherVO);
-		paymentVoucherVO.setParticularsPaymentVoucherVO(particularsPaymentVoucherVOs);
-		return paymentVoucherRepo.save(paymentVoucherVO);
+		 paymentVoucherRepo.save(paymentVoucherVO);
+		 
+
+			Map<String, Object> response = new HashMap<>();
+			response.put("message", message);
+			response.put("costInvoiceVO", paymentVoucherVO);
+			return response;
 	}
 
-	private void getPaymentVoucherVOFromPaymentVoucherDTO(@Valid PaymentVoucherDTO paymentVoucherDTO,
+	private PaymentVoucherVO getPaymentVoucherVOFromPaymentVoucherDTO(@Valid PaymentVoucherDTO paymentVoucherDTO,
 			PaymentVoucherVO paymentVoucherVO) {
-
-
-//		// // Finyr
-//		int finyr = paymentVoucherRepo.findFinyr();
-//		// DocId
-//		String paymentVoucher = "PV" + finyr + paymentVoucherRepo.findDocId();
-//		paymentVoucherVO.setDocId(paymentVoucher);
-//		paymentVoucherRepo.nextSeq();
-
 
 		paymentVoucherVO.setVehicleSubType(paymentVoucherDTO.getVehicleSubType());
 		paymentVoucherVO.setReferenceNo(paymentVoucherDTO.getReferenceNo());
@@ -1369,6 +1362,31 @@ public class TransactionServiceImpl implements TransactionService {
 		paymentVoucherVO.setTotalCreditAmount(paymentVoucherDTO.getTotalCreditAmount());
 		paymentVoucherVO.setRemarks(paymentVoucherDTO.getRemarks());
 
+		
+		if (paymentVoucherDTO.getId() != null) {
+			List<ParticularsPaymentVoucherVO> particularsPaymentVoucherVOs = ParticularsPaymentVoucherRepo.findByPaymentVoucherVO(paymentVoucherVO);
+			ParticularsPaymentVoucherRepo.deleteAll(particularsPaymentVoucherVOs);
+		}
+		
+		List<ParticularsPaymentVoucherVO> particularsPaymentVoucherVOs = new ArrayList<>();
+		for (ParticularsPaymentVoucherDTO particularsPaymentVoucherDTO : paymentVoucherDTO.getParticularsPaymentVoucherDTO()) {
+			ParticularsPaymentVoucherVO particularsPaymentVoucherVO = new ParticularsPaymentVoucherVO();
+
+
+			particularsPaymentVoucherVO.setAccountName(particularsPaymentVoucherDTO.getAccountName());
+			particularsPaymentVoucherVO.setSubLedgerCode(particularsPaymentVoucherDTO.getSubLedgerCode());
+			particularsPaymentVoucherVO.setSubLedgerName(particularsPaymentVoucherDTO.getSubLedgerName());
+			particularsPaymentVoucherVO.setDebit(particularsPaymentVoucherDTO.getDebit());
+			particularsPaymentVoucherVO.setCredit(particularsPaymentVoucherDTO.getCredit());
+			particularsPaymentVoucherVO.setNarration(particularsPaymentVoucherDTO.getNarration());
+			particularsPaymentVoucherVO.setPaymentVoucherVO(paymentVoucherVO);
+			
+			particularsPaymentVoucherVOs.add(particularsPaymentVoucherVO);
+		}
+		paymentVoucherVO.setParticularsPaymentVoucherVO(particularsPaymentVoucherVOs);
+		
+		return paymentVoucherVO;
+		
 	}
 
 	@Override
@@ -2328,10 +2346,8 @@ public class TransactionServiceImpl implements TransactionService {
 		return fundTransferRepo.findAllFundTransferByDocId(orgId, docId);
 
 	}
-	
-	public String getReconcileCashDocId(Long orgId, String finYear,String branch, String branchCode) {
 
-
+	public String getReconcileCashDocId(Long orgId, String finYear, String branch, String branchCode) {
 
 		String ScreenCode = "RCH";
 		String result = reconcileCashRepo.getReconcileCashDocId(orgId, finYear, branchCode, ScreenCode);
@@ -2349,6 +2365,18 @@ public class TransactionServiceImpl implements TransactionService {
 	public String getFundTranferDocId(Long orgId, String finYear, String branch, String branchCode) {
 		String ScreenCode = "CI";
 		String result = fundTransferRepo.getFundTranferDocId(orgId, finYear, branchCode, ScreenCode);
+		return result;
+	}
+
+	@Override
+	public PaymentVoucherVO getpaymentVoucherByDocId(Long orgId, String docId) {
+		return paymentVoucherRepo.findAllPaymentVoucherByDocId(orgId, docId);
+	}
+
+	@Override
+	public String getpaymentVoucherDocId(Long orgId, String finYear, String branch, String branchCode) {
+		String ScreenCode = "PV";
+		String result = paymentVoucherRepo.getpaymentVoucherDocId(orgId, finYear, branchCode, ScreenCode);
 		return result;
 	}
 }

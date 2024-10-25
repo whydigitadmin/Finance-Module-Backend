@@ -18,10 +18,8 @@ public class PaymentVoucherDTO {
 	private String referenceNo;
 
 	private String currency;
-	private String docId;
 	private LocalDate referenceDate;
 	private BigDecimal exRate;
-	private LocalDate docDate;
 	private String chequeNo;
 	private LocalDate chequeDate;
 	private String chequeBank;
