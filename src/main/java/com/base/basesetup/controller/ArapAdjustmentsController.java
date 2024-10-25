@@ -25,6 +25,7 @@ import com.base.basesetup.common.UserConstants;
 import com.base.basesetup.dto.ArapAdjustmentsDTO;
 import com.base.basesetup.dto.ResponseDTO;
 import com.base.basesetup.entity.ArapAdjustmentsVO;
+import com.base.basesetup.entity.CostInvoiceVO;
 import com.base.basesetup.service.ArapAdjustmentsService;
 
 @CrossOrigin
@@ -144,6 +145,64 @@ public class ArapAdjustmentsController extends BaseController {
 		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
 		return ResponseEntity.ok().body(responseDTO);
 
+	}
+	
+	@GetMapping("/getArapAdjustmentsByDocId")
+	public ResponseEntity<ResponseDTO> getArapAdjustmentsByDocId(@RequestParam Long orgId, @RequestParam String docId) {
+		String methodName = "getArapAdjustmentsByDocId()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		ArapAdjustmentsVO adjustmentsVO = new ArapAdjustmentsVO();
+		try {
+			adjustmentsVO = arapAdjustmentsService.getArapAdjustmentsByDocId(orgId, docId);
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "ArapAdjustments information get successfully By docid");
+			responseObjectsMap.put("adjustmentsVO", adjustmentsVO);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					"ArapAdjustments information receive failed By docid", errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+
+	}
+	
+	@GetMapping("/getArapAdjustmentsDocId")
+	public ResponseEntity<ResponseDTO> getArapAdjustmentsDocId(@RequestParam Long orgId, @RequestParam String finYear,
+			@RequestParam String branch, @RequestParam String branchCode) {
+
+		String methodName = "getArapAdjustmentsDocId()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		String mapp = "";
+
+		try {
+			mapp = arapAdjustmentsService.getArapAdjustmentsDocId(orgId, finYear, branch, branchCode);
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "ArapAdjustments information retrieved successfully");
+			responseObjectsMap.put("taxInvoiceDocId", mapp);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					"Failed to retrieve ArapAdjustments Docid information", errorMsg);
+		}
+
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
 	}
 
 }

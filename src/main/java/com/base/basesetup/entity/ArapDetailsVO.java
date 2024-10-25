@@ -1,5 +1,6 @@
 package com.base.basesetup.entity;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -13,7 +14,6 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.base.basesetup.dto.CreatedUpdatedDate;
-import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -49,15 +49,15 @@ public class ArapDetailsVO {
 	@Column(name = "acccurrency",length =15)
 	private String accCurrency;
 	@Column(name = "exrate",precision =10,scale = 2)
-	private float exRate;
+	private BigDecimal exRate;
 	@Column(name = "amount",precision =10,scale = 2)
-	private float amount;
+	private BigDecimal amount;
 	@Column(name = "baseamt",precision =10,scale = 2)
-	private float baseAmt;
+	private BigDecimal baseAmt;
 	@Column(name = "nativeamt",precision =10,scale = 2)
-	private float nativeAmt;
+	private BigDecimal nativeAmt;
 	@Column(name = "chargableamt",precision =10,scale = 2)
-	private float chargableAmt;
+	private BigDecimal chargableAmt;
 	@Column(name = "gstflag")
 	private boolean gstFlag;
 	@Column(name = "doctypecode",length =50)
@@ -66,26 +66,22 @@ public class ArapDetailsVO {
 	private String subTypeCode;
 	@Column(name = "subledgerdivision",length =50)
 	private String subLedgerDivision;
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	@Column(name = "docdate")
 	private LocalDate docDate=LocalDate.now();
 	@Column(name = "supprefno",length =50)
 	private String suppRefNo;
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	@Column(name = "refdate")
 	private LocalDateTime refDate;
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	@Column(name = "suprefdate")
 	private LocalDateTime supRefDate;
 	@Column(name = "subledgercode",length =50)
 	private String subLedgerCode;
 	@Column(name = "creditdays",length =10)
 	private String creditDays;
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	@Column(name = "duedate")
 	private LocalDateTime dueDate;
 	@Column(name = "tdsamt",precision =10,scale = 2)
-	private float TDSAmt;
+	private BigDecimal TDSAmt;
 	@Column(name = "hno",length =50)
 	private String hno;
 	@Column(name = "orgid",length =15)

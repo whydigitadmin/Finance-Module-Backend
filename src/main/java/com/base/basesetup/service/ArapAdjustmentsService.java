@@ -22,5 +22,9 @@ public interface ArapAdjustmentsService {
 	List<ArapAdjustmentsVO> getArapAdjustmentsByActive();
 
 	Map<String, Object> createUpdateArapAdjustments(@Valid ArapAdjustmentsDTO arapAdjustmentsDTO) throws ApplicationException;
+
+	ArapAdjustmentsVO getArapAdjustmentsByDocId(Long orgId, String docId);
+
+	String getArapAdjustmentsDocId(Long orgId, String finYear, String branch, String branchCode);
 	
 }

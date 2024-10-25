@@ -16,8 +16,10 @@ import org.springframework.stereotype.Service;
 import com.base.basesetup.controller.ArapAdjustmentsController;
 import com.base.basesetup.dto.ArapAdjustmentsDTO;
 import com.base.basesetup.entity.ArapAdjustmentsVO;
+import com.base.basesetup.entity.DocumentTypeMappingDetailsVO;
 import com.base.basesetup.exception.ApplicationException;
 import com.base.basesetup.repo.ArapAdjustmentsRepo;
+import com.base.basesetup.repo.DocumentTypeMappingDetailsRepo;
 
 @Service
 public class ArapAdjustmentsServiceImpl implements ArapAdjustmentsService{
@@ -26,6 +28,9 @@ public class ArapAdjustmentsServiceImpl implements ArapAdjustmentsService{
 	
 	@Autowired
 	ArapAdjustmentsRepo arapAdjustmentsRepo;
+	
+	@Autowired
+	DocumentTypeMappingDetailsRepo documentTypeMappingDetailsRepo;
 	
 	
 	
@@ -66,9 +71,23 @@ public class ArapAdjustmentsServiceImpl implements ArapAdjustmentsService{
 	public Map<String, Object> createUpdateArapAdjustments(@Valid ArapAdjustmentsDTO arapAdjustmentsDTO) throws ApplicationException {
 		ArapAdjustmentsVO arapAdjustmentsVO;
 		String message = null;
+		String screenCode="AA";
 		if (ObjectUtils.isEmpty(arapAdjustmentsDTO.getId())) {
 
 			arapAdjustmentsVO = new ArapAdjustmentsVO();
+			
+			// GETDOCID API
+						String docId = arapAdjustmentsRepo.getArapAdjustmentsDocId(arapAdjustmentsDTO.getOrgId(), arapAdjustmentsDTO.getFinYear(),
+								arapAdjustmentsDTO.getBranchCode(), screenCode);
+						arapAdjustmentsVO.setDocId(docId);
+
+						// GETDOCID LASTNO +1
+						DocumentTypeMappingDetailsVO documentTypeMappingDetailsVO = documentTypeMappingDetailsRepo
+								.findByOrgIdAndFinYearAndBranchCodeAndScreenCode(arapAdjustmentsDTO.getOrgId(),
+										arapAdjustmentsDTO.getFinYear(), arapAdjustmentsDTO.getBranchCode(), screenCode);
+						documentTypeMappingDetailsVO.setLastno(documentTypeMappingDetailsVO.getLastno() + 1);
+						documentTypeMappingDetailsRepo.save(documentTypeMappingDetailsVO);
+			
 			arapAdjustmentsVO.setCreatedBy(arapAdjustmentsDTO.getCreatedBy());
 			arapAdjustmentsVO.setUpdatedBy(arapAdjustmentsDTO.getCreatedBy());
 
@@ -125,6 +144,18 @@ public class ArapAdjustmentsServiceImpl implements ArapAdjustmentsService{
 	    
         return arapAdjustmentsVO;
 	}
+
+	@Override
+	public ArapAdjustmentsVO getArapAdjustmentsByDocId(Long orgId, String docId) {
+		return arapAdjustmentsRepo.findArapAdjustmentsByDocId(orgId, docId);
+	}
+
+	@Override
+	public String getArapAdjustmentsDocId(Long orgId, String finYear, String branch, String branchCode) {
+		String ScreenCode = "AA";
+		String result = arapAdjustmentsRepo.getArapAdjustmentsDocId(orgId, finYear, branchCode, ScreenCode);
+		return result;
+	}
+	}
 	
 	
-}

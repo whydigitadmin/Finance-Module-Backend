@@ -2471,7 +2471,8 @@ public class TransactionServiceImpl implements TransactionService {
 
 	public FundTransferVO getFundTranferByDocId(Long orgId, String docId) {
 		return fundTransferRepo.findAllFundTransferByDocId(orgId, docId);
-
+	}
+	
 	public String getReconcileCashDocId(Long orgId, String finYear,String branch, String branchCode) {
 		String ScreenCode = "RCH";
 		String result = reconcileCashRepo.getReconcileCashDocId(orgId, finYear, branchCode,ScreenCode);
