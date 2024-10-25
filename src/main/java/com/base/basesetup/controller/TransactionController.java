@@ -729,30 +729,16 @@ public class TransactionController extends BaseController {
 		String errorMsg = null;
 		Map<String, Object> responseObjectsMap = new HashMap<>();
 		ResponseDTO responseDTO = null;
-
 		try {
-			GeneralJournalVO generalJournalVO = transactionService.updateCreateGeneralJournal(generalJournalDTO);
-			boolean isUpdate = generalJournalDTO.getId() != null;
-
-			if (generalJournalVO != null) {
-				responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
-						isUpdate ? "GeneralJournal updated successfully" : "GeneralJournal created successfully");
-				responseObjectsMap.put("generalJournalVO", generalJournalVO);
-				responseDTO = createServiceResponse(responseObjectsMap);
-			} else {
-				errorMsg = isUpdate ? "GeneralJournal not found for ID: " + generalJournalDTO.getId()
-						: "GeneralJournal creation failed";
-				responseDTO = createServiceResponseError(responseObjectsMap,
-						isUpdate ? "GeneralJournal update failed" : "GeneralJournal creation failed", errorMsg);
-			}
+			Map<String, Object> generalJournalVO = transactionService.updateCreateGeneralJournal(generalJournalDTO);
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, generalJournalVO.get("message"));
+			responseObjectsMap.put("generalJournalVO", generalJournalVO.get("generalJournalVO"));
+			responseDTO = createServiceResponse(responseObjectsMap);
 		} catch (Exception e) {
 			errorMsg = e.getMessage();
-			boolean isUpdate = generalJournalDTO.getId() != null;
 			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
-			responseDTO = createServiceResponseError(responseObjectsMap,
-					isUpdate ? "GeneralJournal update failed" : "GeneralJournal creation failed", errorMsg);
+			responseDTO = createServiceResponseError(responseObjectsMap, errorMsg, errorMsg);
 		}
-
 		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
 		return ResponseEntity.ok().body(responseDTO);
 	}
