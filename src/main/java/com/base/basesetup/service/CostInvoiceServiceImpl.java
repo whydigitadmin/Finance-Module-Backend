@@ -138,7 +138,7 @@ public class CostInvoiceServiceImpl implements CostInvoiceService {
 		costInvoiceVO.setCostInvoiceNo(costInvoiceDTO.getCostInvoiceNo());
 		costInvoiceVO.setCostInvoiceDate(costInvoiceDTO.getCostInvoiceDate());
 		costInvoiceVO.setSupplierBillNo(costInvoiceDTO.getSupplierBillNo());
-		costInvoiceVO.setSuppliertType(costInvoiceDTO.getSuppliertType());
+		costInvoiceVO.setSupplierType(costInvoiceDTO.getSupplierType());
 		costInvoiceVO.setSupplierCode(costInvoiceDTO.getSupplierCode());
 		costInvoiceVO.setCreditDays(costInvoiceDTO.getCreditDays());
 		costInvoiceVO.setDueDate(costInvoiceDTO.getDueDate());
@@ -163,6 +163,10 @@ public class CostInvoiceServiceImpl implements CostInvoiceService {
 		costInvoiceVO.setFinYear(costInvoiceDTO.getFinYear());
 		costInvoiceVO.setIpNo(costInvoiceDTO.getIpNo());
 		costInvoiceVO.setLatitude(costInvoiceDTO.getLatitude());
+		costInvoiceVO.setPayment(costInvoiceDTO.getPayment());
+		costInvoiceVO.setAccuralid(costInvoiceDTO.getAccuralid());
+		costInvoiceVO.setUtrRef(costInvoiceDTO.getUtrRef());
+		costInvoiceVO.setCostType(costInvoiceDTO.getCostType());
 
 		if (costInvoiceDTO.getId() != null) {
 

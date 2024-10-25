@@ -26,5 +26,7 @@ public class CostDebitNoteSummaryDTO {
 	private BigDecimal netLCAmt;
 
 	private String amtInWords;
+	
+	private BigDecimal roundOff;
 
 }

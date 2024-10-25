@@ -36,10 +36,10 @@ public class DailyMonthlyExRatesDtlVO {
 	private String currency;
 	@Column(name = "currencydescripition")
 	private String currencyDescripition;
-	@Column(name = "sellingexrate")
-	private String sellingExRate;
-	@Column(name = "buyingexrate")
-	private String buyingExrate;
+	@Column(name = "sellingexrate",precision = 5,scale = 5)
+	private float sellingExRate;
+	@Column(name = "buyingexrate",precision = 5,scale = 5)
+	private float buyingExrate;
 
 	@ManyToOne
 	@JsonBackReference

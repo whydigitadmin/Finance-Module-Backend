@@ -47,12 +47,12 @@ public class ChargerCostInvoiceVO {
 	private String gsac;
 	@Column(name = "conttype",length =10)
 	private String contType;
-	@Column(name = "currency",precision =10,scale =2)
-	private BigDecimal currency;
+	@Column(name = "currency",length =15)
+	private String currency;
 	@Column(name = "exrate",precision =10,scale =2)
 	private BigDecimal exRate;
-	@Column(name = "gst",length =10)
-	private Long gst;
+	@Column(name = "gst",length =45)
+	private String gst;
 	@Column(name = "fcamt",precision =10,scale =2)
 	private BigDecimal fcAmt;
 	@Column(name = "lcamt",precision =10,scale =2)
