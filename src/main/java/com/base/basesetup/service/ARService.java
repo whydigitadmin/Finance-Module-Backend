@@ -19,7 +19,7 @@ public interface ARService {
 	// Receipt
 	List<ReceiptVO> getAllReceiptReceivableByOrgId(Long orgId);
 
-	 Map<String, Object> updateCreateReceiptReceivable(@Valid ReceiptDTO receiptReceivableDTO)
+	Map<String, Object> updateCreateReceiptReceivable(@Valid ReceiptDTO receiptReceivableDTO)
 			throws ApplicationException;
 
 	List<ReceiptVO> getAllReceiptReceivableById(Long id);
@@ -29,6 +29,8 @@ public interface ARService {
 	List<Map<String, Object>> getCustomerNameAndCodeForReceipt(Long orgId, String branch, String branchCode,
 			String finYear);
 
+	String getReceiptDocId(Long orgId, String finYear, String branch, String branchCode);
+
 //	ARBillBalance
 	List<ArBillBalanceVO> getAllArBillBalanceByOrgId(Long orgId);
 
@@ -37,10 +39,10 @@ public interface ARService {
 	Map<String, Object> updateCreateArBillBalance(@Valid ArBillBalanceDTO arBillBalanceDTO) throws ApplicationException;
 
 	List<ArBillBalanceVO> getArBillBalanceByActive();
-	
+
+	String getArBillBalanceDocId(Long orgId, String finYear, String branch, String branchCode);
+
 // 	ReceiptRegister
-	List<Map<String, Object>> getAllReceiptRegister(Long orgId, String branch, String branchCode,
-			String finYear,String fromDate,String toDate,String subLedgerName);
-
-
+	List<Map<String, Object>> getAllReceiptRegister(Long orgId, String branch, String branchCode, String finYear,
+			String fromDate, String toDate, String subLedgerName);
 }
