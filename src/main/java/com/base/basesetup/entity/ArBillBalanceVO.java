@@ -14,6 +14,7 @@ import javax.persistence.Table;
 
 import com.base.basesetup.dto.CreatedUpdatedDate;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonGetter;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -139,6 +140,11 @@ public class ArBillBalanceVO {
 
 	@Column(name = "latitude", length = 100)
 	private String latitude;
+	
+	@JsonGetter("active")
+	public String getActive() {
+		return active ? "Active" : "In-Active";
+	}
 
 	@Embedded
 	@Builder.Default

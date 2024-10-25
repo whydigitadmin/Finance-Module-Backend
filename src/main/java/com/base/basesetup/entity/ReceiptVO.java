@@ -17,6 +17,7 @@ import javax.persistence.Table;
 
 import com.base.basesetup.dto.CreatedUpdatedDate;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.AllArgsConstructor;
@@ -120,6 +121,11 @@ public class ReceiptVO {
 	private String currencyAmount;
 	@Column(name = "orgid")
 	private Long orgId;
+	
+	@JsonGetter("active")
+	public String getActive() {
+		return active ? "Active" : "In-Active";
+	}
 
 	@OneToMany(mappedBy = "receiptVO", cascade = CascadeType.ALL)
 	@JsonManagedReference
