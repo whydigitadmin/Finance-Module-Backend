@@ -18,17 +18,14 @@ public class PaymentInvDtlsDTO {
 
 	private String invNo;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	private LocalDate invDate;
 
 	private String refNo;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	private LocalDate refDate;
 
 	private String supplierRefNo;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	private LocalDate supplierRefDate;
 
 	private String currency;
@@ -51,10 +48,8 @@ public class PaymentInvDtlsDTO {
 
 	private String remarks;
 	
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	private LocalDate fromDate;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	private LocalDate toDate;
 
 }

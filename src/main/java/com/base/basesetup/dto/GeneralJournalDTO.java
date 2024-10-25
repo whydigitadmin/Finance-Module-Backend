@@ -21,9 +21,8 @@ public class GeneralJournalDTO {
 	private Long id;
 	private String voucherSubType;
 	private String currency;
-	private String exRate;
+	private BigDecimal exRate;
 	private String refNo;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	private LocalDate refDate;
 
 	private String remarks;

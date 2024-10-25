@@ -3,6 +3,8 @@ package com.base.basesetup.dto;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,22 +14,15 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ReconcileCorpBankDTO {
 	private Long id;
-	private String docId;
-	private LocalDate docDate;
 	private String bankAccount;
 	private LocalDate bankStmtDate;
 	private String remarks;
-	
+
 	private Long orgId;
 	private String branch;
 	private String branchCode;
 	private String createdBy;
-	private boolean active;
-	private boolean cancel;
-	private String cancelRemarks;
 	private String finYear;
-	private String ipNo;
-	private String latitude;
 
 	List<ParticularsReconcileCorpBankDTO> particularsReconcileCorpBankDTO;
 }

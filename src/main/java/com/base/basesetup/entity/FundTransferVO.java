@@ -1,3 +1,4 @@
+
 package com.base.basesetup.entity;
 
 import java.math.BigDecimal;
@@ -27,6 +28,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class FundTransferVO {
 	@Id
+	
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "fundtransfergen")
 	@SequenceGenerator(name = "fundtransfergen", sequenceName = "fundtransferseq", initialValue = 1000000001, allocationSize = 1)
 	@Column(name = "fundtransferid")

@@ -92,12 +92,10 @@ public class TaxInvoiceVO {
 	@Column(name = "screenname",length = 30)
 	private String screenName="TAX INVOICE";
 
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	@Column(name = "docdate")
 	private LocalDate docDate= LocalDate.now();
 	@Column(name = "supplierbillno",length = 30)
 	private String supplierBillNo;
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	@Column(name = "supplierbilldate")
 	private LocalDate supplierBillDate;
 	@Column(name = "billcurr",length = 30)
@@ -121,7 +119,6 @@ public class TaxInvoiceVO {
 	@Column(name = "invoiceno",length = 30)
 	private String invoiceNo;
 
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	@Column(name = "invoicedate")
 	private LocalDate invoiceDate;
 	@Column(name = "salestype",length = 30)

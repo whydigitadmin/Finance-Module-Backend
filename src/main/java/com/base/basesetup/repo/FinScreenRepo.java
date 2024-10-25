@@ -20,6 +20,6 @@ public interface FinScreenRepo extends JpaRepository<FinScreenVO, Long> {
 
 	boolean existsByScreenCode(String screenCode);
 
-	@Query(nativeQuery = true, value = "select screencode,screenname from finscreen where screencode not in (select screencode from documenttype);")
-	Set<Object[]> findAllScreenCode();
+	@Query(nativeQuery = true, value = "select screencode,screenname from finscreen where screencode not in (select screencode from documenttype where orgid=?1)")
+	Set<Object[]> findAllScreenCode(Long orgId);
 }

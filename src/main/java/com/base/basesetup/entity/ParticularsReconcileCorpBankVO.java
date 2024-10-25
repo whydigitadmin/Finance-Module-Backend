@@ -35,12 +35,10 @@ public class ParticularsReconcileCorpBankVO {
 	private Long id;
 	@Column(name="voucherno",length = 30)
 	private String voucherNo;
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	@Column(name="voucherdate")
 	private LocalDate voucherDate;
 	@Column(name="chequeno",length = 30)
 	private String chequeNo;
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	@Column(name="chequedate")
 	private LocalDate chequeDate;
 	@Column(name="deposit",precision = 10,scale = 2)

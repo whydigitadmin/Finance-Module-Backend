@@ -30,7 +30,6 @@ public class PaymentDTO {
 	private String gstState;
 	private String gstIn;
 	private String chequeNo;
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	private LocalDate chequeDate;
 	private String bankCashAcc;
 	private String payTo;
@@ -49,8 +48,7 @@ public class PaymentDTO {
 	private boolean cancel;
 	private String cancelRemarks;
 	private String finYear;
-	private String ipNo;
-	private String latitude;
+	
 
 	private List<PaymentInvDtlsDTO> paymentInvDtlsDTO;
 
