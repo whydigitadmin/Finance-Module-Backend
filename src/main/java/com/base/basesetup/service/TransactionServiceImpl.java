@@ -82,6 +82,8 @@ import com.base.basesetup.entity.ParticularsJournalVO;
 import com.base.basesetup.entity.ParticularsPaymentVoucherVO;
 import com.base.basesetup.entity.ParticularsReconcileCorpBankVO;
 import com.base.basesetup.entity.ParticularsReconcileVO;
+import com.base.basesetup.entity.PartyAddressVO;
+import com.base.basesetup.entity.PartyVendorEvaluationVO;
 import com.base.basesetup.entity.PaymentInvoiceVO;
 import com.base.basesetup.entity.PaymentOtherAccountVO;
 import com.base.basesetup.entity.PaymentReversalVO;
@@ -932,7 +934,15 @@ public class TransactionServiceImpl implements TransactionService {
 			documentTypeMappingDetailsRepo.save(documentTypeMappingDetailsVO);
 		}
 
+		if (ObjectUtils.isNotEmpty(generalJournalDTO.getId())) {
+			List<ParticularsJournalVO> particularsJournalVOList = particularsJournalRepo
+					.findByGeneralJournalVO(generalJournalVO);
+			particularsJournalRepo.deleteAll(particularsJournalVOList);
+		}
 		List<ParticularsJournalVO> particularsJournalVOs = new ArrayList<>();
+		BigDecimal totalDebitAmount = BigDecimal.ZERO;
+		BigDecimal totalCreditAmount = BigDecimal.ZERO;
+
 		if (generalJournalDTO.getParticularsJournalDTO() != null) {
 			for (ParticularsJournalDTO particularsJournalDTO : generalJournalDTO.getParticularsJournalDTO()) {
 				ParticularsJournalVO particularsJournalVO;
@@ -945,14 +955,41 @@ public class TransactionServiceImpl implements TransactionService {
 				particularsJournalVO.setAccountsName(particularsJournalDTO.getAccountsName());
 				particularsJournalVO.setSubledgerName(particularsJournalDTO.getSubledgerName());
 				particularsJournalVO.setSubLedgerCode(particularsJournalDTO.getSubLedgerCode());
-				particularsJournalVO.setDebitAmount(particularsJournalDTO.getDebitAmount());
-				particularsJournalVO.setCreditAmount(particularsJournalDTO.getCreditAmount());
+				if (particularsJournalDTO.getDebitAmount() != null
+						&& particularsJournalDTO.getDebitAmount().compareTo(BigDecimal.ZERO) != 0) {
+					particularsJournalVO.setDebitAmount(particularsJournalDTO.getDebitAmount());
+					particularsJournalVO.setCreditAmount(BigDecimal.ZERO);
+					totalDebitAmount = totalDebitAmount.add(particularsJournalDTO.getDebitAmount());
+				} else {
+					particularsJournalVO.setCreditAmount(particularsJournalDTO.getCreditAmount());
+					particularsJournalVO.setDebitAmount(BigDecimal.ZERO);
+					totalCreditAmount = totalCreditAmount.add(particularsJournalDTO.getCreditAmount());
+				}
 				particularsJournalVO.setNarration(particularsJournalDTO.getNarration());
 				particularsJournalVO.setGeneralJournalVO(generalJournalVO);
 				particularsJournalVOs.add(particularsJournalVO);
 			}
 		}
+
+		List<ParticularsJournalVO> existingParticulars = particularsJournalRepo.findAll(generalJournalVO);
+
+		// Sum existing amounts
+		for (ParticularsJournalVO existing : existingParticulars) {
+			totalDebitAmount = totalDebitAmount.add(existing.getDebitAmount() != null ? existing.getDebitAmount() : BigDecimal.ZERO);
+			totalCreditAmount = totalCreditAmount.add(existing.getCreditAmount() != null ? existing.getCreditAmount() : BigDecimal.ZERO);
+		}
+
+		if (ObjectUtils.isNotEmpty(generalJournalDTO.getId())) {
+			generalJournalVO = generalJournalRepo.findById(generalJournalDTO.getId())
+					.orElseThrow(() -> new ApplicationException("Invalid GeneralJournal details"));
+			generalJournalVO.setTotalDebitAmount(totalDebitAmount);
+			generalJournalVO.setTotalCreditAmount(totalCreditAmount);
+		} else {
+			generalJournalVO.setTotalDebitAmount(totalDebitAmount);
+			generalJournalVO.setTotalCreditAmount(totalCreditAmount);
+		}
 		generalJournalVO.setParticularsJournalVO(particularsJournalVOs);
+
 		getGeneralJournalVOFromGeneralJournalDTO(generalJournalDTO, generalJournalVO);
 		return generalJournalRepo.save(generalJournalVO);
 	}
@@ -971,11 +1008,6 @@ public class TransactionServiceImpl implements TransactionService {
 		generalJournalVO.setBranchCode(generalJournalDTO.getBranchCode());
 		generalJournalVO.setFinYear(generalJournalDTO.getFinYear());
 
-		generalJournalVO.setActive(generalJournalDTO.isActive());
-		generalJournalVO.setCancel(generalJournalDTO.isCancel());
-		generalJournalVO.setCancelRemarks(generalJournalDTO.getCancelRemarks());
-		generalJournalVO.setTotalCreditAmount(generalJournalDTO.getTotalCreditAmount());
-		generalJournalVO.setTotalDebitAmount(generalJournalDTO.getTotalDebitAmount());
 	}
 
 	@Override
@@ -1339,7 +1371,6 @@ public class TransactionServiceImpl implements TransactionService {
 
 	private PaymentVoucherVO getPaymentVoucherVOFromPaymentVoucherDTO(@Valid PaymentVoucherDTO paymentVoucherDTO,
 			PaymentVoucherVO paymentVoucherVO) {
-
 		paymentVoucherVO.setVehicleSubType(paymentVoucherDTO.getVehicleSubType());
 		paymentVoucherVO.setReferenceNo(paymentVoucherDTO.getReferenceNo());
 		paymentVoucherVO.setCurrency(paymentVoucherDTO.getCurrency());
@@ -2344,11 +2375,10 @@ public class TransactionServiceImpl implements TransactionService {
 
 	public FundTransferVO getFundTranferByDocId(Long orgId, String docId) {
 		return fundTransferRepo.findAllFundTransferByDocId(orgId, docId);
-
 	}
 
+@Override
 	public String getReconcileCashDocId(Long orgId, String finYear, String branch, String branchCode) {
-
 		String ScreenCode = "RCH";
 		String result = reconcileCashRepo.getReconcileCashDocId(orgId, finYear, branchCode, ScreenCode);
 		return result;

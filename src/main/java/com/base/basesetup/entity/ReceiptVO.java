@@ -16,7 +16,6 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.base.basesetup.dto.CreatedUpdatedDate;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -41,10 +40,9 @@ public class ReceiptVO {
 	// Receipt fields
 	@Column(name = "docid")
 	private String docId;
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	@Column(name = "docdate")
 	@Builder.Default
-	private LocalDate docDate=LocalDate.now();
+	private LocalDate docDate = LocalDate.now();
 	@Column(name = "type")
 	private String type;
 	@Column(name = "customername")
@@ -74,7 +72,6 @@ public class ReceiptVO {
 	@Column(name = "chequeutino", length = 10)
 	private String chequeUtiNo;
 	@Column(name = "chequeutidt")
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	private LocalDate chequeUtiDt;
 	@Column(name = "receivedfrom")
 	private String receivedFrom;
@@ -82,7 +79,6 @@ public class ReceiptVO {
 	private String netAmount;
 	@Column(name = "remarks")
 	private String remarks;
-	
 
 	// Common Fields
 	@Column(name = "branch")
@@ -106,13 +102,11 @@ public class ReceiptVO {
 	@Column(name = "finyear")
 	private String finYear;
 	@Column(name = "screencode")
-	private String screenCode;
+	@Builder.Default
+	private String screenCode = "rt";
 	@Column(name = "screenname")
-	private String screenName;
-	@Column(name = "ipno")
-	private String ipNo;
-	@Column(name = "latitude")
-	private String latitude;
+	@Builder.Default
+	private String screenName = "RECEIPT";
 	@Column(name = "receiptType1")
 	private String receiptType1;
 	@Column(name = "currency")
@@ -121,7 +115,7 @@ public class ReceiptVO {
 	private String currencyAmount;
 	@Column(name = "orgid")
 	private Long orgId;
-	
+
 	@JsonGetter("active")
 	public String getActive() {
 		return active ? "Active" : "In-Active";
