@@ -12,6 +12,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.base.basesetup.dto.CreatedUpdatedDate;
+import com.fasterxml.jackson.annotation.JsonGetter;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -57,6 +58,12 @@ public class BrsOpeningVO {
 
 	@Column(name = "branch", length = 25)
 	private String branch;
+	
+	@Column(name = "docid", length = 25)
+	private String docId;
+	
+	@Column(name = "docdate", length = 25)
+	private LocalDate docDate=LocalDate.now();
 
 	@Column(name = "branchcode", length = 20)
 	private String branchCode;
@@ -90,6 +97,11 @@ public class BrsOpeningVO {
 
 	@Column(name = "latitude", length = 100)
 	private String latitude;
+	
+	@JsonGetter("active")
+	public String getActive() {
+		return active ? "Active" : "In-Active";
+	}
 
 	@Embedded
 	private CreatedUpdatedDate commonDate = new CreatedUpdatedDate();

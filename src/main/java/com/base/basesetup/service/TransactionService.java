@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.base.basesetup.dto.ArApAdjustmentOffSetDTO;
-import com.base.basesetup.dto.ArapAdjustmentsDTO;
 import com.base.basesetup.dto.BrsOpeningDTO;
 import com.base.basesetup.dto.ChartCostCenterDTO;
 import com.base.basesetup.dto.DailyMonthlyExRatesDTO;
@@ -27,9 +26,7 @@ import com.base.basesetup.dto.ReceiptReversalDTO;
 import com.base.basesetup.dto.ReconcileBankDTO;
 import com.base.basesetup.dto.ReconcileCashDTO;
 import com.base.basesetup.dto.ReconcileCorpBankDTO;
-import com.base.basesetup.dto.TaxInvoiceDTO;
 import com.base.basesetup.entity.ArApAdjustmentOffSetVO;
-import com.base.basesetup.entity.ArapAdjustmentsVO;
 import com.base.basesetup.entity.BrsOpeningVO;
 import com.base.basesetup.entity.ChartCostCenterVO;
 import com.base.basesetup.entity.CostInvoiceVO;
@@ -46,20 +43,12 @@ import com.base.basesetup.entity.ReceiptReversalVO;
 import com.base.basesetup.entity.ReconcileBankVO;
 import com.base.basesetup.entity.ReconcileCashVO;
 import com.base.basesetup.entity.ReconcileCorpBankVO;
-import com.base.basesetup.entity.TaxInvoiceVO;
 import com.base.basesetup.exception.ApplicationException;
 
 @Service
 public interface TransactionService {
 
-//	IrnCredit
-	List<IrnCreditVO> getAllIrnCreditByOrgId(Long orgId);
 
-	IrnCreditVO updateCreateIrnCredit(@Valid IrnCreditDTO irnCreditDTO) throws ApplicationException;
-
-	List<IrnCreditVO> getAllIrnCreditById(Long id);
-
-	List<IrnCreditVO> getIrnCreditByActive();
 
 //	DailyMonthlyExRatesVO
 	List<DailyMonthlyExRatesVO> getAllDailyMonthlyExRatesByOrgId(Long orgId);
@@ -74,7 +63,7 @@ public interface TransactionService {
 //	BrsOpening
 	List<BrsOpeningVO> getAllBrsOpeningByOrgId(Long orgId);
 
-	BrsOpeningVO updateCreateBrsOpening(@Valid BrsOpeningDTO brsOpeningDTO) throws ApplicationException;
+	Map<String, Object> updateCreateBrsOpening(@Valid BrsOpeningDTO brsOpeningDTO) throws ApplicationException;
 
 	List<BrsOpeningVO> getAllBrsOpeningById(Long id);
 

@@ -15,13 +15,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.base.basesetup.dto.ArBillBalanceDTO;
-import com.base.basesetup.dto.ReceiptInvDetailsDTO;
 import com.base.basesetup.dto.ReceiptDTO;
+import com.base.basesetup.dto.ReceiptInvDetailsDTO;
 import com.base.basesetup.entity.ArBillBalanceVO;
+import com.base.basesetup.entity.DocumentTypeMappingDetailsVO;
 import com.base.basesetup.entity.ReceiptInvDetailsVO;
 import com.base.basesetup.entity.ReceiptVO;
 import com.base.basesetup.exception.ApplicationException;
 import com.base.basesetup.repo.ArBillBalanceRepo;
+import com.base.basesetup.repo.DocumentTypeMappingDetailsRepo;
 import com.base.basesetup.repo.ReceiptInvDetailsRepo;
 import com.base.basesetup.repo.ReceiptRepo;
 
@@ -31,7 +33,7 @@ public class ARServiceImpl implements ARService {
 	public static final Logger LOGGER = LoggerFactory.getLogger(ARServiceImpl.class);
 
 	@Autowired
-	ReceiptRepo receiptReceivableRepo;
+	ReceiptRepo receiptRepo;
 
 	@Autowired
 	ReceiptInvDetailsRepo receiptInvDetailsRepo;
@@ -39,16 +41,19 @@ public class ARServiceImpl implements ARService {
 	@Autowired
 	ArBillBalanceRepo arBillBalanceRepo;
 
+	@Autowired
+	DocumentTypeMappingDetailsRepo documentTypeMappingDetailsRepo;
+
 	// Receipt
 	@Override
 	public List<ReceiptVO> getAllReceiptReceivableByOrgId(Long orgId) {
 		List<ReceiptVO> receiptReceivableVO = new ArrayList<>();
 		if (ObjectUtils.isNotEmpty(orgId)) {
 			LOGGER.info("Successfully Received ReceiptReceivable BY OrgId : {}", orgId);
-			receiptReceivableVO = receiptReceivableRepo.getAllReceiptReceivableByOrgId(orgId);
+			receiptReceivableVO = receiptRepo.getAllReceiptReceivableByOrgId(orgId);
 		} else {
 			LOGGER.info("Successfully Received  ReceiptReceivable For All OrgId.");
-			receiptReceivableVO = receiptReceivableRepo.findAll();
+			receiptReceivableVO = receiptRepo.findAll();
 		}
 		return receiptReceivableVO;
 	}
@@ -58,66 +63,52 @@ public class ARServiceImpl implements ARService {
 		List<ReceiptVO> receiptReceivableVO = new ArrayList<>();
 		if (ObjectUtils.isNotEmpty(id)) {
 			LOGGER.info("Successfully Received ReceiptReceivable BY Id : {}", id);
-			receiptReceivableVO = receiptReceivableRepo.getAllReceiptReceivableById(id);
+			receiptReceivableVO = receiptRepo.getAllReceiptReceivableById(id);
 		} else {
 			LOGGER.info("Successfully Received ReceiptReceivable For All Id.");
-			receiptReceivableVO = receiptReceivableRepo.findAll();
+			receiptReceivableVO = receiptRepo.findAll();
 		}
 		return receiptReceivableVO;
 	}
 
 	@Override
-	public ReceiptVO updateCreateReceiptReceivable(@Valid ReceiptDTO receiptDTO)
-			throws ApplicationException {
+	public Map<String, Object> updateCreateReceiptReceivable(@Valid ReceiptDTO receiptDTO) throws ApplicationException {
+		String screenCode = "RT";
 		ReceiptVO receiptVO = new ReceiptVO();
-		boolean isUpdate = false;
+		String message;
 		if (ObjectUtils.isNotEmpty(receiptDTO.getId())) {
-			isUpdate = true;
-			receiptVO = receiptReceivableRepo.findById(receiptDTO.getId())
-					.orElseThrow(() -> new ApplicationException("Invalid ReceiptReceivable details"));
+			receiptVO = receiptRepo.findById(receiptDTO.getId())
+					.orElseThrow(() -> new ApplicationException("Receipt Not Found!"));
 			receiptVO.setUpdatedBy(receiptDTO.getCreatedBy());
+			createUpdateReceiptVOByReceiptDTO(receiptDTO, receiptVO);
+			message = "Receipt Updated Successfully";
 		} else {
+			// GETDOCID API
+			String docId = receiptRepo.getReceiptDocId(receiptDTO.getOrgId(), receiptDTO.getFinYear(),
+					receiptDTO.getBranchCode(), screenCode);
+			receiptVO.setDocId(docId);
+
+			// GETDOCID LASTNO +1
+			DocumentTypeMappingDetailsVO documentTypeMappingDetailsVO = documentTypeMappingDetailsRepo
+					.findByOrgIdAndFinYearAndBranchCodeAndScreenCode(receiptDTO.getOrgId(), receiptDTO.getFinYear(),
+							receiptDTO.getBranchCode(), screenCode);
+			documentTypeMappingDetailsVO.setLastno(documentTypeMappingDetailsVO.getLastno() + 1);
+			documentTypeMappingDetailsRepo.save(documentTypeMappingDetailsVO);
+
 			receiptVO.setUpdatedBy(receiptDTO.getCreatedBy());
 			receiptVO.setCreatedBy(receiptDTO.getCreatedBy());
+			createUpdateReceiptVOByReceiptDTO(receiptDTO, receiptVO);
+			message = "Receipt Created Successfully";
 		}
 
-		List<ReceiptInvDetailsVO> particularsAccountReceiptVOs = new ArrayList<>();
-		if (receiptDTO.getReceiptInvDetailaDTO() != null) {
-			for (ReceiptInvDetailsDTO particularsAccountReceiptDTO : receiptDTO.getReceiptInvDetailaDTO()) {
-				ReceiptInvDetailsVO particularsAccountReceiptVO;
-				if (particularsAccountReceiptDTO.getId() != null
-						& ObjectUtils.isEmpty(particularsAccountReceiptDTO.getId())) {
-					particularsAccountReceiptVO = receiptInvDetailsRepo.findById(particularsAccountReceiptDTO.getId())
-							.orElse(new ReceiptInvDetailsVO());
-				} else {
-					particularsAccountReceiptVO = new ReceiptInvDetailsVO();
-				}
-				particularsAccountReceiptVO.setInvNo(particularsAccountReceiptDTO.getInvNo());
-				particularsAccountReceiptVO.setInvDate(particularsAccountReceiptDTO.getInvDate());
-				particularsAccountReceiptVO.setRefNo(particularsAccountReceiptDTO.getRefNo());
-				particularsAccountReceiptVO.setRefDate(particularsAccountReceiptDTO.getRefDate());
-				particularsAccountReceiptVO.setMasterRef(particularsAccountReceiptDTO.getMasterRef());
-				particularsAccountReceiptVO.setHouseRef(particularsAccountReceiptDTO.getHouseRef());
-				particularsAccountReceiptVO.setCurrency(particularsAccountReceiptDTO.getCurrency());
-				particularsAccountReceiptVO.setExRate(particularsAccountReceiptDTO.getExRate());
-				particularsAccountReceiptVO.setAmount(particularsAccountReceiptDTO.getAmount());
-				particularsAccountReceiptVO.setChargeAmt(particularsAccountReceiptDTO.getChargeAmt());
-				particularsAccountReceiptVO.setOutstanding(particularsAccountReceiptDTO.getOutstanding());
-				particularsAccountReceiptVO.setSettled(particularsAccountReceiptDTO.getSettled());
-				particularsAccountReceiptVO.setRecExRate(particularsAccountReceiptDTO.getRecExRate());
-				particularsAccountReceiptVO.setTxnSettled(particularsAccountReceiptDTO.getTxnSettled());
-				particularsAccountReceiptVO.setGainAmt(particularsAccountReceiptDTO.getGainAmt());
-				particularsAccountReceiptVO.setReceiptVO(receiptVO);
-				particularsAccountReceiptVOs.add(particularsAccountReceiptVO);
-			}
-		}
-		receiptVO.setReceiptInvDetailsVO(particularsAccountReceiptVOs);
-		getReceiptReceivableVOFromReceiptReceivableDTO(receiptDTO, receiptVO);
-		return receiptReceivableRepo.save(receiptVO);
+		receiptRepo.save(receiptVO);
+		Map<String, Object> response = new HashMap<>();
+		response.put("receiptVO", receiptVO);
+		response.put("message", message);
+		return response;
 	}
 
-	private void getReceiptReceivableVOFromReceiptReceivableDTO(@Valid ReceiptDTO receiptDTO,
-			ReceiptVO receiptVO) {
+	private ReceiptVO createUpdateReceiptVOByReceiptDTO(@Valid ReceiptDTO receiptDTO, ReceiptVO receiptVO) {
 		receiptVO.setBranch(receiptDTO.getBranch());
 		receiptVO.setBranchCode(receiptDTO.getBranchCode());
 		receiptVO.setCustomer(receiptDTO.getCustomer());
@@ -127,7 +118,7 @@ public class ARServiceImpl implements ARService {
 		receiptVO.setCancel(receiptDTO.isCancel());
 		receiptVO.setCancelRemarks(receiptDTO.getCancelRemarks());
 		receiptVO.setFinYear(receiptDTO.getFinYear());
-		receiptVO.setScreenCode("AR");
+		receiptVO.setScreenCode("RT");
 		receiptVO.setScreenName("RECEIPT");
 		receiptVO.setIpNo(receiptDTO.getIpNo());
 		receiptVO.setLatitude(receiptDTO.getLatitude());
@@ -155,18 +146,46 @@ public class ARServiceImpl implements ARService {
 		receiptVO.setNetAmount(receiptDTO.getNetAmount());
 		receiptVO.setRemarks(receiptDTO.getRemarks());
 
+		if (ObjectUtils.isNotEmpty(receiptVO.getId())) {
+			List<ReceiptInvDetailsVO> receiptInvDetailsVO1 = receiptInvDetailsRepo.findByReceiptVO(receiptVO);
+			receiptInvDetailsRepo.deleteAll(receiptInvDetailsVO1);
+		}
+
+		List<ReceiptInvDetailsVO> receiptInvDetailsVOs = new ArrayList<>();
+		for (ReceiptInvDetailsDTO receiptInvDetailsDTO : receiptDTO.getReceiptInvDetailaDTO()) {
+			ReceiptInvDetailsVO receiptInvDetailsVO = new ReceiptInvDetailsVO();
+
+			receiptInvDetailsVO.setInvNo(receiptInvDetailsDTO.getInvNo());
+			receiptInvDetailsVO.setInvDate(receiptInvDetailsDTO.getInvDate());
+			receiptInvDetailsVO.setRefNo(receiptInvDetailsDTO.getRefNo());
+			receiptInvDetailsVO.setRefDate(receiptInvDetailsDTO.getRefDate());
+			receiptInvDetailsVO.setMasterRef(receiptInvDetailsDTO.getMasterRef());
+			receiptInvDetailsVO.setHouseRef(receiptInvDetailsDTO.getHouseRef());
+			receiptInvDetailsVO.setCurrency(receiptInvDetailsDTO.getCurrency());
+			receiptInvDetailsVO.setExRate(receiptInvDetailsDTO.getExRate());
+			receiptInvDetailsVO.setAmount(receiptInvDetailsDTO.getAmount());
+			receiptInvDetailsVO.setChargeAmt(receiptInvDetailsDTO.getChargeAmt());
+			receiptInvDetailsVO.setOutstanding(receiptInvDetailsDTO.getOutstanding());
+			receiptInvDetailsVO.setSettled(receiptInvDetailsDTO.getSettled());
+			receiptInvDetailsVO.setRecExRate(receiptInvDetailsDTO.getRecExRate());
+			receiptInvDetailsVO.setTxnSettled(receiptInvDetailsDTO.getTxnSettled());
+			receiptInvDetailsVO.setGainAmt(receiptInvDetailsDTO.getGainAmt());
+			receiptInvDetailsVO.setReceiptVO(receiptVO);
+			receiptInvDetailsVOs.add(receiptInvDetailsVO);
+		}
+		receiptVO.setReceiptInvDetailsVO(receiptInvDetailsVOs);
+		return receiptVO;
 	}
 
 	@Override
 	public List<ReceiptVO> getReceiptReceivableByActive() {
-		return receiptReceivableRepo.findReceiptReceivablesByActive();
+		return receiptRepo.findReceiptReceivablesByActive();
 	}
 
 	@Override
 	public List<Map<String, Object>> getCustomerNameAndCodeForReceipt(Long orgId, String branch, String branchCode,
 			String finYear) {
-		Set<Object[]> customerName = receiptReceivableRepo.getCustomerNameAndCodeForReceipt(orgId, branch, branchCode,
-				finYear);
+		Set<Object[]> customerName = receiptRepo.getCustomerNameAndCodeForReceipt(orgId, branch, branchCode, finYear);
 		return getCustomerName(customerName);
 	}
 
@@ -210,27 +229,43 @@ public class ARServiceImpl implements ARService {
 	}
 
 	@Override
-	public ArBillBalanceVO updateCreateArBillBalance(
-			@Valid ArBillBalanceDTO arBillBalanceDTO) throws ApplicationException {
+	public Map<String, Object> updateCreateArBillBalance(@Valid ArBillBalanceDTO arBillBalanceDTO)
+			throws ApplicationException {
+		String screenCode = "ARB";
 		ArBillBalanceVO arBillBalanceVO = new ArBillBalanceVO();
-		boolean isUpdate = false;
+		String message;
 		if (ObjectUtils.isNotEmpty(arBillBalanceDTO.getId())) {
-			isUpdate = true;
 			arBillBalanceVO = arBillBalanceRepo.findById(arBillBalanceDTO.getId())
-					.orElseThrow(() -> new ApplicationException("Invalid ArApBillBalance details"));
+					.orElseThrow(() -> new ApplicationException("AR Bill Balance Not Found!"));
+			createUpdateArBillBalanceVOByArBillBalanceDTO(arBillBalanceDTO, arBillBalanceVO);
+			message = "AR Bill Balance Updated Successfully";
 			arBillBalanceVO.setUpdatedBy(arBillBalanceDTO.getCreatedBy());
 		} else {
+			// GETDOCID API
+			String docId = arBillBalanceRepo.getArBillBalanceDocId(arBillBalanceDTO.getOrgId(),
+					arBillBalanceDTO.getFinYear(), arBillBalanceDTO.getBranchCode(), screenCode);
+			arBillBalanceVO.setDocId(docId);
+
+			// GETDOCID LASTNO +1
+			DocumentTypeMappingDetailsVO documentTypeMappingDetailsVO = documentTypeMappingDetailsRepo
+					.findByOrgIdAndFinYearAndBranchCodeAndScreenCode(arBillBalanceDTO.getOrgId(),
+							arBillBalanceDTO.getFinYear(), arBillBalanceDTO.getBranchCode(), screenCode);
+			documentTypeMappingDetailsVO.setLastno(documentTypeMappingDetailsVO.getLastno() + 1);
+			documentTypeMappingDetailsRepo.save(documentTypeMappingDetailsVO);
 			arBillBalanceVO.setUpdatedBy(arBillBalanceDTO.getCreatedBy());
 			arBillBalanceVO.setCreatedBy(arBillBalanceDTO.getCreatedBy());
+			createUpdateArBillBalanceVOByArBillBalanceDTO(arBillBalanceDTO, arBillBalanceVO);
+			message = "AR Bill Balance Created Successfully";
 		}
 
-		getArBillBalanceVOFromArBillBalanceDTO(arBillBalanceDTO,
-				arBillBalanceVO);
-		return arBillBalanceRepo.save(arBillBalanceVO);
+		arBillBalanceRepo.save(arBillBalanceVO);
+		Map<String, Object> response = new HashMap<>();
+		response.put("arBillBalanceVO", arBillBalanceVO);
+		response.put("message", message);
+		return response;
 	}
 
-	private void getArBillBalanceVOFromArBillBalanceDTO(
-			@Valid ArBillBalanceDTO arBillBalanceDTO,
+	private void createUpdateArBillBalanceVOByArBillBalanceDTO(@Valid ArBillBalanceDTO arBillBalanceDTO,
 			ArBillBalanceVO arBillBalanceVO) {
 		arBillBalanceVO.setAccName(arBillBalanceDTO.getAccName());
 		arBillBalanceVO.setPartyName(arBillBalanceDTO.getPartyName());
@@ -267,13 +302,12 @@ public class ARServiceImpl implements ARService {
 		return arBillBalanceRepo.findArBillBalanceByActive();
 	}
 
-	
-	//Receipt Register
+	// Receipt Register
 	@Override
 	public List<Map<String, Object>> getAllReceiptRegister(Long orgId, String branch, String branchCode, String finYear,
 			String fromDate, String toDate, String subLedgerName) {
-		Set<Object[]> register = receiptReceivableRepo.findAllReceiptRegister(orgId, branch, branchCode,
-				finYear, fromDate, toDate, subLedgerName);
+		Set<Object[]> register = receiptRepo.findAllReceiptRegister(orgId, branch, branchCode, finYear, fromDate,
+				toDate, subLedgerName);
 		return getRegister(register);
 	}
 
@@ -300,8 +334,7 @@ public class ARServiceImpl implements ARService {
 			doctype.put("setteled", sup[16] != null ? sup[16].toString() : "");
 			doctype.put("createdOn", sup[17] != null ? sup[17].toString() : "");
 			doctype.put("createdBy", sup[18] != null ? sup[18].toString() : "");
-			
-			
+
 			doctypeMappingDetails.add(doctype);
 		}
 
