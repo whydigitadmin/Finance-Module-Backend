@@ -26,4 +26,10 @@ public interface CostDebitNoteService {
 
 
 	String getCostDebitNoteDocId(Long orgId, String finYear, String branch, String branchCode);
+
+	List<Map<String, Object>> partyDetailsForCostDebitNote(Long orgId, String branch, String finYear);
+
+	List<Map<String, Object>> chargeTypeDetailsForCostDebitNote(Long orgId);
+
+	List<Map<String, Object>> getAllDocIdForCostInvoice(Long orgId);
 }

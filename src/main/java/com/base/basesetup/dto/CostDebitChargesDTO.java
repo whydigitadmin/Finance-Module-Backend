@@ -50,8 +50,8 @@ public class CostDebitChargesDTO {
 
 	private BigDecimal gst;
 	
-	private BigDecimal tax;
+	private boolean tax;
 	
-	private BigDecimal exampted;
+	private boolean exampted;
 	
 }

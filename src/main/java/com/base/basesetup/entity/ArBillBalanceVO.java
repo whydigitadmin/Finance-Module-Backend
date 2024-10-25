@@ -13,7 +13,6 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.base.basesetup.dto.CreatedUpdatedDate;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonGetter;
 
 import lombok.AllArgsConstructor;
@@ -37,8 +36,8 @@ public class ArBillBalanceVO {
 	@Column(name = "docid", length = 50)
 	private String docId;
 
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	@Column(name = "docdate")
+	@Builder.Default
 	private LocalDate docDate = LocalDate.now();
 
 	@Column(name = "accname", length = 50)
@@ -71,18 +70,15 @@ public class ArBillBalanceVO {
 	@Column(name = "billno", precision = 10)
 	private Long billNo;
 
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	@Column(name = "billdate")
 	private LocalDate billDate;
 
 	@Column(name = "supprefno", length = 25)
 	private String suppRefNo;
 
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	@Column(name = "supprefdate")
 	private LocalDate suppRefDate;
 
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	@Column(name = "duedate")
 	private LocalDate dueDate;
 
@@ -135,12 +131,6 @@ public class ArBillBalanceVO {
 	@Builder.Default
 	private String screenName = "AR BILL BALANCE";
 
-	@Column(name = "ipno", length = 15)
-	private String ipNo;
-
-	@Column(name = "latitude", length = 100)
-	private String latitude;
-	
 	@JsonGetter("active")
 	public String getActive() {
 		return active ? "Active" : "In-Active";

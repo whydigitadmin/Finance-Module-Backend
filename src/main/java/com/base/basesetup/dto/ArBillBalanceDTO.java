@@ -25,12 +25,9 @@ public class ArBillBalanceDTO {
 	private BigDecimal billExRate;
 	private boolean postBillExRate;
 	private Long billNo;
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	private LocalDate billDate;
 	private String suppRefNo;
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	private LocalDate suppRefDate;
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	private LocalDate dueDate;
 	private BigDecimal debitAmt;
 	private BigDecimal creditAmt;
@@ -46,6 +43,4 @@ public class ArBillBalanceDTO {
 	private boolean cancel;
 	private String cancelRemarks;
 	private String finYear;
-	private String ipNo;
-	private String latitude;
 }

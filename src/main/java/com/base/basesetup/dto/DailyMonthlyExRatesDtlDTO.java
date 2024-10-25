@@ -13,7 +13,7 @@ public class DailyMonthlyExRatesDtlDTO {
 	private Long id;
 	private String currency;
 	private String currencyDescripition;
-	private String sellingExRate;
-	private String buyingExrate;
+	private float sellingExRate;
+	private float buyingExrate;
 
 }

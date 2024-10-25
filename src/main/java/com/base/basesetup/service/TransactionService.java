@@ -29,6 +29,7 @@ import com.base.basesetup.dto.ReconcileCorpBankDTO;
 import com.base.basesetup.entity.ArApAdjustmentOffSetVO;
 import com.base.basesetup.entity.BrsOpeningVO;
 import com.base.basesetup.entity.ChartCostCenterVO;
+import com.base.basesetup.entity.CostInvoiceVO;
 import com.base.basesetup.entity.DailyMonthlyExRatesVO;
 import com.base.basesetup.entity.DebitNoteVO;
 import com.base.basesetup.entity.FundTransferVO;
@@ -91,7 +92,7 @@ public interface TransactionService {
 //	FundTransfer
 	List<FundTransferVO> getAllFundTransferByOrgId(Long orgId);
 
-	FundTransferVO updateCreateFundTransfer(@Valid FundTransferDTO fundTransferDTO) throws ApplicationException;
+	Map<String, Object> updateCreateFundTransfer(@Valid FundTransferDTO fundTransferDTO) throws ApplicationException;
 
 	List<FundTransferVO> getAllFundTransferById(Long id);
 
@@ -226,6 +227,10 @@ public interface TransactionService {
 	List<ReconcileCashVO> getAllReconcileCashById(Long id);
 
 	List<ReconcileCashVO> getReconcileCashByActive();
+
+		FundTransferVO getFundTranferByDocId(Long orgId, String docId);
+
+		String getFundTranferDocId(Long orgId, String finYear, String branch, String branchCode);
 
 	
 	String getReconcileCashDocId(Long orgId, String finYear, String branch,String branchCode);

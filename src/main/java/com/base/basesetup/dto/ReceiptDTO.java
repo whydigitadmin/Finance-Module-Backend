@@ -33,7 +33,6 @@ public class ReceiptDTO {
 	private String chequeBank;
 	private String receiptType;
 	private String chequeUtiNo;
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	private LocalDate chequeUtiDt;
 	private String receivedFrom;
 	private String netAmount;
@@ -49,8 +48,6 @@ public class ReceiptDTO {
 	private boolean cancel;
 	private String cancelRemarks;
 	private String finYear;
-	private String ipNo;
-	private String latitude;
 	private String receiptType1;
 	private String currency;
 	private String currencyAmount;

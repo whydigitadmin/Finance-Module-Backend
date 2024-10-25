@@ -52,6 +52,9 @@ public class CostDebitNoteSummaryVO {
 	@Column(name = "amtinwords", length = 150)
 	private String amtInWords;
 	
+	@Column(name = "roundoff",precision =10,scale =2)
+	private BigDecimal roundOff;
+	
 	
 	@ManyToOne
 	@JoinColumn(name="costdebitnoteid")

@@ -21,9 +21,9 @@ public class ChargerCostInvoiceDTO {
 	private String chargeLedger;
 	private String gsac;
 	private String contType;
-	private BigDecimal currency;
+	private String currency;
 	private BigDecimal exRate;
-	private Long gst;
+	private String gst;
 	private BigDecimal fcAmt;
 	private BigDecimal lcAmt;
 	private BigDecimal billAmt;
