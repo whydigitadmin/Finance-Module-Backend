@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import com.base.basesetup.dto.ArapDetailsDTO;
 import com.base.basesetup.entity.ArapDetailsVO;
-import com.base.basesetup.entity.CostInvoiceVO;
 import com.base.basesetup.exception.ApplicationException;
 
 @Service
