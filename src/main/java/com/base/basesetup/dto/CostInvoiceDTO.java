@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
+import javax.persistence.Column;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,7 +23,7 @@ public class CostInvoiceDTO {
 	private String costInvoiceNo;
 	private LocalDate costInvoiceDate;
 	private String supplierBillNo;
-	private String suppliertType;
+	private String supplierType;
 	private String supplierCode;
 	private int creditDays;
 	private LocalDate dueDate;
@@ -46,6 +48,10 @@ public class CostInvoiceDTO {
 	private String finYear;
 	private String ipNo;
 	private String latitude;
+	private String payment;
+	private String accuralid;
+	private String utrRef;
+	private String costType;
 
 	List<ChargerCostInvoiceDTO> chargerCostInvoiceDTO;
 

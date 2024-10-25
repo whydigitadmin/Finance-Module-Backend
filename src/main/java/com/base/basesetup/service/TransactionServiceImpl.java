@@ -947,47 +947,71 @@ public class TransactionServiceImpl implements TransactionService {
 	}
 
 	@Override
-	public FundTransferVO updateCreateFundTransfer(@Valid FundTransferDTO fundTransferDTO) throws ApplicationException {
+	public Map<String, Object> updateCreateFundTransfer(@Valid FundTransferDTO fundTransferDTO) throws ApplicationException {
 		FundTransferVO fundTransferVO = new FundTransferVO();
-		boolean isUpdate = false;
-		if (ObjectUtils.isNotEmpty(fundTransferDTO.getId())) {
-			isUpdate = true;
-			fundTransferVO = fundTransferRepo.findById(fundTransferDTO.getId())
-					.orElseThrow(() -> new ApplicationException("Invalid FundTransfer details"));
-			fundTransferVO.setUpdatedBy(fundTransferDTO.getCreatedBy());
-		} else {
-			fundTransferVO.setUpdatedBy(fundTransferDTO.getCreatedBy());
+		String message=null;
+		String screenCode="FT";
+		if (ObjectUtils.isEmpty(fundTransferDTO.getId())) {
+
+			fundTransferVO = new FundTransferVO();
+
+			// GETDOCID API
+			String docId = fundTransferRepo.getFundTranferDocId(fundTransferDTO.getOrgId(), fundTransferDTO.getFinYear(),
+					fundTransferDTO.getBranchCode(), screenCode);
+			fundTransferVO.setDocId(docId);
+
+			// GETDOCID LASTNO +1
+			DocumentTypeMappingDetailsVO documentTypeMappingDetailsVO = documentTypeMappingDetailsRepo
+					.findByOrgIdAndFinYearAndBranchCodeAndScreenCode(fundTransferDTO.getOrgId(),
+							fundTransferDTO.getFinYear(), fundTransferDTO.getBranchCode(), screenCode);
+			documentTypeMappingDetailsVO.setLastno(documentTypeMappingDetailsVO.getLastno() + 1);
+			documentTypeMappingDetailsRepo.save(documentTypeMappingDetailsVO);
+
 			fundTransferVO.setCreatedBy(fundTransferDTO.getCreatedBy());
+			fundTransferVO.setUpdatedBy(fundTransferDTO.getCreatedBy());
+
+			message = "FundTransfer Creation Successfully";
 		}
 
+		else {
+			fundTransferVO = fundTransferRepo.findById(fundTransferDTO.getId()).orElseThrow(
+					() -> new ApplicationException("Fund Transfer Not Found with id: " + fundTransferDTO.getId()));
+			fundTransferVO.setUpdatedBy(fundTransferDTO.getCreatedBy());
+
+			message = "FundTransfer Updation Successfully";
+		}
+
+
 		getFundTransferVOFromFundTransferDTO(fundTransferDTO, fundTransferVO);
-		return fundTransferRepo.save(fundTransferVO);
+		fundTransferRepo.save(fundTransferVO);
+		
+		Map<String, Object> response = new HashMap<>();
+		response.put("fundTransferVO", fundTransferVO);
+		response.put("message", message);
+		return response;
 	}
 
 	private void getFundTransferVOFromFundTransferDTO(@Valid FundTransferDTO fundTransferDTO,
 			FundTransferVO fundTransferVO) {
 		fundTransferVO.setBranch(fundTransferDTO.getBranch());
-		fundTransferVO.setDocId(fundTransferDTO.getDocId());
-		fundTransferVO.setPaymentType(fundTransferDTO.getPaymentType());
-		fundTransferVO.setDocDate(fundTransferDTO.getDocDate());
-		fundTransferVO.setReferenceNo(fundTransferDTO.getReferenceNo());
-		fundTransferVO.setReferenceDate(fundTransferDTO.getReferenceDate());
-		fundTransferVO.setFromAccount(fundTransferDTO.getFromAccount());
-		fundTransferVO.setBalance(fundTransferDTO.getBalance());
 		fundTransferVO.setCurrency(fundTransferDTO.getCurrency());
 		fundTransferVO.setExRate(fundTransferDTO.getExRate());
-		fundTransferVO.setToBranch(fundTransferDTO.getToBranch());
-		fundTransferVO.setToBank(fundTransferDTO.getToBank());
-		fundTransferVO.setChequeBook(fundTransferDTO.getChequeBook());
-		fundTransferVO.setChequeNo(fundTransferDTO.getChequeNo());
-		fundTransferVO.setChequeDate(fundTransferDTO.getChequeDate());
-		fundTransferVO.setPaymentAmount(fundTransferDTO.getPaymentAmount());
-		fundTransferVO.setConversionRate(fundTransferDTO.getConversionRate());
-		fundTransferVO.setReceiptAmount(fundTransferDTO.getReceiptAmount());
-		fundTransferVO.setGainLoss(fundTransferDTO.getGainLoss());
-		fundTransferVO.setRemarks(fundTransferDTO.getRemarks());
-		fundTransferVO.setActive(fundTransferDTO.isActive());
+		fundTransferVO.setAmount(fundTransferDTO.getAmount());
 		fundTransferVO.setOrgId(fundTransferDTO.getOrgId());
+		fundTransferVO.setCreatedBy(fundTransferDTO.getCreatedBy());
+		fundTransferVO.setCancel(fundTransferDTO.isCancel());
+		fundTransferVO.setCancelRemarks(fundTransferDTO.getCancelRemarks());
+		fundTransferVO.setBranchCode(fundTransferDTO.getBranchCode());
+		fundTransferVO.setFinYear(fundTransferDTO.getFinYear());
+	    fundTransferVO.setIpNo(fundTransferDTO.getIpNo());
+	    fundTransferVO.setLatitude(fundTransferDTO.getLatitude());
+	    fundTransferVO.setMode(fundTransferDTO.getMode());
+	    fundTransferVO.setDocNo(fundTransferDTO.getDocNo());
+	    fundTransferVO.setCorpAccount(fundTransferDTO.getCorpAccount());
+	    fundTransferVO.setTransferTo(fundTransferDTO.getTransferTo());
+	    fundTransferVO.setBranchAcc(fundTransferDTO.getBranchAcc());
+	    fundTransferVO.setAmtBase(fundTransferDTO.getAmtBase());
+	    fundTransferVO.setNarration(fundTransferDTO.getNarration());
 
 	}
 
@@ -1461,6 +1485,15 @@ public class TransactionServiceImpl implements TransactionService {
 
 	private void getPaymentVoucherVOFromPaymentVoucherDTO(@Valid PaymentVoucherDTO paymentVoucherDTO,
 			PaymentVoucherVO paymentVoucherVO) {
+
+
+//		// // Finyr
+//		int finyr = paymentVoucherRepo.findFinyr();
+//		// DocId
+//		String paymentVoucher = "PV" + finyr + paymentVoucherRepo.findDocId();
+//		paymentVoucherVO.setDocId(paymentVoucher);
+//		paymentVoucherRepo.nextSeq();
+
 
 		paymentVoucherVO.setVehicleSubType(paymentVoucherDTO.getVehicleSubType());
 		paymentVoucherVO.setReferenceNo(paymentVoucherDTO.getReferenceNo());
@@ -2435,6 +2468,10 @@ public class TransactionServiceImpl implements TransactionService {
 	}
 
 	@Override
+
+	public FundTransferVO getFundTranferByDocId(Long orgId, String docId) {
+		return fundTransferRepo.findAllFundTransferByDocId(orgId, docId);
+
 	public String getReconcileCashDocId(Long orgId, String finYear,String branch, String branchCode) {
 		String ScreenCode = "RCH";
 		String result = reconcileCashRepo.getReconcileCashDocId(orgId, finYear, branchCode,ScreenCode);
@@ -2445,8 +2482,15 @@ public class TransactionServiceImpl implements TransactionService {
 	@Override
 	public ReconcileCashVO getReconcileCashByDocId(Long orgId, String docId) {
 		return reconcileCashRepo.findAllReconcileCashByDocId(orgId, docId);
+
 	}
 
+	@Override
+	public String getFundTranferDocId(Long orgId, String finYear, String branch, String branchCode) {
+		String ScreenCode = "CI";
+		String result = fundTransferRepo.getFundTranferDocId(orgId, finYear, branchCode, ScreenCode);
+		return result;
+	}
 	
 
 	

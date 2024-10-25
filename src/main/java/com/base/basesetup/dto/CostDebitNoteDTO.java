@@ -26,7 +26,7 @@ public class CostDebitNoteDTO {
 	private String subType;
 	private String product;
 	private String vohNo;
-	private String vohDate; 
+	private LocalDate vohDate; 
 	private String partyType;
 	private String suppRefNo;
 	private LocalDate suppDate;
@@ -43,6 +43,10 @@ public class CostDebitNoteDTO {
 	private String status;
 	private String orginBill;
 	private String gstType;
+	private boolean taxExampt;
+	private LocalDate currentDate;
+	private BigDecimal currentDateValue;
+	private String partyAddType;
 	
 	private List<CostDebitNoteSummaryDTO> costDebitNoteSummaryDTO;
 	

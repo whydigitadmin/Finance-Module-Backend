@@ -1,7 +1,8 @@
 
 package com.base.basesetup.entity;
 
-import java.time.LocalDateTime;
+import java.math.BigDecimal;
+import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Embedded;
@@ -32,58 +33,59 @@ public class FundTransferVO {
 	@SequenceGenerator(name = "fundtransfergen", sequenceName = "fundtransferseq", initialValue = 1000000001, allocationSize = 1)
 	@Column(name = "fundtransferid")
 	private Long id;
-	@Column(name = "branch")
+	@Column(name = "branch",length = 25)
 	private String branch;
 	@Column(name = "docid")
 	private String docId;
-	@Column(name = "paymenttype")
-	private String paymentType;
 	@Column(name = "docdate")
-	private LocalDateTime docDate;
-	@Column(name = "referenceno")
-	private String referenceNo;
-	@Column(name = "referencedate")
-	private LocalDateTime referenceDate;
-	@Column(name = "fromaccount")
-	private String fromAccount;
-	@Column(name = "balance")
-	private String balance;
-	@Column(name = "currency")
+	private LocalDate docDate=LocalDate.now();
+	@Column(name = "currency",length =10)
 	private String currency;
-	@Column(name = "exrate")
+	@Column(name = "exrate",precision =10,scale =2)
 	private String exRate;
-	@Column(name = "tobranch")
-	private String toBranch;
-	@Column(name = "tobank")
-	private String toBank;
-	@Column(name = "chequebook")
-	private String chequeBook;
-	@Column(name = "chequeno")
-	private String chequeNo;
-	@Column(name = "chequedate")
-	private LocalDateTime chequeDate;
-	@Column(name = "paymentamount")
-	private String paymentAmount;
-	@Column(name = "conversionrate")
-	private String conversionRate;
-	@Column(name = "receiptamount")
-	private String receiptAmount;
-	@Column(name = "gainLoss")
-	private String gainLoss;
-	@Column(name = "remarks")
-	private String remarks;
+	@Column(name = "amount",precision =10,scale =2)
+	private BigDecimal amount;
 	@Column(name = "active")
 	private boolean active;
-	@Column(name = "orgid")
+	@Column(name = "orgid",length = 50)
 	private Long orgId;
-	@Column(name = "createdby")
+	@Column(name = "createdby",length = 25)
 	private String createdBy;
-	@Column(name = "modifiedby")
+	@Column(name = "modifiedby",length = 25)
 	private String updatedBy;
 	@Column(name = "cancel")
 	private boolean cancel;
-	@Column(name = "cancelremarks")
+	@Column(name = "cancelremarks",length = 50)
 	private String cancelRemarks;
+	@Column(name = "branchcode",length =10)
+	private String branchCode;
+	@Column(name = "finyear",length =10)
+	private String finYear;
+	@Column(name = "Screencode",length =10)
+	private String ScreenCode="FT";
+	@Column(name = "Screenname",length =15)
+	private String ScreenName="FUND TRANSFER";
+	@Column(name = "ipno",length =15)
+	private String ipNo;
+	@Column(name = "latitude",length =100)
+	private String latitude;
+	@Column(name = "mode",length =25)
+	private String mode;
+	@Column(name = "docno",length =50)
+	private String docNo;
+	@Column(name = "corpaccount",length =50)
+	private String corpAccount;
+	@Column(name = "transferto",length =50)
+	private String transferTo;
+	@Column(name = "branchacc",length =50)
+	private String branchAcc;
+	@Column(name = "narration",length =150)
+	private String narration;
+	@Column(name = "amtbase",precision =10,scale =2)
+	private BigDecimal amtBase;
+ 
+	
+
 
 	@Embedded
 	@Builder.Default
