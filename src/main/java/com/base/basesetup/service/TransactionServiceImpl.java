@@ -2326,6 +2326,7 @@ public class TransactionServiceImpl implements TransactionService {
 
 	public FundTransferVO getFundTranferByDocId(Long orgId, String docId) {
 		return fundTransferRepo.findAllFundTransferByDocId(orgId, docId);
+	}
 
 @Override
     public String getReconcileCashDocId(Long orgId, String finYear,String branch, String branchCode) {

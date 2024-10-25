@@ -280,8 +280,6 @@ public class APServiceImpl implements APService {
 			apBillBalanceVO.setCancel(apBillBalanceDTO.isCancel());
 			apBillBalanceVO.setCancelRemarks(apBillBalanceDTO.getCancelRemarks());
 			apBillBalanceVO.setFinYear(apBillBalanceDTO.getFinYear());
-			apBillBalanceVO.setIpNo(apBillBalanceDTO.getIpNo());
-			apBillBalanceVO.setLatitude(apBillBalanceDTO.getLatitude());
 			apBillBalanceVO.setOrgId(apBillBalanceDTO.getOrgId());
 		}
 
@@ -407,5 +405,13 @@ public class APServiceImpl implements APService {
 
 		return payment;
 	}
+	
+	@Override
+	public String getApBillBalanceDocId(Long orgId, String finYear, String branch, String branchCode) {
+		String ScreenCode = "APB";
+		String result = apBillBalanceRepo.getApBillBalanceDocId(orgId, finYear, branchCode, ScreenCode);
+		return result;
+	}
+
 
 }
