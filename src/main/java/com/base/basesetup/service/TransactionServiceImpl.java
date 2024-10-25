@@ -1333,7 +1333,7 @@ public class TransactionServiceImpl implements TransactionService {
 
 			Map<String, Object> response = new HashMap<>();
 			response.put("message", message);
-			response.put("costInvoiceVO", paymentVoucherVO);
+			response.put("paymentVoucherVO", paymentVoucherVO);
 			return response;
 	}
 
