@@ -77,7 +77,7 @@ public class CostDebitNoteVO {
 	private String vohNo;
 
 	@Column(name = "vohdate", length = 50)
-	private String vohDate; // This can be changed to Date if needed
+	private LocalDate vohDate; // This can be changed to Date if needed
 
 	@Column(name = "partytype", length = 50)
 	private String partyType;
@@ -127,6 +127,15 @@ public class CostDebitNoteVO {
 
 	@Column(name = "gsttype", length = 10)
 	private String gstType;
+	
+	@Column(name = "currentdate")
+	private LocalDate currentDate;
+	
+	@Column(name = "currentdatevalue")
+	private BigDecimal currentDateValue;
+	
+	@Column(name = "partyaddtype",length =50)
+	private String partyAddType;
 	
 	@OneToMany(mappedBy ="costDebitNoteVO",cascade = CascadeType.ALL)
 	@JsonManagedReference

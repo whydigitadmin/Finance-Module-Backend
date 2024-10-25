@@ -14,6 +14,7 @@ import javax.persistence.Table;
 
 import com.base.basesetup.dto.CreatedUpdatedDate;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonGetter;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -33,8 +34,8 @@ public class ArBillBalanceVO {
 	@Column(name = "arbillbalanceid")
 	private Long id;
 
-	@Column(name = "docno", length = 50)
-	private String docNo;
+	@Column(name = "docid", length = 50)
+	private String docId;
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	@Column(name = "docdate")
@@ -127,9 +128,11 @@ public class ArBillBalanceVO {
 	private String finYear;
 
 	@Column(name = "screencode", length = 5)
-	private String screenCode = "ARBB";
+	@Builder.Default
+	private String screenCode = "ARB";
 
 	@Column(name = "screenname", length = 25)
+	@Builder.Default
 	private String screenName = "AR BILL BALANCE";
 
 	@Column(name = "ipno", length = 15)
@@ -137,6 +140,11 @@ public class ArBillBalanceVO {
 
 	@Column(name = "latitude", length = 100)
 	private String latitude;
+	
+	@JsonGetter("active")
+	public String getActive() {
+		return active ? "Active" : "In-Active";
+	}
 
 	@Embedded
 	@Builder.Default

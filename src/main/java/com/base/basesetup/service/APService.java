@@ -40,7 +40,7 @@ public interface APService {
 
 	List<ApBillBalanceVO> getAllApBillBalanceById(Long id);
 
-	ApBillBalanceVO updateCreateApBillBalance(@Valid ApBillBalanceDTO apBillBalanceDTO) throws ApplicationException;
+	Map<String, Object> updateCreateApBillBalance(@Valid ApBillBalanceDTO apBillBalanceDTO) throws ApplicationException;
 
 	List<ApBillBalanceVO> getApBillBalanceByActive();
 

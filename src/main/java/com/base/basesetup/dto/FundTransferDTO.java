@@ -1,6 +1,6 @@
 package com.base.basesetup.dto;
 
-import java.time.LocalDateTime;
+import java.math.BigDecimal;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,26 +14,22 @@ import lombok.NoArgsConstructor;
 public class FundTransferDTO {
 	private Long id;
 	private String branch;
-	private String docId;
-	private String paymentType;
-	private LocalDateTime docDate;
-	private String referenceNo;
-	private LocalDateTime referenceDate;
-	private String fromAccount;
-	private String balance;
 	private String currency;
 	private String exRate;
-	private String toBranch;
-	private String toBank;
-	private String chequeBook;
-	private String chequeNo;
-	private LocalDateTime chequeDate;
-	private String paymentAmount;
-	private String conversionRate;
-	private String receiptAmount;
-	private String gainLoss;
-	private String remarks;
-	private boolean active;
+	private BigDecimal amount;
 	private Long orgId;
 	private String createdBy;
+	private boolean cancel;
+	private String cancelRemarks;
+	private String branchCode;
+	private String finYear;
+	private String ipNo;
+	private String latitude;
+	private String mode;
+	private String docNo;
+	private String corpAccount;
+	private String transferTo;
+	private String branchAcc;
+	private BigDecimal amtBase;
+	private String narration;
 }
