@@ -21,7 +21,10 @@ public class ReconcileBankDTO {
 	private String branchCode;
 	private String createdBy;
 	private String finYear;
+	private boolean active;
 	private String remarks;
+	private String ipNo;
+	private String latitude;
 	
 	List<ParticularsReconcileDTO> particularsReconcileDTO;
 	
