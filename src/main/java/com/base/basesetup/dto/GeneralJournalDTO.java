@@ -27,15 +27,10 @@ public class GeneralJournalDTO {
 
 	private String remarks;
 	private Long orgId;
-	private boolean active;
-	private boolean cancel;
-	private String cancelRemarks;
 	private String createdBy;
 	private String branch;
 	private String branchCode;
 	private String finYear;
-	private BigDecimal totalDebitAmount;
-	private BigDecimal totalCreditAmount;
 
 	List<ParticularsJournalDTO> particularsJournalDTO;
 

@@ -129,6 +129,7 @@ public class ApBillBalanceVO {
 	@Column(name = "screenname", length = 25)
 	private String screenName ="APBILLBALANCE";
 	
+	
 	@JsonGetter("active")
 	public String getActive() {
 		return active ? "Active" : "In-Active";

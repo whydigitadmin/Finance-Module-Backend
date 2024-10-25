@@ -88,6 +88,8 @@ import com.base.basesetup.entity.ParticularsJournalVO;
 import com.base.basesetup.entity.ParticularsPaymentVoucherVO;
 import com.base.basesetup.entity.ParticularsReconcileCorpBankVO;
 import com.base.basesetup.entity.ParticularsReconcileVO;
+import com.base.basesetup.entity.PartyAddressVO;
+import com.base.basesetup.entity.PartyVendorEvaluationVO;
 import com.base.basesetup.entity.PaymentInvoiceVO;
 import com.base.basesetup.entity.PaymentOtherAccountVO;
 import com.base.basesetup.entity.PaymentReversalVO;
@@ -354,12 +356,12 @@ public class TransactionServiceImpl implements TransactionService {
 		dailyMonthlyExRatesVO.setDate(dailyMonthlyExRatesDTO.getDate());
 		LocalDate date = LocalDate.parse(dailyMonthlyExRatesDTO.getMonth());
 
-	    // Define a formatter to convert to "MMMM yyyy" format (e.g., March 2024)
-	    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM yyyy");
+		// Define a formatter to convert to "MMMM yyyy" format (e.g., March 2024)
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM yyyy");
 
-	    // Format the date and set it to the VO
-	    String formattedDate = date.format(formatter);
-	    dailyMonthlyExRatesVO.setMonth(formattedDate);
+		// Format the date and set it to the VO
+		String formattedDate = date.format(formatter);
+		dailyMonthlyExRatesVO.setMonth(formattedDate);
 		dailyMonthlyExRatesVO.setActive(dailyMonthlyExRatesDTO.isActive());
 		dailyMonthlyExRatesVO.setOrgId(dailyMonthlyExRatesDTO.getOrgId());
 	}
@@ -802,17 +804,18 @@ public class TransactionServiceImpl implements TransactionService {
 	}
 
 	@Override
-	public Map<String, Object> updateCreateFundTransfer(@Valid FundTransferDTO fundTransferDTO) throws ApplicationException {
+	public Map<String, Object> updateCreateFundTransfer(@Valid FundTransferDTO fundTransferDTO)
+			throws ApplicationException {
 		FundTransferVO fundTransferVO = new FundTransferVO();
-		String message=null;
-		String screenCode="FT";
+		String message = null;
+		String screenCode = "FT";
 		if (ObjectUtils.isEmpty(fundTransferDTO.getId())) {
 
 			fundTransferVO = new FundTransferVO();
 
 			// GETDOCID API
-			String docId = fundTransferRepo.getFundTranferDocId(fundTransferDTO.getOrgId(), fundTransferDTO.getFinYear(),
-					fundTransferDTO.getBranchCode(), screenCode);
+			String docId = fundTransferRepo.getFundTranferDocId(fundTransferDTO.getOrgId(),
+					fundTransferDTO.getFinYear(), fundTransferDTO.getBranchCode(), screenCode);
 			fundTransferVO.setDocId(docId);
 
 			// GETDOCID LASTNO +1
@@ -836,10 +839,9 @@ public class TransactionServiceImpl implements TransactionService {
 			message = "FundTransfer Updation Successfully";
 		}
 
-
 		getFundTransferVOFromFundTransferDTO(fundTransferDTO, fundTransferVO);
 		fundTransferRepo.save(fundTransferVO);
-		
+
 		Map<String, Object> response = new HashMap<>();
 		response.put("fundTransferVO", fundTransferVO);
 		response.put("message", message);
@@ -858,15 +860,15 @@ public class TransactionServiceImpl implements TransactionService {
 		fundTransferVO.setCancelRemarks(fundTransferDTO.getCancelRemarks());
 		fundTransferVO.setBranchCode(fundTransferDTO.getBranchCode());
 		fundTransferVO.setFinYear(fundTransferDTO.getFinYear());
-	    fundTransferVO.setIpNo(fundTransferDTO.getIpNo());
-	    fundTransferVO.setLatitude(fundTransferDTO.getLatitude());
-	    fundTransferVO.setMode(fundTransferDTO.getMode());
-	    fundTransferVO.setDocNo(fundTransferDTO.getDocNo());
-	    fundTransferVO.setCorpAccount(fundTransferDTO.getCorpAccount());
-	    fundTransferVO.setTransferTo(fundTransferDTO.getTransferTo());
-	    fundTransferVO.setBranchAcc(fundTransferDTO.getBranchAcc());
-	    fundTransferVO.setAmtBase(fundTransferDTO.getAmtBase());
-	    fundTransferVO.setNarration(fundTransferDTO.getNarration());
+		fundTransferVO.setIpNo(fundTransferDTO.getIpNo());
+		fundTransferVO.setLatitude(fundTransferDTO.getLatitude());
+		fundTransferVO.setMode(fundTransferDTO.getMode());
+		fundTransferVO.setDocNo(fundTransferDTO.getDocNo());
+		fundTransferVO.setCorpAccount(fundTransferDTO.getCorpAccount());
+		fundTransferVO.setTransferTo(fundTransferDTO.getTransferTo());
+		fundTransferVO.setBranchAcc(fundTransferDTO.getBranchAcc());
+		fundTransferVO.setAmtBase(fundTransferDTO.getAmtBase());
+		fundTransferVO.setNarration(fundTransferDTO.getNarration());
 
 	}
 
@@ -932,7 +934,15 @@ public class TransactionServiceImpl implements TransactionService {
 			documentTypeMappingDetailsRepo.save(documentTypeMappingDetailsVO);
 		}
 
+		if (ObjectUtils.isNotEmpty(generalJournalDTO.getId())) {
+			List<ParticularsJournalVO> particularsJournalVOList = particularsJournalRepo
+					.findByGeneralJournalVO(generalJournalVO);
+			particularsJournalRepo.deleteAll(particularsJournalVOList);
+		}
 		List<ParticularsJournalVO> particularsJournalVOs = new ArrayList<>();
+		BigDecimal totalDebitAmount = BigDecimal.ZERO;
+		BigDecimal totalCreditAmount = BigDecimal.ZERO;
+
 		if (generalJournalDTO.getParticularsJournalDTO() != null) {
 			for (ParticularsJournalDTO particularsJournalDTO : generalJournalDTO.getParticularsJournalDTO()) {
 				ParticularsJournalVO particularsJournalVO;
@@ -945,14 +955,41 @@ public class TransactionServiceImpl implements TransactionService {
 				particularsJournalVO.setAccountsName(particularsJournalDTO.getAccountsName());
 				particularsJournalVO.setSubledgerName(particularsJournalDTO.getSubledgerName());
 				particularsJournalVO.setSubLedgerCode(particularsJournalDTO.getSubLedgerCode());
-				particularsJournalVO.setDebitAmount(particularsJournalDTO.getDebitAmount());
-				particularsJournalVO.setCreditAmount(particularsJournalDTO.getCreditAmount());
+				if (particularsJournalDTO.getDebitAmount() != null
+						&& particularsJournalDTO.getDebitAmount().compareTo(BigDecimal.ZERO) != 0) {
+					particularsJournalVO.setDebitAmount(particularsJournalDTO.getDebitAmount());
+					particularsJournalVO.setCreditAmount(BigDecimal.ZERO);
+					totalDebitAmount = totalDebitAmount.add(particularsJournalDTO.getDebitAmount());
+				} else {
+					particularsJournalVO.setCreditAmount(particularsJournalDTO.getCreditAmount());
+					particularsJournalVO.setDebitAmount(BigDecimal.ZERO);
+					totalCreditAmount = totalCreditAmount.add(particularsJournalDTO.getCreditAmount());
+				}
 				particularsJournalVO.setNarration(particularsJournalDTO.getNarration());
 				particularsJournalVO.setGeneralJournalVO(generalJournalVO);
 				particularsJournalVOs.add(particularsJournalVO);
 			}
 		}
+
+		List<ParticularsJournalVO> existingParticulars = particularsJournalRepo.findAll(generalJournalVO);
+
+		// Sum existing amounts
+		for (ParticularsJournalVO existing : existingParticulars) {
+			totalDebitAmount = totalDebitAmount.add(existing.getDebitAmount() != null ? existing.getDebitAmount() : BigDecimal.ZERO);
+			totalCreditAmount = totalCreditAmount.add(existing.getCreditAmount() != null ? existing.getCreditAmount() : BigDecimal.ZERO);
+		}
+
+		if (ObjectUtils.isNotEmpty(generalJournalDTO.getId())) {
+			generalJournalVO = generalJournalRepo.findById(generalJournalDTO.getId())
+					.orElseThrow(() -> new ApplicationException("Invalid GeneralJournal details"));
+			generalJournalVO.setTotalDebitAmount(totalDebitAmount);
+			generalJournalVO.setTotalCreditAmount(totalCreditAmount);
+		} else {
+			generalJournalVO.setTotalDebitAmount(totalDebitAmount);
+			generalJournalVO.setTotalCreditAmount(totalCreditAmount);
+		}
 		generalJournalVO.setParticularsJournalVO(particularsJournalVOs);
+
 		getGeneralJournalVOFromGeneralJournalDTO(generalJournalDTO, generalJournalVO);
 		return generalJournalRepo.save(generalJournalVO);
 	}
@@ -971,11 +1008,6 @@ public class TransactionServiceImpl implements TransactionService {
 		generalJournalVO.setBranchCode(generalJournalDTO.getBranchCode());
 		generalJournalVO.setFinYear(generalJournalDTO.getFinYear());
 
-		generalJournalVO.setActive(generalJournalDTO.isActive());
-		generalJournalVO.setCancel(generalJournalDTO.isCancel());
-		generalJournalVO.setCancelRemarks(generalJournalDTO.getCancelRemarks());
-		generalJournalVO.setTotalCreditAmount(generalJournalDTO.getTotalCreditAmount());
-		generalJournalVO.setTotalDebitAmount(generalJournalDTO.getTotalDebitAmount());
 	}
 
 	@Override
@@ -1338,14 +1370,12 @@ public class TransactionServiceImpl implements TransactionService {
 	private void getPaymentVoucherVOFromPaymentVoucherDTO(@Valid PaymentVoucherDTO paymentVoucherDTO,
 			PaymentVoucherVO paymentVoucherVO) {
 
-
 //		// // Finyr
 //		int finyr = paymentVoucherRepo.findFinyr();
 //		// DocId
 //		String paymentVoucher = "PV" + finyr + paymentVoucherRepo.findDocId();
 //		paymentVoucherVO.setDocId(paymentVoucher);
 //		paymentVoucherRepo.nextSeq();
-
 
 		paymentVoucherVO.setVehicleSubType(paymentVoucherDTO.getVehicleSubType());
 		paymentVoucherVO.setReferenceNo(paymentVoucherDTO.getReferenceNo());
@@ -2328,8 +2358,8 @@ public class TransactionServiceImpl implements TransactionService {
 		return fundTransferRepo.findAllFundTransferByDocId(orgId, docId);
 	}
 
-@Override
-    public String getReconcileCashDocId(Long orgId, String finYear,String branch, String branchCode) {
+	@Override
+	public String getReconcileCashDocId(Long orgId, String finYear, String branch, String branchCode) {
 		String ScreenCode = "RCH";
 		String result = reconcileCashRepo.getReconcileCashDocId(orgId, finYear, branchCode, ScreenCode);
 		return result;
