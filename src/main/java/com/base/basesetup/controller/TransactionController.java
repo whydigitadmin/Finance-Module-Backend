@@ -70,120 +70,7 @@ public class TransactionController extends BaseController {
 	TransactionService transactionService;
 	// IrnCredit
 
-	@GetMapping("/getAllIrnCreditByOrgId")
-	public ResponseEntity<ResponseDTO> getAllIrnCreditByOrgId(@RequestParam(required = false) Long orgId) {
-		String methodName = "getAllIrnCreditByOrgId()";
-		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
-		String errorMsg = null;
-		Map<String, Object> responseObjectsMap = new HashMap<>();
-		ResponseDTO responseDTO = null;
-		List<IrnCreditVO> irnCreditVO = new ArrayList<>();
-		try {
-			irnCreditVO = transactionService.getAllIrnCreditByOrgId(orgId);
-		} catch (Exception e) {
-			errorMsg = e.getMessage();
-			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
-		}
-		if (StringUtils.isBlank(errorMsg)) {
-			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "IrnCredit information get successfully ByOrgId");
-			responseObjectsMap.put("irnCreditVO", irnCreditVO);
-			responseDTO = createServiceResponse(responseObjectsMap);
-		} else {
-			responseDTO = createServiceResponseError(responseObjectsMap, "IrnCredit information receive failedByOrgId",
-					errorMsg);
-		}
-		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
-		return ResponseEntity.ok().body(responseDTO);
-
-	}
-
-	@GetMapping("/getAllIrnCreditById")
-	public ResponseEntity<ResponseDTO> getAllIrnCreditById(@RequestParam(required = false) Long id) {
-		String methodName = "getAllIrnCreditById()";
-		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
-		String errorMsg = null;
-		Map<String, Object> responseObjectsMap = new HashMap<>();
-		ResponseDTO responseDTO = null;
-		List<IrnCreditVO> irnCreditVO = new ArrayList<>();
-		try {
-			irnCreditVO = transactionService.getAllIrnCreditById(id);
-		} catch (Exception e) {
-			errorMsg = e.getMessage();
-			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
-		}
-		if (StringUtils.isBlank(errorMsg)) {
-			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "IrnCredit information get successfully By id");
-			responseObjectsMap.put("irnCreditVO", irnCreditVO);
-			responseDTO = createServiceResponse(responseObjectsMap);
-		} else {
-			responseDTO = createServiceResponseError(responseObjectsMap, "IrnCredit information receive failedByOrgId",
-					errorMsg);
-		}
-		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
-		return ResponseEntity.ok().body(responseDTO);
-	}
-
-	@PutMapping("/updateCreateIrnCredit")
-	public ResponseEntity<ResponseDTO> updateCreateIrnCredit(@Valid @RequestBody IrnCreditDTO irnCreditDTO) {
-		String methodName = "updateCreateIrnCredit()";
-
-		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
-		String errorMsg = null;
-		Map<String, Object> responseObjectsMap = new HashMap<>();
-		ResponseDTO responseDTO = null;
-
-		try {
-			IrnCreditVO irnCreditVO = transactionService.updateCreateIrnCredit(irnCreditDTO);
-			boolean isUpdate = irnCreditDTO.getId() != null;
-
-			if (irnCreditVO != null) {
-				responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
-						isUpdate ? "IrnCredit updated successfully" : "IrnCredit created successfully");
-				responseObjectsMap.put("irnCreditVO", irnCreditVO);
-				responseDTO = createServiceResponse(responseObjectsMap);
-			} else {
-				errorMsg = isUpdate ? "IrnCredit not found for ID: " + irnCreditDTO.getId()
-						: "IrnCredit creation failed";
-				responseDTO = createServiceResponseError(responseObjectsMap,
-						isUpdate ? "IrnCredit update failed" : "IrnCredit creation failed", errorMsg);
-			}
-		} catch (Exception e) {
-			errorMsg = e.getMessage();
-			boolean isUpdate = irnCreditDTO.getId() != null;
-			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
-			responseDTO = createServiceResponseError(responseObjectsMap,
-					isUpdate ? "IrnCredit update failed" : "IrnCredit creation failed", errorMsg);
-		}
-		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
-		return ResponseEntity.ok().body(responseDTO);
-	}
-
-	@GetMapping("/getIrnCreditByActive")
-	public ResponseEntity<ResponseDTO> getIrnCreditByActive() {
-		String methodName = "getIrnCreditByActive()";
-		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
-		String errorMsg = null;
-		Map<String, Object> responseObjectsMap = new HashMap<>();
-		ResponseDTO responseDTO = null;
-		List<IrnCreditVO> irnCreditVO = new ArrayList<>();
-		try {
-			irnCreditVO = transactionService.getIrnCreditByActive();
-		} catch (Exception e) {
-			errorMsg = e.getMessage();
-			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
-		}
-		if (StringUtils.isBlank(errorMsg)) {
-			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "IrnCredit information get successfully By Active");
-			responseObjectsMap.put("irnCreditVO", irnCreditVO);
-			responseDTO = createServiceResponse(responseObjectsMap);
-		} else {
-			responseDTO = createServiceResponseError(responseObjectsMap,
-					"IrnCredit information receive failed By Active", errorMsg);
-		}
-		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
-		return ResponseEntity.ok().body(responseDTO);
-
-	}
+	
 
 //	DailyMonthlyExRates
 	@GetMapping("/getAllDailyMonthlyExRatesByOrgId")
@@ -342,7 +229,7 @@ public class TransactionController extends BaseController {
 		ResponseDTO responseDTO = null;
 
 		try {
-			BrsOpeningVO brsOpeningVO = transactionService.updateCreateBrsOpening(brsOpeningDTO);
+			Map<String, Object> brsOpeningVO = transactionService.updateCreateBrsOpening(brsOpeningDTO);
 			boolean isUpdate = brsOpeningDTO.getId() != null;
 
 			if (brsOpeningVO != null) {

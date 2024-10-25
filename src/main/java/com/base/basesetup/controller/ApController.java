@@ -191,7 +191,7 @@ public class ApController extends BaseController {
 		ResponseDTO responseDTO = null;
 
 		try {
-			ApBillBalanceVO apBillBalanceVO = apService.updateCreateApBillBalance(apBillBalanceDTO);
+			Map<String, Object> apBillBalanceVO = apService.updateCreateApBillBalance(apBillBalanceDTO);
 			boolean isUpdate = apBillBalanceDTO.getId() != null;
 
 			if (apBillBalanceVO != null) {

@@ -216,26 +216,43 @@ public class APServiceImpl implements APService {
 		}
 
 		@Override
-		public ApBillBalanceVO updateCreateApBillBalance(
+		public Map<String, Object> updateCreateApBillBalance(
 				@Valid ApBillBalanceDTO apBillBalanceDTO) throws ApplicationException {
+			String screenCode = "APB";
 			ApBillBalanceVO apBillBalanceVO = new ApBillBalanceVO();
-			boolean isUpdate = false;
+			String message;
 			if (ObjectUtils.isNotEmpty(apBillBalanceDTO.getId())) {
-				isUpdate = true;
 				apBillBalanceVO = apBillBalanceRepo.findById(apBillBalanceDTO.getId())
 						.orElseThrow(() -> new ApplicationException("Invalid ApBillBalance details"));
+				createUpdateApBillBalanceVOByApBillBalanceDTO(apBillBalanceDTO, apBillBalanceVO);
+				message = "AR Bill Balance Updated Successfully";
 				apBillBalanceVO.setUpdatedBy(apBillBalanceDTO.getCreatedBy());
 			} else {
+				// GETDOCID API
+				String docId = apBillBalanceRepo.getArBillBalanceDocId(apBillBalanceDTO.getOrgId(),
+						apBillBalanceDTO.getFinYear(), apBillBalanceDTO.getBranchCode(), screenCode);
+				apBillBalanceVO.setDocId(docId);
+
+				// GETDOCID LASTNO +1
+				DocumentTypeMappingDetailsVO documentTypeMappingDetailsVO = documentTypeMappingDetailsRepo
+						.findByOrgIdAndFinYearAndBranchCodeAndScreenCode(apBillBalanceDTO.getOrgId(),
+								apBillBalanceDTO.getFinYear(), apBillBalanceDTO.getBranchCode(), screenCode);
+				documentTypeMappingDetailsVO.setLastno(documentTypeMappingDetailsVO.getLastno() + 1);
+				documentTypeMappingDetailsRepo.save(documentTypeMappingDetailsVO);
 				apBillBalanceVO.setUpdatedBy(apBillBalanceDTO.getCreatedBy());
 				apBillBalanceVO.setCreatedBy(apBillBalanceDTO.getCreatedBy());
+				createUpdateApBillBalanceVOByApBillBalanceDTO(apBillBalanceDTO, apBillBalanceVO);
+				message = "AP Bill Balance Created Successfully";
 			}
 
-			getApBillBalanceVOFromApBillBalanceDTO(apBillBalanceDTO,
-					apBillBalanceVO);
-			return apBillBalanceRepo.save(apBillBalanceVO);
+			apBillBalanceRepo.save(apBillBalanceVO);
+			Map<String, Object> response = new HashMap<>();
+			response.put("apBillBalanceVO", apBillBalanceVO);
+			response.put("message", message);
+			return response;
 		}
 
-		private void getApBillBalanceVOFromApBillBalanceDTO(
+		private void createUpdateApBillBalanceVOByApBillBalanceDTO(
 				@Valid ApBillBalanceDTO apBillBalanceDTO,
 				ApBillBalanceVO apBillBalanceVO) {
 			apBillBalanceVO.setAccName(apBillBalanceDTO.getAccName());
