@@ -37,10 +37,12 @@ public class PartyMasterVO {
 	@Column(name = "partymasterid")
 	private Long id;
 	
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
-	private LocalDate docDate;
-	@Column(name = "docid")
-	private String docId;
+	@Column(name = "docid", length = 50)
+    private String docId;
+
+    @Column(name = "docdate")
+    private LocalDate docDate = LocalDate.now();
+
 	    
     @Column(name = "partytype", length = 15)
     private String partyType;
@@ -183,12 +185,6 @@ public class PartyMasterVO {
 
     @Column(name = "screenname", length = 25)
     private String screenName = "PARTYMASTER";
-
-    @Column(name = "ipno", length = 15)
-    private String ipNo;
-
-    @Column(name = "latitude", length = 100)
-    private String latitude;
 
     @Column(name = "orgid")
     private Long orgId;

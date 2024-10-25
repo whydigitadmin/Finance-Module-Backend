@@ -15,7 +15,6 @@ import lombok.NoArgsConstructor;
 public class ReconcileCorpBankDTO {
 	private Long id;
 	private String bankAccount;
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	private LocalDate bankStmtDate;
 	private String remarks;
 

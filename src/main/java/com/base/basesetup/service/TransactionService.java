@@ -47,14 +47,7 @@ import com.base.basesetup.exception.ApplicationException;
 @Service
 public interface TransactionService {
 
-//	IrnCredit
-	List<IrnCreditVO> getAllIrnCreditByOrgId(Long orgId);
 
-	IrnCreditVO updateCreateIrnCredit(@Valid IrnCreditDTO irnCreditDTO) throws ApplicationException;
-
-	List<IrnCreditVO> getAllIrnCreditById(Long id);
-
-	List<IrnCreditVO> getIrnCreditByActive();
 
 //	DailyMonthlyExRatesVO
 	List<DailyMonthlyExRatesVO> getAllDailyMonthlyExRatesByOrgId(Long orgId);
@@ -69,7 +62,7 @@ public interface TransactionService {
 //	BrsOpening
 	List<BrsOpeningVO> getAllBrsOpeningByOrgId(Long orgId);
 
-	BrsOpeningVO updateCreateBrsOpening(@Valid BrsOpeningDTO brsOpeningDTO) throws ApplicationException;
+	Map<String, Object> updateCreateBrsOpening(@Valid BrsOpeningDTO brsOpeningDTO) throws ApplicationException;
 
 	List<BrsOpeningVO> getAllBrsOpeningById(Long id);
 
@@ -238,5 +231,7 @@ public interface TransactionService {
 	String getReconcileCashDocId(Long orgId, String finYear, String branch,String branchCode);
 
 	ReconcileCashVO getReconcileCashByDocId(Long orgId, String docId);
+
+	String getChartCostCenterDocId(Long orgId, String finYear, String branch, String branchCode);
 
 }

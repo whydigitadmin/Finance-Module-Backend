@@ -18,10 +18,12 @@ import com.base.basesetup.dto.ApBillBalanceDTO;
 import com.base.basesetup.dto.PaymentDTO;
 import com.base.basesetup.dto.PaymentInvDtlsDTO;
 import com.base.basesetup.entity.ApBillBalanceVO;
+import com.base.basesetup.entity.DocumentTypeMappingDetailsVO;
 import com.base.basesetup.entity.PaymentInvDtlsVO;
 import com.base.basesetup.entity.PaymentVO;
 import com.base.basesetup.exception.ApplicationException;
 import com.base.basesetup.repo.ApBillBalanceRepo;
+import com.base.basesetup.repo.DocumentTypeMappingDetailsRepo;
 import com.base.basesetup.repo.PartyMasterRepo;
 import com.base.basesetup.repo.PaymentInvDtlsRepo;
 import com.base.basesetup.repo.PaymentRepo;
@@ -42,6 +44,9 @@ public class APServiceImpl implements APService {
 	
 	@Autowired
 	PartyMasterRepo partyMasterRepo;
+	
+	@Autowired
+	DocumentTypeMappingDetailsRepo documentTypeMappingDetailsRepo;
 
 	@Override
 	public List<PaymentVO> getAllPaymentByOrgId(Long orgId) {
@@ -73,7 +78,8 @@ public class APServiceImpl implements APService {
 	public PaymentVO updateCreatePayment(@Valid PaymentDTO paymentDTO) throws ApplicationException {
 		PaymentVO paymentVO = new PaymentVO();
 		boolean isUpdate = false;
-		if (ObjectUtils.isNotEmpty(paymentDTO.getId())) {
+		 String screenCode = "PT";		
+		 if (ObjectUtils.isNotEmpty(paymentDTO.getId())) {
 			isUpdate = true;
 			paymentVO = paymentRepo.findById(paymentDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid Payment details"));
@@ -82,8 +88,23 @@ public class APServiceImpl implements APService {
 		} else {
 			paymentVO.setUpdatedBy(paymentDTO.getCreatedBy());
 			paymentVO.setCreatedBy(paymentDTO.getCreatedBy());
+			
+//			GETDOCID API
+			String docId = paymentRepo.getPaymentDocId(paymentDTO.getOrgId(),
+					paymentDTO.getFinYear(), paymentDTO.getBranchCode(),
+					screenCode);
 
-		}
+			paymentVO.setDocId(docId);
+
+
+//			// GETDOCID LASTNO +1
+			DocumentTypeMappingDetailsVO documentTypeMappingDetailsVO = documentTypeMappingDetailsRepo
+					.findByOrgIdAndFinYearAndBranchCodeAndScreenCode(paymentDTO.getOrgId(),
+							paymentDTO.getFinYear(), paymentDTO.getBranchCode(), screenCode);
+			documentTypeMappingDetailsVO.setLastno(documentTypeMappingDetailsVO.getLastno() + 1);
+			documentTypeMappingDetailsRepo.save(documentTypeMappingDetailsVO);
+	}
+
 
 		if (ObjectUtils.isNotEmpty(paymentDTO.getId())) {
 			List<PaymentInvDtlsVO> paymentInvDtlsVOList = paymentInvDtlsRepo.findByPaymentVO(paymentVO);
@@ -113,14 +134,14 @@ public class APServiceImpl implements APService {
 				paymentInvDtlsVO.setToDate(paymentInvDtlsDTO.getToDate());
 
 				paymentInvDtlsVO.setPaymentVO(paymentVO);
-				;
+				
 				paymentInvDtlsVOs.add(paymentInvDtlsVO);
 
 			}
 		}
 		getPaymentVOFromPaymentDTO(paymentDTO, paymentVO);
 		paymentVO.setPaymentInvDtlsVO(paymentInvDtlsVOs);
-		;
+		
 		return paymentRepo.save(paymentVO);
 	}
 
@@ -156,11 +177,15 @@ public class APServiceImpl implements APService {
 		paymentVO.setCancel(paymentDTO.isCancel());
 		paymentVO.setCancelRemarks(paymentDTO.getCancelRemarks());
 		paymentVO.setFinYear(paymentDTO.getFinYear());
-
-		paymentVO.setIpNo(paymentDTO.getIpNo());
-		paymentVO.setLatitude(paymentDTO.getLatitude());
 		paymentVO.setOrgId(paymentDTO.getOrgId());
 
+	}
+	
+	@Override
+	public String getPaymentDocId(Long orgId, String finYear, String branch, String branchCode) {
+		String ScreenCode = "PT";
+		String result = paymentRepo.getPaymentByDocId(orgId, finYear, branchCode, ScreenCode);
+		return result;
 	}
 
 	// ApBillBalance
@@ -191,26 +216,43 @@ public class APServiceImpl implements APService {
 		}
 
 		@Override
-		public ApBillBalanceVO updateCreateApBillBalance(
+		public Map<String, Object> updateCreateApBillBalance(
 				@Valid ApBillBalanceDTO apBillBalanceDTO) throws ApplicationException {
+			String screenCode = "APB";
 			ApBillBalanceVO apBillBalanceVO = new ApBillBalanceVO();
-			boolean isUpdate = false;
+			String message;
 			if (ObjectUtils.isNotEmpty(apBillBalanceDTO.getId())) {
-				isUpdate = true;
 				apBillBalanceVO = apBillBalanceRepo.findById(apBillBalanceDTO.getId())
 						.orElseThrow(() -> new ApplicationException("Invalid ApBillBalance details"));
+				createUpdateApBillBalanceVOByApBillBalanceDTO(apBillBalanceDTO, apBillBalanceVO);
+				message = "AR Bill Balance Updated Successfully";
 				apBillBalanceVO.setUpdatedBy(apBillBalanceDTO.getCreatedBy());
 			} else {
+				// GETDOCID API
+				String docId = apBillBalanceRepo.getArBillBalanceDocId(apBillBalanceDTO.getOrgId(),
+						apBillBalanceDTO.getFinYear(), apBillBalanceDTO.getBranchCode(), screenCode);
+				apBillBalanceVO.setDocId(docId);
+
+				// GETDOCID LASTNO +1
+				DocumentTypeMappingDetailsVO documentTypeMappingDetailsVO = documentTypeMappingDetailsRepo
+						.findByOrgIdAndFinYearAndBranchCodeAndScreenCode(apBillBalanceDTO.getOrgId(),
+								apBillBalanceDTO.getFinYear(), apBillBalanceDTO.getBranchCode(), screenCode);
+				documentTypeMappingDetailsVO.setLastno(documentTypeMappingDetailsVO.getLastno() + 1);
+				documentTypeMappingDetailsRepo.save(documentTypeMappingDetailsVO);
 				apBillBalanceVO.setUpdatedBy(apBillBalanceDTO.getCreatedBy());
 				apBillBalanceVO.setCreatedBy(apBillBalanceDTO.getCreatedBy());
+				createUpdateApBillBalanceVOByApBillBalanceDTO(apBillBalanceDTO, apBillBalanceVO);
+				message = "AP Bill Balance Created Successfully";
 			}
 
-			getApBillBalanceVOFromApBillBalanceDTO(apBillBalanceDTO,
-					apBillBalanceVO);
-			return apBillBalanceRepo.save(apBillBalanceVO);
+			apBillBalanceRepo.save(apBillBalanceVO);
+			Map<String, Object> response = new HashMap<>();
+			response.put("apBillBalanceVO", apBillBalanceVO);
+			response.put("message", message);
+			return response;
 		}
 
-		private void getApBillBalanceVOFromApBillBalanceDTO(
+		private void createUpdateApBillBalanceVOByApBillBalanceDTO(
 				@Valid ApBillBalanceDTO apBillBalanceDTO,
 				ApBillBalanceVO apBillBalanceVO) {
 			apBillBalanceVO.setAccName(apBillBalanceDTO.getAccName());
@@ -318,8 +360,8 @@ public class APServiceImpl implements APService {
 		List<Map<String, Object>> currency = new ArrayList<>();
 		for (Object[] sup : customer) {
 			Map<String, Object> currencyname = new HashMap<>();
-			currencyname.put("currency", sup[0] != null ? sup[0].toString() : "");
-			currencyname.put("transactionCurrency", sup[0] != null ? sup[0].toString() : "");
+			currencyname.put("inCurrency", sup[0] != null ? sup[0].toString() : "");
+//			currencyname.put("transactionCurrency", sup[0] != null ? sup[0].toString() : "");
 			currency.add(currencyname);
 		}
 

@@ -19,7 +19,7 @@ public interface ARService {
 	// Receipt
 	List<ReceiptVO> getAllReceiptReceivableByOrgId(Long orgId);
 
-	ReceiptVO updateCreateReceiptReceivable(@Valid ReceiptDTO receiptReceivableDTO)
+	 Map<String, Object> updateCreateReceiptReceivable(@Valid ReceiptDTO receiptReceivableDTO)
 			throws ApplicationException;
 
 	List<ReceiptVO> getAllReceiptReceivableById(Long id);
@@ -34,13 +34,13 @@ public interface ARService {
 
 	List<ArBillBalanceVO> getAllArBillBalanceById(Long id);
 
-	ArBillBalanceVO updateCreateArBillBalance(
-			@Valid ArBillBalanceDTO arApBillBalanceReceivableDTO) throws ApplicationException;
+	Map<String, Object> updateCreateArBillBalance(@Valid ArBillBalanceDTO arBillBalanceDTO) throws ApplicationException;
 
 	List<ArBillBalanceVO> getArBillBalanceByActive();
 	
 // 	ReceiptRegister
 	List<Map<String, Object>> getAllReceiptRegister(Long orgId, String branch, String branchCode,
 			String finYear,String fromDate,String toDate,String subLedgerName);
+
 
 }
