@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PartyDetailsOfDirectorsDTO {
-    private Long id;
     private String name;
     private String designation;
     private String phone; 

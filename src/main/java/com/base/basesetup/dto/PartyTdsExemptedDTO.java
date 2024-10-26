@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PartyTdsExemptedDTO {
-	private Long id;
 	private String tdsExempCerti;
     private BigDecimal value;
     private String finYear;
