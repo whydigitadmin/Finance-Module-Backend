@@ -37,84 +37,129 @@ public class ReceiptVO {
 	@Column(name = "receiptid")
 	private Long id;
 
-	// Receipt fields
-	@Column(name = "docid")
+	@Column(name = "taxamt", length = 30)
+	private BigDecimal taxAmt;
+
+	@Column(name = "branch", length = 25)
+	private String branch;
+
+	@Column(name = "branchcode", length = 20)
+	private String branchCode;
+
+	@Column(name = "customer", length = 50)
+	private String customer;
+
+	@Column(name = "client", length = 50)
+	private String client;
+
+	@Column(name = "createdby", length = 25)
+	private String createdBy;
+
+	@Column(name = "createdon")
+	private LocalDate createdOn;
+
+	@Column(name = "modifyby", length = 25)
+	private String updatedBy;
+
+	@Column(name = "modifyedon")
+	private LocalDate modifiedOn;
+
+	@Column(name = "active")
+	private boolean active;
+
+	@Column(name = "cancel")
+	private boolean cancel;
+
+	@Column(name = "cancelremarks", length = 25)
+	private String cancelRemarks;
+
+	@Column(name = "finyear", length = 5)
+	private String finYear;
+
+	@Column(name = "screencode", length = 5)
+	@Builder.Default
+	private String screenCode = "RT";
+
+	@Column(name = "screenname", length = 25)
+	@Builder.Default
+	private String screenName = "RECEIPT";
+
+	@Column(name = "receiptId")
+	private Long receiptId;
+
+	@Column(name = "receiptType", length = 50)
+	private String receiptType;
+
+	@Column(name = "docid", length = 50)
 	private String docId;
+
 	@Column(name = "docdate")
 	@Builder.Default
 	private LocalDate docDate = LocalDate.now();
-	@Column(name = "type")
+
+	@Column(name = "type", length = 50)
 	private String type;
-	@Column(name = "customername")
+
+	@Column(name = "customername", length = 150)
 	private String customerName;
-	@Column(name = "customercode")
+
+	@Column(name = "customercode", length = 50)
 	private String customerCode;
-	@Column(name = "bankcashacc")
+
+	@Column(name = "bankcashacc", length = 50)
 	private String bankCashAcc;
-	@Column(name = "receiptamt")
+
+	@Column(name = "receiptamt", precision = 10, scale = 2)
 	private BigDecimal receiptAmt;
-	@Column(name = "taxamt")
-	private BigDecimal taxAmt;
-	@Column(name = "bankchargeacc")
+
+	@Column(name = "currency", length = 10)
+	private String currency;
+
+	@Column(name = "currencyAmt", precision = 10, scale = 2)
+	private BigDecimal currencyAmt;
+
+	@Column(name = "bankchargeacc", length = 50)
 	private String bankChargeAcc;
-	@Column(name = "bankcharges")
+
+	@Column(name = "bankcharges", precision = 10, scale = 2)
 	private BigDecimal bankCharges;
-	@Column(name = "incurrencybnkchargs")
+
+	@Column(name = "incurrencybnkchargs", length = 10)
 	private String inCurrencyBnkChargs;
-	@Column(name = "tdsamt")
+
+	@Column(name = "tdsamt", precision = 10, scale = 2)
 	private BigDecimal tdsAmt;
-	@Column(name = "incurrencytdsamt")
+
+	@Column(name = "incurrencytdsamt", length = 10)
 	private String inCurrencyTdsAmt;
+
 	@Column(name = "chequebank", length = 20)
 	private String chequeBank;
-	@Column(name = "receipttype", length = 20)
-	private String receiptType;
+
+	@Column(name = "receiptType1", length = 20)
+	private String receiptType1;
+
 	@Column(name = "chequeutino", length = 10)
 	private String chequeUtiNo;
+
 	@Column(name = "chequeutidt")
 	private LocalDate chequeUtiDt;
-	@Column(name = "receivedfrom")
+
+	@Column(name = "receivedfrom", length = 100)
 	private String receivedFrom;
+
 	@Column(name = "netamount")
-	private String netAmount;
+	private BigDecimal netAmount;
+
 	@Column(name = "remarks")
 	private String remarks;
 
-	// Common Fields
-	@Column(name = "branch")
-	private String branch;
-	@Column(name = "branchcode")
-	private String branchCode;
-	@Column(name = "customer")
-	private String customer;
-	@Column(name = "client")
-	private String client;
-	@Column(name = "createdby")
-	private String createdBy;
-	@Column(name = "modifyedby")
-	private String updatedBy;
-	@Column(name = "active")
-	private boolean active;
-	@Column(name = "cancel")
-	private boolean cancel;
-	@Column(name = "cancelremarks")
-	private String cancelRemarks;
-	@Column(name = "finyear")
-	private String finYear;
-	@Column(name = "screencode")
-	@Builder.Default
-	private String screenCode = "rt";
-	@Column(name = "screenname")
-	@Builder.Default
-	private String screenName = "RECEIPT";
-	@Column(name = "receiptType1")
-	private String receiptType1;
-	@Column(name = "currency")
-	private String currency;
-	@Column(name = "currentamount")
-	private String currencyAmount;
+	// Additional fields
 	@Column(name = "orgid")
 	private Long orgId;
+
+	@Column(name = "currentamount", precision = 10, scale = 2)
+	private BigDecimal currencyAmount;
 
 	@JsonGetter("active")
 	public String getActive() {
