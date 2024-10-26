@@ -1675,13 +1675,7 @@ public class MasterServiceImpl implements MasterService {
 	@Override
 	public List<PartyMasterVO> getPartyMasterByOrgId(Long orgid) {
 		List<PartyMasterVO> partyMasterVO = new ArrayList<>();
-		if (ObjectUtils.isNotEmpty(orgid)) {
-			LOGGER.info("Successfully Received  PartyMaster BY OrgId : {}", orgid);
-			partyMasterVO = partyMasterRepo.findPartyMasterVOByOrgId(orgid);
-		} else {
-			LOGGER.info("Successfully Received  PartyMaster For All OrgId.");
-			partyMasterVO = partyMasterRepo.findAll();
-		}
+		partyMasterVO = partyMasterRepo.findByOrgId(orgid);
 		return partyMasterVO;
 	}
 

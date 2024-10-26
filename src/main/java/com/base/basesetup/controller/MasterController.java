@@ -1719,7 +1719,7 @@ public class MasterController extends BaseController {
 		}
 
 		@GetMapping("/getPartyMasterByOrgId")
-		public ResponseEntity<ResponseDTO> getPartyMasterByOrgId(@RequestParam(required = false) Long orgid) {
+		public ResponseEntity<ResponseDTO> getPartyMasterByOrgId(@RequestParam(required = false) Long orgId) {
 			String methodName = "getPartyMasterByOrgId()";
 			LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
 			String errorMsg = null;
@@ -1727,7 +1727,7 @@ public class MasterController extends BaseController {
 			ResponseDTO responseDTO = null;
 			List<PartyMasterVO> partyMasterVO = new ArrayList<>();
 			try {
-				partyMasterVO = masterService.getPartyMasterByOrgId(orgid);
+				partyMasterVO = masterService.getPartyMasterByOrgId(orgId);
 			} catch (Exception e) {
 				errorMsg = e.getMessage();
 				LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);

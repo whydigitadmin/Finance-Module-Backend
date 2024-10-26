@@ -406,17 +406,6 @@ public class TransactionServiceImpl implements TransactionService {
 			message = "Brs Opening Updated Successfully";
 			brsOpeningVO.setUpdatedBy(brsOpeningDTO.getCreatedBy());
 		} else {
-			// GETDOCID API
-			String docId = brsOpeningRepo.getBrsOpeningDocId(brsOpeningDTO.getOrgId(), brsOpeningDTO.getFinYear(),
-					brsOpeningDTO.getBranchCode(), screenCode);
-			brsOpeningVO.setDocId(docId);
-
-			// GETDOCID LASTNO +1
-			DocumentTypeMappingDetailsVO documentTypeMappingDetailsVO = documentTypeMappingDetailsRepo
-					.findByOrgIdAndFinYearAndBranchCodeAndScreenCode(brsOpeningDTO.getOrgId(),
-							brsOpeningDTO.getFinYear(), brsOpeningDTO.getBranchCode(), screenCode);
-			documentTypeMappingDetailsVO.setLastno(documentTypeMappingDetailsVO.getLastno() + 1);
-			documentTypeMappingDetailsRepo.save(documentTypeMappingDetailsVO);
 			brsOpeningVO.setUpdatedBy(brsOpeningDTO.getCreatedBy());
 			brsOpeningVO.setCreatedBy(brsOpeningDTO.getCreatedBy());
 			createUpdateBrsOpeningVOByBrsOpeningDTO(brsOpeningDTO, brsOpeningVO);
@@ -715,20 +704,6 @@ public class TransactionServiceImpl implements TransactionService {
 				chartCostCenterVO = new ChartCostCenterVO();
 				chartCostCenterVO.setCreatedBy(chartCostCenterDTO.getCreatedBy());
 				chartCostCenterVO.setUpdatedBy(chartCostCenterDTO.getCreatedBy());
-
-//				GETDOCID API
-				String docId = chartCostCenterRepo.getPartyMasterDocId(chartCostCenterDTO.getOrgId(),
-						chartCostCenterDTO.getFinYear(), chartCostCenterDTO.getBranchCode(), screenCode);
-
-				chartCostCenterVO.setDocId(docId);
-
-//				// GETDOCID LASTNO +1
-				DocumentTypeMappingDetailsVO documentTypeMappingDetailsVO = documentTypeMappingDetailsRepo
-						.findByOrgIdAndFinYearAndBranchCodeAndScreenCode(chartCostCenterDTO.getOrgId(),
-								chartCostCenterDTO.getFinYear(), chartCostCenterDTO.getBranchCode(), screenCode);
-				documentTypeMappingDetailsVO.setLastno(documentTypeMappingDetailsVO.getLastno() + 1);
-				documentTypeMappingDetailsRepo.save(documentTypeMappingDetailsVO);
-
 			}
 
 			// Map fields from DTO to VO

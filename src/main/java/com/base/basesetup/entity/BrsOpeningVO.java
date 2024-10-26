@@ -58,12 +58,7 @@ public class BrsOpeningVO {
 
 	@Column(name = "branch", length = 25)
 	private String branch;
-	
-	@Column(name = "docid", length = 25)
-	private String docId;
-	
-	@Column(name = "docdate", length = 25)
-	private LocalDate docDate=LocalDate.now();
+
 
 	@Column(name = "branchcode", length = 20)
 	private String branchCode;
