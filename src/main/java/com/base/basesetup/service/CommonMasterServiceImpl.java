@@ -350,7 +350,7 @@ public class CommonMasterServiceImpl implements CommonMasterService {
 
 	@Override
 	public List<Map<String, Object>> getAllScreenCode(Long orgId) {
-		Set<Object[]> getFinScreen = finScreenRepo.findAllScreenCode(orgId);
+		Set<Object[]> getFinScreen = screenNamesRepo.findAllScreenCode(orgId);
 		return getScreen(getFinScreen);
 	}
 

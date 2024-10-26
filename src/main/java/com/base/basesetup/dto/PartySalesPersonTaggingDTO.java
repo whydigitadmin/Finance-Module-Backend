@@ -14,7 +14,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PartySalesPersonTaggingDTO {
-	private Long id;
 	private String salesPerson;
 
 	private String empCode;

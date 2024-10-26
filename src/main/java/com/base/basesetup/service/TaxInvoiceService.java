@@ -34,4 +34,10 @@ public interface TaxInvoiceService {
 
 	List<Map<String, Object>> getPartyStateCodeDetails(Long orgId, Long id);
 
+	List<Map<String, Object>> getPlaceOfSupplyDetails(Long orgId, Long id,String stateCode);
+
+	List<Map<String, Object>> getPartyAddressDetails(Long orgId, Long id, String stateCode, String placeOfSupply);
+
+	List<Map<String, Object>> getGstTypeDetails(Long orgId, String branchCode, String stateCode);
+
 }

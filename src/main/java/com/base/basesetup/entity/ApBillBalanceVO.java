@@ -37,7 +37,6 @@ public class ApBillBalanceVO {
 	@Column(name = "docid", length = 50)
 	private String docId;
 
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	@Column(name = "docdate")
 	private LocalDate docDate = LocalDate.now();
 
@@ -71,18 +70,15 @@ public class ApBillBalanceVO {
 	@Column(name = "billno", precision = 10)
 	private Long billNo;
 
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	@Column(name = "billdate")
 	private LocalDate billDate;
 
 	@Column(name = "supprefno", length = 25)
 	private String suppRefNo;
 
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	@Column(name = "supprefdate")
 	private LocalDate suppRefDate;
 
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	@Column(name = "duedate")
 	private LocalDate dueDate;
 
@@ -128,16 +124,11 @@ public class ApBillBalanceVO {
 	private String finYear;
 
 	@Column(name = "screencode", length = 5)
-	private String screenCode;
+	private String screenCode ="APB";
 
 	@Column(name = "screenname", length = 25)
-	private String screenName;
-
-	@Column(name = "ipno", length = 15)
-	private String ipNo;
-
-	@Column(name = "latitude", length = 100)
-	private String latitude;
+	private String screenName ="APBILLBALANCE";
+	
 	
 	@JsonGetter("active")
 	public String getActive() {

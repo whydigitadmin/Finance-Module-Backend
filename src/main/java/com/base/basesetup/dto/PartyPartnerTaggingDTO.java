@@ -8,6 +8,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PartyPartnerTaggingDTO {
-	private Long id;
 	private String partnerName;
 }
