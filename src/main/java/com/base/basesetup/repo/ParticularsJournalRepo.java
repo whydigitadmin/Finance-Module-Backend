@@ -11,6 +11,5 @@ public interface ParticularsJournalRepo extends JpaRepository<ParticularsJournal
 
 	List<ParticularsJournalVO> findByGeneralJournalVO(GeneralJournalVO generalJournalVO);
 
-	List<ParticularsJournalVO> findAll(GeneralJournalVO generalJournalVO);
 
 }
