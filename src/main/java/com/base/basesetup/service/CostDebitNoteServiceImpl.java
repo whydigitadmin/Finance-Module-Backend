@@ -166,6 +166,7 @@ public class CostDebitNoteServiceImpl implements CostDebitNoteService {
 			costDebitNoteGstVO.setDBLCAmt(costDebitNoteGstDTO.getDBLCAmt());
 			costDebitNoteGstVO.setCrLCAmt(costDebitNoteGstDTO.getCrLCAmt());
 			costDebitNoteGstVO.setRemarks(costDebitNoteGstDTO.getRemarks());
+			
 
 			costDebitNoteGstVO.setCostDebitNoteVO(costDebitNoteVO);
 			costDebitNoteGstVOs.add(costDebitNoteGstVO);
@@ -199,6 +200,7 @@ public class CostDebitNoteServiceImpl implements CostDebitNoteService {
 			costDebitNoteSummaryVO.setNetBillCurrAmt(costDebitNoteSummaryDTO.getNetBillCurrAmt());
 			costDebitNoteSummaryVO.setNetLCAmt(costDebitNoteSummaryDTO.getNetLCAmt());
 			costDebitNoteSummaryVO.setRoundOff(costDebitNoteSummaryDTO.getRoundOff());
+			costDebitNoteSummaryVO.setAmtInWords(costDebitNoteSummaryDTO.getAmtInWords());
 
 			costDebitNoteSummaryVO.setCostDebitNoteVO(costDebitNoteVO);
 			costDebitNoteSummaryVOs.add(costDebitNoteSummaryVO);

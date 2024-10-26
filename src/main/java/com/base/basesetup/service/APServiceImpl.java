@@ -111,7 +111,6 @@ public class APServiceImpl implements APService {
 			paymentInvDtlsRepo.deleteAll(paymentInvDtlsVOList);
 		}
 		List<PaymentInvDtlsVO> paymentInvDtlsVOs = new ArrayList<>();
-		if (paymentDTO.getPaymentInvDtlsDTO() != null) {
 			for (PaymentInvDtlsDTO paymentInvDtlsDTO : paymentDTO.getPaymentInvDtlsDTO()) {
 				PaymentInvDtlsVO paymentInvDtlsVO = new PaymentInvDtlsVO();
 				paymentInvDtlsVO.setInvNo(paymentInvDtlsDTO.getInvNo());
@@ -138,7 +137,7 @@ public class APServiceImpl implements APService {
 				paymentInvDtlsVOs.add(paymentInvDtlsVO);
 
 			}
-		}
+		
 		getPaymentVOFromPaymentDTO(paymentDTO, paymentVO);
 		paymentVO.setPaymentInvDtlsVO(paymentInvDtlsVOs);
 		

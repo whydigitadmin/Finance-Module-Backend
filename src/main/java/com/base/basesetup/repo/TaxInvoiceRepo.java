@@ -37,5 +37,22 @@ public interface TaxInvoiceRepo extends JpaRepository<TaxInvoiceVO, Long> {
 			+ "group by a.statecode,a.gstin,concat(a.stateno,' - ',a.state)")
 	Set<Object[]> getStateCodeDetails(Long orgId, Long id);
 
+	@Query(nativeQuery = true,value = "SELECT a.businessplace FROM partyaddress a,partymaster b,state c where  a.partymasterid=b.partymasterid and a.state=c.state and b.orgid=?1 and a.partymasterid=?2 and c.statecode=?3\r\n"
+			+ "group by businessplace")
+	Set<Object[]> getPlaceOfSupplyDetails(Long orgId, Long id,String stateCode);
+
+	@Query(nativeQuery = true,value = "SELECT a.addresstype,concat(a.addressline1,',',a.addressline2,',',a.addressline3) address,a.pincode FROM partyaddress a,partymaster b,state c where  a.partymasterid=b.partymasterid and a.state=c.state and b.orgid=?1 and a.partymasterid=?2 and c.statecode=?3 and a.businessplace=?4\r\n"
+			+ "group by a.addresstype,concat(a.addressline1,',',a.addressline2,',',a.addressline3),a.pincode")
+	Set<Object[]> getAddressDetails(Long orgId, Long id,String stateCode,String placeOfSupply);
+	
+	@Query(nativeQuery = true,value = "SELECT \r\n"
+			+ "       CASE \r\n"
+			+ "           WHEN statecode = ?3 THEN 'INTRA'\r\n"
+			+ "           ELSE 'INTER'\r\n"
+			+ "       END AS transactionType\r\n"
+			+ "FROM branch\r\n"
+			+ "WHERE orgid = ?1 \r\n"
+			+ "  AND branchcode = ?2")
+	Set<Object[]> getGstType(Long orgId, String branchCode,String stateCode);
 
 }
