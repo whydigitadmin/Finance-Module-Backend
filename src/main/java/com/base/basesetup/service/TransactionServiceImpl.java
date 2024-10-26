@@ -992,7 +992,7 @@ public class TransactionServiceImpl implements TransactionService {
 			throw new ApplicationException("Total Debit Amount and Total Credit Amount Should be Equal");
 		}
 		generalJournalVO.setParticularsJournalVO(particularsJournalVOs);
-		
+
 	}
 
 //	@Override
@@ -2161,24 +2161,28 @@ public class TransactionServiceImpl implements TransactionService {
 			particularsReconcileVO.setVoucherDate(particularsReconcileDTO.getVoucherDate());
 			particularsReconcileVO.setChequeNo(particularsReconcileDTO.getChequeNo());
 			particularsReconcileVO.setChequeDate(particularsReconcileDTO.getChequeDate());
-			particularsReconcileVO.setDeposit(particularsReconcileDTO.getDeposit());
-			particularsReconcileVO.setWithdrawal(particularsReconcileDTO.getWithdrawal());
-			particularsReconcileVO.setBankRef(particularsReconcileDTO.getBankRef());
-			particularsReconcileVO.setReconcileBankVO(reconcileBankVO);
+
+			if (particularsReconcileDTO.getDeposit() != null
+					&& particularsReconcileDTO.getDeposit().compareTo(BigDecimal.ZERO) != 0) {
+				particularsReconcileVO.setDeposit(particularsReconcileDTO.getDeposit());
+				particularsReconcileVO.setWithdrawal(BigDecimal.ZERO);
+			} else {
+				particularsReconcileVO.setWithdrawal(particularsReconcileDTO.getWithdrawal());
+				particularsReconcileVO.setDeposit(BigDecimal.ZERO);
+			}
 
 			totalDeposit = totalDeposit.add(particularsReconcileDTO.getDeposit());
 			totalWithdrawal = totalWithdrawal.add(particularsReconcileDTO.getWithdrawal());
-
+			particularsReconcileVO.setBankRef(particularsReconcileDTO.getBankRef());
+			particularsReconcileVO.setReconcileBankVO(reconcileBankVO);
 			particularsReconcileVOs.add(particularsReconcileVO);
 		}
-		reconcileBankVO.setTotalDeposit(totalDeposit);
-		reconcileBankVO.setTotalWithdrawal(totalWithdrawal);
-		if (totalDeposit.compareTo(totalWithdrawal) > 0) {
-			throw new ApplicationException("Total Deposit Amount is Higher");
-		} else if (totalWithdrawal.compareTo(totalDeposit) > 0) {
-			throw new ApplicationException("Total Withdrawal Amount is Higher");
+		if (totalDeposit.equals(totalWithdrawal)) {
+			reconcileBankVO.setTotalDeposit(totalDeposit);
+			reconcileBankVO.setTotalWithdrawal(totalWithdrawal);
+		} else {
+			throw new ApplicationException("Total Deposit Amount and Total Withdrawal Amount Should be Equal");
 		}
-
 		reconcileBankVO.setParticularsReconcileVO(particularsReconcileVOs);
 	}
 
