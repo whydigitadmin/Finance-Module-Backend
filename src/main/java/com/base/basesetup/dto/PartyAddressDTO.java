@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PartyAddressDTO {
 
-    private Long id;
     private String state;
     private String businessPlace;
     private String stateGstIn;

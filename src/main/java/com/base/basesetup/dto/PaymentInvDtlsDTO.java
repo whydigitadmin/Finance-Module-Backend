@@ -14,7 +14,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PaymentInvDtlsDTO {
 
-	private Long id;
 
 	private String invNo;
 

@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PartySpecialTDSDTO {
 	
-	private Long id;
 	private String tdsWithSec;
 	private Long rateFrom;
 	private Long rateTo;
