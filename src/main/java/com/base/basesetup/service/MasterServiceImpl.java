@@ -1696,30 +1696,15 @@ public class MasterServiceImpl implements MasterService {
 					.orElseThrow(() -> new ApplicationException("Invalid PartyMaster Details"));
 			partyMasterVO.setUpdatedBy(partyMasterDTO.getCreatedBy());
 		} else {
-			// GETDOCID API
+			// PARTCODE DOCID API
 			String partyTypeDocId = partyTypeRepo.getPartyTypeDocId(partyMasterDTO.getOrgId(), partyMasterDTO.getPartyType());
 			partyMasterVO.setPartyCode(partyTypeDocId);
 
-			// GETDOCID LASTNO +1
+			// UPDATE PARTCODE DOCID LASTNO +1
 			PartyTypeVO partyTypeVO = partyTypeRepo.findByOrgIdAndPartyType(partyMasterDTO.getOrgId(),
 					partyMasterDTO.getPartyType());
 			partyTypeVO.setLastNo(partyTypeVO.getLastNo() + 1);
 			partyTypeRepo.save(partyTypeVO);
-			
-//			GETDOCID API
-			String docId = partyTypeRepo.getPartyMasterDocId(partyMasterDTO.getOrgId(),
-					partyMasterDTO.getFinYear(), partyMasterDTO.getBranchCode(),
-					screenCode);
-
-			partyMasterVO.setDocId(docId);
-
-
-//			// GETDOCID LASTNO +1
-			DocumentTypeMappingDetailsVO documentTypeMappingDetailsVO = documentTypeMappingDetailsRepo
-					.findByOrgIdAndFinYearAndBranchCodeAndScreenCode(partyMasterDTO.getOrgId(),
-							partyMasterDTO.getFinYear(), partyMasterDTO.getBranchCode(), screenCode);
-			documentTypeMappingDetailsVO.setLastno(documentTypeMappingDetailsVO.getLastno() + 1);
-			documentTypeMappingDetailsRepo.save(documentTypeMappingDetailsVO);
 
 			partyMasterVO.setCreatedBy(partyMasterDTO.getCreatedBy());
 			partyMasterVO.setUpdatedBy(partyMasterDTO.getCreatedBy());
