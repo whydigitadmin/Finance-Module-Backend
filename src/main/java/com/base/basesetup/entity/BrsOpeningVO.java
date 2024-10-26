@@ -86,12 +86,6 @@ public class BrsOpeningVO {
 
 	@Column(name = "screenname", length = 25)
 	private String screenName = "AR BILL BALANCE";
-
-	@Column(name = "ipno", length = 15)
-	private String ipNo;
-
-	@Column(name = "latitude", length = 100)
-	private String latitude;
 	
 	@JsonGetter("active")
 	public String getActive() {

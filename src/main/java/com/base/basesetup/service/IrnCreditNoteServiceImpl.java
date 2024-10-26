@@ -114,7 +114,6 @@ public class IrnCreditNoteServiceImpl implements IrnCreditNoteService {
 		irnCreditVO.setCancel(irnCreditDTO.isCancel());
 		irnCreditVO.setCancelRemarks(irnCreditDTO.getCancelRemarks());
 		irnCreditVO.setFinYear(irnCreditDTO.getFinYear());
-		irnCreditVO.setIpNo(irnCreditDTO.getIpNo());
 		irnCreditVO.setOrgId(irnCreditDTO.getOrgId());
 
 		// IRN fields

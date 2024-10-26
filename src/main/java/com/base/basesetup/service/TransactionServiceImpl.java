@@ -438,8 +438,6 @@ public class TransactionServiceImpl implements TransactionService {
 		brsOpeningVO.setCancel(brsOpeningDTO.isCancel());
 		brsOpeningVO.setCancelRemarks(brsOpeningDTO.getCancelRemarks());
 		brsOpeningVO.setFinYear(brsOpeningDTO.getFinYear());
-		brsOpeningVO.setIpNo(brsOpeningDTO.getIpNo());
-		brsOpeningVO.setLatitude(brsOpeningDTO.getLatitude());
 	}
 
 	@Override

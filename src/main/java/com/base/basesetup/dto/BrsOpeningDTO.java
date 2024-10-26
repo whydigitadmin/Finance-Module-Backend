@@ -35,6 +35,4 @@ public class BrsOpeningDTO {
 	private boolean cancel;
 	private String cancelRemarks;
 	private String finYear;
-	private String ipNo;
-	private String latitude;
 }
