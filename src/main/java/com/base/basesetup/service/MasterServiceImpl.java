@@ -1647,7 +1647,7 @@ public class MasterServiceImpl implements MasterService {
 		return listOfValuesRepo.save(listOfValuesVO);
 
 	}
-
+  
 	private void getListOfValuesVOFromTypesOfValuesDTO(@Valid ListOfValuesDTO listOfValuesDTO,
 			ListOfValuesVO listOfValuesVO) {
 		listOfValuesVO.setListCode(listOfValuesDTO.getListCode());
@@ -1931,7 +1931,7 @@ public class MasterServiceImpl implements MasterService {
 		partyMasterVO.setAccountType(partyMasterDTO.getAccountType());
 		partyMasterVO.setBussinessType(partyMasterDTO.getBussinessType());
 		partyMasterVO.setCarrierCode(partyMasterDTO.getCarrierCode());
-		partyMasterVO.setSupplierType(partyMasterDTO.getSupplierType());
+		partyMasterVO.setSupplierType(partyMasterDTO.getSupplierType());  
 		partyMasterVO.setSalesPerson(partyMasterDTO.getSalesPerson());
 		partyMasterVO.setCustomerCoord(partyMasterDTO.getCustomerCoord());
 		partyMasterVO.setAccountName(partyMasterDTO.getAccountName());
