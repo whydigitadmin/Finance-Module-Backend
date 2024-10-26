@@ -118,10 +118,6 @@ public class ARServiceImpl implements ARService {
 		receiptVO.setCancel(receiptDTO.isCancel());
 		receiptVO.setCancelRemarks(receiptDTO.getCancelRemarks());
 		receiptVO.setFinYear(receiptDTO.getFinYear());
-		receiptVO.setScreenCode("RT");
-		receiptVO.setScreenName("RECEIPT");
-		receiptVO.setIpNo(receiptDTO.getIpNo());
-		receiptVO.setLatitude(receiptDTO.getLatitude());
 		receiptVO.setType(receiptDTO.getType());
 		receiptVO.setCustomerName(receiptDTO.getCustomerName());
 		receiptVO.setCustomerCode(receiptDTO.getCustomerCode());
@@ -199,6 +195,13 @@ public class ARServiceImpl implements ARService {
 		}
 
 		return doctypeMappingDetails;
+	}
+
+	@Override
+	public String getReceiptDocId(Long orgId, String finYear, String branch, String branchCode) {
+		String ScreenCode = "RT";
+		String result = receiptRepo.getReceiptByDocId(orgId, finYear, branchCode, ScreenCode);
+		return result;
 	}
 
 	// ArBillBalance
@@ -292,8 +295,6 @@ public class ARServiceImpl implements ARService {
 		arBillBalanceVO.setCancel(arBillBalanceDTO.isCancel());
 		arBillBalanceVO.setCancelRemarks(arBillBalanceDTO.getCancelRemarks());
 		arBillBalanceVO.setFinYear(arBillBalanceDTO.getFinYear());
-		arBillBalanceVO.setIpNo(arBillBalanceDTO.getIpNo());
-		arBillBalanceVO.setLatitude(arBillBalanceDTO.getLatitude());
 		arBillBalanceVO.setOrgId(arBillBalanceDTO.getOrgId());
 	}
 
@@ -339,6 +340,13 @@ public class ARServiceImpl implements ARService {
 		}
 
 		return doctypeMappingDetails;
+	}
+
+	@Override
+	public String getArBillBalanceDocId(Long orgId, String finYear, String branch, String branchCode) {
+		String ScreenCode = "ARB";
+		String result = receiptRepo.getArBillBalanceDocId(orgId, finYear, branchCode, ScreenCode);
+		return result;
 	}
 
 }

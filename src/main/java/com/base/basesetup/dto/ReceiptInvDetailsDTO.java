@@ -17,10 +17,8 @@ import lombok.NoArgsConstructor;
 public class ReceiptInvDetailsDTO {
 	private Long id;
 	private String invNo;
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	private LocalDate invDate;
 	private String refNo;
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	LocalDate refDate;
 	private String masterRef;
 	private String houseRef;

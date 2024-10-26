@@ -31,7 +31,7 @@ public class BranchVO {
 
 	@Column(name = "branch")
 	private String branch;
-	@Column(name = "branchode")
+	@Column(name = "branchcode")
 	private String branchCode;
 	@Column(name = "orgid")
 	private Long orgId;

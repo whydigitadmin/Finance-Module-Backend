@@ -19,8 +19,8 @@ public interface ScreenNamesRepo extends JpaRepository<ScreenNamesVO, Long> {
 
 	boolean existsByScreenCode(String screenCode);
 
-	@Query(nativeQuery = true, value = "select screencode,screenname from screenname where screencode not in (select screencode from documenttype);")
-	Set<Object[]> findAllScreenCode();
+	@Query(nativeQuery = true, value = "select screencode,screenname from screenname where screencode not in (select screencode from documenttype WHERE ORGID=?1);")
+	Set<Object[]> findAllScreenCode(Long orgId);
 
 
 

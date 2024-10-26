@@ -111,7 +111,6 @@ public class APServiceImpl implements APService {
 			paymentInvDtlsRepo.deleteAll(paymentInvDtlsVOList);
 		}
 		List<PaymentInvDtlsVO> paymentInvDtlsVOs = new ArrayList<>();
-		if (paymentDTO.getPaymentInvDtlsDTO() != null) {
 			for (PaymentInvDtlsDTO paymentInvDtlsDTO : paymentDTO.getPaymentInvDtlsDTO()) {
 				PaymentInvDtlsVO paymentInvDtlsVO = new PaymentInvDtlsVO();
 				paymentInvDtlsVO.setInvNo(paymentInvDtlsDTO.getInvNo());
@@ -138,7 +137,7 @@ public class APServiceImpl implements APService {
 				paymentInvDtlsVOs.add(paymentInvDtlsVO);
 
 			}
-		}
+		
 		getPaymentVOFromPaymentDTO(paymentDTO, paymentVO);
 		paymentVO.setPaymentInvDtlsVO(paymentInvDtlsVOs);
 		
@@ -280,8 +279,6 @@ public class APServiceImpl implements APService {
 			apBillBalanceVO.setCancel(apBillBalanceDTO.isCancel());
 			apBillBalanceVO.setCancelRemarks(apBillBalanceDTO.getCancelRemarks());
 			apBillBalanceVO.setFinYear(apBillBalanceDTO.getFinYear());
-			apBillBalanceVO.setIpNo(apBillBalanceDTO.getIpNo());
-			apBillBalanceVO.setLatitude(apBillBalanceDTO.getLatitude());
 			apBillBalanceVO.setOrgId(apBillBalanceDTO.getOrgId());
 		}
 
@@ -407,5 +404,13 @@ public class APServiceImpl implements APService {
 
 		return payment;
 	}
+	
+	@Override
+	public String getApBillBalanceDocId(Long orgId, String finYear, String branch, String branchCode) {
+		String ScreenCode = "APB";
+		String result = apBillBalanceRepo.getApBillBalanceDocId(orgId, finYear, branchCode, ScreenCode);
+		return result;
+	}
+
 
 }

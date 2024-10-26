@@ -16,7 +16,6 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.base.basesetup.dto.CreatedUpdatedDate;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -71,9 +70,6 @@ public class IrnCreditVO {
 	@Builder.Default
 	private String screenName="ICN";
 
-	@Column(name = "ipno")
-	private String ipNo;
-
 	@Column(name = "orgid")
 	private Long orgId;
 
@@ -82,14 +78,13 @@ public class IrnCreditVO {
 	private String docId;
 
 	@Column(name = "docdate")
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+	@Builder.Default
 	private LocalDate docDate=LocalDate.now();
 
 	@Column(name = "vohno")
 	private String vohNo;
 
 	@Column(name = "vohdate")
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	private LocalDate vohDate;
 
 	@Column(name = "partyname")
@@ -102,7 +97,6 @@ public class IrnCreditVO {
 	private String supRefNo;
 
 	@Column(name = "suprefdate")
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	private LocalDate supRefDate;
 
 	@Column(name = "partytype")
@@ -115,7 +109,6 @@ public class IrnCreditVO {
 	private int creditDays;
 
 	@Column(name = "duedate")
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	private LocalDate dueDate;
 
 	@Column(name = "state")

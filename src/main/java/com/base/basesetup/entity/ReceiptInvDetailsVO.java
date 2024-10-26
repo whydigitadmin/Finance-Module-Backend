@@ -38,13 +38,11 @@ public class ReceiptInvDetailsVO {
 	private String invNo;
 
 	@Column(name = "invdate")
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	private LocalDate invDate;
 
 	@Column(name = "refno")
 	private String refNo;
 
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	@Column(name = "refdate")
 	private LocalDate refDate;
 

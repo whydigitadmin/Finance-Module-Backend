@@ -98,7 +98,7 @@ public interface TransactionService {
 // GeneralJournal
 	List<GeneralJournalVO> getAllGeneralJournalByOrgId(Long orgId);
 
-	GeneralJournalVO updateCreateGeneralJournal(@Valid GeneralJournalDTO generalJournalDTO) throws ApplicationException;
+	Map<String, Object> updateCreateGeneralJournal(@Valid GeneralJournalDTO generalJournalDTO) throws ApplicationException;
 
 	List<GeneralJournalVO> getAllGeneralJournalById(Long id);
 

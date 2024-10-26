@@ -4,10 +4,6 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
-import javax.persistence.Column;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -27,15 +23,10 @@ public class GeneralJournalDTO {
 
 	private String remarks;
 	private Long orgId;
-	private boolean active;
-	private boolean cancel;
-	private String cancelRemarks;
 	private String createdBy;
 	private String branch;
 	private String branchCode;
 	private String finYear;
-	private BigDecimal totalDebitAmount;
-	private BigDecimal totalCreditAmount;
 
 	List<ParticularsJournalDTO> particularsJournalDTO;
 
