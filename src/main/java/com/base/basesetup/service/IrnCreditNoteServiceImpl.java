@@ -214,10 +214,8 @@ public class IrnCreditNoteServiceImpl implements IrnCreditNoteService {
 	}
 
 	@Override
-	public List<Map<String, Object>> getPartyNameAndPartyCodeAndPartyTypeForIrn(Long orgId, String branch,
-			String branchCode, String finYear) {
-		Set<Object[]> irn = irnCreditRepo.findPartyNameAndPartyCodeAndPartyTypeForIrn(orgId, branch, branchCode,
-				finYear);
+	public List<Map<String, Object>> getPartyNameAndPartyCodeAndPartyTypeForIrn(Long orgId) {
+		Set<Object[]> irn = irnCreditRepo.findPartyNameAndPartyCodeAndPartyTypeForIrn(orgId);
 		return getPartyNameForIrn(irn);
 	}
 

@@ -382,11 +382,11 @@ public class APServiceImpl implements APService {
 		return state;
 	}
 	
-	@Override
-	public List<ApBillBalanceVO> getAllApBillBalanceByOrgId(Long orgId, String branch, String branchCode,
-			String finYear) {
-		return apBillBalanceRepo.findAll(orgId,branch,branchCode,finYear);
-	}
+//	@Override
+//	public List<ApBillBalanceVO> getAllApBillBalanceByOrgId(Long orgId, String branch, String branchCode,
+//			String finYear) {
+//		return apBillBalanceRepo.findAll(orgId,branch,branchCode,finYear);
+//	}
 	
 	@Override
 	public List<Map<String, Object>> getAccountGroupNameByOrgIdForPayment(Long orgId) {
