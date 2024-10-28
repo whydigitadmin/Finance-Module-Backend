@@ -55,14 +55,8 @@ public class ReceiptVO {
 	@Column(name = "createdby", length = 25)
 	private String createdBy;
 
-//	@Column(name = "createdon")
-//	private LocalDate createdOn;
-
 	@Column(name = "modifyby", length = 25)
 	private String updatedBy;
-
-//	@Column(name = "modifyedon")
-//	private LocalDate modifiedOn;
 
 	@Column(name = "active")
 	private boolean active;
@@ -83,9 +77,6 @@ public class ReceiptVO {
 	@Column(name = "screenname", length = 25)
 	@Builder.Default
 	private String screenName = "RECEIPT";
-
-//	@Column(name = "receiptId")
-//	private Long receiptId;
 
 	@Column(name = "receiptType", length = 50)
 	private String receiptType;
@@ -148,9 +139,6 @@ public class ReceiptVO {
 	@Column(name = "receivedfrom", length = 100)
 	private String receivedFrom;
 
-	@Column(name = "netamount")
-	private BigDecimal netAmount;
-
 	@Column(name = "remarks")
 	private String remarks;
 
@@ -161,6 +149,9 @@ public class ReceiptVO {
 	@Column(name = "currentamount", precision = 10, scale = 2)
 	private BigDecimal currencyAmount;
 
+	@Column(name = "netamount", precision = 10, scale = 2)
+	private BigDecimal netAmount;
+	
 	@JsonGetter("active")
 	public String getActive() {
 		return active ? "Active" : "In-Active";
