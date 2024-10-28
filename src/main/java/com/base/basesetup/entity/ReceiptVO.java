@@ -55,14 +55,14 @@ public class ReceiptVO {
 	@Column(name = "createdby", length = 25)
 	private String createdBy;
 
-	@Column(name = "createdon")
-	private LocalDate createdOn;
+//	@Column(name = "createdon")
+//	private LocalDate createdOn;
 
 	@Column(name = "modifyby", length = 25)
 	private String updatedBy;
 
-	@Column(name = "modifyedon")
-	private LocalDate modifiedOn;
+//	@Column(name = "modifyedon")
+//	private LocalDate modifiedOn;
 
 	@Column(name = "active")
 	private boolean active;
@@ -84,8 +84,8 @@ public class ReceiptVO {
 	@Builder.Default
 	private String screenName = "RECEIPT";
 
-	@Column(name = "receiptId")
-	private Long receiptId;
+//	@Column(name = "receiptId")
+//	private Long receiptId;
 
 	@Column(name = "receiptType", length = 50)
 	private String receiptType;

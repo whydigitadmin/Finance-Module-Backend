@@ -23,8 +23,7 @@ public interface APService {
 
 	PaymentVO updateCreatePayment(@Valid PaymentDTO paymentDTO) throws ApplicationException;
 
-	List<Map<String, Object>> getPartyNameAndCodeForPayment(Long orgId, String branch, String branchCode,
-			String finYear);
+	List<Map<String, Object>> getPartyNameAndCodeForPayment(Long orgId);
 	
 	List<Map<String, Object>> getCurrencyAndTransCurrencyForPayment(Long orgId, String branch, String branchCode, String finYear,
 			String partyName);

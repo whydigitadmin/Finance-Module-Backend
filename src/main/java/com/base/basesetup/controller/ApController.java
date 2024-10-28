@@ -276,8 +276,7 @@ public class ApController extends BaseController {
 	}
 
 	@GetMapping("/getPartyNameAndCodeForPayment")
-	public ResponseEntity<ResponseDTO> getPartyNameAndCodeForPayment(@RequestParam Long orgId,
-			@RequestParam String branch, @RequestParam String branchCode, @RequestParam String finYear) {
+	public ResponseEntity<ResponseDTO> getPartyNameAndCodeForPayment(@RequestParam Long orgId) {
 		String methodName = "getPartyNameAndCodeForPayment()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
 		String errorMsg = null;
@@ -285,7 +284,7 @@ public class ApController extends BaseController {
 		ResponseDTO responseDTO = null;
 		List<Map<String, Object>> party = new ArrayList<>();
 		try {
-			party = apService.getPartyNameAndCodeForPayment(orgId, branch, branchCode, finYear);
+			party = apService.getPartyNameAndCodeForPayment(orgId);
 		} catch (Exception e) {
 			errorMsg = e.getMessage();
 			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);

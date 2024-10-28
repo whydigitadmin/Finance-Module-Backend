@@ -4,8 +4,6 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -35,7 +33,7 @@ public class ReceiptDTO {
 	private String chequeUtiNo;
 	private LocalDate chequeUtiDt;
 	private String receivedFrom;
-	private String netAmount;
+	private BigDecimal netAmount;
 	private String remarks;
 
 	// Common Fields
@@ -50,7 +48,7 @@ public class ReceiptDTO {
 	private String finYear;
 	private String receiptType1;
 	private String currency;
-	private String currencyAmount;
+	private BigDecimal currencyAmount;
 	private Long orgId;
 
 	List<ReceiptInvDetailsDTO> receiptInvDetailaDTO;
