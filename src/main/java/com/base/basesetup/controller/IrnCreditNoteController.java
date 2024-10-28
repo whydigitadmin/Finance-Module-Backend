@@ -152,8 +152,7 @@ public class IrnCreditNoteController extends BaseController {
 	}
 
 	@GetMapping("/getPartyNameAndPartyCodeAndPartyTypeForIrn")
-	public ResponseEntity<ResponseDTO> getPartyNameAndPartyCodeAndPartyTypeForIrn(@RequestParam Long orgId,
-			@RequestParam String branch, @RequestParam String branchCode, @RequestParam String finYear) {
+	public ResponseEntity<ResponseDTO> getPartyNameAndPartyCodeAndPartyTypeForIrn(@RequestParam Long orgId) {
 		String methodName = "getPartyNameAndPartyCodeAndPartyTypeForIrn()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
 		String errorMsg = null;

@@ -161,8 +161,7 @@ public class ARController extends BaseController {
 	}
 
 	@GetMapping("/getCustomerNameAndCodeForReceipt")
-	public ResponseEntity<ResponseDTO> getCustomerNameAndCodeForReceipt(@RequestParam Long orgId,
-			@RequestParam String branch, @RequestParam String branchCode, @RequestParam String finYear) {
+	public ResponseEntity<ResponseDTO> getCustomerNameAndCodeForReceipt(@RequestParam Long orgId) {
 		String methodName = "getCustomerNameAndCodeForReceipt()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
 		String errorMsg = null;
@@ -170,7 +169,7 @@ public class ARController extends BaseController {
 		ResponseDTO responseDTO = null;
 		List<Map<String, Object>> customer = new ArrayList<>();
 		try {
-			customer = arReceivableService.getCustomerNameAndCodeForReceipt(orgId, branch, branchCode, finYear);
+			customer = arReceivableService.getCustomerNameAndCodeForReceipt(orgId);
 		} catch (Exception e) {
 			errorMsg = e.getMessage();
 			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
@@ -358,22 +357,22 @@ public class ARController extends BaseController {
 		}
 
 		if (StringUtils.isBlank(errorMsg)) {
-			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "ArBillBalance DocId information retrieved successfully");
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+					"ArBillBalance DocId information retrieved successfully");
 			responseObjectsMap.put("arBillBalanceDocId", mapp);
 			responseDTO = createServiceResponse(responseObjectsMap);
 		} else {
-			responseDTO = createServiceResponseError(responseObjectsMap, "Failed to retrieve ArBillBalance Docid information",
-					errorMsg);
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					"Failed to retrieve ArBillBalance Docid information", errorMsg);
 		}
 
 		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
 		return ResponseEntity.ok().body(responseDTO);
 	}
-	
+
 	// Receipt Register
 	@GetMapping("/getAllReceiptRegister")
-	public ResponseEntity<ResponseDTO> getAllReceiptRegister(@RequestParam Long orgId, @RequestParam String branch,
-			@RequestParam String branchCode, @RequestParam String finYear, @RequestParam String fromDate,
+	public ResponseEntity<ResponseDTO> getAllReceiptRegister(@RequestParam Long orgId, @RequestParam String fromDate,
 			@RequestParam String toDate, @RequestParam String subLedgerName) {
 		String methodName = "getAllReceiptRegister()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
@@ -382,8 +381,7 @@ public class ARController extends BaseController {
 		ResponseDTO responseDTO = null;
 		List<Map<String, Object>> customer = new ArrayList<>();
 		try {
-			customer = arReceivableService.getAllReceiptRegister(orgId, branch, branchCode, finYear, fromDate, toDate,
-					subLedgerName);
+			customer = arReceivableService.getAllReceiptRegister(orgId, fromDate, toDate, subLedgerName);
 		} catch (Exception e) {
 			errorMsg = e.getMessage();
 			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
@@ -399,5 +397,4 @@ public class ARController extends BaseController {
 		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
 		return ResponseEntity.ok().body(responseDTO);
 	}
-
 }
