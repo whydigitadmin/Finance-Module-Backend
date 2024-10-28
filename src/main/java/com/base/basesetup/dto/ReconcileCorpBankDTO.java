@@ -21,8 +21,11 @@ public class ReconcileCorpBankDTO {
 	private Long orgId;
 	private String branch;
 	private String branchCode;
+	private boolean active;
 	private String createdBy;
 	private String finYear;
+	private String ipNo;
+	private String latitude;
 
 	List<ParticularsReconcileCorpBankDTO> particularsReconcileCorpBankDTO;
 }

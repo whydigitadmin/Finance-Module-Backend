@@ -975,7 +975,7 @@ public class TransactionServiceImpl implements TransactionService {
 			throw new ApplicationException("Total Debit Amount and Total Credit Amount Should be Equal");
 		}
 		generalJournalVO.setParticularsJournalVO(particularsJournalVOs);
-		
+
 	}
 
 //	@Override
@@ -2105,6 +2105,7 @@ public class TransactionServiceImpl implements TransactionService {
 		}
 
 		getReconcileBankVOFromReconcileBankDTO(reconcileBankDTO, reconcileBankVO);
+		reconcileBankRepo.save(reconcileBankVO);
 		Map<String, Object> response = new HashMap<>();
 		response.put("reconcileBankVO", reconcileBankVO);
 		response.put("message", message);
@@ -2122,6 +2123,9 @@ public class TransactionServiceImpl implements TransactionService {
 		reconcileBankVO.setBranch(reconcileBankDTO.getBranch());
 		reconcileBankVO.setBranchCode(reconcileBankDTO.getBranchCode());
 		reconcileBankVO.setFinYear(reconcileBankDTO.getFinYear());
+		reconcileBankVO.setActive(reconcileBankDTO.isActive());
+		reconcileBankVO.setIpNo(reconcileBankDTO.getIpNo());
+		reconcileBankVO.setLatitude(reconcileBankDTO.getLatitude());
 
 		if (ObjectUtils.isNotEmpty(reconcileBankVO.getId())) {
 			List<ParticularsReconcileVO> particularsReconcileVO1 = particularsReconcileRepo
@@ -2140,26 +2144,29 @@ public class TransactionServiceImpl implements TransactionService {
 			particularsReconcileVO.setVoucherDate(particularsReconcileDTO.getVoucherDate());
 			particularsReconcileVO.setChequeNo(particularsReconcileDTO.getChequeNo());
 			particularsReconcileVO.setChequeDate(particularsReconcileDTO.getChequeDate());
-			particularsReconcileVO.setDeposit(particularsReconcileDTO.getDeposit());
-			particularsReconcileVO.setWithdrawal(particularsReconcileDTO.getWithdrawal());
-			particularsReconcileVO.setBankRef(particularsReconcileDTO.getBankRef());
-			particularsReconcileVO.setReconcileBankVO(reconcileBankVO);
+
+			if (particularsReconcileDTO.getDeposit() != null
+					&& particularsReconcileDTO.getDeposit().compareTo(BigDecimal.ZERO) != 0) {
+				particularsReconcileVO.setDeposit(particularsReconcileDTO.getDeposit());
+				particularsReconcileVO.setWithdrawal(BigDecimal.ZERO);
+			} else {
+				particularsReconcileVO.setWithdrawal(particularsReconcileDTO.getWithdrawal());
+				particularsReconcileVO.setDeposit(BigDecimal.ZERO);
+			}
 
 			totalDeposit = totalDeposit.add(particularsReconcileDTO.getDeposit());
 			totalWithdrawal = totalWithdrawal.add(particularsReconcileDTO.getWithdrawal());
-
+			particularsReconcileVO.setBankRef(particularsReconcileDTO.getBankRef());
+			particularsReconcileVO.setReconcileBankVO(reconcileBankVO);
 			particularsReconcileVOs.add(particularsReconcileVO);
 		}
-		reconcileBankVO.setTotalDeposit(totalDeposit);
-		reconcileBankVO.setTotalWithdrawal(totalWithdrawal);
-		if (totalDeposit.compareTo(totalWithdrawal) > 0) {
-			throw new ApplicationException("Total Deposit Amount is Higher");
-		} else if (totalWithdrawal.compareTo(totalDeposit) > 0) {
-			throw new ApplicationException("Total Withdrawal Amount is Higher");
+		if (totalDeposit.equals(totalWithdrawal)) {
+			reconcileBankVO.setTotalDeposit(totalDeposit);
+			reconcileBankVO.setTotalWithdrawal(totalWithdrawal);
+		} else {
+			throw new ApplicationException("Total Deposit Amount and Total Withdrawal Amount Should be Equal");
 		}
-
 		reconcileBankVO.setParticularsReconcileVO(particularsReconcileVOs);
-		reconcileBankRepo.save(reconcileBankVO);
 	}
 
 	@Override
@@ -2222,7 +2229,6 @@ public class TransactionServiceImpl implements TransactionService {
 			reconcileCorpBankVO = reconcileCorpBankRepo.findById(reconcileCorpBankDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid ReconcileCorpBank details"));
 			reconcileCorpBankVO.setUpdatedBy(reconcileCorpBankDTO.getCreatedBy());
-			getReconcileCorpBankVOFromReconcileCorpBankDTO(reconcileCorpBankDTO, reconcileCorpBankVO);
 			message = "ReconcileCorpBank Updated Successfully";
 		} else {
 			String docId = reconcileCorpBankRepo.getReconcileCorpBankDocId(reconcileCorpBankDTO.getOrgId(),
@@ -2238,39 +2244,10 @@ public class TransactionServiceImpl implements TransactionService {
 
 			reconcileCorpBankVO.setUpdatedBy(reconcileCorpBankDTO.getCreatedBy());
 			reconcileCorpBankVO.setCreatedBy(reconcileCorpBankDTO.getCreatedBy());
-			getReconcileCorpBankVOFromReconcileCorpBankDTO(reconcileCorpBankDTO, reconcileCorpBankVO);
 			message = "ReconcileCorpBank Created Successfully";
 		}
-
-		List<ParticularsReconcileCorpBankVO> particularsReconcileCorpBankVOs = new ArrayList<>();
-		if (reconcileCorpBankDTO.getParticularsReconcileCorpBankDTO() != null) {
-			for (ParticularsReconcileCorpBankDTO particularsReconcileCorpBankDTO : reconcileCorpBankDTO
-					.getParticularsReconcileCorpBankDTO()) {
-				ParticularsReconcileCorpBankVO particularsReconcileCorpBankVO;
-				if (particularsReconcileCorpBankDTO.getId() != null
-						&& ObjectUtils.isNotEmpty(particularsReconcileCorpBankDTO.getId())) {
-					particularsReconcileCorpBankVO = particularsReconcileCorpBankRepo
-							.findById(particularsReconcileCorpBankDTO.getId())
-							.orElse(new ParticularsReconcileCorpBankVO());
-				} else {
-					particularsReconcileCorpBankVO = new ParticularsReconcileCorpBankVO();
-				}
-				particularsReconcileCorpBankVO.setVoucherNo(particularsReconcileCorpBankDTO.getVoucherNo());
-				particularsReconcileCorpBankVO.setVoucherDate(particularsReconcileCorpBankDTO.getVoucherDate());
-				particularsReconcileCorpBankVO.setChequeNo(particularsReconcileCorpBankDTO.getChequeNo());
-				particularsReconcileCorpBankVO.setChequeDate(particularsReconcileCorpBankDTO.getChequeDate());
-				particularsReconcileCorpBankVO.setDeposit(particularsReconcileCorpBankDTO.getDeposit());
-				particularsReconcileCorpBankVO.setWithdrawal(particularsReconcileCorpBankDTO.getWithdrawal());
-				particularsReconcileCorpBankVO.setBankRef(particularsReconcileCorpBankDTO.getBankRef());
-				particularsReconcileCorpBankVO.setReconcileCorpBankVO(reconcileCorpBankVO);
-				particularsReconcileCorpBankVOs.add(particularsReconcileCorpBankVO);
-			}
-		}
-
 		getReconcileCorpBankVOFromReconcileCorpBankDTO(reconcileCorpBankDTO, reconcileCorpBankVO);
-		reconcileCorpBankVO.setParticularsReconcileCorpBankVO(particularsReconcileCorpBankVOs);
 		reconcileCorpBankRepo.save(reconcileCorpBankVO);
-
 		Map<String, Object> response = new HashMap<>();
 		response.put("reconcileCorpBankVO", reconcileCorpBankVO);
 		response.put("message", message);
@@ -2297,7 +2274,35 @@ public class TransactionServiceImpl implements TransactionService {
 		reconcileCorpBankVO.setBranch(reconcileCorpBankDTO.getBranch());
 		reconcileCorpBankVO.setBranchCode(reconcileCorpBankDTO.getBranchCode());
 		reconcileCorpBankVO.setFinYear(reconcileCorpBankDTO.getFinYear());
+		reconcileCorpBankVO.setActive(reconcileCorpBankDTO.isActive());
 		reconcileCorpBankVO.setRemarks(reconcileCorpBankDTO.getRemarks());
+		reconcileCorpBankVO.setIpNo(reconcileCorpBankDTO.getIpNo());
+		reconcileCorpBankVO.setLatitude(reconcileCorpBankDTO.getLatitude());
+
+		if (ObjectUtils.isNotEmpty(reconcileCorpBankVO.getId())) {
+			List<ParticularsReconcileCorpBankVO> particularsReconcileCorpBankVO1 = particularsReconcileCorpBankRepo
+					.findByReconcileCorpBankVO(reconcileCorpBankVO);
+
+			particularsReconcileCorpBankRepo.deleteAll(particularsReconcileCorpBankVO1);
+		}
+
+		List<ParticularsReconcileCorpBankVO> particularsReconcileCorpBankVOs = new ArrayList<>();
+		for (ParticularsReconcileCorpBankDTO particularsReconcileCorpBankDTO : reconcileCorpBankDTO
+				.getParticularsReconcileCorpBankDTO()) {
+			ParticularsReconcileCorpBankVO particularsReconcileCorpBankVO = new ParticularsReconcileCorpBankVO();
+
+			particularsReconcileCorpBankVO.setVoucherNo(particularsReconcileCorpBankDTO.getVoucherNo());
+			particularsReconcileCorpBankVO.setVoucherDate(particularsReconcileCorpBankDTO.getVoucherDate());
+			particularsReconcileCorpBankVO.setChequeNo(particularsReconcileCorpBankDTO.getChequeNo());
+			particularsReconcileCorpBankVO.setChequeDate(particularsReconcileCorpBankDTO.getChequeDate());
+			particularsReconcileCorpBankVO.setDeposit(particularsReconcileCorpBankDTO.getDeposit());
+			particularsReconcileCorpBankVO.setWithdrawal(particularsReconcileCorpBankDTO.getWithdrawal());
+			particularsReconcileCorpBankVO.setBankRef(particularsReconcileCorpBankDTO.getBankRef());
+			particularsReconcileCorpBankVO.setReconcileCorpBankVO(reconcileCorpBankVO);
+			particularsReconcileCorpBankVOs.add(particularsReconcileCorpBankVO);
+		}
+		reconcileCorpBankVO.setParticularsReconcileCorpBankVO(particularsReconcileCorpBankVOs);
+
 	}
 
 	@Override
@@ -2360,7 +2365,6 @@ public class TransactionServiceImpl implements TransactionService {
 			reconcileCashVO = reconcileCashRepo.findById(reconcileCashDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid ReconcileCash details"));
 			reconcileCashVO.setUpdatedBy(reconcileCashDTO.getCreatedBy());
-			getReconcileCashVOFromReconcileCashDTO(reconcileCashDTO, reconcileCashVO);
 			message = "ReconcileCash Updated Successfully";
 		} else {
 			String docId = reconcileCashRepo.getReconcileCashDocId(reconcileCashDTO.getOrgId(),
@@ -2401,11 +2405,13 @@ public class TransactionServiceImpl implements TransactionService {
 		reconcileCashVO.setDn8(reconcileCashDTO.getDn8());
 		reconcileCashVO.setRemarks(reconcileCashDTO.getRemarks());
 		reconcileCashVO.setOrgId(reconcileCashDTO.getOrgId());
-		reconcileCashVO.setActive(true);
 		reconcileCashVO.setCancel(false);
 		reconcileCashVO.setBranch(reconcileCashDTO.getBranch());
 		reconcileCashVO.setBranchCode(reconcileCashDTO.getBranchCode());
+		reconcileCashVO.setActive(reconcileCashDTO.isActive());
 		reconcileCashVO.setFinYear(reconcileCashDTO.getFinYear());
+		reconcileCashVO.setIpNo(reconcileCashDTO.getIpNo());
+		reconcileCashVO.setLatitude(reconcileCashDTO.getLatitude());
 
 		// Map counts from DTO
 		int[] counts = { reconcileCashDTO.getDn1(), reconcileCashDTO.getDn2(), reconcileCashDTO.getDn3(),

@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ReconcileBankDTO {
 	private Long id;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	private LocalDate bankStmtDate;
 	private String bankAccount;
 	
@@ -20,7 +21,10 @@ public class ReconcileBankDTO {
 	private String branchCode;
 	private String createdBy;
 	private String finYear;
+	private boolean active;
 	private String remarks;
+	private String ipNo;
+	private String latitude;
 	
 	List<ParticularsReconcileDTO> particularsReconcileDTO;
 	
