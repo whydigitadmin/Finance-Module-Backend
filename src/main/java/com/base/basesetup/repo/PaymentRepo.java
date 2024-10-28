@@ -22,8 +22,8 @@ public interface PaymentRepo extends JpaRepository<PaymentVO, Long> {
 	Set<Object[]> findAllPaymentRegister(Long orgId, String branch, String branchCode, String finYear, String fromDate,
 			String toDate, String subLedgerName);
 
-	@Query(nativeQuery = true, value = "select partyname,partycode from partymaster where orgid=?1 and branch=?2 and branchcode=?3 and finyear =?4 and active=1 and partytype='VENDOR'")
-	Set<Object[]> findPartyNameAndCodeForPayment(Long orgId, String branch, String branchCode, String finYear);
+	@Query(nativeQuery = true, value = "select partyname,partycode from partymaster where orgid=?1 and active=1 and partytype='VENDOR'")
+	Set<Object[]> findPartyNameAndCodeForPayment(Long orgId);
 
 	@Query(nativeQuery = true, value = "SELECT a.currency AS incurrency FROM partymaster a WHERE a.orgid = ?1 AND a.branch = ?2 AND a.branchcode = ?3  AND a.finyear = ?4 \r\n"
 			+ "  AND a.partyname = ?5 AND a.active = 1 UNION SELECT b.transcurrency AS incurrency FROM partymaster a JOIN partycurrencymapping b \r\n"

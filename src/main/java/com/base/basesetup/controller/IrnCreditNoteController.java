@@ -161,7 +161,7 @@ public class IrnCreditNoteController extends BaseController {
 		ResponseDTO responseDTO = null;
 		List<Map<String, Object>> customer = new ArrayList<>();
 		try {
-			customer = irnCreditService.getPartyNameAndPartyCodeAndPartyTypeForIrn(orgId, branch, branchCode, finYear);
+			customer = irnCreditService.getPartyNameAndPartyCodeAndPartyTypeForIrn(orgId);
 		} catch (Exception e) {
 			errorMsg = e.getMessage();
 			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);

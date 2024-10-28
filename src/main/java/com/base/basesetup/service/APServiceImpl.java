@@ -326,10 +326,8 @@ public class APServiceImpl implements APService {
 	}
 	
 	@Override
-	public List<Map<String, Object>> getPartyNameAndCodeForPayment(Long orgId, String branch, String branchCode,
-			String finYear) {
-		Set<Object[]> partyName = paymentRepo.findPartyNameAndCodeForPayment(orgId, branch, branchCode,
-				finYear);
+	public List<Map<String, Object>> getPartyNameAndCodeForPayment(Long orgId) {
+		Set<Object[]> partyName = paymentRepo.findPartyNameAndCodeForPayment(orgId);
 		return getPartyName(partyName);
 	}
 
@@ -382,11 +380,11 @@ public class APServiceImpl implements APService {
 		return state;
 	}
 	
-	@Override
-	public List<ApBillBalanceVO> getAllApBillBalanceByOrgId(Long orgId, String branch, String branchCode,
-			String finYear) {
-		return apBillBalanceRepo.findAll(orgId,branch,branchCode,finYear);
-	}
+//	@Override
+//	public List<ApBillBalanceVO> getAllApBillBalanceByOrgId(Long orgId, String branch, String branchCode,
+//			String finYear) {
+//		return apBillBalanceRepo.findAll(orgId,branch,branchCode,finYear);
+//	}
 	
 	@Override
 	public List<Map<String, Object>> getAccountGroupNameByOrgIdForPayment(Long orgId) {
