@@ -114,8 +114,8 @@ public interface MasterService {
 	List<GroupLedgerVO> getAllGroupLedgerById(Long id);
 
 	List<GroupLedgerVO> getAllGroupLedgerByOrgId(Long orgId);
-	
-	List<Map<String,Object>>getGroupName(Long orgId);
+
+	List<Map<String, Object>> getGroupName(Long orgId);
 
 	GroupLedgerVO updateCreateGroupLedger(@Valid GroupLedgerDTO groupLedgerDTO) throws ApplicationException;
 
@@ -125,13 +125,12 @@ public interface MasterService {
 	List<SacCodeVO> getAllSacCodeById(Long id);
 
 	List<SacCodeVO> getAllSacCodeByOrgId(Long orgId);
-	
+
 	List<SacCodeVO> getAllActiveSacCodeByOrgId(Long orgId);
 
 	SacCodeVO updateCreateSacCode(@Valid SacCodeDTO sacCodeDTO) throws ApplicationException;
 
 //	List<SacCodeVO> getSacCodeByActive();
-
 
 //	SubLedgerAccount
 	List<SubLedgerAccountVO> getAllSubLedgerAccountByOrgId(Long orgId);
@@ -172,7 +171,7 @@ public interface MasterService {
 	List<ChargeTypeRequestVO> getAllChargeTypeRequestById(Long id);
 
 	List<ChargeTypeRequestVO> getChargeTypeRequestByActive();
-	
+
 	List<Map<String, Object>> getSalesAccountFromGroup(Long orgId);
 
 	List<Map<String, Object>> getPaymentAccountFromGroup(Long orgId);
@@ -193,7 +192,5 @@ public interface MasterService {
 	PartyMasterVO updateCreatePartyMaster(@Valid PartyMasterDTO partyMasterDTO) throws ApplicationException;
 
 	String getPartyMasterDocId(Long orgId, String finYear, String branch, String branchCode);
-
-
 
 }

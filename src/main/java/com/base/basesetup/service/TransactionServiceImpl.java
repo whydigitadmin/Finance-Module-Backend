@@ -778,6 +778,15 @@ public class TransactionServiceImpl implements TransactionService {
 		String message = null;
 		String screenCode = "FT";
 
+		if(fundTransferDTO.getCorpAccount().equalsIgnoreCase(fundTransferDTO.getTransferTo())) {
+			
+			String errorMessage=String.format("CorpAccount And TransferAccount Is Same,Try Different Bank",
+					fundTransferDTO.getCorpAccount());
+			
+			throw new ApplicationException(errorMessage);
+		}
+		
+		
 		if (ObjectUtils.isEmpty(fundTransferDTO.getId())) {
 
 			fundTransferVO = new FundTransferVO();
@@ -808,6 +817,8 @@ public class TransactionServiceImpl implements TransactionService {
 
 			message = "FundTransfer Updation Successfully";
 		}
+		
+		
 
 		getFundTransferVOFromFundTransferDTO(fundTransferDTO, fundTransferVO);
 		fundTransferRepo.save(fundTransferVO);
@@ -826,7 +837,6 @@ public class TransactionServiceImpl implements TransactionService {
 		fundTransferVO.setAmount(fundTransferDTO.getAmount());
 		fundTransferVO.setOrgId(fundTransferDTO.getOrgId());
 		fundTransferVO.setCreatedBy(fundTransferDTO.getCreatedBy());
-		fundTransferVO.setCancel(fundTransferDTO.isCancel());
 		fundTransferVO.setCancelRemarks(fundTransferDTO.getCancelRemarks());
 		fundTransferVO.setBranchCode(fundTransferDTO.getBranchCode());
 		fundTransferVO.setFinYear(fundTransferDTO.getFinYear());
@@ -2466,7 +2476,7 @@ public class TransactionServiceImpl implements TransactionService {
 		return paymentVoucherRepo.findAllPaymentVoucherByDocId(orgId, docId);
 	}
 
-	@Override
+	@Override  
 	public String getpaymentVoucherDocId(Long orgId, String finYear, String branch, String branchCode) {
 		String ScreenCode = "PV";
 		String result = paymentVoucherRepo.getpaymentVoucherDocId(orgId, finYear, branchCode, ScreenCode);
