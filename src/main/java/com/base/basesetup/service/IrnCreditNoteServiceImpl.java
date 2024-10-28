@@ -231,4 +231,13 @@ public class IrnCreditNoteServiceImpl implements IrnCreditNoteService {
 
 		return irnCredit;
 	}
+	
+	@Override
+	public String getIrnCreditNoteDocId(Long orgId, String finYear, String branch, String branchCode) {
+		String ScreenCode = "APB";
+		String result = irnCreditRepo.getIrnCreditDocId(orgId, finYear, branchCode, ScreenCode);
+		return result;
+	}
+	
+	
 }
