@@ -1,5 +1,6 @@
 package com.base.basesetup.entity;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import javax.persistence.Column;
@@ -30,7 +31,7 @@ public class BrsOpeningVO {
 	@SequenceGenerator(name = "brsopeninggen", sequenceName = "brsopeningseq", initialValue = 1000000001, allocationSize = 1)
 	@Column(name = "brsopeningid")
 	private Long id;
-	@Column(name = "billno")
+	@Column(name = "billno",length = 30)
 	private String billNo;
 	@Column(name = "billdate")
 	private LocalDate billDate;
@@ -43,11 +44,11 @@ public class BrsOpeningVO {
 	@Column(name = "currency")
 	private String currency;
 	@Column(name = "exrate")
-	private String exRate;
+	private BigDecimal exRate;
 	@Column(name = "receiptamount")
-	private String receiptAmount;
+	private BigDecimal receiptAmount;
 	@Column(name = "paymentamount")
-	private String paymentAmount;
+	private BigDecimal paymentAmount;
 	@Column(name = "reconcile")
 	private boolean reconcile;
 

@@ -369,6 +369,33 @@ public class ARController extends BaseController {
 		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
 		return ResponseEntity.ok().body(responseDTO);
 	}
+	
+	@GetMapping("/getPartyNameAndCodeForArBillBalance")
+	public ResponseEntity<ResponseDTO> getPartyNameAndCodeForArBillBalance(@RequestParam Long orgId) {
+		String methodName = "getPartyNameAndCodeForArBillBalance()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		List<Map<String, Object>> customer = new ArrayList<>();
+		try {
+			customer = arReceivableService.getPartyNameAndCodeForArBillBalance(orgId);
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+					"Party name and code information get successfully");
+			responseObjectsMap.put("PartyMasterVO", customer);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					"Party name and code information receive failed", errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+	}
 
 	// Receipt Register
 	@GetMapping("/getAllReceiptRegister")

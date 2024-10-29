@@ -302,6 +302,24 @@ public class ARServiceImpl implements ARService {
 		return arBillBalanceRepo.findArBillBalanceByActive();
 	}
 
+	@Override
+	public List<Map<String, Object>> getPartyNameAndCodeForArBillBalance(Long orgId) {
+		Set<Object[]> partyName = arBillBalanceRepo.getPartyNameAndCodeForArBillBalance(orgId);
+		return getPartyName(partyName);
+	}
+
+	private List<Map<String, Object>> getPartyName(Set<Object[]> customer) {
+		List<Map<String, Object>> doctypeMappingDetails = new ArrayList<>();
+		for (Object[] sup : customer) {
+			Map<String, Object> doctype = new HashMap<>();
+			doctype.put("partyName", sup[0] != null ? sup[0].toString() : "");
+			doctype.put("partyCode", sup[1] != null ? sup[1].toString() : "");
+			doctypeMappingDetails.add(doctype);
+		}
+
+		return doctypeMappingDetails;
+	}
+
 	// Receipt Register
 	@Override
 	public List<Map<String, Object>> getAllReceiptRegister(Long orgId, String fromDate, String toDate,

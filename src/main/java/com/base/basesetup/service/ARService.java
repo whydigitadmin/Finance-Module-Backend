@@ -40,6 +40,9 @@ public interface ARService {
 	List<ArBillBalanceVO> getArBillBalanceByActive();
 
 	String getArBillBalanceDocId(Long orgId, String finYear, String branch, String branchCode);
+	
+	List<Map<String, Object>> getPartyNameAndCodeForArBillBalance(Long orgId);
+
 
 // 	ReceiptRegister
 	List<Map<String, Object>> getAllReceiptRegister(Long orgId,
