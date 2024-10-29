@@ -726,19 +726,6 @@ public class TransactionServiceImpl implements TransactionService {
 	        } else {
 	            // Create new record
 	            chartCostCenterVO = new ChartCostCenterVO();
-
-	            // Get document ID
-	            String docId = chartCostCenterRepo.getPartyMasterDocId(chartCostCenterDTO.getOrgId(),
-	                    chartCostCenterDTO.getFinYear(), chartCostCenterDTO.getBranchCode(), screenCode);
-	            chartCostCenterVO.setDocId(docId);
-
-	            // Increment last number in DocumentTypeMappingDetails
-	            DocumentTypeMappingDetailsVO documentTypeMappingDetailsVO = documentTypeMappingDetailsRepo
-	                    .findByOrgIdAndFinYearAndBranchCodeAndScreenCode(chartCostCenterDTO.getOrgId(),
-	                            chartCostCenterDTO.getFinYear(), chartCostCenterDTO.getBranchCode(), screenCode);
-	            documentTypeMappingDetailsVO.setLastno(documentTypeMappingDetailsVO.getLastno() + 1);
-	            documentTypeMappingDetailsRepo.save(documentTypeMappingDetailsVO);
-
 	            chartCostCenterVO.setCreatedBy(chartCostCenterDTO.getCreatedBy());
 	            chartCostCenterVO.setUpdatedBy(chartCostCenterDTO.getCreatedBy());
 	            getChartCostCenterVOFromChartCostCenterDTO(chartCostCenterDTO, chartCostCenterVO);
