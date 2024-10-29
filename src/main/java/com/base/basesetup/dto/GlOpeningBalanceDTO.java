@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,19 +17,18 @@ import lombok.NoArgsConstructor;
 public class GlOpeningBalanceDTO {
 	private Long id;
 	private String branch;
-	private LocalDate docDate;
-	private String docId;
 	private String currency;
-	private String exRate;
+	private BigDecimal exRate;
 	private String refNo;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	private LocalDate refDate;
 	private String suppRefNo;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	private LocalDate suppRefDate;
 	private String remarks;
 	private Long orgId;
-	private boolean active;
 	private String createdBy;
-	private BigDecimal totalCreditAmount;
-	private BigDecimal totalDebitAmount;
+	private String finYear;
+	private String branchCode;
 	List<ParticularsGlOpeningBalanceDTO>particularsGlOpeningBalanceDTO;
 }

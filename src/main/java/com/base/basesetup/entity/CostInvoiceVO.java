@@ -1,5 +1,6 @@
-package com.base.basesetup.entity;
 
+package com.base.basesetup.entity;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -15,9 +16,8 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.base.basesetup.dto.CreatedUpdatedDate;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
- 
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -28,7 +28,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@Builder  
 public class CostInvoiceVO {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "costinvoicegen")
@@ -41,23 +41,20 @@ public class CostInvoiceVO {
 	private String product;
 	@Column(name = "purvoucherno",length =50)
 	private String purVoucherNo;
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	@Column(name = "purvoucherdate")
 	private LocalDate purVoucherDate;
 	@Column(name = "costinvoiceno",length =50)
 	private String costInvoiceNo;
 	@Column(name = "costinvoicedate")
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	private LocalDate costInvoiceDate;
 	@Column(name = "supplierbillno",length =50)
 	private String supplierBillNo;
-	@Column(name = "suppliertype",length =10)
-	private String suppliertType;
+	@Column(name = "supplietype",length =10)
+	private String supplierType;
 	@Column(name = "suppliercode",length =15)
 	private String supplierCode;
 	@Column(name = "creditdays",length =10)
 	private int creditDays;
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	@Column(name = "duedate")
 	private LocalDate dueDate;
 	@Column(name = "suppliername",length =150)
@@ -67,7 +64,7 @@ public class CostInvoiceVO {
 	@Column(name = "currency",length =10)
 	private String currency;
 	@Column(name = "exrate",precision = 10,scale = 2)
-	private float exRate;
+	private BigDecimal exRate;
 	@Column(name = "suppliergstin",length =10)
 	private String supplierGstIn;
 	@Column(name = "suppliergstincode",length =15)
@@ -107,17 +104,24 @@ public class CostInvoiceVO {
 	@Column(name = "screencode",length =10)
 	private String screenCode="CI";
 	@Column(name = "screenname",length =25)
-	private String screenName="Cost Invoice";
+	private String screenName="COST INVOICE";
 	@Column(name = "ipno",length =10)
 	private String ipNo;
 	@Column(name = "latitude",length =100)
 	private String latitude;
 	@Column(name = "docid",length =30)
 	private String docId;
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	@Column(name = "docdate")
 	private LocalDate docDate=LocalDate.now();
-	
+	@Column(name="payment",length =20 )
+	private String payment;
+	@Column(name="accuralid",length =20 )
+	private String accuralid;
+	@Column(name="utrref",length =10 )
+	private String utrRef;
+	@Column(name="costtype",length =10 )
+	private String costType;
+	 
  
 	@OneToMany(mappedBy = "costInvoiceVO", cascade = CascadeType.ALL)
 	@JsonManagedReference

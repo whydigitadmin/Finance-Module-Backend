@@ -7,9 +7,9 @@ import javax.validation.Valid;
 
 import org.springframework.stereotype.Service;
 
-import com.base.basesetup.dto.ArApBillBalanceReceivableDTO;
+import com.base.basesetup.dto.ArBillBalanceDTO;
 import com.base.basesetup.dto.ReceiptDTO;
-import com.base.basesetup.entity.ArApBillBalanceReceivableVO;
+import com.base.basesetup.entity.ArBillBalanceVO;
 import com.base.basesetup.entity.ReceiptVO;
 import com.base.basesetup.exception.ApplicationException;
 
@@ -19,28 +19,32 @@ public interface ARService {
 	// Receipt
 	List<ReceiptVO> getAllReceiptReceivableByOrgId(Long orgId);
 
-	ReceiptVO updateCreateReceiptReceivable(@Valid ReceiptDTO receiptReceivableDTO)
+	Map<String, Object> updateCreateReceiptReceivable(@Valid ReceiptDTO receiptReceivableDTO)
 			throws ApplicationException;
 
 	List<ReceiptVO> getAllReceiptReceivableById(Long id);
 
 	List<ReceiptVO> getReceiptReceivableByActive();
 
-	List<Map<String, Object>> getCustomerNameAndCodeForReceipt(Long orgId, String branch, String branchCode,
-			String finYear);
+	List<Map<String, Object>> getCustomerNameAndCodeForReceipt(Long orgId);
 
-//	ARApBillBalance
-	List<ArApBillBalanceReceivableVO> getAllArApBillBalanceReceivableByOrgId(Long orgId);
+	String getReceiptDocId(Long orgId, String finYear, String branch, String branchCode);
 
-	List<ArApBillBalanceReceivableVO> getAllArApBillBalanceReceivableById(Long id);
+//	ARBillBalance
+	List<ArBillBalanceVO> getAllArBillBalanceByOrgId(Long orgId);
 
-	ArApBillBalanceReceivableVO updateCreateArApBillBalanceReceivable(
-			@Valid ArApBillBalanceReceivableDTO arApBillBalanceReceivableDTO) throws ApplicationException;
+	List<ArBillBalanceVO> getAllArBillBalanceById(Long id);
 
-	List<ArApBillBalanceReceivableVO> getArApBillBalanceReceivableByActive();
+	Map<String, Object> updateCreateArBillBalance(@Valid ArBillBalanceDTO arBillBalanceDTO) throws ApplicationException;
+
+	List<ArBillBalanceVO> getArBillBalanceByActive();
+
+	String getArBillBalanceDocId(Long orgId, String finYear, String branch, String branchCode);
 	
-// 	ReceiptRegister
-	List<Map<String, Object>> getAllReceiptRegister(Long orgId, String branch, String branchCode,
-			String finYear,String fromDate,String toDate,String subLedgerName);
+	List<Map<String, Object>> getPartyNameAndCodeForArBillBalance(Long orgId);
 
+
+// 	ReceiptRegister
+	List<Map<String, Object>> getAllReceiptRegister(Long orgId,
+			String fromDate, String toDate, String subLedgerName);
 }

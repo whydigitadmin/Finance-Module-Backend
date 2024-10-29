@@ -24,12 +24,10 @@ public interface PaymentVoucherRepo extends JpaRepository<PaymentVoucherVO, Long
 			+ ") AS finyr")
 	int findFinyr();
 
+	
+	@Query(nativeQuery = true,value="select concat(prefixfield,lpad(lastno,5,0)) AS docid from documenttypemappingdetails where orgid=?1 and finyear=?2 and branchcode=?3 and screencode=?4")
+	String getpaymentVoucherDocId(Long orgId, String finyear, String branchCode, String screenCode);
 
-
-	@Query(nativeQuery = true, value = "select sequence_value from paymentvoucherseq")
-	String findDocId();
-
-	@Query(nativeQuery = true, value = "CALL next_paymentvoucher_sequence_value()")
- 	void nextSeq();
-
+	@Query(value = "select * from paymentVoucher a where a.orgid=?1 and docid=?2",nativeQuery =true)
+	PaymentVoucherVO findAllPaymentVoucherByDocId(Long orgId, String docId);
 }

@@ -1,7 +1,8 @@
 package com.base.basesetup.dto;
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,8 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ReconcileBankDTO {
 	private Long id;
-	private String docId;
-	private LocalDate docDate;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	private LocalDate bankStmtDate;
 	private String bankAccount;
 	
@@ -20,16 +20,11 @@ public class ReconcileBankDTO {
 	private String branch;
 	private String branchCode;
 	private String createdBy;
-	private boolean active;
-	private boolean cancel;
-	private String cancelRemarks;
 	private String finYear;
+	private boolean active;
+	private String remarks;
 	private String ipNo;
 	private String latitude;
-	
-	private BigDecimal totalWithdrawal;
-	private BigDecimal totalDeposit;
-	private String remarks;
 	
 	List<ParticularsReconcileDTO> particularsReconcileDTO;
 	

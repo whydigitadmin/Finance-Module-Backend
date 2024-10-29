@@ -510,6 +510,32 @@ public class CommonMasterController extends BaseController {
 		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
 		return ResponseEntity.ok().body(responseDTO);
 	}
+	
+	@GetMapping("/getAllCurrencyForExRate")
+	public ResponseEntity<ResponseDTO> getAllCurrencyForExRate(@RequestParam Long orgId) {
+		String methodName = "getAllCurrencyForExRate()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		List<Map<String, Object>> currencyVO = new ArrayList<>();
+		try {
+			currencyVO = commonMasterService.getAllCurrencyForExRate(orgId);
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "Currency" + " information get successfully");
+			responseObjectsMap.put("currencyVO", currencyVO);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap, "Currency information receive failed",
+					errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+	}
 
 	// Company
 
@@ -722,7 +748,7 @@ public class CommonMasterController extends BaseController {
 		String errorMsg = null;
 		Map<String, Object> responseObjectsMap = new HashMap<>();
 		ResponseDTO responseDTO = null;
-		List<FinScreenVO> finScreenVO = new ArrayList<>();
+		List<ScreenNamesVO> finScreenVO = new ArrayList<>();
 		try {
 			finScreenVO = commonMasterService.getFinScreenById(id);
 		} catch (Exception e) {
@@ -741,33 +767,6 @@ public class CommonMasterController extends BaseController {
 		return ResponseEntity.ok().body(responseDTO);
 	}
 
-	@GetMapping("/getFinScreenByOrgId")
-	public ResponseEntity<ResponseDTO> getFinScreenByOrgId(@RequestParam(required = false) Long orgId) {
-		String methodName = "getFinScreenByOrgId()";
-		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
-		String errorMsg = null;
-		Map<String, Object> responseObjectsMap = new HashMap<>();
-		ResponseDTO responseDTO = null;
-		List<FinScreenVO> finScreenVO = new ArrayList<>();
-		try {
-			finScreenVO = commonMasterService.getFinScreenByOrgId(orgId);
-		} catch (Exception e) {
-			errorMsg = e.getMessage();
-			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
-		}
-		if (StringUtils.isBlank(errorMsg)) {
-			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "FinScreen information get successfully By OrgId");
-			responseObjectsMap.put("finScreenVO", finScreenVO);
-			responseDTO = createServiceResponse(responseObjectsMap);
-		} else {
-			responseDTO = createServiceResponseError(responseObjectsMap,
-					"FinScreen information receive failed By OrgId", errorMsg);
-		}
-		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
-		return ResponseEntity.ok().body(responseDTO);
-
-	}
-
 	@PutMapping("/updateFinScreen")
 	public ResponseEntity<ResponseDTO> updateFinScreen(@Valid @RequestBody FinScreenDTO finScreenDTO) {
 		String methodName = "updateCreateFinScreen()";
@@ -776,7 +775,7 @@ public class CommonMasterController extends BaseController {
 		Map<String, Object> responseObjectsMap = new HashMap<>();
 		ResponseDTO responseDTO = null;
 		try {
-			FinScreenVO finScreenVO = commonMasterService.updateCreateFinScreen(finScreenDTO);
+			ScreenNamesVO finScreenVO = commonMasterService.updateCreateFinScreen(finScreenDTO);
 			if (finScreenVO != null) {
 				boolean isUpdate = finScreenDTO.getId() != null;
 				responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
@@ -802,7 +801,7 @@ public class CommonMasterController extends BaseController {
 	}
 
 	@GetMapping("/getAllScreenCode")
-	public ResponseEntity<ResponseDTO> getAllScreenCode() {
+	public ResponseEntity<ResponseDTO> getAllScreenCode(@RequestParam Long orgId) {
 		String methodName = "getAllScreenCode()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
 		String errorMsg = null;
@@ -810,7 +809,7 @@ public class CommonMasterController extends BaseController {
 		ResponseDTO responseDTO = null;
 		List<Map<String, Object>> finScreen = new ArrayList<>();
 		try {
-			finScreen = commonMasterService.getAllScreenCode();
+			finScreen = commonMasterService.getAllScreenCode(orgId);
 		} catch (Exception e) {
 			errorMsg = e.getMessage();
 			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);

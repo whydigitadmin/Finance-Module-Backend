@@ -13,32 +13,32 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "branchaccess")
+@Table(name = "paymentsummary")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-
-public class BranchAccessVO {
+@Builder
+public class PaymentSummaryVO {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "branchaccessgen")
-	@SequenceGenerator(name = "branchaccessgen", sequenceName = "branchaccessseq", initialValue = 1000000001, allocationSize = 1)
-	@Column(name = "branchaccessid")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "paymentsummarygen")
+	@SequenceGenerator(name = "paymentsummarygen", sequenceName = "paymentsummaryseq", initialValue = 1000000001, allocationSize = 1)
+	@Column(name = "paymentsummaryid")
 	private Long id;
-	@Column(name = "branch")
-	private String branch;
-
-
+	@Column(name ="totaldebitamount",precision =10,scale =2)
+	private float totalDebitAmount;
+	@Column(name ="totalcreditamount",precision =10,scale =2)
+	private float totalCreditAmount;
+	
 	@ManyToOne
-	@JoinColumn(name = "userid")
+	@JoinColumn(name ="paymentvoucherid")
 	@JsonBackReference
-	private UserVO userVO;
-
-
-
-
+	PaymentVoucherVO paymentVoucherVO;
+	
+	
 }

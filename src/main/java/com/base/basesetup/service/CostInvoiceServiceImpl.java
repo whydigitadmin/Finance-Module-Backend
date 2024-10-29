@@ -91,7 +91,7 @@ public class CostInvoiceServiceImpl implements CostInvoiceService {
 		if (ObjectUtils.isEmpty(costInvoiceDTO.getId())) {
 
 			costInvoiceVO = new CostInvoiceVO();
-			
+
 			// GETDOCID API
 			String docId = costInvoiceRepo.getCostInvoiceDocId(costInvoiceDTO.getOrgId(), costInvoiceDTO.getFinYear(),
 					costInvoiceDTO.getBranchCode(), screenCode);
@@ -100,11 +100,10 @@ public class CostInvoiceServiceImpl implements CostInvoiceService {
 			// GETDOCID LASTNO +1
 			DocumentTypeMappingDetailsVO documentTypeMappingDetailsVO = documentTypeMappingDetailsRepo
 					.findByOrgIdAndFinYearAndBranchCodeAndScreenCode(costInvoiceDTO.getOrgId(),
-							costInvoiceDTO.getFinYear(), costInvoiceDTO.getBranchCode(),
-							screenCode);
+							costInvoiceDTO.getFinYear(), costInvoiceDTO.getBranchCode(), screenCode);
 			documentTypeMappingDetailsVO.setLastno(documentTypeMappingDetailsVO.getLastno() + 1);
 			documentTypeMappingDetailsRepo.save(documentTypeMappingDetailsVO);
-			
+
 			costInvoiceVO.setCreatedBy(costInvoiceDTO.getCreatedBy());
 			costInvoiceVO.setUpdatedBy(costInvoiceDTO.getCreatedBy());
 
@@ -139,7 +138,7 @@ public class CostInvoiceServiceImpl implements CostInvoiceService {
 		costInvoiceVO.setCostInvoiceNo(costInvoiceDTO.getCostInvoiceNo());
 		costInvoiceVO.setCostInvoiceDate(costInvoiceDTO.getCostInvoiceDate());
 		costInvoiceVO.setSupplierBillNo(costInvoiceDTO.getSupplierBillNo());
-		costInvoiceVO.setSuppliertType(costInvoiceDTO.getSuppliertType());
+		costInvoiceVO.setSupplierType(costInvoiceDTO.getSupplierType());
 		costInvoiceVO.setSupplierCode(costInvoiceDTO.getSupplierCode());
 		costInvoiceVO.setCreditDays(costInvoiceDTO.getCreditDays());
 		costInvoiceVO.setDueDate(costInvoiceDTO.getDueDate());
@@ -164,6 +163,10 @@ public class CostInvoiceServiceImpl implements CostInvoiceService {
 		costInvoiceVO.setFinYear(costInvoiceDTO.getFinYear());
 		costInvoiceVO.setIpNo(costInvoiceDTO.getIpNo());
 		costInvoiceVO.setLatitude(costInvoiceDTO.getLatitude());
+		costInvoiceVO.setPayment(costInvoiceDTO.getPayment());
+		costInvoiceVO.setAccuralid(costInvoiceDTO.getAccuralid());
+		costInvoiceVO.setUtrRef(costInvoiceDTO.getUtrRef());
+		costInvoiceVO.setCostType(costInvoiceDTO.getCostType());
 
 		if (costInvoiceDTO.getId() != null) {
 
@@ -193,6 +196,9 @@ public class CostInvoiceServiceImpl implements CostInvoiceService {
 			chargerCostInvoiceVO.setCurrency(chargerCostInvoiceDTO.getCurrency());
 			chargerCostInvoiceVO.setExRate(chargerCostInvoiceDTO.getExRate());
 			chargerCostInvoiceVO.setGst(chargerCostInvoiceDTO.getGst());
+			chargerCostInvoiceVO.setFcAmt(chargerCostInvoiceDTO.getFcAmt());
+			chargerCostInvoiceVO.setLcAmt(chargerCostInvoiceDTO.getLcAmt());
+			chargerCostInvoiceVO.setBillAmt(chargerCostInvoiceDTO.getBillAmt());
 
 			chargerCostInvoiceVO.setCostInvoiceVO(costInvoiceVO);
 			chargerCostInvoiceVOs.add(chargerCostInvoiceVO);

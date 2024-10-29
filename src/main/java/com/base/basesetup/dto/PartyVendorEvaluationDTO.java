@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PartyVendorEvaluationDTO {
-	private Long id;
 	private String boughVendor;
 	private String basicVenSelected;
 	private String justification;

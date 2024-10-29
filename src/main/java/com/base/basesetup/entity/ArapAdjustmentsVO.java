@@ -1,6 +1,8 @@
 package com.base.basesetup.entity;
 
-import java.time.LocalDateTime;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Embedded;
@@ -12,7 +14,6 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.base.basesetup.dto.CreatedUpdatedDate;
-import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -48,28 +49,25 @@ public class ArapAdjustmentsVO {
 	@Column(name = "acccurrency", length = 20)
 	private String accCurrency;
 	@Column(name = "baseamt", precision = 10, scale = 2)
-	private float baseAmnt;
+	private BigDecimal baseAmnt;
 	@Column(name = "nativeamt", precision = 10, scale = 2)
-	private float nativeAmt;
+	private BigDecimal nativeAmt;
 	@Column(name = "offdocid", length = 50)
 	private String offDocId;
 	@Column(name = "vouchertype", length = 50)
 	private String voucherType;
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	@Column(name = "docdate")
-	private LocalDateTime docDate;
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+	private LocalDate docDate=LocalDate.now();
 	@Column(name = "refdate")
-	private LocalDateTime refDate;
+	private LocalDate refDate;
 	@Column(name = "subledgercode", length = 50)
 	private String subLedgerCode;
 	@Column(name = "exrate", precision = 10, scale = 2)
-	private float exRate;
+	private BigDecimal exRate;
 	@Column(name = "creditdays", length = 10)
 	private String creditDays;
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	@Column(name = "duedate")
-	private LocalDateTime dueDate;
+	private LocalDate dueDate;
 	@Column(name = "orgid", length = 20)
 	private Long orgId;
 	@Column(name = "active")
@@ -85,7 +83,7 @@ public class ArapAdjustmentsVO {
 	@Column(name = "screencode", length = 10)
 	private String screenCode = "AA";
 	@Column(name = "screenname", length = 25)
-	private String screenName = "ARAPAdJUSTMENTS";
+	private String screenName = "ARAP AdJUSTMENTS";
 	@Column(name = "ipno", length = 15)
 	private String ipNo;
 	@Column(name = "latitude", length = 100)
@@ -93,9 +91,9 @@ public class ArapAdjustmentsVO {
 	@Column(name = "transid", length = 50)
 	private String transId;
 	@Column(name = "chargeableamt", precision = 10, scale = 2)
-	private float chargeableAmt;
+	private BigDecimal chargeableAmt;
 	@Column(name = "tdsamt", precision = 10, scale = 2)
-	private float tdsAmt;
+	private BigDecimal tdsAmt;
 	@Column(name = "gstflag")
 	private boolean gstFlag;
 	@Column(name = "subledgername", length = 50)

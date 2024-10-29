@@ -1,6 +1,7 @@
 package com.base.basesetup.dto;
 
-import java.time.LocalDateTime;
+import java.math.BigDecimal;
+import java.time.LocalDate;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,16 +14,23 @@ public class BrsOpeningDTO {
 
 	private Long id;
 	private String billNo;
-	private LocalDateTime billDate;
+	private LocalDate billDate;
 	private String chqNo;
-	private LocalDateTime chqDate;
+	private LocalDate chqDate;
 	private String bank;
 	private String currency;
-	private String exRate;
-	private String receiptAmount;
-	private String paymentAmount;
+	private BigDecimal exRate;
+	private BigDecimal receiptAmount;
+	private BigDecimal paymentAmount;
 	private boolean reconcile;
+	//Common Fields
 	private Long orgId;
-	private boolean active;
+	private String branch;
+	private String branchCode;
 	private String createdBy;
+	private String updatedBy;
+	private boolean active;
+	private boolean cancel;
+	private String cancelRemarks;
+	private String finYear;
 }

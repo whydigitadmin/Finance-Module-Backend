@@ -34,27 +34,25 @@ public class ReceiptInvDetailsVO {
 	@Column(name = "receiptinvdetailsid")
 	private Long id;
 
-	@Column(name = "invno", length = 30)
+	@Column(name = "invno",length =50)
 	private String invNo;
 
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	@Column(name = "invdate")
 	private LocalDate invDate;
 
-	@Column(name = "refno", length = 30)
+	@Column(name = "refno",length =50)
 	private String refNo;
 
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	@Column(name = "refdate")
 	private LocalDate refDate;
 
-	@Column(name = "masterref", length = 30)
+	@Column(name = "masterref",length =50)
 	private String masterRef;
 
-	@Column(name = "houseref", length = 30)
+	@Column(name = "houseref",length =50)
 	private String houseRef;
 
-	@Column(name = "currency", length = 5)
+	@Column(name = "currency",length =10)
 	private String currency;
 
 	@Column(name = "exrate", precision = 10, scale = 5)
@@ -81,13 +79,6 @@ public class ReceiptInvDetailsVO {
 	@Column(name = "gainamt", precision = 10, scale = 2)
 	private BigDecimal gainAmt;
 
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
-	@Column(name = "fromdate")
-	private LocalDate fromDate;
-
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
-	@Column(name = "todate")
-	private LocalDate toDate;
 
 	@ManyToOne
 	@JsonBackReference

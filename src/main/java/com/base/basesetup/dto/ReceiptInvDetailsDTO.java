@@ -17,7 +17,7 @@ public class ReceiptInvDetailsDTO {
 	private String invNo;
 	private LocalDate invDate;
 	private String refNo;
-	private LocalDate refDate;
+	LocalDate refDate;
 	private String masterRef;
 	private String houseRef;
 	private String currency;
@@ -29,6 +29,4 @@ public class ReceiptInvDetailsDTO {
 	private BigDecimal recExRate;
 	private BigDecimal txnSettled;
 	private BigDecimal gainAmt;
-	private LocalDate fromDate;
-	private LocalDate toDate;
 }

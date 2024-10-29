@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ArApBillBalanceReceivableDTO {
+public class ApBillBalanceDTO {
 
 	private Long id;
 	private String accName;
@@ -25,12 +25,9 @@ public class ArApBillBalanceReceivableDTO {
 	private BigDecimal billExRate;
 	private boolean postBillExRate;
 	private Long billNo;
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	private LocalDate billDate;
 	private String suppRefNo;
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	private LocalDate suppRefDate;
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	private LocalDate dueDate;
 	private BigDecimal debitAmt;
 	private BigDecimal creditAmt;
@@ -46,8 +43,5 @@ public class ArApBillBalanceReceivableDTO {
 	private boolean cancel;
 	private String cancelRemarks;
 	private String finYear;
-	private String screenCode;
-	private String screenName;
-	private String ipNo;
-	private String latitude;
+	
 }

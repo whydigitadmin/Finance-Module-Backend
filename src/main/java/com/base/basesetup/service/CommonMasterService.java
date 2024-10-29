@@ -111,13 +111,11 @@ public interface CommonMasterService {
 	Optional<FinancialYearVO> getAllFInYearById(Long id);
 
 //	FinScreen
-	List<FinScreenVO> getFinScreenById(Long id);
+	List<ScreenNamesVO> getFinScreenById(Long id);
 
-	List<FinScreenVO> getFinScreenByOrgId(Long orgid);
+	ScreenNamesVO updateCreateFinScreen(@Valid FinScreenDTO finScreenDTO) throws ApplicationException;
 
-	FinScreenVO updateCreateFinScreen(@Valid FinScreenDTO finScreenDTO) throws ApplicationException;
-
-	List<Map<String, Object>> getAllScreenCode();
+	List<Map<String, Object>> getAllScreenCode(Long orgId);
 
 	// Screen Names
 	Map<String, Object> createUpdateScreenNames(ScreenNamesDTO screenNamesDTO) throws ApplicationException;
@@ -125,5 +123,7 @@ public interface CommonMasterService {
 	List<ScreenNamesVO> getAllScreenNames();
 
 	ScreenNamesVO getScreenNamesById(Long id) throws ApplicationException;
+
+	List<Map<String, Object>> getAllCurrencyForExRate(Long orgId);
 
 }

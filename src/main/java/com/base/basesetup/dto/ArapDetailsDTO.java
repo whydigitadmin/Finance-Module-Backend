@@ -1,8 +1,7 @@
 package com.base.basesetup.dto;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,27 +21,22 @@ public class ArapDetailsDTO {
 	private String accName;
 	private String currency;
 	private String accCurrency;
-	private float exRate;
-	private float amount;
-	private float baseAmt;
-	private float nativeAmt;
-	private float chargableAmt;
+	private BigDecimal exRate;
+	private BigDecimal amount;
+	private BigDecimal baseAmt;
+	private BigDecimal nativeAmt;
+	private BigDecimal chargableAmt;
 	private boolean gstFlag;
 	private String docTypeCode;
 	private String subTypeCode;
 	private String subLedgerDivision;
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
-	private LocalDateTime docDate;
 	private String suppRefNo;
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	private LocalDateTime refDate;
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	private LocalDateTime supRefDate;
 	private String subLedgerCode;
 	private String creditDays;
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	private LocalDateTime dueDate;
-	private float TDSAmt;
+	private BigDecimal TDSAmt;
 	private String hno;
 	private Long orgId;
 	private String canelRemarks;

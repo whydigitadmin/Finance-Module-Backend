@@ -25,7 +25,6 @@ import com.base.basesetup.common.UserConstants;
 import com.base.basesetup.dto.CostInvoiceDTO;
 import com.base.basesetup.dto.ResponseDTO;
 import com.base.basesetup.entity.CostInvoiceVO;
-import com.base.basesetup.entity.TaxInvoiceVO;
 import com.base.basesetup.service.CostInvoiceService;
 
 @CrossOrigin

@@ -13,7 +13,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.base.basesetup.dto.CreatedUpdatedDate;
-import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonGetter;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,20 +21,24 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "arapbillbalancerecievable")
+@Table(name = "apbillbalance")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ArApBillBalanceReceivableVO {
+public class ApBillBalanceVO {
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "arapbillbalancerecievablegen")
-	@SequenceGenerator(name = "arapbillbalancerecievablegen", sequenceName = "arapbillbalancerecievableseq", initialValue = 1000000001, allocationSize = 1)
-	@Column(name = "arapbillbalancerecievableid")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "apbillbalancegen")
+	@SequenceGenerator(name = "apbillbalancegen", sequenceName = "apbillbalanceseq", initialValue = 1000000001, allocationSize = 1)
+	@Column(name = "apbillbalanceid")
 	private Long id;
 
-	@Column(name = "docno", length = 50)
-	private String docNo;
+	@Column(name = "docid", length = 50)
+	private String docId;
+
+	@Column(name = "docdate")
+	@Builder.Default
+	private LocalDate docDate = LocalDate.now();
 
 	@Column(name = "accname", length = 50)
 	private String accName;
@@ -66,18 +70,15 @@ public class ArApBillBalanceReceivableVO {
 	@Column(name = "billno", precision = 10)
 	private Long billNo;
 
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	@Column(name = "billdate")
 	private LocalDate billDate;
 
 	@Column(name = "supprefno", length = 25)
 	private String suppRefNo;
 
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	@Column(name = "supprefdate")
 	private LocalDate suppRefDate;
 
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	@Column(name = "duedate")
 	private LocalDate dueDate;
 
@@ -97,7 +98,7 @@ public class ArApBillBalanceReceivableVO {
 
 	@Column(name = "orgid")
 	private Long orgId;
-	
+
 	@Column(name = "branch", length = 25)
 	private String branch;
 
@@ -123,16 +124,16 @@ public class ArApBillBalanceReceivableVO {
 	private String finYear;
 
 	@Column(name = "screencode", length = 5)
-	private String screenCode;
+	private String screenCode ="APB";
 
 	@Column(name = "screenname", length = 25)
-	private String screenName;
-
-	@Column(name = "ipno", length = 15)
-	private String ipNo;
-
-	@Column(name = "latitude", length = 100)
-	private String latitude;
+	private String screenName ="APBILLBALANCE";
+	
+	
+	@JsonGetter("active")
+	public String getActive() {
+		return active ? "Active" : "In-Active";
+	}
 
 	@Embedded
 	@Builder.Default

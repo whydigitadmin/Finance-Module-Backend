@@ -1,5 +1,6 @@
 package com.base.basesetup.entity;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -35,7 +36,7 @@ public class DailyMonthlyExRatesVO {
 	private Long id;
 
 	@Column(name = "date")
-	private String date;
+	private LocalDate date;
 	@Column(name = "month")
 	private String month;
 	@Column(name = "active")

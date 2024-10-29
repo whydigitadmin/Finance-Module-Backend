@@ -16,7 +16,6 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.base.basesetup.dto.CreatedUpdatedDate;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.AllArgsConstructor;
@@ -36,53 +35,70 @@ public class GeneralJournalVO {
 	@SequenceGenerator(name = "generaljournalgen", sequenceName = "generaljournalseq", initialValue = 1000000001, allocationSize = 1)
 	@Column(name = "generaljournalid")
 	private Long id;
-	@Column(name = "vouchersubtype")
+	@Column(name = "vouchersubtype", length = 25)
 	private String voucherSubType;
-	@Column(name = "docdate")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
-	private LocalDate docDate;
-	@Column(name = "docid")
-	private String docId;
 	
-	@Column(name = "currency")
+	@Column(name = "docid", length = 50)
+    private String docId;
+
+    @Column(name = "docdate")
+    private LocalDate docDate = LocalDate.now();
+
+
+	@Column(name = "currency", length = 10)
 	private String currency;
-	@Column(name = "exrate")
-	private String exRate;
-	@Column(name = "refno")
+	@Column(name = "exrate",precision = 10, scale = 2)
+	private BigDecimal exRate;
+	@Column(name = "refno", length = 50)
 	private String refNo;
 	@Column(name = "refdate")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	private LocalDate refDate;
-	
-    @Column(name = "screencode", length = 5)
-    private String screenCode= "GJ";
 
-    @Column(name = "screenname", length = 25)
-    private String screenName = "GENERALJOURNAL";
+	@Column(name = "screencode", length = 5)
+	private String screenCode = "GJ";
 
-	@Column(name = "remarks")
+	@Column(name = "screenname", length = 25)
+	private String screenName = "GENERALJOURNAL";
+
+	@Column(name = "remarks", length = 150)
 	private String remarks;
-	@Column(name = "orgid")
-	private Long orgId;
+
+	@Column(name = "totaldebitamount",precision = 10, scale = 2)
+	private BigDecimal totalDebitAmount;
+	@Column(name = "totalcreditamount",precision = 10, scale = 2)
+	private BigDecimal totalCreditAmount;
+
+	@Column(name = "branch", length = 25)
+	private String branch;
+
+	@Column(name = "branchcode", length = 20)
+	private String branchCode;
+
+	@Column(name = "finyear", length = 5)
+	private String finYear;
+
+	@Column(name = "createdby", length = 25)
+	private String createdBy;
+
+	@Column(name = "modifyby", length = 25)
+	private String updatedBy;
+
 	@Column(name = "active")
 	private boolean active;
+
 	@Column(name = "cancel")
 	private boolean cancel;
-	@Column(name = "cancelremarks")
+
+	@Column(name = "cancelremarks", length = 50)
 	private String cancelRemarks;
-	@Column(name = "createdby")
-	private String createdBy;
-	@Column(name = "modifiedby")
-	private String updatedBy;
-	@Column(name = "totaldebitamount")
-	private BigDecimal totalDebitAmount;
-	@Column(name = "totalcreditamount")
-	private BigDecimal totalCreditAmount;
+
+	@Column(name = "orgid")
+	private Long orgId;
 
 	@OneToMany(mappedBy = "generalJournalVO", cascade = CascadeType.ALL)
 	@JsonManagedReference
 	List<ParticularsJournalVO> particularsJournalVO;
-	
+
 	@Embedded
 	@Builder.Default
 	private CreatedUpdatedDate commonDate = new CreatedUpdatedDate();

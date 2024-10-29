@@ -16,7 +16,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.base.basesetup.dto.CreatedUpdatedDate;
-import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.AllArgsConstructor;
@@ -37,88 +37,125 @@ public class ReceiptVO {
 	@Column(name = "receiptid")
 	private Long id;
 
-	// Receipt fields
-	@Column(name = "docid", length = 50)
-	private String docId;
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
-	@Column(name = "docdate")
-	private LocalDate docDate;
-	@Column(name = "type", length = 50)
-	private String type;
-	@Column(name = "customername", length = 150)
-	private String customerName;
-	@Column(name = "customercode", length = 50)
-	private String customerCode;
-	@Column(name = "bankcashacc", length = 50)
-	private String bankCashAcc;
-	@Column(name = "receiptamt", precision = 10, scale = 2)
-	private BigDecimal receiptAmt;
-	@Column(name = "taxamt", precision = 10, scale = 2)
+	@Column(name = "taxamt", length = 30)
 	private BigDecimal taxAmt;
-	@Column(name = "bankchargeacc", length = 50)
-	private String bankChargeAcc;
-	@Column(name = "bankcharges", precision = 10, scale = 2)
-	private BigDecimal bankCharges;
-	@Column(name = "incurrencybnkchargs", length = 5)
-	private String inCurrencyBnkChargs;
-	@Column(name = "tdsamt", precision = 10, scale = 2)
-	private BigDecimal tdsAmt;
-	@Column(name = "incurrencytdsamt", length = 5)
-	private String inCurrencyTdsAmt;
-	@Column(name = "chequebank", length = 20)
-	private String chequeBank;
-	@Column(name = "receipttype", length = 20)
-	private String receiptType;
-	@Column(name = "chequeutino", length = 10)
-	private String chequeUtiNo;
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
-	@Column(name = "chequeutidt")
-	private LocalDate chequeUtiDt;
-	@Column(name = "receivedfrom", length = 100)
-	private String receivedFrom;
-	@Column(name = "netamount", length = 100)
-	private String netAmount;
-	@Column(name = "remarks", length = 100)
-	private String remarks;
-	
 
-	// Common Fields
 	@Column(name = "branch", length = 25)
 	private String branch;
-	@Column(name = "chcode", length = 5)
+
+	@Column(name = "branchcode", length = 20)
 	private String branchCode;
-	@Column(name = "customer", length = 100)
+
+	@Column(name = "customer", length = 50)
 	private String customer;
-	@Column(name = "client", length = 30)
+
+	@Column(name = "client", length = 50)
 	private String client;
+
 	@Column(name = "createdby", length = 25)
 	private String createdBy;
-	@Column(name = "modifyedby", length = 25)
+
+	@Column(name = "modifyby", length = 25)
 	private String updatedBy;
+
 	@Column(name = "active")
 	private boolean active;
+
 	@Column(name = "cancel")
 	private boolean cancel;
+
 	@Column(name = "cancelremarks", length = 25)
 	private String cancelRemarks;
+
 	@Column(name = "finyear", length = 5)
 	private String finYear;
+
 	@Column(name = "screencode", length = 5)
-	private String screenCode;
+	@Builder.Default
+	private String screenCode = "RT";
+
 	@Column(name = "screenname", length = 25)
-	private String screenName;
-	@Column(name = "ipno", length = 15)
-	private String ipNo;
-	@Column(name = "latitude", length = 100)
-	private String latitude;
-	@Column(name = "receiptType1", length = 100)
-	private String receiptType1;
-	@Column(name = "currency", length = 100)
+	@Builder.Default
+	private String screenName = "RECEIPT";
+
+	@Column(name = "receiptType", length = 50)
+	private String receiptType;
+
+	@Column(name = "docid", length = 50)
+	private String docId;
+
+	@Column(name = "docdate")
+	@Builder.Default
+	private LocalDate docDate = LocalDate.now();
+
+	@Column(name = "type", length = 50)
+	private String type;
+
+	@Column(name = "customername", length = 150)
+	private String customerName;
+
+	@Column(name = "customercode", length = 50)
+	private String customerCode;
+
+	@Column(name = "bankcashacc", length = 50)
+	private String bankCashAcc;
+
+	@Column(name = "receiptamt", precision = 10, scale = 2)
+	private BigDecimal receiptAmt;
+
+	@Column(name = "currency", length = 10)
 	private String currency;
-	@Column(name = "currentamount", length = 100)
-	private String currencyAmount;
+
+	@Column(name = "currencyAmt", precision = 10, scale = 2)
+	private BigDecimal currencyAmt;
+
+	@Column(name = "bankchargeacc", length = 50)
+	private String bankChargeAcc;
+
+	@Column(name = "bankcharges", precision = 10, scale = 2)
+	private BigDecimal bankCharges;
+
+	@Column(name = "incurrencybnkchargs", length = 10)
+	private String inCurrencyBnkChargs;
+
+	@Column(name = "tdsamt", precision = 10, scale = 2)
+	private BigDecimal tdsAmt;
+
+	@Column(name = "incurrencytdsamt", length = 10)
+	private String inCurrencyTdsAmt;
+
+	@Column(name = "chequebank", length = 20)
+	private String chequeBank;
+
+	@Column(name = "receiptType1", length = 20)
+	private String receiptType1;
+
+	@Column(name = "chequeutino", length = 10)
+	private String chequeUtiNo;
+
+	@Column(name = "chequeutidt")
+	private LocalDate chequeUtiDt;
+
+	@Column(name = "receivedfrom", length = 100)
+	private String receivedFrom;
+
+	@Column(name = "remarks")
+	private String remarks;
+
+	// Additional fields
 	@Column(name = "orgid")
 	private Long orgId;
+
+	@Column(name = "currentamount", precision = 10, scale = 2)
+	private BigDecimal currencyAmount;
+
+	@Column(name = "netamount", precision = 10, scale = 2)
+	private BigDecimal netAmount;
+	
+	@JsonGetter("active")
+	public String getActive() {
+		return active ? "Active" : "In-Active";
+	}
 
 	@OneToMany(mappedBy = "receiptVO", cascade = CascadeType.ALL)
 	@JsonManagedReference

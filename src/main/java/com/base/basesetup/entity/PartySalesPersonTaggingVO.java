@@ -44,11 +44,9 @@ public class PartySalesPersonTaggingVO {
 	private String salesBranch;
 
 	@Column(name = "effectivefrom")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	private LocalDate effectiveFrom;
 
 	@Column(name = "effectivetill")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	private LocalDate effectiveTill;
 
 	@ManyToOne

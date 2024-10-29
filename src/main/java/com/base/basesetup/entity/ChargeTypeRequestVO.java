@@ -1,7 +1,5 @@
 package com.base.basesetup.entity;
 
-import java.time.LocalDateTime;
-
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -30,65 +28,58 @@ public class ChargeTypeRequestVO {
 	@SequenceGenerator(name = "chargetyperequestgen", sequenceName = "chargetyperequestseq", initialValue = 1000000001, allocationSize = 1)
 	@Column(name = "chargetyperequestid")
 	private Long id;
-	@Column(name = "chargetype")
+	@Column(name = "chargetype",length = 30)
 	private String chargeType;
-	@Column(name = "chargecode")
+	@Column(name = "chargecode",length = 30)
 	private String chargeCode;
-	@Column(name = "chargedescription")
+	@Column(name = "chargedescription",length = 150)
 	private String chargeDescription;
-	@Column(name = "product")
+	@Column(name = "product",length = 30)
 	private String product;
-	@Column(name = "localchargedescripition")
+	@Column(name = "localchargedescripition",length = 150)
 	private String localChargeDescripition;
-	@Column(name = "serviceaccountcode")
+	@Column(name = "serviceaccountcode",length = 30)
 	private String serviceAccountCode;
-	@Column(name = "sacdescripition")
+	@Column(name = "sacdescripition",length = 50)
 	private String sacDescripition;
-	@Column(name = "salesaccount")
+	@Column(name = "salesaccount",length = 150)
 	private String salesAccount;
-	@Column(name = "purchaseaccount")
+	@Column(name = "purchaseaccount",length = 150)
 	private String purchaseAccount;
-	@Column(name = "taxable")
+	@Column(name = "taxable",length = 30)
 	private String taxable;
-	@Column(name = "taxtype")
+	@Column(name = "taxtype",length = 30)
 	private String taxType;
-	@Column(name = "ccfeeapplicable")
+	@Column(name = "ccfeeapplicable",length = 30)
 	private String ccFeeApplicable;
-	@Column(name = "taxablepercentage")
-	private float taxablePercentage;
-	@Column(name = "ccjob")
+	@Column(name = "taxablepercentage",length = 5)
+	private int taxablePercentage;
+	@Column(name = "ccjob",length = 30)
 	private String ccJob;
-	@Column(name = "govtsac")
+	@Column(name = "govtsac",length = 150)
 	private String govtSac;
-	@Column(name = "excempted")
+	@Column(name = "excempted",length = 30)
 	private String excempted;
-	@Column(name = "gsttax")
-	private String gstTax;
-	@Column(name = "gstcontrol")
+	@Column(name = "gsttax",precision = 5,scale = 2)
+	private float gstTax;
+	@Column(name = "gstcontrol",length = 30)
 	private String gstControl;
-	@Column(name = "service")
+	@Column(name = "service",length = 150)
 	private String service;
-	@Column(name = "type")
+	@Column(name = "type",length = 30)
 	private String type;
-	@Column(name = "salesledger")
-	private String salesLedger;
-	@Column(name = "purchaseledger")
-	private String purchaseLedger;
-	@Column(name = "effromdate")
-	private LocalDateTime effromDate;
-	@Column(name = "eftodate")
-	private LocalDateTime eftoDate;
 
 	@Column(name = "active")
 	private boolean active;
 	@Column(name = "orgid")
 	private Long orgId;
-	@Column(name = "createdby")
+	@Column(name = "createdby",length = 30)
 	private String createdBy;
-	@Column(name = "modifiedby")
+	@Column(name = "modifiedby",length = 30)
 	private String updatedBy;
 	@Column(name = "cancel")
-	private Long cancel;
+	@Builder.Default
+	private boolean cancel=false;
 	@Column(name = "cancelremarks")
 	private Long cancelRemarks;
 

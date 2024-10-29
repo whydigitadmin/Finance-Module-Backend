@@ -1,6 +1,7 @@
 package com.base.basesetup.entity;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -16,6 +17,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.base.basesetup.dto.CreatedUpdatedDate;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -34,6 +36,13 @@ public class PartyMasterVO {
 	@SequenceGenerator(name = "partymastergen", sequenceName = "partymasterseq", initialValue = 1000000001, allocationSize = 1)
 	@Column(name = "partymasterid")
 	private Long id;
+	
+	@Column(name = "docid", length = 50)
+    private String docId;
+
+    @Column(name = "docdate")
+    private LocalDate docDate = LocalDate.now();
+
 	    
     @Column(name = "partytype", length = 15)
     private String partyType;
@@ -176,12 +185,6 @@ public class PartyMasterVO {
 
     @Column(name = "screenname", length = 25)
     private String screenName = "PARTYMASTER";
-
-    @Column(name = "ipno", length = 15)
-    private String ipNo;
-
-    @Column(name = "latitude", length = 100)
-    private String latitude;
 
     @Column(name = "orgid")
     private Long orgId;

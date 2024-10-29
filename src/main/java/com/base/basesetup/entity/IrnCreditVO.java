@@ -2,8 +2,6 @@ package com.base.basesetup.entity;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -14,11 +12,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.PrePersist;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.base.basesetup.dto.CreatedUpdatedDate;
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.AllArgsConstructor;
@@ -27,7 +25,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "irncredit")
+@Table(name = "irncreditnote")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -38,105 +36,174 @@ public class IrnCreditVO {
 	@SequenceGenerator(name = "irncreditgen", sequenceName = "irncreditseq", initialValue = 1000000001, allocationSize = 1)
 	@Column(name = "irncreditid")
 	private Long id;
-	@Column(name = "headercolumns")
-	private String headerColumns;
-	@Column(name = "partyname")
-	private String partyName;
-	@Column(name = "partycode")
-	private String partyCode;
-	@Column(name = "partytype")
-	private String partyType;
-	@Column(name = "addresstype")
-	private String addressType;
-	@Column(name = "recipientgstin")
-	private String recipientGSTIN;
-	@Column(name = "placeofsupply")
-	private String placeOfSupply;
-	@Column(name = "address")
-	private String address;
-	@Column(name = "pincode")
-	private String pincode;
-	@Column(name = "status")
-	private String status;
-	@Column(name = "gsttype")
-	private String GSTType;
-	@Column(name = "duedate")
-	private LocalDateTime dueDate;
-	@Column(name = "billcurr")
-	private String billCurr;
-	@Column(name = "salestype")
-	private String salesType;
-	@Column(name = "orgid")
-	private Long orgId;
+
+	// Common fields
+	@Column(name = "branch", length = 25)
+	private String branch;
+
+	@Column(name = "branchcode", length = 20)
+	private String branchCode;
+
+	@Column(name = "createdby", length = 25)
+	private String createdBy;
+
+	@Column(name = "modifiedby", length = 25)
+	private String updatedBy;
+
 	@Column(name = "active")
 	private boolean active;
-	@Column(name = "modifiedby")
-	private String updatedBy;
-	@Column(name = "createdby")
-	private String createdBy;
+
 	@Column(name = "cancel")
 	private boolean cancel;
-	@Column(name = "cancelremarks")
+
+	@Column(name = "cancelremarks", length = 50)
 	private String cancelRemarks;
-	@Column(name = "docid")
+
+	@Column(name = "finyear", length = 5)
+	private String finYear;
+
+	@Column(name = "screencode", length = 5)
+	@Builder.Default
+	private String screenCode = "IRN CREDIT NOTE";
+
+	@Column(name = "screenname", length = 25)
+	@Builder.Default
+	private String screenName = "ICN";
+
+	@Column(name = "orgid")
+	private Long orgId;
+
+	// IRN fields
+	@Column(name = "docid", length = 50)
 	private String docId;
+
 	@Column(name = "docdate")
-	private LocalDateTime docDate;
-	@Column(name = "invoiceno")
-	private String invoiceNo;
-	@Column(name = "invoicedate")
-	private LocalDateTime invoiceDate;
-	@Column(name = "finyr")
-	private String finyr;
-	@Column(name = "originbill")
+	@Builder.Default
+	private LocalDate docDate = LocalDate.now();
+
+	@Column(name = "vohno", length = 50)
+	private String vohNo;
+
+	@Column(name = "vohdate")
+	private LocalDate vohDate;
+
+	@Column(name = "partyname", length = 50)
+	private String partyName;
+
+	@Column(name = "partycode", length = 25)
+	private String partyCode;
+
+	@Column(name = "suprefno", length = 50)
+	private String supRefNo;
+
+	@Column(name = "suprefdate")
+	private LocalDate supRefDate;
+
+	@Column(name = "partytype", length = 15)
+	private String partyType;
+
+	@Column(name = "product", length = 25)
+	private String product;
+
+	@Column(name = "creditdays", length = 5)
+	private int creditDays;
+
+	@Column(name = "duedate")
+	private LocalDate dueDate;
+
+	@Column(name = "state", length = 25)
+	private String state;
+
+	@Column(name = "city", length = 25)
+	private String city;
+
+	@Column(name = "officetype", length = 15)
+	private String officeType;
+
+	@Column(name = "currency", length = 25)
+	private String currency;
+
+	@Column(name = "exrate", precision = 10, scale = 2)
+	private BigDecimal exRate;
+
+	@Column(name = "status", length = 10)
+	private String status;
+
+	@Column(name = "orginbill", length = 50)
 	private String originBill;
-	@Column(name = "lcchargeamount")
-	private BigDecimal lcChargeAmount;
-	@Column(name = "lctaxamount")
-	private BigDecimal lcTaxAmount;
-	@Column(name = "lcinvamount")
-	private BigDecimal lcInvAmount;
-	@Column(name = "lcroundoffamount")
-	private BigDecimal lcRoundOffAmount;
-	@Column(name = "billchargeamount")
-	private BigDecimal billlcChargeAmount;
-	@Column(name = "billtaxamount")
-	private BigDecimal billTaxAmount;
-	@Column(name = "billinvamount")
-	private BigDecimal billInvAmount;
-	@Column(name = "lctaxableamount")
-	private BigDecimal lcTaxableAmount;
-	@Column(name = "amountinwords")
-	private String amountInwords;
-	@Column(name = "billingremarks")
-	private String billingRemarks;
 
-	@PrePersist
-	private void setDefaultFinyr() {
-		// Execute the logic to set the default value for finyr
-		String fyFull = calculateFinyr();
-		this.finyr = fyFull; 
-	}
+	@Column(name = "remarks", length = 150)
+	private String remarks;
 
-	private String calculateFinyr() {
-		// Logic to calculate finyr based on the provided SQL query
-		String currentMonthDay = LocalDate.now().format(DateTimeFormatter.ofPattern("MMdd"));
-		String fyFull = (currentMonthDay.compareTo("0331") > 0)
-				? LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy"))
-				: LocalDate.now().minusYears(1).format(DateTimeFormatter.ofPattern("yyyy"));
-		return fyFull;
+	@Column(name = "address", length = 150)
+	private String address;
+
+	@Column(name = "shiprefno", length = 50)
+	private String shipRefNo;
+
+	@Column(name = "pincode", length = 10)
+	private int pincode;
+
+	@Column(name = "gstin", length = 50)
+	private String gstin;
+
+	@Column(name = "gsttype", length = 20)
+	private String gstType;
+
+	@Column(name = "billingmonth", length = 15)
+	private String billingMonth;
+
+	@Column(name = "otherinfo", length = 150)
+	private String otherInfo;
+
+	@Column(name = "salestype", length = 20)
+	private String salesType;
+
+	@Column(name = "creditremarks", length = 150)
+	private String creditRemarks;
+
+	@Column(name = "charges", length = 50)
+	private String charges;
+
+	// Summary Fields
+	@Column(name = "totchargesbillcurramt", precision = 10, scale = 2)
+	private BigDecimal totChargesBillCurrAmt;
+
+	@Column(name = "totchargeslcamt", precision = 10, scale = 2)
+	private BigDecimal totChargesLCAmt;
+
+	@Column(name = "totgrossbillamt", precision = 10, scale = 2)
+	private BigDecimal totGrossBillAmt;
+
+	@Column(name = "totgrosslcamt", precision = 10, scale = 2)
+	private BigDecimal totGrossLCAmt;
+
+	@Column(name = "netbillcurramt", precision = 10, scale = 2)
+	private BigDecimal netBillCurrAmt;
+
+	@Column(name = "netlcamt", precision = 10, scale = 2)
+	private BigDecimal netLCAmt;
+
+	@Column(name = "amtinwords", length = 150)
+	private String amtInWords;
+
+	@Column(name = "tottaxamt", precision = 10, scale = 2)
+	private BigDecimal totTaxAmt;
+
+	@JsonGetter("active")
+	public String getActive() {
+		return active ? "Active" : "In-Active";
 	}
 
 	@OneToMany(mappedBy = "irnCreditVO", cascade = CascadeType.ALL)
 	@JsonManagedReference
-	List<ChargerIrnCreditVO> chargerIrnCreditVO;
- 
+	List<IrnCreditChargesVO> irnCreditChargesVO;
+
 	@OneToMany(mappedBy = "irnCreditVO", cascade = CascadeType.ALL)
 	@JsonManagedReference
-	List<GstIrnCreditVO> gstIrnCreditVO;
+	List<IrnCreditGstVO> irnCreditGstVO;
 
 	@Embedded
 	@Builder.Default
 	private CreatedUpdatedDate commonDate = new CreatedUpdatedDate();
 }
-

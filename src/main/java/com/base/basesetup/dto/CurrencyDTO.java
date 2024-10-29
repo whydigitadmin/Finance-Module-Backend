@@ -15,9 +15,8 @@ public class CurrencyDTO {
 	private String country;
 	private String currency;
 	private String subCurrency;
-	private String currencySymbol;
+	private String currencyDescription;
 	private Long orgId;
 	private boolean active;
 	private String createdBy;
-	private boolean cancel;
 }

@@ -12,7 +12,6 @@ public class SacCodeDTO {
 	private Long orgId;
 	private String serviceAccountCode;
 	private String sacDescription;
-	private String chapter;
 	private String product;
 	private String createdBy;
 	private String cancelRemarks;
