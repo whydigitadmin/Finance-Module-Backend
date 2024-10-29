@@ -227,17 +227,17 @@ public class APServiceImpl implements APService {
 				message = "AR Bill Balance Updated Successfully";
 				apBillBalanceVO.setUpdatedBy(apBillBalanceDTO.getCreatedBy());
 			} else {
-				// GETDOCID API
-				String docId = apBillBalanceRepo.getArBillBalanceDocId(apBillBalanceDTO.getOrgId(),
-						apBillBalanceDTO.getFinYear(), apBillBalanceDTO.getBranchCode(), screenCode);
-				apBillBalanceVO.setDocId(docId);
-
-				// GETDOCID LASTNO +1
-				DocumentTypeMappingDetailsVO documentTypeMappingDetailsVO = documentTypeMappingDetailsRepo
-						.findByOrgIdAndFinYearAndBranchCodeAndScreenCode(apBillBalanceDTO.getOrgId(),
-								apBillBalanceDTO.getFinYear(), apBillBalanceDTO.getBranchCode(), screenCode);
-				documentTypeMappingDetailsVO.setLastno(documentTypeMappingDetailsVO.getLastno() + 1);
-				documentTypeMappingDetailsRepo.save(documentTypeMappingDetailsVO);
+//				// GETDOCID API
+//				String docId = apBillBalanceRepo.getArBillBalanceDocId(apBillBalanceDTO.getOrgId(),
+//						apBillBalanceDTO.getFinYear(), apBillBalanceDTO.getBranchCode(), screenCode);
+//				apBillBalanceVO.setDocId(docId);
+//
+//				// GETDOCID LASTNO +1
+//				DocumentTypeMappingDetailsVO documentTypeMappingDetailsVO = documentTypeMappingDetailsRepo
+//						.findByOrgIdAndFinYearAndBranchCodeAndScreenCode(apBillBalanceDTO.getOrgId(),
+//								apBillBalanceDTO.getFinYear(), apBillBalanceDTO.getBranchCode(), screenCode);
+//				documentTypeMappingDetailsVO.setLastno(documentTypeMappingDetailsVO.getLastno() + 1);
+//				documentTypeMappingDetailsRepo.save(documentTypeMappingDetailsVO);
 				apBillBalanceVO.setUpdatedBy(apBillBalanceDTO.getCreatedBy());
 				apBillBalanceVO.setCreatedBy(apBillBalanceDTO.getCreatedBy());
 				createUpdateApBillBalanceVOByApBillBalanceDTO(apBillBalanceDTO, apBillBalanceVO);
@@ -404,13 +404,19 @@ public class APServiceImpl implements APService {
 
 		return payment;
 	}
+
+//	@Override
+//	public String getApBillBalanceDocId(Long orgId, String finYear, String branch, String branchCode) {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
 	
-	@Override
-	public String getApBillBalanceDocId(Long orgId, String finYear, String branch, String branchCode) {
-		String ScreenCode = "APB";
-		String result = apBillBalanceRepo.getApBillBalanceDocId(orgId, finYear, branchCode, ScreenCode);
-		return result;
-	}
+//	@Override
+//	public String getApBillBalanceDocId(Long orgId, String finYear, String branch, String branchCode) {
+//		String ScreenCode = "APB";
+//		String result = apBillBalanceRepo.getApBillBalanceDocId(orgId, finYear, branchCode, ScreenCode);
+//		return result;
+//	}
 
 
 }
