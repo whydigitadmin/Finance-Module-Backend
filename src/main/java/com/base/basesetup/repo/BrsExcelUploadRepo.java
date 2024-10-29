@@ -13,5 +13,4 @@ public interface BrsExcelUploadRepo extends JpaRepository<BrsExcelUploadVO, Long
 	@Query(nativeQuery = true,value="select * from brsexcelupload where orgid=?1")
 	List<BrsExcelUploadVO> findBrsExcelByOrgId(Long orgId);
 
-	
 }
