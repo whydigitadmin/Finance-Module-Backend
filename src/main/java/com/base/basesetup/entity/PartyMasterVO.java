@@ -36,13 +36,6 @@ public class PartyMasterVO {
 	@SequenceGenerator(name = "partymastergen", sequenceName = "partymasterseq", initialValue = 1000000001, allocationSize = 1)
 	@Column(name = "partymasterid")
 	private Long id;
-	
-	@Column(name = "docid", length = 50)
-    private String docId;
-
-    @Column(name = "docdate")
-    private LocalDate docDate = LocalDate.now();
-
 	    
     @Column(name = "partytype", length = 15)
     private String partyType;
