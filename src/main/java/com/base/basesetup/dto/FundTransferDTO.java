@@ -19,7 +19,6 @@ public class FundTransferDTO {
 	private BigDecimal amount;
 	private Long orgId;
 	private String createdBy;
-	private boolean cancel;
 	private String cancelRemarks;
 	private String branchCode;
 	private String finYear;

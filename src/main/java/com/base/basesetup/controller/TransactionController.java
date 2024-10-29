@@ -27,14 +27,12 @@ import com.base.basesetup.common.UserConstants;
 import com.base.basesetup.dto.ArApAdjustmentOffSetDTO;
 import com.base.basesetup.dto.BrsOpeningDTO;
 import com.base.basesetup.dto.ChartCostCenterDTO;
-import com.base.basesetup.dto.CostInvoiceDTO;
 import com.base.basesetup.dto.DailyMonthlyExRatesDTO;
 import com.base.basesetup.dto.DebitNoteDTO;
 import com.base.basesetup.dto.FundTransferDTO;
 import com.base.basesetup.dto.GeneralJournalDTO;
 import com.base.basesetup.dto.GlOpeningBalanceDTO;
 import com.base.basesetup.dto.GstSalesVoucherDTO;
-import com.base.basesetup.dto.IrnCreditDTO;
 import com.base.basesetup.dto.PaymentReversalDTO;
 import com.base.basesetup.dto.PaymentVoucherDTO;
 import com.base.basesetup.dto.ReceiptReversalDTO;
@@ -43,6 +41,7 @@ import com.base.basesetup.dto.ReconcileCashDTO;
 import com.base.basesetup.dto.ReconcileCorpBankDTO;
 import com.base.basesetup.dto.ResponseDTO;
 import com.base.basesetup.entity.ArApAdjustmentOffSetVO;
+import com.base.basesetup.entity.BrsExcelUploadVO;
 import com.base.basesetup.entity.BrsOpeningVO;
 import com.base.basesetup.entity.ChartCostCenterVO;
 import com.base.basesetup.entity.DailyMonthlyExRatesVO;
@@ -51,7 +50,6 @@ import com.base.basesetup.entity.FundTransferVO;
 import com.base.basesetup.entity.GeneralJournalVO;
 import com.base.basesetup.entity.GlOpeningBalanceVO;
 import com.base.basesetup.entity.GstSalesVoucherVO;
-import com.base.basesetup.entity.IrnCreditVO;
 import com.base.basesetup.entity.PaymentReversalVO;
 import com.base.basesetup.entity.PaymentVoucherVO;
 import com.base.basesetup.entity.ReceiptReversalVO;
@@ -70,8 +68,6 @@ public class TransactionController extends BaseController {
 	@Autowired
 	TransactionService transactionService;
 	// IrnCredit
-
-	
 
 //	DailyMonthlyExRates
 	@GetMapping("/getAllDailyMonthlyExRatesByOrgId")
@@ -318,8 +314,8 @@ public class TransactionController extends BaseController {
 
 	@PostMapping("/excelUploadForBrs")
 	public ResponseEntity<ResponseDTO> ExcelUploadForBrs(@RequestParam MultipartFile[] files,
-			@RequestParam(required = false) Long orgId, @RequestParam(required = false) String createdBy,
-			String customer, String client, String finYear, String branch, String branchCode) {
+			@RequestParam(required = false) Long orgId, @RequestParam(required = false) String createdBy, String branch,
+			String branchCode) {
 		String methodName = "ExcelUploadForBrs()";
 		int totalRows = 0;
 		Map<String, Object> responseObjectsMap = new HashMap<>();
@@ -327,8 +323,7 @@ public class TransactionController extends BaseController {
 		ResponseDTO responseDTO = null;
 		try {
 			// Call service method to process Excel upload
-			transactionService.ExcelUploadForBrs(files, orgId, createdBy, customer, client, finYear, branch,
-					branchCode);
+			transactionService.ExcelUploadForBrs(files, orgId, createdBy, branch, branchCode);
 
 			// Retrieve the counts after processing
 			totalRows = transactionService.getTotalRows(); // Get total rows processed
@@ -355,6 +350,33 @@ public class TransactionController extends BaseController {
 		}
 		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
 		return ResponseEntity.ok().body(responseDTO);
+	}
+
+	@GetMapping("/getAllBrsExcelByOrgId")
+	public ResponseEntity<ResponseDTO> getAllBrsExcelByOrgId(@RequestParam(required = false) Long orgId) {
+		String methodName = "getAllBrsExcelByOrgId()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		List<BrsExcelUploadVO> brsExcelVO = new ArrayList<>();
+		try {
+			brsExcelVO = transactionService.getAllBrsExcelByOrgId(orgId);
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "Brs Excel information get successfully ByOrgId");
+			responseObjectsMap.put("brsExcelVO", brsExcelVO);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap, "Brs Excel information receive failedByOrgId",
+					errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+
 	}
 
 //	ChartCostCenter
@@ -462,7 +484,6 @@ public class TransactionController extends BaseController {
 		return ResponseEntity.ok().body(responseDTO);
 	}
 
-	
 	@GetMapping("/getChartCostCenterDocId")
 	public ResponseEntity<ResponseDTO> getChartCostCenterDocId(@RequestParam Long orgId, @RequestParam String finYear,
 			@RequestParam String branch, @RequestParam String branchCode) {
@@ -482,7 +503,8 @@ public class TransactionController extends BaseController {
 		}
 
 		if (StringUtils.isBlank(errorMsg)) {
-			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "ChartCostCenter DocId information retrieved successfully");
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+					"ChartCostCenter DocId information retrieved successfully");
 			responseObjectsMap.put("chartCostCenterDocId", mapp);
 			responseDTO = createServiceResponse(responseObjectsMap);
 		} else {
@@ -548,7 +570,6 @@ public class TransactionController extends BaseController {
 		return ResponseEntity.ok().body(responseDTO);
 	}
 
-
 	@PutMapping("/updateCreateFundTransfer")
 	public ResponseEntity<ResponseDTO> updateCreateFundTransfer(@Valid @RequestBody FundTransferDTO fundTransferDTO) {
 		String methodName = "updateCreateFundTransfer()";
@@ -558,25 +579,24 @@ public class TransactionController extends BaseController {
 		ResponseDTO responseDTO = null;
 
 		try {
-	        Map<String, Object> fundTransferVO = transactionService.updateCreateFundTransfer(fundTransferDTO);
-	        responseObjectsMap.put(CommonConstant.STRING_MESSAGE, fundTransferVO.get("message"));
-	        responseObjectsMap.put("fundTransferVO", fundTransferVO.get("fundTransferVO")); // Corrected key
-	        responseDTO = createServiceResponse(responseObjectsMap);
-	    } catch (Exception e) {
-	        errorMsg = e.getMessage();
-	        LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
-	        responseDTO = createServiceResponseError(responseObjectsMap, errorMsg, errorMsg);
-	    }
-	    LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
-	    return ResponseEntity.ok().body(responseDTO);
+			Map<String, Object> fundTransferVO = transactionService.updateCreateFundTransfer(fundTransferDTO);
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, fundTransferVO.get("message"));
+			responseObjectsMap.put("fundTransferVO", fundTransferVO.get("fundTransferVO")); // Corrected key
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+			responseDTO = createServiceResponseError(responseObjectsMap, errorMsg, errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
 	}
 
-	
 	@GetMapping("/getFundTransferByActive")
 	public ResponseEntity<ResponseDTO> getFundTransferByActive() {
 		String methodName = "getFundTransferByActive()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
-		String errorMsg = null; 
+		String errorMsg = null;
 		Map<String, Object> responseObjectsMap = new HashMap<>();
 		ResponseDTO responseDTO = null;
 		List<FundTransferVO> fundTransferVO = new ArrayList<>();
@@ -625,7 +645,7 @@ public class TransactionController extends BaseController {
 		return ResponseEntity.ok().body(responseDTO);
 
 	}
-	
+
 	@GetMapping("/getFundTranferDocId")
 	public ResponseEntity<ResponseDTO> getFundTranferDocId(@RequestParam Long orgId, @RequestParam String finYear,
 			@RequestParam String branch, @RequestParam String branchCode) {
@@ -645,7 +665,8 @@ public class TransactionController extends BaseController {
 		}
 
 		if (StringUtils.isBlank(errorMsg)) {
-			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "Fund Tranfer Docid information retrieved successfully");
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+					"Fund Tranfer Docid information retrieved successfully");
 			responseObjectsMap.put("fundTransferDocId", mapp);
 			responseDTO = createServiceResponse(responseObjectsMap);
 		} else {
@@ -657,8 +678,6 @@ public class TransactionController extends BaseController {
 		return ResponseEntity.ok().body(responseDTO);
 	}
 
-	
-	
 //	GeneralJournal
 	@GetMapping("/getAllGeneralJournalByOrgId")
 	public ResponseEntity<ResponseDTO> getAllGeneralJournalByOrgId(@RequestParam(required = false) Long orgId) {
@@ -763,7 +782,6 @@ public class TransactionController extends BaseController {
 		return ResponseEntity.ok().body(responseDTO);
 	}
 
-
 	@GetMapping("/getGeneralJournalDocId")
 	public ResponseEntity<ResponseDTO> getGeneralJournalDocId(@RequestParam Long orgId, @RequestParam String finYear,
 			@RequestParam String branch, @RequestParam String branchCode) {
@@ -783,7 +801,8 @@ public class TransactionController extends BaseController {
 		}
 
 		if (StringUtils.isBlank(errorMsg)) {
-			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "GeneralJournal DocId information retrieved successfully");
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+					"GeneralJournal DocId information retrieved successfully");
 			responseObjectsMap.put("generalJournalDocId", mapp);
 			responseDTO = createServiceResponse(responseObjectsMap);
 		} else {
@@ -794,9 +813,6 @@ public class TransactionController extends BaseController {
 		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
 		return ResponseEntity.ok().body(responseDTO);
 	}
-
-	
-
 
 	// DebitNote
 
@@ -1092,11 +1108,9 @@ public class TransactionController extends BaseController {
 		return ResponseEntity.ok().body(responseDTO);
 	}
 
-
-	
-	
 	@PutMapping("/updateCreatePaymentVoucher")
-	public ResponseEntity<ResponseDTO> updateCreatePaymentVoucher(@Valid @RequestBody PaymentVoucherDTO paymentVoucherDTO) {
+	public ResponseEntity<ResponseDTO> updateCreatePaymentVoucher(
+			@Valid @RequestBody PaymentVoucherDTO paymentVoucherDTO) {
 		String methodName = "updateCreatePaymentVoucher()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
 		String errorMsg = null;
@@ -1104,20 +1118,18 @@ public class TransactionController extends BaseController {
 		ResponseDTO responseDTO = null;
 
 		try {
-	        Map<String, Object> paymentVoucherVO = transactionService.updateCreatePaymentVoucher(paymentVoucherDTO);
-	        responseObjectsMap.put(CommonConstant.STRING_MESSAGE, paymentVoucherVO.get("message"));
-	        responseObjectsMap.put("paymentVoucherVO", paymentVoucherVO.get("paymentVoucherVO")); // Corrected key
-	        responseDTO = createServiceResponse(responseObjectsMap);
-	    } catch (Exception e) {
-	        errorMsg = e.getMessage();
-	        LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
-	        responseDTO = createServiceResponseError(responseObjectsMap, errorMsg, errorMsg);
-	    }
-	    LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
-	    return ResponseEntity.ok().body(responseDTO);
+			Map<String, Object> paymentVoucherVO = transactionService.updateCreatePaymentVoucher(paymentVoucherDTO);
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, paymentVoucherVO.get("message"));
+			responseObjectsMap.put("paymentVoucherVO", paymentVoucherVO.get("paymentVoucherVO")); // Corrected key
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+			responseDTO = createServiceResponseError(responseObjectsMap, errorMsg, errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
 	}
-	
-	
 
 	@GetMapping("/getPaymentVoucherByActive")
 	public ResponseEntity<ResponseDTO> getPaymentVoucherByActive() {
@@ -1146,8 +1158,7 @@ public class TransactionController extends BaseController {
 		return ResponseEntity.ok().body(responseDTO);
 
 	}
-	
-	
+
 	@GetMapping("/getpaymentVoucherByDocId")
 	public ResponseEntity<ResponseDTO> getpaymentVoucherByDocId(@RequestParam Long orgId, @RequestParam String docId) {
 		String methodName = "getpaymentVoucherByDocId()";
@@ -1163,7 +1174,8 @@ public class TransactionController extends BaseController {
 			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
 		}
 		if (StringUtils.isBlank(errorMsg)) {
-			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "PaymentVoucher information get successfully By docid");
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+					"PaymentVoucher information get successfully By docid");
 			responseObjectsMap.put("paymentVoucherVO", paymentVoucherVO);
 			responseDTO = createServiceResponse(responseObjectsMap);
 		} else {
@@ -1174,7 +1186,7 @@ public class TransactionController extends BaseController {
 		return ResponseEntity.ok().body(responseDTO);
 
 	}
-	
+
 	@GetMapping("/getpaymentVoucherDocId")
 	public ResponseEntity<ResponseDTO> getpaymentVoucherDocId(@RequestParam Long orgId, @RequestParam String finYear,
 			@RequestParam String branch, @RequestParam String branchCode) {
@@ -1194,7 +1206,8 @@ public class TransactionController extends BaseController {
 		}
 
 		if (StringUtils.isBlank(errorMsg)) {
-			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "paymentVoucher DocId information retrieved successfully");
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+					"paymentVoucher DocId information retrieved successfully");
 			responseObjectsMap.put("paymentVoucherDocId", mapp);
 			responseDTO = createServiceResponse(responseObjectsMap);
 		} else {
@@ -1205,7 +1218,6 @@ public class TransactionController extends BaseController {
 		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
 		return ResponseEntity.ok().body(responseDTO);
 	}
-
 
 	// ReceiptReversal
 
@@ -1695,7 +1707,7 @@ public class TransactionController extends BaseController {
 		return ResponseEntity.ok().body(responseDTO);
 
 	}
-	
+
 	@GetMapping("/getGlOpeningBalanceDocId")
 	public ResponseEntity<ResponseDTO> getGlOpeningBalanceDocId(@RequestParam Long orgId, @RequestParam String finYear,
 			@RequestParam String branch, @RequestParam String branchCode) {
@@ -1909,8 +1921,7 @@ public class TransactionController extends BaseController {
 	}
 
 	@GetMapping("/getReconcileBankByDocId")
-	public ResponseEntity<ResponseDTO> getReconcileBankByDocId(@RequestParam Long orgId,
-			@RequestParam String docId) {
+	public ResponseEntity<ResponseDTO> getReconcileBankByDocId(@RequestParam Long orgId, @RequestParam String docId) {
 		String methodName = "getReconcileBankByDocId()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
 		String errorMsg = null;
@@ -2186,7 +2197,7 @@ public class TransactionController extends BaseController {
 		ResponseDTO responseDTO = null;
 
 		try {
-			Map<String, Object> reconcileCashVO= transactionService.updateCreateReconcileCash(reconcileCashDTO);
+			Map<String, Object> reconcileCashVO = transactionService.updateCreateReconcileCash(reconcileCashDTO);
 			boolean isUpdate = reconcileCashDTO.getId() != null;
 
 			if (reconcileCashVO != null) {
@@ -2238,11 +2249,10 @@ public class TransactionController extends BaseController {
 		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
 		return ResponseEntity.ok().body(responseDTO);
 	}
-	
 
 	@GetMapping("/getReconcileCashDocId")
-	public ResponseEntity<ResponseDTO> getReconcileCashDocId(@RequestParam Long orgId, @RequestParam String finYear,@RequestParam String branch,
-			 @RequestParam String branchCode) {
+	public ResponseEntity<ResponseDTO> getReconcileCashDocId(@RequestParam Long orgId, @RequestParam String finYear,
+			@RequestParam String branch, @RequestParam String branchCode) {
 		String methodName = "getReconcileCashDocId()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
 		String errorMsg = null;
@@ -2251,7 +2261,7 @@ public class TransactionController extends BaseController {
 		String mapp = "";
 
 		try {
-			mapp = transactionService.getReconcileCashDocId(orgId, finYear,branch, branchCode);
+			mapp = transactionService.getReconcileCashDocId(orgId, finYear, branch, branchCode);
 		} catch (Exception e) {
 			errorMsg = e.getMessage();
 			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
@@ -2272,8 +2282,7 @@ public class TransactionController extends BaseController {
 	}
 
 	@GetMapping("/getReconcileCashByDocId")
-	public ResponseEntity<ResponseDTO> getReconcileCashByDocId(@RequestParam Long orgId,
-			@RequestParam String docId) {
+	public ResponseEntity<ResponseDTO> getReconcileCashByDocId(@RequestParam Long orgId, @RequestParam String docId) {
 		String methodName = "getReconcileCashgByDocId()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
 		String errorMsg = null;
@@ -2299,6 +2308,5 @@ public class TransactionController extends BaseController {
 		return ResponseEntity.ok().body(responseDTO);
 
 	}
-
 
 }

@@ -31,14 +31,7 @@ public class ChartCostCenterVO {
 	@SequenceGenerator(name = "chartcostcentergen",sequenceName = "chartcostcenterseq",initialValue = 1000000001,allocationSize = 1)
 	@Column(name="chartcostcenterid")
 	private Long id;
-	
-	@Column(name = "docid", length = 50)
-    private String docId;
 
-    @Column(name = "docdate")
-    private LocalDate docDate = LocalDate.now();
-
-	
 	@Column(name = "costcentercode", length = 25)
 	private String costCenterCode;
 	@Column(name = "costcentername", length = 50)

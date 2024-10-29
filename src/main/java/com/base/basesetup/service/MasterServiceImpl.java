@@ -1647,7 +1647,7 @@ public class MasterServiceImpl implements MasterService {
 		return listOfValuesRepo.save(listOfValuesVO);
 
 	}
-
+  
 	private void getListOfValuesVOFromTypesOfValuesDTO(@Valid ListOfValuesDTO listOfValuesDTO,
 			ListOfValuesVO listOfValuesVO) {
 		listOfValuesVO.setListCode(listOfValuesDTO.getListCode());
@@ -1675,13 +1675,7 @@ public class MasterServiceImpl implements MasterService {
 	@Override
 	public List<PartyMasterVO> getPartyMasterByOrgId(Long orgid) {
 		List<PartyMasterVO> partyMasterVO = new ArrayList<>();
-		if (ObjectUtils.isNotEmpty(orgid)) {
-			LOGGER.info("Successfully Received  PartyMaster BY OrgId : {}", orgid);
-			partyMasterVO = partyMasterRepo.findPartyMasterVOByOrgId(orgid);
-		} else {
-			LOGGER.info("Successfully Received  PartyMaster For All OrgId.");
-			partyMasterVO = partyMasterRepo.findAll();
-		}
+		partyMasterVO = partyMasterRepo.findByOrgId(orgid);
 		return partyMasterVO;
 	}
 
@@ -1905,7 +1899,7 @@ public class MasterServiceImpl implements MasterService {
 		partyMasterVO.setAccountType(partyMasterDTO.getAccountType());
 		partyMasterVO.setBussinessType(partyMasterDTO.getBussinessType());
 		partyMasterVO.setCarrierCode(partyMasterDTO.getCarrierCode());
-		partyMasterVO.setSupplierType(partyMasterDTO.getSupplierType());
+		partyMasterVO.setSupplierType(partyMasterDTO.getSupplierType());  
 		partyMasterVO.setSalesPerson(partyMasterDTO.getSalesPerson());
 		partyMasterVO.setCustomerCoord(partyMasterDTO.getCustomerCoord());
 		partyMasterVO.setAccountName(partyMasterDTO.getAccountName());

@@ -179,9 +179,8 @@ public class ARServiceImpl implements ARService {
 	}
 
 	@Override
-	public List<Map<String, Object>> getCustomerNameAndCodeForReceipt(Long orgId, String branch, String branchCode,
-			String finYear) {
-		Set<Object[]> customerName = receiptRepo.getCustomerNameAndCodeForReceipt(orgId, branch, branchCode, finYear);
+	public List<Map<String, Object>> getCustomerNameAndCodeForReceipt(Long orgId) {
+		Set<Object[]> customerName = receiptRepo.getCustomerNameAndCodeForReceipt(orgId);
 		return getCustomerName(customerName);
 	}
 
@@ -200,7 +199,7 @@ public class ARServiceImpl implements ARService {
 	@Override
 	public String getReceiptDocId(Long orgId, String finYear, String branch, String branchCode) {
 		String ScreenCode = "RT";
-		String result = receiptRepo.getReceiptByDocId(orgId, finYear, branchCode, ScreenCode);
+		String result = receiptRepo.getReceiptDocId(orgId, finYear, branchCode, ScreenCode);
 		return result;
 	}
 
@@ -303,12 +302,29 @@ public class ARServiceImpl implements ARService {
 		return arBillBalanceRepo.findArBillBalanceByActive();
 	}
 
+	@Override
+	public List<Map<String, Object>> getPartyNameAndCodeForArBillBalance(Long orgId) {
+		Set<Object[]> partyName = arBillBalanceRepo.getPartyNameAndCodeForArBillBalance(orgId);
+		return getPartyName(partyName);
+	}
+
+	private List<Map<String, Object>> getPartyName(Set<Object[]> customer) {
+		List<Map<String, Object>> doctypeMappingDetails = new ArrayList<>();
+		for (Object[] sup : customer) {
+			Map<String, Object> doctype = new HashMap<>();
+			doctype.put("partyName", sup[0] != null ? sup[0].toString() : "");
+			doctype.put("partyCode", sup[1] != null ? sup[1].toString() : "");
+			doctypeMappingDetails.add(doctype);
+		}
+
+		return doctypeMappingDetails;
+	}
+
 	// Receipt Register
 	@Override
-	public List<Map<String, Object>> getAllReceiptRegister(Long orgId, String branch, String branchCode, String finYear,
-			String fromDate, String toDate, String subLedgerName) {
-		Set<Object[]> register = receiptRepo.findAllReceiptRegister(orgId, branch, branchCode, finYear, fromDate,
-				toDate, subLedgerName);
+	public List<Map<String, Object>> getAllReceiptRegister(Long orgId, String fromDate, String toDate,
+			String subLedgerName) {
+		Set<Object[]> register = receiptRepo.findAllReceiptRegister(orgId, fromDate, toDate, subLedgerName);
 		return getRegister(register);
 	}
 

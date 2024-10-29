@@ -3,8 +3,6 @@ package com.base.basesetup.dto;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,10 +15,8 @@ import lombok.NoArgsConstructor;
 public class ReceiptInvDetailsDTO {
 	private Long id;
 	private String invNo;
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	private LocalDate invDate;
 	private String refNo;
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	LocalDate refDate;
 	private String masterRef;
 	private String houseRef;
