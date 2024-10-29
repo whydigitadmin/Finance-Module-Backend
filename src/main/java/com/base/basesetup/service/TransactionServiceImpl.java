@@ -266,6 +266,7 @@ public class TransactionServiceImpl implements TransactionService {
 
 	@Autowired
 	BrsExcelUploadRepo brsExcelUploadRepo;
+	
 
 //	@Autowired
 //	ReconciliationSummaryRepo reconciliationSummaryRepo;
@@ -649,6 +650,20 @@ public class TransactionServiceImpl implements TransactionService {
 		return successfulUploads;
 	}
 
+	
+	
+	@Override
+	public List<BrsExcelUploadVO> getAllBrsExcelByOrgId(Long orgId) {
+		List<BrsExcelUploadVO> brsExcelUploadVO = new ArrayList<>();
+		if (ObjectUtils.isNotEmpty(orgId)) {
+			LOGGER.info("Successfully Received BrsExcel BY Id : {}", orgId);
+			brsExcelUploadVO = brsExcelUploadRepo.findBrsExcelByOrgId(orgId);
+		} else {
+			LOGGER.info("Successfully Received BrsExcel For All orgId.");
+			brsExcelUploadVO = brsExcelUploadRepo.findAll();
+		}
+		return brsExcelUploadVO;
+	}
 	// ChartCostCenter
 	@Override
 	public List<ChartCostCenterVO> getAllChartCostCenterByOrgId(Long orgId) {
