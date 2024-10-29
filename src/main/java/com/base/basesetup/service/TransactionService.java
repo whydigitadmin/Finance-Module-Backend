@@ -81,8 +81,8 @@ public interface TransactionService {
 
 //	ChartCostCenter
 	List<ChartCostCenterVO> getAllChartCostCenterByOrgId(Long orgId);
-
-	List<ChartCostCenterVO> updateCreateChartCostCenter(@Valid List<ChartCostCenterDTO> chartCostCenterDTOList)
+	
+	Map<String, Object> updateCreateChartCostCenter(@Valid ChartCostCenterDTO chartCostCenterDTO)
 			throws ApplicationException;
 
 	List<ChartCostCenterVO> getAllChartCostCenterById(Long id);
@@ -242,6 +242,8 @@ public interface TransactionService {
 	ReconcileCashVO getReconcileCashByDocId(Long orgId, String docId);
 
 	String getChartCostCenterDocId(Long orgId, String finYear, String branch, String branchCode);
+
+	
 
 	
 
