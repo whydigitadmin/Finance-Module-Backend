@@ -247,8 +247,7 @@ public class ApController extends BaseController {
 
 	// PaymentRegister
 	@GetMapping("/getAllPaymentRegister")
-	public ResponseEntity<ResponseDTO> getAllPaymentRegister(@RequestParam Long orgId, @RequestParam String branch,
-			@RequestParam String branchCode, @RequestParam String finYear, @RequestParam String fromDate,
+	public ResponseEntity<ResponseDTO> getAllPaymentRegister(@RequestParam Long orgId, @RequestParam String fromDate,
 			@RequestParam String toDate, @RequestParam String subLedgerName) {
 		String methodName = "getAllPaymentRegister()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
@@ -257,7 +256,7 @@ public class ApController extends BaseController {
 		ResponseDTO responseDTO = null;
 		List<Map<String, Object>> customer = new ArrayList<>();
 		try {
-			customer = apService.getAllPaymentRegister(orgId, branch, branchCode, finYear, fromDate, toDate,
+			customer = apService.getAllPaymentRegister(orgId, fromDate, toDate,
 					subLedgerName);
 		} catch (Exception e) {
 			errorMsg = e.getMessage();

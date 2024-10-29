@@ -37,10 +37,12 @@ public class ReconcileCorpBankVO {
 	private Long id;
 	@Column(name = "docid",length = 25)
 	private String docId;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	@Column(name = "docdate")
 	private LocalDate docDate= LocalDate.now();
 	@Column(name="bankaccount",length = 30)
 	private String bankAccount;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	@Column(name = "bankstmtdate")
 	private LocalDate bankStmtDate;
 	@Column(name="remarks",length = 150)

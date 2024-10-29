@@ -319,7 +319,7 @@ public class TransactionController extends BaseController {
 	@PostMapping("/excelUploadForBrs")
 	public ResponseEntity<ResponseDTO> ExcelUploadForBrs(@RequestParam MultipartFile[] files,
 			@RequestParam(required = false) Long orgId, @RequestParam(required = false) String createdBy,
-			String customer, String client, String finYear, String branch, String branchCode) {
+			String branch, String branchCode) {
 		String methodName = "ExcelUploadForBrs()";
 		int totalRows = 0;
 		Map<String, Object> responseObjectsMap = new HashMap<>();
@@ -327,7 +327,7 @@ public class TransactionController extends BaseController {
 		ResponseDTO responseDTO = null;
 		try {
 			// Call service method to process Excel upload
-			transactionService.ExcelUploadForBrs(files, orgId, createdBy, customer, client, finYear, branch,
+			transactionService.ExcelUploadForBrs(files, orgId, createdBy, branch,
 					branchCode);
 
 			// Retrieve the counts after processing

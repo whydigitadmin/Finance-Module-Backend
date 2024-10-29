@@ -18,9 +18,8 @@ public interface PaymentRepo extends JpaRepository<PaymentVO, Long> {
 	@Query(value = "select * from payment  where orgid=?1 ", nativeQuery = true)
 	List<PaymentVO> getAllPaymentByOrgId(Long orgId);
 
-	@Query(nativeQuery = true, value = "select a.docid,a.docdate,a.partyname,a.bankcashacc,a.receiptamt,a.bankcharges,a.tdsamt,a.chequebank,a.chequeno,b.invno,b.invdate,b.refno,b.refdate,b.amount,b.outstanding,b.settled,a.createdon,a.createdby from payment a, paymentinvdtls b where a.paymentid=b.paymentid and a.orgid=?1 and a.branch=?2 and a.branchcode=?3 and a.finyear=?4 and a.docdate BETWEEN ?5 AND ?6 and a.partyname =?7")
-	Set<Object[]> findAllPaymentRegister(Long orgId, String branch, String branchCode, String finYear, String fromDate,
-			String toDate, String subLedgerName);
+	@Query(nativeQuery = true, value = "select a.docid,a.docdate,a.partyname,a.bankcashacc,a.receiptamt,a.bankcharges,a.tdsamt,a.chequebank,a.chequeno,b.invno,b.invdate,b.refno,b.refdate,b.amount,b.outstanding,b.settled,a.createdon,a.createdby from payment a, paymentinvdtls b where a.paymentid=b.paymentid and a.orgid=?1 and a.docdate BETWEEN ?2 AND ?3 and a.partyname =?4")
+	Set<Object[]> findAllPaymentRegister(Long orgId, String fromDate, String toDate, String subLedgerName);
 
 	@Query(nativeQuery = true, value = "select partyname,partycode from partymaster where orgid=?1 and active=1 and partytype='VENDOR'")
 	Set<Object[]> findPartyNameAndCodeForPayment(Long orgId);
@@ -38,10 +37,7 @@ public interface PaymentRepo extends JpaRepository<PaymentVO, Long> {
 	@Query(nativeQuery = true, value = "SELECT accountgroupname FROM groupledger WHERE accountgroupname LIKE '%TDS%' and orgid =?1 and active=1 ")
 	Set<Object[]> findAccountGroupNameByOrgIdForPayment(Long orgId);
 
-	@Query(nativeQuery = true,value="select concat(prefixfield,lpad(lastno,5,0)) AS docid from documenttypemappingdetails where orgid=?1 and finyear=?2 and branchcode=?3 and screencode=?4")
+	@Query(nativeQuery = true, value = "select concat(prefixfield,lpad(lastno,5,0)) AS docid from documenttypemappingdetails where orgid=?1 and finyear=?2 and branchcode=?3 and screencode=?4")
 	String getPaymentDocId(Long orgId, String finYear, String branchCode, String screenCode);
-
-	@Query(nativeQuery = true,value="select concat(prefixfield,lpad(lastno,5,0)) AS docid from documenttypemappingdetails where orgid=?1 and finyear=?2 and branchcode=?3 and screencode=?4")
-	String getPaymentByDocId(Long orgId, String finYear, String branchCode, String screenCode);
 
 }

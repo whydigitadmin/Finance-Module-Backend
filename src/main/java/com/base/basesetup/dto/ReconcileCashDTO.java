@@ -25,7 +25,10 @@ public class ReconcileCashDTO {
 
 	private Long orgId;
 	private String branch;
+	private boolean active;
 	private String branchCode;
 	private String createdBy;
 	private String finYear;
+	private String ipNo;
+	private String latitude;
 }
