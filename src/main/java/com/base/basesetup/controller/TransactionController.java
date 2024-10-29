@@ -434,26 +434,30 @@ public class TransactionController extends BaseController {
 	}
 	
 	@PutMapping("/updateCreateChartCostCenter")
-	public ResponseEntity<ResponseDTO> updateCreateChartCostCenter(@Valid @RequestBody ChartCostCenterDTO chartCostCenterDTO) {
-		String methodName = "updateCreateChartCostCenter()";
-		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
-		String errorMsg = null;
-		Map<String, Object> responseObjectsMap = new HashMap<>();
-		ResponseDTO responseDTO = null;
+	public ResponseEntity<ResponseDTO> updateCreateChartCostCenter(@Valid @RequestBody List<ChartCostCenterDTO> chartCostCenterDTOList) {
+	    String methodName = "updateCreateChartCostCenter()";
+	    LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+	    String errorMsg = null;
+	    Map<String, Object> responseObjectsMap = new HashMap<>();
+	    ResponseDTO responseDTO;
 
-		try {
-	        Map<String, Object> chartCostCenterVO = transactionService.updateCreateChartCostCenter(chartCostCenterDTO);
-	        responseObjectsMap.put(CommonConstant.STRING_MESSAGE, chartCostCenterVO.get("message"));
-	        responseObjectsMap.put("chartCostCenterVO", chartCostCenterVO.get("chartCostCenterVO")); // Corrected key
+	    try {
+	        // Assuming the service method returns a list of maps containing messages and VO objects
+	        List<Map<String, Object>> chartCostCenterResponses = transactionService.updateCreateChartCostCenterList(chartCostCenterDTOList);
+
+	        responseObjectsMap.put("chartCostCenterResponses", chartCostCenterResponses);  // List of responses for each DTO
 	        responseDTO = createServiceResponse(responseObjectsMap);
+
 	    } catch (Exception e) {
 	        errorMsg = e.getMessage();
 	        LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
 	        responseDTO = createServiceResponseError(responseObjectsMap, errorMsg, errorMsg);
 	    }
+
 	    LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
 	    return ResponseEntity.ok().body(responseDTO);
 	}
+
 
 
 	
