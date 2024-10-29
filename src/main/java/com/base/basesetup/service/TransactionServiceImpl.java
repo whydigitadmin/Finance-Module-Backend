@@ -2466,7 +2466,7 @@ public class TransactionServiceImpl implements TransactionService {
 
 	@Override
 	public String getFundTranferDocId(Long orgId, String finYear, String branch, String branchCode) {
-		String ScreenCode = "CI";
+		String ScreenCode = "FT";
 		String result = fundTransferRepo.getFundTranferDocId(orgId, finYear, branchCode, ScreenCode);
 		return result;
 	}
