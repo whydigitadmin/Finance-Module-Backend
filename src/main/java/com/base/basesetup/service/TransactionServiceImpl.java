@@ -707,65 +707,70 @@ public class TransactionServiceImpl implements TransactionService {
 
 	
 	@Override
-	public Map<String, Object> updateCreateChartCostCenter(@Valid ChartCostCenterDTO chartCostCenterDTO)
-			throws ApplicationException {
-		ChartCostCenterVO chartCostCenterVO = new ChartCostCenterVO();
-		boolean isUpdate = false;
-		String message = null;
-		String screenCode = "CCC";
+	public List<Map<String, Object>> updateCreateChartCostCenterList(@Valid List<ChartCostCenterDTO> chartCostCenterDTOList)
+	        throws ApplicationException {
+	    List<Map<String, Object>> responseList = new ArrayList<>();
+	    String screenCode = "CCC";
 
-		if (ObjectUtils.isNotEmpty(chartCostCenterDTO.getId())) {
-			
-			chartCostCenterVO = chartCostCenterRepo.findById(chartCostCenterDTO.getId()).orElseThrow(
-					() -> new ApplicationException("ChartCostCenter Not Found with id: " + chartCostCenterDTO.getId()));
-			chartCostCenterVO.setUpdatedBy(chartCostCenterDTO.getCreatedBy());
-			getChartCostCenterVOFromChartCostCenterDTO(chartCostCenterDTO, chartCostCenterVO);
+	    for (ChartCostCenterDTO chartCostCenterDTO : chartCostCenterDTOList) {
+	        ChartCostCenterVO chartCostCenterVO;
+	        String message;
 
-			message = "ChartCostCenter Updation Successfully";
-		}
+	        if (ObjectUtils.isNotEmpty(chartCostCenterDTO.getId())) {
+	            // Update existing record
+	            chartCostCenterVO = chartCostCenterRepo.findById(chartCostCenterDTO.getId()).orElseThrow(
+	                    () -> new ApplicationException("ChartCostCenter Not Found with id: " + chartCostCenterDTO.getId()));
+	            chartCostCenterVO.setUpdatedBy(chartCostCenterDTO.getCreatedBy());
+	            getChartCostCenterVOFromChartCostCenterDTO(chartCostCenterDTO, chartCostCenterVO);
+	            message = "ChartCostCenter Updation Successfully";
+	        } else {
+	            // Create new record
+	            chartCostCenterVO = new ChartCostCenterVO();
 
-		else {
-//			GETDOCID API
-			String docId = chartCostCenterRepo.getPartyMasterDocId(chartCostCenterDTO.getOrgId(),
-					chartCostCenterDTO.getFinYear(), chartCostCenterDTO.getBranchCode(), screenCode);
+	            // Get document ID
+	            String docId = chartCostCenterRepo.getPartyMasterDocId(chartCostCenterDTO.getOrgId(),
+	                    chartCostCenterDTO.getFinYear(), chartCostCenterDTO.getBranchCode(), screenCode);
+	            chartCostCenterVO.setDocId(docId);
 
-			chartCostCenterVO.setDocId(docId);
-//			// GETDOCID LASTNO +1
-			DocumentTypeMappingDetailsVO documentTypeMappingDetailsVO = documentTypeMappingDetailsRepo
-					.findByOrgIdAndFinYearAndBranchCodeAndScreenCode(chartCostCenterDTO.getOrgId(),
-							chartCostCenterDTO.getFinYear(), chartCostCenterDTO.getBranchCode(), screenCode);
-			documentTypeMappingDetailsVO.setLastno(documentTypeMappingDetailsVO.getLastno() + 1);
-			documentTypeMappingDetailsRepo.save(documentTypeMappingDetailsVO);
-			
-			chartCostCenterVO.setCreatedBy(chartCostCenterDTO.getCreatedBy());
-			chartCostCenterVO.setUpdatedBy(chartCostCenterDTO.getCreatedBy());
-			getChartCostCenterVOFromChartCostCenterDTO(chartCostCenterDTO, chartCostCenterVO);
-			message = "ChartCostCenter Creation Successfully";
-		}
+	            // Increment last number in DocumentTypeMappingDetails
+	            DocumentTypeMappingDetailsVO documentTypeMappingDetailsVO = documentTypeMappingDetailsRepo
+	                    .findByOrgIdAndFinYearAndBranchCodeAndScreenCode(chartCostCenterDTO.getOrgId(),
+	                            chartCostCenterDTO.getFinYear(), chartCostCenterDTO.getBranchCode(), screenCode);
+	            documentTypeMappingDetailsVO.setLastno(documentTypeMappingDetailsVO.getLastno() + 1);
+	            documentTypeMappingDetailsRepo.save(documentTypeMappingDetailsVO);
 
-		chartCostCenterRepo.save(chartCostCenterVO);
-		Map<String, Object> response = new HashMap<>();
-		response.put("chartCostCenterVO", chartCostCenterVO);
-		response.put("message", message);
-		return response;
+	            chartCostCenterVO.setCreatedBy(chartCostCenterDTO.getCreatedBy());
+	            chartCostCenterVO.setUpdatedBy(chartCostCenterDTO.getCreatedBy());
+	            getChartCostCenterVOFromChartCostCenterDTO(chartCostCenterDTO, chartCostCenterVO);
+	            message = "ChartCostCenter Creation Successfully";
+	        }
+
+	        chartCostCenterRepo.save(chartCostCenterVO);
+
+	        Map<String, Object> response = new HashMap<>();
+	        response.put("chartCostCenterVO", chartCostCenterVO);
+	        response.put("message", message);
+	        responseList.add(response);
+	    }
+
+	    return responseList;
 	}
 
 	private void getChartCostCenterVOFromChartCostCenterDTO(@Valid ChartCostCenterDTO chartCostCenterDTO,
-			ChartCostCenterVO chartCostCenterVO) {
-		chartCostCenterVO.setCostCenterCode(chartCostCenterDTO.getCostCenterCode());
-		chartCostCenterVO.setCostCenterName(chartCostCenterDTO.getCostCenterName());
-		chartCostCenterVO.setCredit(chartCostCenterDTO.getCredit());
-		chartCostCenterVO.setDebit(chartCostCenterDTO.getDebit());
-		chartCostCenterVO.setOrgId(chartCostCenterDTO.getOrgId());
-		chartCostCenterVO.setActive(chartCostCenterDTO.isActive());
-		chartCostCenterVO.setCancel(chartCostCenterDTO.isCancel());
-		chartCostCenterVO.setCancelRemarks(chartCostCenterDTO.getCancelRemarks());
-		chartCostCenterVO.setBranch(chartCostCenterDTO.getBranch());
-		chartCostCenterVO.setBranchCode(chartCostCenterDTO.getBranchCode());
-		chartCostCenterVO.setFinYear(chartCostCenterDTO.getFinYear());
-
+	        ChartCostCenterVO chartCostCenterVO) {
+	    chartCostCenterVO.setCostCenterCode(chartCostCenterDTO.getCostCenterCode());
+	    chartCostCenterVO.setCostCenterName(chartCostCenterDTO.getCostCenterName());
+	    chartCostCenterVO.setCredit(chartCostCenterDTO.getCredit());
+	    chartCostCenterVO.setDebit(chartCostCenterDTO.getDebit());
+	    chartCostCenterVO.setOrgId(chartCostCenterDTO.getOrgId());
+	    chartCostCenterVO.setActive(chartCostCenterDTO.isActive());
+	    chartCostCenterVO.setCancel(chartCostCenterDTO.isCancel());
+	    chartCostCenterVO.setCancelRemarks(chartCostCenterDTO.getCancelRemarks());
+	    chartCostCenterVO.setBranch(chartCostCenterDTO.getBranch());
+	    chartCostCenterVO.setBranchCode(chartCostCenterDTO.getBranchCode());
+	    chartCostCenterVO.setFinYear(chartCostCenterDTO.getFinYear());
 	}
-	
+
 	// FundTransfer
 
 	@Override
