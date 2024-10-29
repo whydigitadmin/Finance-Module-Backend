@@ -26,6 +26,7 @@ import com.base.basesetup.dto.ReconcileBankDTO;
 import com.base.basesetup.dto.ReconcileCashDTO;
 import com.base.basesetup.dto.ReconcileCorpBankDTO;
 import com.base.basesetup.entity.ArApAdjustmentOffSetVO;
+import com.base.basesetup.entity.BrsExcelUploadVO;
 import com.base.basesetup.entity.BrsOpeningVO;
 import com.base.basesetup.entity.ChartCostCenterVO;
 import com.base.basesetup.entity.DailyMonthlyExRatesVO;
@@ -44,8 +45,6 @@ import com.base.basesetup.exception.ApplicationException;
 
 @Service
 public interface TransactionService {
-
-
 
 //	DailyMonthlyExRatesVO
 	List<DailyMonthlyExRatesVO> getAllDailyMonthlyExRatesByOrgId(Long orgId);
@@ -70,6 +69,8 @@ public interface TransactionService {
 
 	void ExcelUploadForBrs(MultipartFile[] files, Long orgId, String createdBy, String branch, String branchCode)
 			throws ApplicationException, EncryptedDocumentException, IOException;
+
+	List<BrsExcelUploadVO> getAllBrsExcelByOrgId(Long orgId);
 
 	int getTotalRows();
 
@@ -97,7 +98,8 @@ public interface TransactionService {
 // GeneralJournal
 	List<GeneralJournalVO> getAllGeneralJournalByOrgId(Long orgId);
 
-	Map<String, Object> updateCreateGeneralJournal(@Valid GeneralJournalDTO generalJournalDTO) throws ApplicationException;
+	Map<String, Object> updateCreateGeneralJournal(@Valid GeneralJournalDTO generalJournalDTO)
+			throws ApplicationException;
 
 	List<GeneralJournalVO> getAllGeneralJournalById(Long id);
 
@@ -125,12 +127,13 @@ public interface TransactionService {
 // PaymentVoucher
 	List<PaymentVoucherVO> getAllPaymentVoucherByOrgId(Long orgId);
 
-	Map<String, Object> updateCreatePaymentVoucher(@Valid PaymentVoucherDTO paymentVoucherDTO) throws ApplicationException;
+	Map<String, Object> updateCreatePaymentVoucher(@Valid PaymentVoucherDTO paymentVoucherDTO)
+			throws ApplicationException;
 
 	List<PaymentVoucherVO> getAllPaymentVoucherById(Long id);
 
 	List<PaymentVoucherVO> getPaymentVoucherByActive();
-	
+
 	PaymentVoucherVO getpaymentVoucherByDocId(Long orgId, String docId);
 
 	String getpaymentVoucherDocId(Long orgId, String finYear, String branch, String branchCode);
@@ -174,8 +177,8 @@ public interface TransactionService {
 	List<GlOpeningBalanceVO> getAllGlOpeningBalanceById(Long id);
 
 	List<GlOpeningBalanceVO> getGlOpeningBalanceByActive();
-	
-	String getGlOpeningBalanceDocId(Long orgId, String finYear,String branch, String branchCode);
+
+	String getGlOpeningBalanceDocId(Long orgId, String finYear, String branch, String branchCode);
 
 	GlOpeningBalanceVO getGlOpeningBalanceByDocId(Long orgId, String docId);
 
@@ -200,9 +203,7 @@ public interface TransactionService {
 
 	ReconcileBankVO getReconcileBankByDocId(Long orgId, String docId);
 
-
 	String getGeneralJournalDocId(Long orgId, String finYear, String branch, String branchCode);
-
 
 	// ReconcileCorpBank
 	List<ReconcileCorpBankVO> getAllReconcileCorpBankByOrgId(Long orgId);
@@ -214,7 +215,7 @@ public interface TransactionService {
 
 	List<ReconcileCorpBankVO> getReconcileCorpBankByActive();
 
-	String getReconcileCorpBankDocId(Long orgId, String finYear, String branch,String branchCode);
+	String getReconcileCorpBankDocId(Long orgId, String finYear, String branch, String branchCode);
 
 	ReconcileCorpBankVO getReconcileCorpBankByDocId(Long orgId, String docId);
 
@@ -228,17 +229,14 @@ public interface TransactionService {
 
 	List<ReconcileCashVO> getReconcileCashByActive();
 
-		FundTransferVO getFundTranferByDocId(Long orgId, String docId);
+	FundTransferVO getFundTranferByDocId(Long orgId, String docId);
 
-		String getFundTranferDocId(Long orgId, String finYear, String branch, String branchCode);
+	String getFundTranferDocId(Long orgId, String finYear, String branch, String branchCode);
 
-	
-	String getReconcileCashDocId(Long orgId, String finYear, String branch,String branchCode);
+	String getReconcileCashDocId(Long orgId, String finYear, String branch, String branchCode);
 
 	ReconcileCashVO getReconcileCashByDocId(Long orgId, String docId);
 
 	String getChartCostCenterDocId(Long orgId, String finYear, String branch, String branchCode);
-
-	
 
 }
