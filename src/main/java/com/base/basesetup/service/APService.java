@@ -24,9 +24,9 @@ public interface APService {
 	PaymentVO updateCreatePayment(@Valid PaymentDTO paymentDTO) throws ApplicationException;
 
 	List<Map<String, Object>> getPartyNameAndCodeForPayment(Long orgId);
-	
-	List<Map<String, Object>> getCurrencyAndTransCurrencyForPayment(Long orgId, String branch, String branchCode, String finYear,
-			String partyName);
+
+	List<Map<String, Object>> getCurrencyAndTransCurrencyForPayment(Long orgId, String branch, String branchCode,
+			String finYear, String partyName);
 
 	List<Map<String, Object>> getStateCodeByOrgIdForPayment(Long orgId);
 
@@ -43,13 +43,11 @@ public interface APService {
 
 	List<ApBillBalanceVO> getApBillBalanceByActive();
 
+	List<Map<String, Object>> getPartyNameAndCodeForApBillBalance(Long orgId);
 
 // 	PaymentRegister
-	List<Map<String, Object>> getAllPaymentRegister(Long orgId,
-			String fromDate, String toDate, String subLedgerName);
+	List<Map<String, Object>> getAllPaymentRegister(Long orgId, String fromDate, String toDate, String subLedgerName);
 
 	String getApBillBalanceDocId(Long orgId, String finYear, String branch, String branchCode);
-
-	
 
 }

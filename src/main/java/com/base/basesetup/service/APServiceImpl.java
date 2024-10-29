@@ -283,6 +283,25 @@ public class APServiceImpl implements APService {
 		return apBillBalanceRepo.findApBillBalanceByActive();
 	}
 
+	@Override
+	public List<Map<String, Object>> getPartyNameAndCodeForApBillBalance(Long orgId) {
+		Set<Object[]> partyName = apBillBalanceRepo.getPartyNameAndCodeForApBillBalance(orgId);
+		return getPartyNameForAPB(partyName);
+	}
+
+	private List<Map<String, Object>> getPartyNameForAPB(Set<Object[]> customer) {
+		List<Map<String, Object>> doctypeMappingDetails = new ArrayList<>();
+		for (Object[] sup : customer) {
+			Map<String, Object> doctype = new HashMap<>();
+			doctype.put("partyName", sup[0] != null ? sup[0].toString() : "");
+			doctype.put("partyCode", sup[1] != null ? sup[1].toString() : "");
+			doctypeMappingDetails.add(doctype);
+		}
+
+		return doctypeMappingDetails;
+	}
+
+	
 	// Payment Service
 	@Override
 	public List<Map<String, Object>> getAllPaymentRegister(Long orgId, String fromDate, String toDate,
