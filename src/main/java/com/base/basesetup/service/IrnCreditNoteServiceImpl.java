@@ -155,6 +155,10 @@ public class IrnCreditNoteServiceImpl implements IrnCreditNoteService {
 		irnCreditVO.setAmtInWords(irnCreditDTO.getAmtInWords());
 		irnCreditVO.setExRate(irnCreditDTO.getExRate());
 		irnCreditVO.setTotTaxAmt(irnCreditDTO.getTotTaxAmt());
+		irnCreditVO.setSummaryExRate(irnCreditDTO.getSummaryExRate());
+		irnCreditVO.setCurrentDate(irnCreditDTO.getCurrentDate());
+		irnCreditVO.setCurrentDateValue(irnCreditDTO.getCurrentDateValue());
+		irnCreditVO.setRoundOff(irnCreditDTO.getRoundOff());
 
 		if (ObjectUtils.isNotEmpty(irnCreditVO.getId())) {
 			List<IrnCreditChargesVO> irnCreditChargesVO1 = irnCreditChargesRepo.findByIrnCreditVO(irnCreditVO);
@@ -231,13 +235,12 @@ public class IrnCreditNoteServiceImpl implements IrnCreditNoteService {
 
 		return irnCredit;
 	}
-	
+
 	@Override
 	public String getIrnCreditNoteDocId(Long orgId, String finYear, String branch, String branchCode) {
 		String ScreenCode = "APB";
 		String result = irnCreditRepo.getIrnCreditDocId(orgId, finYear, branchCode, ScreenCode);
 		return result;
 	}
-	
-	
+
 }
