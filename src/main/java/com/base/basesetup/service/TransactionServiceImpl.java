@@ -467,8 +467,8 @@ public class TransactionServiceImpl implements TransactionService {
 	private final DataFormatter dataFormatter = new DataFormatter();
 
 	@Transactional
-	public void ExcelUploadForBrs(MultipartFile[] files, Long orgId, String createdBy, String customer, String client,
-			String finYear, String branch, String branchCode) throws ApplicationException {
+	public void ExcelUploadForBrs(MultipartFile[] files, Long orgId, String createdBy, String branch, String branchCode)
+			throws ApplicationException {
 		List<BrsExcelUploadVO> brsExcelUploadVOsToSave = new ArrayList<>();
 		totalRows = 0;
 		successfulUploads = 0;
@@ -523,9 +523,6 @@ public class TransactionServiceImpl implements TransactionService {
 						brsExcelUploadVO.setPaymentAmount(paymentAmount);
 						brsExcelUploadVO.setReconcile(reconcile);
 						brsExcelUploadVO.setOrgId(orgId);
-						brsExcelUploadVO.setCustomer(customer);
-						brsExcelUploadVO.setClient(client);
-						brsExcelUploadVO.setFinYear(finYear);
 						brsExcelUploadVO.setBranch(branch);
 						brsExcelUploadVO.setBranchCode(branchCode);
 						brsExcelUploadVO.setCreatedBy(createdBy);
@@ -778,15 +775,14 @@ public class TransactionServiceImpl implements TransactionService {
 		String message = null;
 		String screenCode = "FT";
 
-		if(fundTransferDTO.getCorpAccount().equalsIgnoreCase(fundTransferDTO.getTransferTo())) {
-			
-			String errorMessage=String.format("CorpAccount And TransferAccount Is Same,Try Different Bank",
+		if (fundTransferDTO.getCorpAccount().equalsIgnoreCase(fundTransferDTO.getTransferTo())) {
+
+			String errorMessage = String.format("CorpAccount And TransferAccount Is Same,Try Different Bank",
 					fundTransferDTO.getCorpAccount());
-			
+
 			throw new ApplicationException(errorMessage);
 		}
-		
-		
+
 		if (ObjectUtils.isEmpty(fundTransferDTO.getId())) {
 
 			fundTransferVO = new FundTransferVO();
@@ -817,8 +813,6 @@ public class TransactionServiceImpl implements TransactionService {
 
 			message = "FundTransfer Updation Successfully";
 		}
-		
-		
 
 		getFundTransferVOFromFundTransferDTO(fundTransferDTO, fundTransferVO);
 		fundTransferRepo.save(fundTransferVO);
@@ -2482,7 +2476,7 @@ public class TransactionServiceImpl implements TransactionService {
 		return paymentVoucherRepo.findAllPaymentVoucherByDocId(orgId, docId);
 	}
 
-	@Override  
+	@Override
 	public String getpaymentVoucherDocId(Long orgId, String finYear, String branch, String branchCode) {
 		String ScreenCode = "PV";
 		String result = paymentVoucherRepo.getpaymentVoucherDocId(orgId, finYear, branchCode, ScreenCode);

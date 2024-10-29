@@ -68,8 +68,7 @@ public interface TransactionService {
 
 	List<Map<String, Object>> getBranchForBrsOpening(Long orgId);
 
-	void ExcelUploadForBrs(MultipartFile[] files, Long orgId, String createdBy, String customer, String client,
-			String finYear, String branch, String branchCode)
+	void ExcelUploadForBrs(MultipartFile[] files, Long orgId, String createdBy, String branch, String branchCode)
 			throws ApplicationException, EncryptedDocumentException, IOException;
 
 	int getTotalRows();
