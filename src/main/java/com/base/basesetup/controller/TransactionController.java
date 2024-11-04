@@ -432,38 +432,35 @@ public class TransactionController extends BaseController {
 		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
 		return ResponseEntity.ok().body(responseDTO);
 	}
-
+	
 	@PutMapping("/updateCreateChartCostCenter")
-	public ResponseEntity<ResponseDTO> updateChartCostCenter(
-			@RequestBody List<ChartCostCenterDTO> chartCostCenterDTOList) {
-		String methodName = "updateCreateChartCostCenter()";
-		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
-		Map<String, Object> responseObjectsMap = new HashMap<>();
-		ResponseDTO responseDTO = null;
+	public ResponseEntity<ResponseDTO> updateCreateChartCostCenter(@Valid @RequestBody List<ChartCostCenterDTO> chartCostCenterDTOList) {
+	    String methodName = "updateCreateChartCostCenter()";
+	    LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+	    String errorMsg = null;
+	    Map<String, Object> responseObjectsMap = new HashMap<>();
+	    ResponseDTO responseDTO;
 
-		try {
-			// Process the list (both update and create operations)
-			List<ChartCostCenterVO> chartCostCenterVOList = transactionService
-					.updateCreateChartCostCenter(chartCostCenterDTOList);
+	    try {
+	        // Assuming the service method returns a list of maps containing messages and VO objects
+	        List<Map<String, Object>> chartCostCenterResponses = transactionService.updateCreateChartCostCenterList(chartCostCenterDTOList);
 
-			if (!chartCostCenterVOList.isEmpty()) {
-				responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "ChartCostCenters processed successfully");
-				responseObjectsMap.put("chartCostCenterVOList", chartCostCenterVOList);
-				responseDTO = createServiceResponse(responseObjectsMap);
-			} else {
-				responseDTO = createServiceResponseError(responseObjectsMap, "Processing failed",
-						"No records processed");
-			}
-		} catch (Exception e) {
-			String errorMsg = e.getMessage();
-			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
-			responseDTO = createServiceResponseError(responseObjectsMap, "Processing failed", errorMsg);
-		}
+	        responseObjectsMap.put("chartCostCenterResponses", chartCostCenterResponses);  // List of responses for each DTO
+	        responseDTO = createServiceResponse(responseObjectsMap);
 
-		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
-		return ResponseEntity.ok().body(responseDTO);
+	    } catch (Exception e) {
+	        errorMsg = e.getMessage();
+	        LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+	        responseDTO = createServiceResponseError(responseObjectsMap, errorMsg, errorMsg);
+	    }
+
+	    LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+	    return ResponseEntity.ok().body(responseDTO);
 	}
 
+
+
+	
 	@GetMapping("/getChartCostCenterByActive")
 	public ResponseEntity<ResponseDTO> getChartCostCenterByActive() {
 		String methodName = "getChartCostCenterByActive()";
