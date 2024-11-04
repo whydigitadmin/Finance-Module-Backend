@@ -211,43 +211,42 @@ public class APServiceImpl implements APService {
 		return apBillBalanceVO;
 	}
 
-	@Override
-	public Map<String, Object> updateCreateApBillBalance(@Valid ApBillBalanceDTO apBillBalanceDTO)
-			throws ApplicationException {
-		String screenCode = "APB";
-		ApBillBalanceVO apBillBalanceVO = new ApBillBalanceVO();
-		String message;
-		if (ObjectUtils.isNotEmpty(apBillBalanceDTO.getId())) {
-			apBillBalanceVO = apBillBalanceRepo.findById(apBillBalanceDTO.getId())
-					.orElseThrow(() -> new ApplicationException("Invalid ApBillBalance details"));
-			createUpdateApBillBalanceVOByApBillBalanceDTO(apBillBalanceDTO, apBillBalanceVO);
-			message = "AR Bill Balance Updated Successfully";
-			apBillBalanceVO.setUpdatedBy(apBillBalanceDTO.getCreatedBy());
-		} else {
-			// GETDOCID API
-			String docId = apBillBalanceRepo.getArBillBalanceDocId(apBillBalanceDTO.getOrgId(),
-					apBillBalanceDTO.getFinYear(), apBillBalanceDTO.getBranchCode(), screenCode);
-			apBillBalanceVO.setDocId(docId);
+		@Override
+		public Map<String, Object> updateCreateApBillBalance(
+				@Valid ApBillBalanceDTO apBillBalanceDTO) throws ApplicationException {
+			String screenCode = "APB";
+			ApBillBalanceVO apBillBalanceVO = new ApBillBalanceVO();
+			String message;
+			if (ObjectUtils.isNotEmpty(apBillBalanceDTO.getId())) {
+				apBillBalanceVO = apBillBalanceRepo.findById(apBillBalanceDTO.getId())
+						.orElseThrow(() -> new ApplicationException("Invalid ApBillBalance details"));
+				createUpdateApBillBalanceVOByApBillBalanceDTO(apBillBalanceDTO, apBillBalanceVO);
+				message = "AR Bill Balance Updated Successfully";
+				apBillBalanceVO.setUpdatedBy(apBillBalanceDTO.getCreatedBy());
+			} else {
+//				// GETDOCID API
+//				String docId = apBillBalanceRepo.getArBillBalanceDocId(apBillBalanceDTO.getOrgId(),
+//						apBillBalanceDTO.getFinYear(), apBillBalanceDTO.getBranchCode(), screenCode);
+//				apBillBalanceVO.setDocId(docId);
+//
+//				// GETDOCID LASTNO +1
+//				DocumentTypeMappingDetailsVO documentTypeMappingDetailsVO = documentTypeMappingDetailsRepo
+//						.findByOrgIdAndFinYearAndBranchCodeAndScreenCode(apBillBalanceDTO.getOrgId(),
+//								apBillBalanceDTO.getFinYear(), apBillBalanceDTO.getBranchCode(), screenCode);
+//				documentTypeMappingDetailsVO.setLastno(documentTypeMappingDetailsVO.getLastno() + 1);
+//				documentTypeMappingDetailsRepo.save(documentTypeMappingDetailsVO);
+				apBillBalanceVO.setUpdatedBy(apBillBalanceDTO.getCreatedBy());
+				apBillBalanceVO.setCreatedBy(apBillBalanceDTO.getCreatedBy());
+				createUpdateApBillBalanceVOByApBillBalanceDTO(apBillBalanceDTO, apBillBalanceVO);
+				message = "AP Bill Balance Created Successfully";
+			}
 
-			// GETDOCID LASTNO +1
-			DocumentTypeMappingDetailsVO documentTypeMappingDetailsVO = documentTypeMappingDetailsRepo
-					.findByOrgIdAndFinYearAndBranchCodeAndScreenCode(apBillBalanceDTO.getOrgId(),
-							apBillBalanceDTO.getFinYear(), apBillBalanceDTO.getBranchCode(), screenCode);
-			documentTypeMappingDetailsVO.setLastno(documentTypeMappingDetailsVO.getLastno() + 1);
-			documentTypeMappingDetailsRepo.save(documentTypeMappingDetailsVO);
-			apBillBalanceVO.setUpdatedBy(apBillBalanceDTO.getCreatedBy());
-			apBillBalanceVO.setCreatedBy(apBillBalanceDTO.getCreatedBy());
-			createUpdateApBillBalanceVOByApBillBalanceDTO(apBillBalanceDTO, apBillBalanceVO);
-			message = "AP Bill Balance Created Successfully";
-		}
-
-		apBillBalanceRepo.save(apBillBalanceVO);
-		Map<String, Object> response = new HashMap<>();
-		response.put("apBillBalanceVO", apBillBalanceVO);
-		response.put("message", message);
-		return response;
-	}
-
+			apBillBalanceRepo.save(apBillBalanceVO);
+			Map<String, Object> response = new HashMap<>();
+			response.put("apBillBalanceVO", apBillBalanceVO);
+			response.put("message", message);
+			return response;
+    }
 	private void createUpdateApBillBalanceVOByApBillBalanceDTO(@Valid ApBillBalanceDTO apBillBalanceDTO,
 			ApBillBalanceVO apBillBalanceVO) {
 		apBillBalanceVO.setAccName(apBillBalanceDTO.getAccName());
@@ -416,12 +415,12 @@ public class APServiceImpl implements APService {
 
 		return payment;
 	}
-
-	@Override
-	public String getApBillBalanceDocId(Long orgId, String finYear, String branch, String branchCode) {
-		String ScreenCode = "APB";
-		String result = apBillBalanceRepo.getApBillBalanceDocId(orgId, finYear, branchCode, ScreenCode);
-		return result;
-	}
-
+	
+//	@Override
+//	public String getApBillBalanceDocId(Long orgId, String finYear, String branch, String branchCode) {
+//		String ScreenCode = "APB";
+//		String result = apBillBalanceRepo.getApBillBalanceDocId(orgId, finYear, branchCode, ScreenCode);
+//		return result;
+//
+}
 }
