@@ -13,7 +13,6 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.base.basesetup.dto.CreatedUpdatedDate;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonGetter;
 
 import lombok.AllArgsConstructor;
@@ -38,6 +37,7 @@ public class ApBillBalanceVO {
 //	private String docId;
 
 	@Column(name = "docdate")
+	@Builder.Default
 	private LocalDate docDate = LocalDate.now();
 
 	@Column(name = "accname", length = 50)

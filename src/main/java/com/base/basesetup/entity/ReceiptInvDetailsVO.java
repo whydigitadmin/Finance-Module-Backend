@@ -34,51 +34,49 @@ public class ReceiptInvDetailsVO {
 	@Column(name = "receiptinvdetailsid")
 	private Long id;
 
-	@Column(name = "invno")
+	@Column(name = "invno",length =50)
 	private String invNo;
 
 	@Column(name = "invdate")
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	private LocalDate invDate;
 
-	@Column(name = "refno")
+	@Column(name = "refno",length =50)
 	private String refNo;
 
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	@Column(name = "refdate")
 	private LocalDate refDate;
 
-	@Column(name = "masterref")
+	@Column(name = "masterref",length =50)
 	private String masterRef;
 
-	@Column(name = "houseref")
+	@Column(name = "houseref",length =50)
 	private String houseRef;
 
-	@Column(name = "currency")
+	@Column(name = "currency",length =10)
 	private String currency;
 
-	@Column(name = "exrate")
+	@Column(name = "exrate", precision = 10, scale = 5)
 	private BigDecimal exRate;
 
-	@Column(name = "amount")
+	@Column(name = "amount", precision = 10, scale = 2)
 	private BigDecimal amount;
 
-	@Column(name = "chargeamt")
+	@Column(name = "chargeamt", precision = 10, scale = 2)
 	private BigDecimal chargeAmt;
 
-	@Column(name = "outstanding")
+	@Column(name = "outstanding", precision = 10, scale = 2)
 	private BigDecimal outstanding;
 
-	@Column(name = "settled")
+	@Column(name = "settled", precision = 10, scale = 2)
 	private BigDecimal settled;
 
-	@Column(name = "recexrate")
+	@Column(name = "recexrate", precision = 10, scale = 2)
 	private BigDecimal recExRate;
 
-	@Column(name = "txnsettled")
+	@Column(name = "txnsettled", precision = 10, scale = 2)
 	private BigDecimal txnSettled;
 
-	@Column(name = "gainamt")
+	@Column(name = "gainamt", precision = 10, scale = 2)
 	private BigDecimal gainAmt;
 
 

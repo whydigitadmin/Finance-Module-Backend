@@ -23,5 +23,7 @@ public interface IrnCreditNoteService {
 
 	List<IrnCreditVO> getIrnCreditByActive();
 	
-	List<Map<String,Object>> getPartyNameAndPartyCodeAndPartyTypeForIrn(Long orgId,String branch,String branchCode,String finYear);
+	List<Map<String,Object>> getPartyNameAndPartyCodeAndPartyTypeForIrn(Long orgId);
+	
+	String getIrnCreditNoteDocId(Long orgId, String finYear, String branch, String branchCode);
 }

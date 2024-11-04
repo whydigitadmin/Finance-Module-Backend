@@ -114,7 +114,6 @@ public class IrnCreditNoteServiceImpl implements IrnCreditNoteService {
 		irnCreditVO.setCancel(irnCreditDTO.isCancel());
 		irnCreditVO.setCancelRemarks(irnCreditDTO.getCancelRemarks());
 		irnCreditVO.setFinYear(irnCreditDTO.getFinYear());
-		irnCreditVO.setIpNo(irnCreditDTO.getIpNo());
 		irnCreditVO.setOrgId(irnCreditDTO.getOrgId());
 
 		// IRN fields
@@ -156,6 +155,10 @@ public class IrnCreditNoteServiceImpl implements IrnCreditNoteService {
 		irnCreditVO.setAmtInWords(irnCreditDTO.getAmtInWords());
 		irnCreditVO.setExRate(irnCreditDTO.getExRate());
 		irnCreditVO.setTotTaxAmt(irnCreditDTO.getTotTaxAmt());
+		irnCreditVO.setSummaryExRate(irnCreditDTO.getSummaryExRate());
+		irnCreditVO.setCurrentDate(irnCreditDTO.getCurrentDate());
+		irnCreditVO.setCurrentDateValue(irnCreditDTO.getCurrentDateValue());
+		irnCreditVO.setRoundOff(irnCreditDTO.getRoundOff());
 
 		if (ObjectUtils.isNotEmpty(irnCreditVO.getId())) {
 			List<IrnCreditChargesVO> irnCreditChargesVO1 = irnCreditChargesRepo.findByIrnCreditVO(irnCreditVO);
@@ -215,10 +218,8 @@ public class IrnCreditNoteServiceImpl implements IrnCreditNoteService {
 	}
 
 	@Override
-	public List<Map<String, Object>> getPartyNameAndPartyCodeAndPartyTypeForIrn(Long orgId, String branch,
-			String branchCode, String finYear) {
-		Set<Object[]> irn = irnCreditRepo.findPartyNameAndPartyCodeAndPartyTypeForIrn(orgId, branch, branchCode,
-				finYear);
+	public List<Map<String, Object>> getPartyNameAndPartyCodeAndPartyTypeForIrn(Long orgId) {
+		Set<Object[]> irn = irnCreditRepo.findPartyNameAndPartyCodeAndPartyTypeForIrn(orgId);
 		return getPartyNameForIrn(irn);
 	}
 
@@ -234,4 +235,12 @@ public class IrnCreditNoteServiceImpl implements IrnCreditNoteService {
 
 		return irnCredit;
 	}
+
+	@Override
+	public String getIrnCreditNoteDocId(Long orgId, String finYear, String branch, String branchCode) {
+		String ScreenCode = "APB";
+		String result = irnCreditRepo.getIrnCreditDocId(orgId, finYear, branchCode, ScreenCode);
+		return result;
+	}
+
 }

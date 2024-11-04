@@ -110,6 +110,7 @@ public class CostDebitNoteServiceImpl implements CostDebitNoteService {
 		costDebitNoteVO.setCreatedBy(costDebitNoteDTO.getCreatedBy());
 		costDebitNoteVO.setCancelRemarks(costDebitNoteDTO.getCancelRemarks());
 		costDebitNoteVO.setFinYear(costDebitNoteDTO.getFinYear());
+		costDebitNoteVO.setTaxExampt(costDebitNoteDTO.isTaxExampt());
 		costDebitNoteVO.setIpNo(costDebitNoteDTO.getIpNo());
 		costDebitNoteVO.setLatitude(costDebitNoteDTO.getLatitude());
 		costDebitNoteVO.setOrgId(costDebitNoteDTO.getOrgId());
@@ -231,6 +232,8 @@ public class CostDebitNoteServiceImpl implements CostDebitNoteService {
 			costDebitChargesVO.setBillAmt(costDebitChargesDTO.getBillAmt());
 			costDebitChargesVO.setGstPercentage(costDebitChargesDTO.getGstPercentage());
 			costDebitChargesVO.setGst(costDebitChargesDTO.getGst());
+			costDebitChargesVO.setExampted(costDebitChargesDTO.isExampted());
+			costDebitChargesVO.setTax(costDebitChargesDTO.isTax());
 
 			costDebitChargesVO.setCostDebitNoteVO(costDebitNoteVO);
 			costDebitChargesVOs.add(costDebitChargesVO);

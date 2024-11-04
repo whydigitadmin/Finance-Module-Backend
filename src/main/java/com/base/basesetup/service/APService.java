@@ -23,11 +23,10 @@ public interface APService {
 
 	PaymentVO updateCreatePayment(@Valid PaymentDTO paymentDTO) throws ApplicationException;
 
-	List<Map<String, Object>> getPartyNameAndCodeForPayment(Long orgId, String branch, String branchCode,
-			String finYear);
-	
-	List<Map<String, Object>> getCurrencyAndTransCurrencyForPayment(Long orgId, String branch, String branchCode, String finYear,
-			String partyName);
+	List<Map<String, Object>> getPartyNameAndCodeForPayment(Long orgId);
+
+	List<Map<String, Object>> getCurrencyAndTransCurrencyForPayment(Long orgId, String branch, String branchCode,
+			String finYear, String partyName);
 
 	List<Map<String, Object>> getStateCodeByOrgIdForPayment(Long orgId);
 
@@ -36,7 +35,7 @@ public interface APService {
 	String getPaymentDocId(Long orgId, String finYear, String branch, String branchCode);
 
 	// ARBillBalance
-	List<ApBillBalanceVO> getAllApBillBalanceByOrgId(Long orgId, String branch, String branchCode, String finYear);
+	List<ApBillBalanceVO> getAllApBillBalanceByOrgId(Long orgId);
 
 	List<ApBillBalanceVO> getAllApBillBalanceById(Long id);
 
@@ -44,14 +43,11 @@ public interface APService {
 
 	List<ApBillBalanceVO> getApBillBalanceByActive();
 
-	List<ApBillBalanceVO> getAllApBillBalanceByOrgId(Long orgId);
+	List<Map<String, Object>> getPartyNameAndCodeForApBillBalance(Long orgId);
 
 // 	PaymentRegister
-	List<Map<String, Object>> getAllPaymentRegister(Long orgId, String branch, String branchCode, String finYear,
-			String fromDate, String toDate, String subLedgerName);
+	List<Map<String, Object>> getAllPaymentRegister(Long orgId, String fromDate, String toDate, String subLedgerName);
 
 //	String getApBillBalanceDocId(Long orgId, String finYear, String branch, String branchCode);
-
-	
 
 }

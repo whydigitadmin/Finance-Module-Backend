@@ -266,6 +266,7 @@ public class TransactionServiceImpl implements TransactionService {
 
 	@Autowired
 	BrsExcelUploadRepo brsExcelUploadRepo;
+	
 
 //	@Autowired
 //	ReconciliationSummaryRepo reconciliationSummaryRepo;
@@ -406,17 +407,6 @@ public class TransactionServiceImpl implements TransactionService {
 			message = "Brs Opening Updated Successfully";
 			brsOpeningVO.setUpdatedBy(brsOpeningDTO.getCreatedBy());
 		} else {
-			// GETDOCID API
-			String docId = brsOpeningRepo.getBrsOpeningDocId(brsOpeningDTO.getOrgId(), brsOpeningDTO.getFinYear(),
-					brsOpeningDTO.getBranchCode(), screenCode);
-			brsOpeningVO.setDocId(docId);
-
-			// GETDOCID LASTNO +1
-			DocumentTypeMappingDetailsVO documentTypeMappingDetailsVO = documentTypeMappingDetailsRepo
-					.findByOrgIdAndFinYearAndBranchCodeAndScreenCode(brsOpeningDTO.getOrgId(),
-							brsOpeningDTO.getFinYear(), brsOpeningDTO.getBranchCode(), screenCode);
-			documentTypeMappingDetailsVO.setLastno(documentTypeMappingDetailsVO.getLastno() + 1);
-			documentTypeMappingDetailsRepo.save(documentTypeMappingDetailsVO);
 			brsOpeningVO.setUpdatedBy(brsOpeningDTO.getCreatedBy());
 			brsOpeningVO.setCreatedBy(brsOpeningDTO.getCreatedBy());
 			createUpdateBrsOpeningVOByBrsOpeningDTO(brsOpeningDTO, brsOpeningVO);
@@ -449,8 +439,6 @@ public class TransactionServiceImpl implements TransactionService {
 		brsOpeningVO.setCancel(brsOpeningDTO.isCancel());
 		brsOpeningVO.setCancelRemarks(brsOpeningDTO.getCancelRemarks());
 		brsOpeningVO.setFinYear(brsOpeningDTO.getFinYear());
-		brsOpeningVO.setIpNo(brsOpeningDTO.getIpNo());
-		brsOpeningVO.setLatitude(brsOpeningDTO.getLatitude());
 	}
 
 	@Override
@@ -480,8 +468,8 @@ public class TransactionServiceImpl implements TransactionService {
 	private final DataFormatter dataFormatter = new DataFormatter();
 
 	@Transactional
-	public void ExcelUploadForBrs(MultipartFile[] files, Long orgId, String createdBy, String customer, String client,
-			String finYear, String branch, String branchCode) throws ApplicationException {
+	public void ExcelUploadForBrs(MultipartFile[] files, Long orgId, String createdBy, String branch, String branchCode)
+			throws ApplicationException {
 		List<BrsExcelUploadVO> brsExcelUploadVOsToSave = new ArrayList<>();
 		totalRows = 0;
 		successfulUploads = 0;
@@ -536,9 +524,6 @@ public class TransactionServiceImpl implements TransactionService {
 						brsExcelUploadVO.setPaymentAmount(paymentAmount);
 						brsExcelUploadVO.setReconcile(reconcile);
 						brsExcelUploadVO.setOrgId(orgId);
-						brsExcelUploadVO.setCustomer(customer);
-						brsExcelUploadVO.setClient(client);
-						brsExcelUploadVO.setFinYear(finYear);
 						brsExcelUploadVO.setBranch(branch);
 						brsExcelUploadVO.setBranchCode(branchCode);
 						brsExcelUploadVO.setCreatedBy(createdBy);
@@ -665,6 +650,20 @@ public class TransactionServiceImpl implements TransactionService {
 		return successfulUploads;
 	}
 
+	
+	
+	@Override
+	public List<BrsExcelUploadVO> getAllBrsExcelByOrgId(Long orgId) {
+		List<BrsExcelUploadVO> brsExcelUploadVO = new ArrayList<>();
+		if (ObjectUtils.isNotEmpty(orgId)) {
+			LOGGER.info("Successfully Received BrsExcel BY Id : {}", orgId);
+			brsExcelUploadVO = brsExcelUploadRepo.findBrsExcelByOrgId(orgId);
+		} else {
+			LOGGER.info("Successfully Received BrsExcel For All orgId.");
+			brsExcelUploadVO = brsExcelUploadRepo.findAll();
+		}
+		return brsExcelUploadVO;
+	}
 	// ChartCostCenter
 	@Override
 	public List<ChartCostCenterVO> getAllChartCostCenterByOrgId(Long orgId) {
@@ -715,20 +714,6 @@ public class TransactionServiceImpl implements TransactionService {
 				chartCostCenterVO = new ChartCostCenterVO();
 				chartCostCenterVO.setCreatedBy(chartCostCenterDTO.getCreatedBy());
 				chartCostCenterVO.setUpdatedBy(chartCostCenterDTO.getCreatedBy());
-
-//				GETDOCID API
-				String docId = chartCostCenterRepo.getPartyMasterDocId(chartCostCenterDTO.getOrgId(),
-						chartCostCenterDTO.getFinYear(), chartCostCenterDTO.getBranchCode(), screenCode);
-
-				chartCostCenterVO.setDocId(docId);
-
-//				// GETDOCID LASTNO +1
-				DocumentTypeMappingDetailsVO documentTypeMappingDetailsVO = documentTypeMappingDetailsRepo
-						.findByOrgIdAndFinYearAndBranchCodeAndScreenCode(chartCostCenterDTO.getOrgId(),
-								chartCostCenterDTO.getFinYear(), chartCostCenterDTO.getBranchCode(), screenCode);
-				documentTypeMappingDetailsVO.setLastno(documentTypeMappingDetailsVO.getLastno() + 1);
-				documentTypeMappingDetailsRepo.save(documentTypeMappingDetailsVO);
-
 			}
 
 			// Map fields from DTO to VO
@@ -805,6 +790,14 @@ public class TransactionServiceImpl implements TransactionService {
 		String message = null;
 		String screenCode = "FT";
 
+		if (fundTransferDTO.getCorpAccount().equalsIgnoreCase(fundTransferDTO.getTransferTo())) {
+
+			String errorMessage = String.format("CorpAccount And TransferAccount Is Same,Try Different Bank",
+					fundTransferDTO.getCorpAccount());
+
+			throw new ApplicationException(errorMessage);
+		}
+
 		if (ObjectUtils.isEmpty(fundTransferDTO.getId())) {
 
 			fundTransferVO = new FundTransferVO();
@@ -853,7 +846,6 @@ public class TransactionServiceImpl implements TransactionService {
 		fundTransferVO.setAmount(fundTransferDTO.getAmount());
 		fundTransferVO.setOrgId(fundTransferDTO.getOrgId());
 		fundTransferVO.setCreatedBy(fundTransferDTO.getCreatedBy());
-		fundTransferVO.setCancel(fundTransferDTO.isCancel());
 		fundTransferVO.setCancelRemarks(fundTransferDTO.getCancelRemarks());
 		fundTransferVO.setBranchCode(fundTransferDTO.getBranchCode());
 		fundTransferVO.setFinYear(fundTransferDTO.getFinYear());
@@ -2489,7 +2481,7 @@ public class TransactionServiceImpl implements TransactionService {
 
 	@Override
 	public String getFundTranferDocId(Long orgId, String finYear, String branch, String branchCode) {
-		String ScreenCode = "CI";
+		String ScreenCode = "FT";
 		String result = fundTransferRepo.getFundTranferDocId(orgId, finYear, branchCode, ScreenCode);
 		return result;
 	}

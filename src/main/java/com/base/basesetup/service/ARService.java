@@ -26,8 +26,7 @@ public interface ARService {
 
 	List<ReceiptVO> getReceiptReceivableByActive();
 
-	List<Map<String, Object>> getCustomerNameAndCodeForReceipt(Long orgId, String branch, String branchCode,
-			String finYear);
+	List<Map<String, Object>> getCustomerNameAndCodeForReceipt(Long orgId);
 
 	String getReceiptDocId(Long orgId, String finYear, String branch, String branchCode);
 
@@ -41,8 +40,11 @@ public interface ARService {
 	List<ArBillBalanceVO> getArBillBalanceByActive();
 
 	String getArBillBalanceDocId(Long orgId, String finYear, String branch, String branchCode);
+	
+	List<Map<String, Object>> getPartyNameAndCodeForArBillBalance(Long orgId);
+
 
 // 	ReceiptRegister
-	List<Map<String, Object>> getAllReceiptRegister(Long orgId, String branch, String branchCode, String finYear,
+	List<Map<String, Object>> getAllReceiptRegister(Long orgId,
 			String fromDate, String toDate, String subLedgerName);
 }
