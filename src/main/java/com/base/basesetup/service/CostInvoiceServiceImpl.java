@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.validation.Valid;
 
@@ -21,8 +22,10 @@ import com.base.basesetup.entity.ChargerCostInvoiceVO;
 import com.base.basesetup.entity.CostInvSummaryVO;
 import com.base.basesetup.entity.CostInvoiceVO;
 import com.base.basesetup.entity.DocumentTypeMappingDetailsVO;
+import com.base.basesetup.entity.PartyMasterVO;
 import com.base.basesetup.entity.TdsCostInvoiceVO;
 import com.base.basesetup.exception.ApplicationException;
+import com.base.basesetup.repo.ChargeTypeRequestRepo;
 import com.base.basesetup.repo.ChargerCostInvoiceRepo;
 import com.base.basesetup.repo.CostInvSummaryRepo;
 import com.base.basesetup.repo.CostInvoiceRepo;
@@ -47,6 +50,9 @@ public class CostInvoiceServiceImpl implements CostInvoiceService {
 	CostInvSummaryRepo costInvSummaryRepo;
 	@Autowired
 	DocumentTypeMappingDetailsRepo documentTypeMappingDetailsRepo;
+	
+	@Autowired
+	ChargeTypeRequestRepo chargeTypeRequestRepo;
 
 	// costInvoice
 
@@ -130,7 +136,7 @@ public class CostInvoiceServiceImpl implements CostInvoiceService {
 
 	private CostInvoiceVO getCostInvoiceVOFromCostInvoiceDTO(CostInvoiceVO costInvoiceVO,
 			@Valid CostInvoiceDTO costInvoiceDTO) {
-
+ 
 		costInvoiceVO.setMode(costInvoiceDTO.getMode());
 		costInvoiceVO.setProduct(costInvoiceDTO.getProduct());
 		costInvoiceVO.setPurVoucherNo(costInvoiceDTO.getPurVoucherNo());
@@ -163,7 +169,7 @@ public class CostInvoiceServiceImpl implements CostInvoiceService {
 		costInvoiceVO.setFinYear(costInvoiceDTO.getFinYear());
 		costInvoiceVO.setIpNo(costInvoiceDTO.getIpNo());
 		costInvoiceVO.setLatitude(costInvoiceDTO.getLatitude());
-		costInvoiceVO.setPayment(costInvoiceDTO.getPayment());
+		costInvoiceVO.setPayment(costInvoiceDTO.  getPayment());
 		costInvoiceVO.setAccuralid(costInvoiceDTO.getAccuralid());
 		costInvoiceVO.setUtrRef(costInvoiceDTO.getUtrRef());
 		costInvoiceVO.setCostType(costInvoiceDTO.getCostType());
@@ -237,7 +243,7 @@ public class CostInvoiceServiceImpl implements CostInvoiceService {
 		}
 		costInvoiceVO.setCostInvSummaryVO(costInvSummaryVOs);
 
-		return costInvoiceVO;
+		return costInvoiceVO; 
 
 	}
 
@@ -251,6 +257,128 @@ public class CostInvoiceServiceImpl implements CostInvoiceService {
 		String ScreenCode = "CI";
 		String result = costInvoiceRepo.getCostInvoiceDocId(orgId, finYear, branchCode, ScreenCode);
 		return result;
+	}
+
+	@Override
+	public List<Map<String, Object>> getChargeType(Long orgId) {
+		Set<Object[]> chType = costInvoiceRepo.getActiveChargType(orgId);
+		return getChargeType(chType);
+	}
+
+	private List<Map<String, Object>> getChargeType(Set<Object[]> chType) {
+		List<Map<String, Object>> List1 = new ArrayList<>();
+		for (Object[] ch : chType) {
+			Map<String, Object> map = new HashMap<>();
+			map.put("chargeType", ch[0].toString());
+			List1.add(map);
+		}
+		return List1;
+
+	}
+
+	@Override
+	public List<Map<String, Object>> getChargeCodeByChargeType(Long orgId, String chargeType) {
+		Set<Object[]> chCode = costInvoiceRepo.getActiveChargCodeByOrgIdAndChargeTypeIgnoreCase(orgId,
+				chargeType);
+		return getChargeCode(chCode);
+	}
+
+	private List<Map<String, Object>> getChargeCode(Set<Object[]> chCode) {
+		List<Map<String, Object>> List1 = new ArrayList<>();
+		for (Object[] ch : chCode) {
+			Map<String, Object> map = new HashMap<>();
+			map.put("chargeCode", ch[0] != null ? ch[0].toString() : ""); // Empty string if null
+			map.put("govChargeCode", ch[1] != null ? ch[1].toString() : "");
+			map.put("chargeName", ch[2] != null ? ch[2].toString() : "");
+			map.put("taxable", ch[3] != null ? ch[3].toString() : "");
+			map.put("ccFeeApplicable", ch[4] != null ? ch[4].toString() : "");
+			map.put("exempted", ch[5] != null ? ch[5].toString() : "");
+			map.put("sac", ch[6] != null ? ch[6].toString() : "");
+			map.put("GSTPercent", ch[7] != null ? ch[7].toString() : ""); // Handle as string, empty if null
+			map.put("ledger", ch[8] != null ? ch[8].toString() : "");
+
+			List1.add(map);
+		}
+		return List1;
+
+	}
+
+	@Override
+	public List<Map<String, Object>> getCurrencyAndExrates(Long orgId) {
+		Set<Object[]> currency = costInvoiceRepo.getCurrencyAndExrateDetails(orgId);
+		return getCurrency(currency);
+	}
+
+	private List<Map<String, Object>> getCurrency(Set<Object[]> currency) {
+		List<Map<String, Object>> List1 = new ArrayList<>();
+		for (Object[] ch : currency) {
+			Map<String, Object> map = new HashMap<>();
+			map.put("currency", ch[0] != null ? ch[0].toString() : ""); // Empty string if null
+			map.put("currencyDescription", ch[1] != null ? ch[1].toString() : "");
+			map.put("buyingExRate", ch[2] != null ? ch[2].toString() : "");
+			map.put("sellingExRate", ch[3] != null ? ch[3].toString() : "");
+			List1.add(map);
+		}
+		return List1;
+	}
+
+	@Override
+	public List<PartyMasterVO> getAllPartyByPartyType(Long orgId, String partyType) {
+		
+		return costInvoiceRepo.findByOrgIdAndPartyTypeIgnoreCase(orgId,partyType);
+
+	}
+
+	@Override
+	public List<Map<String, Object>> getPartyStateCodeDetails(Long orgId,Long id) {
+		Set<Object[]> getStateDetails = costInvoiceRepo.getStateCodeDetails(orgId,id);
+		return getState(getStateDetails);
+	}
+
+	private List<Map<String, Object>> getState(Set<Object[]> getStateDetails) {
+		List<Map<String, Object>> List1 = new ArrayList<>();
+		for (Object[] ch : getStateDetails) {
+			Map<String, Object> map = new HashMap<>();
+			map.put("stateCode", ch[0] != null ? ch[0].toString() : ""); // Empty string if null
+			map.put("recipientGSTIN", ch[1] != null ? ch[1].toString() : "");
+			map.put("stateNo", ch[2] != null ? ch[2].toString() : "");
+			List1.add(map);
+		}
+		return List1;
+	}
+
+	@Override
+	public List<Map<String, Object>> getPartyAddressDetails(Long orgId,Long id,String stateCode,String placeOfSupply) {
+		Set<Object[]> getAddressDetails = costInvoiceRepo.getAddressDetails(orgId, id, stateCode, placeOfSupply);
+		return getAddress(getAddressDetails);
+	}
+
+	private List<Map<String, Object>> getAddress(Set<Object[]> getAddressDetails) {
+		List<Map<String, Object>> List1 = new ArrayList<>();
+		for (Object[] ch : getAddressDetails) {
+			Map<String, Object> map = new HashMap<>();
+			map.put("addressType", ch[0] != null ? ch[0].toString() : "");
+			map.put("address", ch[1] != null ? ch[1].toString() : ""); // Empty string if null
+			map.put("pinCode", ch[2] != null ? ch[2].toString() : "");
+			List1.add(map);
+		}
+		return List1;
+	}
+	
+	@Override
+	public List<Map<String, Object>> getGstTypeDetails(Long orgId,String branchCode,String stateCode) {
+		Set<Object[]> getGSTTypeDetails = costInvoiceRepo.getGstType(orgId, branchCode, stateCode);
+		return getGstType(getGSTTypeDetails);
+	}
+
+	private List<Map<String, Object>> getGstType(Set<Object[]> getGSTTypeDetails) {
+		List<Map<String, Object>> List1 = new ArrayList<>();
+		for (Object[] ch : getGSTTypeDetails) {
+			Map<String, Object> map = new HashMap<>();
+			map.put("gstType", ch[0] != null ? ch[0].toString() : "");
+			List1.add(map);
+		}
+		return List1;
 	}
 
 }
