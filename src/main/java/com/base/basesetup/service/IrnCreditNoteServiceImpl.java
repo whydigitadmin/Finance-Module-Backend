@@ -238,7 +238,7 @@ public class IrnCreditNoteServiceImpl implements IrnCreditNoteService {
 
 	@Override
 	public String getIrnCreditNoteDocId(Long orgId, String finYear, String branch, String branchCode) {
-		String ScreenCode = "APB";
+		String ScreenCode = "ICN";
 		String result = irnCreditRepo.getIrnCreditDocId(orgId, finYear, branchCode, ScreenCode);
 		return result;
 	}
