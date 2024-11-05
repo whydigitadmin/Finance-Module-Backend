@@ -202,7 +202,7 @@ public class IrnCreditNoteServiceImpl implements IrnCreditNoteService {
 			irnCreditGstVO.setCrBillAmt(irnCreditGstDTO.getCrBillAmt());
 			irnCreditGstVO.setDBLCAmt(irnCreditGstDTO.getDBLCAmt());
 			irnCreditGstVO.setCrLCAmt(irnCreditGstDTO.getCrLCAmt());
-			irnCreditGstVO.setRemarks(irnCreditGstDTO.getRemarks());
+			irnCreditGstVO.setGstRemarks(irnCreditGstDTO.getGstRemarks());
 			irnCreditGstVO.setIrnCreditVO(irnCreditVO);
 			irnCreditGstVOs.add(irnCreditGstVO);
 		}
