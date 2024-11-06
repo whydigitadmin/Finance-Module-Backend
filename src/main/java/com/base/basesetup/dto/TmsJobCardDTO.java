@@ -1,5 +1,6 @@
 package com.base.basesetup.dto;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -12,21 +13,29 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ReconcileCorpBankDTO {
+public class TmsJobCardDTO {
 	private Long id;
-	private String bankAccount;
+	private String jobNo;
+	private String customer;
+	private boolean operationClosed;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
-	private LocalDate bankStmtDate;
+	private LocalDate date;
+	private String salesCategory;
+	private boolean financeClosed;
+	private String salesPerson;
+	private String closedOn;
+	private BigDecimal income;
+	private BigDecimal profit;
+	private BigDecimal expense;
 	private String remarks;
+	private boolean closed;
 
 	private Long orgId;
 	private String branch;
 	private String branchCode;
-	private boolean active;
 	private String createdBy;
-	private String finYear;
-	private String ipNo;
-	private String latitude;
+	private boolean active;
 
-	List<ParticularsReconcileCorpBankDTO> particularsReconcileCorpBankDTO;
+	List<CostCenterTmsJobCardDTO> costCenterTmsJobCardDTO;
+
 }
