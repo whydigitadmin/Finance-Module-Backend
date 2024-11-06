@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.base.basesetup.dto.CostInvoiceDTO;
 import com.base.basesetup.entity.CostInvoiceVO;
+import com.base.basesetup.entity.PartyMasterVO;
 import com.base.basesetup.exception.ApplicationException;
 
 @Service
@@ -27,5 +28,19 @@ public interface CostInvoiceService {
 	CostInvoiceVO getCostInvoiceByDocId(Long orgId, String docId);
 
 	String getCostInvoiceDocId(Long orgId, String finYear, String branch, String branchCode);
+
+	List<Map<String, Object>> getChargeType(Long orgId);
+
+	List<Map<String, Object>> getChargeCodeByChargeType(Long orgId, String chargeType);
+
+	List<Map<String, Object>> getCurrencyAndExrates(Long orgId);
+
+	List<PartyMasterVO> getAllPartyByPartyType(Long orgId, String partyType);
+
+	List<Map<String, Object>> getPartyStateCodeDetails(Long orgId, Long id);
+
+	List<Map<String, Object>> getPartyAddressDetails(Long orgId, Long id, String stateCode, String placeOfSupply);
+
+	List<Map<String, Object>> getGstTypeDetails(Long orgId, String branchCode, String stateCode);
 
 }
