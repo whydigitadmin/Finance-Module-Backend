@@ -2626,8 +2626,14 @@ public class TransactionServiceImpl implements TransactionService {
 				totalCreditAmount = totalCreditAmount.add(accountParticularsVO.getCreditAmount());
 				totalDebitAmount = totalDebitAmount.add(accountParticularsVO.getDebitAmount());
 				
-				accountParticularsVO.setDebitBase(accountParticularsDTO.getDebitBase());
-				accountParticularsVO.setCreditBase(accountParticularsDTO.getDebitBase());
+				if (accountParticularsDTO.getDebitBase() != null
+						&& accountParticularsDTO.getDebitBase().compareTo(BigDecimal.ZERO) != 0) {
+					accountParticularsVO.setDebitBase(accountParticularsDTO.getDebitBase());
+					accountParticularsVO.setCreditBase(BigDecimal.ZERO);
+				} else {
+					accountParticularsVO.setCreditBase(accountParticularsDTO.getDebitBase());
+					accountParticularsVO.setDebitBase(BigDecimal.ZERO);
+				}
 
 				accountParticularsVO.setAdjustmentJournalVO(adjustmentJournalVO);
 				accountParticularsVOs.add(accountParticularsVO);
