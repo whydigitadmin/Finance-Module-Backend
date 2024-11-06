@@ -23,7 +23,8 @@ public class TmsJobCardDTO {
 	private String salesCategory;
 	private boolean financeClosed;
 	private String salesPerson;
-	private String closedOn;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+	private  LocalDate closedOn;
 	private BigDecimal income;
 	private BigDecimal profit;
 	private BigDecimal expense;
@@ -35,6 +36,9 @@ public class TmsJobCardDTO {
 	private String branchCode;
 	private String createdBy;
 	private boolean active;
+	private String finyear;
+	private String cancelRemarks;
+	
 
 	List<CostCenterTmsJobCardDTO> costCenterTmsJobCardDTO;
 

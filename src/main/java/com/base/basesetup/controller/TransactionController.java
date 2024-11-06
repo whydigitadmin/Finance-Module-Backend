@@ -2421,5 +2421,31 @@ public class TransactionController extends BaseController {
 		return ResponseEntity.ok().body(responseDTO);
 
 	}
+	
+	@GetMapping("/getEmployeeNameAndEmployeeCode")
+	public ResponseEntity<ResponseDTO> getEmployeeNameAndEmployeeCode(@RequestParam Long orgId, @RequestParam String branch,@RequestParam String  branchCode) {
+		String methodName = "getEmployeeNameAndEmployeeCode()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		List<Map<String,Object>> employee = new ArrayList<>();
+		try {
+			employee = transactionService.getEmployeeNameAndEmployeeCode(orgId,branch,branchCode);
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "EmployeeName information get successfully Active");
+			responseObjectsMap.put("employee", employee);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap, "EmployeeName information receive failedByActive",
+					errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+	}
 
 }

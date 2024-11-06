@@ -250,4 +250,6 @@ public interface TransactionService {
 	List<TmsJobCardVO> getAllTmsJobCardById(Long id);
 
 	List<TmsJobCardVO> getTmsJobCardByActive();
+	
+	List<Map<String,Object>> getEmployeeNameAndEmployeeCode(Long orgId,String branch,String branchCode);
 }

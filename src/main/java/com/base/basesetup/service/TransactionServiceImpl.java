@@ -2577,7 +2577,9 @@ public class TransactionServiceImpl implements TransactionService {
 		tmsJobCardVO.setFinanceClosed(tmsJobCardDTO.isFinanceClosed());
 		tmsJobCardVO.setClosed(tmsJobCardDTO.isClosed());
 		tmsJobCardVO.setBranch(tmsJobCardDTO.getBranch());
+		tmsJobCardVO.setBranchCode(tmsJobCardDTO.getBranchCode());
 		tmsJobCardVO.setActive(tmsJobCardDTO.isActive());
+		tmsJobCardVO.setFinYear(tmsJobCardDTO.getFinyear());
 
 		if (ObjectUtils.isNotEmpty(tmsJobCardDTO.getId())) {
 			List<CostCenterTmsJobCardVO> costCenterTmsJobCardVO1 = costCenterTmsJobCardRepo
@@ -2601,6 +2603,22 @@ public class TransactionServiceImpl implements TransactionService {
 
 		return tmsJobCardRepo.findTmsJobCardByActive();
 
+	}
+
+	@Override
+	public List<Map<String, Object>> getEmployeeNameAndEmployeeCode(Long orgId, String branch, String branchCode) {
+		Set<Object[]> getEmployee = tmsJobCardRepo.findByEmployeeNameAndEmployeeCode(orgId, branch, branchCode);
+		return getEmployess(getEmployee);
+	}
+
+	private List<Map<String, Object>> getEmployess(Set<Object[]> getEmployee) {
+		List<Map<String, Object>> list1 = new ArrayList<>();
+		for (Object[] ch : getEmployee) {
+			Map<String, Object> map = new HashMap<>();
+			map.put("employee", ch[0] != null ? ch[0].toString() : "");
+			list1.add(map);
+		}
+		return list1;
 	}
 
 }
