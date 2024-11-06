@@ -18,7 +18,6 @@ import lombok.NoArgsConstructor;
 @Builder
 public class AccountParticularsDTO {
 	
-	private Long id;
 	private String accountsName;
 	private String subledgerName;
 	private String subLedgerCode;
