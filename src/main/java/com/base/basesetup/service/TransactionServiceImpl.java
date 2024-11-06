@@ -37,6 +37,7 @@ import com.base.basesetup.dto.ArApOffSetInvoiceDetailsDTO;
 import com.base.basesetup.dto.BrsOpeningDTO;
 import com.base.basesetup.dto.ChargerDebitNoteDTO;
 import com.base.basesetup.dto.ChartCostCenterDTO;
+import com.base.basesetup.dto.CostCenterTmsJobCardDTO;
 import com.base.basesetup.dto.DailyMonthlyExRatesDTO;
 import com.base.basesetup.dto.DailyMonthlyExRatesDtlDTO;
 import com.base.basesetup.dto.DebitNoteDTO;
@@ -62,6 +63,7 @@ import com.base.basesetup.dto.ReceiptReversalDTO;
 import com.base.basesetup.dto.ReconcileBankDTO;
 import com.base.basesetup.dto.ReconcileCashDTO;
 import com.base.basesetup.dto.ReconcileCorpBankDTO;
+import com.base.basesetup.dto.TmsJobCardDTO;
 import com.base.basesetup.entity.AccountParticularsVO;
 import com.base.basesetup.entity.AdjustmentJournalVO;
 import com.base.basesetup.entity.ArApAdjustmentOffSetVO;
@@ -70,6 +72,7 @@ import com.base.basesetup.entity.BrsExcelUploadVO;
 import com.base.basesetup.entity.BrsOpeningVO;
 import com.base.basesetup.entity.ChargerDebitNoteVO;
 import com.base.basesetup.entity.ChartCostCenterVO;
+import com.base.basesetup.entity.CostCenterTmsJobCardVO;
 import com.base.basesetup.entity.DailyMonthlyExRatesDtlVO;
 import com.base.basesetup.entity.DailyMonthlyExRatesVO;
 import com.base.basesetup.entity.DebitNoteVO;
@@ -96,6 +99,7 @@ import com.base.basesetup.entity.ReceiptReversalVO;
 import com.base.basesetup.entity.ReconcileBankVO;
 import com.base.basesetup.entity.ReconcileCashVO;
 import com.base.basesetup.entity.ReconcileCorpBankVO;
+import com.base.basesetup.entity.TmsJobCardVO;
 import com.base.basesetup.exception.ApplicationException;
 import com.base.basesetup.repo.AccountParticularsRepo;
 import com.base.basesetup.repo.AdjustmentJournalRepo;
@@ -109,6 +113,7 @@ import com.base.basesetup.repo.BrsOpeningRepo;
 import com.base.basesetup.repo.ChargerCostInvoiceRepo;
 import com.base.basesetup.repo.ChargerDebitNoteRepo;
 import com.base.basesetup.repo.ChartCostCenterRepo;
+import com.base.basesetup.repo.CostCenterTmsJobCardRepo;
 import com.base.basesetup.repo.CostInvoiceRepo;
 import com.base.basesetup.repo.DailyMonthlyExRatesDtlRepo;
 import com.base.basesetup.repo.DailyMonthlyExRatesRepo;
@@ -143,6 +148,7 @@ import com.base.basesetup.repo.TaxInvoiceDetailsRepo;
 import com.base.basesetup.repo.TaxInvoiceGstRepo;
 import com.base.basesetup.repo.TaxInvoiceRepo;
 import com.base.basesetup.repo.TdsCostInvoiceRepo;
+import com.base.basesetup.repo.TmsJobCardRepo;
 
 @Service
 public class TransactionServiceImpl implements TransactionService {
@@ -272,7 +278,12 @@ public class TransactionServiceImpl implements TransactionService {
 
 	@Autowired
 	BrsExcelUploadRepo brsExcelUploadRepo;
-	
+
+	@Autowired
+	TmsJobCardRepo tmsJobCardRepo;
+
+	@Autowired
+	CostCenterTmsJobCardRepo costCenterTmsJobCardRepo;
 
 //	@Autowired
 //	ReconciliationSummaryRepo reconciliationSummaryRepo;
@@ -662,8 +673,6 @@ public class TransactionServiceImpl implements TransactionService {
 		return successfulUploads;
 	}
 
-	
-	
 	@Override
 	public List<BrsExcelUploadVO> getAllBrsExcelByOrgId(Long orgId) {
 		List<BrsExcelUploadVO> brsExcelUploadVO = new ArrayList<>();
@@ -676,6 +685,7 @@ public class TransactionServiceImpl implements TransactionService {
 		}
 		return brsExcelUploadVO;
 	}
+
 	// ChartCostCenter
 	@Override
 	public List<ChartCostCenterVO> getAllChartCostCenterByOrgId(Long orgId) {
@@ -2407,6 +2417,101 @@ public class TransactionServiceImpl implements TransactionService {
 		String ScreenCode = "PV";
 		String result = paymentVoucherRepo.getpaymentVoucherDocId(orgId, finYear, branchCode, ScreenCode);
 		return result;
+	}
+
+	// TMS-TT-JobCard
+
+	@Override
+	public List<TmsJobCardVO> getAllTmsJobCardByOrgId(Long orgId) {
+		List<TmsJobCardVO> tmsJobCardVO = new ArrayList<>();
+		if (ObjectUtils.isNotEmpty(orgId)) {
+			LOGGER.info("Successfully Received  TmsJobCard BY OrgId : {}", orgId);
+			tmsJobCardVO = tmsJobCardRepo.getAllTmsJobCardByOrgId(orgId);
+		} else {
+			LOGGER.info("Successfully Received  TmsJobCard For All OrgId.");
+			tmsJobCardVO = tmsJobCardRepo.findAll();
+		}
+		return tmsJobCardVO;
+	}
+
+	@Override
+	public List<TmsJobCardVO> getAllTmsJobCardById(Long id) {
+		List<TmsJobCardVO> tmsJobCardVO = new ArrayList<>();
+		if (ObjectUtils.isNotEmpty(id)) {
+			LOGGER.info("Successfully Received  TmsJobCard BY Id : {}", id);
+			tmsJobCardVO = tmsJobCardRepo.getAllTmsJobCardById(id);
+		} else {
+			LOGGER.info("Successfully Received TmsJobCard For All Id.");
+			tmsJobCardVO = tmsJobCardRepo.findAll();
+		}
+		return tmsJobCardVO;
+	}
+
+	@Override
+	public Map<String, Object> updateCreateTmsJobCard(@Valid TmsJobCardDTO tmsJobCardDTO) throws ApplicationException {
+		TmsJobCardVO tmsJobCardVO = new TmsJobCardVO();
+		String message;
+		if (ObjectUtils.isNotEmpty(tmsJobCardDTO.getId())) {
+			tmsJobCardVO = tmsJobCardRepo.findById(tmsJobCardDTO.getId())
+					.orElseThrow(() -> new ApplicationException("Invalid TmsJobCard details"));
+			tmsJobCardVO.setUpdatedBy(tmsJobCardVO.getCreatedBy());
+			message = "TmsJobCard Updated Successfully";
+		} else {
+
+			tmsJobCardVO.setCreatedBy(tmsJobCardDTO.getCreatedBy());
+			tmsJobCardVO.setUpdatedBy(tmsJobCardVO.getCreatedBy());
+			message = "TmsJobCard Creation  Successfully !";
+		}
+
+		getTmsJobCardVOFromTmsJobCardDTO(tmsJobCardDTO, tmsJobCardVO);
+		tmsJobCardRepo.save(tmsJobCardVO);
+		Map<String, Object> response = new HashMap<>();
+		response.put("tmsJobCardVO", tmsJobCardVO);
+		response.put("message", message);
+		return response;
+	}
+
+	private void getTmsJobCardVOFromTmsJobCardDTO(@Valid TmsJobCardDTO tmsJobCardDTO, TmsJobCardVO tmsJobCardVO) {
+		tmsJobCardVO.setJobNo(tmsJobCardDTO.getJobNo());
+		tmsJobCardVO.setCustomer(tmsJobCardDTO.getCustomer());
+		tmsJobCardVO.setDate(tmsJobCardDTO.getDate());
+		tmsJobCardVO.setSalesCategory(tmsJobCardDTO.getSalesCategory());
+		tmsJobCardVO.setSalesPerson(tmsJobCardDTO.getSalesPerson());
+		tmsJobCardVO.setClosedOn(tmsJobCardDTO.getClosedOn());
+		tmsJobCardVO.setIncome(tmsJobCardDTO.getIncome());
+		tmsJobCardVO.setExpense(tmsJobCardDTO.getExpense());
+		tmsJobCardVO.setProfit(tmsJobCardDTO.getProfit());
+		tmsJobCardVO.setRemarks(tmsJobCardDTO.getRemarks());
+		tmsJobCardVO.setCreatedBy(tmsJobCardDTO.getCreatedBy());
+		tmsJobCardVO.setOrgId(tmsJobCardDTO.getOrgId());
+		tmsJobCardVO.setOperationClosed(tmsJobCardDTO.isOperationClosed());
+		tmsJobCardVO.setFinanceClosed(tmsJobCardDTO.isFinanceClosed());
+		tmsJobCardVO.setClosed(tmsJobCardDTO.isClosed());
+		tmsJobCardVO.setBranch(tmsJobCardDTO.getBranch());
+		tmsJobCardVO.setActive(tmsJobCardDTO.isActive());
+
+		if (ObjectUtils.isNotEmpty(tmsJobCardDTO.getId())) {
+			List<CostCenterTmsJobCardVO> costCenterTmsJobCardVO1 = costCenterTmsJobCardRepo
+					.findByTmsJobCardVO(tmsJobCardVO);
+			costCenterTmsJobCardRepo.deleteAll(costCenterTmsJobCardVO1);
+		}
+		List<CostCenterTmsJobCardVO> costCenterTmsJobCardVOs = new ArrayList<>();
+		for (CostCenterTmsJobCardDTO costCenterTmsJobCardDTO : tmsJobCardDTO.getCostCenterTmsJobCardDTO()) {
+			CostCenterTmsJobCardVO costCenterTmsJobCardVO = new CostCenterTmsJobCardVO();
+			costCenterTmsJobCardVO.setAccountName(costCenterTmsJobCardDTO.getAccountName());
+			costCenterTmsJobCardVO.setAmount(costCenterTmsJobCardDTO.getAmount());
+			costCenterTmsJobCardVO.setTmsJobCardVO(tmsJobCardVO);
+			costCenterTmsJobCardVOs.add(costCenterTmsJobCardVO);
+		}
+		tmsJobCardVO.setCostCenterTmsJobCardVO(costCenterTmsJobCardVOs);
+
+	}
+
+	@Override
+	public List<TmsJobCardVO> getTmsJobCardByActive() {
+
+		return tmsJobCardRepo.findTmsJobCardByActive();
+
 	}
 	
 	
