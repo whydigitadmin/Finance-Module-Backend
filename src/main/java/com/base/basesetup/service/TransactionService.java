@@ -26,6 +26,7 @@ import com.base.basesetup.dto.ReceiptReversalDTO;
 import com.base.basesetup.dto.ReconcileBankDTO;
 import com.base.basesetup.dto.ReconcileCashDTO;
 import com.base.basesetup.dto.ReconcileCorpBankDTO;
+import com.base.basesetup.dto.TmsJobCardDTO;
 import com.base.basesetup.entity.AdjustmentJournalVO;
 import com.base.basesetup.entity.ArApAdjustmentOffSetVO;
 import com.base.basesetup.entity.BrsExcelUploadVO;
@@ -43,6 +44,7 @@ import com.base.basesetup.entity.ReceiptReversalVO;
 import com.base.basesetup.entity.ReconcileBankVO;
 import com.base.basesetup.entity.ReconcileCashVO;
 import com.base.basesetup.entity.ReconcileCorpBankVO;
+import com.base.basesetup.entity.TmsJobCardVO;
 import com.base.basesetup.exception.ApplicationException;
 
 @Service
@@ -242,6 +244,15 @@ public interface TransactionService {
 
 	String getChartCostCenterDocId(Long orgId, String finYear, String branch, String branchCode);
 
+	/// TMS-TT-JobCard
+
+	List<TmsJobCardVO> getAllTmsJobCardByOrgId(Long orgId);
+
+	Map<String, Object> updateCreateTmsJobCard(@Valid TmsJobCardDTO tmsJobCardDTO) throws ApplicationException;
+
+	List<TmsJobCardVO> getAllTmsJobCardById(Long id);
+
+	List<TmsJobCardVO> getTmsJobCardByActive();
 	//AdjustmentJournal
 	
 	List<AdjustmentJournalVO> getAllAdjustmentJournalByOrgId(Long orgId);
@@ -251,8 +262,4 @@ public interface TransactionService {
 	Map<String, Object> updateCreateAdjustmentJournal(@Valid AdjustmentJournalDTO adjustmentJournalDTO) throws ApplicationException;
 
 	String getAdjustmentJournalDocId(Long orgId, String finYear, String branch, String branchCode);
-
-
-
-
 }
