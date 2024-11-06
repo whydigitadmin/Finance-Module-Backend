@@ -30,6 +30,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.base.basesetup.dto.AccountParticularsDTO;
+import com.base.basesetup.dto.AdjustmentJournalDTO;
 import com.base.basesetup.dto.ArApAdjustmentOffSetDTO;
 import com.base.basesetup.dto.ArApOffSetInvoiceDetailsDTO;
 import com.base.basesetup.dto.BrsOpeningDTO;
@@ -60,6 +62,8 @@ import com.base.basesetup.dto.ReceiptReversalDTO;
 import com.base.basesetup.dto.ReconcileBankDTO;
 import com.base.basesetup.dto.ReconcileCashDTO;
 import com.base.basesetup.dto.ReconcileCorpBankDTO;
+import com.base.basesetup.entity.AccountParticularsVO;
+import com.base.basesetup.entity.AdjustmentJournalVO;
 import com.base.basesetup.entity.ArApAdjustmentOffSetVO;
 import com.base.basesetup.entity.ArApOffSetInvoiceDetailsVO;
 import com.base.basesetup.entity.BrsExcelUploadVO;
@@ -93,6 +97,8 @@ import com.base.basesetup.entity.ReconcileBankVO;
 import com.base.basesetup.entity.ReconcileCashVO;
 import com.base.basesetup.entity.ReconcileCorpBankVO;
 import com.base.basesetup.exception.ApplicationException;
+import com.base.basesetup.repo.AccountParticularsRepo;
+import com.base.basesetup.repo.AdjustmentJournalRepo;
 import com.base.basesetup.repo.ArApAdjustmentOffSetRepo;
 import com.base.basesetup.repo.ArApOffSetInvoiceDetailsRepo;
 import com.base.basesetup.repo.ArapAdjustmentsRepo;
@@ -273,12 +279,18 @@ public class TransactionServiceImpl implements TransactionService {
 
 	@Autowired
 	ReconcileCashRepo reconcileCashRepo;
+	
+	@Autowired
+	AdjustmentJournalRepo adjustmentJournalRepo;
 
 	@Autowired
 	DocumentTypeMappingDetailsRepo documentTypeMappingDetailsRepo;
 
 	@Autowired
 	ParticularsPaymentVoucherRepo ParticularsPaymentVoucherRepo;
+	
+	@Autowired
+	AccountParticularsRepo accountParticularsRepo;
 
 	// DailyMonthlyExRates
 	@Override
@@ -2396,4 +2408,140 @@ public class TransactionServiceImpl implements TransactionService {
 		String result = paymentVoucherRepo.getpaymentVoucherDocId(orgId, finYear, branchCode, ScreenCode);
 		return result;
 	}
+	
+	
+	// AdjustmentJournal
+
+		@Override
+		public List<AdjustmentJournalVO> getAllAdjustmentJournalByOrgId(Long orgId) {
+			List<AdjustmentJournalVO> adjustmentJournalVO = new ArrayList<>();
+			if (ObjectUtils.isNotEmpty(orgId)) {
+				LOGGER.info("Successfully Received  AdjustmentJournal BY OrgId : {}", orgId);
+				adjustmentJournalVO = adjustmentJournalRepo.getAllAdjustmentJournalByOrgId(orgId);
+			} else {
+				LOGGER.info("Successfully Received  AdjustmentJournal For All OrgId.");
+				adjustmentJournalVO = adjustmentJournalRepo.findAll();
+			}
+			return adjustmentJournalVO;
+		}
+		
+		@Override
+		public List<AdjustmentJournalVO> getAllAdjustmentJournalById(Long id) {
+			List<AdjustmentJournalVO> adjustmentJournalVO = new ArrayList<>();
+			if (ObjectUtils.isNotEmpty(id)) {
+				LOGGER.info("Successfully Received AdjustmentJournal BY Id : {}", id);
+				adjustmentJournalVO = adjustmentJournalRepo.getAllAdjustmentJournalById(id);
+			} else {
+				LOGGER.info("Successfully Received AdjustmentJournal For All Id.");
+				adjustmentJournalVO = adjustmentJournalRepo.findAll();
+			}
+			return adjustmentJournalVO;
+		}
+		
+		
+		@Override
+		public Map<String, Object> updateCreateAdjustmentJournal(@Valid AdjustmentJournalDTO adjustmentJournalDTO)
+				throws ApplicationException {
+			String screenCode = "AJ";
+			AdjustmentJournalVO adjustmentJournalVO = new AdjustmentJournalVO();
+			String message;
+			if (ObjectUtils.isNotEmpty(adjustmentJournalDTO.getId())) {
+				adjustmentJournalVO = adjustmentJournalRepo.findById(adjustmentJournalDTO.getId())
+						.orElseThrow(() -> new ApplicationException("adjustmentJournal not found"));
+
+				adjustmentJournalVO.setUpdatedBy(adjustmentJournalDTO.getCreatedBy());
+				createUpdateAdjustmentJournalVOByAdjustmentJournalDTO(adjustmentJournalDTO, adjustmentJournalVO);
+				message = "AdjustmentJournal Updated Successfully";
+			} else {
+				// GETDOCID API
+				String docId = adjustmentJournalRepo.getAdjustmentJournalDocId(adjustmentJournalDTO.getOrgId(),
+						adjustmentJournalDTO.getFinYear(), adjustmentJournalDTO.getBranchCode(), screenCode);
+
+				adjustmentJournalVO.setDocId(docId);
+
+//				// GETDOCID LASTNO +1
+				DocumentTypeMappingDetailsVO documentTypeMappingDetailsVO = documentTypeMappingDetailsRepo
+						.findByOrgIdAndFinYearAndBranchCodeAndScreenCode(adjustmentJournalDTO.getOrgId(),
+								adjustmentJournalDTO.getFinYear(), adjustmentJournalDTO.getBranchCode(), screenCode);
+				documentTypeMappingDetailsVO.setLastno(documentTypeMappingDetailsVO.getLastno() + 1);
+				documentTypeMappingDetailsRepo.save(documentTypeMappingDetailsVO);
+
+				adjustmentJournalVO.setCreatedBy(adjustmentJournalDTO.getCreatedBy());
+				adjustmentJournalVO.setUpdatedBy(adjustmentJournalDTO.getCreatedBy());
+				createUpdateAdjustmentJournalVOByAdjustmentJournalDTO(adjustmentJournalDTO, adjustmentJournalVO);
+				message = "AdjustmentJournal Created Successfully";
+			}
+
+			adjustmentJournalRepo.save(adjustmentJournalVO);
+			Map<String, Object> response = new HashMap<>();
+			response.put("adjustmentJournalVO", adjustmentJournalVO);
+			response.put("message", message);
+			return response;
+		}
+
+		private void createUpdateAdjustmentJournalVOByAdjustmentJournalDTO(@Valid AdjustmentJournalDTO adjustmentJournalDTO,
+				AdjustmentJournalVO adjustmentJournalVO) throws ApplicationException {
+			adjustmentJournalVO.setAdjustmentType(adjustmentJournalDTO.getAdjustmentType());
+			adjustmentJournalVO.setRemarks(adjustmentJournalDTO.getRemarks().toUpperCase());
+			adjustmentJournalVO.setCurrency(adjustmentJournalDTO.getCurrency());
+			adjustmentJournalVO.setExRate(adjustmentJournalDTO.getExRate());
+
+			adjustmentJournalVO.setRefNo(adjustmentJournalDTO.getRefNo().toUpperCase());
+			adjustmentJournalVO.setRefDate(adjustmentJournalDTO.getRefDate());
+			adjustmentJournalVO.setSuppRefNo(adjustmentJournalDTO.getSuppRefNo().toUpperCase());
+			adjustmentJournalVO.setSuppRefDate(adjustmentJournalDTO.getSuppRefDate());
+			adjustmentJournalVO.setOrgId(adjustmentJournalDTO.getOrgId());
+			adjustmentJournalVO.setBranch(adjustmentJournalDTO.getBranch());
+			adjustmentJournalVO.setBranchCode(adjustmentJournalDTO.getBranchCode());
+			adjustmentJournalVO.setFinYear(adjustmentJournalDTO.getFinYear());
+
+			if (ObjectUtils.isNotEmpty(adjustmentJournalVO.getId())) {
+				List<AccountParticularsVO> accountParticularsVOList = accountParticularsRepo
+						.findByAdjustmentJournalVO(adjustmentJournalVO);
+				accountParticularsRepo.deleteAll(accountParticularsVOList);
+			}
+
+			BigDecimal totalDebitAmount = BigDecimal.ZERO;
+			BigDecimal totalCreditAmount = BigDecimal.ZERO;
+			List<AccountParticularsVO> accountParticularsVOs = new ArrayList<>();
+			for (AccountParticularsDTO accountParticularsDTO : adjustmentJournalDTO.getAccountParticularsDTO()) {
+				AccountParticularsVO accountParticularsVO = new AccountParticularsVO();
+
+				accountParticularsVO.setAccountsName(accountParticularsDTO.getAccountsName());
+				accountParticularsVO.setSubledgerName(accountParticularsDTO.getSubledgerName());
+				accountParticularsVO.setSubLedgerCode(accountParticularsDTO.getSubLedgerCode());
+				if (accountParticularsDTO.getDebitAmount() != null
+						&& accountParticularsDTO.getDebitAmount().compareTo(BigDecimal.ZERO) != 0) {
+					accountParticularsVO.setDebitAmount(accountParticularsDTO.getDebitAmount());
+					accountParticularsVO.setCreditAmount(BigDecimal.ZERO);
+				} else {
+					accountParticularsVO.setCreditAmount(accountParticularsDTO.getCreditAmount());
+					accountParticularsVO.setDebitAmount(BigDecimal.ZERO);
+				}
+				totalCreditAmount = totalCreditAmount.add(accountParticularsVO.getCreditAmount());
+				totalDebitAmount = totalDebitAmount.add(accountParticularsVO.getDebitAmount());
+				
+				accountParticularsVO.setDebitBase(accountParticularsDTO.getDebitBase());
+				accountParticularsVO.setCreditBase(accountParticularsDTO.getDebitBase());
+
+				accountParticularsVO.setAdjustmentJournalVO(adjustmentJournalVO);
+				accountParticularsVOs.add(accountParticularsVO);
+			}
+			if (totalCreditAmount.equals(totalDebitAmount)) {
+				adjustmentJournalVO.setTotalCreditAmount(totalCreditAmount);
+				adjustmentJournalVO.setTotalDebitAmount(totalDebitAmount);
+			} else {
+				throw new ApplicationException("Total Debit Amount and Total Credit Amount Should be Equal");
+			}
+			adjustmentJournalVO.setAccountParticularsVO(accountParticularsVOs);
+
+		}
+		
+		@Override
+		public String getAdjustmentJournalDocId(Long orgId, String finYear, String branch, String branchCode) {
+			String ScreenCode = "AJ";
+			String result = adjustmentJournalRepo.getAdjustmentJournalByDocId(orgId, finYear, branchCode, ScreenCode);
+			return result;
+		}
+
 }
