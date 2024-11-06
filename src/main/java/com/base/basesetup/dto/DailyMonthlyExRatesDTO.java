@@ -1,5 +1,6 @@
 package com.base.basesetup.dto;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
@@ -13,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class DailyMonthlyExRatesDTO {
 	private Long id;
-	private String date;
+	private LocalDate date;
 	private String month;
 	private boolean active;
 	private Long orgId;

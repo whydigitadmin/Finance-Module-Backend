@@ -50,8 +50,8 @@ public class IrnCreditGstVO {
 	@Column(name = "crlcamt")
 	private BigDecimal crLCAmt;
 
-	@Column(name = "remarks")
-	private String remarks;
+	@Column(name = "gstremarks")
+	private String gstRemarks;
 
 	@ManyToOne
 	@JsonBackReference

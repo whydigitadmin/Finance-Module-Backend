@@ -13,8 +13,8 @@ public interface ChartCostCenterRepo extends JpaRepository<ChartCostCenterVO, Lo
 	List<ChartCostCenterVO> getAllChartCostCenterByOrgId(Long orgId);
 
 	@Query(nativeQuery = true, value = "select * from chartcostcenter where chartcostcenterid=?1")
-	List<ChartCostCenterVO> getAllChartCostCenterById(Long id);
-
+	List<ChartCostCenterVO> getAllChartCostCenterById(Long id);       
+ 
 	@Query(nativeQuery = true, value = "select * from chartcostcenter where active=1")
 	List<ChartCostCenterVO> findChartCostCenterByActive();
 
