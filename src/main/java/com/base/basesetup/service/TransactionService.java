@@ -10,6 +10,7 @@ import org.apache.poi.EncryptedDocumentException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.base.basesetup.dto.AdjustmentJournalDTO;
 import com.base.basesetup.dto.ArApAdjustmentOffSetDTO;
 import com.base.basesetup.dto.BrsOpeningDTO;
 import com.base.basesetup.dto.ChartCostCenterDTO;
@@ -26,6 +27,7 @@ import com.base.basesetup.dto.ReconcileBankDTO;
 import com.base.basesetup.dto.ReconcileCashDTO;
 import com.base.basesetup.dto.ReconcileCorpBankDTO;
 import com.base.basesetup.dto.TmsJobCardDTO;
+import com.base.basesetup.entity.AdjustmentJournalVO;
 import com.base.basesetup.entity.ArApAdjustmentOffSetVO;
 import com.base.basesetup.entity.BrsExcelUploadVO;
 import com.base.basesetup.entity.BrsOpeningVO;
@@ -80,10 +82,11 @@ public interface TransactionService {
 
 //	ChartCostCenter
 	List<ChartCostCenterVO> getAllChartCostCenterByOrgId(Long orgId);
-
-	List<ChartCostCenterVO> updateCreateChartCostCenter(@Valid List<ChartCostCenterDTO> chartCostCenterDTOList)
+	
+	List<Map<String, Object>> updateCreateChartCostCenterList(@Valid List<ChartCostCenterDTO> chartCostCenterDTOList)
 			throws ApplicationException;
 
+	
 	List<ChartCostCenterVO> getAllChartCostCenterById(Long id);
 
 	List<ChartCostCenterVO> getChartCostCenterByActive();
@@ -250,4 +253,13 @@ public interface TransactionService {
 	List<TmsJobCardVO> getAllTmsJobCardById(Long id);
 
 	List<TmsJobCardVO> getTmsJobCardByActive();
+	//AdjustmentJournal
+	
+	List<AdjustmentJournalVO> getAllAdjustmentJournalByOrgId(Long orgId);
+
+	List<AdjustmentJournalVO> getAllAdjustmentJournalById(Long id);
+
+	Map<String, Object> updateCreateAdjustmentJournal(@Valid AdjustmentJournalDTO adjustmentJournalDTO) throws ApplicationException;
+
+	String getAdjustmentJournalDocId(Long orgId, String finYear, String branch, String branchCode);
 }

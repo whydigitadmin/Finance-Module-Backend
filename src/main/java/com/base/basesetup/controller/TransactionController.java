@@ -25,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.base.basesetup.common.CommonConstant;
 import com.base.basesetup.common.UserConstants;
+import com.base.basesetup.dto.AdjustmentJournalDTO;
 import com.base.basesetup.dto.ArApAdjustmentOffSetDTO;
 import com.base.basesetup.dto.BrsOpeningDTO;
 import com.base.basesetup.dto.ChartCostCenterDTO;
@@ -42,6 +43,7 @@ import com.base.basesetup.dto.ReconcileCashDTO;
 import com.base.basesetup.dto.ReconcileCorpBankDTO;
 import com.base.basesetup.dto.ResponseDTO;
 import com.base.basesetup.dto.TmsJobCardDTO;
+import com.base.basesetup.entity.AdjustmentJournalVO;
 import com.base.basesetup.entity.ArApAdjustmentOffSetVO;
 import com.base.basesetup.entity.BrsExcelUploadVO;
 import com.base.basesetup.entity.BrsOpeningVO;
@@ -435,38 +437,35 @@ public class TransactionController extends BaseController {
 		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
 		return ResponseEntity.ok().body(responseDTO);
 	}
-
+	
 	@PutMapping("/updateCreateChartCostCenter")
-	public ResponseEntity<ResponseDTO> updateChartCostCenter(
-			@RequestBody List<ChartCostCenterDTO> chartCostCenterDTOList) {
-		String methodName = "updateCreateChartCostCenter()";
-		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
-		Map<String, Object> responseObjectsMap = new HashMap<>();
-		ResponseDTO responseDTO = null;
+	public ResponseEntity<ResponseDTO> updateCreateChartCostCenter(@Valid @RequestBody List<ChartCostCenterDTO> chartCostCenterDTOList) {
+	    String methodName = "updateCreateChartCostCenter()";
+	    LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+	    String errorMsg = null;
+	    Map<String, Object> responseObjectsMap = new HashMap<>();
+	    ResponseDTO responseDTO;
 
-		try {
-			// Process the list (both update and create operations)
-			List<ChartCostCenterVO> chartCostCenterVOList = transactionService
-					.updateCreateChartCostCenter(chartCostCenterDTOList);
+	    try {
+	        // Assuming the service method returns a list of maps containing messages and VO objects
+	        List<Map<String, Object>> chartCostCenterResponses = transactionService.updateCreateChartCostCenterList(chartCostCenterDTOList);
 
-			if (!chartCostCenterVOList.isEmpty()) {
-				responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "ChartCostCenters processed successfully");
-				responseObjectsMap.put("chartCostCenterVOList", chartCostCenterVOList);
-				responseDTO = createServiceResponse(responseObjectsMap);
-			} else {
-				responseDTO = createServiceResponseError(responseObjectsMap, "Processing failed",
-						"No records processed");
-			}
-		} catch (Exception e) {
-			String errorMsg = e.getMessage();
-			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
-			responseDTO = createServiceResponseError(responseObjectsMap, "Processing failed", errorMsg);
-		}
+	        responseObjectsMap.put("chartCostCenterResponses", chartCostCenterResponses);  // List of responses for each DTO
+	        responseDTO = createServiceResponse(responseObjectsMap);
 
-		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
-		return ResponseEntity.ok().body(responseDTO);
+	    } catch (Exception e) {
+	        errorMsg = e.getMessage();
+	        LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+	        responseDTO = createServiceResponseError(responseObjectsMap, errorMsg, errorMsg);
+	    }
+
+	    LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+	    return ResponseEntity.ok().body(responseDTO);
 	}
 
+
+
+	
 	@GetMapping("/getChartCostCenterByActive")
 	public ResponseEntity<ResponseDTO> getChartCostCenterByActive() {
 		String methodName = "getChartCostCenterByActive()";
@@ -2317,6 +2316,115 @@ public class TransactionController extends BaseController {
 		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
 		return ResponseEntity.ok().body(responseDTO);
 
+	}
+	
+//	AdjustmentJournal
+	@GetMapping("/getAllAdjustmentJournalByOrgId")
+	public ResponseEntity<ResponseDTO> getAllAdjustmentJournalByOrgId(@RequestParam(required = false) Long orgId) {
+		String methodName = "getAllAdjustmentJournalByOrgId()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		List<AdjustmentJournalVO> adjustmentJournalVO = new ArrayList<>();
+		try {
+			adjustmentJournalVO = transactionService.getAllAdjustmentJournalByOrgId(orgId);
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+					"AdjustmentJournal information get successfully ByOrgId");
+			responseObjectsMap.put("adjustmentJournalVO", adjustmentJournalVO);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					"AdjustmentJournal information receive failed By OrgId", errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+
+	}
+
+	@GetMapping("/getAllAdjustmentJournalById")
+	public ResponseEntity<ResponseDTO> getAllAdjustmentJournalById(@RequestParam(required = false) Long id) {
+		String methodName = "getAllAdjustmentJournalById()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		List<AdjustmentJournalVO> adjustmentJournalVO = new ArrayList<>();
+		try {
+			adjustmentJournalVO = transactionService.getAllAdjustmentJournalById(id);
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "AdjustmentJournal information get successfully By id");
+			responseObjectsMap.put("adjustmentJournalVO", adjustmentJournalVO);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					"AdjustmentJournal information receive failedByOrgId", errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+	}
+	
+	@PutMapping("/updateCreateAdjustmentJournal")
+	public ResponseEntity<ResponseDTO> updateCreateAdjustmentJournal(
+			@Valid @RequestBody AdjustmentJournalDTO adjustmentJournalDTO) {
+		String methodName = "updateCreateAdjustmentJournal()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		try {
+			Map<String, Object> adjustmentJournalVO = transactionService.updateCreateAdjustmentJournal(adjustmentJournalDTO);
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, adjustmentJournalVO.get("message"));
+			responseObjectsMap.put("adjustmentJournalVO", adjustmentJournalVO.get("adjustmentJournalVO"));
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+			responseDTO = createServiceResponseError(responseObjectsMap, errorMsg, errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+	}
+
+	@GetMapping("/getAdjustmentJournalDocId")
+	public ResponseEntity<ResponseDTO> getAdjustmentJournalDocId(@RequestParam Long orgId, @RequestParam String finYear,
+			@RequestParam String branch, @RequestParam String branchCode) {
+
+		String methodName = "getAdjustmentJournalDocId()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		String mapp = "";
+
+		try {
+			mapp = transactionService.getAdjustmentJournalDocId(orgId, finYear, branch, branchCode);
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+					"AdjustmentJournal DocId information retrieved successfully");
+			responseObjectsMap.put("adjustmentJournalDocId", mapp);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					"Failed to retrieve AdjustmentJournal Docid information", errorMsg);
+		}
+
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
 	}
 
 	// TMS-TT-JobCard

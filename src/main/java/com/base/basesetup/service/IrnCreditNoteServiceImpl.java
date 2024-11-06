@@ -202,7 +202,7 @@ public class IrnCreditNoteServiceImpl implements IrnCreditNoteService {
 			irnCreditGstVO.setCrBillAmt(irnCreditGstDTO.getCrBillAmt());
 			irnCreditGstVO.setDBLCAmt(irnCreditGstDTO.getDBLCAmt());
 			irnCreditGstVO.setCrLCAmt(irnCreditGstDTO.getCrLCAmt());
-			irnCreditGstVO.setRemarks(irnCreditGstDTO.getRemarks());
+			irnCreditGstVO.setGstRemarks(irnCreditGstDTO.getGstRemarks());
 			irnCreditGstVO.setIrnCreditVO(irnCreditVO);
 			irnCreditGstVOs.add(irnCreditGstVO);
 		}
@@ -238,7 +238,7 @@ public class IrnCreditNoteServiceImpl implements IrnCreditNoteService {
 
 	@Override
 	public String getIrnCreditNoteDocId(Long orgId, String finYear, String branch, String branchCode) {
-		String ScreenCode = "APB";
+		String ScreenCode = "ICN";
 		String result = irnCreditRepo.getIrnCreditDocId(orgId, finYear, branchCode, ScreenCode);
 		return result;
 	}
