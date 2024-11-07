@@ -277,5 +277,7 @@ public interface TransactionService {
 
 	String getBankingDepositDocId(Long orgId, String finYear, String branch, String branchCode);
 
+	List<Map<String, Object>> getAccountNameFromGroupforBankingDeposit(Long orgId);
+
 	
 }
