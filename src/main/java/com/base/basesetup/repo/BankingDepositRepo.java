@@ -1,0 +1,26 @@
+package com.base.basesetup.repo;
+
+import java.util.List;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
+
+import com.base.basesetup.entity.BankingDepositVO;
+
+@Repository
+public interface BankingDepositRepo extends JpaRepository<BankingDepositVO, Long>{
+
+	@Query(nativeQuery = true, value = "select * from bankingdeposit where orgid=?1")
+	List<BankingDepositVO> getAllBankingDepositByOrgId(Long orgId);
+
+	@Query(nativeQuery = true, value = "select * from bankingdeposit where bankingdepositid=?1")
+	List<BankingDepositVO> getAllBankingDepositById(Long id);
+
+	@Query(nativeQuery = true,value ="select concat(prefixfield,lpad(lastno,6,0)) AS docid from documenttypemappingdetails where orgid=?1 and finyear=?2 and branchcode=?3 and screencode=?4")
+	String getBankingDepositDocId(Long orgId, String finYear, String branchCode, String screenCode);
+
+	@Query(nativeQuery = true,value="select concat(prefixfield,lpad(lastno,5,0)) AS docid from documenttypemappingdetails where orgid=?1 and finyear=?2 and branchcode=?3 and screencode=?4")
+	String getBankingDepositByDocId(Long orgId, String finYear, String branchCode, String screenCode);
+
+}
