@@ -93,9 +93,6 @@ public class PartyTypeServiceImpl implements PartyTypeService {
 		if (ObjectUtils.isNotEmpty(id)) {
 			LOGGER.info("Successfully Received  PartyType BY Id : {}", id);
 			partyTypeVO = partyTypeRepo.findPartyTypeVOById(id);
-		} else {
-			LOGGER.info("Successfully Received  PartyType For All Id.");
-			partyTypeVO = partyTypeRepo.findAll();
 		}
 		return partyTypeVO;
 	}
@@ -106,10 +103,7 @@ public class PartyTypeServiceImpl implements PartyTypeService {
 		if (ObjectUtils.isNotEmpty(orgid)) {
 			LOGGER.info("Successfully Received  PartyType BY OrgId : {}", orgid);
 			partyTypeVO = partyTypeRepo.findAllPartyTypeVOByOrgId(orgid);
-		} else {
-			LOGGER.info("Successfully Received  PartyType For All OrgId.");
-			partyTypeVO = partyTypeRepo.findAll();
-		}
+		} 
 		return partyTypeVO;
 	}
 	

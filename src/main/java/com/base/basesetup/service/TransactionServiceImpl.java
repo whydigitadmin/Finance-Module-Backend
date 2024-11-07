@@ -705,23 +705,17 @@ public class TransactionServiceImpl implements TransactionService {
 		if (ObjectUtils.isNotEmpty(orgId)) {
 			LOGGER.info("Successfully Received ChartCostCenter BY OrgId : {}", orgId);
 			chartCostCenterVO = chartCostCenterRepo.getAllChartCostCenterByOrgId(orgId);
-		} else {
-			LOGGER.info("Successfully Received  ChartCostCenter For All OrgId.");
-			chartCostCenterVO = chartCostCenterRepo.findAll();
-		}
+		} 
 		return chartCostCenterVO;
 	}
 
 	@Override
-	public List<ChartCostCenterVO> getAllChartCostCenterById(Long id) {
+	public List<ChartCostCenterVO> getChartCostCenterById(Long id) {
 		List<ChartCostCenterVO> chartCostCenterVO = new ArrayList<>();
 		if (ObjectUtils.isNotEmpty(id)) {
 			LOGGER.info("Successfully Received ChartCostCenter BY Id : {}", id);
-			chartCostCenterVO = chartCostCenterRepo.getAllChartCostCenterById(id);
-		} else {
-			LOGGER.info("Successfully Received ChartCostCenter For All Id.");
-			chartCostCenterVO = chartCostCenterRepo.findAll();
-		}
+			chartCostCenterVO = chartCostCenterRepo.getChartCostCenterById(id);
+		} 
 		return chartCostCenterVO;
 	}
 
@@ -909,22 +903,16 @@ public class TransactionServiceImpl implements TransactionService {
 		if (ObjectUtils.isNotEmpty(orgId)) {
 			LOGGER.info("Successfully Received  GeneralJournal BY OrgId : {}", orgId);
 			generalJournalVO = generalJournalRepo.getAllGeneralJournalByOrgId(orgId);
-		} else {
-			LOGGER.info("Successfully Received  GeneralJournal For All OrgId.");
-			generalJournalVO = generalJournalRepo.findAll();
-		}
+		} 
 		return generalJournalVO;
 	}
 
 	@Override
-	public List<GeneralJournalVO> getAllGeneralJournalById(Long id) {
+	public List<GeneralJournalVO> getGeneralJournalById(Long id) {
 		List<GeneralJournalVO> generalJournalVO = new ArrayList<>();
 		if (ObjectUtils.isNotEmpty(id)) {
 			LOGGER.info("Successfully Received GeneralJournal BY Id : {}", id);
-			generalJournalVO = generalJournalRepo.getAllGeneralJournalById(id);
-		} else {
-			LOGGER.info("Successfully Received GeneralJournal For All Id.");
-			generalJournalVO = generalJournalRepo.findAll();
+			generalJournalVO = generalJournalRepo.getGeneralJournalById(id);
 		}
 		return generalJournalVO;
 	}
@@ -1332,23 +1320,17 @@ public class TransactionServiceImpl implements TransactionService {
 		if (ObjectUtils.isNotEmpty(orgId)) {
 			LOGGER.info("Successfully Received PaymentVoucher BY OrgId : {}", orgId);
 			paymentVoucherVO = paymentVoucherRepo.getAllPaymentVoucherByOrgId(orgId);
-		} else {
-			LOGGER.info("Successfully Received PaymentVoucher For All OrgId.");
-			paymentVoucherVO = paymentVoucherRepo.findAll();
 		}
 		return paymentVoucherVO;
 	}
 
 	@Override
-	public List<PaymentVoucherVO> getAllPaymentVoucherById(Long id) {
+	public List<PaymentVoucherVO> getPaymentVoucherById(Long id) {
 		List<PaymentVoucherVO> paymentVoucherVO = new ArrayList<>();
 		if (ObjectUtils.isNotEmpty(id)) {
 			LOGGER.info("Successfully Received PaymentVoucher BY Id : {}", id);
-			paymentVoucherVO = paymentVoucherRepo.getAllPaymentVoucherById(id);
-		} else {
-			LOGGER.info("Successfully Received PaymentVoucher For All Id.");
-			paymentVoucherVO = paymentVoucherRepo.findAll();
-		}
+			paymentVoucherVO = paymentVoucherRepo.getPaymentVoucherById(id);
+		} 
 		return paymentVoucherVO;
 	}
 
@@ -2547,23 +2529,17 @@ public class TransactionServiceImpl implements TransactionService {
 		if (ObjectUtils.isNotEmpty(orgId)) {
 			LOGGER.info("Successfully Received  AdjustmentJournal BY OrgId : {}", orgId);
 			adjustmentJournalVO = adjustmentJournalRepo.getAllAdjustmentJournalByOrgId(orgId);
-		} else {
-			LOGGER.info("Successfully Received  AdjustmentJournal For All OrgId.");
-			adjustmentJournalVO = adjustmentJournalRepo.findAll();
-		}
+		} 
 		return adjustmentJournalVO;
 	}
 
 	@Override
-	public List<AdjustmentJournalVO> getAllAdjustmentJournalById(Long id) {
+	public List<AdjustmentJournalVO> getAdjustmentJournalById(Long id) {
 		List<AdjustmentJournalVO> adjustmentJournalVO = new ArrayList<>();
 		if (ObjectUtils.isNotEmpty(id)) {
 			LOGGER.info("Successfully Received AdjustmentJournal BY Id : {}", id);
-			adjustmentJournalVO = adjustmentJournalRepo.getAllAdjustmentJournalById(id);
-		} else {
-			LOGGER.info("Successfully Received AdjustmentJournal For All Id.");
-			adjustmentJournalVO = adjustmentJournalRepo.findAll();
-		}
+			adjustmentJournalVO = adjustmentJournalRepo.getAdjustmentJournalById(id);
+		} 
 		return adjustmentJournalVO;
 	}
 
@@ -2688,23 +2664,17 @@ public class TransactionServiceImpl implements TransactionService {
 		if (ObjectUtils.isNotEmpty(orgId)) {
 			LOGGER.info("Successfully Received  BankingDeposit BY OrgId : {}", orgId);
 			bankingDepositVO = bankingDepositRepo.getAllBankingDepositByOrgId(orgId);
-		} else {
-			LOGGER.info("Successfully Received  BankingDeposit For All OrgId.");
-			bankingDepositVO = bankingDepositRepo.findAll();
-		}
+		} 
 		return bankingDepositVO;
 	}
 
 	@Override
-	public List<BankingDepositVO> getAllBankingDepositById(Long id) {
+	public List<BankingDepositVO> getBankingDepositById(Long id) {
 		List<BankingDepositVO> bankingDepositVO = new ArrayList<>();
 		if (ObjectUtils.isNotEmpty(id)) {
 			LOGGER.info("Successfully Received  BankingDeposit BY Id : {}", id);
-			bankingDepositVO = bankingDepositRepo.getAllBankingDepositById(id);
-		} else {
-			LOGGER.info("Successfully Received  BankingDeposit For All Id.");
-			bankingDepositVO = bankingDepositRepo.findAll();
-		}
+			bankingDepositVO = bankingDepositRepo.getBankingDepositById(id);
+		} 
 		return bankingDepositVO;
 	}
 

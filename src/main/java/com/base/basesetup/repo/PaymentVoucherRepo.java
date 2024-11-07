@@ -13,7 +13,7 @@ public interface PaymentVoucherRepo extends JpaRepository<PaymentVoucherVO, Long
 	List<PaymentVoucherVO> getAllPaymentVoucherByOrgId(Long orgId);
 
 	@Query(nativeQuery = true, value = "select * from paymentvoucher where paymentvoucherid=?1")
-	List<PaymentVoucherVO> getAllPaymentVoucherById(Long id);
+	List<PaymentVoucherVO> getPaymentVoucherById(Long id);
 
 	@Query(nativeQuery = true, value = "select * from paymentvoucher where active=1")
 	List<PaymentVoucherVO> findPaymentVoucherByActive();
