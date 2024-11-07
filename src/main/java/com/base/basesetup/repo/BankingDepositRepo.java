@@ -15,7 +15,7 @@ public interface BankingDepositRepo extends JpaRepository<BankingDepositVO, Long
 	List<BankingDepositVO> getAllBankingDepositByOrgId(Long orgId);
 
 	@Query(nativeQuery = true, value = "select * from bankingdeposit where bankingdepositid=?1")
-	List<BankingDepositVO> getAllBankingDepositById(Long id);
+	List<BankingDepositVO> getBankingDepositById(Long id);
 
 	@Query(nativeQuery = true,value ="select concat(prefixfield,lpad(lastno,6,0)) AS docid from documenttypemappingdetails where orgid=?1 and finyear=?2 and branchcode=?3 and screencode=?4")
 	String getBankingDepositDocId(Long orgId, String finYear, String branchCode, String screenCode);

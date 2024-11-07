@@ -14,7 +14,7 @@ public interface GeneralJournalRepo extends JpaRepository<GeneralJournalVO, Long
 	List<GeneralJournalVO> getAllGeneralJournalByOrgId(Long orgId);
 
 	@Query(nativeQuery = true, value = "select * from generaljournal where generaljournalid=?1")
-	List<GeneralJournalVO> getAllGeneralJournalById(Long id);
+	List<GeneralJournalVO> getGeneralJournalById(Long id);
 
 	@Query(nativeQuery = true, value = "select * from generaljournal where active=1")
 	List<GeneralJournalVO> findGeneralJournalByActive();

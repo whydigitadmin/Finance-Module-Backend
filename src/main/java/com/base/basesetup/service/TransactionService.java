@@ -89,7 +89,7 @@ public interface TransactionService {
 			throws ApplicationException;
 
 	
-	List<ChartCostCenterVO> getAllChartCostCenterById(Long id);
+	List<ChartCostCenterVO> getChartCostCenterById(Long id);
 
 	List<ChartCostCenterVO> getChartCostCenterByActive();
 
@@ -108,7 +108,7 @@ public interface TransactionService {
 	Map<String, Object> updateCreateGeneralJournal(@Valid GeneralJournalDTO generalJournalDTO)
 			throws ApplicationException;
 
-	List<GeneralJournalVO> getAllGeneralJournalById(Long id);
+	List<GeneralJournalVO> getGeneralJournalById(Long id);
 
 	List<GeneralJournalVO> getGeneralJournalByActive();
 	
@@ -139,7 +139,7 @@ public interface TransactionService {
 	Map<String, Object> updateCreatePaymentVoucher(@Valid PaymentVoucherDTO paymentVoucherDTO)
 			throws ApplicationException;
 
-	List<PaymentVoucherVO> getAllPaymentVoucherById(Long id);
+	List<PaymentVoucherVO> getPaymentVoucherById(Long id);
 
 	List<PaymentVoucherVO> getPaymentVoucherByActive();
 
@@ -261,7 +261,7 @@ public interface TransactionService {
 	
 	List<AdjustmentJournalVO> getAllAdjustmentJournalByOrgId(Long orgId);
 
-	List<AdjustmentJournalVO> getAllAdjustmentJournalById(Long id);
+	List<AdjustmentJournalVO> getAdjustmentJournalById(Long id);
 
 	Map<String, Object> updateCreateAdjustmentJournal(@Valid AdjustmentJournalDTO adjustmentJournalDTO) throws ApplicationException;
 
@@ -270,7 +270,7 @@ public interface TransactionService {
 	//BankingDeposit
 	List<BankingDepositVO> getAllBankingDepositByOrgId(Long orgId);
 
-	List<BankingDepositVO> getAllBankingDepositById(Long id);
+	List<BankingDepositVO> getBankingDepositById(Long id);
 
 	Map<String, Object> updateCreateBankingDeposit(@Valid BankingDepositDTO bankingDepositDTO)
 			throws ApplicationException;

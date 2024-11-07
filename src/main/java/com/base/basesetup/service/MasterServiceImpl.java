@@ -1665,10 +1665,7 @@ public class MasterServiceImpl implements MasterService {
 		if (ObjectUtils.isNotEmpty(id)) {
 			LOGGER.info("Successfully Received  PartyMaster BY Id : {}", id);
 			partyMasterVO = partyMasterRepo.findPartyMasterVOById(id);
-		} else {
-			LOGGER.info("Successfully Received  PartyMaster For All Id.");
-			partyMasterVO = partyMasterRepo.findAll();
-		}
+		} 
 		return partyMasterVO;
 	}
 
