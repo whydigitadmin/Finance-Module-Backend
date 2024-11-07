@@ -40,4 +40,7 @@ public interface CostDebitNoteRepo extends JpaRepository<CostDebitNoteVO, Long>{
 	@Query(value ="select docid from costinvoice where orgid=?1",nativeQuery =true)
 	Set<Object[]> getDocIdForCI(Long orgId);
 
+	@Query(nativeQuery = true,value="select currency,currencydescripition,buyingexrate,sellingexrate from vw_exrates where orgid=?1")
+	Set<Object[]> getCurrencyAndExrateDetails(Long orgId);
+
 }
