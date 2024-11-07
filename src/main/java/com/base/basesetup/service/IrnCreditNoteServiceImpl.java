@@ -21,11 +21,13 @@ import com.base.basesetup.entity.DocumentTypeMappingDetailsVO;
 import com.base.basesetup.entity.IrnCreditChargesVO;
 import com.base.basesetup.entity.IrnCreditGstVO;
 import com.base.basesetup.entity.IrnCreditVO;
+import com.base.basesetup.entity.PartyMasterVO;
 import com.base.basesetup.exception.ApplicationException;
 import com.base.basesetup.repo.DocumentTypeMappingDetailsRepo;
 import com.base.basesetup.repo.IrnCreditChargesRepo;
 import com.base.basesetup.repo.IrnCreditGstRepo;
 import com.base.basesetup.repo.IrnCreditRepo;
+import com.base.basesetup.repo.PartyMasterRepo;
 
 @Service
 public class IrnCreditNoteServiceImpl implements IrnCreditNoteService {
@@ -38,6 +40,9 @@ public class IrnCreditNoteServiceImpl implements IrnCreditNoteService {
 
 	@Autowired
 	IrnCreditGstRepo irnCreditGstRepo;
+	
+	@Autowired
+	PartyMasterRepo partyMasterRepo;
 
 	@Autowired
 	DocumentTypeMappingDetailsRepo documentTypeMappingDetailsRepo;
@@ -217,11 +222,7 @@ public class IrnCreditNoteServiceImpl implements IrnCreditNoteService {
 
 	}
 
-	@Override
-	public List<Map<String, Object>> getPartyNameAndPartyCodeAndPartyTypeForIrn(Long orgId) {
-		Set<Object[]> irn = irnCreditRepo.findPartyNameAndPartyCodeAndPartyTypeForIrn(orgId);
-		return getPartyNameForIrn(irn);
-	}
+	
 
 	private List<Map<String, Object>> getPartyNameForIrn(Set<Object[]> irn) {
 		List<Map<String, Object>> irnCredit = new ArrayList<>();
@@ -241,6 +242,13 @@ public class IrnCreditNoteServiceImpl implements IrnCreditNoteService {
 		String ScreenCode = "ICN";
 		String result = irnCreditRepo.getIrnCreditDocId(orgId, finYear, branchCode, ScreenCode);
 		return result;
+	}
+	
+	@Override
+	public List<PartyMasterVO> getAllPartyByPartyType(Long orgId, String partyType) {
+		
+		return partyMasterRepo.findByOrgIdAndPartyTypeIgnoreCase(orgId,partyType);
+
 	}
 
 }
