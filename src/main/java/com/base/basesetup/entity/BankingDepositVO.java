@@ -25,49 +25,65 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "generaljournal")
+@Table(name = "bankingdeposit")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class GeneralJournalVO {
+public class BankingDepositVO {
+
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "generaljournalgen")
-	@SequenceGenerator(name = "generaljournalgen", sequenceName = "generaljournalseq", initialValue = 1000000001, allocationSize = 1)
-	@Column(name = "generaljournalid")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "bankingdepositgen")
+	@SequenceGenerator(name = "bankingdepositgen", sequenceName = "bankingdepositseq", initialValue = 1000000001, allocationSize = 1)
+	@Column(name = "bankingdepositid")
 	private Long id;
-	@Column(name = "vouchersubtype", length = 25)
-	private String voucherSubType;
-	
-	@Column(name = "docid", length = 50)
+
+	@Column(name = "depositmode")
+    private String depositMode;
+
+    @Column(name = "docid")
     private String docId;
 
     @Column(name = "docdate")
-    private LocalDate docDate = LocalDate.now();
+    private LocalDate docDate= LocalDate.now();
 
+    @Column(name = "receivedfrom")
+    private String receivedFrom;
 
-	@Column(name = "currency", length = 10)
-	private String currency;
-	@Column(name = "exrate",precision = 10, scale = 2)
-	private BigDecimal exRate;
-	@Column(name = "refno", length = 50)
-	private String refNo;
-	@Column(name = "refdate")
-	private LocalDate refDate;
+    @Column(name = "chequeno")
+    private String chequeNo;
 
-	@Column(name = "screencode", length = 5)
-	private String screenCode = "GJ";
+    @Column(name = "chequedate")
+    private LocalDate chequeDate;
 
-	@Column(name = "screenname", length = 25)
-	private String screenName = "GENERALJOURNAL";
+    @Column(name = "chequebank")
+    private String chequeBank;
 
-	@Column(name = "remarks", length = 150)
-	private String remarks;
+    @Column(name = "bankaccount")
+    private String bankAccount;
 
-	@Column(name = "totaldebitamount",precision = 10, scale = 2)
-	private BigDecimal totalDebitAmount;
-	@Column(name = "totalcreditamount",precision = 10, scale = 2)
-	private BigDecimal totalCreditAmount;
+    @Column(name = "currency")
+    private String currency;
+
+    @Column(name = "exchangerate", precision = 10, scale = 2)
+    private BigDecimal exchangeRate;
+
+    @Column(name = "depositamount", precision = 15, scale = 2)
+    private BigDecimal depositAmount;
+
+    @Column(name = "totaldebitamount", precision = 15, scale = 2)
+    private BigDecimal totalDebitAmount;
+
+    @Column(name = "totalcreditamount", precision = 15, scale = 2)
+    private BigDecimal totalCreditAmount;
+
+    @Column(name = "totalamount", precision = 15, scale = 2)
+    private BigDecimal totalAmount;
+
+    @Column(name = "remarks")
+    private String remarks;
+    
+    
 
 	@Column(name = "branch", length = 25)
 	private String branch;
@@ -95,17 +111,17 @@ public class GeneralJournalVO {
 
 	@Column(name = "orgid")
 	private Long orgId;
-
-	@OneToMany(mappedBy = "generalJournalVO", cascade = CascadeType.ALL)
+    
+	@OneToMany(mappedBy = "bankingDepositVO", cascade = CascadeType.ALL)
 	@JsonManagedReference
-	List<ParticularsJournalVO> particularsJournalVO;
-
+	List<DepositParticularsVO> depositparticularsVO;
+    
 	@JsonGetter("active")
 	public String getActive() {
 		return active ? "Active" : "In-Active";
 	}
-	
-	@Embedded
+    
+    @Embedded
 	@Builder.Default
 	private CreatedUpdatedDate commonDate = new CreatedUpdatedDate();
 }

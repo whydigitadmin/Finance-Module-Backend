@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.base.basesetup.dto.AdjustmentJournalDTO;
 import com.base.basesetup.dto.ArApAdjustmentOffSetDTO;
+import com.base.basesetup.dto.BankingDepositDTO;
 import com.base.basesetup.dto.BrsOpeningDTO;
 import com.base.basesetup.dto.ChartCostCenterDTO;
 import com.base.basesetup.dto.DailyMonthlyExRatesDTO;
@@ -29,6 +30,7 @@ import com.base.basesetup.dto.ReconcileCorpBankDTO;
 import com.base.basesetup.dto.TmsJobCardDTO;
 import com.base.basesetup.entity.AdjustmentJournalVO;
 import com.base.basesetup.entity.ArApAdjustmentOffSetVO;
+import com.base.basesetup.entity.BankingDepositVO;
 import com.base.basesetup.entity.BrsExcelUploadVO;
 import com.base.basesetup.entity.BrsOpeningVO;
 import com.base.basesetup.entity.ChartCostCenterVO;
@@ -109,6 +111,8 @@ public interface TransactionService {
 	List<GeneralJournalVO> getAllGeneralJournalById(Long id);
 
 	List<GeneralJournalVO> getGeneralJournalByActive();
+	
+	List<Map<String, Object>> getAccountNameFromGroup( Long orgId);
 
 // DebitNote
 	List<DebitNoteVO> getAllDebitNoteByOrgId(Long orgId);
@@ -262,4 +266,16 @@ public interface TransactionService {
 	Map<String, Object> updateCreateAdjustmentJournal(@Valid AdjustmentJournalDTO adjustmentJournalDTO) throws ApplicationException;
 
 	String getAdjustmentJournalDocId(Long orgId, String finYear, String branch, String branchCode);
+
+	//BankingDeposit
+	List<BankingDepositVO> getAllBankingDepositByOrgId(Long orgId);
+
+	List<BankingDepositVO> getAllBankingDepositById(Long id);
+
+	Map<String, Object> updateCreateBankingDeposit(@Valid BankingDepositDTO bankingDepositDTO)
+			throws ApplicationException;
+
+	String getBankingDepositDocId(Long orgId, String finYear, String branch, String branchCode);
+
+	
 }
