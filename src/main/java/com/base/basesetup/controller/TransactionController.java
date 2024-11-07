@@ -2565,7 +2565,6 @@ public class TransactionController extends BaseController {
 	
 	//BANKINGDEPOSIT
 	
-//	AdjustmentJournal
 	@GetMapping("/getAllBankingDepositByOrgId")
 	public ResponseEntity<ResponseDTO> getAllBankingDepositByOrgId(@RequestParam Long orgId) {
 		String methodName = "getAllBankingDepositByOrgId()";
@@ -2624,7 +2623,7 @@ public class TransactionController extends BaseController {
 	}
 	
 	@PutMapping("/updateCreateBankingDeposit")
-	public ResponseEntity<ResponseDTO> updateCreateAdjustmentJournal(
+	public ResponseEntity<ResponseDTO> updateCreateBankingDeposit(
 			@Valid @RequestBody BankingDepositDTO bankingDepositDTO) {
 		String methodName = "updateCreateBankingDeposit()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
