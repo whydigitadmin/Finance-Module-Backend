@@ -2767,7 +2767,7 @@ public class TransactionServiceImpl implements TransactionService {
 		if (totalCreditAmount.equals(totalDebitAmount)) {
 			bankingDepositVO.setTotalCreditAmount(totalCreditAmount);
 			bankingDepositVO.setTotalDebitAmount(totalDebitAmount);
-			bankingDepositVO.setTotalAmount(totalDebitAmount);
+			bankingDepositVO.setTotalAmount(bankingDepositDTO.getDepositAmount());
 
 		} else {
 			throw new ApplicationException("Total Debit Amount and Total Credit Amount Should be Equal");
@@ -2782,5 +2782,25 @@ public class TransactionServiceImpl implements TransactionService {
 		String result = bankingDepositRepo.getBankingDepositByDocId(orgId, finYear, branchCode, ScreenCode);
 		return result;
 	}
+	
+	
+	@Override
+	@Transactional
+	public List<Map<String, Object>> getAccountNameFromGroupforBankingDeposit( Long orgId) {
+
+		Set<Object[]> result = bankingDepositRepo.findAccountNameFromGroupforBankingDeposit( orgId);
+		return getAccountNameFromGroupforBankingDeposit(result);
+	}
+
+	private List<Map<String, Object>> getAccountNameFromGroupforBankingDeposit(Set<Object[]> result) {
+		List<Map<String, Object>> details1 = new ArrayList<>();
+		for (Object[] fs : result) {
+			Map<String, Object> part = new HashMap<>();
+			part.put("accountName", fs[0] != null ? fs[0].toString() : "");
+			details1.add(part);
+		}
+		return details1;
+	}
+
 
 }
