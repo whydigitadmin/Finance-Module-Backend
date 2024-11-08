@@ -35,6 +35,7 @@ import com.base.basesetup.dto.AdjustmentJournalDTO;
 import com.base.basesetup.dto.ArApAdjustmentOffSetDTO;
 import com.base.basesetup.dto.ArApOffSetInvoiceDetailsDTO;
 import com.base.basesetup.dto.BankingDepositDTO;
+import com.base.basesetup.dto.BankingWithdrawalDTO;
 import com.base.basesetup.dto.BrsOpeningDTO;
 import com.base.basesetup.dto.ChargerDebitNoteDTO;
 import com.base.basesetup.dto.ChartCostCenterDTO;
@@ -66,11 +67,13 @@ import com.base.basesetup.dto.ReconcileBankDTO;
 import com.base.basesetup.dto.ReconcileCashDTO;
 import com.base.basesetup.dto.ReconcileCorpBankDTO;
 import com.base.basesetup.dto.TmsJobCardDTO;
+import com.base.basesetup.dto.WithdrawalParticularsDTO;
 import com.base.basesetup.entity.AccountParticularsVO;
 import com.base.basesetup.entity.AdjustmentJournalVO;
 import com.base.basesetup.entity.ArApAdjustmentOffSetVO;
 import com.base.basesetup.entity.ArApOffSetInvoiceDetailsVO;
 import com.base.basesetup.entity.BankingDepositVO;
+import com.base.basesetup.entity.BankingWithdrawalVO;
 import com.base.basesetup.entity.BrsExcelUploadVO;
 import com.base.basesetup.entity.BrsOpeningVO;
 import com.base.basesetup.entity.ChargerDebitNoteVO;
@@ -104,6 +107,7 @@ import com.base.basesetup.entity.ReconcileBankVO;
 import com.base.basesetup.entity.ReconcileCashVO;
 import com.base.basesetup.entity.ReconcileCorpBankVO;
 import com.base.basesetup.entity.TmsJobCardVO;
+import com.base.basesetup.entity.WithdrawalParticularsVO;
 import com.base.basesetup.exception.ApplicationException;
 import com.base.basesetup.repo.AccountParticularsRepo;
 import com.base.basesetup.repo.AdjustmentJournalRepo;
@@ -112,6 +116,7 @@ import com.base.basesetup.repo.ArApOffSetInvoiceDetailsRepo;
 import com.base.basesetup.repo.ArapAdjustmentsRepo;
 import com.base.basesetup.repo.ArapDetailsRepo;
 import com.base.basesetup.repo.BankingDepositRepo;
+import com.base.basesetup.repo.BankingWithdrawalRepo;
 import com.base.basesetup.repo.BranchRepo;
 import com.base.basesetup.repo.BrsExcelUploadRepo;
 import com.base.basesetup.repo.BrsOpeningRepo;
@@ -155,6 +160,7 @@ import com.base.basesetup.repo.TaxInvoiceGstRepo;
 import com.base.basesetup.repo.TaxInvoiceRepo;
 import com.base.basesetup.repo.TdsCostInvoiceRepo;
 import com.base.basesetup.repo.TmsJobCardRepo;
+import com.base.basesetup.repo.WithdrawalParticularsRepo;
 
 @Service
 public class TransactionServiceImpl implements TransactionService {
@@ -315,6 +321,12 @@ public class TransactionServiceImpl implements TransactionService {
 	@Autowired
 	DepositParticularsRepo depositParticularsRepo;
 
+	@Autowired
+	BankingWithdrawalRepo bankingWithdrawalRepo;
+	
+	@Autowired
+	WithdrawalParticularsRepo withdrawalParticularsRepo;
+	
 	// DailyMonthlyExRates
 	@Override
 	public List<DailyMonthlyExRatesVO> getAllDailyMonthlyExRatesById(Long id) {
@@ -2656,8 +2668,6 @@ public class TransactionServiceImpl implements TransactionService {
 
 	// BankingDeposit
 
-	// AdjustmentJournal
-
 	@Override
 	public List<BankingDepositVO> getAllBankingDepositByOrgId(Long orgId) {
 		List<BankingDepositVO> bankingDepositVO = new ArrayList<>();
@@ -2801,6 +2811,133 @@ public class TransactionServiceImpl implements TransactionService {
 		}
 		return details1;
 	}
+	
+	//BANKINGWITHDRAWAL
+	
+	@Override
+	public List<BankingWithdrawalVO> getAllBankingWithdrawalByOrgId(Long orgId) {
+		List<BankingWithdrawalVO> bankingWithdrawalVO = new ArrayList<>();
+		if (ObjectUtils.isNotEmpty(orgId)) {
+			LOGGER.info("Successfully Received  BankingWithdrawal BY OrgId : {}", orgId);
+			bankingWithdrawalVO = bankingWithdrawalRepo.getAllBankingWithdrawalByOrgId(orgId);
+		} 
+		return bankingWithdrawalVO;
+	}
 
+	@Override
+	public List<BankingWithdrawalVO> getBankingWithdrawalById(Long id) {
+		List<BankingWithdrawalVO> bankingWithdrawalVO = new ArrayList<>();
+		if (ObjectUtils.isNotEmpty(id)) {
+			LOGGER.info("Successfully Received  BankingWithdrawal BY Id : {}", id);
+			bankingWithdrawalVO = bankingWithdrawalRepo.getBankingWithdrawalById(id);
+		} 
+		return bankingWithdrawalVO;
+	}
+
+	@Override
+	public String getBankingWithdrawalDocId(Long orgId, String finYear, String branch, String branchCode) {
+		String ScreenCode = "BW";
+		String result = bankingWithdrawalRepo.getBankingWithdrawalDocId(orgId, finYear, branchCode, ScreenCode);
+		return result;
+	}
+
+	
+	@Override
+	public Map<String, Object> updateCreateBankingWithdrawal(@Valid BankingWithdrawalDTO bankingWithdrawalDTO)
+			throws ApplicationException {
+		String screenCode = "BW";
+		BankingWithdrawalVO bankingWithdrawalVO = new BankingWithdrawalVO();
+		String message;
+		if (ObjectUtils.isNotEmpty(bankingWithdrawalDTO.getId())) {
+			bankingWithdrawalVO = bankingWithdrawalRepo.findById(bankingWithdrawalDTO.getId())
+					.orElseThrow(() -> new ApplicationException("BankingWithdrawal not found"));
+
+			bankingWithdrawalVO.setUpdatedBy(bankingWithdrawalDTO.getCreatedBy());
+			createUpdateBankingWithdrawalVOByBankingWithdrawalDTO(bankingWithdrawalDTO, bankingWithdrawalVO);
+			message = "BankingWithdrawal Updated Successfully";
+		} else {
+			// GETDOCID API
+			String docId = bankingWithdrawalRepo.getBankingWithdrawalByDocId(bankingWithdrawalDTO.getOrgId(),
+					bankingWithdrawalDTO.getFinYear(), bankingWithdrawalDTO.getBranchCode(), screenCode);
+
+			bankingWithdrawalVO.setDocId(docId);
+
+//						// GETDOCID LASTNO +1
+			DocumentTypeMappingDetailsVO documentTypeMappingDetailsVO = documentTypeMappingDetailsRepo
+					.findByOrgIdAndFinYearAndBranchCodeAndScreenCode(bankingWithdrawalDTO.getOrgId(),
+							bankingWithdrawalDTO.getFinYear(), bankingWithdrawalDTO.getBranchCode(), screenCode);
+			documentTypeMappingDetailsVO.setLastno(documentTypeMappingDetailsVO.getLastno() + 1);
+			documentTypeMappingDetailsRepo.save(documentTypeMappingDetailsVO);
+
+			bankingWithdrawalVO.setCreatedBy(bankingWithdrawalDTO.getCreatedBy());
+			bankingWithdrawalVO.setUpdatedBy(bankingWithdrawalDTO.getCreatedBy());
+			createUpdateBankingWithdrawalVOByBankingWithdrawalDTO(bankingWithdrawalDTO, bankingWithdrawalVO);
+			message = "BankingWithdrawal Created Successfully";
+		}
+
+		bankingWithdrawalRepo.save(bankingWithdrawalVO);
+		Map<String, Object> response = new HashMap<>();
+		response.put("bankingWithdrawalVO", bankingWithdrawalVO);
+		response.put("message", message);
+		return response;
+	}
+
+	private void createUpdateBankingWithdrawalVOByBankingWithdrawalDTO(@Valid BankingWithdrawalDTO bankingWithdrawalDTO,
+			BankingWithdrawalVO bankingWithdrawalVO) throws ApplicationException {
+		bankingWithdrawalVO.setWithdrawalMode(bankingWithdrawalDTO.getWithdrawalMode());
+		bankingWithdrawalVO.setReceivedFrom(bankingWithdrawalDTO.getReceivedFrom().toUpperCase()); 
+		bankingWithdrawalVO.setChequeNo(bankingWithdrawalDTO.getChequeNo());
+		bankingWithdrawalVO.setChequeDate(bankingWithdrawalDTO.getChequeDate());
+		bankingWithdrawalVO.setChequeBank(bankingWithdrawalDTO.getChequeBank());
+		bankingWithdrawalVO.setBankAccount(bankingWithdrawalDTO.getBankAccount());
+		bankingWithdrawalVO.setCurrency(bankingWithdrawalDTO.getCurrency());
+		bankingWithdrawalVO.setExchangeRate(bankingWithdrawalDTO.getExchangeRate());
+		bankingWithdrawalVO.setWithdrawalAmount(bankingWithdrawalDTO.getWithdrawalAmount());
+
+		bankingWithdrawalVO.setRemarks(bankingWithdrawalDTO.getRemarks());
+		bankingWithdrawalVO.setOrgId(bankingWithdrawalDTO.getOrgId());
+		bankingWithdrawalVO.setBranch(bankingWithdrawalDTO.getBranch());
+		bankingWithdrawalVO.setBranchCode(bankingWithdrawalDTO.getBranchCode());
+		bankingWithdrawalVO.setFinYear(bankingWithdrawalDTO.getFinYear());
+
+		if (ObjectUtils.isNotEmpty(bankingWithdrawalVO.getId())) {
+			List<WithdrawalParticularsVO> withdrawalParticularsVOList = withdrawalParticularsRepo
+					.findByBankingWithdrawalVO(bankingWithdrawalVO);
+			withdrawalParticularsRepo.deleteAll(withdrawalParticularsVOList);
+		}
+
+		BigDecimal totalDebitAmount = BigDecimal.ZERO;
+		BigDecimal totalCreditAmount = BigDecimal.ZERO;
+		List<WithdrawalParticularsVO> withdrawalParticularsVOs = new ArrayList<>();
+		for (WithdrawalParticularsDTO withdrawalParticularsDTO : bankingWithdrawalDTO.getWithdrawalParticularsDTO()) {
+			WithdrawalParticularsVO withdrawalParticularsVO = new WithdrawalParticularsVO();
+
+			withdrawalParticularsVO.setAccountsName(withdrawalParticularsDTO.getAccountsName());
+			withdrawalParticularsVO.setNarration(withdrawalParticularsDTO.getNarration());
+			if (withdrawalParticularsDTO.getDebit() != null
+					&& withdrawalParticularsDTO.getDebit().compareTo(BigDecimal.ZERO) != 0) {
+				withdrawalParticularsVO.setDebit(withdrawalParticularsDTO.getDebit());
+				withdrawalParticularsVO.setCredit(BigDecimal.ZERO);
+			} else {
+				withdrawalParticularsVO.setCredit(withdrawalParticularsDTO.getCredit());
+				withdrawalParticularsVO.setDebit(BigDecimal.ZERO);
+			}
+			totalCreditAmount = totalCreditAmount.add(withdrawalParticularsVO.getCredit());
+			totalDebitAmount = totalDebitAmount.add(withdrawalParticularsVO.getDebit());
+
+			withdrawalParticularsVO.setBankingWithdrawalVO(bankingWithdrawalVO);
+			withdrawalParticularsVOs.add(withdrawalParticularsVO);
+		}
+		if (totalCreditAmount.equals(totalDebitAmount)) {
+			bankingWithdrawalVO.setTotalCreditAmount(totalCreditAmount);
+			bankingWithdrawalVO.setTotalDebitAmount(totalDebitAmount);
+			bankingWithdrawalVO.setTotalAmount(bankingWithdrawalDTO.getWithdrawalAmount());
+
+		} else {
+			throw new ApplicationException("Total Debit Amount and Total Credit Amount Should be Equal");
+		}
+		bankingWithdrawalVO.setWithdrawalParticularsVO(withdrawalParticularsVOs);
+
+	}
 
 }
