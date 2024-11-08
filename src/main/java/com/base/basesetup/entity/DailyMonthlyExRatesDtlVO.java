@@ -43,7 +43,7 @@ public class DailyMonthlyExRatesDtlVO {
 
 	@ManyToOne
 	@JsonBackReference
-	@JoinColumn(name = "dailyMonthlyExRatesid")
+	@JoinColumn(name = "dailymonthlyexratesid")
 	DailyMonthlyExRatesVO dailyMonthlyExRatesVO;
 
 	@Embedded

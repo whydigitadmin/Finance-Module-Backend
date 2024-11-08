@@ -39,7 +39,7 @@ public class Views {
     			+ "JOIN \r\n"
     			+ "    dailymonthlyexrates g\r\n"
     			+ "ON \r\n"
-    			+ "    c.daily_monthly_ex_ratesid = g.dailymonthlyexratesid\r\n"
+    			+ "    c.dailymonthlyexratesid = g.dailymonthlyexratesid\r\n"
     			+ "JOIN (\r\n"
     			+ "    SELECT \r\n"
     			+ "        a.currency,\r\n"
@@ -47,13 +47,13 @@ public class Views {
     			+ "    FROM \r\n"
     			+ "        dailymonthlyexratesdtl a\r\n"
     			+ "    JOIN \r\n"
-    			+ "        dailymonthlyexrates b \r\n"
+    			+ "        dailymonthlyexrates b\r\n"
     			+ "    ON \r\n"
-    			+ "        a.daily_monthly_ex_ratesid = b.dailymonthlyexratesid\r\n"
+    			+ "        a.dailymonthlyexratesid = b.dailymonthlyexratesid\r\n"
     			+ "    GROUP BY \r\n"
     			+ "        a.currency\r\n"
     			+ ") d \r\n"
     			+ "ON c.dailymonthlyexratesdtlid = d.dailymonthlyexratesdtlid");
-    }
+   }
 
 }
