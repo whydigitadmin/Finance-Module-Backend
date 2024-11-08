@@ -47,8 +47,8 @@ public class BankingWithdrawalVO {
     @Column(name = "docdate")
     private LocalDate docDate= LocalDate.now();
 
-    @Column(name = "receivedfrom")
-    private String receivedFrom;
+    @Column(name = "payto")
+    private String payTo;
 
     @Column(name = "chequeno")
     private String chequeNo;
