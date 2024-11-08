@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.base.basesetup.dto.AdjustmentJournalDTO;
 import com.base.basesetup.dto.ArApAdjustmentOffSetDTO;
 import com.base.basesetup.dto.BankingDepositDTO;
+import com.base.basesetup.dto.BankingWithdrawalDTO;
 import com.base.basesetup.dto.BrsOpeningDTO;
 import com.base.basesetup.dto.ChartCostCenterDTO;
 import com.base.basesetup.dto.DailyMonthlyExRatesDTO;
@@ -31,6 +32,7 @@ import com.base.basesetup.dto.TmsJobCardDTO;
 import com.base.basesetup.entity.AdjustmentJournalVO;
 import com.base.basesetup.entity.ArApAdjustmentOffSetVO;
 import com.base.basesetup.entity.BankingDepositVO;
+import com.base.basesetup.entity.BankingWithdrawalVO;
 import com.base.basesetup.entity.BrsExcelUploadVO;
 import com.base.basesetup.entity.BrsOpeningVO;
 import com.base.basesetup.entity.ChartCostCenterVO;
@@ -278,6 +280,15 @@ public interface TransactionService {
 	String getBankingDepositDocId(Long orgId, String finYear, String branch, String branchCode);
 
 	List<Map<String, Object>> getBankNameFromGroupforBankingDeposit(Long orgId);
+
+	//BankingWithdrawal
+	List<BankingWithdrawalVO> getAllBankingWithdrawalByOrgId(Long orgId);
+
+	List<BankingWithdrawalVO> getBankingWithdrawalById(Long id);
+
+	Map<String, Object> updateCreateBankingWithdrawal(@Valid BankingWithdrawalDTO bankingWithdrawalDTO) throws ApplicationException;
+
+	String getBankingWithdrawalDocId(Long orgId, String finYear, String branch, String branchCode);
 
 	
 }
