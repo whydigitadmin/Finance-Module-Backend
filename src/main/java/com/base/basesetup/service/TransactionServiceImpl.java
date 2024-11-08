@@ -2786,17 +2786,17 @@ public class TransactionServiceImpl implements TransactionService {
 	
 	@Override
 	@Transactional
-	public List<Map<String, Object>> getAccountNameFromGroupforBankingDeposit( Long orgId) {
+	public List<Map<String, Object>> getBankNameFromGroupforBankingDeposit( Long orgId) {
 
-		Set<Object[]> result = bankingDepositRepo.findAccountNameFromGroupforBankingDeposit( orgId);
-		return getAccountNameFromGroupforBankingDeposit(result);
+		Set<Object[]> result = bankingDepositRepo.findBankNameFromGroupforBankingDeposit( orgId);
+		return getBankNameFromGroupforBankingDeposit(result);
 	}
 
-	private List<Map<String, Object>> getAccountNameFromGroupforBankingDeposit(Set<Object[]> result) {
+	private List<Map<String, Object>> getBankNameFromGroupforBankingDeposit(Set<Object[]> result) {
 		List<Map<String, Object>> details1 = new ArrayList<>();
 		for (Object[] fs : result) {
 			Map<String, Object> part = new HashMap<>();
-			part.put("accountName", fs[0] != null ? fs[0].toString() : "");
+			part.put("bankName", fs[0] != null ? fs[0].toString() : "");
 			details1.add(part);
 		}
 		return details1;

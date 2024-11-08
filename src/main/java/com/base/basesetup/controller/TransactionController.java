@@ -2676,18 +2676,18 @@ public class TransactionController extends BaseController {
 		return ResponseEntity.ok().body(responseDTO);
 	}
 
-	@GetMapping("/getAccountNameFromGroupforBankingDeposit")
-	public ResponseEntity<ResponseDTO> getAccountNameFromGroupforBankingDeposit(
+	@GetMapping("/getBankNameFromGroupforBankingDeposit")
+	public ResponseEntity<ResponseDTO> getBankNameFromGroupforBankingDeposit(
 			@RequestParam Long orgId) {
 
-		String methodName = "getAccountNameFromGroupforBankingDeposit()";
+		String methodName = "getBankNameFromGroupforBankingDeposit()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
 		String errorMsg = null;
 		Map<String, Object> responseObjectsMap = new HashMap<>();
 		ResponseDTO responseDTO = null;
 		List<Map<String, Object>> mov = new ArrayList<>();
 		try {
-			mov = transactionService.getAccountNameFromGroupforBankingDeposit(orgId);
+			mov = transactionService.getBankNameFromGroupforBankingDeposit(orgId);
 		} catch (Exception e) {
 			errorMsg = e.getMessage();
 			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
@@ -2695,12 +2695,12 @@ public class TransactionController extends BaseController {
 
 		if (StringUtils.isBlank(errorMsg)) {
 			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
-					" AccountName from Group for BankingDeposit information retrieved successfully");
+					" BankName from Group for BankingDeposit information retrieved successfully");
 			responseObjectsMap.put("BankingDeposit", mov);
 			responseDTO = createServiceResponse(responseObjectsMap);
 		} else {
 			responseDTO = createServiceResponseError(responseObjectsMap,
-					"Failed to retrieve AccountName from Group for BankingDeposit information", errorMsg);
+					"Failed to retrieve BankName from Group for BankingDeposit information", errorMsg);
 		}
 
 		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
