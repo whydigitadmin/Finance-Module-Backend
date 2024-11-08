@@ -25,6 +25,6 @@ public interface BankingDepositRepo extends JpaRepository<BankingDepositVO, Long
 	String getBankingDepositByDocId(Long orgId, String finYear, String branchCode, String screenCode);
 
 	@Query(nativeQuery = true, value = "select accountgroupname from groupledger where orgid=?1 and type='bank'  and  active=1")
-	Set<Object[]> findAccountNameFromGroupforBankingDeposit(Long orgId);
+	Set<Object[]> findBankNameFromGroupforBankingDeposit(Long orgId);
 
 }
