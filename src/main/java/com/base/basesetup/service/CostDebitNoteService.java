@@ -32,4 +32,6 @@ public interface CostDebitNoteService {
 	List<Map<String, Object>> chargeTypeDetailsForCostDebitNote(Long orgId);
 
 	List<Map<String, Object>> getAllDocIdForCostInvoice(Long orgId);
+
+	List<Map<String, Object>> getCurrencyAndExrates(Long orgId);
 }
