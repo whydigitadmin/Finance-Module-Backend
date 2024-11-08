@@ -2118,12 +2118,6 @@ public class TransactionServiceImpl implements TransactionService {
 		reconcileBankVO.setParticularsReconcileVO(particularsReconcileVOs);
 	}
 
-	@Override
-	public List<ReconcileBankVO> getReconcileBankByActive() {
-
-		return reconcileBankRepo.findReconcileBankByActive();
-
-	}
 
 	@Override
 	public String getReconcileBankDocId(Long orgId, String finYear, String branch, String branchCode) {
@@ -2132,10 +2126,21 @@ public class TransactionServiceImpl implements TransactionService {
 		return result;
 	}
 
-	@Override
-	public ReconcileBankVO getReconcileBankByDocId(Long orgId, String docId) {
 
-		return reconcileBankRepo.findAllReconcileBankByDocId(orgId, docId);
+	@Override
+	public List<Map<String, Object>> getBankNameForGroupLedgerAndReconcileBank(Long orgId) {
+		Set<Object[]> getAccount = reconcileBankRepo.findByAccountNameForBank(orgId);
+		return getAccountName(getAccount);
+	}
+
+	private List<Map<String, Object>> getAccountName(Set<Object[]> getAccount) {
+		List<Map<String, Object>> list1 = new ArrayList<>();
+		for (Object[] ch : getAccount) {
+			Map<String, Object> map = new HashMap<>();
+			map.put("accountgroupname", ch[0] != null ? ch[0].toString() : "");
+			list1.add(map);
+		}
+		return list1;
 	}
 
 	// ReconcileCorpBank
@@ -2254,11 +2259,6 @@ public class TransactionServiceImpl implements TransactionService {
 
 	}
 
-	@Override
-	public List<ReconcileCorpBankVO> getReconcileCorpBankByActive() {
-
-		return reconcileCorpBankRepo.findReconcileCorpBankByActive();
-	}
 
 	@Override
 	public String getReconcileCorpBankDocId(Long orgId, String finYear, String branch, String branchCode) {
@@ -2268,10 +2268,21 @@ public class TransactionServiceImpl implements TransactionService {
 
 	}
 
-	@Override
-	public ReconcileCorpBankVO getReconcileCorpBankByDocId(Long orgId, String docId) {
 
-		return reconcileCorpBankRepo.findAllReconcileCorpBankByDocId(orgId, docId);
+	@Override
+	public List<Map<String, Object>> getBankNameForGroupLedgerAndReconcileCorp(Long orgId) {
+		Set<Object[]> getAccount = reconcileCorpBankRepo.findByBankName(orgId);
+		return getAccountnames(getAccount);
+	}
+
+	private List<Map<String, Object>> getAccountnames(Set<Object[]> getAccount) {
+		List<Map<String, Object>> list1 = new ArrayList<>();
+		for (Object[] ch : getAccount) {
+			Map<String, Object> map = new HashMap<>();
+			map.put("accountgroupname", ch[0] != null ? ch[0].toString() : "");
+			list1.add(map);
+		}
+		return list1;
 	}
 
 	// ReconcileCash
@@ -2394,10 +2405,6 @@ public class TransactionServiceImpl implements TransactionService {
 		return total.setScale(2, RoundingMode.HALF_UP);
 	}
 
-	@Override
-	public List<ReconcileCashVO> getReconcileCashByActive() {
-		return reconcileCashRepo.findReconcileCashByActive();
-	}
 
 	@Override
 
@@ -2414,9 +2421,19 @@ public class TransactionServiceImpl implements TransactionService {
 	}
 
 	@Override
-	public ReconcileCashVO getReconcileCashByDocId(Long orgId, String docId) {
-		return reconcileCashRepo.findAllReconcileCashByDocId(orgId, docId);
+	public List<Map<String, Object>> getAccountNameForGroupLedgerAndReconcileCash(Long orgId) {
+		Set<Object[]> getAccount = reconcileCashRepo.findByAccountName(orgId);
+		return getAccountNames(getAccount);
+	}
 
+	private List<Map<String, Object>> getAccountNames(Set<Object[]> getAccount) {
+		List<Map<String, Object>> list1 = new ArrayList<>();
+		for (Object[] ch : getAccount) {
+			Map<String, Object> map = new HashMap<>();
+			map.put("accountgroupname", ch[0] != null ? ch[0].toString() : "");
+			list1.add(map);
+		}
+		return list1;
 	}
 
 	@Override
@@ -2469,20 +2486,34 @@ public class TransactionServiceImpl implements TransactionService {
 	@Override
 	public Map<String, Object> updateCreateTmsJobCard(@Valid TmsJobCardDTO tmsJobCardDTO) throws ApplicationException {
 		TmsJobCardVO tmsJobCardVO = new TmsJobCardVO();
+		String screenCode = "JC";
 		String message;
 		if (ObjectUtils.isNotEmpty(tmsJobCardDTO.getId())) {
 			tmsJobCardVO = tmsJobCardRepo.findById(tmsJobCardDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid TmsJobCard details"));
 			tmsJobCardVO.setUpdatedBy(tmsJobCardVO.getCreatedBy());
+			getTmsJobCardVOFromTmsJobCardDTO(tmsJobCardDTO, tmsJobCardVO);
 			message = "TmsJobCard Updated Successfully";
 		} else {
+			// GETDOCID API
+			String docId = tmsJobCardRepo.getTmsJobCardDocId(tmsJobCardDTO.getOrgId(), tmsJobCardDTO.getFinYear(),
+					tmsJobCardDTO.getBranchCode(), screenCode);
+
+			tmsJobCardVO.setJobNo(docId);
+
+//			// GETDOCID LASTNO +1
+			DocumentTypeMappingDetailsVO documentTypeMappingDetailsVO = documentTypeMappingDetailsRepo
+					.findByOrgIdAndFinYearAndBranchCodeAndScreenCode(tmsJobCardDTO.getOrgId(),
+							tmsJobCardDTO.getFinYear(), tmsJobCardDTO.getBranchCode(), screenCode);
+			documentTypeMappingDetailsVO.setLastno(documentTypeMappingDetailsVO.getLastno() + 1);
+			documentTypeMappingDetailsRepo.save(documentTypeMappingDetailsVO);
 
 			tmsJobCardVO.setCreatedBy(tmsJobCardDTO.getCreatedBy());
 			tmsJobCardVO.setUpdatedBy(tmsJobCardVO.getCreatedBy());
+			getTmsJobCardVOFromTmsJobCardDTO(tmsJobCardDTO, tmsJobCardVO);
 			message = "TmsJobCard Creation  Successfully !";
 		}
 
-		getTmsJobCardVOFromTmsJobCardDTO(tmsJobCardDTO, tmsJobCardVO);
 		tmsJobCardRepo.save(tmsJobCardVO);
 		Map<String, Object> response = new HashMap<>();
 		response.put("tmsJobCardVO", tmsJobCardVO);
@@ -2491,7 +2522,7 @@ public class TransactionServiceImpl implements TransactionService {
 	}
 
 	private void getTmsJobCardVOFromTmsJobCardDTO(@Valid TmsJobCardDTO tmsJobCardDTO, TmsJobCardVO tmsJobCardVO) {
-		tmsJobCardVO.setJobNo(tmsJobCardDTO.getJobNo());
+		//tmsJobCardVO.setJobNo(tmsJobCardDTO.getJobNo());
 		tmsJobCardVO.setCustomer(tmsJobCardDTO.getCustomer());
 		tmsJobCardVO.setDate(tmsJobCardDTO.getDate());
 		tmsJobCardVO.setSalesCategory(tmsJobCardDTO.getSalesCategory());
@@ -2507,7 +2538,9 @@ public class TransactionServiceImpl implements TransactionService {
 		tmsJobCardVO.setFinanceClosed(tmsJobCardDTO.isFinanceClosed());
 		tmsJobCardVO.setClosed(tmsJobCardDTO.isClosed());
 		tmsJobCardVO.setBranch(tmsJobCardDTO.getBranch());
+		tmsJobCardVO.setBranchCode(tmsJobCardDTO.getBranchCode());
 		tmsJobCardVO.setActive(tmsJobCardDTO.isActive());
+		tmsJobCardVO.setFinYear(tmsJobCardDTO.getFinYear());
 
 		if (ObjectUtils.isNotEmpty(tmsJobCardDTO.getId())) {
 			List<CostCenterTmsJobCardVO> costCenterTmsJobCardVO1 = costCenterTmsJobCardRepo
@@ -2527,11 +2560,13 @@ public class TransactionServiceImpl implements TransactionService {
 	}
 
 	@Override
-	public List<TmsJobCardVO> getTmsJobCardByActive() {
-
-		return tmsJobCardRepo.findTmsJobCardByActive();
+	public String getTmsJobCardDocId(Long orgId, String finYear, String branch, String branchCode) {
+		String ScreenCode = "JC";
+		String result = tmsJobCardRepo.getTmsJobCardDocId(orgId, finYear, branchCode, ScreenCode);
+		return result;
 
 	}
+
 
 	// AdjustmentJournal
 
@@ -2546,11 +2581,11 @@ public class TransactionServiceImpl implements TransactionService {
 	}
 
 	@Override
-	public List<AdjustmentJournalVO> getAdjustmentJournalById(Long id) {
+	public List<AdjustmentJournalVO> getAllAdjustmentJournalById(Long id) {
 		List<AdjustmentJournalVO> adjustmentJournalVO = new ArrayList<>();
 		if (ObjectUtils.isNotEmpty(id)) {
 			LOGGER.info("Successfully Received AdjustmentJournal BY Id : {}", id);
-			adjustmentJournalVO = adjustmentJournalRepo.getAdjustmentJournalById(id);
+			adjustmentJournalVO = adjustmentJournalRepo.getAllAdjustmentJournalById(id);
 		} 
 		return adjustmentJournalVO;
 	}
@@ -2564,7 +2599,6 @@ public class TransactionServiceImpl implements TransactionService {
 		if (ObjectUtils.isNotEmpty(adjustmentJournalDTO.getId())) {
 			adjustmentJournalVO = adjustmentJournalRepo.findById(adjustmentJournalDTO.getId())
 					.orElseThrow(() -> new ApplicationException("adjustmentJournal not found"));
-
 			adjustmentJournalVO.setUpdatedBy(adjustmentJournalDTO.getCreatedBy());
 			createUpdateAdjustmentJournalVOByAdjustmentJournalDTO(adjustmentJournalDTO, adjustmentJournalVO);
 			message = "AdjustmentJournal Updated Successfully";
@@ -2572,7 +2606,6 @@ public class TransactionServiceImpl implements TransactionService {
 			// GETDOCID API
 			String docId = adjustmentJournalRepo.getAdjustmentJournalDocId(adjustmentJournalDTO.getOrgId(),
 					adjustmentJournalDTO.getFinYear(), adjustmentJournalDTO.getBranchCode(), screenCode);
-
 			adjustmentJournalVO.setDocId(docId);
 
 //				// GETDOCID LASTNO +1
@@ -2882,6 +2915,64 @@ public class TransactionServiceImpl implements TransactionService {
 		return response;
 	}
 
+	private void createUpdateAdjustmentJournalVOByAdjustmentJournalDTO(@Valid AdjustmentJournalDTO adjustmentJournalDTO,
+			AdjustmentJournalVO adjustmentJournalVO) throws ApplicationException {
+		adjustmentJournalVO.setAdjustmentType(adjustmentJournalDTO.getAdjustmentType());
+		adjustmentJournalVO.setRemarks(adjustmentJournalDTO.getRemarks().toUpperCase());
+		adjustmentJournalVO.setCurrency(adjustmentJournalDTO.getCurrency());
+		adjustmentJournalVO.setExRate(adjustmentJournalDTO.getExRate());
+
+		adjustmentJournalVO.setRefNo(adjustmentJournalDTO.getRefNo().toUpperCase());
+		adjustmentJournalVO.setRefDate(adjustmentJournalDTO.getRefDate());
+		adjustmentJournalVO.setSuppRefNo(adjustmentJournalDTO.getSuppRefNo().toUpperCase());
+		adjustmentJournalVO.setSuppRefDate(adjustmentJournalDTO.getSuppRefDate());
+		adjustmentJournalVO.setOrgId(adjustmentJournalDTO.getOrgId());
+		adjustmentJournalVO.setBranch(adjustmentJournalDTO.getBranch());
+		adjustmentJournalVO.setBranchCode(adjustmentJournalDTO.getBranchCode());
+		adjustmentJournalVO.setFinYear(adjustmentJournalDTO.getFinYear());
+
+		if (ObjectUtils.isNotEmpty(adjustmentJournalVO.getId())) {
+			List<AccountParticularsVO> accountParticularsVOList = accountParticularsRepo
+					.findByAdjustmentJournalVO(adjustmentJournalVO);
+			accountParticularsRepo.deleteAll(accountParticularsVOList);
+		}
+
+		BigDecimal totalDebitAmount = BigDecimal.ZERO;
+		BigDecimal totalCreditAmount = BigDecimal.ZERO;
+		List<AccountParticularsVO> accountParticularsVOs = new ArrayList<>();
+		for (AccountParticularsDTO accountParticularsDTO : adjustmentJournalDTO.getAccountParticularsDTO()) {
+			AccountParticularsVO accountParticularsVO = new AccountParticularsVO();
+
+			accountParticularsVO.setAccountsName(accountParticularsDTO.getAccountsName());
+			accountParticularsVO.setSubledgerName(accountParticularsDTO.getSubledgerName());
+			accountParticularsVO.setSubLedgerCode(accountParticularsDTO.getSubLedgerCode());
+			if (accountParticularsDTO.getDebitAmount() != null
+					&& accountParticularsDTO.getDebitAmount().compareTo(BigDecimal.ZERO) != 0) {
+				accountParticularsVO.setDebitAmount(accountParticularsDTO.getDebitAmount());
+				accountParticularsVO.setCreditAmount(BigDecimal.ZERO);
+			} else {
+				accountParticularsVO.setCreditAmount(accountParticularsDTO.getCreditAmount());
+				accountParticularsVO.setDebitAmount(BigDecimal.ZERO);
+			}
+			totalCreditAmount = totalCreditAmount.add(accountParticularsVO.getCreditAmount());
+			totalDebitAmount = totalDebitAmount.add(accountParticularsVO.getDebitAmount());
+
+			accountParticularsVO.setDebitBase(accountParticularsDTO.getDebitBase());
+			accountParticularsVO.setCreditBase(accountParticularsDTO.getDebitBase());
+
+			accountParticularsVO.setAdjustmentJournalVO(adjustmentJournalVO);
+			accountParticularsVOs.add(accountParticularsVO);
+		}
+		if (totalCreditAmount.equals(totalDebitAmount)) {
+			adjustmentJournalVO.setTotalCreditAmount(totalCreditAmount);
+			adjustmentJournalVO.setTotalDebitAmount(totalDebitAmount);
+		} else {
+			throw new ApplicationException("Total Debit Amount and Total Credit Amount Should be Equal");
+		}
+		adjustmentJournalVO.setAccountParticularsVO(accountParticularsVOs);
+
+	}
+  
 	private void createUpdateBankingWithdrawalVOByBankingWithdrawalDTO(@Valid BankingWithdrawalDTO bankingWithdrawalDTO,
 			BankingWithdrawalVO bankingWithdrawalVO) throws ApplicationException {
 		bankingWithdrawalVO.setWithdrawalMode(bankingWithdrawalDTO.getWithdrawalMode());
@@ -2908,6 +2999,109 @@ public class TransactionServiceImpl implements TransactionService {
 
 		BigDecimal totalDebitAmount = BigDecimal.ZERO;
 		BigDecimal totalCreditAmount = BigDecimal.ZERO;
+		List<WithdrawalParticularsVO> withdrawalParticularsVOs = new ArrayList<>();
+		for (WithdrawalParticularsDTO withdrawalParticularsDTO : bankingWithdrawalDTO.getWithdrawalParticularsDTO()) {
+			WithdrawalParticularsVO withdrawalParticularsVO = new WithdrawalParticularsVO();
+
+			withdrawalParticularsVO.setAccountsName(withdrawalParticularsDTO.getAccountsName());
+			withdrawalParticularsVO.setNarration(withdrawalParticularsDTO.getNarration());
+			if (withdrawalParticularsDTO.getDebit() != null
+					&& withdrawalParticularsDTO.getDebit().compareTo(BigDecimal.ZERO) != 0) {
+				withdrawalParticularsVO.setDebit(withdrawalParticularsDTO.getDebit());
+				withdrawalParticularsVO.setCredit(BigDecimal.ZERO);
+			} else {
+				withdrawalParticularsVO.setCredit(withdrawalParticularsDTO.getCredit());
+				withdrawalParticularsVO.setDebit(BigDecimal.ZERO);
+			}
+			totalCreditAmount = totalCreditAmount.add(withdrawalParticularsVO.getCredit());
+			totalDebitAmount = totalDebitAmount.add(withdrawalParticularsVO.getDebit());
+
+			withdrawalParticularsVO.setBankingWithdrawalVO(bankingWithdrawalVO);
+			withdrawalParticularsVOs.add(withdrawalParticularsVO);
+		}
+		if (totalCreditAmount.equals(totalDebitAmount)) {
+			bankingWithdrawalVO.setTotalCreditAmount(totalCreditAmount);
+			bankingWithdrawalVO.setTotalDebitAmount(totalDebitAmount);
+			bankingWithdrawalVO.setTotalAmount(bankingWithdrawalDTO.getWithdrawalAmount());
+
+		} else {
+			throw new ApplicationException("Total Debit Amount and Total Credit Amount Should be Equal");
+		}
+		bankingWithdrawalVO.setWithdrawalParticularsVO(withdrawalParticularsVOs);
+
+	}
+
+		List<AccountParticularsVO> accountParticularsVOs = new ArrayList<>();
+		for (AccountParticularsDTO accountParticularsDTO : adjustmentJournalDTO.getAccountParticularsDTO()) {
+			AccountParticularsVO accountParticularsVO = new AccountParticularsVO();
+
+			accountParticularsVO.setAccountsName(accountParticularsDTO.getAccountsName());
+			accountParticularsVO.setSubledgerName(accountParticularsDTO.getSubledgerName());
+			accountParticularsVO.setSubLedgerCode(accountParticularsDTO.getSubLedgerCode());
+			if (accountParticularsDTO.getDebitAmount() != null
+					&& accountParticularsDTO.getDebitAmount().compareTo(BigDecimal.ZERO) != 0) {
+				accountParticularsVO.setDebitAmount(accountParticularsDTO.getDebitAmount());
+				accountParticularsVO.setCreditAmount(BigDecimal.ZERO);
+			} else {
+				accountParticularsVO.setCreditAmount(accountParticularsDTO.getCreditAmount());
+				accountParticularsVO.setDebitAmount(BigDecimal.ZERO);
+			}
+			totalCreditAmount = totalCreditAmount.add(accountParticularsVO.getCreditAmount());
+			totalDebitAmount = totalDebitAmount.add(accountParticularsVO.getDebitAmount());
+
+			accountParticularsVO.setDebitBase(accountParticularsDTO.getDebitBase());
+			accountParticularsVO.setCreditBase(accountParticularsDTO.getDebitBase());
+
+			accountParticularsVO.setAdjustmentJournalVO(adjustmentJournalVO);
+			accountParticularsVOs.add(accountParticularsVO);
+		}
+		if (totalCreditAmount.equals(totalDebitAmount)) {
+			adjustmentJournalVO.setTotalCreditAmount(totalCreditAmount);
+			adjustmentJournalVO.setTotalDebitAmount(totalDebitAmount);
+		} else {
+			throw new ApplicationException("Total Debit Amount and Total Credit Amount Should be Equal");
+		}
+		adjustmentJournalVO.setAccountParticularsVO(accountParticularsVOs);
+
+	}
+
+	@Override
+	public String getAdjustmentJournalDocId(Long orgId, String finYear, String branch, String branchCode) {
+		String ScreenCode = "AJ";
+		String result = adjustmentJournalRepo.getAdjustmentJournalByDocId(orgId, finYear, branchCode, ScreenCode);
+		return result;
+	}
+
+	@Override
+	public List<Map<String, Object>> getSalesPersonFromPartyMaster(Long orgId, String partyName) {
+		Set<Object[]> getSalePerson = tmsJobCardRepo.findBySalesPreson(orgId, partyName);
+		return getSalePersons(getSalePerson);
+	}
+
+	private List<Map<String, Object>> getSalePersons(Set<Object[]> getSalePerson) { 
+		List<Map<String, Object>> list1 = new ArrayList<>();
+		for (Object[] ch : getSalePerson) {
+			Map<String, Object> map = new HashMap<>();
+			map.put("salesperson", ch[0] != null ? ch[0].toString() : "");
+			list1.add(map);
+		}
+		return list1;
+	}
+
+	@Override
+	public List<Map<String, Object>> getAllCustomersFromPartyMaster(Long orgId) {
+		Set<Object[]> getCustomer = tmsJobCardRepo.findAllCustomers(orgId);
+		return getCustomers(getCustomer);
+	}
+
+	private List<Map<String, Object>> getCustomers(Set<Object[]> getCustomer) {
+		List<Map<String, Object>> list1 = new ArrayList<>();
+		for (Object[] ch : getCustomer) {
+			Map<String, Object> map = new HashMap<>();
+			map.put("partyname", ch[0] != null ? ch[0].toString() : "");
+			list1.add(map);
+		}
+		return list1;
 		List<WithdrawalParticularsVO> withdrawalParticularsVOs = new ArrayList<>();
 		for (WithdrawalParticularsDTO withdrawalParticularsDTO : bankingWithdrawalDTO.getWithdrawalParticularsDTO()) {
 			WithdrawalParticularsVO withdrawalParticularsVO = new WithdrawalParticularsVO();
