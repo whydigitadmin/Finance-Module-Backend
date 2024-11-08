@@ -36,34 +36,42 @@ public class TmsJobCardVO {
 	@SequenceGenerator(name = "tmsjobcardgen", sequenceName = "tmsjobcardseq", initialValue = 1000000001, allocationSize = 1)
 	@Column(name = "tmsjobcardid")
 	private Long id;
-	@Column(name = "jobno")
+	@Column(name = "jobno",length = 30)
 	private String jobNo;
-	@Column(name = "customer")
+	@Column(name = "customer",length = 50)
 	private String customer;
 	@Column(name = "operationclosed")
 	private boolean operationClosed;
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	@Column(name = "date")
 	private LocalDate date;
-	@Column(name = "salescategory")
+	@Column(name = "salescategory",length = 50)
 	private String salesCategory;
 	@Column(name = "financeclosed")
 	private boolean financeClosed;
-	@Column(name = "salesperson")
+	@Column(name = "salesperson",length = 50)
 	private String salesPerson;
 	@Column(name = "closed")
 	private boolean closed;
 	@Column(name = "closedon")
-	private String closedOn;
-	@Column(name = "income")
+	private LocalDate closedOn;
+	@Column(name = "income",precision = 10,scale = 2)
 	private BigDecimal income;
-	@Column(name = "expense")
+	@Column(name = "expense",precision = 10,scale = 2)
 	private BigDecimal expense;
-	@Column(name = "profit")
+	@Column(name = "profit",precision = 10,scale = 2)
 	private BigDecimal profit;
-	@Column(name = "remarks")
+	@Column(name = "remarks",length = 150)
 	private String remarks;
+	@Column(name = "docdate")
+	private LocalDate docDate= LocalDate.now();
 
+	//default fields
+	@Builder.Default
+	@Column(name = "screencode",length = 5)
+	private String screenCode="JC";
+	@Builder.Default
+	@Column(name="screenname",length = 20)
+	private String screenName="JOB CARD";
 	@Column(name = "orgid")
 	private Long orgId;
 	@Column(name = "branch", length = 25)
@@ -76,6 +84,13 @@ public class TmsJobCardVO {
 	private String updatedBy;
 	@Column(name = "active")
 	private boolean active;
+	@Column(name="cancel")
+	private boolean cancel;
+	@Column(name = "cancelremarks", length = 50)
+	private String cancelRemarks;
+	@Column(name = "finyear", length = 5)
+	private String finYear;
+	
 
 	@OneToMany(mappedBy = "tmsJobCardVO", cascade = CascadeType.ALL)
 	@JsonManagedReference

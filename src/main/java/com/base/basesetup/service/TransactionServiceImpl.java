@@ -2138,12 +2138,6 @@ public class TransactionServiceImpl implements TransactionService {
 		reconcileBankVO.setParticularsReconcileVO(particularsReconcileVOs);
 	}
 
-	@Override
-	public List<ReconcileBankVO> getReconcileBankByActive() {
-
-		return reconcileBankRepo.findReconcileBankByActive();
-
-	}
 
 	@Override
 	public String getReconcileBankDocId(Long orgId, String finYear, String branch, String branchCode) {
@@ -2152,10 +2146,21 @@ public class TransactionServiceImpl implements TransactionService {
 		return result;
 	}
 
-	@Override
-	public ReconcileBankVO getReconcileBankByDocId(Long orgId, String docId) {
 
-		return reconcileBankRepo.findAllReconcileBankByDocId(orgId, docId);
+	@Override
+	public List<Map<String, Object>> getBankNameForGroupLedgerAndReconcileBank(Long orgId) {
+		Set<Object[]> getAccount = reconcileBankRepo.findByAccountNameForBank(orgId);
+		return getAccountName(getAccount);
+	}
+
+	private List<Map<String, Object>> getAccountName(Set<Object[]> getAccount) {
+		List<Map<String, Object>> list1 = new ArrayList<>();
+		for (Object[] ch : getAccount) {
+			Map<String, Object> map = new HashMap<>();
+			map.put("accountgroupname", ch[0] != null ? ch[0].toString() : "");
+			list1.add(map);
+		}
+		return list1;
 	}
 
 	// ReconcileCorpBank
@@ -2274,11 +2279,6 @@ public class TransactionServiceImpl implements TransactionService {
 
 	}
 
-	@Override
-	public List<ReconcileCorpBankVO> getReconcileCorpBankByActive() {
-
-		return reconcileCorpBankRepo.findReconcileCorpBankByActive();
-	}
 
 	@Override
 	public String getReconcileCorpBankDocId(Long orgId, String finYear, String branch, String branchCode) {
@@ -2288,10 +2288,21 @@ public class TransactionServiceImpl implements TransactionService {
 
 	}
 
-	@Override
-	public ReconcileCorpBankVO getReconcileCorpBankByDocId(Long orgId, String docId) {
 
-		return reconcileCorpBankRepo.findAllReconcileCorpBankByDocId(orgId, docId);
+	@Override
+	public List<Map<String, Object>> getBankNameForGroupLedgerAndReconcileCorp(Long orgId) {
+		Set<Object[]> getAccount = reconcileCorpBankRepo.findByBankName(orgId);
+		return getAccountnames(getAccount);
+	}
+
+	private List<Map<String, Object>> getAccountnames(Set<Object[]> getAccount) {
+		List<Map<String, Object>> list1 = new ArrayList<>();
+		for (Object[] ch : getAccount) {
+			Map<String, Object> map = new HashMap<>();
+			map.put("accountgroupname", ch[0] != null ? ch[0].toString() : "");
+			list1.add(map);
+		}
+		return list1;
 	}
 
 	// ReconcileCash
@@ -2414,10 +2425,6 @@ public class TransactionServiceImpl implements TransactionService {
 		return total.setScale(2, RoundingMode.HALF_UP);
 	}
 
-	@Override
-	public List<ReconcileCashVO> getReconcileCashByActive() {
-		return reconcileCashRepo.findReconcileCashByActive();
-	}
 
 	@Override
 
@@ -2434,9 +2441,19 @@ public class TransactionServiceImpl implements TransactionService {
 	}
 
 	@Override
-	public ReconcileCashVO getReconcileCashByDocId(Long orgId, String docId) {
-		return reconcileCashRepo.findAllReconcileCashByDocId(orgId, docId);
+	public List<Map<String, Object>> getAccountNameForGroupLedgerAndReconcileCash(Long orgId) {
+		Set<Object[]> getAccount = reconcileCashRepo.findByAccountName(orgId);
+		return getAccountNames(getAccount);
+	}
 
+	private List<Map<String, Object>> getAccountNames(Set<Object[]> getAccount) {
+		List<Map<String, Object>> list1 = new ArrayList<>();
+		for (Object[] ch : getAccount) {
+			Map<String, Object> map = new HashMap<>();
+			map.put("accountgroupname", ch[0] != null ? ch[0].toString() : "");
+			list1.add(map);
+		}
+		return list1;
 	}
 
 	@Override
@@ -2489,20 +2506,34 @@ public class TransactionServiceImpl implements TransactionService {
 	@Override
 	public Map<String, Object> updateCreateTmsJobCard(@Valid TmsJobCardDTO tmsJobCardDTO) throws ApplicationException {
 		TmsJobCardVO tmsJobCardVO = new TmsJobCardVO();
+		String screenCode = "JC";
 		String message;
 		if (ObjectUtils.isNotEmpty(tmsJobCardDTO.getId())) {
 			tmsJobCardVO = tmsJobCardRepo.findById(tmsJobCardDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid TmsJobCard details"));
 			tmsJobCardVO.setUpdatedBy(tmsJobCardVO.getCreatedBy());
+			getTmsJobCardVOFromTmsJobCardDTO(tmsJobCardDTO, tmsJobCardVO);
 			message = "TmsJobCard Updated Successfully";
 		} else {
+			// GETDOCID API
+			String docId = tmsJobCardRepo.getTmsJobCardDocId(tmsJobCardDTO.getOrgId(), tmsJobCardDTO.getFinYear(),
+					tmsJobCardDTO.getBranchCode(), screenCode);
+
+			tmsJobCardVO.setJobNo(docId);
+
+//			// GETDOCID LASTNO +1
+			DocumentTypeMappingDetailsVO documentTypeMappingDetailsVO = documentTypeMappingDetailsRepo
+					.findByOrgIdAndFinYearAndBranchCodeAndScreenCode(tmsJobCardDTO.getOrgId(),
+							tmsJobCardDTO.getFinYear(), tmsJobCardDTO.getBranchCode(), screenCode);
+			documentTypeMappingDetailsVO.setLastno(documentTypeMappingDetailsVO.getLastno() + 1);
+			documentTypeMappingDetailsRepo.save(documentTypeMappingDetailsVO);
 
 			tmsJobCardVO.setCreatedBy(tmsJobCardDTO.getCreatedBy());
 			tmsJobCardVO.setUpdatedBy(tmsJobCardVO.getCreatedBy());
+			getTmsJobCardVOFromTmsJobCardDTO(tmsJobCardDTO, tmsJobCardVO);
 			message = "TmsJobCard Creation  Successfully !";
 		}
 
-		getTmsJobCardVOFromTmsJobCardDTO(tmsJobCardDTO, tmsJobCardVO);
 		tmsJobCardRepo.save(tmsJobCardVO);
 		Map<String, Object> response = new HashMap<>();
 		response.put("tmsJobCardVO", tmsJobCardVO);
@@ -2511,7 +2542,7 @@ public class TransactionServiceImpl implements TransactionService {
 	}
 
 	private void getTmsJobCardVOFromTmsJobCardDTO(@Valid TmsJobCardDTO tmsJobCardDTO, TmsJobCardVO tmsJobCardVO) {
-		tmsJobCardVO.setJobNo(tmsJobCardDTO.getJobNo());
+		//tmsJobCardVO.setJobNo(tmsJobCardDTO.getJobNo());
 		tmsJobCardVO.setCustomer(tmsJobCardDTO.getCustomer());
 		tmsJobCardVO.setDate(tmsJobCardDTO.getDate());
 		tmsJobCardVO.setSalesCategory(tmsJobCardDTO.getSalesCategory());
@@ -2527,7 +2558,9 @@ public class TransactionServiceImpl implements TransactionService {
 		tmsJobCardVO.setFinanceClosed(tmsJobCardDTO.isFinanceClosed());
 		tmsJobCardVO.setClosed(tmsJobCardDTO.isClosed());
 		tmsJobCardVO.setBranch(tmsJobCardDTO.getBranch());
+		tmsJobCardVO.setBranchCode(tmsJobCardDTO.getBranchCode());
 		tmsJobCardVO.setActive(tmsJobCardDTO.isActive());
+		tmsJobCardVO.setFinYear(tmsJobCardDTO.getFinYear());
 
 		if (ObjectUtils.isNotEmpty(tmsJobCardDTO.getId())) {
 			List<CostCenterTmsJobCardVO> costCenterTmsJobCardVO1 = costCenterTmsJobCardRepo
@@ -2547,11 +2580,13 @@ public class TransactionServiceImpl implements TransactionService {
 	}
 
 	@Override
-	public List<TmsJobCardVO> getTmsJobCardByActive() {
-
-		return tmsJobCardRepo.findTmsJobCardByActive();
+	public String getTmsJobCardDocId(Long orgId, String finYear, String branch, String branchCode) {
+		String ScreenCode = "JC";
+		String result = tmsJobCardRepo.getTmsJobCardDocId(orgId, finYear, branchCode, ScreenCode);
+		return result;
 
 	}
+
 
 	// AdjustmentJournal
 
@@ -2584,7 +2619,6 @@ public class TransactionServiceImpl implements TransactionService {
 		if (ObjectUtils.isNotEmpty(adjustmentJournalDTO.getId())) {
 			adjustmentJournalVO = adjustmentJournalRepo.findById(adjustmentJournalDTO.getId())
 					.orElseThrow(() -> new ApplicationException("adjustmentJournal not found"));
-
 			adjustmentJournalVO.setUpdatedBy(adjustmentJournalDTO.getCreatedBy());
 			createUpdateAdjustmentJournalVOByAdjustmentJournalDTO(adjustmentJournalDTO, adjustmentJournalVO);
 			message = "AdjustmentJournal Updated Successfully";
@@ -2592,7 +2626,6 @@ public class TransactionServiceImpl implements TransactionService {
 			// GETDOCID API
 			String docId = adjustmentJournalRepo.getAdjustmentJournalDocId(adjustmentJournalDTO.getOrgId(),
 					adjustmentJournalDTO.getFinYear(), adjustmentJournalDTO.getBranchCode(), screenCode);
-
 			adjustmentJournalVO.setDocId(docId);
 
 //				// GETDOCID LASTNO +1
@@ -2901,11 +2934,11 @@ public class TransactionServiceImpl implements TransactionService {
 		response.put("message", message);
 		return response;
 	}
-
+  
 	private void createUpdateBankingWithdrawalVOByBankingWithdrawalDTO(@Valid BankingWithdrawalDTO bankingWithdrawalDTO,
 			BankingWithdrawalVO bankingWithdrawalVO) throws ApplicationException {
 		bankingWithdrawalVO.setWithdrawalMode(bankingWithdrawalDTO.getWithdrawalMode());
-		bankingWithdrawalVO.setReceivedFrom(bankingWithdrawalDTO.getReceivedFrom().toUpperCase()); 
+		bankingWithdrawalVO.setPayTo(bankingWithdrawalDTO.getPayTo().toUpperCase()); 
 		bankingWithdrawalVO.setChequeNo(bankingWithdrawalDTO.getChequeNo());
 		bankingWithdrawalVO.setChequeDate(bankingWithdrawalDTO.getChequeDate());
 		bankingWithdrawalVO.setChequeBank(bankingWithdrawalDTO.getChequeBank());
@@ -2928,6 +2961,7 @@ public class TransactionServiceImpl implements TransactionService {
 
 		BigDecimal totalDebitAmount = BigDecimal.ZERO;
 		BigDecimal totalCreditAmount = BigDecimal.ZERO;
+		
 		List<WithdrawalParticularsVO> withdrawalParticularsVOs = new ArrayList<>();
 		for (WithdrawalParticularsDTO withdrawalParticularsDTO : bankingWithdrawalDTO.getWithdrawalParticularsDTO()) {
 			WithdrawalParticularsVO withdrawalParticularsVO = new WithdrawalParticularsVO();
@@ -2960,4 +2994,37 @@ public class TransactionServiceImpl implements TransactionService {
 
 	}
 
+
+	@Override
+	public List<Map<String, Object>> getSalesPersonFromPartyMaster(Long orgId, String partyName) {
+		Set<Object[]> getSalePerson = tmsJobCardRepo.findBySalesPreson(orgId, partyName);
+		return getSalePersons(getSalePerson);
+	}
+
+	private List<Map<String, Object>> getSalePersons(Set<Object[]> getSalePerson) { 
+		List<Map<String, Object>> list1 = new ArrayList<>();
+		for (Object[] ch : getSalePerson) {
+			Map<String, Object> map = new HashMap<>();
+			map.put("salesperson", ch[0] != null ? ch[0].toString() : "");
+			list1.add(map);
+		}
+		return list1;
+	}
+
+	@Override
+	public List<Map<String, Object>> getAllCustomersFromPartyMaster(Long orgId) {
+		Set<Object[]> getCustomer = tmsJobCardRepo.findAllCustomers(orgId);
+		return getCustomers(getCustomer);
+	}
+
+	private List<Map<String, Object>> getCustomers(Set<Object[]> getCustomer) {
+		List<Map<String, Object>> list1 = new ArrayList<>();
+		for (Object[] ch : getCustomer) {
+			Map<String, Object> map = new HashMap<>();
+			map.put("partyname", ch[0] != null ? ch[0].toString() : "");
+			list1.add(map);
+		}
+		return list1;
+	}
+	
 }

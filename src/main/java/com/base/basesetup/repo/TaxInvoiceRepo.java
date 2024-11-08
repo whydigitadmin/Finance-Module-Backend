@@ -54,5 +54,6 @@ public interface TaxInvoiceRepo extends JpaRepository<TaxInvoiceVO, Long> {
 			+ "WHERE orgid = ?1 \r\n"
 			+ "  AND branchcode = ?2")
 	Set<Object[]> getGstType(Long orgId, String branchCode,String stateCode);
+	
 
 }
