@@ -63,6 +63,10 @@ public class IrnCreditDTO {
 	private String amtInWords;
 	private BigDecimal exRate;
 	private BigDecimal totTaxAmt;
+	private BigDecimal summaryExRate;
+	private LocalDate currentDate;
+	private Long currentDateValue;
+	private Long roundOff;
 
 	List<IrnCreditChargesDTO> irnCreditChargeDTO;
 

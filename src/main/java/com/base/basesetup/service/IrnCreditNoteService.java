@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.base.basesetup.dto.IrnCreditDTO;
 import com.base.basesetup.entity.IrnCreditVO;
+import com.base.basesetup.entity.PartyMasterVO;
 import com.base.basesetup.exception.ApplicationException;
 
 @Service
@@ -23,7 +24,8 @@ public interface IrnCreditNoteService {
 
 	List<IrnCreditVO> getIrnCreditByActive();
 	
-	List<Map<String,Object>> getPartyNameAndPartyCodeAndPartyTypeForIrn(Long orgId);
 	
 	String getIrnCreditNoteDocId(Long orgId, String finYear, String branch, String branchCode);
+
+	List<PartyMasterVO> getAllPartyByPartyType(Long orgId, String partyType);
 }

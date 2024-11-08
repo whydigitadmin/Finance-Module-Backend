@@ -48,6 +48,6 @@ public interface APService {
 // 	PaymentRegister
 	List<Map<String, Object>> getAllPaymentRegister(Long orgId, String fromDate, String toDate, String subLedgerName);
 
-	String getApBillBalanceDocId(Long orgId, String finYear, String branch, String branchCode);
+//	String getApBillBalanceDocId(Long orgId, String finYear, String branch, String branchCode);
 
 }

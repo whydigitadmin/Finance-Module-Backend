@@ -33,8 +33,8 @@ public class ApBillBalanceVO {
 	@Column(name = "apbillbalanceid")
 	private Long id;
 
-	@Column(name = "docid", length = 50)
-	private String docId;
+//	@Column(name = "docid", length = 50)
+//	private String docId;
 
 	@Column(name = "docdate")
 	@Builder.Default

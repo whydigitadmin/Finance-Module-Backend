@@ -125,6 +125,18 @@ public class IrnCreditVO {
 
 	@Column(name = "exrate", precision = 10, scale = 2)
 	private BigDecimal exRate;
+	
+	@Column(name = "summaryexrate", precision = 10, scale = 2)
+	private BigDecimal summaryExRate;
+	
+	@Column(name="currentdate")
+	private LocalDate currentDate;
+	
+	@Column(name="currentdatevalue")
+	private Long currentDateValue;
+	
+	@Column(name="roundoff")
+	private Long roundOff;
 
 	@Column(name = "status", length = 10)
 	private String status;

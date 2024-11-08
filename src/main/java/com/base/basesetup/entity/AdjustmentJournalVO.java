@@ -16,7 +16,6 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.base.basesetup.dto.CreatedUpdatedDate;
-import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.AllArgsConstructor;
@@ -25,19 +24,22 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "generaljournal")
+@Table(name = "adjustmentjournal")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class GeneralJournalVO {
+public class AdjustmentJournalVO {
+
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "generaljournalgen")
-	@SequenceGenerator(name = "generaljournalgen", sequenceName = "generaljournalseq", initialValue = 1000000001, allocationSize = 1)
-	@Column(name = "generaljournalid")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "adjustmentjournalgen")
+	@SequenceGenerator(name = "adjustmentjournalgen", sequenceName = "adjustmentjournalseq", initialValue = 1000000001, allocationSize = 1)
+	@Column(name = "adjustmentjournalid")
 	private Long id;
-	@Column(name = "vouchersubtype", length = 25)
-	private String voucherSubType;
+	
+	
+	@Column(name = "adjustmenttype", length = 25)
+	private String adjustmentType;
 	
 	@Column(name = "docid", length = 50)
     private String docId;
@@ -54,12 +56,16 @@ public class GeneralJournalVO {
 	private String refNo;
 	@Column(name = "refdate")
 	private LocalDate refDate;
+	@Column(name = "supprefno", length = 50)
+	private String suppRefNo;
+	@Column(name = "supprefdate")
+	private LocalDate suppRefDate;
 
 	@Column(name = "screencode", length = 5)
-	private String screenCode = "GJ";
+	private String screenCode = "AJ";
 
 	@Column(name = "screenname", length = 25)
-	private String screenName = "GENERALJOURNAL";
+	private String screenName = "ADJUSTMENTJOURNAL";
 
 	@Column(name = "remarks", length = 150)
 	private String remarks;
@@ -95,17 +101,15 @@ public class GeneralJournalVO {
 
 	@Column(name = "orgid")
 	private Long orgId;
-
-	@OneToMany(mappedBy = "generalJournalVO", cascade = CascadeType.ALL)
+	
+	
+	
+	@OneToMany(mappedBy = "adjustmentJournalVO", cascade = CascadeType.ALL)
 	@JsonManagedReference
-	List<ParticularsJournalVO> particularsJournalVO;
-
-	@JsonGetter("active")
-	public String getActive() {
-		return active ? "Active" : "In-Active";
-	}
+	List<AccountParticularsVO> accountParticularsVO;
 	
 	@Embedded
 	@Builder.Default
 	private CreatedUpdatedDate commonDate = new CreatedUpdatedDate();
+
 }

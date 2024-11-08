@@ -19,5 +19,5 @@ public class IrnCreditGstDTO {
 	private BigDecimal crBillAmt;
 	private BigDecimal dBLCAmt;
 	private BigDecimal crLCAmt;
-	private String remarks;
+	private String gstRemarks;
 }
