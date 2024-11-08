@@ -201,11 +201,7 @@ public interface TransactionService {
 
 	List<ReconcileBankVO> getAllReconcileBankById(Long id);
 
-	List<ReconcileBankVO> getReconcileBankByActive();
-
 	String getReconcileBankDocId(Long orgId, String finYear, String branch, String branchCode);
-
-	ReconcileBankVO getReconcileBankByDocId(Long orgId, String docId);
 
 	String getGeneralJournalDocId(Long orgId, String finYear, String branch, String branchCode);
 
@@ -219,11 +215,7 @@ public interface TransactionService {
 
 	List<ReconcileCorpBankVO> getAllReconcileCorpBankById(Long id);
 
-	List<ReconcileCorpBankVO> getReconcileCorpBankByActive();
-
 	String getReconcileCorpBankDocId(Long orgId, String finYear, String branch, String branchCode);
-
-	ReconcileCorpBankVO getReconcileCorpBankByDocId(Long orgId, String docId);
 
 	List<Map<String, Object>> getBankNameForGroupLedgerAndReconcileCorp(Long orgId);
 
@@ -235,15 +227,11 @@ public interface TransactionService {
 
 	List<ReconcileCashVO> getAllReconcileCashById(Long id);
 
-	List<ReconcileCashVO> getReconcileCashByActive();
-
 	FundTransferVO getFundTranferByDocId(Long orgId, String docId);
 
 	String getFundTranferDocId(Long orgId, String finYear, String branch, String branchCode);
 
 	String getReconcileCashDocId(Long orgId, String finYear, String branch, String branchCode);
-
-	ReconcileCashVO getReconcileCashByDocId(Long orgId, String docId);
 
 	String getChartCostCenterDocId(Long orgId, String finYear, String branch, String branchCode);
 
@@ -257,15 +245,11 @@ public interface TransactionService {
 
 	List<TmsJobCardVO> getAllTmsJobCardById(Long id);
 
-	List<TmsJobCardVO> getTmsJobCardByActive();
-
 	List<Map<String, Object>> getSalesPersonFromPartyMaster(Long orgId, String partyName);
 
 	List<Map<String, Object>> getAllCustomersFromPartyMaster(Long orgId);
 
 	String getTmsJobCardDocId(Long orgId, String finYear, String branch, String branchCode);
-
-	TmsJobCardVO getTmsJobCardByDocId(Long orgId, String docId);
 
 	// AdjustmentJournal
 

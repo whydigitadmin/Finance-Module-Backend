@@ -18,14 +18,8 @@ public interface ReconcileCorpBankRepo extends JpaRepository<ReconcileCorpBankVO
 	@Query(nativeQuery = true, value = "select * from reconcilecorpbank where reconcilecorpbankid=?1")
 	List<ReconcileCorpBankVO> getAllReconcileCorpBankById(Long id);
 
-	@Query(nativeQuery = true, value = "select * from reconcilecorpbank where active=1")
-	List<ReconcileCorpBankVO> findReconcileCorpBankByActive();
-
 	@Query(nativeQuery = true, value = "select concat(prefixfield,lpad(lastno,5,0)) AS docid from documenttypemappingdetails where orgid=?1 and finyear=?2 and branchcode=?3 and screencode=?4")
 	String getReconcileCorpBankDocId(Long orgId, String finYear, String branchCode, String screenCode);
-
-	@Query(nativeQuery = true, value = "select * from reconcilecorpbank where orgid=?1 and docid=?2")
-	ReconcileCorpBankVO findAllReconcileCorpBankByDocId(Long orgId, String docId);
 
 	@Query(nativeQuery = true, value = "select accountgroupname  from  groupledger where orgid=?1 and type='BANK' and active=1 group by accountgroupname")
 	Set<Object[]> findByBankName(Long orgId);

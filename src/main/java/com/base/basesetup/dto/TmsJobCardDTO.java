@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class TmsJobCardDTO {
 	private Long id;
-	private String jobNo;
+	//private String jobNo;
 	private String customer;
 	private boolean operationClosed;
 	private LocalDate date;

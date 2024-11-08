@@ -62,8 +62,6 @@ public class TmsJobCardVO {
 	private BigDecimal profit;
 	@Column(name = "remarks",length = 150)
 	private String remarks;
-	@Column(name = "docid",length = 30)
-	private String docId;
 	@Column(name = "docdate")
 	private LocalDate docDate= LocalDate.now();
 

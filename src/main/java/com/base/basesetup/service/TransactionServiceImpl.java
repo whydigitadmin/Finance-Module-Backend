@@ -2094,12 +2094,6 @@ public class TransactionServiceImpl implements TransactionService {
 		reconcileBankVO.setParticularsReconcileVO(particularsReconcileVOs);
 	}
 
-	@Override
-	public List<ReconcileBankVO> getReconcileBankByActive() {
-
-		return reconcileBankRepo.findReconcileBankByActive();
-
-	}
 
 	@Override
 	public String getReconcileBankDocId(Long orgId, String finYear, String branch, String branchCode) {
@@ -2108,11 +2102,6 @@ public class TransactionServiceImpl implements TransactionService {
 		return result;
 	}
 
-	@Override
-	public ReconcileBankVO getReconcileBankByDocId(Long orgId, String docId) {
-
-		return reconcileBankRepo.findAllReconcileBankByDocId(orgId, docId);
-	}
 
 	@Override
 	public List<Map<String, Object>> getBankNameForGroupLedgerAndReconcileBank(Long orgId) {
@@ -2246,11 +2235,6 @@ public class TransactionServiceImpl implements TransactionService {
 
 	}
 
-	@Override
-	public List<ReconcileCorpBankVO> getReconcileCorpBankByActive() {
-
-		return reconcileCorpBankRepo.findReconcileCorpBankByActive();
-	}
 
 	@Override
 	public String getReconcileCorpBankDocId(Long orgId, String finYear, String branch, String branchCode) {
@@ -2260,11 +2244,6 @@ public class TransactionServiceImpl implements TransactionService {
 
 	}
 
-	@Override
-	public ReconcileCorpBankVO getReconcileCorpBankByDocId(Long orgId, String docId) {
-
-		return reconcileCorpBankRepo.findAllReconcileCorpBankByDocId(orgId, docId);
-	}
 
 	@Override
 	public List<Map<String, Object>> getBankNameForGroupLedgerAndReconcileCorp(Long orgId) {
@@ -2402,10 +2381,6 @@ public class TransactionServiceImpl implements TransactionService {
 		return total.setScale(2, RoundingMode.HALF_UP);
 	}
 
-	@Override
-	public List<ReconcileCashVO> getReconcileCashByActive() {
-		return reconcileCashRepo.findReconcileCashByActive();
-	}
 
 	@Override
 
@@ -2418,12 +2393,6 @@ public class TransactionServiceImpl implements TransactionService {
 		String ScreenCode = "RCH";
 		String result = reconcileCashRepo.getReconcileCashDocId(orgId, finYear, branchCode, ScreenCode);
 		return result;
-
-	}
-
-	@Override
-	public ReconcileCashVO getReconcileCashByDocId(Long orgId, String docId) {
-		return reconcileCashRepo.findAllReconcileCashByDocId(orgId, docId);
 
 	}
 
@@ -2506,7 +2475,7 @@ public class TransactionServiceImpl implements TransactionService {
 			String docId = tmsJobCardRepo.getTmsJobCardDocId(tmsJobCardDTO.getOrgId(), tmsJobCardDTO.getFinYear(),
 					tmsJobCardDTO.getBranchCode(), screenCode);
 
-			tmsJobCardVO.setDocId(docId);
+			tmsJobCardVO.setJobNo(docId);
 
 //			// GETDOCID LASTNO +1
 			DocumentTypeMappingDetailsVO documentTypeMappingDetailsVO = documentTypeMappingDetailsRepo
@@ -2529,7 +2498,7 @@ public class TransactionServiceImpl implements TransactionService {
 	}
 
 	private void getTmsJobCardVOFromTmsJobCardDTO(@Valid TmsJobCardDTO tmsJobCardDTO, TmsJobCardVO tmsJobCardVO) {
-		tmsJobCardVO.setJobNo(tmsJobCardDTO.getJobNo());
+		//tmsJobCardVO.setJobNo(tmsJobCardDTO.getJobNo());
 		tmsJobCardVO.setCustomer(tmsJobCardDTO.getCustomer());
 		tmsJobCardVO.setDate(tmsJobCardDTO.getDate());
 		tmsJobCardVO.setSalesCategory(tmsJobCardDTO.getSalesCategory());
@@ -2567,13 +2536,6 @@ public class TransactionServiceImpl implements TransactionService {
 	}
 
 	@Override
-	public List<TmsJobCardVO> getTmsJobCardByActive() {
-
-		return tmsJobCardRepo.findTmsJobCardByActive();
-
-	}
-
-	@Override
 	public String getTmsJobCardDocId(Long orgId, String finYear, String branch, String branchCode) {
 		String ScreenCode = "JC";
 		String result = tmsJobCardRepo.getTmsJobCardDocId(orgId, finYear, branchCode, ScreenCode);
@@ -2581,11 +2543,6 @@ public class TransactionServiceImpl implements TransactionService {
 
 	}
 
-	@Override
-	public TmsJobCardVO getTmsJobCardByDocId(Long orgId, String docId) {
-
-		return tmsJobCardRepo.findAllTmsJobCardByDocId(orgId, docId);
-	}
 
 	// AdjustmentJournal
 
@@ -2726,7 +2683,7 @@ public class TransactionServiceImpl implements TransactionService {
 		return getSalePersons(getSalePerson);
 	}
 
-	private List<Map<String, Object>> getSalePersons(Set<Object[]> getSalePerson) {
+	private List<Map<String, Object>> getSalePersons(Set<Object[]> getSalePerson) { 
 		List<Map<String, Object>> list1 = new ArrayList<>();
 		for (Object[] ch : getSalePerson) {
 			Map<String, Object> map = new HashMap<>();
