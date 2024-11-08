@@ -1,14 +1,13 @@
 package com.base.basesetup.repo;
 
 import java.util.List;
-
+import java.util.Set;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.base.basesetup.entity.ReconcileBankVO;
-
 
 @Repository
 public interface ReconcileBankRepo extends JpaRepository<ReconcileBankVO, Long> {
@@ -21,12 +20,14 @@ public interface ReconcileBankRepo extends JpaRepository<ReconcileBankVO, Long> 
 
 	@Query(nativeQuery = true, value = "select * from reconcilebank where active=1")
 	List<ReconcileBankVO> findReconcileBankByActive();
-	
-	@Query(nativeQuery = true,value="select concat(prefixfield,lpad(lastno,5,0)) AS docid from documenttypemappingdetails where orgid=?1 and finyear=?2 and branchcode=?3 and screencode=?4")
+
+	@Query(nativeQuery = true, value = "select concat(prefixfield,lpad(lastno,5,0)) AS docid from documenttypemappingdetails where orgid=?1 and finyear=?2 and branchcode=?3 and screencode=?4")
 	String getReconcileBankDocId(Long orgId, String finYear, String branchCode, String screenCode);
 
 	@Query(nativeQuery = true, value = "select * from reconcilebank where orgid=?1 and docid=?2")
 	ReconcileBankVO findAllReconcileBankByDocId(Long orgId, String docId);
 
-	
+	@Query(nativeQuery = true, value = "select accountgroupname  from  groupledger where orgid=?1 and type='BANK' and active=1 group by accountgroupname")
+	Set<Object[]> findByAccountNameForBank(Long orgId);
+
 }

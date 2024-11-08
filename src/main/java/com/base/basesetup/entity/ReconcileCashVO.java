@@ -34,7 +34,6 @@ public class ReconcileCashVO {
 	private Long id;
 	@Column(name = "docid",length = 30)
 	private String docId;
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	@Column(name = "docdate")
 	private LocalDate docDate=LocalDate.now();
 	@Column(name="accountname",length=30)

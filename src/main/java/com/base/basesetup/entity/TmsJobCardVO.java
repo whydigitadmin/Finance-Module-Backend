@@ -42,7 +42,6 @@ public class TmsJobCardVO {
 	private String customer;
 	@Column(name = "operationclosed")
 	private boolean operationClosed;
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	@Column(name = "date")
 	private LocalDate date;
 	@Column(name = "salescategory",length = 50)
@@ -53,7 +52,6 @@ public class TmsJobCardVO {
 	private String salesPerson;
 	@Column(name = "closed")
 	private boolean closed;
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	@Column(name = "closedon")
 	private LocalDate closedOn;
 	@Column(name = "income",precision = 10,scale = 2)
@@ -64,6 +62,10 @@ public class TmsJobCardVO {
 	private BigDecimal profit;
 	@Column(name = "remarks",length = 150)
 	private String remarks;
+	@Column(name = "docid",length = 30)
+	private String docId;
+	@Column(name = "docdate")
+	private LocalDate docDate= LocalDate.now();
 
 	//default fields
 	@Builder.Default

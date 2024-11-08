@@ -290,7 +290,7 @@ public class TransactionServiceImpl implements TransactionService {
 
 	@Autowired
 	ReconcileCashRepo reconcileCashRepo;
-	
+
 	@Autowired
 	AdjustmentJournalRepo adjustmentJournalRepo;
 
@@ -299,7 +299,7 @@ public class TransactionServiceImpl implements TransactionService {
 
 	@Autowired
 	ParticularsPaymentVoucherRepo ParticularsPaymentVoucherRepo;
-	
+
 	@Autowired
 	AccountParticularsRepo accountParticularsRepo;
 
@@ -713,12 +713,10 @@ public class TransactionServiceImpl implements TransactionService {
 		return chartCostCenterVO;
 	}
 
-
 	@Override
 	public List<ChartCostCenterVO> getChartCostCenterByActive() {
 		return chartCostCenterRepo.findChartCostCenterByActive();
 	}
-
 
 	@Override
 	public String getChartCostCenterDocId(Long orgId, String finYear, String branch, String branchCode) {
@@ -727,57 +725,57 @@ public class TransactionServiceImpl implements TransactionService {
 		return result;
 	}
 
-	
 	@Override
-	public List<Map<String, Object>> updateCreateChartCostCenterList(@Valid List<ChartCostCenterDTO> chartCostCenterDTOList)
-	        throws ApplicationException {
-	    List<Map<String, Object>> responseList = new ArrayList<>();
-	    String screenCode = "CCC";
+	public List<Map<String, Object>> updateCreateChartCostCenterList(
+			@Valid List<ChartCostCenterDTO> chartCostCenterDTOList) throws ApplicationException {
+		List<Map<String, Object>> responseList = new ArrayList<>();
+		String screenCode = "CCC";
 
-	    for (ChartCostCenterDTO chartCostCenterDTO : chartCostCenterDTOList) {
-	        ChartCostCenterVO chartCostCenterVO;
-	        String message;
+		for (ChartCostCenterDTO chartCostCenterDTO : chartCostCenterDTOList) {
+			ChartCostCenterVO chartCostCenterVO;
+			String message;
 
-	        if (ObjectUtils.isNotEmpty(chartCostCenterDTO.getId())) {
-	            // Update existing record
-	            chartCostCenterVO = chartCostCenterRepo.findById(chartCostCenterDTO.getId()).orElseThrow(
-	                    () -> new ApplicationException("ChartCostCenter Not Found with id: " + chartCostCenterDTO.getId()));
-	            chartCostCenterVO.setUpdatedBy(chartCostCenterDTO.getCreatedBy());
-	            getChartCostCenterVOFromChartCostCenterDTO(chartCostCenterDTO, chartCostCenterVO);
-	            message = "ChartCostCenter Updation Successfully";
-	        } else {
-	            // Create new record
-	            chartCostCenterVO = new ChartCostCenterVO();
-	            chartCostCenterVO.setCreatedBy(chartCostCenterDTO.getCreatedBy());
-	            chartCostCenterVO.setUpdatedBy(chartCostCenterDTO.getCreatedBy());
-	            getChartCostCenterVOFromChartCostCenterDTO(chartCostCenterDTO, chartCostCenterVO);
-	            message = "ChartCostCenter Creation Successfully";
-	        }
+			if (ObjectUtils.isNotEmpty(chartCostCenterDTO.getId())) {
+				// Update existing record
+				chartCostCenterVO = chartCostCenterRepo.findById(chartCostCenterDTO.getId())
+						.orElseThrow(() -> new ApplicationException(
+								"ChartCostCenter Not Found with id: " + chartCostCenterDTO.getId()));
+				chartCostCenterVO.setUpdatedBy(chartCostCenterDTO.getCreatedBy());
+				getChartCostCenterVOFromChartCostCenterDTO(chartCostCenterDTO, chartCostCenterVO);
+				message = "ChartCostCenter Updation Successfully";
+			} else {
+				// Create new record
+				chartCostCenterVO = new ChartCostCenterVO();
+				chartCostCenterVO.setCreatedBy(chartCostCenterDTO.getCreatedBy());
+				chartCostCenterVO.setUpdatedBy(chartCostCenterDTO.getCreatedBy());
+				getChartCostCenterVOFromChartCostCenterDTO(chartCostCenterDTO, chartCostCenterVO);
+				message = "ChartCostCenter Creation Successfully";
+			}
 
-	        chartCostCenterRepo.save(chartCostCenterVO);
+			chartCostCenterRepo.save(chartCostCenterVO);
 
-	        Map<String, Object> response = new HashMap<>();
-	        response.put("chartCostCenterVO", chartCostCenterVO);
-	        response.put("message", message);
-	        responseList.add(response);
-	    }
+			Map<String, Object> response = new HashMap<>();
+			response.put("chartCostCenterVO", chartCostCenterVO);
+			response.put("message", message);
+			responseList.add(response);
+		}
 
-	    return responseList;
+		return responseList;
 	}
 
 	private void getChartCostCenterVOFromChartCostCenterDTO(@Valid ChartCostCenterDTO chartCostCenterDTO,
-	        ChartCostCenterVO chartCostCenterVO) {
-	    chartCostCenterVO.setCostCenterCode(chartCostCenterDTO.getCostCenterCode());
-	    chartCostCenterVO.setCostCenterName(chartCostCenterDTO.getCostCenterName());
-	    chartCostCenterVO.setCredit(chartCostCenterDTO.getCredit());
-	    chartCostCenterVO.setDebit(chartCostCenterDTO.getDebit());
-	    chartCostCenterVO.setOrgId(chartCostCenterDTO.getOrgId());
-	    chartCostCenterVO.setActive(chartCostCenterDTO.isActive());
-	    chartCostCenterVO.setCancel(chartCostCenterDTO.isCancel());
-	    chartCostCenterVO.setCancelRemarks(chartCostCenterDTO.getCancelRemarks());
-	    chartCostCenterVO.setBranch(chartCostCenterDTO.getBranch());
-	    chartCostCenterVO.setBranchCode(chartCostCenterDTO.getBranchCode());
-	    chartCostCenterVO.setFinYear(chartCostCenterDTO.getFinYear());
+			ChartCostCenterVO chartCostCenterVO) {
+		chartCostCenterVO.setCostCenterCode(chartCostCenterDTO.getCostCenterCode());
+		chartCostCenterVO.setCostCenterName(chartCostCenterDTO.getCostCenterName());
+		chartCostCenterVO.setCredit(chartCostCenterDTO.getCredit());
+		chartCostCenterVO.setDebit(chartCostCenterDTO.getDebit());
+		chartCostCenterVO.setOrgId(chartCostCenterDTO.getOrgId());
+		chartCostCenterVO.setActive(chartCostCenterDTO.isActive());
+		chartCostCenterVO.setCancel(chartCostCenterDTO.isCancel());
+		chartCostCenterVO.setCancelRemarks(chartCostCenterDTO.getCancelRemarks());
+		chartCostCenterVO.setBranch(chartCostCenterDTO.getBranch());
+		chartCostCenterVO.setBranchCode(chartCostCenterDTO.getBranchCode());
+		chartCostCenterVO.setFinYear(chartCostCenterDTO.getFinYear());
 	}
 
 	// FundTransfer
@@ -857,7 +855,6 @@ public class TransactionServiceImpl implements TransactionService {
 		getFundTransferVOFromFundTransferDTO(fundTransferDTO, fundTransferVO);
 		fundTransferRepo.save(fundTransferVO);
 
-		
 		Map<String, Object> response = new HashMap<>();
 		response.put("fundTransferVO", fundTransferVO);
 		response.put("message", message);
@@ -1012,8 +1009,6 @@ public class TransactionServiceImpl implements TransactionService {
 		generalJournalVO.setParticularsJournalVO(particularsJournalVOs);
 
 	}
-
-
 
 	@Override
 	public List<GeneralJournalVO> getGeneralJournalByActive() {
@@ -2119,6 +2114,22 @@ public class TransactionServiceImpl implements TransactionService {
 		return reconcileBankRepo.findAllReconcileBankByDocId(orgId, docId);
 	}
 
+	@Override
+	public List<Map<String, Object>> getBankNameForGroupLedgerAndReconcileBank(Long orgId) {
+		Set<Object[]> getAccount = reconcileBankRepo.findByAccountNameForBank(orgId);
+		return getAccountName(getAccount);
+	}
+
+	private List<Map<String, Object>> getAccountName(Set<Object[]> getAccount) {
+		List<Map<String, Object>> list1 = new ArrayList<>();
+		for (Object[] ch : getAccount) {
+			Map<String, Object> map = new HashMap<>();
+			map.put("accountgroupname", ch[0] != null ? ch[0].toString() : "");
+			list1.add(map);
+		}
+		return list1;
+	}
+
 	// ReconcileCorpBank
 
 	@Override
@@ -2253,6 +2264,22 @@ public class TransactionServiceImpl implements TransactionService {
 	public ReconcileCorpBankVO getReconcileCorpBankByDocId(Long orgId, String docId) {
 
 		return reconcileCorpBankRepo.findAllReconcileCorpBankByDocId(orgId, docId);
+	}
+
+	@Override
+	public List<Map<String, Object>> getBankNameForGroupLedgerAndReconcileCorp(Long orgId) {
+		Set<Object[]> getAccount = reconcileCorpBankRepo.findByBankName(orgId);
+		return getAccountnames(getAccount);
+	}
+
+	private List<Map<String, Object>> getAccountnames(Set<Object[]> getAccount) {
+		List<Map<String, Object>> list1 = new ArrayList<>();
+		for (Object[] ch : getAccount) {
+			Map<String, Object> map = new HashMap<>();
+			map.put("accountgroupname", ch[0] != null ? ch[0].toString() : "");
+			list1.add(map);
+		}
+		return list1;
 	}
 
 	// ReconcileCash
@@ -2401,6 +2428,22 @@ public class TransactionServiceImpl implements TransactionService {
 	}
 
 	@Override
+	public List<Map<String, Object>> getAccountNameForGroupLedgerAndReconcileCash(Long orgId) {
+		Set<Object[]> getAccount = reconcileCashRepo.findByAccountName(orgId);
+		return getAccountNames(getAccount);
+	}
+
+	private List<Map<String, Object>> getAccountNames(Set<Object[]> getAccount) {
+		List<Map<String, Object>> list1 = new ArrayList<>();
+		for (Object[] ch : getAccount) {
+			Map<String, Object> map = new HashMap<>();
+			map.put("accountgroupname", ch[0] != null ? ch[0].toString() : "");
+			list1.add(map);
+		}
+		return list1;
+	}
+
+	@Override
 	public String getFundTranferDocId(Long orgId, String finYear, String branch, String branchCode) {
 		String ScreenCode = "FT";
 		String result = fundTransferRepo.getFundTranferDocId(orgId, finYear, branchCode, ScreenCode);
@@ -2450,20 +2493,34 @@ public class TransactionServiceImpl implements TransactionService {
 	@Override
 	public Map<String, Object> updateCreateTmsJobCard(@Valid TmsJobCardDTO tmsJobCardDTO) throws ApplicationException {
 		TmsJobCardVO tmsJobCardVO = new TmsJobCardVO();
+		String screenCode = "JC";
 		String message;
 		if (ObjectUtils.isNotEmpty(tmsJobCardDTO.getId())) {
 			tmsJobCardVO = tmsJobCardRepo.findById(tmsJobCardDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid TmsJobCard details"));
 			tmsJobCardVO.setUpdatedBy(tmsJobCardVO.getCreatedBy());
+			getTmsJobCardVOFromTmsJobCardDTO(tmsJobCardDTO, tmsJobCardVO);
 			message = "TmsJobCard Updated Successfully";
 		} else {
+			// GETDOCID API
+			String docId = tmsJobCardRepo.getTmsJobCardDocId(tmsJobCardDTO.getOrgId(), tmsJobCardDTO.getFinYear(),
+					tmsJobCardDTO.getBranchCode(), screenCode);
+
+			tmsJobCardVO.setDocId(docId);
+
+//			// GETDOCID LASTNO +1
+			DocumentTypeMappingDetailsVO documentTypeMappingDetailsVO = documentTypeMappingDetailsRepo
+					.findByOrgIdAndFinYearAndBranchCodeAndScreenCode(tmsJobCardDTO.getOrgId(),
+							tmsJobCardDTO.getFinYear(), tmsJobCardDTO.getBranchCode(), screenCode);
+			documentTypeMappingDetailsVO.setLastno(documentTypeMappingDetailsVO.getLastno() + 1);
+			documentTypeMappingDetailsRepo.save(documentTypeMappingDetailsVO);
 
 			tmsJobCardVO.setCreatedBy(tmsJobCardDTO.getCreatedBy());
 			tmsJobCardVO.setUpdatedBy(tmsJobCardVO.getCreatedBy());
+			getTmsJobCardVOFromTmsJobCardDTO(tmsJobCardDTO, tmsJobCardVO);
 			message = "TmsJobCard Creation  Successfully !";
 		}
 
-		getTmsJobCardVOFromTmsJobCardDTO(tmsJobCardDTO, tmsJobCardVO);
 		tmsJobCardRepo.save(tmsJobCardVO);
 		Map<String, Object> response = new HashMap<>();
 		response.put("tmsJobCardVO", tmsJobCardVO);
@@ -2490,7 +2547,7 @@ public class TransactionServiceImpl implements TransactionService {
 		tmsJobCardVO.setBranch(tmsJobCardDTO.getBranch());
 		tmsJobCardVO.setBranchCode(tmsJobCardDTO.getBranchCode());
 		tmsJobCardVO.setActive(tmsJobCardDTO.isActive());
-		tmsJobCardVO.setFinYear(tmsJobCardDTO.getFinyear());
+		tmsJobCardVO.setFinYear(tmsJobCardDTO.getFinYear());
 
 		if (ObjectUtils.isNotEmpty(tmsJobCardDTO.getId())) {
 			List<CostCenterTmsJobCardVO> costCenterTmsJobCardVO1 = costCenterTmsJobCardRepo
@@ -2515,153 +2572,181 @@ public class TransactionServiceImpl implements TransactionService {
 		return tmsJobCardRepo.findTmsJobCardByActive();
 
 	}
-	
-	
-	// AdjustmentJournal
-
-		@Override
-		public List<AdjustmentJournalVO> getAllAdjustmentJournalByOrgId(Long orgId) {
-			List<AdjustmentJournalVO> adjustmentJournalVO = new ArrayList<>();
-			if (ObjectUtils.isNotEmpty(orgId)) {
-				LOGGER.info("Successfully Received  AdjustmentJournal BY OrgId : {}", orgId);
-				adjustmentJournalVO = adjustmentJournalRepo.getAllAdjustmentJournalByOrgId(orgId);
-			} else {
-				LOGGER.info("Successfully Received  AdjustmentJournal For All OrgId.");
-				adjustmentJournalVO = adjustmentJournalRepo.findAll();
-			}
-			return adjustmentJournalVO;
-		}
-		
-		@Override
-		public List<AdjustmentJournalVO> getAllAdjustmentJournalById(Long id) {
-			List<AdjustmentJournalVO> adjustmentJournalVO = new ArrayList<>();
-			if (ObjectUtils.isNotEmpty(id)) {
-				LOGGER.info("Successfully Received AdjustmentJournal BY Id : {}", id);
-				adjustmentJournalVO = adjustmentJournalRepo.getAllAdjustmentJournalById(id);
-			} else {
-				LOGGER.info("Successfully Received AdjustmentJournal For All Id.");
-				adjustmentJournalVO = adjustmentJournalRepo.findAll();
-			}
-			return adjustmentJournalVO;
-		}
-		
-		
-		@Override
-		public Map<String, Object> updateCreateAdjustmentJournal(@Valid AdjustmentJournalDTO adjustmentJournalDTO)
-				throws ApplicationException {
-			String screenCode = "AJ";
-			AdjustmentJournalVO adjustmentJournalVO = new AdjustmentJournalVO();
-			String message;
-			if (ObjectUtils.isNotEmpty(adjustmentJournalDTO.getId())) {
-				adjustmentJournalVO = adjustmentJournalRepo.findById(adjustmentJournalDTO.getId())
-						.orElseThrow(() -> new ApplicationException("adjustmentJournal not found"));
-
-				adjustmentJournalVO.setUpdatedBy(adjustmentJournalDTO.getCreatedBy());
-				createUpdateAdjustmentJournalVOByAdjustmentJournalDTO(adjustmentJournalDTO, adjustmentJournalVO);
-				message = "AdjustmentJournal Updated Successfully";
-			} else {
-				// GETDOCID API
-				String docId = adjustmentJournalRepo.getAdjustmentJournalDocId(adjustmentJournalDTO.getOrgId(),
-						adjustmentJournalDTO.getFinYear(), adjustmentJournalDTO.getBranchCode(), screenCode);
-
-				adjustmentJournalVO.setDocId(docId);
-
-//				// GETDOCID LASTNO +1
-				DocumentTypeMappingDetailsVO documentTypeMappingDetailsVO = documentTypeMappingDetailsRepo
-						.findByOrgIdAndFinYearAndBranchCodeAndScreenCode(adjustmentJournalDTO.getOrgId(),
-								adjustmentJournalDTO.getFinYear(), adjustmentJournalDTO.getBranchCode(), screenCode);
-				documentTypeMappingDetailsVO.setLastno(documentTypeMappingDetailsVO.getLastno() + 1);
-				documentTypeMappingDetailsRepo.save(documentTypeMappingDetailsVO);
-
-				adjustmentJournalVO.setCreatedBy(adjustmentJournalDTO.getCreatedBy());
-				adjustmentJournalVO.setUpdatedBy(adjustmentJournalDTO.getCreatedBy());
-				createUpdateAdjustmentJournalVOByAdjustmentJournalDTO(adjustmentJournalDTO, adjustmentJournalVO);
-				message = "AdjustmentJournal Created Successfully";
-			}
-
-			adjustmentJournalRepo.save(adjustmentJournalVO);
-			Map<String, Object> response = new HashMap<>();
-			response.put("adjustmentJournalVO", adjustmentJournalVO);
-			response.put("message", message);
-			return response;
-		}
-
-		private void createUpdateAdjustmentJournalVOByAdjustmentJournalDTO(@Valid AdjustmentJournalDTO adjustmentJournalDTO,
-				AdjustmentJournalVO adjustmentJournalVO) throws ApplicationException {
-			adjustmentJournalVO.setAdjustmentType(adjustmentJournalDTO.getAdjustmentType());
-			adjustmentJournalVO.setRemarks(adjustmentJournalDTO.getRemarks().toUpperCase());
-			adjustmentJournalVO.setCurrency(adjustmentJournalDTO.getCurrency());
-			adjustmentJournalVO.setExRate(adjustmentJournalDTO.getExRate());
-
-			adjustmentJournalVO.setRefNo(adjustmentJournalDTO.getRefNo().toUpperCase());
-			adjustmentJournalVO.setRefDate(adjustmentJournalDTO.getRefDate());
-			adjustmentJournalVO.setSuppRefNo(adjustmentJournalDTO.getSuppRefNo().toUpperCase());
-			adjustmentJournalVO.setSuppRefDate(adjustmentJournalDTO.getSuppRefDate());
-			adjustmentJournalVO.setOrgId(adjustmentJournalDTO.getOrgId());
-			adjustmentJournalVO.setBranch(adjustmentJournalDTO.getBranch());
-			adjustmentJournalVO.setBranchCode(adjustmentJournalDTO.getBranchCode());
-			adjustmentJournalVO.setFinYear(adjustmentJournalDTO.getFinYear());
-
-			if (ObjectUtils.isNotEmpty(adjustmentJournalVO.getId())) {
-				List<AccountParticularsVO> accountParticularsVOList = accountParticularsRepo
-						.findByAdjustmentJournalVO(adjustmentJournalVO);
-				accountParticularsRepo.deleteAll(accountParticularsVOList);
-			}
-
-			BigDecimal totalDebitAmount = BigDecimal.ZERO;
-			BigDecimal totalCreditAmount = BigDecimal.ZERO;
-			List<AccountParticularsVO> accountParticularsVOs = new ArrayList<>();
-			for (AccountParticularsDTO accountParticularsDTO : adjustmentJournalDTO.getAccountParticularsDTO()) {
-				AccountParticularsVO accountParticularsVO = new AccountParticularsVO();
-
-				accountParticularsVO.setAccountsName(accountParticularsDTO.getAccountsName());
-				accountParticularsVO.setSubledgerName(accountParticularsDTO.getSubledgerName());
-				accountParticularsVO.setSubLedgerCode(accountParticularsDTO.getSubLedgerCode());
-				if (accountParticularsDTO.getDebitAmount() != null
-						&& accountParticularsDTO.getDebitAmount().compareTo(BigDecimal.ZERO) != 0) {
-					accountParticularsVO.setDebitAmount(accountParticularsDTO.getDebitAmount());
-					accountParticularsVO.setCreditAmount(BigDecimal.ZERO);
-				} else {
-					accountParticularsVO.setCreditAmount(accountParticularsDTO.getCreditAmount());
-					accountParticularsVO.setDebitAmount(BigDecimal.ZERO);
-				}
-				totalCreditAmount = totalCreditAmount.add(accountParticularsVO.getCreditAmount());
-				totalDebitAmount = totalDebitAmount.add(accountParticularsVO.getDebitAmount());
-				
-				accountParticularsVO.setDebitBase(accountParticularsDTO.getDebitBase());
-				accountParticularsVO.setCreditBase(accountParticularsDTO.getDebitBase());
-
-				accountParticularsVO.setAdjustmentJournalVO(adjustmentJournalVO);
-				accountParticularsVOs.add(accountParticularsVO);
-			}
-			if (totalCreditAmount.equals(totalDebitAmount)) {
-				adjustmentJournalVO.setTotalCreditAmount(totalCreditAmount);
-				adjustmentJournalVO.setTotalDebitAmount(totalDebitAmount);
-			} else {
-				throw new ApplicationException("Total Debit Amount and Total Credit Amount Should be Equal");
-			}
-			adjustmentJournalVO.setAccountParticularsVO(accountParticularsVOs);
-
-		}
-		
-		@Override
-		public String getAdjustmentJournalDocId(Long orgId, String finYear, String branch, String branchCode) {
-			String ScreenCode = "AJ";
-			String result = adjustmentJournalRepo.getAdjustmentJournalByDocId(orgId, finYear, branchCode, ScreenCode);
-			return result;
-		}
 
 	@Override
-	public List<Map<String, Object>> getEmployeeNameAndEmployeeCode(Long orgId, String branch, String branchCode) {
-		Set<Object[]> getEmployee = tmsJobCardRepo.findByEmployeeNameAndEmployeeCode(orgId, branch, branchCode);
-		return getEmployess(getEmployee);
+	public String getTmsJobCardDocId(Long orgId, String finYear, String branch, String branchCode) {
+		String ScreenCode = "JC";
+		String result = tmsJobCardRepo.getTmsJobCardDocId(orgId, finYear, branchCode, ScreenCode);
+		return result;
+
 	}
 
-	private List<Map<String, Object>> getEmployess(Set<Object[]> getEmployee) {
+	@Override
+	public TmsJobCardVO getTmsJobCardByDocId(Long orgId, String docId) {
+
+		return tmsJobCardRepo.findAllTmsJobCardByDocId(orgId, docId);
+	}
+
+	// AdjustmentJournal
+
+	@Override
+	public List<AdjustmentJournalVO> getAllAdjustmentJournalByOrgId(Long orgId) {
+		List<AdjustmentJournalVO> adjustmentJournalVO = new ArrayList<>();
+		if (ObjectUtils.isNotEmpty(orgId)) {
+			LOGGER.info("Successfully Received  AdjustmentJournal BY OrgId : {}", orgId);
+			adjustmentJournalVO = adjustmentJournalRepo.getAllAdjustmentJournalByOrgId(orgId);
+		} else {
+			LOGGER.info("Successfully Received  AdjustmentJournal For All OrgId.");
+			adjustmentJournalVO = adjustmentJournalRepo.findAll();
+		}
+		return adjustmentJournalVO;
+	}
+
+	@Override
+	public List<AdjustmentJournalVO> getAllAdjustmentJournalById(Long id) {
+		List<AdjustmentJournalVO> adjustmentJournalVO = new ArrayList<>();
+		if (ObjectUtils.isNotEmpty(id)) {
+			LOGGER.info("Successfully Received AdjustmentJournal BY Id : {}", id);
+			adjustmentJournalVO = adjustmentJournalRepo.getAllAdjustmentJournalById(id);
+		} else {
+			LOGGER.info("Successfully Received AdjustmentJournal For All Id.");
+			adjustmentJournalVO = adjustmentJournalRepo.findAll();
+		}
+		return adjustmentJournalVO;
+	}
+
+	@Override
+	public Map<String, Object> updateCreateAdjustmentJournal(@Valid AdjustmentJournalDTO adjustmentJournalDTO)
+			throws ApplicationException {
+		String screenCode = "AJ";
+		AdjustmentJournalVO adjustmentJournalVO = new AdjustmentJournalVO();
+		String message;
+		if (ObjectUtils.isNotEmpty(adjustmentJournalDTO.getId())) {
+			adjustmentJournalVO = adjustmentJournalRepo.findById(adjustmentJournalDTO.getId())
+					.orElseThrow(() -> new ApplicationException("adjustmentJournal not found"));
+
+			adjustmentJournalVO.setUpdatedBy(adjustmentJournalDTO.getCreatedBy());
+			createUpdateAdjustmentJournalVOByAdjustmentJournalDTO(adjustmentJournalDTO, adjustmentJournalVO);
+			message = "AdjustmentJournal Updated Successfully";
+		} else {
+			// GETDOCID API
+			String docId = adjustmentJournalRepo.getAdjustmentJournalDocId(adjustmentJournalDTO.getOrgId(),
+					adjustmentJournalDTO.getFinYear(), adjustmentJournalDTO.getBranchCode(), screenCode);
+
+			adjustmentJournalVO.setDocId(docId);
+
+//				// GETDOCID LASTNO +1
+			DocumentTypeMappingDetailsVO documentTypeMappingDetailsVO = documentTypeMappingDetailsRepo
+					.findByOrgIdAndFinYearAndBranchCodeAndScreenCode(adjustmentJournalDTO.getOrgId(),
+							adjustmentJournalDTO.getFinYear(), adjustmentJournalDTO.getBranchCode(), screenCode);
+			documentTypeMappingDetailsVO.setLastno(documentTypeMappingDetailsVO.getLastno() + 1);
+			documentTypeMappingDetailsRepo.save(documentTypeMappingDetailsVO);
+
+			adjustmentJournalVO.setCreatedBy(adjustmentJournalDTO.getCreatedBy());
+			adjustmentJournalVO.setUpdatedBy(adjustmentJournalDTO.getCreatedBy());
+			createUpdateAdjustmentJournalVOByAdjustmentJournalDTO(adjustmentJournalDTO, adjustmentJournalVO);
+			message = "AdjustmentJournal Created Successfully";
+		}
+
+		adjustmentJournalRepo.save(adjustmentJournalVO);
+		Map<String, Object> response = new HashMap<>();
+		response.put("adjustmentJournalVO", adjustmentJournalVO);
+		response.put("message", message);
+		return response;
+	}
+
+	private void createUpdateAdjustmentJournalVOByAdjustmentJournalDTO(@Valid AdjustmentJournalDTO adjustmentJournalDTO,
+			AdjustmentJournalVO adjustmentJournalVO) throws ApplicationException {
+		adjustmentJournalVO.setAdjustmentType(adjustmentJournalDTO.getAdjustmentType());
+		adjustmentJournalVO.setRemarks(adjustmentJournalDTO.getRemarks().toUpperCase());
+		adjustmentJournalVO.setCurrency(adjustmentJournalDTO.getCurrency());
+		adjustmentJournalVO.setExRate(adjustmentJournalDTO.getExRate());
+
+		adjustmentJournalVO.setRefNo(adjustmentJournalDTO.getRefNo().toUpperCase());
+		adjustmentJournalVO.setRefDate(adjustmentJournalDTO.getRefDate());
+		adjustmentJournalVO.setSuppRefNo(adjustmentJournalDTO.getSuppRefNo().toUpperCase());
+		adjustmentJournalVO.setSuppRefDate(adjustmentJournalDTO.getSuppRefDate());
+		adjustmentJournalVO.setOrgId(adjustmentJournalDTO.getOrgId());
+		adjustmentJournalVO.setBranch(adjustmentJournalDTO.getBranch());
+		adjustmentJournalVO.setBranchCode(adjustmentJournalDTO.getBranchCode());
+		adjustmentJournalVO.setFinYear(adjustmentJournalDTO.getFinYear());
+
+		if (ObjectUtils.isNotEmpty(adjustmentJournalVO.getId())) {
+			List<AccountParticularsVO> accountParticularsVOList = accountParticularsRepo
+					.findByAdjustmentJournalVO(adjustmentJournalVO);
+			accountParticularsRepo.deleteAll(accountParticularsVOList);
+		}
+
+		BigDecimal totalDebitAmount = BigDecimal.ZERO;
+		BigDecimal totalCreditAmount = BigDecimal.ZERO;
+		List<AccountParticularsVO> accountParticularsVOs = new ArrayList<>();
+		for (AccountParticularsDTO accountParticularsDTO : adjustmentJournalDTO.getAccountParticularsDTO()) {
+			AccountParticularsVO accountParticularsVO = new AccountParticularsVO();
+
+			accountParticularsVO.setAccountsName(accountParticularsDTO.getAccountsName());
+			accountParticularsVO.setSubledgerName(accountParticularsDTO.getSubledgerName());
+			accountParticularsVO.setSubLedgerCode(accountParticularsDTO.getSubLedgerCode());
+			if (accountParticularsDTO.getDebitAmount() != null
+					&& accountParticularsDTO.getDebitAmount().compareTo(BigDecimal.ZERO) != 0) {
+				accountParticularsVO.setDebitAmount(accountParticularsDTO.getDebitAmount());
+				accountParticularsVO.setCreditAmount(BigDecimal.ZERO);
+			} else {
+				accountParticularsVO.setCreditAmount(accountParticularsDTO.getCreditAmount());
+				accountParticularsVO.setDebitAmount(BigDecimal.ZERO);
+			}
+			totalCreditAmount = totalCreditAmount.add(accountParticularsVO.getCreditAmount());
+			totalDebitAmount = totalDebitAmount.add(accountParticularsVO.getDebitAmount());
+
+			accountParticularsVO.setDebitBase(accountParticularsDTO.getDebitBase());
+			accountParticularsVO.setCreditBase(accountParticularsDTO.getDebitBase());
+
+			accountParticularsVO.setAdjustmentJournalVO(adjustmentJournalVO);
+			accountParticularsVOs.add(accountParticularsVO);
+		}
+		if (totalCreditAmount.equals(totalDebitAmount)) {
+			adjustmentJournalVO.setTotalCreditAmount(totalCreditAmount);
+			adjustmentJournalVO.setTotalDebitAmount(totalDebitAmount);
+		} else {
+			throw new ApplicationException("Total Debit Amount and Total Credit Amount Should be Equal");
+		}
+		adjustmentJournalVO.setAccountParticularsVO(accountParticularsVOs);
+
+	}
+
+	@Override
+	public String getAdjustmentJournalDocId(Long orgId, String finYear, String branch, String branchCode) {
+		String ScreenCode = "AJ";
+		String result = adjustmentJournalRepo.getAdjustmentJournalByDocId(orgId, finYear, branchCode, ScreenCode);
+		return result;
+	}
+
+	@Override
+	public List<Map<String, Object>> getSalesPersonFromPartyMaster(Long orgId, String partyName) {
+		Set<Object[]> getSalePerson = tmsJobCardRepo.findBySalesPreson(orgId, partyName);
+		return getSalePersons(getSalePerson);
+	}
+
+	private List<Map<String, Object>> getSalePersons(Set<Object[]> getSalePerson) {
 		List<Map<String, Object>> list1 = new ArrayList<>();
-		for (Object[] ch : getEmployee) {
+		for (Object[] ch : getSalePerson) {
 			Map<String, Object> map = new HashMap<>();
-			map.put("employee", ch[0] != null ? ch[0].toString() : "");
+			map.put("salesperson", ch[0] != null ? ch[0].toString() : "");
+			list1.add(map);
+		}
+		return list1;
+	}
+
+	@Override
+	public List<Map<String, Object>> getAllCustomersFromPartyMaster(Long orgId) {
+		Set<Object[]> getCustomer = tmsJobCardRepo.findAllCustomers(orgId);
+		return getCustomers(getCustomer);
+	}
+
+	private List<Map<String, Object>> getCustomers(Set<Object[]> getCustomer) {
+		List<Map<String, Object>> list1 = new ArrayList<>();
+		for (Object[] ch : getCustomer) {
+			Map<String, Object> map = new HashMap<>();
+			map.put("partyname", ch[0] != null ? ch[0].toString() : "");
 			list1.add(map);
 		}
 		return list1;

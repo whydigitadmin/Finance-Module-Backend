@@ -1,6 +1,6 @@
 package com.base.basesetup.repo;
 
-import java.util.List;
+import java.util.List;	
 import java.util.Set;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -21,8 +21,19 @@ public interface TmsJobCardRepo extends JpaRepository<TmsJobCardVO, Long> {
 	@Query(nativeQuery = true, value = "select * from tmsjobcard where active=1")
 	List<TmsJobCardVO> findTmsJobCardByActive();
 
-	@Query(nativeQuery = true, value = "select concat(a.employee,' - ',a.employeecode)as employee from employee a where active=1 and orgid=?1 and\r\n"
-			+ " branch=?2 and branchcode=?3 group by concat(a.employee,' - ',a.employeecode) order by employee")
-	Set<Object[]> findByEmployeeNameAndEmployeeCode(Long orgId,String branch,String branchCode);
+	@Query(nativeQuery = true, value = "select  a1.salesperson from partymaster a,partysalespersontagging a1 where\r\n"
+			+ "active=1 and  a.partymasterid=a1.partymasterid \r\n"
+			+ " and a.partyname=?1 and  a.orgid=?2\r\n"
+			+ "group by a1.salesperson")
+	Set<Object[]> findBySalesPreson(Long orgId,String partyName);
+	
+	@Query(nativeQuery = true,value="select partyname from partymaster where orgid=?1 and active=1 group by partyname")
+	Set<Object[]> findAllCustomers(Long orgId);
+
+	@Query(nativeQuery = true,value="select concat(prefixfield,lpad(lastno,5,0)) AS docid from documenttypemappingdetails where orgid=?1 and finyear=?2 and branchcode=?3 and screencode=?4")
+	String getTmsJobCardDocId(Long orgId, String finYear, String branchCode, String screenCode);
+
+	@Query(nativeQuery = true , value="select * from tmsjobcard where orgid=?1 and docid=?2")
+	TmsJobCardVO findAllTmsJobCardByDocId(Long orgId, String docId);
 
 }

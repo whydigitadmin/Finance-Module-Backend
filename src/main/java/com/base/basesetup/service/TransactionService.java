@@ -82,11 +82,10 @@ public interface TransactionService {
 
 //	ChartCostCenter
 	List<ChartCostCenterVO> getAllChartCostCenterByOrgId(Long orgId);
-	
+
 	List<Map<String, Object>> updateCreateChartCostCenterList(@Valid List<ChartCostCenterDTO> chartCostCenterDTOList)
 			throws ApplicationException;
 
-	
 	List<ChartCostCenterVO> getAllChartCostCenterById(Long id);
 
 	List<ChartCostCenterVO> getChartCostCenterByActive();
@@ -210,6 +209,8 @@ public interface TransactionService {
 
 	String getGeneralJournalDocId(Long orgId, String finYear, String branch, String branchCode);
 
+	List<Map<String, Object>> getBankNameForGroupLedgerAndReconcileBank(Long orgId);
+
 	// ReconcileCorpBank
 	List<ReconcileCorpBankVO> getAllReconcileCorpBankByOrgId(Long orgId);
 
@@ -223,6 +224,8 @@ public interface TransactionService {
 	String getReconcileCorpBankDocId(Long orgId, String finYear, String branch, String branchCode);
 
 	ReconcileCorpBankVO getReconcileCorpBankByDocId(Long orgId, String docId);
+
+	List<Map<String, Object>> getBankNameForGroupLedgerAndReconcileCorp(Long orgId);
 
 	// ReconcileCash
 
@@ -244,6 +247,8 @@ public interface TransactionService {
 
 	String getChartCostCenterDocId(Long orgId, String finYear, String branch, String branchCode);
 
+	List<Map<String, Object>> getAccountNameForGroupLedgerAndReconcileCash(Long orgId);
+
 	/// TMS-TT-JobCard
 
 	List<TmsJobCardVO> getAllTmsJobCardByOrgId(Long orgId);
@@ -254,16 +259,22 @@ public interface TransactionService {
 
 	List<TmsJobCardVO> getTmsJobCardByActive();
 
-	
-	List<Map<String,Object>> getEmployeeNameAndEmployeeCode(Long orgId,String branch,String branchCode);
+	List<Map<String, Object>> getSalesPersonFromPartyMaster(Long orgId, String partyName);
 
-	//AdjustmentJournal
-	
+	List<Map<String, Object>> getAllCustomersFromPartyMaster(Long orgId);
+
+	String getTmsJobCardDocId(Long orgId, String finYear, String branch, String branchCode);
+
+	TmsJobCardVO getTmsJobCardByDocId(Long orgId, String docId);
+
+	// AdjustmentJournal
+
 	List<AdjustmentJournalVO> getAllAdjustmentJournalByOrgId(Long orgId);
 
 	List<AdjustmentJournalVO> getAllAdjustmentJournalById(Long id);
 
-	Map<String, Object> updateCreateAdjustmentJournal(@Valid AdjustmentJournalDTO adjustmentJournalDTO) throws ApplicationException;
+	Map<String, Object> updateCreateAdjustmentJournal(@Valid AdjustmentJournalDTO adjustmentJournalDTO)
+			throws ApplicationException;
 
 	String getAdjustmentJournalDocId(Long orgId, String finYear, String branch, String branchCode);
 
