@@ -25,6 +25,7 @@ import com.base.basesetup.common.UserConstants;
 import com.base.basesetup.dto.IrnCreditDTO;
 import com.base.basesetup.dto.ResponseDTO;
 import com.base.basesetup.entity.IrnCreditVO;
+import com.base.basesetup.entity.PartyMasterVO;
 import com.base.basesetup.service.IrnCreditNoteService;
 
 @CrossOrigin
@@ -38,7 +39,7 @@ public class IrnCreditNoteController extends BaseController {
 	IrnCreditNoteService irnCreditService;
 
 	@GetMapping("/getAllIrnCreditByOrgId")
-	public ResponseEntity<ResponseDTO> getAllIrnCreditByOrgId(@RequestParam(required = false) Long orgId) {
+	public ResponseEntity<ResponseDTO> getAllIrnCreditByOrgId(@RequestParam Long orgId) {
 		String methodName = "getAllIrnCreditByOrgId()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
 		String errorMsg = null;
@@ -64,9 +65,9 @@ public class IrnCreditNoteController extends BaseController {
 
 	}
 
-	@GetMapping("/getAllIrnCreditById")
-	public ResponseEntity<ResponseDTO> getAllIrnCreditById(@RequestParam(required = false) Long id) {
-		String methodName = "getAllIrnCreditById()";
+	@GetMapping("/getIrnCreditById")
+	public ResponseEntity<ResponseDTO> getIrnCreditById(@RequestParam(required = false) Long id) {
+		String methodName = "getIrnCreditById()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
 		String errorMsg = null;
 		Map<String, Object> responseObjectsMap = new HashMap<>();
@@ -151,29 +152,31 @@ public class IrnCreditNoteController extends BaseController {
 		return ResponseEntity.ok().body(responseDTO);
 	}
 
-	@GetMapping("/getPartyNameAndPartyCodeAndPartyTypeForIrn")
-	public ResponseEntity<ResponseDTO> getPartyNameAndPartyCodeAndPartyTypeForIrn(@RequestParam Long orgId) {
-		String methodName = "getPartyNameAndPartyCodeAndPartyTypeForIrn()";
+	@GetMapping("/getPartyNameByPartyType")
+	public ResponseEntity<ResponseDTO> getPartyNameByPartyType(@RequestParam Long orgId,@RequestParam String partyType) {
+		String methodName = "getPartyNameByPartyType()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
 		String errorMsg = null;
 		Map<String, Object> responseObjectsMap = new HashMap<>();
 		ResponseDTO responseDTO = null;
-		List<Map<String, Object>> customer = new ArrayList<>();
+		List<PartyMasterVO> partyMasterVO = new ArrayList<>();
 		try {
-			customer = irnCreditService.getPartyNameAndPartyCodeAndPartyTypeForIrn(orgId);
+			partyMasterVO = irnCreditService.getAllPartyByPartyType(orgId, partyType);
 		} catch (Exception e) {
 			errorMsg = e.getMessage();
 			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
 		}
 		if (StringUtils.isBlank(errorMsg)) {
-			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "Party information get successfully");
-			responseObjectsMap.put("irnCreditVO", customer);
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "Party information get successfully ByOrgId");
+			responseObjectsMap.put("partyMasterVO", partyMasterVO);
 			responseDTO = createServiceResponse(responseObjectsMap);
 		} else {
-			responseDTO = createServiceResponseError(responseObjectsMap, "Party information receive failed", errorMsg);
+			responseDTO = createServiceResponseError(responseObjectsMap, "Party information receive failedByOrgId",
+					errorMsg);
 		}
 		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
 		return ResponseEntity.ok().body(responseDTO);
+
 	}
 
 	@GetMapping("/getIrnCreditNoteDocId")
