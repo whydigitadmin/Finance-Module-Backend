@@ -15,7 +15,7 @@ public interface AdjustmentJournalRepo extends JpaRepository<AdjustmentJournalVO
 	List<AdjustmentJournalVO> getAllAdjustmentJournalByOrgId(Long orgId);
 
 	@Query(nativeQuery = true, value = "select * from adjustmentjournal where adjustmentjournalid=?1")
-	List<AdjustmentJournalVO> getAllAdjustmentJournalById(Long id);
+	List<AdjustmentJournalVO> getAdjustmentJournalById(Long id);
 
 	@Query(nativeQuery = true,value ="select concat(prefixfield,lpad(lastno,6,0)) AS docid from documenttypemappingdetails where orgid=?1 and finyear=?2 and branchcode=?3 and screencode=?4")
 	String getAdjustmentJournalDocId(Long orgId, String finYear, String branchCode, String screenCode);

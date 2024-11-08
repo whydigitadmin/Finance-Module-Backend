@@ -73,7 +73,7 @@ public class PartyTypeController extends BaseController {
 			}
 
 			@GetMapping("/getPartyTypeById")
-			public ResponseEntity<ResponseDTO> getPartyTypeById(@RequestParam(required = false) Long id) {
+			public ResponseEntity<ResponseDTO> getPartyTypeById(@RequestParam Long id) {
 				String methodName = "getPartyTypeById()";
 				LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
 				String errorMsg = null;
@@ -99,7 +99,7 @@ public class PartyTypeController extends BaseController {
 			}
 
 			@GetMapping("/getAllPartyTypeByOrgId")
-			public ResponseEntity<ResponseDTO> getAllPartyTypeByOrgId(@RequestParam(required = false) Long orgid) {
+			public ResponseEntity<ResponseDTO> getAllPartyTypeByOrgId(@RequestParam Long orgid) {
 				String methodName = "getAllPartyTypeByOrgId()";
 				LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
 				String errorMsg = null;
