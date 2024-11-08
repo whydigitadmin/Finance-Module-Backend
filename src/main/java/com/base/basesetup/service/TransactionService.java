@@ -12,6 +12,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.base.basesetup.dto.AdjustmentJournalDTO;
 import com.base.basesetup.dto.ArApAdjustmentOffSetDTO;
+import com.base.basesetup.dto.BankingDepositDTO;
+import com.base.basesetup.dto.BankingWithdrawalDTO;
 import com.base.basesetup.dto.BrsOpeningDTO;
 import com.base.basesetup.dto.ChartCostCenterDTO;
 import com.base.basesetup.dto.DailyMonthlyExRatesDTO;
@@ -29,6 +31,8 @@ import com.base.basesetup.dto.ReconcileCorpBankDTO;
 import com.base.basesetup.dto.TmsJobCardDTO;
 import com.base.basesetup.entity.AdjustmentJournalVO;
 import com.base.basesetup.entity.ArApAdjustmentOffSetVO;
+import com.base.basesetup.entity.BankingDepositVO;
+import com.base.basesetup.entity.BankingWithdrawalVO;
 import com.base.basesetup.entity.BrsExcelUploadVO;
 import com.base.basesetup.entity.BrsOpeningVO;
 import com.base.basesetup.entity.ChartCostCenterVO;
@@ -86,7 +90,9 @@ public interface TransactionService {
 	List<Map<String, Object>> updateCreateChartCostCenterList(@Valid List<ChartCostCenterDTO> chartCostCenterDTOList)
 			throws ApplicationException;
 
-	List<ChartCostCenterVO> getAllChartCostCenterById(Long id);
+
+	
+	List<ChartCostCenterVO> getChartCostCenterById(Long id);
 
 	List<ChartCostCenterVO> getChartCostCenterByActive();
 
@@ -105,9 +111,11 @@ public interface TransactionService {
 	Map<String, Object> updateCreateGeneralJournal(@Valid GeneralJournalDTO generalJournalDTO)
 			throws ApplicationException;
 
-	List<GeneralJournalVO> getAllGeneralJournalById(Long id);
+	List<GeneralJournalVO> getGeneralJournalById(Long id);
 
 	List<GeneralJournalVO> getGeneralJournalByActive();
+	
+	List<Map<String, Object>> getAccountNameFromGroup( Long orgId);
 
 // DebitNote
 	List<DebitNoteVO> getAllDebitNoteByOrgId(Long orgId);
@@ -134,7 +142,7 @@ public interface TransactionService {
 	Map<String, Object> updateCreatePaymentVoucher(@Valid PaymentVoucherDTO paymentVoucherDTO)
 			throws ApplicationException;
 
-	List<PaymentVoucherVO> getAllPaymentVoucherById(Long id);
+	List<PaymentVoucherVO> getPaymentVoucherById(Long id);
 
 	List<PaymentVoucherVO> getPaymentVoucherByActive();
 
@@ -255,11 +263,33 @@ public interface TransactionService {
 
 	List<AdjustmentJournalVO> getAllAdjustmentJournalByOrgId(Long orgId);
 
-	List<AdjustmentJournalVO> getAllAdjustmentJournalById(Long id);
+	List<AdjustmentJournalVO> getAdjustmentJournalById(Long id);
 
 	Map<String, Object> updateCreateAdjustmentJournal(@Valid AdjustmentJournalDTO adjustmentJournalDTO)
 			throws ApplicationException;
 
 	String getAdjustmentJournalDocId(Long orgId, String finYear, String branch, String branchCode);
 
+	//BankingDeposit
+	List<BankingDepositVO> getAllBankingDepositByOrgId(Long orgId);
+
+	List<BankingDepositVO> getBankingDepositById(Long id);
+
+	Map<String, Object> updateCreateBankingDeposit(@Valid BankingDepositDTO bankingDepositDTO)
+			throws ApplicationException;
+
+	String getBankingDepositDocId(Long orgId, String finYear, String branch, String branchCode);
+
+	List<Map<String, Object>> getBankNameFromGroupforBankingDeposit(Long orgId);
+
+	//BankingWithdrawal
+	List<BankingWithdrawalVO> getAllBankingWithdrawalByOrgId(Long orgId);
+
+	List<BankingWithdrawalVO> getBankingWithdrawalById(Long id);
+
+	Map<String, Object> updateCreateBankingWithdrawal(@Valid BankingWithdrawalDTO bankingWithdrawalDTO) throws ApplicationException;
+
+	String getBankingWithdrawalDocId(Long orgId, String finYear, String branch, String branchCode);
+
+	
 }

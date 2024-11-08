@@ -50,10 +50,10 @@ public interface CostInvoiceRepo extends JpaRepository<CostInvoiceVO, Long> {
 	@Query(nativeQuery = true,value = "SELECT \r\n"
 			+ "       CASE \r\n"
 			+ "           WHEN statecode = ?3 THEN 'INTRA'\r\n"
-			+ "           ELSE 'INTER'\r\n"
+			+ "           ELSE    'INTER'\r\n"
 			+ "       END AS transactionType\r\n"
 			+ "FROM branch\r\n"
-			+ "WHERE orgid = ?1 \r\n"
+			+ "WHERE orgid = ?1 \r\n"      
 			+ "  AND branchcode = ?2")
 	Set<Object[]> getGstType(Long orgId, String branchCode,String stateCode);
 

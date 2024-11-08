@@ -1,6 +1,7 @@
 package com.base.basesetup.repo;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -13,7 +14,7 @@ public interface PaymentVoucherRepo extends JpaRepository<PaymentVoucherVO, Long
 	List<PaymentVoucherVO> getAllPaymentVoucherByOrgId(Long orgId);
 
 	@Query(nativeQuery = true, value = "select * from paymentvoucher where paymentvoucherid=?1")
-	List<PaymentVoucherVO> getAllPaymentVoucherById(Long id);
+	List<PaymentVoucherVO> getPaymentVoucherById(Long id);
 
 	@Query(nativeQuery = true, value = "select * from paymentvoucher where active=1")
 	List<PaymentVoucherVO> findPaymentVoucherByActive();
@@ -30,4 +31,7 @@ public interface PaymentVoucherRepo extends JpaRepository<PaymentVoucherVO, Long
 
 	@Query(value = "select * from paymentVoucher a where a.orgid=?1 and docid=?2",nativeQuery =true)
 	PaymentVoucherVO findAllPaymentVoucherByDocId(Long orgId, String docId);
+
+	@Query(nativeQuery = true,value="select currency,currencydescripition,buyingexrate,sellingexrate from vw_exrates where orgid=?1")
+	Set<Object[]> getCurrencyAndExrateDetails(Long orgId);
 }
