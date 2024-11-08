@@ -17,7 +17,7 @@ public class BankingWithdrawalDTO {
 
 	private Long id;
 	private String withdrawalMode;
-	private String receivedFrom;
+	private String payTo;
 	private String chequeNo;
 	private LocalDate chequeDate;
 	private String chequeBank;
