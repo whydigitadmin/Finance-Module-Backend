@@ -86,9 +86,10 @@ public interface TransactionService {
 
 //	ChartCostCenter
 	List<ChartCostCenterVO> getAllChartCostCenterByOrgId(Long orgId);
-	
+
 	List<Map<String, Object>> updateCreateChartCostCenterList(@Valid List<ChartCostCenterDTO> chartCostCenterDTOList)
 			throws ApplicationException;
+
 
 	
 	List<ChartCostCenterVO> getChartCostCenterById(Long id);
@@ -208,13 +209,11 @@ public interface TransactionService {
 
 	List<ReconcileBankVO> getAllReconcileBankById(Long id);
 
-	List<ReconcileBankVO> getReconcileBankByActive();
-
 	String getReconcileBankDocId(Long orgId, String finYear, String branch, String branchCode);
 
-	ReconcileBankVO getReconcileBankByDocId(Long orgId, String docId);
-
 	String getGeneralJournalDocId(Long orgId, String finYear, String branch, String branchCode);
+
+	List<Map<String, Object>> getBankNameForGroupLedgerAndReconcileBank(Long orgId);
 
 	// ReconcileCorpBank
 	List<ReconcileCorpBankVO> getAllReconcileCorpBankByOrgId(Long orgId);
@@ -224,11 +223,9 @@ public interface TransactionService {
 
 	List<ReconcileCorpBankVO> getAllReconcileCorpBankById(Long id);
 
-	List<ReconcileCorpBankVO> getReconcileCorpBankByActive();
-
 	String getReconcileCorpBankDocId(Long orgId, String finYear, String branch, String branchCode);
 
-	ReconcileCorpBankVO getReconcileCorpBankByDocId(Long orgId, String docId);
+	List<Map<String, Object>> getBankNameForGroupLedgerAndReconcileCorp(Long orgId);
 
 	// ReconcileCash
 
@@ -238,17 +235,15 @@ public interface TransactionService {
 
 	List<ReconcileCashVO> getAllReconcileCashById(Long id);
 
-	List<ReconcileCashVO> getReconcileCashByActive();
-
 	FundTransferVO getFundTranferByDocId(Long orgId, String docId);
 
 	String getFundTranferDocId(Long orgId, String finYear, String branch, String branchCode);
 
 	String getReconcileCashDocId(Long orgId, String finYear, String branch, String branchCode);
 
-	ReconcileCashVO getReconcileCashByDocId(Long orgId, String docId);
-
 	String getChartCostCenterDocId(Long orgId, String finYear, String branch, String branchCode);
+
+	List<Map<String, Object>> getAccountNameForGroupLedgerAndReconcileCash(Long orgId);
 
 	/// TMS-TT-JobCard
 
@@ -258,14 +253,20 @@ public interface TransactionService {
 
 	List<TmsJobCardVO> getAllTmsJobCardById(Long id);
 
-	List<TmsJobCardVO> getTmsJobCardByActive();
-	//AdjustmentJournal
-	
+	List<Map<String, Object>> getSalesPersonFromPartyMaster(Long orgId, String partyName);
+
+	List<Map<String, Object>> getAllCustomersFromPartyMaster(Long orgId);
+
+	String getTmsJobCardDocId(Long orgId, String finYear, String branch, String branchCode);
+
+	// AdjustmentJournal
+
 	List<AdjustmentJournalVO> getAllAdjustmentJournalByOrgId(Long orgId);
 
 	List<AdjustmentJournalVO> getAdjustmentJournalById(Long id);
 
-	Map<String, Object> updateCreateAdjustmentJournal(@Valid AdjustmentJournalDTO adjustmentJournalDTO) throws ApplicationException;
+	Map<String, Object> updateCreateAdjustmentJournal(@Valid AdjustmentJournalDTO adjustmentJournalDTO)
+			throws ApplicationException;
 
 	String getAdjustmentJournalDocId(Long orgId, String finYear, String branch, String branchCode);
 
