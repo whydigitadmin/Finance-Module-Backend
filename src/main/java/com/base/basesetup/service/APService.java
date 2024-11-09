@@ -19,7 +19,7 @@ public interface APService {
 //	Payment
 	List<PaymentVO> getAllPaymentByOrgId(Long orgId);
 
-	List<PaymentVO> getAllPaymentById(Long id);
+	List<PaymentVO> getPaymentById(Long id);
 
 	PaymentVO updateCreatePayment(@Valid PaymentDTO paymentDTO) throws ApplicationException;
 

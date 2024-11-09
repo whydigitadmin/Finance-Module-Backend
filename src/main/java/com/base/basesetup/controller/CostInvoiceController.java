@@ -393,4 +393,30 @@ public class CostInvoiceController extends BaseController{
 			return ResponseEntity.ok().body(responseDTO);
 		}
 
+		@GetMapping("/getPlaceOfSupply")
+		public ResponseEntity<ResponseDTO> getPlaceOfSupply(@RequestParam Long orgId,@RequestParam Long id,@RequestParam String stateCode) {
+			String methodName = "getPlaceOfSupply()";
+			LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+			String errorMsg = null;
+			Map<String, Object> responseObjectsMap = new HashMap<>();
+			ResponseDTO responseDTO = null;
+			List<Map<String,Object>> placeOfSupplyDetails = new ArrayList<>();
+			try {
+				placeOfSupplyDetails = costInvoiceService.getPlaceOfSupplyDetails(orgId, id,stateCode);
+			} catch (Exception e) {
+				errorMsg = e.getMessage();
+				LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+			}
+			if (StringUtils.isBlank(errorMsg)) {
+				responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "Place Of Supply information get successfully ByOrgId");
+				responseObjectsMap.put("placeOfSupplyDetails", placeOfSupplyDetails);
+				responseDTO = createServiceResponse(responseObjectsMap);
+			} else {
+				responseDTO = createServiceResponseError(responseObjectsMap, "Place Of Supply information receive failedByOrgId",
+						errorMsg);
+			}
+			LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+			return ResponseEntity.ok().body(responseDTO);
+		}
+		
 }

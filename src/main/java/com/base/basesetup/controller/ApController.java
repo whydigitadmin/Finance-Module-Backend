@@ -66,16 +66,17 @@ public class ApController extends BaseController {
 
 	}
 
-	@GetMapping("/getAllPaymentById")
-	public ResponseEntity<ResponseDTO> getAllPaymentById(@RequestParam Long id) {
-		String methodName = "getAllPaymentById()";
+
+	@GetMapping("/getPaymentById")
+	public ResponseEntity<ResponseDTO> getPaymentById(@RequestParam Long id) {
+		String methodName = "getPaymentById()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
 		String errorMsg = null;
 		Map<String, Object> responseObjectsMap = new HashMap<>();
 		ResponseDTO responseDTO = null;
 		List<PaymentVO> paymentVO = new ArrayList<>();
 		try {
-			paymentVO = apService.getAllPaymentById(id);
+			paymentVO = apService.getPaymentById(id);
 		} catch (Exception e) {
 			errorMsg = e.getMessage();
 			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);

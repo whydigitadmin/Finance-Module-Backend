@@ -380,5 +380,21 @@ public class CostInvoiceServiceImpl implements CostInvoiceService {
 		}
 		return List1;
 	}
+	
+	@Override
+	public List<Map<String, Object>> getPlaceOfSupplyDetails(Long orgId,Long id,String stateCode) {
+		Set<Object[]> getPOSDetails = costInvoiceRepo.getPlaceOfSupplyDetails(orgId,id,stateCode);
+		return getPOS(getPOSDetails);
+	}
+
+	private List<Map<String, Object>> getPOS(Set<Object[]> getPOSDetails) {
+		List<Map<String, Object>> List1 = new ArrayList<>();
+		for (Object[] ch : getPOSDetails) {
+			Map<String, Object> map = new HashMap<>();
+			map.put("placeOfSupply", ch[0] != null ? ch[0].toString() : ""); // Empty string if null
+			List1.add(map);
+		}
+		return List1;
+	}
 
 }

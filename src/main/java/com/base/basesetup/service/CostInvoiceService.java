@@ -43,4 +43,6 @@ public interface CostInvoiceService {
 
 	List<Map<String, Object>> getGstTypeDetails(Long orgId, String branchCode, String stateCode);
 
+	List<Map<String, Object>> getPlaceOfSupplyDetails(Long orgId, Long id, String stateCode);
+
 }
