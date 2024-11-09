@@ -2279,21 +2279,6 @@ public class TransactionServiceImpl implements TransactionService {
 
 	}
 
-	@Override
-	public List<Map<String, Object>> getBankNameForGroupLedgerAndReconcileCorp(Long orgId) {
-		Set<Object[]> getAccount = reconcileCorpBankRepo.findByBankName(orgId);
-		return getAccountnames(getAccount);
-	}
-
-	private List<Map<String, Object>> getAccountnames(Set<Object[]> getAccount) {
-		List<Map<String, Object>> list1 = new ArrayList<>();
-		for (Object[] ch : getAccount) {
-			Map<String, Object> map = new HashMap<>();
-			map.put("accountgroupname", ch[0] != null ? ch[0].toString() : "");
-			list1.add(map);
-		}
-		return list1;
-	}
 
 	// ReconcileCash
 
