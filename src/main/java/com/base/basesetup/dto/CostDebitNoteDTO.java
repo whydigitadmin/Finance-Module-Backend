@@ -22,7 +22,6 @@ public class CostDebitNoteDTO {
 	private String ipNo;
 	private String latitude;
 	private Long orgId;
-	private String docNo;
 	private String subType;
 	private String product;
 	private String vohNo;
