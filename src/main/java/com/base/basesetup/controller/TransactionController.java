@@ -171,7 +171,7 @@ public class TransactionController extends BaseController {
 
 //	BrsOpening
 	@GetMapping("/getAllBrsOpeningByOrgId")
-	public ResponseEntity<ResponseDTO> getAllBrsOpeningByOrgId(@RequestParam(required = false) Long orgId) {
+	public ResponseEntity<ResponseDTO> getAllBrsOpeningByOrgId(@RequestParam Long orgId) {
 		String methodName = "getAllBrsOpeningByOrgId()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
 		String errorMsg = null;
@@ -198,7 +198,7 @@ public class TransactionController extends BaseController {
 	}
 
 	@GetMapping("/getAllBrsOpeningById")
-	public ResponseEntity<ResponseDTO> getAllBrsOpeningById(@RequestParam(required = false) Long id) {
+	public ResponseEntity<ResponseDTO> getAllBrsOpeningById(@RequestParam Long id) {
 		String methodName = "getAllBrsOpeningById()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
 		String errorMsg = null;
@@ -285,7 +285,7 @@ public class TransactionController extends BaseController {
 	}
 
 	@GetMapping("/getBranchForBrsOpening")
-	public ResponseEntity<ResponseDTO> getBranchForBrsOpening(@RequestParam(required = false) Long orgId) {
+	public ResponseEntity<ResponseDTO> getBranchForBrsOpening(@RequestParam Long orgId) {
 
 		String methodName = "getBranchForBrsOpening()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
@@ -320,7 +320,7 @@ public class TransactionController extends BaseController {
 
 	@PostMapping("/excelUploadForBrs")
 	public ResponseEntity<ResponseDTO> ExcelUploadForBrs(@RequestParam MultipartFile[] files,
-			@RequestParam(required = false) Long orgId, @RequestParam(required = false) String createdBy, String branch,
+			@RequestParam Long orgId, @RequestParam String createdBy, String branch,
 			String branchCode) {
 		String methodName = "ExcelUploadForBrs()";
 		int totalRows = 0;
@@ -359,7 +359,7 @@ public class TransactionController extends BaseController {
 	}
 
 	@GetMapping("/getAllBrsExcelByOrgId")
-	public ResponseEntity<ResponseDTO> getAllBrsExcelByOrgId(@RequestParam(required = false) Long orgId) {
+	public ResponseEntity<ResponseDTO> getAllBrsExcelByOrgId(@RequestParam Long orgId) {
 		String methodName = "getAllBrsExcelByOrgId()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
 		String errorMsg = null;

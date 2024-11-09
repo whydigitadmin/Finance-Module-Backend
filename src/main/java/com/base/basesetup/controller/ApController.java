@@ -40,7 +40,7 @@ public class ApController extends BaseController {
 	public static final Logger LOGGER = LoggerFactory.getLogger(ApController.class);
 
 	@GetMapping("/getAllPaymentByOrgId")
-	public ResponseEntity<ResponseDTO> getAllPaymentByOrgId(@RequestParam(required = false) Long orgId) {
+	public ResponseEntity<ResponseDTO> getAllPaymentByOrgId(@RequestParam Long orgId) {
 		String methodName = "getAllPaymentByOrgId()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
 		String errorMsg = null;
@@ -67,7 +67,7 @@ public class ApController extends BaseController {
 	}
 
 	@GetMapping("/getAllPaymentById")
-	public ResponseEntity<ResponseDTO> getAllPaymentById(@RequestParam(required = false) Long id) {
+	public ResponseEntity<ResponseDTO> getAllPaymentById(@RequestParam Long id) {
 		String methodName = "getAllPaymentById()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
 		String errorMsg = null;
@@ -128,7 +128,7 @@ public class ApController extends BaseController {
 
 	// ApBillBalance
 	@GetMapping("/getAllApBillBalanceByOrgId")
-	public ResponseEntity<ResponseDTO> getAllApBillBalanceByOrgId(@RequestParam(required = false) Long orgId) {
+	public ResponseEntity<ResponseDTO> getAllApBillBalanceByOrgId(@RequestParam Long orgId) {
 		String methodName = "getAllApBillBalanceByOrgId()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
 		String errorMsg = null;
@@ -156,7 +156,7 @@ public class ApController extends BaseController {
 	}
 
 	@GetMapping("/getAllApBillBalanceById")
-	public ResponseEntity<ResponseDTO> getAllApBillBalanceById(@RequestParam(required = false) Long id) {
+	public ResponseEntity<ResponseDTO> getAllApBillBalanceById(@RequestParam Long id) {
 		String methodName = "getAllApBillBalanceById()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
 		String errorMsg = null;
@@ -244,7 +244,7 @@ public class ApController extends BaseController {
 		return ResponseEntity.ok().body(responseDTO);
 
 	}
-	
+
 	@GetMapping("/getPartyNameAndCodeForApBillBalance")
 	public ResponseEntity<ResponseDTO> getPartyNameAndCodeForApBillBalance(@RequestParam Long orgId) {
 		String methodName = "getPartyNameAndCodeForApBillBalance()";
@@ -260,8 +260,7 @@ public class ApController extends BaseController {
 			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
 		}
 		if (StringUtils.isBlank(errorMsg)) {
-			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
-					"Party name and code information get successfully");
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "Party name and code information get successfully");
 			responseObjectsMap.put("PartyMasterVO", customer);
 			responseDTO = createServiceResponse(responseObjectsMap);
 		} else {
@@ -438,7 +437,7 @@ public class ApController extends BaseController {
 		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
 		return ResponseEntity.ok().body(responseDTO);
 	}
-	
+
 //	@GetMapping("/getApBillBalanceDocId")
 //	public ResponseEntity<ResponseDTO> getApBillBalanceDocId(@RequestParam Long orgId, @RequestParam String finYear,
 //			@RequestParam String branch, @RequestParam String branchCode) {
@@ -469,4 +468,5 @@ public class ApController extends BaseController {
 //		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
 //		return ResponseEntity.ok().body(responseDTO);
 //	}
+
 }
