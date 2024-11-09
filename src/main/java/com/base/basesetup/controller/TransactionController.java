@@ -173,7 +173,7 @@ public class TransactionController extends BaseController {
 
 //	BrsOpening
 	@GetMapping("/getAllBrsOpeningByOrgId")
-	public ResponseEntity<ResponseDTO> getAllBrsOpeningByOrgId(@RequestParam(required = false) Long orgId) {
+	public ResponseEntity<ResponseDTO> getAllBrsOpeningByOrgId(@RequestParam Long orgId) {
 		String methodName = "getAllBrsOpeningByOrgId()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
 		String errorMsg = null;
@@ -200,7 +200,7 @@ public class TransactionController extends BaseController {
 	}
 
 	@GetMapping("/getAllBrsOpeningById")
-	public ResponseEntity<ResponseDTO> getAllBrsOpeningById(@RequestParam(required = false) Long id) {
+	public ResponseEntity<ResponseDTO> getAllBrsOpeningById(@RequestParam Long id) {
 		String methodName = "getAllBrsOpeningById()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
 		String errorMsg = null;
@@ -287,7 +287,7 @@ public class TransactionController extends BaseController {
 	}
 
 	@GetMapping("/getBranchForBrsOpening")
-	public ResponseEntity<ResponseDTO> getBranchForBrsOpening(@RequestParam(required = false) Long orgId) {
+	public ResponseEntity<ResponseDTO> getBranchForBrsOpening(@RequestParam Long orgId) {
 
 		String methodName = "getBranchForBrsOpening()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
@@ -322,7 +322,7 @@ public class TransactionController extends BaseController {
 
 	@PostMapping("/excelUploadForBrs")
 	public ResponseEntity<ResponseDTO> ExcelUploadForBrs(@RequestParam MultipartFile[] files,
-			@RequestParam(required = false) Long orgId, @RequestParam(required = false) String createdBy, String branch,
+			@RequestParam Long orgId, @RequestParam String createdBy, String branch,
 			String branchCode) {
 		String methodName = "ExcelUploadForBrs()";
 		int totalRows = 0;
@@ -361,7 +361,7 @@ public class TransactionController extends BaseController {
 	}
 
 	@GetMapping("/getAllBrsExcelByOrgId")
-	public ResponseEntity<ResponseDTO> getAllBrsExcelByOrgId(@RequestParam(required = false) Long orgId) {
+	public ResponseEntity<ResponseDTO> getAllBrsExcelByOrgId(@RequestParam Long orgId) {
 		String methodName = "getAllBrsExcelByOrgId()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
 		String errorMsg = null;
@@ -1264,6 +1264,37 @@ public class TransactionController extends BaseController {
 		return ResponseEntity.ok().body(responseDTO);
 	}
 
+	
+	@GetMapping("/getCurrencyAndExrateDetails")
+	public ResponseEntity<ResponseDTO> getCurrencyAndExrateDetails(@RequestParam Long orgId) {
+		String methodName = "getCurrencyAndExrateDetails()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		List<Map<String,Object>> mapp = new ArrayList<>();
+
+		try {
+			mapp = transactionService.getCurrencyAndExrates(orgId);
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "Currency Details retrieved successfully");
+			responseObjectsMap.put("currencyVO", mapp);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					"Failed to retrieve Currency Details", errorMsg);
+		}
+
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+	}
+	
+	
 	// ReceiptReversal
 
 	@GetMapping("/getAllReceiptReversalByOrgId")

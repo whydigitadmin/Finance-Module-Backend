@@ -277,7 +277,7 @@ public interface TransactionService {
 			throws ApplicationException;
 
 	String getBankingDepositDocId(Long orgId, String finYear, String branch, String branchCode);
-
+ 
 	List<Map<String, Object>> getBankNameFromGroupforBankingDeposit(Long orgId);
 
 	//BankingWithdrawal
@@ -288,6 +288,8 @@ public interface TransactionService {
 	Map<String, Object> updateCreateBankingWithdrawal(@Valid BankingWithdrawalDTO bankingWithdrawalDTO) throws ApplicationException;
 
 	String getBankingWithdrawalDocId(Long orgId, String finYear, String branch, String branchCode);
+
+	List<Map<String, Object>> getCurrencyAndExrates(Long orgId);
 
 	
 }
