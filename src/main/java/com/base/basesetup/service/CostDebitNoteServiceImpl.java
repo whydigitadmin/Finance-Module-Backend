@@ -114,7 +114,6 @@ public class CostDebitNoteServiceImpl implements CostDebitNoteService {
 		costDebitNoteVO.setIpNo(costDebitNoteDTO.getIpNo());
 		costDebitNoteVO.setLatitude(costDebitNoteDTO.getLatitude());
 		costDebitNoteVO.setOrgId(costDebitNoteDTO.getOrgId());
-		costDebitNoteVO.setDocNo(costDebitNoteDTO.getDocNo());
 		costDebitNoteVO.setSubType(costDebitNoteDTO.getSubType());
 		costDebitNoteVO.setProduct(costDebitNoteDTO.getProduct());
 		costDebitNoteVO.setVohNo(costDebitNoteDTO.getVohNo());
