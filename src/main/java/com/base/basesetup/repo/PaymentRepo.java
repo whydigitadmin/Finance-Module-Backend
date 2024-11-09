@@ -13,7 +13,7 @@ import com.base.basesetup.entity.PaymentVO;
 public interface PaymentRepo extends JpaRepository<PaymentVO, Long> {
 
 	@Query(value = "Select * from payment where paymentid=?1", nativeQuery = true)
-	List<PaymentVO> getAllPaymentById(Long id);
+	List<PaymentVO> getPaymentById(Long id);
 
 	@Query(value = "select * from payment  where orgid=?1 ", nativeQuery = true)
 	List<PaymentVO> getAllPaymentByOrgId(Long orgId);
