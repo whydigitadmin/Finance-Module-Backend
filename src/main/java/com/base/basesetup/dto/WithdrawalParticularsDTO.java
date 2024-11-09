@@ -3,16 +3,18 @@ package com.base.basesetup.dto;
 import java.math.BigDecimal;
 
 import lombok.AllArgsConstructor;
-
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CostCenterTmsJobCardDTO {
-	private Long id;
-	private String accountName;
-	private BigDecimal amount;
+@Builder
+public class WithdrawalParticularsDTO {
 
+	private String accountsName;
+	private BigDecimal debit;
+	private BigDecimal credit;
+	private String narration;
 }
