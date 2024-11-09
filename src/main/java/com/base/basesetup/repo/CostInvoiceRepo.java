@@ -57,4 +57,8 @@ public interface CostInvoiceRepo extends JpaRepository<CostInvoiceVO, Long> {
 			+ "  AND branchcode = ?2")
 	Set<Object[]> getGstType(Long orgId, String branchCode,String stateCode);
 
+	@Query(nativeQuery = true,value = "SELECT a.businessplace FROM partyaddress a,partymaster b,state c where  a.partymasterid=b.partymasterid and a.state=c.state and b.orgid=?1 and a.partymasterid=?2 and c.statecode=?3\r\n"
+			+ "group by businessplace")
+	Set<Object[]> getPlaceOfSupplyDetails(Long orgId, Long id, String stateCode);
+
 }
