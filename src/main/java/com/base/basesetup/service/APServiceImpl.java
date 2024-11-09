@@ -62,14 +62,11 @@ public class APServiceImpl implements APService {
 	}
 
 	@Override
-	public List<PaymentVO> getAllPaymentById(Long id) {
+	public List<PaymentVO> getPaymentById(Long id) {
 		List<PaymentVO> paymentVO = new ArrayList<>();
 		if (ObjectUtils.isNotEmpty(id)) {
 			LOGGER.info("Successfully Received  Payment BY Id : {}", id);
-			paymentVO = paymentRepo.getAllPaymentById(id);
-		} else {
-			LOGGER.info("Successfully Received  Payment For All Id.");
-			paymentVO = paymentRepo.findAll();
+			paymentVO = paymentRepo.getPaymentById(id);
 		}
 		return paymentVO;
 	}
