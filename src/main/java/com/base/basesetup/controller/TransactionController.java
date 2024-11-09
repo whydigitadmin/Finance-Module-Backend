@@ -173,7 +173,7 @@ public class TransactionController extends BaseController {
 
 //	BrsOpening
 	@GetMapping("/getAllBrsOpeningByOrgId")
-	public ResponseEntity<ResponseDTO> getAllBrsOpeningByOrgId(@RequestParam(required = false) Long orgId) {
+	public ResponseEntity<ResponseDTO> getAllBrsOpeningByOrgId(@RequestParam Long orgId) {
 		String methodName = "getAllBrsOpeningByOrgId()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
 		String errorMsg = null;
@@ -200,7 +200,7 @@ public class TransactionController extends BaseController {
 	}
 
 	@GetMapping("/getAllBrsOpeningById")
-	public ResponseEntity<ResponseDTO> getAllBrsOpeningById(@RequestParam(required = false) Long id) {
+	public ResponseEntity<ResponseDTO> getAllBrsOpeningById(@RequestParam Long id) {
 		String methodName = "getAllBrsOpeningById()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
 		String errorMsg = null;
@@ -287,7 +287,7 @@ public class TransactionController extends BaseController {
 	}
 
 	@GetMapping("/getBranchForBrsOpening")
-	public ResponseEntity<ResponseDTO> getBranchForBrsOpening(@RequestParam(required = false) Long orgId) {
+	public ResponseEntity<ResponseDTO> getBranchForBrsOpening(@RequestParam Long orgId) {
 
 		String methodName = "getBranchForBrsOpening()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
@@ -322,7 +322,7 @@ public class TransactionController extends BaseController {
 
 	@PostMapping("/excelUploadForBrs")
 	public ResponseEntity<ResponseDTO> ExcelUploadForBrs(@RequestParam MultipartFile[] files,
-			@RequestParam(required = false) Long orgId, @RequestParam(required = false) String createdBy, String branch,
+			@RequestParam Long orgId, @RequestParam String createdBy, String branch,
 			String branchCode) {
 		String methodName = "ExcelUploadForBrs()";
 		int totalRows = 0;
@@ -361,7 +361,7 @@ public class TransactionController extends BaseController {
 	}
 
 	@GetMapping("/getAllBrsExcelByOrgId")
-	public ResponseEntity<ResponseDTO> getAllBrsExcelByOrgId(@RequestParam(required = false) Long orgId) {
+	public ResponseEntity<ResponseDTO> getAllBrsExcelByOrgId(@RequestParam Long orgId) {
 		String methodName = "getAllBrsExcelByOrgId()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
 		String errorMsg = null;
@@ -1968,27 +1968,27 @@ public class TransactionController extends BaseController {
 		return ResponseEntity.ok().body(responseDTO);
 	}
 
-	@GetMapping("/getBankNameForGroupLedgerAndReconcileBank")
-	public ResponseEntity<ResponseDTO> getBankNameForGroupLedgerAndReconcileBank(@RequestParam Long orgId) {
-		String methodName = "getBankNameForGroupLedgerAndReconcileBank()";
+	@GetMapping("/getBankNameForGroupLedger")
+	public ResponseEntity<ResponseDTO> getBankNameForGroupLedger(@RequestParam Long orgId) {
+		String methodName = "getBankNameForGroupLedger()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
 		String errorMsg = null;
 		Map<String, Object> responseObjectsMap = new HashMap<>();
 		ResponseDTO responseDTO = null;
 		List<Map<String, Object>> accountName = new ArrayList<>();
 		try {
-			accountName = transactionService.getBankNameForGroupLedgerAndReconcileBank(orgId);
+			accountName = transactionService.getBankNameForGroupLedger(orgId);
 		} catch (Exception e) {
 			errorMsg = e.getMessage();
 			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
 		}
 		if (StringUtils.isBlank(errorMsg)) {
-			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "AccountName information get successfully ByOrgId");
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, " AccountName from Group information retrieved successfully");
 			responseObjectsMap.put("accountName", accountName);
 			responseDTO = createServiceResponse(responseObjectsMap);
 		} else {
 			responseDTO = createServiceResponseError(responseObjectsMap,
-					"AccountName information receive failedByOrgId", errorMsg);
+					"Failed to retrieve AccountName from Group information", errorMsg);
 		}
 		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
 		return ResponseEntity.ok().body(responseDTO);
@@ -2122,33 +2122,6 @@ public class TransactionController extends BaseController {
 	}
 
 	
-
-	@GetMapping("/getBankNameForGroupLedgerAndReconcileCorp")
-	public ResponseEntity<ResponseDTO> getBankNameForGroupLedgerAndReconcileCorp(@RequestParam Long orgId) {
-		String methodName = "getBankNameForGroupLedgerAndReconcileCorp()";
-		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
-		String errorMsg = null;
-		Map<String, Object> responseObjectsMap = new HashMap<>();
-		ResponseDTO responseDTO = null;
-		List<Map<String, Object>> accountName = new ArrayList<>();
-		try {
-			accountName = transactionService.getBankNameForGroupLedgerAndReconcileCorp(orgId);
-		} catch (Exception e) {
-			errorMsg = e.getMessage();
-			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
-		}
-		if (StringUtils.isBlank(errorMsg)) {
-			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "AccountName information get successfully ByOrgId");
-			responseObjectsMap.put("accountName", accountName);
-			responseDTO = createServiceResponse(responseObjectsMap);
-		} else {
-			responseDTO = createServiceResponseError(responseObjectsMap,
-					"AccountName information receive failedByOrgId", errorMsg);
-		}
-		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
-		return ResponseEntity.ok().body(responseDTO);
-	}
-
 	// ReconcileCash
 
 	@GetMapping("/getAllReconcileCashByOrgId")
@@ -2275,32 +2248,6 @@ public class TransactionController extends BaseController {
 	}
 
 	
-
-	@GetMapping("/getAccountNameForGroupLedgerAndReconcileCash")
-	public ResponseEntity<ResponseDTO> getAccountNameForGroupLedgerAndReconcileCash(@RequestParam Long orgId) {
-		String methodName = "getAccountNameForGroupLedgerAndReconcileCash()";
-		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
-		String errorMsg = null;
-		Map<String, Object> responseObjectsMap = new HashMap<>();
-		ResponseDTO responseDTO = null;
-		List<Map<String, Object>> accountName = new ArrayList<>();
-		try {
-			accountName = transactionService.getAccountNameForGroupLedgerAndReconcileCash(orgId);
-		} catch (Exception e) {
-			errorMsg = e.getMessage();
-			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
-		}
-		if (StringUtils.isBlank(errorMsg)) {
-			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "AccountName information get successfully ByOrgId");
-			responseObjectsMap.put("accountName", accountName);
-			responseDTO = createServiceResponse(responseObjectsMap);
-		} else {
-			responseDTO = createServiceResponseError(responseObjectsMap,
-					"AccountName information receive failedByOrgId", errorMsg);
-		}
-		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
-		return ResponseEntity.ok().body(responseDTO);
-	}
 
 //	AdjustmentJournal
 	@GetMapping("/getAllAdjustmentJournalByOrgId")

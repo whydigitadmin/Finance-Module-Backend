@@ -54,9 +54,6 @@ public class APServiceImpl implements APService {
 		if (ObjectUtils.isNotEmpty(orgId)) {
 			LOGGER.info("Successfully Received  Payment BY OrgId: {}", orgId);
 			paymentVO = paymentRepo.getAllPaymentByOrgId(orgId);
-		} else {
-			LOGGER.info("Successfully Received  Payment For All OrgId.");
-			paymentVO = paymentRepo.findAll();
 		}
 		return paymentVO;
 	}
@@ -188,10 +185,7 @@ public class APServiceImpl implements APService {
 		if (ObjectUtils.isNotEmpty(orgId)) {
 			LOGGER.info("Successfully Received ApBillBalance BY OrgId : {}", orgId);
 			apBillBalanceVO = apBillBalanceRepo.getAllApBillBalanceByOrgId(orgId);
-		} else {
-			LOGGER.info("Successfully Received  ReceiptReceivable For All OrgId.");
-			apBillBalanceVO = apBillBalanceRepo.findAll();
-		}
+		} 
 		return apBillBalanceVO;
 	}
 
@@ -201,10 +195,7 @@ public class APServiceImpl implements APService {
 		if (ObjectUtils.isNotEmpty(id)) {
 			LOGGER.info("Successfully Received ApBillBalance BY Id : {}", id);
 			apBillBalanceVO = apBillBalanceRepo.getAllApBillBalanceById(id);
-		} else {
-			LOGGER.info("Successfully Received ApBillBalance For All Id.");
-			apBillBalanceVO = apBillBalanceRepo.findAll();
-		}
+		} 
 		return apBillBalanceVO;
 	}
 
