@@ -51,9 +51,6 @@ public class ARServiceImpl implements ARService {
 		if (ObjectUtils.isNotEmpty(orgId)) {
 			LOGGER.info("Successfully Received ReceiptReceivable BY OrgId : {}", orgId);
 			receiptReceivableVO = receiptRepo.getAllReceiptReceivableByOrgId(orgId);
-		} else {
-			LOGGER.info("Successfully Received  ReceiptReceivable For All OrgId.");
-			receiptReceivableVO = receiptRepo.findAll();
 		}
 		return receiptReceivableVO;
 	}
@@ -64,9 +61,6 @@ public class ARServiceImpl implements ARService {
 		if (ObjectUtils.isNotEmpty(id)) {
 			LOGGER.info("Successfully Received ReceiptReceivable BY Id : {}", id);
 			receiptReceivableVO = receiptRepo.getAllReceiptReceivableById(id);
-		} else {
-			LOGGER.info("Successfully Received ReceiptReceivable For All Id.");
-			receiptReceivableVO = receiptRepo.findAll();
 		}
 		return receiptReceivableVO;
 	}
@@ -210,9 +204,6 @@ public class ARServiceImpl implements ARService {
 		if (ObjectUtils.isNotEmpty(orgId)) {
 			LOGGER.info("Successfully Received ArApBillBalance BY OrgId : {}", orgId);
 			arBillBalanceVO = arBillBalanceRepo.getAllArBillBalanceByOrgId(orgId);
-		} else {
-			LOGGER.info("Successfully Received  ReceiptReceivable For All OrgId.");
-			arBillBalanceVO = arBillBalanceRepo.findAll();
 		}
 		return arBillBalanceVO;
 	}
@@ -223,9 +214,6 @@ public class ARServiceImpl implements ARService {
 		if (ObjectUtils.isNotEmpty(id)) {
 			LOGGER.info("Successfully Received ArApBillBalance BY Id : {}", id);
 			arBillBalanceVO = arBillBalanceRepo.getAllArBillBalanceById(id);
-		} else {
-			LOGGER.info("Successfully Received ArApBillBalance For All Id.");
-			arBillBalanceVO = arBillBalanceRepo.findAll();
 		}
 		return arBillBalanceVO;
 	}

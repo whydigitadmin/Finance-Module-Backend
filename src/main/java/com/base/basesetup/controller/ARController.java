@@ -42,7 +42,7 @@ public class ARController extends BaseController {
 	// Receipt
 
 	@GetMapping("/getAllReceiptByOrgId")
-	public ResponseEntity<ResponseDTO> getAllReceiptReceivableByOrgId(@RequestParam(required = false) Long orgId) {
+	public ResponseEntity<ResponseDTO> getAllReceiptReceivableByOrgId(@RequestParam Long orgId) {
 		String methodName = "getAllReceiptReceivableByOrgId()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
 		String errorMsg = null;
@@ -70,7 +70,7 @@ public class ARController extends BaseController {
 	}
 
 	@GetMapping("/getAllReceiptById")
-	public ResponseEntity<ResponseDTO> getAllReceiptReceivableById(@RequestParam(required = false) Long id) {
+	public ResponseEntity<ResponseDTO> getAllReceiptReceivableById(@RequestParam Long id) {
 		String methodName = "getAllReceiptReceivableById()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
 		String errorMsg = null;
@@ -220,7 +220,7 @@ public class ARController extends BaseController {
 
 	// ArBillBalance
 	@GetMapping("/getAllArBillBalanceByOrgId")
-	public ResponseEntity<ResponseDTO> getAllArBillBalanceByOrgId(@RequestParam(required = false) Long orgId) {
+	public ResponseEntity<ResponseDTO> getAllArBillBalanceByOrgId(@RequestParam Long orgId) {
 		String methodName = "getAllArBillBalanceByOrgId()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
 		String errorMsg = null;
@@ -248,7 +248,7 @@ public class ARController extends BaseController {
 	}
 
 	@GetMapping("/getAllArBillBalanceById")
-	public ResponseEntity<ResponseDTO> getAllArBillBalanceById(@RequestParam(required = false) Long id) {
+	public ResponseEntity<ResponseDTO> getAllArBillBalanceById(@RequestParam Long id) {
 		String methodName = "getAllArBillBalanceById()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
 		String errorMsg = null;
