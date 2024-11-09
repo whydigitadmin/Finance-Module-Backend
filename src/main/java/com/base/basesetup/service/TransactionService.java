@@ -213,7 +213,7 @@ public interface TransactionService {
 
 	String getGeneralJournalDocId(Long orgId, String finYear, String branch, String branchCode);
 
-	List<Map<String, Object>> getBankNameForGroupLedgerAndReconcileBank(Long orgId);
+	List<Map<String, Object>> getBankNameForGroupLedger(Long orgId);
 
 	// ReconcileCorpBank
 	List<ReconcileCorpBankVO> getAllReconcileCorpBankByOrgId(Long orgId);
@@ -225,7 +225,6 @@ public interface TransactionService {
 
 	String getReconcileCorpBankDocId(Long orgId, String finYear, String branch, String branchCode);
 
-	List<Map<String, Object>> getBankNameForGroupLedgerAndReconcileCorp(Long orgId);
 
 	// ReconcileCash
 
@@ -243,7 +242,6 @@ public interface TransactionService {
 
 	String getChartCostCenterDocId(Long orgId, String finYear, String branch, String branchCode);
 
-	List<Map<String, Object>> getAccountNameForGroupLedgerAndReconcileCash(Long orgId);
 
 	/// TMS-TT-JobCard
 

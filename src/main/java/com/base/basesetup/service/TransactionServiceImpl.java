@@ -2128,7 +2128,7 @@ public class TransactionServiceImpl implements TransactionService {
 
 
 	@Override
-	public List<Map<String, Object>> getBankNameForGroupLedgerAndReconcileBank(Long orgId) {
+	public List<Map<String, Object>> getBankNameForGroupLedger(Long orgId) {
 		Set<Object[]> getAccount = reconcileBankRepo.findByAccountNameForBank(orgId);
 		return getAccountName(getAccount);
 	}
@@ -2268,23 +2268,6 @@ public class TransactionServiceImpl implements TransactionService {
 
 	}
 
-
-	@Override
-	public List<Map<String, Object>> getBankNameForGroupLedgerAndReconcileCorp(Long orgId) {
-		Set<Object[]> getAccount = reconcileCorpBankRepo.findByBankName(orgId);
-		return getAccountnames(getAccount);
-	}
-
-	private List<Map<String, Object>> getAccountnames(Set<Object[]> getAccount) {
-		List<Map<String, Object>> list1 = new ArrayList<>();
-		for (Object[] ch : getAccount) {
-			Map<String, Object> map = new HashMap<>();
-			map.put("accountgroupname", ch[0] != null ? ch[0].toString() : "");
-			list1.add(map);
-		}
-		return list1;
-	}
-
 	// ReconcileCash
 
 	@Override
@@ -2420,21 +2403,6 @@ public class TransactionServiceImpl implements TransactionService {
 
 	}
 
-	@Override
-	public List<Map<String, Object>> getAccountNameForGroupLedgerAndReconcileCash(Long orgId) {
-		Set<Object[]> getAccount = reconcileCashRepo.findByAccountName(orgId);
-		return getAccountNames(getAccount);
-	}
-
-	private List<Map<String, Object>> getAccountNames(Set<Object[]> getAccount) {
-		List<Map<String, Object>> list1 = new ArrayList<>();
-		for (Object[] ch : getAccount) {
-			Map<String, Object> map = new HashMap<>();
-			map.put("accountgroupname", ch[0] != null ? ch[0].toString() : "");
-			list1.add(map);
-		}
-		return list1;
-	}
 
 	@Override
 	public String getFundTranferDocId(Long orgId, String finYear, String branch, String branchCode) {

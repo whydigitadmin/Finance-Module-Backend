@@ -1,7 +1,6 @@
 package com.base.basesetup.repo;
 
 import java.util.List;
-import java.util.Set;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -21,6 +20,4 @@ public interface ReconcileCorpBankRepo extends JpaRepository<ReconcileCorpBankVO
 	@Query(nativeQuery = true, value = "select concat(prefixfield,lpad(lastno,5,0)) AS docid from documenttypemappingdetails where orgid=?1 and finyear=?2 and branchcode=?3 and screencode=?4")
 	String getReconcileCorpBankDocId(Long orgId, String finYear, String branchCode, String screenCode);
 
-	@Query(nativeQuery = true, value = "select accountgroupname  from  groupledger where orgid=?1 and type='BANK' and active=1 group by accountgroupname")
-	Set<Object[]> findByBankName(Long orgId);
 }
