@@ -178,7 +178,7 @@ public class CostInvoiceController extends BaseController{
 			String errorMsg = null;
 			Map<String, Object> responseObjectsMap = new HashMap<>();
 			ResponseDTO responseDTO = null;
-			String mapp = "";
+			String mapp = "";  
 
 			try {
 				mapp = costInvoiceService.getCostInvoiceDocId(orgId, finYear, branch, branchCode);
