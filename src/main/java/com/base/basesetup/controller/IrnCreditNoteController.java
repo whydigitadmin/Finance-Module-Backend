@@ -22,10 +22,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.base.basesetup.common.CommonConstant;
 import com.base.basesetup.common.UserConstants;
-import com.base.basesetup.dto.IrnCreditDTO;
+import com.base.basesetup.dto.IrnCreditNoteDTO;
 import com.base.basesetup.dto.ResponseDTO;
-import com.base.basesetup.entity.IrnCreditVO;
+import com.base.basesetup.dto.TaxInvoiceDTO;
+import com.base.basesetup.entity.IrnCreditNoteVO;
 import com.base.basesetup.entity.PartyMasterVO;
+import com.base.basesetup.entity.TaxInvoiceVO;
 import com.base.basesetup.service.IrnCreditNoteService;
 
 @CrossOrigin
@@ -45,7 +47,7 @@ public class IrnCreditNoteController extends BaseController {
 		String errorMsg = null;
 		Map<String, Object> responseObjectsMap = new HashMap<>();
 		ResponseDTO responseDTO = null;
-		List<IrnCreditVO> irnCreditVO = new ArrayList<>();
+		List<IrnCreditNoteVO> irnCreditVO = new ArrayList<>();
 		try {
 			irnCreditVO = irnCreditService.getAllIrnCreditByOrgId(orgId);
 		} catch (Exception e) {
@@ -72,7 +74,7 @@ public class IrnCreditNoteController extends BaseController {
 		String errorMsg = null;
 		Map<String, Object> responseObjectsMap = new HashMap<>();
 		ResponseDTO responseDTO = null;
-		List<IrnCreditVO> irnCreditVO = new ArrayList<>();
+		List<IrnCreditNoteVO> irnCreditVO = new ArrayList<>();
 		try {
 			irnCreditVO = irnCreditService.getAllIrnCreditById(id);
 		} catch (Exception e) {
@@ -91,62 +93,22 @@ public class IrnCreditNoteController extends BaseController {
 		return ResponseEntity.ok().body(responseDTO);
 	}
 
-	@PutMapping("/updateCreateIrnCredit")
-	public ResponseEntity<ResponseDTO> updateCreateIrnCredit(@Valid @RequestBody IrnCreditDTO irnCreditDTO) {
-		String methodName = "updateCreateIrnCredit()";
-
+	@PutMapping("/updateCreateIrnCreditNote")
+	public ResponseEntity<ResponseDTO> updateCreateIrnCreditNote(@RequestBody IrnCreditNoteDTO irnCreditNoteDTO) {
+		String methodName = "updateCreateIrnCreditNote()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
 		String errorMsg = null;
 		Map<String, Object> responseObjectsMap = new HashMap<>();
 		ResponseDTO responseDTO = null;
-
 		try {
-			Map<String, Object> irnCreditVO = irnCreditService.updateCreateIrnCredit(irnCreditDTO);
-			boolean isUpdate = irnCreditDTO.getId() != null;
-
-			if (irnCreditVO != null) {
-				responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
-						isUpdate ? "IrnCredit updated successfully" : "IrnCredit created successfully");
-				responseObjectsMap.put("irnCreditVO", irnCreditVO);
-				responseDTO = createServiceResponse(responseObjectsMap);
-			} else {
-				errorMsg = isUpdate ? "IrnCredit not found for ID: " + irnCreditDTO.getId()
-						: "IrnCredit creation failed";
-				responseDTO = createServiceResponseError(responseObjectsMap,
-						isUpdate ? "IrnCredit update failed" : "IrnCredit creation failed", errorMsg);
-			}
-		} catch (Exception e) {
-			errorMsg = e.getMessage();
-			boolean isUpdate = irnCreditDTO.getId() != null;
-			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
-			responseDTO = createServiceResponseError(responseObjectsMap,
-					isUpdate ? "IrnCredit update failed" : "IrnCredit creation failed", errorMsg);
-		}
-		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
-		return ResponseEntity.ok().body(responseDTO);
-	}
-
-	@GetMapping("/getIrnCreditByActive")
-	public ResponseEntity<ResponseDTO> getIrnCreditByActive() {
-		String methodName = "getIrnCreditByActive()";
-		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
-		String errorMsg = null;
-		Map<String, Object> responseObjectsMap = new HashMap<>();
-		ResponseDTO responseDTO = null;
-		List<IrnCreditVO> irnCreditVO = new ArrayList<>();
-		try {
-			irnCreditVO = irnCreditService.getIrnCreditByActive();
-		} catch (Exception e) {
-			errorMsg = e.getMessage();
-			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
-		}
-		if (StringUtils.isBlank(errorMsg)) {
-			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "IrnCredit information get successfully By Active");
-			responseObjectsMap.put("irnCreditVO", irnCreditVO);
+			Map<String, Object> irnCreditNoteVO = irnCreditService.updateCreateIrnCreditNote(irnCreditNoteDTO);
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, irnCreditNoteVO.get("message"));
+			responseObjectsMap.put("irnCreditNoteVO", irnCreditNoteVO.get("irnCreditNoteVO"));
 			responseDTO = createServiceResponse(responseObjectsMap);
-		} else {
-			responseDTO = createServiceResponseError(responseObjectsMap,
-					"IrnCredit information receive failed By Active", errorMsg);
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+			responseDTO = createServiceResponseError(responseObjectsMap, errorMsg, errorMsg);
 		}
 		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
 		return ResponseEntity.ok().body(responseDTO);
@@ -209,6 +171,33 @@ public class IrnCreditNoteController extends BaseController {
 
 		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
 		return ResponseEntity.ok().body(responseDTO);
+	}
+	
+	@GetMapping("/getOrginBillNoByParty")
+	public ResponseEntity<ResponseDTO> getOrginBillNoByParty(@RequestParam Long orgId,@RequestParam String party,@RequestParam String branchCode) {
+		String methodName = "getOrginBillNoByParty()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		List<TaxInvoiceVO> taxInvoiceVO = new ArrayList<>();
+		try {
+			taxInvoiceVO = irnCreditService.getOriginBillNofromTaxInvoiceByParty(orgId, party, branchCode);
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "OrginBillNo information get successfully ByOrgId");
+			responseObjectsMap.put("taxInvoiceVO", taxInvoiceVO);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap, "OrginBillNo information receive failedByOrgId",
+					errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+
 	}
 
 }
