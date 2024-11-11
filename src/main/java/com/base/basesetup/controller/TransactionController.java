@@ -2439,27 +2439,30 @@ public class TransactionController extends BaseController {
 	
 
 	@GetMapping("/getSalesPersonFromPartyMaster")
-	public ResponseEntity<ResponseDTO> getSalesPerson(@RequestParam Long orgId, @RequestParam String partyName) {
+	public ResponseEntity<ResponseDTO> getSalesPersonFromPartyMaster(@RequestParam Long orgId, @RequestParam String partyName) {
 		String methodName = "getSalesPersonFromPartyMaster()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
 		String errorMsg = null;
 		Map<String, Object> responseObjectsMap = new HashMap<>();
 		ResponseDTO responseDTO = null;
-		List<Map<String, Object>> salesPerson = new ArrayList<>();
+		List<Map<String,Object>> sales = new ArrayList<>();
+
 		try {
-			salesPerson = transactionService.getSalesPersonFromPartyMaster(orgId, partyName);
+			sales = transactionService.getSalesPersonFromPartyMaster(orgId,partyName);
 		} catch (Exception e) {
 			errorMsg = e.getMessage();
 			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
 		}
+
 		if (StringUtils.isBlank(errorMsg)) {
-			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "SalesPerson information get successfully ByOrgId");
-			responseObjectsMap.put("salesPerson", salesPerson);
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "SalesPerson retrieved successfully");
+			responseObjectsMap.put("slaesperson", sales);
 			responseDTO = createServiceResponse(responseObjectsMap);
 		} else {
 			responseDTO = createServiceResponseError(responseObjectsMap,
-					"SalesPerson information receive failedByOrgId", errorMsg);
+					"Failed to retrieve SalesPerson", errorMsg);
 		}
+
 		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
 		return ResponseEntity.ok().body(responseDTO);
 	}
@@ -2479,12 +2482,12 @@ public class TransactionController extends BaseController {
 			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
 		}
 		if (StringUtils.isBlank(errorMsg)) {
-			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "CustomerName information get successfully ByOrgId");
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "CustomerName information get successfully");
 			responseObjectsMap.put("customer", customer);
 			responseDTO = createServiceResponse(responseObjectsMap);
 		} else {
 			responseDTO = createServiceResponseError(responseObjectsMap,
-					"CustomerName information receive failedByOrgId", errorMsg);
+					"Failed to CustomerName information", errorMsg);
 		}
 		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
 		return ResponseEntity.ok().body(responseDTO);
