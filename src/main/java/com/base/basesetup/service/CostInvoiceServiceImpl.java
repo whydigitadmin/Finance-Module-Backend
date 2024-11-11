@@ -1,5 +1,7 @@
 package com.base.basesetup.service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -15,11 +17,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.base.basesetup.dto.ChargerCostInvoiceDTO;
-import com.base.basesetup.dto.CostInvSummaryDTO;
 import com.base.basesetup.dto.CostInvoiceDTO;
 import com.base.basesetup.dto.TdsCostInvoiceDTO;
 import com.base.basesetup.entity.ChargerCostInvoiceVO;
-import com.base.basesetup.entity.CostInvSummaryVO;
 import com.base.basesetup.entity.CostInvoiceVO;
 import com.base.basesetup.entity.DocumentTypeMappingDetailsVO;
 import com.base.basesetup.entity.PartyMasterVO;
@@ -27,7 +27,6 @@ import com.base.basesetup.entity.TdsCostInvoiceVO;
 import com.base.basesetup.exception.ApplicationException;
 import com.base.basesetup.repo.ChargeTypeRequestRepo;
 import com.base.basesetup.repo.ChargerCostInvoiceRepo;
-import com.base.basesetup.repo.CostInvSummaryRepo;
 import com.base.basesetup.repo.CostInvoiceRepo;
 import com.base.basesetup.repo.DocumentTypeMappingDetailsRepo;
 import com.base.basesetup.repo.TdsCostInvoiceRepo;
@@ -47,10 +46,8 @@ public class CostInvoiceServiceImpl implements CostInvoiceService {
 	ChargerCostInvoiceRepo chargerCostInvoiceRepo;
 
 	@Autowired
-	CostInvSummaryRepo costInvSummaryRepo;
-	@Autowired
 	DocumentTypeMappingDetailsRepo documentTypeMappingDetailsRepo;
-	
+
 	@Autowired
 	ChargeTypeRequestRepo chargeTypeRequestRepo;
 
@@ -90,7 +87,7 @@ public class CostInvoiceServiceImpl implements CostInvoiceService {
 	@Override
 	public Map<String, Object> updateCreateCostInvoice(@Valid CostInvoiceDTO costInvoiceDTO)
 			throws ApplicationException {
-		String screenCode = "cI";
+		String screenCode = "CI";
 		CostInvoiceVO costInvoiceVO;
 		String message = null;
 
@@ -136,7 +133,7 @@ public class CostInvoiceServiceImpl implements CostInvoiceService {
 
 	private CostInvoiceVO getCostInvoiceVOFromCostInvoiceDTO(CostInvoiceVO costInvoiceVO,
 			@Valid CostInvoiceDTO costInvoiceDTO) {
- 
+
 		costInvoiceVO.setMode(costInvoiceDTO.getMode());
 		costInvoiceVO.setProduct(costInvoiceDTO.getProduct());
 		costInvoiceVO.setPurVoucherNo(costInvoiceDTO.getPurVoucherNo());
@@ -169,7 +166,7 @@ public class CostInvoiceServiceImpl implements CostInvoiceService {
 		costInvoiceVO.setFinYear(costInvoiceDTO.getFinYear());
 		costInvoiceVO.setIpNo(costInvoiceDTO.getIpNo());
 		costInvoiceVO.setLatitude(costInvoiceDTO.getLatitude());
-		costInvoiceVO.setPayment(costInvoiceDTO.  getPayment());
+		costInvoiceVO.setPayment(costInvoiceDTO.getPayment());
 		costInvoiceVO.setAccuralid(costInvoiceDTO.getAccuralid());
 		costInvoiceVO.setUtrRef(costInvoiceDTO.getUtrRef());
 		costInvoiceVO.setCostType(costInvoiceDTO.getCostType());
@@ -183,32 +180,88 @@ public class CostInvoiceServiceImpl implements CostInvoiceService {
 			List<TdsCostInvoiceVO> tdsCostInvoiceVOs = tdsCostInvoiceRepo.findByCostInvoiceVO(costInvoiceVO);
 			tdsCostInvoiceRepo.deleteAll(tdsCostInvoiceVOs);
 
-			List<CostInvSummaryVO> costInvSummaryVOs = costInvSummaryRepo.findByCostInvoiceVO(costInvoiceVO);
-			costInvSummaryRepo.deleteAll(costInvSummaryVOs);
 		}
+
+		BigDecimal totChargesBillCurrAmt = BigDecimal.ZERO;
+		BigDecimal totChargesLcAmt = BigDecimal.ZERO;
+		BigDecimal actBillCurrAmt = BigDecimal.ZERO;
+		BigDecimal actBillLcAmt = BigDecimal.ZERO;
+		BigDecimal netBillCurrAmt = BigDecimal.ZERO;
+		BigDecimal netBillLcAmt = BigDecimal.ZERO;
+		BigDecimal roundOff = BigDecimal.ZERO;
+		BigDecimal gstInputLcAmt = BigDecimal.ZERO;
 
 		List<ChargerCostInvoiceVO> chargerCostInvoiceVOs = new ArrayList<>();
 		for (ChargerCostInvoiceDTO chargerCostInvoiceDTO : costInvoiceDTO.getChargerCostInvoiceDTO()) {
 			ChargerCostInvoiceVO chargerCostInvoiceVO = new ChargerCostInvoiceVO();
 
-			chargerCostInvoiceVO.setHouseNo(chargerCostInvoiceDTO.getHouseNo());
+			chargerCostInvoiceVO.setRate(chargerCostInvoiceDTO.getRate());
 			chargerCostInvoiceVO.setJobNo(chargerCostInvoiceDTO.getJobNo());
-			chargerCostInvoiceVO.setSubJobNo(chargerCostInvoiceDTO.getSubJobNo());
 			chargerCostInvoiceVO.setChargeName(chargerCostInvoiceDTO.getChargeName());
 			chargerCostInvoiceVO.setChargeCode(chargerCostInvoiceDTO.getChargeCode());
 			chargerCostInvoiceVO.setChargeLedger(chargerCostInvoiceDTO.getChargeLedger());
-			chargerCostInvoiceVO.setGsac(chargerCostInvoiceDTO.getGsac());
-			chargerCostInvoiceVO.setContType(chargerCostInvoiceDTO.getContType());
+			chargerCostInvoiceVO.setSac(chargerCostInvoiceDTO.getSac());
 			chargerCostInvoiceVO.setCurrency(chargerCostInvoiceDTO.getCurrency());
 			chargerCostInvoiceVO.setExRate(chargerCostInvoiceDTO.getExRate());
 			chargerCostInvoiceVO.setGst(chargerCostInvoiceDTO.getGst());
-			chargerCostInvoiceVO.setFcAmt(chargerCostInvoiceDTO.getFcAmt());
-			chargerCostInvoiceVO.setLcAmt(chargerCostInvoiceDTO.getLcAmt());
-			chargerCostInvoiceVO.setBillAmt(chargerCostInvoiceDTO.getBillAmt());
+			chargerCostInvoiceVO.setGovChargeCode(chargerCostInvoiceDTO.getGovChargeCode());
+			chargerCostInvoiceVO.setExempted(chargerCostInvoiceDTO.getExempted());
+			chargerCostInvoiceVO.setTaxable(chargerCostInvoiceDTO.getTaxable());
+
+//			chargerCostInvoiceVO.setFcAmt(chargerCostInvoiceDTO.getFcAmt());
+//			chargerCostInvoiceVO.setLcAmt(chargerCostInvoiceDTO.getLcAmt());
+//			chargerCostInvoiceVO.setBillAmt(chargerCostInvoiceDTO.getBillAmt());
+			BigDecimal fcAmount;
+			BigDecimal lcAmount;
+			BigDecimal tlcAmount;
+			BigDecimal billAmount;
+			BigDecimal gstAmount;
+
+			if (!chargerCostInvoiceDTO.getCurrency().equals("INR")) {
+				BigDecimal rate = chargerCostInvoiceDTO.getRate(); // BigDecimal type is expected here
+				BigDecimal qty = BigDecimal.valueOf(chargerCostInvoiceDTO.getQty()); // Convert qty to BigDecimal
+
+				fcAmount = rate.multiply(qty);
+
+				chargerCostInvoiceVO.setFcAmt(fcAmount);
+
+			} else {
+				fcAmount = BigDecimal.valueOf(0.00);
+				chargerCostInvoiceVO.setFcAmt(fcAmount);
+			}
+
+			BigDecimal exRate = chargerCostInvoiceDTO.getExRate();
+			BigDecimal qty = BigDecimal.valueOf(chargerCostInvoiceDTO.getQty());
+			BigDecimal rate = chargerCostInvoiceDTO.getRate();
+			lcAmount = exRate.multiply(qty.multiply(rate));
+			chargerCostInvoiceVO.setLcAmt(lcAmount);
+			totChargesLcAmt = totChargesLcAmt.add(lcAmount);
+
+			BigDecimal gstPercent = BigDecimal.valueOf(chargerCostInvoiceDTO.getGstPercent());
+			tlcAmount = lcAmount.multiply(gstPercent).divide(BigDecimal.valueOf(100));
+			chargerCostInvoiceVO.setTlcAmount(tlcAmount);
+
+			billAmount = lcAmount.divide(exRate, RoundingMode.HALF_UP);
+
+			chargerCostInvoiceVO.setBillAmt(billAmount);
+			totChargesBillCurrAmt = totChargesBillCurrAmt.add(billAmount);
+
+			gstAmount = lcAmount.multiply(gstPercent).divide(BigDecimal.valueOf(100));
+			chargerCostInvoiceVO.setGstAmount(gstAmount);
 
 			chargerCostInvoiceVO.setCostInvoiceVO(costInvoiceVO);
 			chargerCostInvoiceVOs.add(chargerCostInvoiceVO);
 		}
+
+		Map<String, BigDecimal> ledgerSumMap = new HashMap<>();
+		for (ChargerCostInvoiceVO detailsVO : chargerCostInvoiceVOs) {
+			String ledger = detailsVO.getLedger();
+			BigDecimal lcAmount = detailsVO.getLcAmt();
+
+			ledgerSumMap.put(ledger, ledgerSumMap.getOrDefault(ledger, BigDecimal.ZERO).add(lcAmount));
+		}
+
+		// TDS table
 		costInvoiceVO.setChargerCostInvoiceVO(chargerCostInvoiceVOs);
 
 		List<TdsCostInvoiceVO> tdsCostInvoiceVOs = new ArrayList<>();
@@ -225,25 +278,9 @@ public class CostInvoiceServiceImpl implements CostInvoiceService {
 		}
 		costInvoiceVO.setTdsCostInvoiceVO(tdsCostInvoiceVOs);
 
-		List<CostInvSummaryVO> costInvSummaryVOs = new ArrayList<>();
-		for (CostInvSummaryDTO costInvSummaryDTO : costInvoiceDTO.getCostInvSummaryDTO()) {
-			CostInvSummaryVO costInvSummaryVO = new CostInvSummaryVO();
+		// Summary Calculation
 
-			costInvSummaryVO.setTotChargesBillCurrAmt(costInvSummaryDTO.getTotChargesBillCurrAmt());
-			costInvSummaryVO.setTotChargesLcAmt(costInvSummaryDTO.getTotChargesLcAmt());
-			costInvSummaryVO.setActBillCurrAmt(costInvSummaryDTO.getActBillCurrAmt());
-			costInvSummaryVO.setActBillLcAmt(costInvSummaryDTO.getActBillLcAmt());
-			costInvSummaryVO.setNetBillCurrAmt(costInvSummaryDTO.getNetBillCurrAmt());
-			costInvSummaryVO.setNetBillLcAmt(costInvSummaryDTO.getNetBillLcAmt());
-			costInvSummaryVO.setRoundOff(costInvSummaryDTO.getRoundOff());
-			costInvSummaryVO.setGstInputLcAmt(costInvSummaryDTO.getGstInputLcAmt());
-
-			costInvSummaryVO.setCostInvoiceVO(costInvoiceVO);
-			costInvSummaryVOs.add(costInvSummaryVO);
-		}
-		costInvoiceVO.setCostInvSummaryVO(costInvSummaryVOs);
-
-		return costInvoiceVO; 
+		return costInvoiceVO;
 
 	}
 
@@ -278,8 +315,7 @@ public class CostInvoiceServiceImpl implements CostInvoiceService {
 
 	@Override
 	public List<Map<String, Object>> getChargeCodeByChargeType(Long orgId, String chargeType) {
-		Set<Object[]> chCode = costInvoiceRepo.getActiveChargCodeByOrgIdAndChargeTypeIgnoreCase(orgId,
-				chargeType);
+		Set<Object[]> chCode = costInvoiceRepo.getActiveChargCodeByOrgIdAndChargeTypeIgnoreCase(orgId, chargeType);
 		return getChargeCode(chCode);
 	}
 
@@ -304,8 +340,8 @@ public class CostInvoiceServiceImpl implements CostInvoiceService {
 	}
 
 	@Override
-	public List<Map<String, Object>> getCurrencyAndExrates(Long orgId) {
-		Set<Object[]> currency = costInvoiceRepo.getCurrencyAndExrateDetails(orgId);
+	public List<Map<String, Object>> getCurrencyAndExratesForMatchingParties(Long orgId, String partyName) {
+		Set<Object[]> currency = costInvoiceRepo.getCurrencyAndExratesForMatchingParties(orgId, partyName);
 		return getCurrency(currency);
 	}
 
@@ -313,10 +349,14 @@ public class CostInvoiceServiceImpl implements CostInvoiceService {
 		List<Map<String, Object>> List1 = new ArrayList<>();
 		for (Object[] ch : currency) {
 			Map<String, Object> map = new HashMap<>();
-			map.put("currency", ch[0] != null ? ch[0].toString() : ""); // Empty string if null
-			map.put("currencyDescription", ch[1] != null ? ch[1].toString() : "");
-			map.put("buyingExRate", ch[2] != null ? ch[2].toString() : "");
-			map.put("sellingExRate", ch[3] != null ? ch[3].toString() : "");
+			map.put("orgId", ch[0] != null ? ch[0].toString() : ""); // Empty string if null
+			map.put("date", ch[1] != null ? ch[1].toString() : "");
+			map.put("month", ch[2] != null ? ch[2].toString() : "");
+			map.put("currency", ch[3] != null ? ch[3].toString() : "");
+			map.put("currencyDescripition", ch[4] != null ? ch[4].toString() : "");
+			map.put("buyingExRate", ch[5] != null ? ch[5].toString() : "");
+			map.put("sellingExRate", ch[6] != null ? ch[6].toString() : "");
+
 			List1.add(map);
 		}
 		return List1;
@@ -324,14 +364,14 @@ public class CostInvoiceServiceImpl implements CostInvoiceService {
 
 	@Override
 	public List<PartyMasterVO> getAllPartyByPartyType(Long orgId, String partyType) {
-		
-		return costInvoiceRepo.findByOrgIdAndPartyTypeIgnoreCase(orgId,partyType);
+
+		return costInvoiceRepo.findByOrgIdAndPartyTypeIgnoreCase(orgId, partyType);
 
 	}
 
 	@Override
-	public List<Map<String, Object>> getPartyStateCodeDetails(Long orgId,Long id) {
-		Set<Object[]> getStateDetails = costInvoiceRepo.getStateCodeDetails(orgId,id);
+	public List<Map<String, Object>> getPartyStateCodeDetails(Long orgId, Long id) {
+		Set<Object[]> getStateDetails = costInvoiceRepo.getStateCodeDetails(orgId, id);
 		return getState(getStateDetails);
 	}
 
@@ -348,7 +388,8 @@ public class CostInvoiceServiceImpl implements CostInvoiceService {
 	}
 
 	@Override
-	public List<Map<String, Object>> getPartyAddressDetails(Long orgId,Long id,String stateCode,String placeOfSupply) {
+	public List<Map<String, Object>> getPartyAddressDetails(Long orgId, Long id, String stateCode,
+			String placeOfSupply) {
 		Set<Object[]> getAddressDetails = costInvoiceRepo.getAddressDetails(orgId, id, stateCode, placeOfSupply);
 		return getAddress(getAddressDetails);
 	}
@@ -364,9 +405,9 @@ public class CostInvoiceServiceImpl implements CostInvoiceService {
 		}
 		return List1;
 	}
-	
+
 	@Override
-	public List<Map<String, Object>> getGstTypeDetails(Long orgId,String branchCode,String stateCode) {
+	public List<Map<String, Object>> getGstTypeDetails(Long orgId, String branchCode, String stateCode) {
 		Set<Object[]> getGSTTypeDetails = costInvoiceRepo.getGstType(orgId, branchCode, stateCode);
 		return getGstType(getGSTTypeDetails);
 	}
@@ -380,10 +421,10 @@ public class CostInvoiceServiceImpl implements CostInvoiceService {
 		}
 		return List1;
 	}
-	
+
 	@Override
-	public List<Map<String, Object>> getPlaceOfSupplyDetails(Long orgId,Long id,String stateCode) {
-		Set<Object[]> getPOSDetails = costInvoiceRepo.getPlaceOfSupplyDetails(orgId,id,stateCode);
+	public List<Map<String, Object>> getPlaceOfSupplyDetails(Long orgId, Long id, String stateCode) {
+		Set<Object[]> getPOSDetails = costInvoiceRepo.getPlaceOfSupplyDetails(orgId, id, stateCode);
 		return getPOS(getPOSDetails);
 	}
 

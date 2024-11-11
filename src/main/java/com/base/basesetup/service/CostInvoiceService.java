@@ -33,7 +33,7 @@ public interface CostInvoiceService {
 
 	List<Map<String, Object>> getChargeCodeByChargeType(Long orgId, String chargeType);
 
-	List<Map<String, Object>> getCurrencyAndExrates(Long orgId);
+	List<Map<String, Object>> getCurrencyAndExratesForMatchingParties(Long orgId,String partyName);
 
 	List<PartyMasterVO> getAllPartyByPartyType(Long orgId, String partyType);
 
