@@ -18,10 +18,8 @@ public interface TmsJobCardRepo extends JpaRepository<TmsJobCardVO, Long> {
 	@Query(nativeQuery = true, value = "select * from tmsjobcard where tmsjobcardid=?1")
 	List<TmsJobCardVO> getAllTmsJobCardById(Long id);
 
-	@Query(nativeQuery = true, value = "select  a1.salesperson from partymaster a,partysalespersontagging a1 where\r\n"
-			+ "active=1 and  a.partymasterid=a1.partymasterid \r\n"
-			+ " and a.partyname=?1 and  a.orgid=?2\r\n"
-			+ "group by a1.salesperson")
+	@Query(nativeQuery = true, value = "select  a1.salesperson from partymaster a,partysalespersontagging a1 where active=1 and  a.partymasterid=a1.partymasterid\r\n"
+			+ "	and a.orgid=?1  and a.partyname=?2 group by a1.salesperson")
 	Set<Object[]> findBySalesPreson(Long orgId,String partyName);
 	
 	@Query(nativeQuery = true,value="select partyname from partymaster where orgid=?1 and active=1 group by partyname")
