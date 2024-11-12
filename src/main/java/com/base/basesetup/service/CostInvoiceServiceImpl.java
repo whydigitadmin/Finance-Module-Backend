@@ -190,6 +190,8 @@ public class CostInvoiceServiceImpl implements CostInvoiceService {
 		BigDecimal netBillLcAmt = BigDecimal.ZERO;
 		BigDecimal roundOff = BigDecimal.ZERO;
 		BigDecimal gstInputLcAmt = BigDecimal.ZERO;
+//		SumOfLc Amount to set in TDS Table
+		BigDecimal sumLcAmount = BigDecimal.ZERO;
 
 		List<ChargerCostInvoiceVO> chargerCostInvoiceVOs = new ArrayList<>();
 		for (ChargerCostInvoiceDTO chargerCostInvoiceDTO : costInvoiceDTO.getChargerCostInvoiceDTO()) {
@@ -236,6 +238,8 @@ public class CostInvoiceServiceImpl implements CostInvoiceService {
 			lcAmount = exRate.multiply(qty.multiply(rate));
 			chargerCostInvoiceVO.setLcAmt(lcAmount);
 			totChargesLcAmt = totChargesLcAmt.add(lcAmount);
+			// TDS Purpose
+			sumLcAmount = sumLcAmount.add(lcAmount);
 
 			BigDecimal gstPercent = BigDecimal.valueOf(chargerCostInvoiceDTO.getGstPercent());
 			tlcAmount = lcAmount.multiply(gstPercent).divide(BigDecimal.valueOf(100));
@@ -271,8 +275,14 @@ public class CostInvoiceServiceImpl implements CostInvoiceService {
 			tdsCostInvoiceVO.setTdsWithHolding(tdsCostInvoiceDTO.getTdsWithHolding());
 			tdsCostInvoiceVO.setTdsWithHoldingPer(tdsCostInvoiceDTO.getTdsWithHoldingPer());
 			tdsCostInvoiceVO.setSection(tdsCostInvoiceDTO.getSection());
-			tdsCostInvoiceVO.setTotTdsWhAmnt(tdsCostInvoiceDTO.getTotTdsWhAmnt());
+//			tdsCostInvoiceVO.setTotTdsWhAmnt(tdsCostInvoiceDTO.getTotTdsWhAmnt());
 
+			BigDecimal totTdsWhAmt = BigDecimal.ZERO;
+			BigDecimal tdsWhPercent = tdsCostInvoiceDTO.getTdsWithHoldingPer();
+			System.out.println("TOTAL LC AMOUNT IS :"+sumLcAmount);;
+			totTdsWhAmt = sumLcAmount.multiply(tdsWhPercent.divide(BigDecimal.valueOf(100)));
+			tdsCostInvoiceVO.setTotTdsWhAmnt(totTdsWhAmt);
+			
 			tdsCostInvoiceVO.setCostInvoiceVO(costInvoiceVO);
 			tdsCostInvoiceVOs.add(tdsCostInvoiceVO);
 		}
@@ -473,6 +483,25 @@ public class CostInvoiceServiceImpl implements CostInvoiceService {
 			map.put("sac", ch[6] != null ? ch[6].toString() : "");
 			map.put("GSTPercent", ch[7] != null ? ch[7].toString() : ""); // Handle as string, empty if null
 			map.put("ledger", ch[8] != null ? ch[8].toString() : "");
+
+			List1.add(map);
+		}
+		return List1;
+
+	}
+
+	@Override
+	public List<Map<String, Object>> getTdsDetailsFromPartyMasterSpecialTDS(Long orgId, String partyCode) {
+		Set<Object[]> specialTds = costInvoiceRepo.findTdsDetailsFromPartyMasterSpecialTDS(orgId, partyCode);
+		return getTds(specialTds);
+	}
+
+	private List<Map<String, Object>> getTds(Set<Object[]> chCode) {
+		List<Map<String, Object>> List1 = new ArrayList<>();
+		for (Object[] ch : chCode) {
+			Map<String, Object> map = new HashMap<>();
+			map.put("section", ch[0] != null ? ch[0].toString() : ""); // Empty string if null
+			map.put("tdsWhPercent", ch[1] != null ? ch[1].toString() : "");
 
 			List1.add(map);
 		}

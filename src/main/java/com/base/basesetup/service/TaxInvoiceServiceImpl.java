@@ -44,10 +44,10 @@ public class TaxInvoiceServiceImpl implements TaxInvoiceService {
 
 	@Autowired
 	TaxInvoiceGstRepo taxInvoiceGstRepo;
-	
+
 	@Autowired
 	AmountInWordsConverterService amountInWordsConverterService;
-	
+
 	@Autowired
 	PartyMasterRepo partyMasterRepo;
 
@@ -261,7 +261,8 @@ public class TaxInvoiceServiceImpl implements TaxInvoiceService {
 		BigDecimal roundedTotalInvAmountLC = totalInvAmountLC.setScale(0, RoundingMode.HALF_UP);
 		BigDecimal roundOffAmountLC = roundedTotalInvAmountLC.subtract(originalTotalInvAmountLC);
 		taxInvoiceVO.setTotalInvAmountLc(roundedTotalInvAmountLC);
-		taxInvoiceVO.setAmountInWords(amountInWordsConverterService.convert(taxInvoiceVO.getTotalInvAmountLc().longValue()));
+		taxInvoiceVO.setAmountInWords(
+				amountInWordsConverterService.convert(taxInvoiceVO.getTotalInvAmountLc().longValue()));
 		taxInvoiceVO.setRoundOffAmountLc(roundOffAmountLC);
 
 		BigDecimal roundedTotalInvAmountBC = totalInvAmountBC.setScale(0, RoundingMode.HALF_UP);
@@ -348,15 +349,14 @@ public class TaxInvoiceServiceImpl implements TaxInvoiceService {
 
 	@Override
 	public List<PartyMasterVO> getAllPartyByPartyType(Long orgId, String partyType) {
-		
-		return partyMasterRepo.findByOrgIdAndPartyTypeIgnoreCase(orgId,partyType);
+
+		return partyMasterRepo.findByOrgIdAndPartyTypeIgnoreCase(orgId, partyType);
 
 	}
 
-	
 	@Override
-	public List<Map<String, Object>> getPartyStateCodeDetails(Long orgId,Long id) {
-		Set<Object[]> getStateDetails = taxInvoiceRepo.getStateCodeDetails(orgId,id);
+	public List<Map<String, Object>> getPartyStateCodeDetails(Long orgId, Long id) {
+		Set<Object[]> getStateDetails = taxInvoiceRepo.getStateCodeDetails(orgId, id);
 		return getState(getStateDetails);
 	}
 
@@ -371,10 +371,10 @@ public class TaxInvoiceServiceImpl implements TaxInvoiceService {
 		}
 		return List1;
 	}
-	
+
 	@Override
-	public List<Map<String, Object>> getPlaceOfSupplyDetails(Long orgId,Long id,String stateCode) {
-		Set<Object[]> getPOSDetails = taxInvoiceRepo.getPlaceOfSupplyDetails(orgId,id,stateCode);
+	public List<Map<String, Object>> getPlaceOfSupplyDetails(Long orgId, Long id, String stateCode) {
+		Set<Object[]> getPOSDetails = taxInvoiceRepo.getPlaceOfSupplyDetails(orgId, id, stateCode);
 		return getPOS(getPOSDetails);
 	}
 
@@ -387,9 +387,10 @@ public class TaxInvoiceServiceImpl implements TaxInvoiceService {
 		}
 		return List1;
 	}
-	
+
 	@Override
-	public List<Map<String, Object>> getPartyAddressDetails(Long orgId,Long id,String stateCode,String placeOfSupply) {
+	public List<Map<String, Object>> getPartyAddressDetails(Long orgId, Long id, String stateCode,
+			String placeOfSupply) {
 		Set<Object[]> getAddressDetails = taxInvoiceRepo.getAddressDetails(orgId, id, stateCode, placeOfSupply);
 		return getAddress(getAddressDetails);
 	}
@@ -405,9 +406,9 @@ public class TaxInvoiceServiceImpl implements TaxInvoiceService {
 		}
 		return List1;
 	}
-	
+
 	@Override
-	public List<Map<String, Object>> getGstTypeDetails(Long orgId,String branchCode,String stateCode) {
+	public List<Map<String, Object>> getGstTypeDetails(Long orgId, String branchCode, String stateCode) {
 		Set<Object[]> getGSTTypeDetails = taxInvoiceRepo.getGstType(orgId, branchCode, stateCode);
 		return getGstType(getGSTTypeDetails);
 	}
