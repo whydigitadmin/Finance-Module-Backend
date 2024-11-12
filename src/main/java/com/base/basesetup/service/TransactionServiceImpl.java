@@ -2503,10 +2503,8 @@ public class TransactionServiceImpl implements TransactionService {
 	private void getTmsJobCardVOFromTmsJobCardDTO(@Valid TmsJobCardDTO tmsJobCardDTO, TmsJobCardVO tmsJobCardVO) {
 		// tmsJobCardVO.setJobNo(tmsJobCardDTO.getJobNo());
 		tmsJobCardVO.setCustomer(tmsJobCardDTO.getCustomer());
-		tmsJobCardVO.setDate(tmsJobCardDTO.getDate());
 		tmsJobCardVO.setSalesCategory(tmsJobCardDTO.getSalesCategory());
 		tmsJobCardVO.setSalesPerson(tmsJobCardDTO.getSalesPerson());
-		tmsJobCardVO.setClosedOn(tmsJobCardDTO.getClosedOn());
 		tmsJobCardVO.setIncome(tmsJobCardDTO.getIncome());
 		tmsJobCardVO.setExpense(tmsJobCardDTO.getExpense());
 		tmsJobCardVO.setProfit(tmsJobCardDTO.getProfit());

@@ -16,6 +16,6 @@ public class TdsCostInvoiceDTO {
 	private String tdsWithHolding;
 	private BigDecimal tdsWithHoldingPer;
 	private String section;
-	private BigDecimal totTdsWhAmnt;
+//	private BigDecimal totTdsWhAmnt;
 
 }

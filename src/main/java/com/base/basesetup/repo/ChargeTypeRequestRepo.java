@@ -19,7 +19,6 @@ public interface ChargeTypeRequestRepo extends JpaRepository<ChargeTypeRequestVO
 	@Query(nativeQuery = true, value = "select * from chargetyperequest where active=1")
 	List<ChargeTypeRequestVO> findChargeTypeRequestByActive();
 
-
 	@Query(nativeQuery = true, value = "select accountgroupname from groupledger where active=1 and category in('RECEIVABLE A/C','OTHERS') and type='ACCOUNT' and orgid=?1")
 	Set<Object[]> findSalesAccountFromGroup(Long orgId);
 
@@ -32,7 +31,12 @@ public interface ChargeTypeRequestRepo extends JpaRepository<ChargeTypeRequestVO
 
 	@Query(value = "select a.chargeType from ChargeTypeRequestVO a where a.orgId=?1 and a.active=true group by a.chargeType")
 	Set<Object[]> getActiveChargType(Long orgId);
+
 	@Query(nativeQuery = true, value = "select chargecode,govtsac,chargedescription,taxable,ccfeeapplicable,excempted,serviceaccountcode,gsttax,salesaccount from chargetyperequest\r\n"
 			+ " where orgid=?1 and chargetype=?2 and active=1 group by chargecode,govtsac,chargedescription,taxable,ccfeeapplicable,excempted,serviceaccountcode,gsttax,salesaccount")
 	Set<Object[]> getActiveChargCodeByOrgIdAndChargeTypeIgnoreCase(Long orgId, String chargeType);
+
+	@Query(nativeQuery = true, value = "select chargecode,govtsac,chargedescription,taxable,ccfeeapplicable,excempted,serviceaccountcode,gsttax,purchaseaccount from chargetyperequest\r\n"
+			+ "			where orgid=?1 and active=1 and purchaseaccount is not null group by chargecode,govtsac,chargedescription,taxable,ccfeeapplicable,excempted,serviceaccountcode,gsttax,purchaseaccount")
+	Set<Object[]> getActiveChargeDetailsFromChargeType(Long orgId);
 }

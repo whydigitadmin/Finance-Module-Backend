@@ -137,9 +137,31 @@ public class CostDebitNoteVO {
 	@Column(name = "partyaddtype",length =50)
 	private String partyAddType;
 	
-	@OneToMany(mappedBy ="costDebitNoteVO",cascade = CascadeType.ALL)
-	@JsonManagedReference
-    List <CostDebitNoteSummaryVO> costDebitNoteSummaryVO;
+	//summary 
+	
+	@Column(name = "totchargesbillcurramt", precision = 10, scale = 2)
+	private BigDecimal totChargesBillCurrAmt;
+
+	@Column(name = "totchargeslcamp", precision = 10, scale = 2)
+	private BigDecimal totChargesLCAmt;
+
+	@Column(name = "totgrossbillamt", precision = 10, scale = 2)
+	private BigDecimal totGrossBillAmt;
+
+	@Column(name = "totgrosslcamt", precision = 10, scale = 2)
+	private BigDecimal totGrossLCAmt;
+
+	@Column(name = "netbillcurramt", precision = 10, scale = 2)
+	private BigDecimal netBillCurrAmt;
+
+	@Column(name = "netlcamt", precision = 10, scale = 2)
+	private BigDecimal netLCAmt;
+
+	@Column(name = "amtinwords", length = 150)
+	private String amtInWords;
+	
+	@Column(name = "roundoff",precision =10,scale =2)
+	private BigDecimal roundOff;
 	
 	@OneToMany(mappedBy ="costDebitNoteVO",cascade = CascadeType.ALL)
 	@JsonManagedReference

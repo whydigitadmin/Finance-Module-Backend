@@ -94,6 +94,12 @@ public class CostDebitChargesVO {
 	@Column(name = "gst", precision = 10, scale = 2)
 	private BigDecimal gst;
 	
+	@Column(name = "qty")
+	private int qty;
+	
+	@Column(name = "ledger",length = 150)
+	private String ledger;
+	
 	@ManyToOne
 	@JoinColumn(name="costdebitnoteid")
 	@JsonBackReference
