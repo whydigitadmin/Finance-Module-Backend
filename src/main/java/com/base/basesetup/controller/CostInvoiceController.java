@@ -260,7 +260,7 @@ public class CostInvoiceController extends BaseController {
 
 	@GetMapping("/getCurrencyAndExratesForMatchingParties")
 	public ResponseEntity<ResponseDTO> getCurrencyAndExratesForMatchingParties(@RequestParam Long orgId,
-			@RequestParam String partyName) {
+			@RequestParam String partyCode) {
 		String methodName = "getCurrencyAndExratesForMatchingParties()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
 		String errorMsg = null;
@@ -269,7 +269,7 @@ public class CostInvoiceController extends BaseController {
 		List<Map<String, Object>> mapp = new ArrayList<>();
 
 		try {
-			mapp = costInvoiceService.getCurrencyAndExratesForMatchingParties(orgId, partyName);
+			mapp = costInvoiceService.getCurrencyAndExratesForMatchingParties(orgId, partyCode);
 		} catch (Exception e) {
 			errorMsg = e.getMessage();
 			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
@@ -424,4 +424,54 @@ public class CostInvoiceController extends BaseController {
 		return ResponseEntity.ok().body(responseDTO);
 	}
 
+	@GetMapping("/getJobNoFromTmsJobCard")
+	public ResponseEntity<ResponseDTO> getJobNoFromTmsJobCard(@RequestParam Long orgId) {
+		String methodName = "getJobNoFromTmsJobCard()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		List<Map<String, Object>> jobNo = new ArrayList<>();
+		try {
+			jobNo = costInvoiceService.getJobNoFromTmsJobCard(orgId);
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "Job No get successfully By OrgId");
+			responseObjectsMap.put("jobNo", jobNo);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap, "Job No receive failed By OrgId", errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+	}
+
+	@GetMapping("/getChargeDetailsFromChargeType")
+	public ResponseEntity<ResponseDTO> getChargeDetailsFromChargeType(@RequestParam Long orgId) {
+		String methodName = "getChargeDetailsFromChargeType()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		List<Map<String, Object>> chargeDetails = new ArrayList<>();
+		try {
+			chargeDetails = costInvoiceService.getChargeDetailsFromChargeType(orgId);
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "Charge Details get successfully By OrgId");
+			responseObjectsMap.put("chargeDetails", chargeDetails);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap, "Charge Details receive failed By OrgId",
+					errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+	}
 }

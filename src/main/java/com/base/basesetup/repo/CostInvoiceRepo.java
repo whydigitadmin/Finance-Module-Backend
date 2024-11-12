@@ -34,9 +34,9 @@ public interface CostInvoiceRepo extends JpaRepository<CostInvoiceVO, Long> {
 	Set<Object[]> getActiveChargCodeByOrgIdAndChargeTypeIgnoreCase(Long orgId, String chargeType);
 
 	@Query(nativeQuery = true, value = "select c.orgid,c.date,c.month,c.currency,c.currencydescripition,c.buyingexrate,c.sellingexrate from  partymaster a,partycurrencymapping b, vw_exrates c where a.partymasterid=b.partymasterid\r\n"
-			+ "and a.orgid=c.orgid and a.orgid=?1 and b.transcurrency=c.currency and a.partyname=?2\r\n"
+			+ "and a.orgid=c.orgid and a.orgid=?1 and b.transcurrency=c.currency and a.partycode=?2\r\n"
 			+ " group by c.orgid,c.date,c.month,c.currency,c.currencydescripition,c.buyingexrate,c.sellingexrate ")
-	Set<Object[]> getCurrencyAndExratesForMatchingParties(Long orgId, String partyName);
+	Set<Object[]> getCurrencyAndExratesForMatchingParties(Long orgId, String partyCode);
 
 	@Query(value = "select a from PartyMasterVO a where a.orgId=?1 and a.partyType=?2 and a.active=true")
 	List<PartyMasterVO> findByOrgIdAndPartyTypeIgnoreCase(Long orgId, String partyType);
@@ -58,5 +58,8 @@ public interface CostInvoiceRepo extends JpaRepository<CostInvoiceVO, Long> {
 	@Query(nativeQuery = true, value = "SELECT a.businessplace FROM partyaddress a,partymaster b,state c where  a.partymasterid=b.partymasterid and a.state=c.state and b.orgid=?1 and a.partymasterid=?2 and c.statecode=?3\r\n"
 			+ "group by businessplace")
 	Set<Object[]> getPlaceOfSupplyDetails(Long orgId, Long id, String stateCode);
+
+	@Query(nativeQuery = true, value = "SELECT jobno FROM tmsjobcard WHERE orgid=?1 AND closed = 0 AND active=1")
+	Set<Object[]> getJobNoFromTmsJobCard(Long orgId);
 
 }

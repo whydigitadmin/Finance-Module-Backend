@@ -340,8 +340,8 @@ public class CostInvoiceServiceImpl implements CostInvoiceService {
 	}
 
 	@Override
-	public List<Map<String, Object>> getCurrencyAndExratesForMatchingParties(Long orgId, String partyName) {
-		Set<Object[]> currency = costInvoiceRepo.getCurrencyAndExratesForMatchingParties(orgId, partyName);
+	public List<Map<String, Object>> getCurrencyAndExratesForMatchingParties(Long orgId, String partyCode) {
+		Set<Object[]> currency = costInvoiceRepo.getCurrencyAndExratesForMatchingParties(orgId, partyCode);
 		return getCurrency(currency);
 	}
 
@@ -436,6 +436,48 @@ public class CostInvoiceServiceImpl implements CostInvoiceService {
 			List1.add(map);
 		}
 		return List1;
+	}
+
+	@Override
+	public List<Map<String, Object>> getJobNoFromTmsJobCard(Long orgId) {
+		Set<Object[]> getJobNo = costInvoiceRepo.getJobNoFromTmsJobCard(orgId);
+		return getJobDetails(getJobNo);
+	}
+
+	private List<Map<String, Object>> getJobDetails(Set<Object[]> getJob) {
+		List<Map<String, Object>> List1 = new ArrayList<>();
+		for (Object[] ch : getJob) {
+			Map<String, Object> map = new HashMap<>();
+			map.put("jobNo", ch[0] != null ? ch[0].toString() : ""); // Empty string if null
+			List1.add(map);
+		}
+		return List1;
+	}
+
+	@Override
+	public List<Map<String, Object>> getChargeDetailsFromChargeType(Long orgId) {
+		Set<Object[]> chDetails = chargeTypeRequestRepo.getActiveChargeDetailsFromChargeType(orgId);
+		return getChargeDetails(chDetails);
+	}
+
+	private List<Map<String, Object>> getChargeDetails(Set<Object[]> chCode) {
+		List<Map<String, Object>> List1 = new ArrayList<>();
+		for (Object[] ch : chCode) {
+			Map<String, Object> map = new HashMap<>();
+			map.put("chargeCode", ch[0] != null ? ch[0].toString() : ""); // Empty string if null
+			map.put("govChargeCode", ch[1] != null ? ch[1].toString() : "");
+			map.put("chargeName", ch[2] != null ? ch[2].toString() : "");
+			map.put("taxable", ch[3] != null ? ch[3].toString() : "");
+			map.put("ccFeeApplicable", ch[4] != null ? ch[4].toString() : "");
+			map.put("exempted", ch[5] != null ? ch[5].toString() : "");
+			map.put("sac", ch[6] != null ? ch[6].toString() : "");
+			map.put("GSTPercent", ch[7] != null ? ch[7].toString() : ""); // Handle as string, empty if null
+			map.put("ledger", ch[8] != null ? ch[8].toString() : "");
+
+			List1.add(map);
+		}
+		return List1;
+
 	}
 
 }

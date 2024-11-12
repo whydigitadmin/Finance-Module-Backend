@@ -16,7 +16,7 @@ import com.base.basesetup.exception.ApplicationException;
 public interface CostInvoiceService {
 
 	// CostInvoice
-	
+
 	List<CostInvoiceVO> getAllCostInvoiceByOrgId(Long orgId);
 
 	Map<String, Object> updateCreateCostInvoice(@Valid CostInvoiceDTO costInvoiceDTO) throws ApplicationException;
@@ -33,7 +33,7 @@ public interface CostInvoiceService {
 
 	List<Map<String, Object>> getChargeCodeByChargeType(Long orgId, String chargeType);
 
-	List<Map<String, Object>> getCurrencyAndExratesForMatchingParties(Long orgId,String partyName);
+	List<Map<String, Object>> getCurrencyAndExratesForMatchingParties(Long orgId, String partyCode);
 
 	List<PartyMasterVO> getAllPartyByPartyType(Long orgId, String partyType);
 
@@ -44,5 +44,9 @@ public interface CostInvoiceService {
 	List<Map<String, Object>> getGstTypeDetails(Long orgId, String branchCode, String stateCode);
 
 	List<Map<String, Object>> getPlaceOfSupplyDetails(Long orgId, Long id, String stateCode);
+
+	List<Map<String, Object>> getJobNoFromTmsJobCard(Long orgId);
+	
+	List<Map<String, Object>> getChargeDetailsFromChargeType(Long orgId);
 
 }
