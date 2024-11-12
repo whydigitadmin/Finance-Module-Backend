@@ -44,7 +44,7 @@ public class TmsJobCardVO {
 	@Column(name = "operationclosed")
 	private boolean operationClosed;
 	@Column(name = "date")
-	private LocalDate date;
+	private LocalDate date=LocalDate.now();
 	@Column(name = "salescategory", length = 50)
 	private String salesCategory;
 	@Column(name = "financeclosed")
@@ -54,7 +54,7 @@ public class TmsJobCardVO {
 	@Column(name = "closed")
 	private boolean closed;
 	@Column(name = "closedon")
-	private LocalDateTime closedOn;
+	private LocalDateTime closedOn=LocalDateTime.now();
 	@Column(name = "income", precision = 10, scale = 2)
 	private BigDecimal income;
 	@Column(name = "expense", precision = 10, scale = 2)
@@ -63,8 +63,6 @@ public class TmsJobCardVO {
 	private BigDecimal profit;
 	@Column(name = "remarks", length = 150)
 	private String remarks;
-	@Column(name = "docdate")
-	private LocalDate docDate = LocalDate.now();
 
 	// default fields
 	@Builder.Default
