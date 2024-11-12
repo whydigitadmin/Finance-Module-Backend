@@ -19,12 +19,14 @@ import org.springframework.stereotype.Service;
 import com.base.basesetup.dto.CostDebitChargesDTO;
 import com.base.basesetup.dto.CostDebitNoteDTO;
 import com.base.basesetup.dto.CostDebitNoteTaxPrtculDTO;
+import com.base.basesetup.dto.TdsCostInvoiceDTO;
 import com.base.basesetup.entity.CostDebitChargesVO;
 import com.base.basesetup.entity.CostDebitNoteGstVO;
 import com.base.basesetup.entity.CostDebitNoteTaxPrtculVO;
 import com.base.basesetup.entity.CostDebitNoteVO;
 import com.base.basesetup.entity.CostInvoiceVO;
 import com.base.basesetup.entity.DocumentTypeMappingDetailsVO;
+import com.base.basesetup.entity.TdsCostInvoiceVO;
 import com.base.basesetup.exception.ApplicationException;
 import com.base.basesetup.repo.CostDebitChargesRepo;
 import com.base.basesetup.repo.CostDebitNoteGstRepo;
@@ -147,22 +149,6 @@ public class CostDebitNoteServiceImpl implements CostDebitNoteService {
 			costDebitChargesRepo.deleteAll(costDebitChargesVOs);
 		}
 
-		
-
-		// Adding Cost Debit Note Tax Particulars
-		List<CostDebitNoteTaxPrtculVO> costDebitNoteTaxPrtculVOs = new ArrayList<>();
-		for (CostDebitNoteTaxPrtculDTO costDebitNoteTaxPrtculDTO : costDebitNoteDTO.getCostDebitNoteTaxPrtculDTO()) {
-			CostDebitNoteTaxPrtculVO costDebitNoteTaxPrtculVO = new CostDebitNoteTaxPrtculVO();
-
-			costDebitNoteTaxPrtculVO.setTds(costDebitNoteTaxPrtculDTO.getTds());
-			costDebitNoteTaxPrtculVO.setTdsPercentage(costDebitNoteTaxPrtculDTO.getTdsPercentage());
-			costDebitNoteTaxPrtculVO.setSection(costDebitNoteTaxPrtculDTO.getSection());
-			costDebitNoteTaxPrtculVO.setTotTDSAmt(costDebitNoteTaxPrtculDTO.getTotTDSAmt());
-
-			costDebitNoteTaxPrtculVO.setCostDebitNoteVO(costDebitNoteVO);
-			costDebitNoteTaxPrtculVOs.add(costDebitNoteTaxPrtculVO);
-		}
-		costDebitNoteVO.setCostDebitNoteTaxPrtculVO(costDebitNoteTaxPrtculVOs);
 
 		BigDecimal totalChargeAmountLC = BigDecimal.ZERO;
 		BigDecimal totalChargeAmountBC = BigDecimal.ZERO;
@@ -170,7 +156,8 @@ public class CostDebitNoteServiceImpl implements CostDebitNoteService {
 		BigDecimal totalTaxAmountBC = BigDecimal.ZERO;
 //		BigDecimal totalInvAmountLC = BigDecimal.ZERO;
 //		BigDecimal totalInvAmountBC = BigDecimal.ZERO;
-		
+		BigDecimal sumLcAmount = BigDecimal.ZERO;
+
 		// Adding Cost Debit Charges
 		List<CostDebitChargesVO> costDebitChargesVOs = new ArrayList<>();
 		for (CostDebitChargesDTO costDebitChargesDTO : costDebitNoteDTO.getCostDebitChargesDTO()) {
@@ -215,6 +202,8 @@ public class CostDebitNoteServiceImpl implements CostDebitNoteService {
 			lcAmount = exRate.multiply(qty.multiply(rate));
 			costDebitChargesVO.setLcAmt(lcAmount);
 			totalChargeAmountLC = totalChargeAmountLC.add(lcAmount);
+			sumLcAmount = sumLcAmount.add(lcAmount);
+
 
 			BigDecimal gstPercent = BigDecimal.valueOf(costDebitChargesDTO.getGstPercentage()); // Convert GSTPercent to
 			// BigDecimal
@@ -240,6 +229,28 @@ public class CostDebitNoteServiceImpl implements CostDebitNoteService {
 			costDebitChargesVOs.add(costDebitChargesVO);
 			
 		}
+		
+		// Adding Cost Debit Note Tax Particulars
+		List<CostDebitNoteTaxPrtculVO> costDebitNoteTaxPrtculVOs = new ArrayList<>();
+		for (CostDebitNoteTaxPrtculDTO costDebitNoteTaxPrtculDTO : costDebitNoteDTO.getCostDebitNoteTaxPrtculDTO()) {
+			CostDebitNoteTaxPrtculVO costDebitNoteTaxPrtculVO = new CostDebitNoteTaxPrtculVO();
+
+			costDebitNoteTaxPrtculVO.setTds(costDebitNoteTaxPrtculDTO.getTds());
+			costDebitNoteTaxPrtculVO.setTdsPercentage(costDebitNoteTaxPrtculDTO.getTdsPercentage());
+			costDebitNoteTaxPrtculVO.setSection(costDebitNoteTaxPrtculDTO.getSection());
+			
+			
+			BigDecimal totTdsWhAmt = BigDecimal.ZERO;
+			BigDecimal tdsWhPercent = costDebitNoteTaxPrtculDTO.getTdsPercentage();
+			System.out.println("TOTAL LC AMOUNT IS :"+sumLcAmount);;
+			totTdsWhAmt = sumLcAmount.multiply(tdsWhPercent.divide(BigDecimal.valueOf(100)));
+			costDebitNoteTaxPrtculVO.setTotTDSAmt(totTdsWhAmt);
+			
+
+			costDebitNoteTaxPrtculVO.setCostDebitNoteVO(costDebitNoteVO);
+			costDebitNoteTaxPrtculVOs.add(costDebitNoteTaxPrtculVO);
+		}
+		costDebitNoteVO.setCostDebitNoteTaxPrtculVO(costDebitNoteTaxPrtculVOs);
 		
 		Map<String, BigDecimal> ledgerSumMap = new HashMap<>();
 		for (CostDebitChargesVO detailsVO : costDebitChargesVOs) {

@@ -45,6 +45,6 @@ public interface CostDebitNoteRepo extends JpaRepository<CostDebitNoteVO, Long>{
 	Set<Object[]> getCurrencyAndExrateDetails(Long orgId);
 
 	@Query(value="select a from CostInvoiceVO a where a.orgId=?1 and a.supplierName=?2 and a.branchCode=?3")
-	List<CostInvoiceVO> findOrginBillNoByParty(Long orgId, String party, String branchCode);
+	List<CostInvoiceVO> findOrginBillNoByParty(Long orgId, String party, String branchCode); 
 
 }

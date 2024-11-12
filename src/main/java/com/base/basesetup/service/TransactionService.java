@@ -16,6 +16,7 @@ import com.base.basesetup.dto.BankingDepositDTO;
 import com.base.basesetup.dto.BankingWithdrawalDTO;
 import com.base.basesetup.dto.BrsOpeningDTO;
 import com.base.basesetup.dto.ChartCostCenterDTO;
+import com.base.basesetup.dto.ContraVoucherDTO;
 import com.base.basesetup.dto.DailyMonthlyExRatesDTO;
 import com.base.basesetup.dto.DebitNoteDTO;
 import com.base.basesetup.dto.FundTransferDTO;
@@ -36,6 +37,7 @@ import com.base.basesetup.entity.BankingWithdrawalVO;
 import com.base.basesetup.entity.BrsExcelUploadVO;
 import com.base.basesetup.entity.BrsOpeningVO;
 import com.base.basesetup.entity.ChartCostCenterVO;
+import com.base.basesetup.entity.ContraVoucherVO;
 import com.base.basesetup.entity.DailyMonthlyExRatesVO;
 import com.base.basesetup.entity.DebitNoteVO;
 import com.base.basesetup.entity.FundTransferVO;
@@ -290,6 +292,16 @@ public interface TransactionService {
 	String getBankingWithdrawalDocId(Long orgId, String finYear, String branch, String branchCode);
 
 	List<Map<String, Object>> getCurrencyAndExrates(Long orgId);
+
+	//contraVoucher
+	
+	List<ContraVoucherVO> getAllContraVoucherByOrgId(Long orgId);
+
+	List<ContraVoucherVO> getContraVoucherById(Long id);
+
+	String getContraVoucherDocId(Long orgId, String finYear, String branch, String branchCode);
+
+	Map<String, Object> updateCreateContraVoucher(@Valid ContraVoucherDTO contraVoucherDTO) throws ApplicationException;
 
 
 	
