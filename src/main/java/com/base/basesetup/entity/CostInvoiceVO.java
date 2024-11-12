@@ -1,5 +1,6 @@
 
 package com.base.basesetup.entity;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
@@ -28,101 +29,118 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder  
+@Builder
 public class CostInvoiceVO {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "costinvoicegen")
 	@SequenceGenerator(name = "costinvoicegen", sequenceName = "costinvoiceseq", initialValue = 1000000001, allocationSize = 1)
 	@Column(name = "costinvoiceid")
 	private Long id;
-	@Column(name = "mode",length =10)
+	@Column(name = "mode", length = 10)
 	private String mode;
-	@Column(name = "product",length =50)
+	@Column(name = "product", length = 50)
 	private String product;
-	@Column(name = "purvoucherno",length =50)
+	@Column(name = "purvoucherno", length = 50)
 	private String purVoucherNo;
 	@Column(name = "purvoucherdate")
 	private LocalDate purVoucherDate;
-	@Column(name = "costinvoiceno",length =50)
+	@Column(name = "costinvoiceno", length = 50)
 	private String costInvoiceNo;
 	@Column(name = "costinvoicedate")
 	private LocalDate costInvoiceDate;
-	@Column(name = "supplierbillno",length =50)
+	@Column(name = "supplierbillno", length = 50)
 	private String supplierBillNo;
-	@Column(name = "supplietype",length =10)
+	@Column(name = "supplietype", length = 10)
 	private String supplierType;
-	@Column(name = "suppliercode",length =15)
+	@Column(name = "suppliercode", length = 15)
 	private String supplierCode;
-	@Column(name = "creditdays",length =10)
+	@Column(name = "creditdays", length = 10)
 	private int creditDays;
 	@Column(name = "duedate")
 	private LocalDate dueDate;
-	@Column(name = "suppliername",length =150)
+	@Column(name = "suppliername", length = 150)
 	private String supplierName;
-	@Column(name = "supplierplace",length =15)
+	@Column(name = "supplierplace", length = 15)
 	private String supplierPlace;
-	@Column(name = "currency",length =10)
+	@Column(name = "currency", length = 10)
 	private String currency;
-	@Column(name = "exrate",precision = 10,scale = 2)
+	@Column(name = "exrate", precision = 10, scale = 2)
 	private BigDecimal exRate;
-	@Column(name = "suppliergstin",length =10)
+	@Column(name = "suppliergstin", length = 10)
 	private String supplierGstIn;
-	@Column(name = "suppliergstincode",length =15)
+	@Column(name = "suppliergstincode", length = 15)
 	private String supplierGstInCode;
-	@Column(name = "remarks",length =150)
+	@Column(name = "remarks", length = 150)
 	private String remarks;
-	@Column(name = "address",length =150)
+	@Column(name = "address", length = 150)
 	private String address;
-	@Column(name = "otherinfo",length =150)
+	@Column(name = "otherinfo", length = 150)
 	private String otherInfo;
-	@Column(name = "shipperrefno",length =25)
+	@Column(name = "shipperrefno", length = 25)
 	private String shipperRefNo;
-	@Column(name = "gsttype",length =15)
+	@Column(name = "gsttype", length = 15)
 	private String gstType;
-	@Column(name = "orgid",length =15)
+	@Column(name = "orgid", length = 15)
 	private Long orgId;
 	@Column(name = "active")
 	private boolean active;
-	@Column(name = "modifiedby",length =25)
+	@Column(name = "modifiedby", length = 25)
 	private String updatedBy;
-	@Column(name = "createdby",length =25)
+	@Column(name = "createdby", length = 25)
 	private String createdBy;
 	@Column(name = "cancel")
 	private boolean cancel;
-	@Column(name = "cancelremarks",length =25)
+	@Column(name = "cancelremarks", length = 25)
 	private String cancelRemarks;
-	@Column(name = "branch",length =25)
+	@Column(name = "branch", length = 25)
 	private String branch;
-	@Column(name = "branchcode",length =10)
+	@Column(name = "branchcode", length = 10)
 	private String branchCode;
-	@Column(name = "customer",length =100)
+	@Column(name = "customer", length = 100)
 	private String customer;
-	@Column(name = "client",length =30)
+	@Column(name = "client", length = 30)
 	private String client;
-	@Column(name = "finyear",length =10)
+	@Column(name = "finyear", length = 10)
 	private String finYear;
-	@Column(name = "screencode",length =10)
-	private String screenCode="CI";
-	@Column(name = "screenname",length =25)
-	private String screenName="COST INVOICE";
-	@Column(name = "ipno",length =10)
+	@Column(name = "screencode", length = 10)
+	private String screenCode = "CI";
+	@Column(name = "screenname", length = 25)
+	private String screenName = "COST INVOICE";
+	@Column(name = "ipno", length = 10)
 	private String ipNo;
-	@Column(name = "latitude",length =100)
+	@Column(name = "latitude", length = 100)
 	private String latitude;
-	@Column(name = "docid",length =30)
+	@Column(name = "docid", length = 30)
 	private String docId;
 	@Column(name = "docdate")
-	private LocalDate docDate=LocalDate.now();
-	@Column(name="payment",length =20 )
+	private LocalDate docDate = LocalDate.now();
+	@Column(name = "payment", length = 20)
 	private String payment;
-	@Column(name="accuralid",length =20 )
+	@Column(name = "accuralid", length = 20)
 	private String accuralid;
-	@Column(name="utrref",length =10 )
+	@Column(name = "utrref", length = 10)
 	private String utrRef;
-	@Column(name="costtype",length =10 )
+	@Column(name = "costtype", length = 10)
 	private String costType;
-	 
- 
+
+	@Column(name = "totchargesbillcurramt", precision = 10, scale = 2)
+	private BigDecimal totChargesBillCurrAmt;
+	@Column(name = "totchargeslcamt", precision = 10, scale = 2)
+	private BigDecimal totChargesLcAmt;
+	@Column(name = "actbillcurramt", precision = 10, scale = 2)
+	private BigDecimal actBillCurrAmt;
+	@Column(name = "actbilllcamt", precision = 10, scale = 2)
+	private BigDecimal actBillLcAmt;
+	@Column(name = "netbillcurramt", precision = 10, scale = 2)
+	private BigDecimal netBillCurrAmt;
+	@Column(name = "netbilllcamt", precision = 10, scale = 2)
+	private BigDecimal netBillLcAmt;
+	@Column(name = "roundoff", precision = 10, scale = 2)
+	private BigDecimal roundOff;
+	@Column(name = "gstinputlcamt", precision = 10, scale = 2)
+	private BigDecimal gstInputLcAmt;
+	
+
 	@OneToMany(mappedBy = "costInvoiceVO", cascade = CascadeType.ALL)
 	@JsonManagedReference
 	List<ChargerCostInvoiceVO> chargerCostInvoiceVO;
@@ -130,11 +148,6 @@ public class CostInvoiceVO {
 	@OneToMany(mappedBy = "costInvoiceVO", cascade = CascadeType.ALL)
 	@JsonManagedReference
 	List<TdsCostInvoiceVO> tdsCostInvoiceVO;
-	
-	
-	@OneToMany(mappedBy ="costInvoiceVO",cascade = CascadeType.ALL)
-	@JsonManagedReference
-	List<CostInvSummaryVO> costInvSummaryVO ;
 
 	@Embedded
 	@Builder.Default

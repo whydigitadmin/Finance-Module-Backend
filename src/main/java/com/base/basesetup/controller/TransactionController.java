@@ -2456,7 +2456,7 @@ public class TransactionController extends BaseController {
 
 		if (StringUtils.isBlank(errorMsg)) {
 			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "SalesPerson retrieved successfully");
-			responseObjectsMap.put("slaesperson", sales);
+			responseObjectsMap.put("salesperson", sales);
 			responseDTO = createServiceResponse(responseObjectsMap);
 		} else {
 			responseDTO = createServiceResponseError(responseObjectsMap,

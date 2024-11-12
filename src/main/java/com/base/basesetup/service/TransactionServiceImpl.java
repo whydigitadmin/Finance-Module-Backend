@@ -135,9 +135,9 @@ import com.base.basesetup.repo.GeneralJournalRepo;
 import com.base.basesetup.repo.GlOpeningBalanceRepo;
 import com.base.basesetup.repo.GstDebitNoteRepo;
 import com.base.basesetup.repo.GstSalesVoucherRepo;
-import com.base.basesetup.repo.IrnCreditChargesRepo;
-import com.base.basesetup.repo.IrnCreditGstRepo;
-import com.base.basesetup.repo.IrnCreditRepo;
+import com.base.basesetup.repo.IrnCreditNoteDetailsRepo;
+import com.base.basesetup.repo.IrnCreditNoteGstRepo;
+import com.base.basesetup.repo.IrnCreditNoteRepo;
 import com.base.basesetup.repo.ParticularsDebitNoteRepo;
 import com.base.basesetup.repo.ParticularsGlOpeningBalanceRepo;
 import com.base.basesetup.repo.ParticularsGstVoucherRepo;
@@ -175,7 +175,7 @@ public class TransactionServiceImpl implements TransactionService {
 	TaxInvoiceGstRepo gstTaxInvoiceRepo;
 
 	@Autowired
-	IrnCreditRepo irnCreditRepo;
+	IrnCreditNoteRepo irnCreditRepo;
 
 	@Autowired
 	ReconcileBankRepo reconcileBankRepo;
@@ -190,10 +190,10 @@ public class TransactionServiceImpl implements TransactionService {
 	ReconcileCorpBankRepo reconcileCorpBankRepo;
 
 	@Autowired
-	IrnCreditChargesRepo irnCreditChargesRepo;
+	IrnCreditNoteDetailsRepo irnCreditChargesRepo;
 
 	@Autowired
-	IrnCreditGstRepo irnCreditGstRepo;
+	IrnCreditNoteGstRepo irnCreditGstRepo;
 
 	@Autowired
 	DailyMonthlyExRatesRepo dailyMonthlyExRatesRepo;
@@ -2503,10 +2503,8 @@ public class TransactionServiceImpl implements TransactionService {
 	private void getTmsJobCardVOFromTmsJobCardDTO(@Valid TmsJobCardDTO tmsJobCardDTO, TmsJobCardVO tmsJobCardVO) {
 		// tmsJobCardVO.setJobNo(tmsJobCardDTO.getJobNo());
 		tmsJobCardVO.setCustomer(tmsJobCardDTO.getCustomer());
-		tmsJobCardVO.setDate(tmsJobCardDTO.getDate());
 		tmsJobCardVO.setSalesCategory(tmsJobCardDTO.getSalesCategory());
 		tmsJobCardVO.setSalesPerson(tmsJobCardDTO.getSalesPerson());
-		tmsJobCardVO.setClosedOn(tmsJobCardDTO.getClosedOn());
 		tmsJobCardVO.setIncome(tmsJobCardDTO.getIncome());
 		tmsJobCardVO.setExpense(tmsJobCardDTO.getExpense());
 		tmsJobCardVO.setProfit(tmsJobCardDTO.getProfit());
