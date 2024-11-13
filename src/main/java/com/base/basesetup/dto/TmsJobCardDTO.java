@@ -1,6 +1,7 @@
 package com.base.basesetup.dto;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
@@ -20,6 +21,7 @@ public class TmsJobCardDTO {
 	private String salesPerson;
 	private BigDecimal income;
 	private BigDecimal profit;
+	private LocalDateTime closedOn;
 	private BigDecimal expense;
 	private String remarks;
 	private boolean closed;

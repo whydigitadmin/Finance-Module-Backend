@@ -2026,10 +2026,7 @@ public class TransactionServiceImpl implements TransactionService {
 		if (ObjectUtils.isNotEmpty(orgId)) {
 			LOGGER.info("Successfully Received  ReconcileBank BY OrgId : {}", orgId);
 			reconcileBankVO = reconcileBankRepo.getAllReconcileBankByOrgId(orgId);
-		} else {
-			LOGGER.info("Successfully Received  ReconcileBank For All OrgId.");
-			reconcileBankVO = reconcileBankRepo.findAll();
-		}
+		} 
 		return reconcileBankVO;
 	}
 
@@ -2039,10 +2036,7 @@ public class TransactionServiceImpl implements TransactionService {
 		if (ObjectUtils.isNotEmpty(id)) {
 			LOGGER.info("Successfully Received  ReconcileBank BY Id : {}", id);
 			reconcileBankVO = reconcileBankRepo.getAllReconcileBankById(id);
-		} else {
-			LOGGER.info("Successfully Received ReconcileBank For All Id.");
-			reconcileBankVO = reconcileBankRepo.findAll();
-		}
+		} 
 		return reconcileBankVO;
 	}
 
@@ -2118,7 +2112,6 @@ public class TransactionServiceImpl implements TransactionService {
 			particularsReconcileVO.setVoucherDate(particularsReconcileDTO.getVoucherDate());
 			particularsReconcileVO.setChequeNo(particularsReconcileDTO.getChequeNo());
 			particularsReconcileVO.setChequeDate(particularsReconcileDTO.getChequeDate());
-
 			if (particularsReconcileDTO.getDeposit() != null
 					&& particularsReconcileDTO.getDeposit().compareTo(BigDecimal.ZERO) != 0) {
 				particularsReconcileVO.setDeposit(particularsReconcileDTO.getDeposit());
@@ -2128,8 +2121,8 @@ public class TransactionServiceImpl implements TransactionService {
 				particularsReconcileVO.setDeposit(BigDecimal.ZERO);
 			}
 
-			totalDeposit = totalDeposit.add(particularsReconcileDTO.getDeposit());
-			totalWithdrawal = totalWithdrawal.add(particularsReconcileDTO.getWithdrawal());
+			totalDeposit = totalDeposit.add(particularsReconcileVO.getDeposit());
+			totalWithdrawal = totalWithdrawal.add(particularsReconcileVO.getWithdrawal());
 			particularsReconcileVO.setBankRef(particularsReconcileDTO.getBankRef());
 			particularsReconcileVO.setReconcileBankVO(reconcileBankVO);
 			particularsReconcileVOs.add(particularsReconcileVO);
@@ -2142,7 +2135,6 @@ public class TransactionServiceImpl implements TransactionService {
 		}
 		reconcileBankVO.setParticularsReconcileVO(particularsReconcileVOs);
 	}
-
 	@Override
 	public String getReconcileBankDocId(Long orgId, String finYear, String branch, String branchCode) {
 		String ScreenCode = "RB";
@@ -2174,10 +2166,7 @@ public class TransactionServiceImpl implements TransactionService {
 		if (ObjectUtils.isNotEmpty(orgId)) {
 			LOGGER.info("Successfully Received  ReconcileCorpBank BY OrgId : {}", orgId);
 			reconcileCorpBankVO = reconcileCorpBankRepo.getAllReconcileCorpBankByOrgId(orgId);
-		} else {
-			LOGGER.info("Successfully Received  ReconcileCorpBank For All OrgId.");
-			reconcileCorpBankVO = reconcileCorpBankRepo.findAll();
-		}
+		} 
 		return reconcileCorpBankVO;
 	}
 
@@ -2187,10 +2176,7 @@ public class TransactionServiceImpl implements TransactionService {
 		if (ObjectUtils.isNotEmpty(id)) {
 			LOGGER.info("Successfully Received  ReconcileCorpBank BY Id : {}", id);
 			reconcileCorpBankVO = reconcileCorpBankRepo.getAllReconcileCorpBankById(id);
-		} else {
-			LOGGER.info("Successfully Received ReconcileCorpBank For All Id.");
-			reconcileCorpBankVO = reconcileCorpBankRepo.findAll();
-		}
+		} 
 		return reconcileCorpBankVO;
 	}
 
@@ -2298,10 +2284,7 @@ public class TransactionServiceImpl implements TransactionService {
 		if (ObjectUtils.isNotEmpty(orgId)) {
 			LOGGER.info("Successfully Received ReconcileCash BY OrgId : {}", orgId);
 			reconcileCashVO = reconcileCashRepo.getAllReconcileCashByOrgId(orgId);
-		} else {
-			LOGGER.info("Successfully Received ReconcileCash For All OrgId.");
-			reconcileCashVO = reconcileCashRepo.findAll();
-		}
+		} 
 		return reconcileCashVO;
 	}
 
@@ -2311,10 +2294,7 @@ public class TransactionServiceImpl implements TransactionService {
 		if (ObjectUtils.isNotEmpty(id)) {
 			LOGGER.info("Successfully Received ReconcileCash BY Id : {}", id);
 			reconcileCashVO = reconcileCashRepo.getAllReconcileCashById(id);
-		} else {
-			LOGGER.info("Successfully Received ReconcileCash For All Id.");
-			reconcileCashVO = reconcileCashRepo.findAll();
-		}
+		} 
 		return reconcileCashVO;
 	}
 
@@ -2517,8 +2497,10 @@ public class TransactionServiceImpl implements TransactionService {
 		tmsJobCardVO.setOperationClosed(tmsJobCardDTO.isOperationClosed());
 		tmsJobCardVO.setFinanceClosed(tmsJobCardDTO.isFinanceClosed());
 		tmsJobCardVO.setClosed(tmsJobCardDTO.isClosed());
+		tmsJobCardVO.setClosedOn(tmsJobCardDTO.getClosedOn());
 		tmsJobCardVO.setBranch(tmsJobCardDTO.getBranch());
 		tmsJobCardVO.setBranchCode(tmsJobCardDTO.getBranchCode());
+		tmsJobCardVO.setCancelRemarks(tmsJobCardDTO.getCancelRemarks());	
 		tmsJobCardVO.setActive(tmsJobCardDTO.isActive());
 		tmsJobCardVO.setFinYear(tmsJobCardDTO.getFinYear());
 
