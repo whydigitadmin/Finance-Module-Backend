@@ -18,11 +18,9 @@ public class TmsJobCardDTO {
 	//private String jobNo;
 	private String customer;
 	private boolean operationClosed;
-	private LocalDate date;
 	private String salesCategory;
 	private boolean financeClosed;
 	private String salesPerson;
-	private LocalDateTime closedOn;
 	private BigDecimal income;
 	private BigDecimal profit;
 	private BigDecimal expense;

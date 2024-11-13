@@ -53,12 +53,10 @@ public class CostInvoiceDTO {
 	private String utrRef;
 	private String costType;
 
+
 	List<ChargerCostInvoiceDTO> chargerCostInvoiceDTO;
 
 	List<TdsCostInvoiceDTO> tdsCostInvoiceDTO;
-	
-	List<CostInvSummaryDTO> costInvSummaryDTO;
-	
-	
+
 
 }

@@ -1,12 +1,11 @@
 package com.base.basesetup.service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-
-import javax.validation.Valid;
 
 import org.apache.commons.lang3.ObjectUtils;
 import org.slf4j.Logger;
@@ -14,227 +13,259 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.base.basesetup.dto.IrnCreditChargesDTO;
-import com.base.basesetup.dto.IrnCreditDTO;
-import com.base.basesetup.dto.IrnCreditGstDTO;
+import com.base.basesetup.dto.IrnCreditNoteDTO;
+import com.base.basesetup.dto.IrnCreditNoteDetailsDTO;
 import com.base.basesetup.entity.DocumentTypeMappingDetailsVO;
-import com.base.basesetup.entity.IrnCreditChargesVO;
-import com.base.basesetup.entity.IrnCreditGstVO;
-import com.base.basesetup.entity.IrnCreditVO;
+import com.base.basesetup.entity.IrnCreditNoteDetailsVO;
+import com.base.basesetup.entity.IrnCreditNoteGstVO;
+import com.base.basesetup.entity.IrnCreditNoteVO;
 import com.base.basesetup.entity.PartyMasterVO;
+import com.base.basesetup.entity.TaxInvoiceVO;
 import com.base.basesetup.exception.ApplicationException;
 import com.base.basesetup.repo.DocumentTypeMappingDetailsRepo;
-import com.base.basesetup.repo.IrnCreditChargesRepo;
-import com.base.basesetup.repo.IrnCreditGstRepo;
-import com.base.basesetup.repo.IrnCreditRepo;
+import com.base.basesetup.repo.IrnCreditNoteDetailsRepo;
+import com.base.basesetup.repo.IrnCreditNoteGstRepo;
+import com.base.basesetup.repo.IrnCreditNoteRepo;
 import com.base.basesetup.repo.PartyMasterRepo;
+import com.base.basesetup.repo.TaxInvoiceRepo;
 
 @Service
 public class IrnCreditNoteServiceImpl implements IrnCreditNoteService {
 	public static final Logger LOGGER = LoggerFactory.getLogger(IrnCreditNoteServiceImpl.class);
 	@Autowired
-	IrnCreditRepo irnCreditRepo;
+	IrnCreditNoteRepo irnCreditRepo;
 
 	@Autowired
-	IrnCreditChargesRepo irnCreditChargesRepo;
+	IrnCreditNoteDetailsRepo irnCreditChargesRepo;
 
 	@Autowired
-	IrnCreditGstRepo irnCreditGstRepo;
+	IrnCreditNoteGstRepo irnCreditGstRepo;
+	
+	@Autowired
+	AmountInWordsConverterService amountInWordsConverterService;
 	
 	@Autowired
 	PartyMasterRepo partyMasterRepo;
+	
+	@Autowired
+	TaxInvoiceRepo taxInvoiceRepo;
 
 	@Autowired
 	DocumentTypeMappingDetailsRepo documentTypeMappingDetailsRepo;
 
 	@Override
-	public List<IrnCreditVO> getAllIrnCreditByOrgId(Long orgId) {
-		List<IrnCreditVO> irnCreditVO = new ArrayList<>();
+	public List<IrnCreditNoteVO> getAllIrnCreditByOrgId(Long orgId) {
+		List<IrnCreditNoteVO> irnCreditVO = new ArrayList<>();
 		if (ObjectUtils.isNotEmpty(orgId)) {
 			LOGGER.info("Successfully Received  IrnCredit BY OrgId : {}", orgId);
 			irnCreditVO = irnCreditRepo.getAllIrnCreditByOrgId(orgId);
-		} else {
-			LOGGER.info("Successfully Received  IrnCredit For All OrgId.");
-			irnCreditVO = irnCreditRepo.findAll();
-		}
+		} 
 		return irnCreditVO;
 	}
 
 	@Override
-	public List<IrnCreditVO> getAllIrnCreditById(Long id) {
-		List<IrnCreditVO> irnCreditVO = new ArrayList<>();
+	public List<IrnCreditNoteVO> getAllIrnCreditById(Long id) {
+		List<IrnCreditNoteVO> irnCreditVO = new ArrayList<>();
 		if (ObjectUtils.isNotEmpty(id)) {
 			LOGGER.info("Successfully Received  IrnCredit BY Id : {}", id);
 			irnCreditVO = irnCreditRepo.getAllIrnCreditById(id);
-		} else {
-			LOGGER.info("Successfully Received  IrnCredit For All Id.");
-			irnCreditVO = irnCreditRepo.findAll();
-		}
+		} 
 		return irnCreditVO;
 	}
 
 	@Override
-	public Map<String, Object> updateCreateIrnCredit(@Valid IrnCreditDTO irnCreditDTO) throws ApplicationException {
+	public Map<String, Object> updateCreateIrnCreditNote(IrnCreditNoteDTO irnCreditNoteDTO) throws ApplicationException {
 		String screenCode = "ICN";
-		IrnCreditVO irnCreditVO = new IrnCreditVO();
+		IrnCreditNoteVO irnCreditNoteVO = new IrnCreditNoteVO();
 		String message;
-		if (ObjectUtils.isNotEmpty(irnCreditDTO.getId())) {
-			irnCreditVO = irnCreditRepo.findById(irnCreditDTO.getId())
-					.orElseThrow(() -> new ApplicationException("Invalid IrnCredit details"));
-			irnCreditVO.setUpdatedBy(irnCreditDTO.getCreatedBy());
-			createUpdateIrnCreditVOByIrnCreditDTO(irnCreditDTO, irnCreditVO);
-			message = "IRN Credit Updated Successfully";
+		if (ObjectUtils.isNotEmpty(irnCreditNoteDTO.getId())) {
+			irnCreditNoteVO = irnCreditRepo.findById(irnCreditNoteDTO.getId())
+					.orElseThrow(() -> new ApplicationException("IRN Credit Note not found"));
+
+			irnCreditNoteVO.setModifiedBy(irnCreditNoteDTO.getCreatedBy());
+			createUpdateIrnCreditNoteVOByIrnCreditNoteDTO(irnCreditNoteDTO, irnCreditNoteVO);
+			message = "IRN Credit Note Updated Successfully";
 		} else {
 			// GETDOCID API
-			String docId = irnCreditRepo.getIrnCreditDocId(irnCreditDTO.getOrgId(), irnCreditDTO.getFinYear(),
-					irnCreditDTO.getBranchCode(), screenCode);
-			irnCreditVO.setDocId(docId);
+			String docId = irnCreditRepo.getIrnCreditDocId(irnCreditNoteVO.getOrgId(), irnCreditNoteVO.getFinYear(),
+					irnCreditNoteVO.getBranchCode(), screenCode);
+			irnCreditNoteVO.setDocId(docId);
 
 			// GETDOCID LASTNO +1
 			DocumentTypeMappingDetailsVO documentTypeMappingDetailsVO = documentTypeMappingDetailsRepo
-					.findByOrgIdAndFinYearAndBranchCodeAndScreenCode(irnCreditDTO.getOrgId(), irnCreditDTO.getFinYear(),
-							irnCreditDTO.getBranchCode(), screenCode);
+					.findByOrgIdAndFinYearAndBranchCodeAndScreenCode(irnCreditNoteVO.getOrgId(),
+							irnCreditNoteVO.getFinYear(), irnCreditNoteVO.getBranchCode(), screenCode);
 			documentTypeMappingDetailsVO.setLastno(documentTypeMappingDetailsVO.getLastno() + 1);
 			documentTypeMappingDetailsRepo.save(documentTypeMappingDetailsVO);
-			irnCreditVO.setUpdatedBy(irnCreditDTO.getCreatedBy());
-			irnCreditVO.setCreatedBy(irnCreditDTO.getCreatedBy());
-			createUpdateIrnCreditVOByIrnCreditDTO(irnCreditDTO, irnCreditVO);
-			message = "IRN Credit Created Successfully";
+
+			irnCreditNoteVO.setCreatedBy(irnCreditNoteDTO.getCreatedBy());
+			irnCreditNoteVO.setModifiedBy(irnCreditNoteDTO.getCreatedBy());
+			createUpdateIrnCreditNoteVOByIrnCreditNoteDTO(irnCreditNoteDTO, irnCreditNoteVO);
+			message = "Tax Invoice Created Successfully";
 		}
-		irnCreditRepo.save(irnCreditVO);
+
+		irnCreditRepo.save(irnCreditNoteVO);
 		Map<String, Object> response = new HashMap<>();
-		response.put("irnCreditVO", irnCreditVO);
+		response.put("irnCreditNoteVO", irnCreditNoteVO);
 		response.put("message", message);
 		return response;
 	}
 
-	private IrnCreditVO createUpdateIrnCreditVOByIrnCreditDTO(@Valid IrnCreditDTO irnCreditDTO,
-			IrnCreditVO irnCreditVO) {
-		// Common fields
-		irnCreditVO.setBranch(irnCreditDTO.getBranch());
-		irnCreditVO.setBranchCode(irnCreditDTO.getBranchCode());
-		irnCreditVO.setCreatedBy(irnCreditDTO.getCreatedBy());
-		irnCreditVO.setUpdatedBy(irnCreditDTO.getUpdatedBy());
-		irnCreditVO.setActive(irnCreditDTO.isActive());
-		irnCreditVO.setCancel(irnCreditDTO.isCancel());
-		irnCreditVO.setCancelRemarks(irnCreditDTO.getCancelRemarks());
-		irnCreditVO.setFinYear(irnCreditDTO.getFinYear());
-		irnCreditVO.setOrgId(irnCreditDTO.getOrgId());
+	private void createUpdateIrnCreditNoteVOByIrnCreditNoteDTO(IrnCreditNoteDTO irnCreditNoteDTO, IrnCreditNoteVO irnCreditNoteVO) {
 
-		// IRN fields
-		irnCreditVO.setVohNo(irnCreditDTO.getVohNo());
-		irnCreditVO.setVohDate(irnCreditDTO.getVohDate());
-		irnCreditVO.setPartyName(irnCreditDTO.getPartyName());
-		irnCreditVO.setPartyCode(irnCreditDTO.getPartyCode());
-		irnCreditVO.setSupRefNo(irnCreditDTO.getSupRefNo());
-		irnCreditVO.setSupRefDate(irnCreditDTO.getSupRefDate());
-		irnCreditVO.setPartyType(irnCreditDTO.getPartyType());
-		irnCreditVO.setProduct(irnCreditDTO.getProduct());
-		irnCreditVO.setCreditDays(irnCreditDTO.getCreditDays());
-		irnCreditVO.setDueDate(irnCreditDTO.getDueDate());
-		irnCreditVO.setState(irnCreditDTO.getState());
-		irnCreditVO.setCity(irnCreditDTO.getCity());
-		irnCreditVO.setOfficeType(irnCreditDTO.getOfficeType());
-		irnCreditVO.setCurrency(irnCreditDTO.getCurrency());
-		irnCreditVO.setStatus(irnCreditDTO.getStatus());
-		irnCreditVO.setOriginBill(irnCreditDTO.getOriginBill());
-		irnCreditVO.setRemarks(irnCreditDTO.getRemarks());
-		irnCreditVO.setAddress(irnCreditDTO.getAddress());
-		irnCreditVO.setShipRefNo(irnCreditDTO.getShipRefNo());
-		irnCreditVO.setPincode(irnCreditDTO.getPincode());
-		irnCreditVO.setGstin(irnCreditDTO.getGstin());
-		irnCreditVO.setGstType(irnCreditDTO.getGstType());
-		irnCreditVO.setBillingMonth(irnCreditDTO.getBillingMonth());
-		irnCreditVO.setOtherInfo(irnCreditDTO.getOtherInfo());
-		irnCreditVO.setSalesType(irnCreditDTO.getSalesType());
-		irnCreditVO.setCreditRemarks(irnCreditDTO.getCreditRemarks());
-		irnCreditVO.setCharges(irnCreditDTO.getCharges());
+		// Map fields from DTO to VO
+		irnCreditNoteVO.setOrgId(irnCreditNoteDTO.getOrgId());
+	    irnCreditNoteVO.setBranch(irnCreditNoteDTO.getBranch());
+	    irnCreditNoteVO.setBranchCode(irnCreditNoteDTO.getBranchCode());
+	    irnCreditNoteVO.setFinYear(irnCreditNoteDTO.getFinYear());
+	    irnCreditNoteVO.setCreatedBy(irnCreditNoteDTO.getCreatedBy());
+	    irnCreditNoteVO.setBizType(irnCreditNoteDTO.getBizType());
+	    irnCreditNoteVO.setBizMode(irnCreditNoteDTO.getBizMode());
+	    irnCreditNoteVO.setPartyName(irnCreditNoteDTO.getPartyName());
+	    irnCreditNoteVO.setPartyCode(irnCreditNoteDTO.getPartyCode());
+	    irnCreditNoteVO.setPartyType(irnCreditNoteDTO.getPartyType());
+	    irnCreditNoteVO.setStateNo(irnCreditNoteDTO.getStateNo());
+	    irnCreditNoteVO.setStateCode(irnCreditNoteDTO.getStateCode());
+	    irnCreditNoteVO.setRecipientGSTIN(irnCreditNoteDTO.getRecipientGSTIN());
+	    irnCreditNoteVO.setPlaceOfSupply(irnCreditNoteDTO.getPlaceOfSupply());
+	    irnCreditNoteVO.setAddressType(irnCreditNoteDTO.getAddressType());
+	    irnCreditNoteVO.setAddress(irnCreditNoteDTO.getAddress());
+	    irnCreditNoteVO.setPinCode(irnCreditNoteDTO.getPinCode());
+	    irnCreditNoteVO.setStatus(irnCreditNoteDTO.getStatus());
+	    irnCreditNoteVO.setGstType(irnCreditNoteDTO.getGstType());
+	    irnCreditNoteVO.setOriginBillNo(irnCreditNoteDTO.getOriginBillNo());
+	    irnCreditNoteVO.setVoucherNo(irnCreditNoteDTO.getVoucherNo());
+	    irnCreditNoteVO.setVoucherDate(irnCreditNoteDTO.getVoucherDate());
+	    irnCreditNoteVO.setSupplierRefNo(irnCreditNoteDTO.getSupplierRefNo());
+	    irnCreditNoteVO.setSupplierRefDate(irnCreditNoteDTO.getSupplierRefDate());
+	    irnCreditNoteVO.setBillCurr(irnCreditNoteDTO.getBillCurr());
+	    irnCreditNoteVO.setBillCurrRate(irnCreditNoteDTO.getBillCurrRate());
+	    irnCreditNoteVO.setExAmount(irnCreditNoteDTO.getExAmount());
+	    irnCreditNoteVO.setCreditDays(irnCreditNoteDTO.getCreditDays());
+	    irnCreditNoteVO.setShipperRefNo(irnCreditNoteDTO.getShipperRefNo());
+	    irnCreditNoteVO.setBillMonth(irnCreditNoteDTO.getBillMonth());
+	    irnCreditNoteVO.setSalesType(irnCreditNoteDTO.getSalesType());
+	    irnCreditNoteVO.setCreditRemarks(irnCreditNoteDTO.getCreditRemarks());
+	    
+		if (ObjectUtils.isNotEmpty(irnCreditNoteVO.getId())) {
+			List<IrnCreditNoteDetailsVO> irnCreditNoteDetailsVO1 = irnCreditChargesRepo.findByIrnCreditNoteVO(irnCreditNoteVO);
+			irnCreditChargesRepo.deleteAll(irnCreditNoteDetailsVO1);
+		}
+		BigDecimal totalChargeAmountLC = BigDecimal.ZERO;
+		BigDecimal totalChargeAmountBC = BigDecimal.ZERO;
+		BigDecimal totalTaxAmountLC = BigDecimal.ZERO;
+		BigDecimal totalTaxAmountBC = BigDecimal.ZERO;
+		BigDecimal totalInvAmountLC = BigDecimal.ZERO;
+		BigDecimal totalInvAmountBC = BigDecimal.ZERO;
 
-		// Summary fields
-		irnCreditVO.setTotChargesBillCurrAmt(irnCreditDTO.getTotChargesBillCurrAmt());
-		irnCreditVO.setTotChargesLCAmt(irnCreditDTO.getTotChargesLCAmt());
-		irnCreditVO.setTotGrossBillAmt(irnCreditDTO.getTotGrossBillAmt());
-		irnCreditVO.setTotGrossLCAmt(irnCreditDTO.getTotGrossLCAmt());
-		irnCreditVO.setNetBillCurrAmt(irnCreditDTO.getNetBillCurrAmt());
-		irnCreditVO.setNetLCAmt(irnCreditDTO.getNetLCAmt());
-		irnCreditVO.setAmtInWords(irnCreditDTO.getAmtInWords());
-		irnCreditVO.setExRate(irnCreditDTO.getExRate());
-		irnCreditVO.setTotTaxAmt(irnCreditDTO.getTotTaxAmt());
-		irnCreditVO.setSummaryExRate(irnCreditDTO.getSummaryExRate());
-		irnCreditVO.setCurrentDate(irnCreditDTO.getCurrentDate());
-		irnCreditVO.setCurrentDateValue(irnCreditDTO.getCurrentDateValue());
-		irnCreditVO.setRoundOff(irnCreditDTO.getRoundOff());
+		List<IrnCreditNoteDetailsVO> irnCreditNoteDetailsVOs = new ArrayList<>();
+		for (IrnCreditNoteDetailsDTO irnCreditNoteDetailsDTO : irnCreditNoteDTO.getIrnCreditNoteDetailsDTO()) {
 
-		if (ObjectUtils.isNotEmpty(irnCreditVO.getId())) {
-			List<IrnCreditChargesVO> irnCreditChargesVO1 = irnCreditChargesRepo.findByIrnCreditVO(irnCreditVO);
-			irnCreditChargesRepo.deleteAll(irnCreditChargesVO1);
+			IrnCreditNoteDetailsVO irnCreditNoteDetailsVO = new IrnCreditNoteDetailsVO();
+			irnCreditNoteDetailsVO.setChargeType(irnCreditNoteDetailsDTO.getChargeType());
+			irnCreditNoteDetailsVO.setChargeCode(irnCreditNoteDetailsDTO.getChargeCode());
+			irnCreditNoteDetailsVO.setGovChargeCode(irnCreditNoteDetailsDTO.getGovChargeCode());
+			irnCreditNoteDetailsVO.setLedger(irnCreditNoteDetailsDTO.getLedger());
+			irnCreditNoteDetailsVO.setChargeName(irnCreditNoteDetailsDTO.getChargeName());
+			irnCreditNoteDetailsVO.setTaxable(irnCreditNoteDetailsDTO.getTaxable());
+			irnCreditNoteDetailsVO.setQty(irnCreditNoteDetailsDTO.getQty());
+			irnCreditNoteDetailsVO.setRate(irnCreditNoteDetailsDTO.getRate());
+			irnCreditNoteDetailsVO.setCurrency(irnCreditNoteDetailsDTO.getCurrency());
+			irnCreditNoteDetailsVO.setExRate(irnCreditNoteDetailsDTO.getExRate());
+			irnCreditNoteDetailsVO.setExempted(irnCreditNoteDetailsDTO.getExempted());
+			irnCreditNoteDetailsVO.setSac(irnCreditNoteDetailsDTO.getSac());
+			irnCreditNoteDetailsVO.setGSTPercent(irnCreditNoteDetailsDTO.getGSTPercent());
+
+			BigDecimal fcAmount;
+			BigDecimal lcAmount;
+			BigDecimal tlcAmount;
+			BigDecimal billAmount;
+			BigDecimal gstAmount;
+
+			if (!irnCreditNoteDetailsDTO.getCurrency().equals("INR")) {
+				BigDecimal rate = irnCreditNoteDetailsDTO.getRate(); // BigDecimal type is expected here
+				BigDecimal qty = BigDecimal.valueOf(irnCreditNoteDetailsDTO.getQty()); // Convert qty to BigDecimal
+
+				fcAmount = rate.multiply(qty);
+
+				irnCreditNoteDetailsVO.setFcAmount(fcAmount);
+
+			} else {
+				fcAmount = BigDecimal.valueOf(0.00);
+				irnCreditNoteDetailsVO.setFcAmount(fcAmount);
+			}
+
+			BigDecimal exRate = irnCreditNoteDetailsDTO.getExRate();// Assuming getExRate() returns BigDecimal
+			BigDecimal qty = BigDecimal.valueOf(irnCreditNoteDetailsDTO.getQty());
+			BigDecimal rate = irnCreditNoteDetailsDTO.getRate();
+			lcAmount = exRate.multiply(qty.multiply(rate));
+			irnCreditNoteDetailsVO.setLcAmount(lcAmount);
+			totalChargeAmountLC = totalChargeAmountLC.add(lcAmount);
+
+			BigDecimal gstPercent = BigDecimal.valueOf(irnCreditNoteDetailsDTO.getGSTPercent()); // Convert GSTPercent to
+																								// BigDecimal
+			tlcAmount = lcAmount.multiply(gstPercent).divide(BigDecimal.valueOf(100));
+			irnCreditNoteDetailsVO.setTlcAmount(tlcAmount);
+
+			billAmount = lcAmount.divide(exRate, RoundingMode.HALF_UP); // Ensure you specify a RoundingMode when
+																		// dividing
+			irnCreditNoteDetailsVO.setBillAmount(billAmount);
+			totalChargeAmountBC = totalChargeAmountBC.add(billAmount);
+
+			gstAmount = lcAmount.multiply(gstPercent).divide(BigDecimal.valueOf(100));
+			irnCreditNoteDetailsVO.setGstAmount(gstAmount);
+			totalTaxAmountLC = totalTaxAmountLC.add(gstAmount);
+			totalTaxAmountBC = totalTaxAmountBC.add(gstAmount);
+
+			irnCreditNoteDetailsVO.setIrnCreditNoteVO(irnCreditNoteVO);
+			irnCreditNoteDetailsVOs.add(irnCreditNoteDetailsVO);
 		}
 
-		List<IrnCreditChargesVO> irnCreditChargesVOs = new ArrayList<>();
-		for (IrnCreditChargesDTO irnCreditChargesDTO : irnCreditDTO.getIrnCreditChargeDTO()) {
-			IrnCreditChargesVO irnCreditChargesVO = new IrnCreditChargesVO();
-			irnCreditChargesVO.setJobNo(irnCreditChargesDTO.getJobNo());
-			irnCreditChargesVO.setHouseNo(irnCreditChargesDTO.getHouseNo());
-			irnCreditChargesVO.setChargeCode(irnCreditChargesDTO.getChargeCode());
-			irnCreditChargesVO.setGchargeCode(irnCreditChargesDTO.getGchargeCode());
-			irnCreditChargesVO.setChargeName(irnCreditChargesDTO.getChargeName());
-			irnCreditChargesVO.setApplyOn(irnCreditChargesDTO.getApplyOn());
-			irnCreditChargesVO.setCurrency(irnCreditChargesDTO.getCurrency());
-			irnCreditChargesVO.setExRate(irnCreditChargesDTO.getExRate());
-			irnCreditChargesVO.setRate(irnCreditChargesDTO.getRate());
-			irnCreditChargesVO.setExampted(irnCreditChargesDTO.isExampted());
-			irnCreditChargesVO.setFcAmt(irnCreditChargesDTO.getFcAmt());
-			irnCreditChargesVO.setLcAmt(irnCreditChargesDTO.getLcAmt());
-			irnCreditChargesVO.setTlcAmt(irnCreditChargesDTO.getTlcAmt());
-			irnCreditChargesVO.setBillAmt(irnCreditChargesDTO.getBillAmt());
-			irnCreditChargesVO.setGstPercentage(irnCreditChargesDTO.getGstPercentage());
-			irnCreditChargesVO.setGst(irnCreditChargesDTO.getGst());
-			irnCreditChargesVO.setIrnCreditVO(irnCreditVO);
-			irnCreditChargesVOs.add(irnCreditChargesVO);
+		Map<String, BigDecimal> ledgerSumMap = new HashMap<>();
+		for (IrnCreditNoteDetailsVO detailsVO : irnCreditNoteDetailsVOs) {
+			String ledger = detailsVO.getLedger();
+			BigDecimal lcAmount = detailsVO.getLcAmount();
+
+			ledgerSumMap.put(ledger, ledgerSumMap.getOrDefault(ledger, BigDecimal.ZERO).add(lcAmount));
 		}
-
-		if (ObjectUtils.isNotEmpty(irnCreditVO.getId())) {
-			List<IrnCreditGstVO> irnCreditGstVO1 = irnCreditGstRepo.findByIrnCreditVO(irnCreditVO);
-			irnCreditGstRepo.deleteAll(irnCreditGstVO1);
+		if (ObjectUtils.isNotEmpty(irnCreditNoteVO.getId())) {
+			List<IrnCreditNoteGstVO> irnCreditNoteGstVO = irnCreditGstRepo.findByIrnCreditNoteVO(irnCreditNoteVO);
+			irnCreditGstRepo.deleteAll(irnCreditNoteGstVO);
 		}
-
-		List<IrnCreditGstVO> irnCreditGstVOs = new ArrayList<>();
-		for (IrnCreditGstDTO irnCreditGstDTO : irnCreditDTO.getIrnCreditGstDTO()) {
-			IrnCreditGstVO irnCreditGstVO = new IrnCreditGstVO();
-			irnCreditGstVO.setChargeAcc(irnCreditGstDTO.getChargeAcc());
-			irnCreditGstVO.setSubLodgerCode(irnCreditGstDTO.getSubLodgerCode());
-			irnCreditGstVO.setDBillAmt(irnCreditGstDTO.getDBillAmt());
-			irnCreditGstVO.setCrBillAmt(irnCreditGstDTO.getCrBillAmt());
-			irnCreditGstVO.setDBLCAmt(irnCreditGstDTO.getDBLCAmt());
-			irnCreditGstVO.setCrLCAmt(irnCreditGstDTO.getCrLCAmt());
-			irnCreditGstVO.setGstRemarks(irnCreditGstDTO.getGstRemarks());
-			irnCreditGstVO.setIrnCreditVO(irnCreditVO);
-			irnCreditGstVOs.add(irnCreditGstVO);
+		List<IrnCreditNoteGstVO> irnCreditNoteGstVOList = new ArrayList<>();
+		for (Map.Entry<String, BigDecimal> entry : ledgerSumMap.entrySet()) {
+			IrnCreditNoteGstVO irnCreditNoteGstVO = new IrnCreditNoteGstVO();
+			irnCreditNoteGstVO.setGstChargeAcc(entry.getKey());
+			irnCreditNoteGstVO.setGstCrLcAmount(entry.getValue());
+			irnCreditNoteGstVO.setGstDbBillAmount(BigDecimal.ZERO);
+			irnCreditNoteGstVO.setGstDbLcAmount(BigDecimal.ZERO);
+			irnCreditNoteGstVO.setGstSubledgerCode("None");
+			irnCreditNoteGstVO.setGstCrBillAmount(entry.getValue());
+			irnCreditNoteGstVO.setIrnCreditNoteVO(irnCreditNoteVO);
+			irnCreditNoteGstVOList.add(irnCreditNoteGstVO);
 		}
-		irnCreditVO.setIrnCreditChargesVO(irnCreditChargesVOs);
-		irnCreditVO.setIrnCreditGstVO(irnCreditGstVOs);
-		return irnCreditVO;
-	}
+		irnCreditNoteVO.setIrnCreditNoteGstVO(irnCreditNoteGstVOList);
 
-	@Override
-	public List<IrnCreditVO> getIrnCreditByActive() {
-		return irnCreditRepo.findIrnCreditByActive();
+		totalInvAmountLC = totalChargeAmountLC.add(totalTaxAmountLC);
+		totalInvAmountBC = totalChargeAmountBC.add(totalTaxAmountBC);
 
-	}
+		irnCreditNoteVO.setTotalChargeAmountLc(totalChargeAmountLC);
+		irnCreditNoteVO.setTotalChargeAmountBc(totalChargeAmountBC);
+		irnCreditNoteVO.setTotalTaxAmountLc(totalTaxAmountLC);
+		irnCreditNoteVO.setTotalTaxAmountBc(totalTaxAmountBC);
 
-	
+		BigDecimal originalTotalInvAmountLC = totalChargeAmountLC.add(totalTaxAmountLC);
+		BigDecimal roundedTotalInvAmountLC = totalInvAmountLC.setScale(0, RoundingMode.HALF_UP);
+		BigDecimal roundOffAmountLC = roundedTotalInvAmountLC.subtract(originalTotalInvAmountLC);
+		irnCreditNoteVO.setTotalInvAmountLc(roundedTotalInvAmountLC);
+		irnCreditNoteVO.setAmountInWords(amountInWordsConverterService.convert(irnCreditNoteVO.getTotalInvAmountLc().longValue()));
+		irnCreditNoteVO.setRoundOffAmountLc(roundOffAmountLC);
 
-	private List<Map<String, Object>> getPartyNameForIrn(Set<Object[]> irn) {
-		List<Map<String, Object>> irnCredit = new ArrayList<>();
-		for (Object[] sup : irn) {
-			Map<String, Object> data = new HashMap<>();
-			data.put("partyName", sup[0] != null ? sup[0].toString() : "");
-			data.put("partyCode", sup[1] != null ? sup[1].toString() : "");
-			data.put("partyType", sup[2] != null ? sup[2].toString() : "");
-			irnCredit.add(data);
-		}
+		BigDecimal roundedTotalInvAmountBC = totalInvAmountBC.setScale(0, RoundingMode.HALF_UP);
+		irnCreditNoteVO.setTotalInvAmountBc(roundedTotalInvAmountBC);
 
-		return irnCredit;
+		irnCreditNoteVO.setIrnCreditNoteDetailsVO(irnCreditNoteDetailsVOs);
+
 	}
 
 	@Override
@@ -249,6 +280,11 @@ public class IrnCreditNoteServiceImpl implements IrnCreditNoteService {
 		
 		return partyMasterRepo.findByOrgIdAndPartyTypeIgnoreCase(orgId,partyType);
 
+	}
+
+	@Override
+	public List<TaxInvoiceVO> getOriginBillNofromTaxInvoiceByParty(Long orgId, String party,String branchCode) {
+		return taxInvoiceRepo.findPartyInvoiceDetails(orgId,party,branchCode);
 	}
 
 }
