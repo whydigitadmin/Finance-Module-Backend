@@ -48,7 +48,7 @@ import com.base.basesetup.entity.ReceiptReversalVO;
 import com.base.basesetup.entity.ReconcileBankVO;
 import com.base.basesetup.entity.ReconcileCashVO;
 import com.base.basesetup.entity.ReconcileCorpBankVO;
-import com.base.basesetup.entity.TmsJobCardVO;
+import com.base.basesetup.entity.JobCardVO;
 import com.base.basesetup.exception.ApplicationException;
 
 @Service
@@ -245,17 +245,17 @@ public interface TransactionService {
 
 	/// TMS-TT-JobCard
 
-	List<TmsJobCardVO> getAllTmsJobCardByOrgId(Long orgId);
+	List<JobCardVO> getAllJobCardByOrgId(Long orgId);
 
-	Map<String, Object> updateCreateTmsJobCard(@Valid TmsJobCardDTO tmsJobCardDTO) throws ApplicationException;
+	Map<String, Object> updateCreateJobCard(@Valid TmsJobCardDTO tmsJobCardDTO) throws ApplicationException;
 
-	List<TmsJobCardVO> getAllTmsJobCardById(Long id);
+	List<JobCardVO> getAllJobCardById(Long id);
 
 	List<Map<String, Object>> getSalesPersonFromPartyMaster(Long orgId, String partyName);
 
 	List<Map<String, Object>> getAllCustomersFromPartyMaster(Long orgId);
 
-	String getTmsJobCardDocId(Long orgId, String finYear, String branch, String branchCode);
+	String getJobCardDocId(Long orgId, String finYear, String branch, String branchCode);
 
 	// AdjustmentJournal
 
