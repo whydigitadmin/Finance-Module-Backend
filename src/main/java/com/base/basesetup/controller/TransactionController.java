@@ -2895,6 +2895,67 @@ public class TransactionController extends BaseController {
 		return ResponseEntity.ok().body(responseDTO);
 	}
 	
+//	@GetMapping("/getSubLedgerNamefromPartymaster")
+//	public ResponseEntity<ResponseDTO> getSubLedgerNamefromPartymaster() {
+//
+//		String methodName = "getSubLedgerNamefromPartymaster()";
+//		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+//		String errorMsg = null;
+//		Map<String, Object> responseObjectsMap = new HashMap<>();
+//		ResponseDTO responseDTO = null;
+//		List<Map<String, Object>> mov = new ArrayList<>();
+//		try {
+//			mov = transactionService.getSubLedgerNamefromPartymaster();
+//		} catch (Exception e) {
+//			errorMsg = e.getMessage();
+//			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+//		}
+//
+//		if (StringUtils.isBlank(errorMsg)) {
+//			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+//					" SubLedgerName from PartyMaster for Contravoucher information retrieved successfully");
+//			responseObjectsMap.put("ContraVoucherVO", mov);
+//			responseDTO = createServiceResponse(responseObjectsMap);
+//		} else {
+//			responseDTO = createServiceResponseError(responseObjectsMap,
+//					"Failed to retrieve SubLedgerName from PartyMaster for Contravoucher information", errorMsg);
+//		}
+//
+//		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+//		return ResponseEntity.ok().body(responseDTO);
+//	}
+
+	
+	@GetMapping("/getAccountNamefromGroupLedgerforCV")
+	public ResponseEntity<ResponseDTO> getAccountNamefromGroupLedgerforCV(
+			@RequestParam Long OrgId	) {
+
+		String methodName = "getAccountNamefromGroupLedgerforCV()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		List<Map<String, Object>> mov = new ArrayList<>();
+		try {
+			mov = transactionService.getAccountNamefromGroupLedgerforCV(OrgId);
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+					" AccountName from GroupLedger for Contravoucher information retrieved successfully");
+			responseObjectsMap.put("ContraVoucherVO", mov);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					"Failed to retrieve AccountName from GroupLedger for Contravoucher information", errorMsg);
+		}
+
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+	}
 
 
 }

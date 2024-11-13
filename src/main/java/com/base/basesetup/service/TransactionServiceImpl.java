@@ -3092,6 +3092,47 @@ public class TransactionServiceImpl implements TransactionService {
 		contraVoucherVO.setContraVoucherParticularsVO(contraVoucherParticularsVOs);
 
 	}
+	
+//	@Override
+//	@Transactional
+//	public List<Map<String, Object>> getSubLedgerNamefromPartymaster( ) {
+//
+//		Set<Object[]> result = contraVoucherRepo.findSubLedgerNamefromPartymaster();
+//		return getSubLedgerNamefromPartymaster(result);
+//	}
+//
+//	private List<Map<String, Object>> getSubLedgerNamefromPartymaster(Set<Object[]> result) {
+//		List<Map<String, Object>> details1 = new ArrayList<>();
+//		for (Object[] fs : result) {
+//			Map<String, Object> part = new HashMap<>();
+//			part.put("SubLedgerName", fs[0] != null ? fs[0].toString() : "");
+//			details1.add(part);
+//		}
+//		return details1;
+//	}
 
 
+	@Override
+	@Transactional
+	public List<Map<String, Object>> getAccountNamefromGroupLedgerforCV(Long orgId ) {
+
+		Set<Object[]> result = contraVoucherRepo.findAccountNamefromGroupLedgerforCV(orgId);
+		return getAccountNamefromGroupLedgerforCV(result);
+	}
+
+	private List<Map<String, Object>> getAccountNamefromGroupLedgerforCV(Set<Object[]> result) {
+		List<Map<String, Object>> details1 = new ArrayList<>();
+		for (Object[] fs : result) {
+			Map<String, Object> part = new HashMap<>();
+			part.put("accountName", fs[0] != null ? fs[0].toString() : "");
+			part.put("accountCode", fs[1] != null ? fs[1].toString() : "");
+			part.put("category", fs[2] != null ? fs[2].toString() : "");
+			part.put("currency", fs[3] != null ? fs[3].toString() : "");
+
+
+			details1.add(part);
+		}
+		return details1;
+	}
+	
 }
