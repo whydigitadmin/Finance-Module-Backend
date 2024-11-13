@@ -274,50 +274,18 @@ public class CostInvoiceController extends BaseController {
 			errorMsg = e.getMessage();
 			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
 		}
-    
-    if (StringUtils.isBlank(errorMsg)) {
+
+		if (StringUtils.isBlank(errorMsg)) {
 			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "Currency Details retrieved successfully");
 			responseObjectsMap.put("currencyVO", mapp);
 			responseDTO = createServiceResponse(responseObjectsMap);
 		} else {
 			responseDTO = createServiceResponseError(responseObjectsMap, "Failed to retrieve Currency Details",
 					errorMsg);
+		}
 		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
 		return ResponseEntity.ok().body(responseDTO);
 	}
-
-		
-		@GetMapping("/getCostInvoiceDocId")
-		public ResponseEntity<ResponseDTO> getCostInvoiceDocId(@RequestParam Long orgId, @RequestParam String finYear,
-				@RequestParam String branch, @RequestParam String branchCode) {
-
-			String methodName = "getCostInvoiceDocId()";
-			LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
-			String errorMsg = null;
-			Map<String, Object> responseObjectsMap = new HashMap<>();
-			ResponseDTO responseDTO = null;
-			String mapp = "";  
-
-			try {
-				mapp = costInvoiceService.getCostInvoiceDocId(orgId, finYear, branch, branchCode);
-			} catch (Exception e) {
-				errorMsg = e.getMessage();
-				LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
-			}
-
-			if (StringUtils.isBlank(errorMsg)) {
-				responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "CostInvoiceDocId information retrieved successfully");
-				responseObjectsMap.put("taxInvoiceDocId", mapp);
-				responseDTO = createServiceResponse(responseObjectsMap);
-			} else {
-				responseDTO = createServiceResponseError(responseObjectsMap,
-						"Failed to retrieve CostInvoice Docid information", errorMsg);
-			}
-
-			LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
-			return ResponseEntity.ok().body(responseDTO);
-
-    }
 
 	@GetMapping("/getPartyNameByPartyType")
 	public ResponseEntity<ResponseDTO> getPartyNameByPartyType(@RequestParam Long orgId,
@@ -501,6 +469,34 @@ public class CostInvoiceController extends BaseController {
 		} else {
 			responseDTO = createServiceResponseError(responseObjectsMap, "Charge Details receive failed By OrgId",
 					errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+	}
+
+	@GetMapping("/getTdsDetailsFromPartyMasterSpecialTDS")
+	public ResponseEntity<ResponseDTO> getTdsDetailsFromPartyMasterSpecialTDS(@RequestParam Long orgId,
+			@RequestParam String partyCode) {
+		String methodName = "getTdsDetailsFromPartyMasterSpecialTDS()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		List<Map<String, Object>> tds = new ArrayList<>();
+		try {
+			tds = costInvoiceService.getTdsDetailsFromPartyMasterSpecialTDS(orgId, partyCode);
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+					"TDS get successfully By OrgId And Party Code from Party Special TDS");
+			responseObjectsMap.put("tds", tds);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					"TDS receive failed By OrgId And Party Code from Party Special TDS", errorMsg);
 		}
 		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
 		return ResponseEntity.ok().body(responseDTO);

@@ -46,7 +46,10 @@ public interface CostInvoiceService {
 	List<Map<String, Object>> getPlaceOfSupplyDetails(Long orgId, Long id, String stateCode);
 
 	List<Map<String, Object>> getJobNoFromTmsJobCard(Long orgId);
-	
+
 	List<Map<String, Object>> getChargeDetailsFromChargeType(Long orgId);
+
+	// TDS Sub Table
+	List<Map<String, Object>> getTdsDetailsFromPartyMasterSpecialTDS(Long orgId, String partyCode);
 
 }

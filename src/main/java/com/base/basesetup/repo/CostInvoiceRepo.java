@@ -62,4 +62,7 @@ public interface CostInvoiceRepo extends JpaRepository<CostInvoiceVO, Long> {
 	@Query(nativeQuery = true, value = "SELECT jobno FROM tmsjobcard WHERE orgid=?1 AND closed = 0 AND active=1")
 	Set<Object[]> getJobNoFromTmsJobCard(Long orgId);
 
+	@Query(nativeQuery = true, value = "SELECT a.tdswithsec,a.tdswithper FROM partyspecialtds a, partymaster b WHERE a.partymasterid = b.partymasterid AND b.orgid=?1 AND b.partycode=?2")
+	Set<Object[]> findTdsDetailsFromPartyMasterSpecialTDS(Long orgId, String partyCode);
+
 }

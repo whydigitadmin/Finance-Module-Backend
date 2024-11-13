@@ -36,19 +36,13 @@ public class CostDebitChargesDTO {
 	
 	private BigDecimal rate;
 
-	private BigDecimal fcAmt;
-
-	private BigDecimal lcAmt;
-
 	private int taxPercentage;
-
-	private BigDecimal tlcAmt;
-
-	private BigDecimal billAmt;
+	
+	private int qty;
+	
+	private String ledger;
 
 	private int gstPercentage;
-
-	private BigDecimal gst;
 	
 	private boolean tax;
 	
