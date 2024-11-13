@@ -47,12 +47,8 @@ public class CostDebitNoteDTO {
 	private BigDecimal currentDateValue;
 	private String partyAddType;
 	
-	private List<CostDebitNoteSummaryDTO> costDebitNoteSummaryDTO;
-	
 	private List<CostDebitChargesDTO> costDebitChargesDTO;
-	
-	private List<CostDebitNoteGstDTO> costDebitNoteGstDTO;
-	
+		
 	private List<CostDebitNoteTaxPrtculDTO> costDebitNoteTaxPrtculDTO;
 	
 	

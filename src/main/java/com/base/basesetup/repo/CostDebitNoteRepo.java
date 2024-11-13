@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.base.basesetup.entity.CostDebitNoteVO;
+import com.base.basesetup.entity.CostInvoiceVO;
 @Repository
 public interface CostDebitNoteRepo extends JpaRepository<CostDebitNoteVO, Long>{
 	
@@ -42,5 +43,8 @@ public interface CostDebitNoteRepo extends JpaRepository<CostDebitNoteVO, Long>{
 
 	@Query(nativeQuery = true,value="select currency,currencydescripition,buyingexrate,sellingexrate from vw_exrates where orgid=?1")
 	Set<Object[]> getCurrencyAndExrateDetails(Long orgId);
+
+	@Query(value="select a from CostInvoiceVO a where a.orgId=?1 and a.supplierName=?2 and a.branchCode=?3")
+	List<CostInvoiceVO> findOrginBillNoByParty(Long orgId, String party, String branchCode); 
 
 }
