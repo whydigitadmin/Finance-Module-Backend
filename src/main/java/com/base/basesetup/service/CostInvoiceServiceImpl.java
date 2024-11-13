@@ -192,6 +192,7 @@ public class CostInvoiceServiceImpl implements CostInvoiceService {
 		BigDecimal gstInputLcAmt = BigDecimal.ZERO;
 //		SumOfLc Amount to set in TDS Table
 		BigDecimal sumLcAmount = BigDecimal.ZERO;
+//		
 
 		List<ChargerCostInvoiceVO> chargerCostInvoiceVOs = new ArrayList<>();
 		for (ChargerCostInvoiceDTO chargerCostInvoiceDTO : costInvoiceDTO.getChargerCostInvoiceDTO()) {
@@ -279,10 +280,11 @@ public class CostInvoiceServiceImpl implements CostInvoiceService {
 
 			BigDecimal totTdsWhAmt = BigDecimal.ZERO;
 			BigDecimal tdsWhPercent = tdsCostInvoiceDTO.getTdsWithHoldingPer();
-			System.out.println("TOTAL LC AMOUNT IS :"+sumLcAmount);;
+			System.out.println("TOTAL LC AMOUNT IS :" + sumLcAmount);
+			;
 			totTdsWhAmt = sumLcAmount.multiply(tdsWhPercent.divide(BigDecimal.valueOf(100)));
 			tdsCostInvoiceVO.setTotTdsWhAmnt(totTdsWhAmt);
-			
+
 			tdsCostInvoiceVO.setCostInvoiceVO(costInvoiceVO);
 			tdsCostInvoiceVOs.add(tdsCostInvoiceVO);
 		}
