@@ -11,22 +11,19 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ChargerCostInvoiceDTO {
-	private Long id;
-	private String jobNo;
-	private String chargeName;
+public class IrnCreditNoteDetailsDTO {
+
+	private String chargeType;
 	private String chargeCode;
-	private String chargeLedger;
-	private String sac;
+	private String govChargeCode;
+	private String ledger;
+	private String chargeName;
+	private String taxable;
+	private int qty;
+	private BigDecimal rate;
 	private String currency;
 	private BigDecimal exRate;
-	private String gst;
-	private BigDecimal rate;
-	private int qty;
-	private int gstPercent;
-	private String ledger;
-	private String govChargeCode;
-	
-	private String taxable;
 	private String exempted;
+	private String sac;
+	private int GSTPercent;
 }

@@ -4,6 +4,12 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
+import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,7 +19,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class TaxInvoiceDTO {
+public class IrnCreditNoteDTO {
 
 	private Long id;
 	private Long orgId;
@@ -35,23 +41,20 @@ public class TaxInvoiceDTO {
 	private String pinCode;
 	private String status;
 	private String gstType;
-	private String supplierBillNo;
-	private LocalDate supplierBillDate;
+	private String originBillNo;
+	private String voucherNo;
+	private LocalDate voucherDate;
+	private String supplierRefNo;
+	private LocalDate supplierRefDate;
 	private String billCurr;
 	private BigDecimal billCurrRate;
 	private BigDecimal exAmount;
 	private int creditDays;
-	private String contactPerson;
-	private String shipperInvoiceNo;
-	private String billOfEntry;
+	private String shipperRefNo;
 	private String billMonth;
-	private String invoiceNo;
-	private LocalDate invoiceDate;
 	private String salesType;
-	
-	List<TaxInvoiceDetailsDTO> taxInvoiceDetailsDTO;
+	private String creditRemarks;
 
-	
-	
-	
+	List<IrnCreditNoteDetailsDTO> irnCreditNoteDetailsDTO;
+
 }

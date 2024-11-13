@@ -11,11 +11,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class TdsCostInvoiceDTO {
-	private Long id;
-	private String tdsWithHolding;
-	private BigDecimal tdsWithHoldingPer;
-	private String section;
-//	private BigDecimal totTdsWhAmnt;
+public class ContraVoucherParticularsDTO {
 
+	private String accountsName;
+	private String subledgerName;
+	private String subLedgerCode;
+	private BigDecimal debit;
+	private BigDecimal credit;
+	private String narration;
 }

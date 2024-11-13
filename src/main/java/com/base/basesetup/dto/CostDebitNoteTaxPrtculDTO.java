@@ -20,6 +20,6 @@ public class CostDebitNoteTaxPrtculDTO {
 
 	private String section;
 
-	private BigDecimal totTDSAmt;
+//	private BigDecimal totTDSAmt;
 
 }
