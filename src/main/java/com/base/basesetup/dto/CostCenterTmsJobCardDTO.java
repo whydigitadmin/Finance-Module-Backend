@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CostCenterTmsJobCardDTO {
-	private Long id;
 	private String accountName;
 	private BigDecimal amount;
 

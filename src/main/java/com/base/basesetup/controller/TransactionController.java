@@ -65,7 +65,7 @@ import com.base.basesetup.entity.ReceiptReversalVO;
 import com.base.basesetup.entity.ReconcileBankVO;
 import com.base.basesetup.entity.ReconcileCashVO;
 import com.base.basesetup.entity.ReconcileCorpBankVO;
-import com.base.basesetup.entity.TmsJobCardVO;
+import com.base.basesetup.entity.JobCardVO;
 import com.base.basesetup.service.TransactionService;
 
 @CrossOrigin
@@ -2365,22 +2365,22 @@ public class TransactionController extends BaseController {
 	// TMS-TT-JobCard
 
 	@GetMapping("/getAllTmsJobCardByOrgId")
-	public ResponseEntity<ResponseDTO> getAllTmsJobCardByOrgId(@RequestParam(required = false) Long orgId) {
+	public ResponseEntity<ResponseDTO> getAllJobCardByOrgId(@RequestParam(required = false) Long orgId) {
 		String methodName = "getAllTmsJobCardByOrgId()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
 		String errorMsg = null;
 		Map<String, Object> responseObjectsMap = new HashMap<>();
 		ResponseDTO responseDTO = null;
-		List<TmsJobCardVO> tmsJobCardVO = new ArrayList<>();
+		List<JobCardVO> jobCardVO = new ArrayList<>();
 		try {
-			tmsJobCardVO = transactionService.getAllTmsJobCardByOrgId(orgId);
+			jobCardVO = transactionService.getAllJobCardByOrgId(orgId);
 		} catch (Exception e) {
 			errorMsg = e.getMessage();
 			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
 		}
 		if (StringUtils.isBlank(errorMsg)) {
 			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "TmsJobCard information get successfully By OrgId");
-			responseObjectsMap.put("tmsJobCardVO", tmsJobCardVO);
+			responseObjectsMap.put("jobCardVO", jobCardVO);
 			responseDTO = createServiceResponse(responseObjectsMap);
 		} else {
 			responseDTO = createServiceResponseError(responseObjectsMap,
@@ -2392,22 +2392,22 @@ public class TransactionController extends BaseController {
 	}
 
 	@GetMapping("/getAllTmsJobCardById")
-	public ResponseEntity<ResponseDTO> getAllTmsJobCardById(@RequestParam(required = false) Long id) {
+	public ResponseEntity<ResponseDTO> getAllJobCardById(@RequestParam(required = false) Long id) {
 		String methodName = "getAllTmsJobCardById()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
 		String errorMsg = null;
 		Map<String, Object> responseObjectsMap = new HashMap<>();
 		ResponseDTO responseDTO = null;
-		List<TmsJobCardVO> tmsJobCardVO = new ArrayList<>();
+		List<JobCardVO> jobCardVO = new ArrayList<>();
 		try {
-			tmsJobCardVO = transactionService.getAllTmsJobCardById(id);
+			jobCardVO = transactionService.getAllJobCardById(id);
 		} catch (Exception e) {
 			errorMsg = e.getMessage();
 			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
 		}
 		if (StringUtils.isBlank(errorMsg)) {
 			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "TmsJobCard information get successfully By id");
-			responseObjectsMap.put("tmsJobCardVO", tmsJobCardVO);
+			responseObjectsMap.put("jobCardVO", jobCardVO);
 			responseDTO = createServiceResponse(responseObjectsMap);
 		} else {
 			responseDTO = createServiceResponseError(responseObjectsMap,
@@ -2418,16 +2418,16 @@ public class TransactionController extends BaseController {
 	}
 
 	@PutMapping("/updateCreateTmsJobCard")
-	public ResponseEntity<ResponseDTO> updateCreateTmsJobCard(@RequestBody TmsJobCardDTO tmsJobCardDTO) {
+	public ResponseEntity<ResponseDTO> updateCreateJobCard(@RequestBody TmsJobCardDTO tmsJobCardDTO) {
 		String methodName = "updateCreateTmsJobCard()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
 		String errorMsg = null;
 		Map<String, Object> responseObjectsMap = new HashMap<>();
 		ResponseDTO responseDTO = null;
 		try {
-			Map<String, Object> tmsJobCardVO = transactionService.updateCreateTmsJobCard(tmsJobCardDTO);
+			Map<String, Object> tmsJobCardVO = transactionService.updateCreateJobCard(tmsJobCardDTO);
 			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, tmsJobCardVO.get("message"));
-			responseObjectsMap.put("tmsJobCardVO", tmsJobCardVO.get("tmsJobCardVO"));
+			responseObjectsMap.put("jobCardVO", tmsJobCardVO.get("jobCardVO"));
 			responseDTO = createServiceResponse(responseObjectsMap);
 		} catch (Exception e) {
 			errorMsg = e.getMessage();
@@ -2496,7 +2496,7 @@ public class TransactionController extends BaseController {
 	}
 
 	@GetMapping("/getTmsJobCardDocId")
-	public ResponseEntity<ResponseDTO> getTmsJobCardDocId(@RequestParam Long orgId, @RequestParam String finYear,
+	public ResponseEntity<ResponseDTO> getJobCardDocId(@RequestParam Long orgId, @RequestParam String finYear,
 			@RequestParam String branch, @RequestParam String branchCode) {
 
 		String methodName = "getTmsJobCardDocId()";
@@ -2507,7 +2507,7 @@ public class TransactionController extends BaseController {
 		String mapp = "";
 
 		try {
-			mapp = transactionService.getTmsJobCardDocId(orgId, finYear, branch, branchCode);
+			mapp = transactionService.getJobCardDocId(orgId, finYear, branch, branchCode);
 		} catch (Exception e) {
 			errorMsg = e.getMessage();
 			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
