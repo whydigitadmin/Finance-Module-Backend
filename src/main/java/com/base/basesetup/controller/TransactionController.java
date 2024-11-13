@@ -2427,7 +2427,7 @@ public class TransactionController extends BaseController {
 		try {
 			Map<String, Object> tmsJobCardVO = transactionService.updateCreateJobCard(tmsJobCardDTO);
 			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, tmsJobCardVO.get("message"));
-			responseObjectsMap.put("jobCardVO", tmsJobCardVO.get("jobCardVO"));
+			responseObjectsMap.put("jobCardVO", tmsJobCardVO.get("tmsJobCardVO"));
 			responseDTO = createServiceResponse(responseObjectsMap);
 		} catch (Exception e) {
 			errorMsg = e.getMessage();
