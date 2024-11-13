@@ -59,13 +59,13 @@ import com.base.basesetup.entity.FundTransferVO;
 import com.base.basesetup.entity.GeneralJournalVO;
 import com.base.basesetup.entity.GlOpeningBalanceVO;
 import com.base.basesetup.entity.GstSalesVoucherVO;
+import com.base.basesetup.entity.JobCardVO;
 import com.base.basesetup.entity.PaymentReversalVO;
 import com.base.basesetup.entity.PaymentVoucherVO;
 import com.base.basesetup.entity.ReceiptReversalVO;
 import com.base.basesetup.entity.ReconcileBankVO;
 import com.base.basesetup.entity.ReconcileCashVO;
 import com.base.basesetup.entity.ReconcileCorpBankVO;
-import com.base.basesetup.entity.JobCardVO;
 import com.base.basesetup.service.TransactionService;
 
 @CrossOrigin
@@ -2427,7 +2427,7 @@ public class TransactionController extends BaseController {
 		try {
 			Map<String, Object> tmsJobCardVO = transactionService.updateCreateJobCard(tmsJobCardDTO);
 			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, tmsJobCardVO.get("message"));
-			responseObjectsMap.put("jobCardVO", tmsJobCardVO.get("jobCardVO"));
+			responseObjectsMap.put("jobCardVO", tmsJobCardVO.get("tmsJobCardVO"));
 			responseDTO = createServiceResponse(responseObjectsMap);
 		} catch (Exception e) {
 			errorMsg = e.getMessage();
