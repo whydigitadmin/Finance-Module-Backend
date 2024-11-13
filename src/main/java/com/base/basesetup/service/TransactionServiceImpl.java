@@ -39,6 +39,7 @@ import com.base.basesetup.dto.BankingWithdrawalDTO;
 import com.base.basesetup.dto.BrsOpeningDTO;
 import com.base.basesetup.dto.ChargerDebitNoteDTO;
 import com.base.basesetup.dto.ChartCostCenterDTO;
+import com.base.basesetup.dto.ContraVoucherDTO;
 import com.base.basesetup.dto.CostCenterTmsJobCardDTO;
 import com.base.basesetup.dto.DailyMonthlyExRatesDTO;
 import com.base.basesetup.dto.DailyMonthlyExRatesDtlDTO;
@@ -78,6 +79,7 @@ import com.base.basesetup.entity.BrsExcelUploadVO;
 import com.base.basesetup.entity.BrsOpeningVO;
 import com.base.basesetup.entity.ChargerDebitNoteVO;
 import com.base.basesetup.entity.ChartCostCenterVO;
+import com.base.basesetup.entity.ContraVoucherVO;
 import com.base.basesetup.entity.CostCenterJobCardVO;
 import com.base.basesetup.entity.DailyMonthlyExRatesDtlVO;
 import com.base.basesetup.entity.DailyMonthlyExRatesVO;
@@ -135,9 +137,6 @@ import com.base.basesetup.repo.GeneralJournalRepo;
 import com.base.basesetup.repo.GlOpeningBalanceRepo;
 import com.base.basesetup.repo.GstDebitNoteRepo;
 import com.base.basesetup.repo.GstSalesVoucherRepo;
-import com.base.basesetup.repo.IrnCreditChargesRepo;
-import com.base.basesetup.repo.IrnCreditGstRepo;
-import com.base.basesetup.repo.IrnCreditRepo;
 import com.base.basesetup.repo.JobCardRepo;
 import com.base.basesetup.repo.ParticularsDebitNoteRepo;
 import com.base.basesetup.repo.ParticularsGlOpeningBalanceRepo;
@@ -174,8 +173,6 @@ public class TransactionServiceImpl implements TransactionService {
 	@Autowired
 	TaxInvoiceGstRepo gstTaxInvoiceRepo;
 
-	@Autowired
-	IrnCreditRepo irnCreditRepo;
 
 	@Autowired
 	ReconcileBankRepo reconcileBankRepo;
@@ -189,11 +186,6 @@ public class TransactionServiceImpl implements TransactionService {
 	@Autowired
 	ReconcileCorpBankRepo reconcileCorpBankRepo;
 
-	@Autowired
-	IrnCreditChargesRepo irnCreditChargesRepo;
-
-	@Autowired
-	IrnCreditGstRepo irnCreditGstRepo;
 
 	@Autowired
 	DailyMonthlyExRatesRepo dailyMonthlyExRatesRepo;
@@ -2497,10 +2489,8 @@ public class TransactionServiceImpl implements TransactionService {
 	private void getTmsJobCardVOFromTmsJobCardDTO(@Valid TmsJobCardDTO tmsJobCardDTO, JobCardVO jobCardVO) {
 		// jobCardVO.setJobNo(tmsJobCardDTO.getJobNo());
 		jobCardVO.setCustomer(tmsJobCardDTO.getCustomer());
-		jobCardVO.setDate(tmsJobCardDTO.getDate());
 		jobCardVO.setSalesCategory(tmsJobCardDTO.getSalesCategory());
 		jobCardVO.setSalesPerson(tmsJobCardDTO.getSalesPerson());
-		jobCardVO.setClosedOn(tmsJobCardDTO.getClosedOn());
 		jobCardVO.setIncome(tmsJobCardDTO.getIncome());
 		jobCardVO.setExpense(tmsJobCardDTO.getExpense());
 		jobCardVO.setProfit(tmsJobCardDTO.getProfit());
@@ -2973,6 +2963,31 @@ public class TransactionServiceImpl implements TransactionService {
 			list1.add(map);
 		}
 		return list1;
+	}
+
+	@Override
+	public List<ContraVoucherVO> getAllContraVoucherByOrgId(Long orgId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<ContraVoucherVO> getContraVoucherById(Long id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getContraVoucherDocId(Long orgId, String finYear, String branch, String branchCode) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Map<String, Object> updateCreateContraVoucher(@Valid ContraVoucherDTO contraVoucherDTO)
+			throws ApplicationException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
