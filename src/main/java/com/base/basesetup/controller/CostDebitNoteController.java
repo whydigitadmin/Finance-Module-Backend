@@ -26,8 +26,6 @@ import com.base.basesetup.dto.CostDebitNoteDTO;
 import com.base.basesetup.dto.ResponseDTO;
 import com.base.basesetup.entity.CostDebitNoteVO;
 import com.base.basesetup.entity.CostInvoiceVO;
-import com.base.basesetup.entity.PartyMasterVO;
-import com.base.basesetup.entity.ScreenNamesVO;
 import com.base.basesetup.service.CostDebitNoteService;
 
 @CrossOrigin

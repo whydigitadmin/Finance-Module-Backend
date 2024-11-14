@@ -82,7 +82,7 @@ import com.base.basesetup.entity.ChargerDebitNoteVO;
 import com.base.basesetup.entity.ChartCostCenterVO;
 import com.base.basesetup.entity.ContraVoucherParticularsVO;
 import com.base.basesetup.entity.ContraVoucherVO;
-import com.base.basesetup.entity.CostCenterTmsJobCardVO;
+import com.base.basesetup.entity.CostCenterJobCardVO;
 import com.base.basesetup.entity.DailyMonthlyExRatesDtlVO;
 import com.base.basesetup.entity.DailyMonthlyExRatesVO;
 import com.base.basesetup.entity.DebitNoteVO;
@@ -93,6 +93,7 @@ import com.base.basesetup.entity.GeneralJournalVO;
 import com.base.basesetup.entity.GlOpeningBalanceVO;
 import com.base.basesetup.entity.GstDebitNoteVO;
 import com.base.basesetup.entity.GstSalesVoucherVO;
+import com.base.basesetup.entity.JobCardVO;
 import com.base.basesetup.entity.ParticularsDebitNoteVO;
 import com.base.basesetup.entity.ParticularsGlOpeningBalanceVO;
 import com.base.basesetup.entity.ParticularsGstVoucherVO;
@@ -110,7 +111,6 @@ import com.base.basesetup.entity.ReceiptReversalVO;
 import com.base.basesetup.entity.ReconcileBankVO;
 import com.base.basesetup.entity.ReconcileCashVO;
 import com.base.basesetup.entity.ReconcileCorpBankVO;
-import com.base.basesetup.entity.TmsJobCardVO;
 import com.base.basesetup.entity.WithdrawalParticularsVO;
 import com.base.basesetup.exception.ApplicationException;
 import com.base.basesetup.repo.AccountParticularsRepo;
@@ -129,7 +129,7 @@ import com.base.basesetup.repo.ChargerDebitNoteRepo;
 import com.base.basesetup.repo.ChartCostCenterRepo;
 import com.base.basesetup.repo.ContraVoucherParticularsRepo;
 import com.base.basesetup.repo.ContraVoucherRepo;
-import com.base.basesetup.repo.CostCenterTmsJobCardRepo;
+import com.base.basesetup.repo.CostCenterJobCardRepo;
 import com.base.basesetup.repo.CostInvoiceRepo;
 import com.base.basesetup.repo.DailyMonthlyExRatesDtlRepo;
 import com.base.basesetup.repo.DailyMonthlyExRatesRepo;
@@ -144,6 +144,7 @@ import com.base.basesetup.repo.GstSalesVoucherRepo;
 import com.base.basesetup.repo.IrnCreditNoteDetailsRepo;
 import com.base.basesetup.repo.IrnCreditNoteGstRepo;
 import com.base.basesetup.repo.IrnCreditNoteRepo;
+import com.base.basesetup.repo.JobCardRepo;
 import com.base.basesetup.repo.ParticularsDebitNoteRepo;
 import com.base.basesetup.repo.ParticularsGlOpeningBalanceRepo;
 import com.base.basesetup.repo.ParticularsGstVoucherRepo;
@@ -165,7 +166,6 @@ import com.base.basesetup.repo.TaxInvoiceDetailsRepo;
 import com.base.basesetup.repo.TaxInvoiceGstRepo;
 import com.base.basesetup.repo.TaxInvoiceRepo;
 import com.base.basesetup.repo.TdsCostInvoiceRepo;
-import com.base.basesetup.repo.TmsJobCardRepo;
 import com.base.basesetup.repo.WithdrawalParticularsRepo;
 
 @Service
@@ -298,10 +298,10 @@ public class TransactionServiceImpl implements TransactionService {
 	BrsExcelUploadRepo brsExcelUploadRepo;
 
 	@Autowired
-	TmsJobCardRepo tmsJobCardRepo;
+	JobCardRepo tmsJobCardRepo;
 
 	@Autowired
-	CostCenterTmsJobCardRepo costCenterTmsJobCardRepo;
+	CostCenterJobCardRepo costCenterTmsJobCardRepo;
 
 //	@Autowired
 //	ReconciliationSummaryRepo reconciliationSummaryRepo;
@@ -2026,10 +2026,7 @@ public class TransactionServiceImpl implements TransactionService {
 		if (ObjectUtils.isNotEmpty(orgId)) {
 			LOGGER.info("Successfully Received  ReconcileBank BY OrgId : {}", orgId);
 			reconcileBankVO = reconcileBankRepo.getAllReconcileBankByOrgId(orgId);
-		} else {
-			LOGGER.info("Successfully Received  ReconcileBank For All OrgId.");
-			reconcileBankVO = reconcileBankRepo.findAll();
-		}
+		} 
 		return reconcileBankVO;
 	}
 
@@ -2039,10 +2036,7 @@ public class TransactionServiceImpl implements TransactionService {
 		if (ObjectUtils.isNotEmpty(id)) {
 			LOGGER.info("Successfully Received  ReconcileBank BY Id : {}", id);
 			reconcileBankVO = reconcileBankRepo.getAllReconcileBankById(id);
-		} else {
-			LOGGER.info("Successfully Received ReconcileBank For All Id.");
-			reconcileBankVO = reconcileBankRepo.findAll();
-		}
+		} 
 		return reconcileBankVO;
 	}
 
@@ -2118,7 +2112,6 @@ public class TransactionServiceImpl implements TransactionService {
 			particularsReconcileVO.setVoucherDate(particularsReconcileDTO.getVoucherDate());
 			particularsReconcileVO.setChequeNo(particularsReconcileDTO.getChequeNo());
 			particularsReconcileVO.setChequeDate(particularsReconcileDTO.getChequeDate());
-
 			if (particularsReconcileDTO.getDeposit() != null
 					&& particularsReconcileDTO.getDeposit().compareTo(BigDecimal.ZERO) != 0) {
 				particularsReconcileVO.setDeposit(particularsReconcileDTO.getDeposit());
@@ -2128,8 +2121,8 @@ public class TransactionServiceImpl implements TransactionService {
 				particularsReconcileVO.setDeposit(BigDecimal.ZERO);
 			}
 
-			totalDeposit = totalDeposit.add(particularsReconcileDTO.getDeposit());
-			totalWithdrawal = totalWithdrawal.add(particularsReconcileDTO.getWithdrawal());
+			totalDeposit = totalDeposit.add(particularsReconcileVO.getDeposit());
+			totalWithdrawal = totalWithdrawal.add(particularsReconcileVO.getWithdrawal());
 			particularsReconcileVO.setBankRef(particularsReconcileDTO.getBankRef());
 			particularsReconcileVO.setReconcileBankVO(reconcileBankVO);
 			particularsReconcileVOs.add(particularsReconcileVO);
@@ -2142,7 +2135,6 @@ public class TransactionServiceImpl implements TransactionService {
 		}
 		reconcileBankVO.setParticularsReconcileVO(particularsReconcileVOs);
 	}
-
 	@Override
 	public String getReconcileBankDocId(Long orgId, String finYear, String branch, String branchCode) {
 		String ScreenCode = "RB";
@@ -2174,10 +2166,7 @@ public class TransactionServiceImpl implements TransactionService {
 		if (ObjectUtils.isNotEmpty(orgId)) {
 			LOGGER.info("Successfully Received  ReconcileCorpBank BY OrgId : {}", orgId);
 			reconcileCorpBankVO = reconcileCorpBankRepo.getAllReconcileCorpBankByOrgId(orgId);
-		} else {
-			LOGGER.info("Successfully Received  ReconcileCorpBank For All OrgId.");
-			reconcileCorpBankVO = reconcileCorpBankRepo.findAll();
-		}
+		} 
 		return reconcileCorpBankVO;
 	}
 
@@ -2187,10 +2176,7 @@ public class TransactionServiceImpl implements TransactionService {
 		if (ObjectUtils.isNotEmpty(id)) {
 			LOGGER.info("Successfully Received  ReconcileCorpBank BY Id : {}", id);
 			reconcileCorpBankVO = reconcileCorpBankRepo.getAllReconcileCorpBankById(id);
-		} else {
-			LOGGER.info("Successfully Received ReconcileCorpBank For All Id.");
-			reconcileCorpBankVO = reconcileCorpBankRepo.findAll();
-		}
+		} 
 		return reconcileCorpBankVO;
 	}
 
@@ -2298,10 +2284,7 @@ public class TransactionServiceImpl implements TransactionService {
 		if (ObjectUtils.isNotEmpty(orgId)) {
 			LOGGER.info("Successfully Received ReconcileCash BY OrgId : {}", orgId);
 			reconcileCashVO = reconcileCashRepo.getAllReconcileCashByOrgId(orgId);
-		} else {
-			LOGGER.info("Successfully Received ReconcileCash For All OrgId.");
-			reconcileCashVO = reconcileCashRepo.findAll();
-		}
+		} 
 		return reconcileCashVO;
 	}
 
@@ -2311,10 +2294,7 @@ public class TransactionServiceImpl implements TransactionService {
 		if (ObjectUtils.isNotEmpty(id)) {
 			LOGGER.info("Successfully Received ReconcileCash BY Id : {}", id);
 			reconcileCashVO = reconcileCashRepo.getAllReconcileCashById(id);
-		} else {
-			LOGGER.info("Successfully Received ReconcileCash For All Id.");
-			reconcileCashVO = reconcileCashRepo.findAll();
-		}
+		} 
 		return reconcileCashVO;
 	}
 
@@ -2446,45 +2426,39 @@ public class TransactionServiceImpl implements TransactionService {
 	// TMS-TT-JobCard
 
 	@Override
-	public List<TmsJobCardVO> getAllTmsJobCardByOrgId(Long orgId) {
-		List<TmsJobCardVO> tmsJobCardVO = new ArrayList<>();
+	public List<JobCardVO> getAllJobCardByOrgId(Long orgId) {
+		List<JobCardVO> tmsJobCardVO = new ArrayList<>();
 		if (ObjectUtils.isNotEmpty(orgId)) {
 			LOGGER.info("Successfully Received  TmsJobCard BY OrgId : {}", orgId);
-			tmsJobCardVO = tmsJobCardRepo.getAllTmsJobCardByOrgId(orgId);
-		} else {
-			LOGGER.info("Successfully Received  TmsJobCard For All OrgId.");
-			tmsJobCardVO = tmsJobCardRepo.findAll();
+			tmsJobCardVO = tmsJobCardRepo.getAllJobCardByOrgId(orgId);
 		}
 		return tmsJobCardVO;
 	}
 
 	@Override
-	public List<TmsJobCardVO> getAllTmsJobCardById(Long id) {
-		List<TmsJobCardVO> tmsJobCardVO = new ArrayList<>();
+	public List<JobCardVO> getAllJobCardById(Long id) {
+		List<JobCardVO> tmsJobCardVO = new ArrayList<>();
 		if (ObjectUtils.isNotEmpty(id)) {
 			LOGGER.info("Successfully Received  TmsJobCard BY Id : {}", id);
-			tmsJobCardVO = tmsJobCardRepo.getAllTmsJobCardById(id);
-		} else {
-			LOGGER.info("Successfully Received TmsJobCard For All Id.");
-			tmsJobCardVO = tmsJobCardRepo.findAll();
+			tmsJobCardVO = tmsJobCardRepo.getAllJobCardById(id);
 		}
 		return tmsJobCardVO;
 	}
 
 	@Override
-	public Map<String, Object> updateCreateTmsJobCard(@Valid TmsJobCardDTO tmsJobCardDTO) throws ApplicationException {
-		TmsJobCardVO tmsJobCardVO = new TmsJobCardVO();
+	public Map<String, Object> updateCreateJobCard(@Valid TmsJobCardDTO tmsJobCardDTO) throws ApplicationException {
+		JobCardVO tmsJobCardVO = new JobCardVO();
 		String screenCode = "JC";
 		String message;
 		if (ObjectUtils.isNotEmpty(tmsJobCardDTO.getId())) {
 			tmsJobCardVO = tmsJobCardRepo.findById(tmsJobCardDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid TmsJobCard details"));
 			tmsJobCardVO.setUpdatedBy(tmsJobCardVO.getCreatedBy());
-			getTmsJobCardVOFromTmsJobCardDTO(tmsJobCardDTO, tmsJobCardVO);
+			getJobCardVOFromJobCardDTO(tmsJobCardDTO, tmsJobCardVO);
 			message = "TmsJobCard Updated Successfully";
 		} else {
 			// GETDOCID API
-			String docId = tmsJobCardRepo.getTmsJobCardDocId(tmsJobCardDTO.getOrgId(), tmsJobCardDTO.getFinYear(),
+			String docId = tmsJobCardRepo.getJobCardDocId(tmsJobCardDTO.getOrgId(), tmsJobCardDTO.getFinYear(),
 					tmsJobCardDTO.getBranchCode(), screenCode);
 
 			tmsJobCardVO.setJobNo(docId);
@@ -2498,7 +2472,7 @@ public class TransactionServiceImpl implements TransactionService {
 
 			tmsJobCardVO.setCreatedBy(tmsJobCardDTO.getCreatedBy());
 			tmsJobCardVO.setUpdatedBy(tmsJobCardVO.getCreatedBy());
-			getTmsJobCardVOFromTmsJobCardDTO(tmsJobCardDTO, tmsJobCardVO);
+			getJobCardVOFromJobCardDTO(tmsJobCardDTO, tmsJobCardVO);
 			message = "TmsJobCard Creation  Successfully !";
 		}
 
@@ -2509,7 +2483,7 @@ public class TransactionServiceImpl implements TransactionService {
 		return response;
 	}
 
-	private void getTmsJobCardVOFromTmsJobCardDTO(@Valid TmsJobCardDTO tmsJobCardDTO, TmsJobCardVO tmsJobCardVO) {
+	private void getJobCardVOFromJobCardDTO(@Valid TmsJobCardDTO tmsJobCardDTO, JobCardVO tmsJobCardVO) {
 		// tmsJobCardVO.setJobNo(tmsJobCardDTO.getJobNo());
 		tmsJobCardVO.setCustomer(tmsJobCardDTO.getCustomer());
 		tmsJobCardVO.setSalesCategory(tmsJobCardDTO.getSalesCategory());
@@ -2523,32 +2497,34 @@ public class TransactionServiceImpl implements TransactionService {
 		tmsJobCardVO.setOperationClosed(tmsJobCardDTO.isOperationClosed());
 		tmsJobCardVO.setFinanceClosed(tmsJobCardDTO.isFinanceClosed());
 		tmsJobCardVO.setClosed(tmsJobCardDTO.isClosed());
+		tmsJobCardVO.setClosedOn(tmsJobCardDTO.getClosedOn());
 		tmsJobCardVO.setBranch(tmsJobCardDTO.getBranch());
 		tmsJobCardVO.setBranchCode(tmsJobCardDTO.getBranchCode());
+		tmsJobCardVO.setCancelRemarks(tmsJobCardDTO.getCancelRemarks());	
 		tmsJobCardVO.setActive(tmsJobCardDTO.isActive());
 		tmsJobCardVO.setFinYear(tmsJobCardDTO.getFinYear());
 
 		if (ObjectUtils.isNotEmpty(tmsJobCardDTO.getId())) {
-			List<CostCenterTmsJobCardVO> costCenterTmsJobCardVO1 = costCenterTmsJobCardRepo
-					.findByTmsJobCardVO(tmsJobCardVO);
+			List<CostCenterJobCardVO> costCenterTmsJobCardVO1 = costCenterTmsJobCardRepo
+					.findByJobCardVO(tmsJobCardVO);
 			costCenterTmsJobCardRepo.deleteAll(costCenterTmsJobCardVO1);
 		}
-		List<CostCenterTmsJobCardVO> costCenterTmsJobCardVOs = new ArrayList<>();
+		List<CostCenterJobCardVO> costCenterTmsJobCardVOs = new ArrayList<>();
 		for (CostCenterTmsJobCardDTO costCenterTmsJobCardDTO : tmsJobCardDTO.getCostCenterTmsJobCardDTO()) {
-			CostCenterTmsJobCardVO costCenterTmsJobCardVO = new CostCenterTmsJobCardVO();
+			CostCenterJobCardVO costCenterTmsJobCardVO = new CostCenterJobCardVO();
 			costCenterTmsJobCardVO.setAccountName(costCenterTmsJobCardDTO.getAccountName());
 			costCenterTmsJobCardVO.setAmount(costCenterTmsJobCardDTO.getAmount());
-			costCenterTmsJobCardVO.setTmsJobCardVO(tmsJobCardVO);
+			costCenterTmsJobCardVO.setJobCardVO(tmsJobCardVO);
 			costCenterTmsJobCardVOs.add(costCenterTmsJobCardVO);
 		}
-		tmsJobCardVO.setCostCenterTmsJobCardVO(costCenterTmsJobCardVOs);
+		tmsJobCardVO.setCostCenterJobCardVO(costCenterTmsJobCardVOs);
 
 	}
 
 	@Override
-	public String getTmsJobCardDocId(Long orgId, String finYear, String branch, String branchCode) {
+	public String getJobCardDocId(Long orgId, String finYear, String branch, String branchCode) {
 		String ScreenCode = "JC";
-		String result = tmsJobCardRepo.getTmsJobCardDocId(orgId, finYear, branchCode, ScreenCode);
+		String result = tmsJobCardRepo.getJobCardDocId(orgId, finYear, branchCode, ScreenCode);
 		return result;
 
 	}
@@ -3118,4 +3094,27 @@ public class TransactionServiceImpl implements TransactionService {
 	}
 
 
+	@Override
+	@Transactional
+	public List<Map<String, Object>> getAccountNamefromGroupLedgerforCV(Long orgId ) {
+
+		Set<Object[]> result = contraVoucherRepo.findAccountNamefromGroupLedgerforCV(orgId);
+		return getAccountNamefromGroupLedgerforCV(result);
+	}
+
+	private List<Map<String, Object>> getAccountNamefromGroupLedgerforCV(Set<Object[]> result) {
+		List<Map<String, Object>> details1 = new ArrayList<>();
+		for (Object[] fs : result) {
+			Map<String, Object> part = new HashMap<>();
+			part.put("accountName", fs[0] != null ? fs[0].toString() : "");
+			part.put("accountCode", fs[1] != null ? fs[1].toString() : "");
+			part.put("category", fs[2] != null ? fs[2].toString() : "");
+			part.put("currency", fs[3] != null ? fs[3].toString() : "");
+
+
+			details1.add(part);
+		}
+		return details1;
+	}
+	
 }
