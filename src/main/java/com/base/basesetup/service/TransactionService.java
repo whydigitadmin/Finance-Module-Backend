@@ -303,8 +303,6 @@ public interface TransactionService {
 
 	Map<String, Object> updateCreateContraVoucher(@Valid ContraVoucherDTO contraVoucherDTO) throws ApplicationException;
 
-//	List<Map<String, Object>> getSubLedgerNamefromPartymaster( );
-
 	List<Map<String, Object>> getAccountNamefromGroupLedgerforCV(Long orgId);
 
 

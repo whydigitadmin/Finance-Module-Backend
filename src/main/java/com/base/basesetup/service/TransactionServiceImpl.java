@@ -3092,24 +3092,6 @@ public class TransactionServiceImpl implements TransactionService {
 		contraVoucherVO.setContraVoucherParticularsVO(contraVoucherParticularsVOs);
 
 	}
-	
-//	@Override
-//	@Transactional
-//	public List<Map<String, Object>> getSubLedgerNamefromPartymaster( ) {
-//
-//		Set<Object[]> result = contraVoucherRepo.findSubLedgerNamefromPartymaster();
-//		return getSubLedgerNamefromPartymaster(result);
-//	}
-//
-//	private List<Map<String, Object>> getSubLedgerNamefromPartymaster(Set<Object[]> result) {
-//		List<Map<String, Object>> details1 = new ArrayList<>();
-//		for (Object[] fs : result) {
-//			Map<String, Object> part = new HashMap<>();
-//			part.put("SubLedgerName", fs[0] != null ? fs[0].toString() : "");
-//			details1.add(part);
-//		}
-//		return details1;
-//	}
 
 
 	@Override
