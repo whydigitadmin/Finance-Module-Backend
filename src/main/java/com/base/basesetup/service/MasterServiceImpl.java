@@ -58,7 +58,6 @@ import com.base.basesetup.entity.ChargeTypeRequestVO;
 import com.base.basesetup.entity.ChequeBookDetailsVO;
 import com.base.basesetup.entity.ChequeBookVO;
 import com.base.basesetup.entity.CostCenterVO;
-import com.base.basesetup.entity.DocumentTypeMappingDetailsVO;
 import com.base.basesetup.entity.EmployeeVO;
 import com.base.basesetup.entity.GroupLedgerVO;
 import com.base.basesetup.entity.ListOfValues1VO;
