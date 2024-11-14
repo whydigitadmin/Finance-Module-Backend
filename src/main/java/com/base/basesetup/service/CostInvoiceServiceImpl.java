@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import com.base.basesetup.dto.ChargerCostInvoiceDTO;
 import com.base.basesetup.dto.CostInvoiceDTO;
 import com.base.basesetup.dto.TdsCostInvoiceDTO;
+import com.base.basesetup.entity.ChargeTypeRequestVO;
 import com.base.basesetup.entity.ChargerCostInvoiceVO;
 import com.base.basesetup.entity.CostInvoiceVO;
 import com.base.basesetup.entity.DocumentTypeMappingDetailsVO;
@@ -184,17 +185,14 @@ public class CostInvoiceServiceImpl implements CostInvoiceService {
 
 		BigDecimal totChargesBillCurrAmt = BigDecimal.ZERO;
 		BigDecimal totChargesLcAmt = BigDecimal.ZERO;
-		BigDecimal actBillCurrAmt = BigDecimal.ZERO;
-		BigDecimal actBillLcAmt = BigDecimal.ZERO;
-		BigDecimal netBillCurrAmt = BigDecimal.ZERO;
-		BigDecimal netBillLcAmt = BigDecimal.ZERO;
-		BigDecimal roundOff = BigDecimal.ZERO;
-		BigDecimal gstInputLcAmt = BigDecimal.ZERO;
 //		SumOfLc Amount to set in TDS Table
 		BigDecimal sumLcAmount = BigDecimal.ZERO;
 //		
 
 		List<ChargerCostInvoiceVO> chargerCostInvoiceVOs = new ArrayList<>();
+		// Map to store IGST sums by GST percentage
+		Map<String, BigDecimal> igstCategorySumMap = new HashMap<>();
+
 		for (ChargerCostInvoiceDTO chargerCostInvoiceDTO : costInvoiceDTO.getChargerCostInvoiceDTO()) {
 			ChargerCostInvoiceVO chargerCostInvoiceVO = new ChargerCostInvoiceVO();
 
@@ -210,24 +208,18 @@ public class CostInvoiceServiceImpl implements CostInvoiceService {
 			chargerCostInvoiceVO.setGovChargeCode(chargerCostInvoiceDTO.getGovChargeCode());
 			chargerCostInvoiceVO.setExempted(chargerCostInvoiceDTO.getExempted());
 			chargerCostInvoiceVO.setTaxable(chargerCostInvoiceDTO.getTaxable());
+			chargerCostInvoiceVO.setGSTPercent(chargerCostInvoiceDTO.getGstPercent());
 
-//			chargerCostInvoiceVO.setFcAmt(chargerCostInvoiceDTO.getFcAmt());
-//			chargerCostInvoiceVO.setLcAmt(chargerCostInvoiceDTO.getLcAmt());
-//			chargerCostInvoiceVO.setBillAmt(chargerCostInvoiceDTO.getBillAmt());
-			BigDecimal fcAmount;
+			BigDecimal fcAmount = BigDecimal.ZERO;
 			BigDecimal lcAmount;
-			BigDecimal tlcAmount;
 			BigDecimal billAmount;
-			BigDecimal gstAmount;
+			BigDecimal gstAmount = BigDecimal.ZERO;
 
 			if (!chargerCostInvoiceDTO.getCurrency().equals("INR")) {
 				BigDecimal rate = chargerCostInvoiceDTO.getRate(); // BigDecimal type is expected here
 				BigDecimal qty = BigDecimal.valueOf(chargerCostInvoiceDTO.getQty()); // Convert qty to BigDecimal
-
 				fcAmount = rate.multiply(qty);
-
 				chargerCostInvoiceVO.setFcAmt(fcAmount);
-
 			} else {
 				fcAmount = BigDecimal.valueOf(0.00);
 				chargerCostInvoiceVO.setFcAmt(fcAmount);
@@ -243,19 +235,44 @@ public class CostInvoiceServiceImpl implements CostInvoiceService {
 			sumLcAmount = sumLcAmount.add(lcAmount);
 
 			BigDecimal gstPercent = BigDecimal.valueOf(chargerCostInvoiceDTO.getGstPercent());
-			tlcAmount = lcAmount.multiply(gstPercent).divide(BigDecimal.valueOf(100));
-			chargerCostInvoiceVO.setTlcAmount(tlcAmount);
 
 			billAmount = lcAmount.divide(exRate, RoundingMode.HALF_UP);
-
 			chargerCostInvoiceVO.setBillAmt(billAmount);
 			totChargesBillCurrAmt = totChargesBillCurrAmt.add(billAmount);
 
 			gstAmount = lcAmount.multiply(gstPercent).divide(BigDecimal.valueOf(100));
 			chargerCostInvoiceVO.setGstAmount(gstAmount);
 
+			// Aggregate IGST sums by GST percentage
+			// Add the gstAmount to the appropriate IGST category sum
+			if (gstPercent.compareTo(BigDecimal.ZERO) > 0) { // Only include entries with gstPercent > 0
+				String igstCategoryKey = chargerCostInvoiceDTO.getChargeCode();
+				igstCategorySumMap.put(igstCategoryKey,
+						igstCategorySumMap.getOrDefault(igstCategoryKey, BigDecimal.ZERO).add(gstAmount));
+			}
+
 			chargerCostInvoiceVO.setCostInvoiceVO(costInvoiceVO);
 			chargerCostInvoiceVOs.add(chargerCostInvoiceVO);
+		}
+
+		// Add summary rows for each IGST percentage in igstCategorySumMap
+		for (Map.Entry<String, BigDecimal> entry : igstCategorySumMap.entrySet()) {
+			ChargerCostInvoiceVO igstSummaryVO = new ChargerCostInvoiceVO();
+
+			String igstChargeCode = entry.getKey();
+			BigDecimal igstLcAmount = entry.getValue();
+			ChargeTypeRequestVO chargeVO = chargeTypeRequestRepo.FindByChargeCodeAndOrgId(igstChargeCode,
+					costInvoiceDTO.getOrgId());
+
+			igstSummaryVO.setChargeName(chargeVO.getChargeDescription());
+			igstSummaryVO.setChargeCode(chargeVO.getChargeCode()); // Set chargeCode as IGST-18, IGST-12, IGST-5, etc.
+			igstSummaryVO.setLcAmt(igstLcAmount); // Set the sum of gstAmount to lcAmount
+			igstSummaryVO.setFcAmt(BigDecimal.ZERO); // summary rows don’t have fcAmt, rate, qty, etc.
+			igstSummaryVO.setExRate(BigDecimal.ZERO);
+			igstSummaryVO.setGstAmount(BigDecimal.ZERO);
+
+			// Add the IGST summary row
+			chargerCostInvoiceVOs.add(igstSummaryVO);
 		}
 
 		Map<String, BigDecimal> ledgerSumMap = new HashMap<>();

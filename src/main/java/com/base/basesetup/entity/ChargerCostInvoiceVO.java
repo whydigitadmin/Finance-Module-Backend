@@ -35,7 +35,7 @@ public class ChargerCostInvoiceVO {
 	private String jobNo;
 	@Column(name = "chargername", length = 150)
 	private String chargeName;
-	@Column(name = "chargecode", length = 10)
+	@Column(name = "chargecode", length = 25)
 	private String chargeCode;
 	@Column(name = "chargeledger", length = 150)
 	private String chargeLedger;

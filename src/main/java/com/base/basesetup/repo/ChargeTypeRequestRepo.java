@@ -5,6 +5,7 @@ import java.util.Set;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import com.base.basesetup.entity.ChargeTypeRequestVO;
 
@@ -39,4 +40,8 @@ public interface ChargeTypeRequestRepo extends JpaRepository<ChargeTypeRequestVO
 	@Query(nativeQuery = true, value = "select chargecode,govtsac,chargedescription,taxable,ccfeeapplicable,excempted,serviceaccountcode,gsttax,purchaseaccount from chargetyperequest\r\n"
 			+ "			where orgid=?1 and active=1 and purchaseaccount is not null group by chargecode,govtsac,chargedescription,taxable,ccfeeapplicable,excempted,serviceaccountcode,gsttax,purchaseaccount")
 	Set<Object[]> getActiveChargeDetailsFromChargeType(Long orgId);
+
+	@Query("SELECT c FROM ChargeTypeRequestVO c WHERE c.chargeCode = :chargeCode AND c.orgId = :orgId")
+	ChargeTypeRequestVO FindByChargeCodeAndOrgId(@Param("chargeCode")String igstChargeCode,  @Param("orgId")Long orgId);
+
 }
