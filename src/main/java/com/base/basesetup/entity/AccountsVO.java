@@ -26,7 +26,6 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "accounts")
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
 public class AccountsVO {
 	
