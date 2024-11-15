@@ -62,35 +62,33 @@ public class SampleExcelUploadServiceImpl implements SampleExcelUploadService {
     }
 
     @Transactional
-	@Override
-	public void ExcelUploadForSample(MultipartFile[] files) throws ApplicationException {
-	    List<SampleExcelUploadVO> sampleExcelUploadVOToSave = new ArrayList<>();
-	    List<String> errorMessages = new ArrayList<>();
+    @Override
+    public void ExcelUploadForSample(MultipartFile[] files)
+            throws ApplicationException {
+        List<SampleExcelUploadVO> sampleExcelUploadVOToSave = new ArrayList<>();
 
-	    // Reset counters at the start of each upload
-	  int  totalRows = 0;
-	    int successfulUploads = 0;
+        // Reset counters at the start of each upload
+        totalRows = 0;
+        successfulUploads = 0;
 
-	    for (MultipartFile file : files) {
-	        try (Workbook workbook = WorkbookFactory.create(file.getInputStream())) {
-	            Sheet sheet = workbook.getSheetAt(0); // Assuming only one sheet
-	            
-	            // Debugging statement
-	            System.out.println("Processing file: " + file.getOriginalFilename());
+        for (MultipartFile file : files) {
+			try (Workbook workbook = WorkbookFactory.create(file.getInputStream())) {
+				Sheet sheet = workbook.getSheetAt(0); // Assuming only one sheet
+				List<String> errorMessages = new ArrayList<>();
+				System.out.println("Processing file: " + file.getOriginalFilename()); // Debug statement
+				Row headerRow = sheet.getRow(0);
+				if (!isHeaderValid(headerRow)) {
+					throw new ApplicationException("Invalid Excel format. Please refer to the sample file.");
+				}
 
-	            Row headerRow = sheet.getRow(0);
-	            if (!isHeaderValid(headerRow)) {
-	                throw new ApplicationException("Invalid Excel format. Please refer to the sample file.");
-	            }
+				// Check all rows for validity first
+				for (Row row : sheet) {
+					if (row.getRowNum() == 0 || isRowEmpty(row)) {
+						continue; // Skip header row and empty rows
+					}
 
-	            // Validate and process each row
-	            for (Row row : sheet) {
-	                if (row.getRowNum() == 0 || isRowEmpty(row)) {
-	                    continue; // Skip header row and empty rows
-	                }
-
-	                totalRows++; // Increment total rows processed
-	                System.out.println("Validating row: " + (row.getRowNum() + 1)); // Debug statement
+					totalRows++; // Increment totalRows
+					System.out.println("Validating row: " + (row.getRowNum() + 1)); // Debug statement
 
 	                try {
 	                    // Parse the row data
