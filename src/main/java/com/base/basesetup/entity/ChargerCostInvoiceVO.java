@@ -60,7 +60,7 @@ public class ChargerCostInvoiceVO {
 	@Column(name = "qty")
 	private int qty;
 	@Column(name = "gstpercent")
-	private int GSTPercent;
+	private Float GSTPercent;
 	@Column(name = "tlcamount", precision = 10, scale = 2)
 	private BigDecimal tlcAmount;
 	@Column(name = "gstamount", precision = 10, scale = 2)
