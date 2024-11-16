@@ -35,7 +35,7 @@ public interface CostDebitNoteRepo extends JpaRepository<CostDebitNoteVO, Long>{
 			+ "JOIN partyaddress b ON a.partymasterid = b.partymasterid  \r\n"
 			+ "WHERE a.orgId = ?1\r\n"
 			+ "AND a.branch = ?2\r\n"
-			+ "AND a.finyear =?3")
+			+ "AND a.finyear =?3 and partytype='Vendor'")
 	Set<Object[]> getParty(Long orgId,String branch,String finYear);
 
 	@Query(value ="select docid from costinvoice where orgid=?1",nativeQuery =true)
