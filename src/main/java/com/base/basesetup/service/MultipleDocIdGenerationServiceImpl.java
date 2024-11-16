@@ -40,6 +40,7 @@ public class MultipleDocIdGenerationServiceImpl implements MultipleDocIdGenerati
 		multipleDocIdGenerationVO.setOrgId(multipleDocIdGenerationDTO.getOrgId());
 		multipleDocIdGenerationVO.setScreenName(multipleDocIdGenerationDTO.getScreenName());
 		multipleDocIdGenerationVO.setScreenCode(multipleDocIdGenerationDTO.getScreenCode());
+		multipleDocIdGenerationVO.setDocCode(multipleDocIdGenerationDTO.getDocCode());
 
 		multipleDocIdGenerationVO.setCreatedBy(multipleDocIdGenerationDTO.getCreatedBy());
 		multipleDocIdGenerationVO.setUpdatedBy(multipleDocIdGenerationDTO.getCreatedBy());
@@ -96,9 +97,9 @@ public class MultipleDocIdGenerationServiceImpl implements MultipleDocIdGenerati
 	
 	@Override
 	public List<Map<String, Object>> getPendingMultipleDocIdGeneration(Long orgId, String branch, String branchCode,
-			String finYear, String finYearIdentifier) {
+			String finYear, String finYearIdentifier,String docCode) {
 		Set<Object[]> pendingMultipleDocIdGenDetails = multipleDocIdGenerationRepo.getPendingMultipleDocIdGeneration(orgId, branch,
-				branchCode, finYear, finYearIdentifier);
+				branchCode, finYear, finYearIdentifier,docCode);
 		return getPendingMultipleDocIdGeneration(pendingMultipleDocIdGenDetails);
 	}
 

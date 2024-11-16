@@ -21,7 +21,7 @@ public interface MultipleDocIdGenerationRepo extends JpaRepository<MultipleDocId
 			+ "    ?2 AS branch,\r\n"
 			+ "    ?3 AS branchcode,\r\n"
 			+ "    ?5 AS finyearidentifier,\r\n"
-			+ "    CONCAT(?3, ?5, 'A', b.doccode) AS prefixfield\r\n"
+			+ "    CONCAT(?3, ?5, ?6, b.doccode) AS prefixfield\r\n"
 			+ "FROM (\r\n"
 			+ "    SELECT doccode, screencode, screenname \r\n"
 			+ "    FROM documenttype  \r\n"
@@ -36,7 +36,7 @@ public interface MultipleDocIdGenerationRepo extends JpaRepository<MultipleDocId
 			+ "WHERE md.doccode IS NULL  \r\n"
 			+ "")
 	Set<Object[]> getPendingMultipleDocIdGeneration(Long orgId, String branch, String branchCode, String finYear,
-			String finYearIdentifier);
+			String finYearIdentifier,String docCode);
 
 	@Query(nativeQuery = true, value = "select * from multipledocidgeneration where orgid=?1")
 	List<MultipleDocIdGenerationVO> findMultipleDocIdGenerationByOrgId(Long orgId);
