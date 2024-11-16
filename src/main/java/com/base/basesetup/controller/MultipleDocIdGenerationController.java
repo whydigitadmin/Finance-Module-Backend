@@ -112,7 +112,7 @@ public class MultipleDocIdGenerationController extends BaseController {
 			
 			@GetMapping("/getPendingMultipleDocIdGeneration")
 			public ResponseEntity<ResponseDTO> getPendingMultipleDocIdGeneration(@RequestParam Long orgId,@RequestParam String branch,@RequestParam String branchCode,
-					@RequestParam String finYear,@RequestParam String finYearIdentifier) {
+					@RequestParam String finYear,@RequestParam String finYearIdentifier,String docCode) {
 				String methodName = "getPendingMultipleDocIdGeneration()";
 				LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
 				String errorMsg = null;
@@ -120,7 +120,7 @@ public class MultipleDocIdGenerationController extends BaseController {
 				ResponseDTO responseDTO = null;
 				List<Map<String, Object>> multipleDocIdGenerationVO = new ArrayList<>();
 				try {
-					multipleDocIdGenerationVO = multipleDocIdGenerationService.getPendingMultipleDocIdGeneration(orgId, branch, branchCode, finYear, finYearIdentifier);
+					multipleDocIdGenerationVO = multipleDocIdGenerationService.getPendingMultipleDocIdGeneration(orgId, branch, branchCode, finYear, finYearIdentifier,docCode);
 					} catch (Exception e) {
 					errorMsg = e.getMessage();
 					LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);

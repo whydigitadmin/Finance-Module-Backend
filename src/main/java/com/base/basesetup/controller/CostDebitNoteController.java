@@ -26,6 +26,7 @@ import com.base.basesetup.dto.CostDebitNoteDTO;
 import com.base.basesetup.dto.ResponseDTO;
 import com.base.basesetup.entity.CostDebitNoteVO;
 import com.base.basesetup.entity.CostInvoiceVO;
+import com.base.basesetup.entity.TaxInvoiceVO;
 import com.base.basesetup.service.CostDebitNoteService;
 
 @CrossOrigin
@@ -333,6 +334,34 @@ public class CostDebitNoteController extends BaseController {
 			responseDTO = createServiceResponse(responseObjectsMap);
 		} else {
 			responseDTO = createServiceResponseError(responseObjectsMap, "OrginBillNo information receive failed  By OrgId",
+					errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+	}
+	
+	
+	@GetMapping("/partyTypeForCostDebitNote")
+	public ResponseEntity<ResponseDTO> partyTypeForCostDebitNote(@RequestParam Long orgId,
+			@RequestParam String branch, @RequestParam String finYear) {
+		String methodName = "partyTypeForCostDebitNote()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		List<Map<String, Object>> partyMaster = new ArrayList<>();
+		try {
+			partyMaster = costDebitNoteService.partyTypeForCostDebitNote(orgId, branch,finYear);
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "PartyType from Party Master information get successfully");
+			responseObjectsMap.put("partyMaster", partyMaster);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap, "PartyType from Party Master information receive failed",
 					errorMsg);
 		}
 		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);

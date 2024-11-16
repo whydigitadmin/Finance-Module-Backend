@@ -19,6 +19,7 @@ public class MultipleDocIdGenerationDTO {
     private Long id;
 	private String screenCode;
 	private String screenName;
+	private String docCode;
 	private String branch;
 	private String branchCode;
 	private String finYear;
