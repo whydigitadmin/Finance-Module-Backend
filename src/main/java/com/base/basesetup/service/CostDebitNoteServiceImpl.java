@@ -25,11 +25,13 @@ import com.base.basesetup.entity.CostDebitNoteTaxPrtculVO;
 import com.base.basesetup.entity.CostDebitNoteVO;
 import com.base.basesetup.entity.CostInvoiceVO;
 import com.base.basesetup.entity.DocumentTypeMappingDetailsVO;
+import com.base.basesetup.entity.TaxInvoiceVO;
 import com.base.basesetup.exception.ApplicationException;
 import com.base.basesetup.repo.CostDebitChargesRepo;
 import com.base.basesetup.repo.CostDebitNoteGstRepo;
 import com.base.basesetup.repo.CostDebitNoteRepo;
 import com.base.basesetup.repo.CostDebitNoteTaxPrtculRepo;
+import com.base.basesetup.repo.CostInvoiceRepo;
 import com.base.basesetup.repo.DocumentTypeMappingDetailsRepo;
 
 @Service
@@ -52,6 +54,9 @@ public class CostDebitNoteServiceImpl implements CostDebitNoteService {
 	
 	@Autowired
 	DocumentTypeMappingDetailsRepo documentTypeMappingDetailsRepo;
+	
+	@Autowired
+	CostInvoiceRepo costInvoiceRepo;
 
 	@Override
 	public Map<String, Object> updateCreateCostDebitNote(@Valid CostDebitNoteDTO costDebitNoteDTO)
@@ -345,8 +350,7 @@ public class CostDebitNoteServiceImpl implements CostDebitNoteService {
 			Map<String, Object> details = new HashMap<>(); 
 			details.put("partyName", grid[0] != null ? grid[0].toString() : "");
 			details.put("partyCode", grid[1] != null ? grid[1].toString() : "");
-			details.put("partyType", grid[2] != null ? grid[2].toString() : "");
-			details.put("addressType", grid[3] != null ? grid[3].toString() : "");
+			details.put("addressType", grid[2] != null ? grid[2].toString() : "");
 
 			gridDetails.add(details);
 
@@ -395,7 +399,28 @@ public class CostDebitNoteServiceImpl implements CostDebitNoteService {
 
 	@Override
 	public List<CostInvoiceVO> getOrginBillNoByParty(Long orgId, String party, String branchCode) {
-		return costDebitNoteRepo.findOrginBillNoByParty(orgId,party,branchCode);
+		return costInvoiceRepo.findOrginBillNoByParty(orgId,party,branchCode);
+	}
+	
+	@Override
+	public List<Map<String, Object>> partyTypeForCostDebitNote(Long orgId, String branch, String finYear) {
+		// Fetch party details from the repository
+		Set<Object[]> getAllPartyType = costDebitNoteRepo.partyTypeForCostDebitNote(orgId, branch, finYear);
+		// Return processed party details
+		return getPartyType(getAllPartyType);
+	}
+
+	private List<Map<String, Object>> getPartyType(Set<Object[]> getPartyInformation) {
+		List<Map<String, Object>> gridDetails = new ArrayList<>();
+		// Iterate through the result set
+		for (Object[] grid : getPartyInformation) {
+
+			Map<String, Object> details = new HashMap<>(); 
+			details.put("partyType", grid[0] != null ? grid[0].toString() : "");
+			gridDetails.add(details);
+
+		}
+		return gridDetails; // Return the list of party details
 	}
 	
 	

@@ -38,4 +38,7 @@ public interface CostDebitNoteService {
 
 	List<CostInvoiceVO> getOrginBillNoByParty(Long orgId, String party, String branchCode);
 
+	List<Map<String, Object>> partyTypeForCostDebitNote(Long orgId, String branch, String finYear);
+
+
 }
