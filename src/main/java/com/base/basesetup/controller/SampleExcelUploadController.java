@@ -133,7 +133,7 @@ public class SampleExcelUploadController extends BaseController {
 			responseObjectsMap.put("totalRows", totalRows);
 			responseObjectsMap.put("successfulUploads", successfulUploads);
 			Map<String, Object> paramObjectsMap = new HashMap<>();
-			paramObjectsMap.put("message", "Excel Upload For brs successful");
+			paramObjectsMap.put("message", "Excel Upload  successful");
 			responseObjectsMap.put("paramObjectsMap", paramObjectsMap);
 			responseDTO = createServiceResponse(responseObjectsMap);
 
@@ -145,7 +145,7 @@ public class SampleExcelUploadController extends BaseController {
 			responseObjectsMap.put("status", false);
 			responseObjectsMap.put("errorMessage", errorMsg);
 
-			responseDTO = createServiceResponseError(responseObjectsMap, "Excel Upload For Brs Failed", errorMsg);
+			responseDTO = createServiceResponseError(responseObjectsMap, "Excel Upload For Sample", errorMsg);
 		}
 		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
 		return ResponseEntity.ok().body(responseDTO);
