@@ -30,12 +30,12 @@ public interface CostDebitNoteRepo extends JpaRepository<CostDebitNoteVO, Long>{
 	 @Query(value="SELECT c.chargeType, c.chargeCode, c.govtSac, c.serviceAccountCode FROM ChargeTypeRequest c WHERE c.orgId =?1 AND c.purchaseAccount IS NOT NULL",nativeQuery =true)
 	Set<Object[]> getChareDetails(Long orgId);
 
-	@Query(nativeQuery =true,value ="SELECT a.partyname, a.partycode, a.partytype, b.addresstype\r\n"
+	@Query(nativeQuery =true,value ="SELECT a.partyname, a.partycode, b.addresstype\r\n"
 			+ "FROM partymaster a\r\n"
 			+ "JOIN partyaddress b ON a.partymasterid = b.partymasterid  \r\n"
 			+ "WHERE a.orgId = ?1\r\n"
 			+ "AND a.branch = ?2\r\n"
-			+ "AND a.finyear =?3")
+			+ "AND a.finyear =?3 and partytype='Vendor'GROUP BY a.partyname, a.partycode, b.addresstype")
 	Set<Object[]> getParty(Long orgId,String branch,String finYear);
 
 	@Query(value ="select docid from costinvoice where orgid=?1",nativeQuery =true)
@@ -45,6 +45,14 @@ public interface CostDebitNoteRepo extends JpaRepository<CostDebitNoteVO, Long>{
 	Set<Object[]> getCurrencyAndExrateDetails(Long orgId);
 
 	@Query(value="select a from CostInvoiceVO a where a.orgId=?1 and a.supplierName=?2 and a.branchCode=?3")
-	List<CostInvoiceVO> findOrginBillNoByParty(Long orgId, String party, String branchCode); 
+	List<CostInvoiceVO> findOrginBillNoByParty(Long orgId, String party, String branchCode);
+
+	@Query(nativeQuery =true,value ="SELECT a.partytype\r\n"
+			+ "FROM partymaster a\r\n"
+			+ "WHERE a.orgId = ?1\r\n"
+			+ "AND a.branch = ?2\r\n"
+			+ "AND a.finyear =?3 and partytype='VENDOR'GROUP BY a.partytype")
+	Set<Object[]> partyTypeForCostDebitNote(Long orgId, String branch, String finYear);
+
 
 }

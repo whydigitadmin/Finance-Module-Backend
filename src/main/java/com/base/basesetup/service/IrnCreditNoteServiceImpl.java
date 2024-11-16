@@ -87,14 +87,16 @@ public class IrnCreditNoteServiceImpl implements IrnCreditNoteService {
 			message = "IRN Credit Note Updated Successfully";
 		} else {
 			// GETDOCID API
-			String docId = irnCreditRepo.getIrnCreditDocId(irnCreditNoteVO.getOrgId(), irnCreditNoteVO.getFinYear(),
-					irnCreditNoteVO.getBranchCode(), screenCode);
+			String docId = irnCreditRepo.getIrnCreditDocId(irnCreditNoteDTO.getOrgId(), irnCreditNoteDTO.getFinYear(),
+					irnCreditNoteDTO.getBranchCode(), screenCode);
 			irnCreditNoteVO.setDocId(docId);
+			
+			System.out.println(docId);
 
 			// GETDOCID LASTNO +1
 			DocumentTypeMappingDetailsVO documentTypeMappingDetailsVO = documentTypeMappingDetailsRepo
-					.findByOrgIdAndFinYearAndBranchCodeAndScreenCode(irnCreditNoteVO.getOrgId(),
-							irnCreditNoteVO.getFinYear(), irnCreditNoteVO.getBranchCode(), screenCode);
+					.findByOrgIdAndFinYearAndBranchCodeAndScreenCode(irnCreditNoteDTO.getOrgId(),
+							irnCreditNoteDTO.getFinYear(), irnCreditNoteDTO.getBranchCode(), screenCode);
 			documentTypeMappingDetailsVO.setLastno(documentTypeMappingDetailsVO.getLastno() + 1);
 			documentTypeMappingDetailsRepo.save(documentTypeMappingDetailsVO);
 
