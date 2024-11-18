@@ -19,6 +19,6 @@ public interface MultipleDocIdGenerationService {
 	List<MultipleDocIdGenerationVO> getMultipleDocIdGenerationByOrgId(Long orgId) throws ApplicationException;
 
 	List<Map<String, Object>> getPendingMultipleDocIdGeneration(Long orgId, String branch, String branchCode,
-			String finYear, String finYearIdentifier);
+			String finYear, String finYearIdentifier,String docCode);
 
 }

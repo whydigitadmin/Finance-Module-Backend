@@ -501,4 +501,60 @@ public class CostInvoiceController extends BaseController {
 		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
 		return ResponseEntity.ok().body(responseDTO);
 	}
+
+	@GetMapping("/getChargeNameAndChargeCodeForIgst")
+	public ResponseEntity<ResponseDTO> getChargeNameAndChargeCodeForIgst(@RequestParam Long orgId,
+			@RequestParam List<String> gstTax) {
+		String methodName = "getChargeNameAndChargeCodeForIgst()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		List<Map<String, Object>> charge = new ArrayList<>();
+		try {
+			charge = costInvoiceService.getChargeNameAndChargeCodeForIgst(orgId, gstTax);
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+					"Charge Details for the Inter get successfully By OrgId And Gst Tax");
+			responseObjectsMap.put("chargeDetails", charge);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					"Charge Detials for the Inter receive failed By OrgId And Gst Tax", errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+	}
+
+	@GetMapping("/getChargeNameAndChargeCodeForCgstAndSgst")
+	public ResponseEntity<ResponseDTO> getChargeNameAndChargeCodeForCgstAndSgst(@RequestParam Long orgId,
+			@RequestParam List<String> gstTax) {
+		String methodName = "getChargeNameAndChargeCodeForCgstAndSgst()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		List<Map<String, Object>> charge = new ArrayList<>();
+		try {
+			charge = costInvoiceService.getChargeNameAndChargeCodeForCgstAndSgst(orgId, gstTax);
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+					"Charge Details for the Intra get successfully By OrgId And Gst Tax");
+			responseObjectsMap.put("chargeDetails", charge);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					"Charge Detials for the Intra receive failed By OrgId And Gst Tax", errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+	}
 }

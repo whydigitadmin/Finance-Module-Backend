@@ -184,16 +184,14 @@ public class CostInvoiceServiceImpl implements CostInvoiceService {
 
 		BigDecimal totChargesBillCurrAmt = BigDecimal.ZERO;
 		BigDecimal totChargesLcAmt = BigDecimal.ZERO;
-		BigDecimal actBillCurrAmt = BigDecimal.ZERO;
-		BigDecimal actBillLcAmt = BigDecimal.ZERO;
-		BigDecimal netBillCurrAmt = BigDecimal.ZERO;
-		BigDecimal netBillLcAmt = BigDecimal.ZERO;
-		BigDecimal roundOff = BigDecimal.ZERO;
-		BigDecimal gstInputLcAmt = BigDecimal.ZERO;
-//		SumOfLc Amount to set in TDS Table
 		BigDecimal sumLcAmount = BigDecimal.ZERO;
 
 		List<ChargerCostInvoiceVO> chargerCostInvoiceVOs = new ArrayList<>();
+
+		// Map to store IGST sums by GST percentage
+		Map<String, BigDecimal> igstCategorySumMap = new HashMap<>();
+		Map<String, BigDecimal> cgstCategorySumMap = new HashMap<>();
+
 		for (ChargerCostInvoiceDTO chargerCostInvoiceDTO : costInvoiceDTO.getChargerCostInvoiceDTO()) {
 			ChargerCostInvoiceVO chargerCostInvoiceVO = new ChargerCostInvoiceVO();
 
@@ -202,6 +200,7 @@ public class CostInvoiceServiceImpl implements CostInvoiceService {
 			chargerCostInvoiceVO.setChargeName(chargerCostInvoiceDTO.getChargeName());
 			chargerCostInvoiceVO.setChargeCode(chargerCostInvoiceDTO.getChargeCode());
 			chargerCostInvoiceVO.setChargeLedger(chargerCostInvoiceDTO.getChargeLedger());
+			chargerCostInvoiceVO.setLedger(chargerCostInvoiceDTO.getLedger());
 			chargerCostInvoiceVO.setSac(chargerCostInvoiceDTO.getSac());
 			chargerCostInvoiceVO.setCurrency(chargerCostInvoiceDTO.getCurrency());
 			chargerCostInvoiceVO.setExRate(chargerCostInvoiceDTO.getExRate());
@@ -209,59 +208,183 @@ public class CostInvoiceServiceImpl implements CostInvoiceService {
 			chargerCostInvoiceVO.setGovChargeCode(chargerCostInvoiceDTO.getGovChargeCode());
 			chargerCostInvoiceVO.setExempted(chargerCostInvoiceDTO.getExempted());
 			chargerCostInvoiceVO.setTaxable(chargerCostInvoiceDTO.getTaxable());
+			chargerCostInvoiceVO.setGSTPercent(chargerCostInvoiceDTO.getGstPercent());
 
-//			chargerCostInvoiceVO.setFcAmt(chargerCostInvoiceDTO.getFcAmt());
-//			chargerCostInvoiceVO.setLcAmt(chargerCostInvoiceDTO.getLcAmt());
-//			chargerCostInvoiceVO.setBillAmt(chargerCostInvoiceDTO.getBillAmt());
-			BigDecimal fcAmount;
+//			FIELD DECLARATION
+			BigDecimal fcAmount = BigDecimal.ZERO;
 			BigDecimal lcAmount;
-			BigDecimal tlcAmount;
 			BigDecimal billAmount;
-			BigDecimal gstAmount;
+			BigDecimal gstAmount = BigDecimal.ZERO;
 
+//			TO CHECK THE CURRENCY 
 			if (!chargerCostInvoiceDTO.getCurrency().equals("INR")) {
 				BigDecimal rate = chargerCostInvoiceDTO.getRate(); // BigDecimal type is expected here
 				BigDecimal qty = BigDecimal.valueOf(chargerCostInvoiceDTO.getQty()); // Convert qty to BigDecimal
-
 				fcAmount = rate.multiply(qty);
-
 				chargerCostInvoiceVO.setFcAmt(fcAmount);
-
 			} else {
 				fcAmount = BigDecimal.valueOf(0.00);
 				chargerCostInvoiceVO.setFcAmt(fcAmount);
 			}
 
+//			FIELD DECLARATION
 			BigDecimal exRate = chargerCostInvoiceDTO.getExRate();
 			BigDecimal qty = BigDecimal.valueOf(chargerCostInvoiceDTO.getQty());
 			BigDecimal rate = chargerCostInvoiceDTO.getRate();
+			BigDecimal gstPercent = BigDecimal.valueOf(chargerCostInvoiceDTO.getGstPercent());
+
+//			LC AMOUNT CALCULATION
 			lcAmount = exRate.multiply(qty.multiply(rate));
 			chargerCostInvoiceVO.setLcAmt(lcAmount);
 			totChargesLcAmt = totChargesLcAmt.add(lcAmount);
-			// TDS Purpose
-			sumLcAmount = sumLcAmount.add(lcAmount);
+			sumLcAmount = sumLcAmount.add(lcAmount); // TDS Purpose
 
-			BigDecimal gstPercent = BigDecimal.valueOf(chargerCostInvoiceDTO.getGstPercent());
-			tlcAmount = lcAmount.multiply(gstPercent).divide(BigDecimal.valueOf(100));
-			chargerCostInvoiceVO.setTlcAmount(tlcAmount);
-
+//			BILL AMOUNT CALCULATION
 			billAmount = lcAmount.divide(exRate, RoundingMode.HALF_UP);
-
 			chargerCostInvoiceVO.setBillAmt(billAmount);
 			totChargesBillCurrAmt = totChargesBillCurrAmt.add(billAmount);
 
+//			GST AMOUNT CALCULATION
 			gstAmount = lcAmount.multiply(gstPercent).divide(BigDecimal.valueOf(100));
 			chargerCostInvoiceVO.setGstAmount(gstAmount);
 
+//			AGGREGATE IGST SUMS BY GST PERCENTAGE
+			if (costInvoiceDTO.getGstType().equalsIgnoreCase("INTER") && gstPercent.compareTo(BigDecimal.ZERO) > 0) {
+				String igstCategoryKey = gstPercent.toString();
+				igstCategorySumMap.put(igstCategoryKey,
+						igstCategorySumMap.getOrDefault(igstCategoryKey, BigDecimal.ZERO).add(gstAmount));
+			}
+			if (costInvoiceDTO.getGstType().equalsIgnoreCase("INTRA") && gstPercent.compareTo(BigDecimal.ZERO) > 0) {
+				String gstCategoryKey = gstPercent.toString();
+				cgstCategorySumMap.put(gstCategoryKey,
+						cgstCategorySumMap.getOrDefault(gstCategoryKey, BigDecimal.ZERO).add(gstAmount));
+			}
+
 			chargerCostInvoiceVO.setCostInvoiceVO(costInvoiceVO);
 			chargerCostInvoiceVOs.add(chargerCostInvoiceVO);
+		}
+
+//		ADD IGST ROWS FOR EACH IGST PERCENTAGE IN igstCategorySumMap
+		if ("INTER".equalsIgnoreCase(costInvoiceDTO.getGstType())) {
+			for (Map.Entry<String, BigDecimal> entry : igstCategorySumMap.entrySet()) {
+				ChargerCostInvoiceVO igstSummaryVO = new ChargerCostInvoiceVO();
+
+				String gstPercent = entry.getKey();
+				BigDecimal igstLcAmount = entry.getValue();
+
+				Set<Object[]> chargeVO = costInvoiceRepo
+						.findChargeNameAndChargeCodeForIgstPosting(costInvoiceDTO.getOrgId(), gstPercent);
+
+				if (!chargeVO.isEmpty()) {
+					Object[] chargeVOSet = chargeVO.iterator().next(); // Get the first element in the set
+					String chargeDesc = (String) chargeVOSet[0];
+					String chargeCode = (String) chargeVOSet[1];
+					String gChargeCode = (String) chargeVOSet[2];
+					String taxable = (String) chargeVOSet[3];
+					String sac = (String) chargeVOSet[4];
+					Float gstPer = (Float) chargeVOSet[5];
+					igstSummaryVO.setChargeName(chargeDesc);
+					igstSummaryVO.setChargeCode(chargeCode);
+					igstSummaryVO.setGovChargeCode(gChargeCode);
+					igstSummaryVO.setTaxable(taxable);
+					igstSummaryVO.setSac(sac);
+					igstSummaryVO.setGSTPercent(gstPer);
+
+				}
+				igstSummaryVO.setQty(Integer.valueOf(1));
+				igstSummaryVO.setRate(BigDecimal.ONE);
+				igstSummaryVO.setExRate(BigDecimal.ONE);
+				igstSummaryVO.setFcAmt(BigDecimal.ONE);
+				igstSummaryVO.setLcAmt(igstLcAmount);
+				igstSummaryVO.setFcAmt(BigDecimal.ONE);
+				igstSummaryVO.setBillAmt(BigDecimal.ONE);
+				igstSummaryVO.setGstAmount(BigDecimal.ONE);
+				igstSummaryVO.setCostInvoiceVO(costInvoiceVO);
+
+				chargerCostInvoiceVOs.add(igstSummaryVO);
+			}
+		}
+
+//		ADD CGST and SGST ROWS FOR EACH GST PERCENTAGE IN cgstCategorySumMap
+		if ("INTRA".equalsIgnoreCase(costInvoiceDTO.getGstType())) {
+			for (Map.Entry<String, BigDecimal> entry : cgstCategorySumMap.entrySet()) {
+
+				String gstPercent = entry.getKey();
+				BigDecimal intraPercent = new BigDecimal(gstPercent).divide(BigDecimal.valueOf(2));
+				System.out.println("PARAM" + intraPercent);
+				BigDecimal totalTaxAmount = entry.getValue();
+
+				BigDecimal cgstAmount = totalTaxAmount.divide(BigDecimal.valueOf(2), RoundingMode.HALF_UP);
+				BigDecimal sgstAmount = totalTaxAmount.divide(BigDecimal.valueOf(2), RoundingMode.HALF_UP);
+
+				Set<Object[]> chargeVO = costInvoiceRepo
+						.findChargeNameAndChargeCodeForCgstAndSgtsPosting(costInvoiceDTO.getOrgId(), intraPercent);
+
+				if (!chargeVO.isEmpty()) {
+
+//					TO HOLD THE FIRST TWO LIST
+					Object[] cgstRecord = null;
+					Object[] sgstRecord = null;
+
+					// Iterate through the query results
+					for (Object[] chargeVOSet : chargeVO) {
+						String chargeCode = (String) chargeVOSet[1];
+
+						// Determine CGST and SGST records based on the charge code
+						if (chargeCode.contains("CGST")) {
+							cgstRecord = chargeVOSet; // Set CGST record
+						} else if (chargeCode.contains("SGST")) {
+							sgstRecord = chargeVOSet; // Set SGST record
+						}
+
+						if (cgstRecord != null && sgstRecord != null) {
+
+							ChargerCostInvoiceVO cgstSummaryVO = new ChargerCostInvoiceVO();
+							cgstSummaryVO.setChargeName((String) cgstRecord[0]);
+							cgstSummaryVO.setChargeCode((String) cgstRecord[1]);
+							cgstSummaryVO.setGovChargeCode((String) cgstRecord[2]);
+							cgstSummaryVO.setTaxable((String) cgstRecord[3]);
+							cgstSummaryVO.setSac((String) cgstRecord[4]);
+							cgstSummaryVO.setGSTPercent((Float) cgstRecord[5]);
+							cgstSummaryVO.setQty(Integer.valueOf(1));
+							cgstSummaryVO.setRate(BigDecimal.ONE);
+							cgstSummaryVO.setExRate(BigDecimal.ONE);
+							cgstSummaryVO.setFcAmt(BigDecimal.ONE);
+							cgstSummaryVO.setLcAmt(cgstAmount);
+							cgstSummaryVO.setBillAmt(BigDecimal.ONE);
+							cgstSummaryVO.setGstAmount(BigDecimal.ONE);
+							cgstSummaryVO.setCostInvoiceVO(costInvoiceVO);
+							chargerCostInvoiceVOs.add(cgstSummaryVO);
+
+							ChargerCostInvoiceVO sgstSummaryVO = new ChargerCostInvoiceVO();
+							sgstSummaryVO.setChargeName((String) sgstRecord[0]);
+							sgstSummaryVO.setChargeCode((String) sgstRecord[1]);
+							sgstSummaryVO.setGovChargeCode((String) sgstRecord[2]);
+							sgstSummaryVO.setTaxable((String) sgstRecord[3]);
+							sgstSummaryVO.setSac((String) sgstRecord[4]);
+							sgstSummaryVO.setGSTPercent((Float) sgstRecord[5]);
+							sgstSummaryVO.setQty(Integer.valueOf(1));
+							sgstSummaryVO.setRate(BigDecimal.ONE);
+							sgstSummaryVO.setExRate(BigDecimal.ONE);
+							sgstSummaryVO.setFcAmt(BigDecimal.ONE);
+							sgstSummaryVO.setLcAmt(sgstAmount);
+							sgstSummaryVO.setBillAmt(BigDecimal.ONE);
+							sgstSummaryVO.setGstAmount(BigDecimal.ONE);
+							sgstSummaryVO.setCostInvoiceVO(costInvoiceVO);
+							
+							chargerCostInvoiceVOs.add(sgstSummaryVO);
+
+							break;
+						}
+					}
+				}
+			}
 		}
 
 		Map<String, BigDecimal> ledgerSumMap = new HashMap<>();
 		for (ChargerCostInvoiceVO detailsVO : chargerCostInvoiceVOs) {
 			String ledger = detailsVO.getLedger();
 			BigDecimal lcAmount = detailsVO.getLcAmt();
-
 			ledgerSumMap.put(ledger, ledgerSumMap.getOrDefault(ledger, BigDecimal.ZERO).add(lcAmount));
 		}
 
@@ -279,10 +402,11 @@ public class CostInvoiceServiceImpl implements CostInvoiceService {
 
 			BigDecimal totTdsWhAmt = BigDecimal.ZERO;
 			BigDecimal tdsWhPercent = tdsCostInvoiceDTO.getTdsWithHoldingPer();
-			System.out.println("TOTAL LC AMOUNT IS :"+sumLcAmount);;
+			System.out.println("TOTAL LC AMOUNT IS :" + sumLcAmount);
+			;
 			totTdsWhAmt = sumLcAmount.multiply(tdsWhPercent.divide(BigDecimal.valueOf(100)));
 			tdsCostInvoiceVO.setTotTdsWhAmnt(totTdsWhAmt);
-			
+
 			tdsCostInvoiceVO.setCostInvoiceVO(costInvoiceVO);
 			tdsCostInvoiceVOs.add(tdsCostInvoiceVO);
 		}
@@ -509,4 +633,51 @@ public class CostInvoiceServiceImpl implements CostInvoiceService {
 
 	}
 
+	@Override
+	public List<Map<String, Object>> getChargeNameAndChargeCodeForIgst(Long orgId, List<String> gstTax) {
+		Set<Object[]> chargeDetails = costInvoiceRepo.findChargeNameAndChargeCodeForIgst(orgId, gstTax);
+		return getChargeDe(chargeDetails);
+	}
+
+	private List<Map<String, Object>> getChargeDe(Set<Object[]> chDetails) {
+		List<Map<String, Object>> List1 = new ArrayList<>();
+		for (Object[] ch : chDetails) {
+			Map<String, Object> map = new HashMap<>();
+			map.put("chargeDesc", ch[0] != null ? ch[0].toString() : ""); // Empty string if null
+			map.put("chargeCode", ch[1] != null ? ch[1].toString() : "");
+			map.put("gChargeCode", ch[2] != null ? ch[2].toString() : "");
+			map.put("taxable", ch[3] != null ? ch[3].toString() : "");
+			map.put("sac", ch[4] != null ? ch[4].toString() : "");
+			map.put("gstPercent", ch[5] != null ? ch[5].toString() : "");
+
+			List1.add(map);
+		}
+		return List1;
+
+	}
+
+	@Override
+	public List<Map<String, Object>> getChargeNameAndChargeCodeForCgstAndSgst(Long orgId, List<String> gstTax) {
+		Set<Object[]> chargeDetails = costInvoiceRepo.findChargeNameAndChargeCodeForCgstAndIgst(orgId, gstTax);
+		return getChargeIntra(chargeDetails);
+	}
+
+	private List<Map<String, Object>> getChargeIntra(Set<Object[]> chDetails) {
+		List<Map<String, Object>> List1 = new ArrayList<>();
+		for (Object[] ch : chDetails) {
+			Map<String, Object> map = new HashMap<>();
+			map.put("chargeDesc", ch[0] != null ? ch[0].toString() : ""); // Empty string if null
+			map.put("chargeCode", ch[1] != null ? ch[1].toString() : "");
+			map.put("gChargeCode", ch[2] != null ? ch[2].toString() : "");
+			map.put("taxable", ch[3] != null ? ch[3].toString() : "");
+			map.put("sac", ch[4] != null ? ch[4].toString() : "");
+			map.put("gstPercent", ch[5] != null ? ch[5].toString() : "");
+
+			List1.add(map);
+		}
+		return List1;
+
+	}
+	
+	
 }

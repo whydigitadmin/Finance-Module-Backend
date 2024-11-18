@@ -39,6 +39,9 @@ public class MultipleDocIdGenerationVO {
 	@Column(name = "screenname",length =50)
 	private String screenName;
 	
+	@Column(name = "doccode",length =10)
+	private String docCode;
+	
 	@Column(name = "branch",length =25)
 	private String branch;
 	
