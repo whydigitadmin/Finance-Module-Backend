@@ -175,12 +175,12 @@ public interface TransactionService {
 //	ArApAdjustmentOffSet
 	List<ArApAdjustmentOffSetVO> getAllArApAdjustmentOffSetByOrgId(Long orgId);
 
-	ArApAdjustmentOffSetVO updateCreateArApAdjustmentOffSet(@Valid ArApAdjustmentOffSetDTO arApAdjustmentOffSetDTO)
+	Map<String, Object> updateCreateArApAdjustmentOffSet(@Valid ArApAdjustmentOffSetDTO arApAdjustmentOffSetDTO)
 			throws ApplicationException;
 
 	List<ArApAdjustmentOffSetVO> getAllArApAdjustmentOffSetById(Long id);
-
-	List<ArApAdjustmentOffSetVO> getArApAdjustmentOffSetByActive();
+	
+	String getArApAdjustmentOffSetDocId(Long orgId, String finYear, String branch, String branchCode);
 
 	// GlOpeningBalance
 	List<GlOpeningBalanceVO> getAllGlOpeningBalanceByOrgId(Long orgId);
