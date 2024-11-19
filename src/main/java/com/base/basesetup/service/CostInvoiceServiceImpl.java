@@ -182,9 +182,10 @@ public class CostInvoiceServiceImpl implements CostInvoiceService {
 
 		}
 
-		BigDecimal totChargesBillCurrAmt = BigDecimal.ZERO;
-		BigDecimal totChargesLcAmt = BigDecimal.ZERO;
+		BigDecimal sumBillAmount = BigDecimal.ZERO;
 		BigDecimal sumLcAmount = BigDecimal.ZERO;
+		BigDecimal taxAmount = BigDecimal.ZERO;
+		BigDecimal tdsAmount = BigDecimal.ZERO;
 
 		List<ChargerCostInvoiceVO> chargerCostInvoiceVOs = new ArrayList<>();
 
@@ -236,13 +237,16 @@ public class CostInvoiceServiceImpl implements CostInvoiceService {
 //			LC AMOUNT CALCULATION
 			lcAmount = exRate.multiply(qty.multiply(rate));
 			chargerCostInvoiceVO.setLcAmt(lcAmount);
-			totChargesLcAmt = totChargesLcAmt.add(lcAmount);
 			sumLcAmount = sumLcAmount.add(lcAmount); // TDS Purpose
+
+			if (chargerCostInvoiceDTO.getGstPercent() != 0) {
+				taxAmount = taxAmount.add(lcAmount);
+			}
 
 //			BILL AMOUNT CALCULATION
 			billAmount = lcAmount.divide(exRate, RoundingMode.HALF_UP);
 			chargerCostInvoiceVO.setBillAmt(billAmount);
-			totChargesBillCurrAmt = totChargesBillCurrAmt.add(billAmount);
+			sumBillAmount = sumBillAmount.add(billAmount);
 
 //			GST AMOUNT CALCULATION
 			gstAmount = lcAmount.multiply(gstPercent).divide(BigDecimal.valueOf(100));
@@ -371,7 +375,7 @@ public class CostInvoiceServiceImpl implements CostInvoiceService {
 							sgstSummaryVO.setBillAmt(BigDecimal.ONE);
 							sgstSummaryVO.setGstAmount(BigDecimal.ONE);
 							sgstSummaryVO.setCostInvoiceVO(costInvoiceVO);
-							
+
 							chargerCostInvoiceVOs.add(sgstSummaryVO);
 
 							break;
@@ -403,9 +407,10 @@ public class CostInvoiceServiceImpl implements CostInvoiceService {
 			BigDecimal totTdsWhAmt = BigDecimal.ZERO;
 			BigDecimal tdsWhPercent = tdsCostInvoiceDTO.getTdsWithHoldingPer();
 			System.out.println("TOTAL LC AMOUNT IS :" + sumLcAmount);
-			;
+
 			totTdsWhAmt = sumLcAmount.multiply(tdsWhPercent.divide(BigDecimal.valueOf(100)));
 			tdsCostInvoiceVO.setTotTdsWhAmnt(totTdsWhAmt);
+			tdsAmount = totTdsWhAmt;
 
 			tdsCostInvoiceVO.setCostInvoiceVO(costInvoiceVO);
 			tdsCostInvoiceVOs.add(tdsCostInvoiceVO);
@@ -413,7 +418,20 @@ public class CostInvoiceServiceImpl implements CostInvoiceService {
 		costInvoiceVO.setTdsCostInvoiceVO(tdsCostInvoiceVOs);
 
 		// Summary Calculation
+		BigDecimal totChargeAmtBillCurr = sumBillAmount;
+		BigDecimal totChargeAmtLc = sumLcAmount;
+		BigDecimal netAmountBillCurr = sumBillAmount.add(tdsAmount).add(taxAmount);
+		BigDecimal netAmountLc = taxAmount.add(sumLcAmount);
+		BigDecimal actBillAmtLc = sumLcAmount.add(tdsAmount).add(taxAmount);
+		BigDecimal actBillAmtBillCurr = sumBillAmount.add(tdsAmount).add(taxAmount);
 
+		costInvoiceVO.setTotChargesBillCurrAmt(totChargeAmtBillCurr);
+		costInvoiceVO.setTotChargesLcAmt(totChargeAmtLc);
+		costInvoiceVO.setNetBillCurrAmt(netAmountBillCurr);
+		costInvoiceVO.setNetBillLcAmt(netAmountLc);
+		costInvoiceVO.setActBillCurrAmt(actBillAmtBillCurr);
+		costInvoiceVO.setActBillLcAmt(actBillAmtLc);
+		;
 		return costInvoiceVO;
 
 	}
@@ -678,6 +696,5 @@ public class CostInvoiceServiceImpl implements CostInvoiceService {
 		return List1;
 
 	}
-	
-	
+
 }
