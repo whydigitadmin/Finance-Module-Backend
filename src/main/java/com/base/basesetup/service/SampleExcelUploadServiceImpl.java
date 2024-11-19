@@ -256,7 +256,7 @@ public class SampleExcelUploadServiceImpl implements SampleExcelUploadService {
         LocalDate dob = sampleExcelUploadDTO.getDob();
 		
 		if (dob != null && !isAgeValid(dob)) {
-			throw new ApplicationException("Above 18 Year only Access");
+			throw new ApplicationException("Date MissMatching !");
 		}
 
 		sampleExcelUploadVO.setDob(dob);

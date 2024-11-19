@@ -2,6 +2,7 @@ package com.base.basesetup.entity;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -15,6 +16,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import com.base.basesetup.dto.CreatedUpdatedDate;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -27,6 +30,8 @@ import lombok.NoArgsConstructor;
 @Table(name = "accounts")
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class AccountsVO {
 	
 	@Id
@@ -66,107 +71,59 @@ public class AccountsVO {
 	private String currency;
 	@Column(name = "exrate", precision = 10, scale = 2)
 	private BigDecimal exRate;
-	
-	
-	@Column(name = "biztype",length = 10)
-	private String bizType;
-	@Column(name = "bizmode",length = 30)
-	private String bizMode;
-	@Column(name = "partyname",length = 150)
-	private String partyName;
-	@Column(name = "partycode",length = 10)
-	private String partyCode;
-	@Column(name = "partytype",length = 30)
-	private String partyType;
-	@Column(name = "stateno",length = 30)
-	private String stateNo;
-	@Column(name = "statecode",length = 10)
-	private String stateCode;
-	@Column(name = "recipientgstin",length = 30)
-	private String recipientGSTIN;
-	@Column(name = "placeofsupply",length = 30)
-	private String placeOfSupply;
-	@Column(name = "addresstype",length = 30)
-	private String addressType;
-	@Column(name = "address",length = 150)
-	private String address;
-	@Column(name = "pincode",length = 10)
-	private String pinCode;
-	@Column(name = "status",length = 30)
-	private String status;
-	@Column(name = "gsttype",length = 30)
-	private String gstType;
-	@Column(name = "docid",length = 30)
-	private String docId;
-
-	@Column(name = "docdate")
-	private LocalDate docDate= LocalDate.now();
-	@Column(name = "supplierbillno",length = 30)
-	private String supplierBillNo;
-	@Column(name = "supplierbilldate")
-	private LocalDate supplierBillDate;
-	
-	@Column(name = "billcurrrate", precision = 10, scale = 2)
-	private BigDecimal billCurrRate;
-	@Column(name = "examount", precision = 10, scale = 2)
-	private BigDecimal exAmount;
+	@Column(name = "remarks",length = 150)
+	private String remarks;
+	@Column(name = "totaldebitamount", precision = 10, scale = 2)
+	private BigDecimal totalDebitAmount;
+	@Column(name = "totalcreditamount", precision = 10, scale = 2)
+	private BigDecimal totalCreditAmount;
+	@Column(name = "sttaxamount", precision = 10, scale = 2)
+	private BigDecimal stTaxAmount;
+	@Column(name = "chargeableamount", precision = 10, scale = 2)
+	private BigDecimal chargeableAmount;
 	@Column(name = "creditdays",length = 5)
 	private int creditDays;
-	@Column(name = "contactperson",length = 30)
-	private String contactPerson;
-	@Column(name = "shipperinvoiceno",length = 30)
-	private String shipperInvoiceNo;
-	@Column(name = "billofentry",length = 30)
-	private String billOfEntry;
-	@Column(name = "billmonth",length = 30)
-	private String billMonth;
-	
-	
-	@Column(name = "invoiceno",length = 30)
-	private String invoiceNo;
-
-	@Column(name = "invoicedate")
-	private LocalDate invoiceDate;
-	@Column(name = "salestype",length = 30)
-	private String salesType;
-
-	@Column(name = "totalchargeamountlc", precision = 10, scale = 2)
-	private BigDecimal totalChargeAmountLc;
-	@Column(name = "totaltaxamountlc", precision = 10, scale = 2)
-	private BigDecimal totalTaxAmountLc;
-	@Column(name = "totalinvamountlc", precision = 10, scale = 2)
-	private BigDecimal totalInvAmountLc;
-	@Column(name = "roundoffamountlc", precision = 10, scale = 2)
-	private BigDecimal roundOffAmountLc;
-	@Column(name = "totalchargeamountbc", precision = 10, scale = 2)
-	private BigDecimal totalChargeAmountBc;
-	@Column(name = "totaltaxamountbc", precision = 10, scale = 2)
-	private BigDecimal totalTaxAmountBc;
-	@Column(name = "totalinvamountbc", precision = 10, scale = 2)
-	private BigDecimal totalInvAmountBc;
-	@Column(name = "totaltaxableamountlc", precision = 10, scale = 2)
-	private BigDecimal totalTaxableAmountLc;
+	@Column(name = "duedate")
+	private LocalDate dueDate;
+	@Column(name = "chequeno",length = 30)
+	private String chequeNo;
+	@Column(name = "chequedate")
+	private LocalDate chequeDate;
+	@Column(name = "chequebank",length = 150)
+	private String chequeBank;
+	@Column(name = "product",length = 10)
+	private String product;
 	@Column(name = "amountinwords",length = 150)
 	private String amountInWords;
-	@Column(name = "billingremarks",length = 30)
-	private String billingRemarks;
-
+	@Column(name = "supplierrefno",length = 30)
+	private String supplierRefNo;
+	@Column(name = "supplierrefdate")
+	private LocalDate supplierRefDate;
+	@Column(name = "billmonth",length = 30)
+	private String billMonth;
+	@Column(name = "acknowledgementno")
+	private Long acknowledgementNo;
+	@Column(name = "acknowledgementdate")
+	private LocalDateTime acknowledgementDate;
+	@Column(name = "irnid",length = 150)
+	private String irnId;
+	@Column(name = "rc",length = 30)
+	private String rc;
+	@Column(name = "salestype",length = 30)
+	private String salesType;
 	
+	@DateTimeFormat(pattern = "dd-MM-yyyy hh:mm:ss a")
+	@Column(name="createdon",length = 25)
+	private String createdon;
+
+	@DateTimeFormat(pattern = "dd-MM-yyyy hh:mm:ss a")
+	@Column(name="modifiedon",length = 25)
+	private String modifiedon;
+		
 
 
-	@OneToMany(mappedBy = "taxInvoiceVO", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "accountsVO", cascade = CascadeType.ALL)
 	@JsonManagedReference
-	List<TaxInvoiceDetailsVO> taxInvoiceDetailsVO;
-
-	
-	@OneToMany(mappedBy = "taxInvoiceVO", cascade = CascadeType.ALL)
-	@JsonManagedReference
-	List<TaxInvoiceGstVO> taxInvoiceGstVO;
-
-	@Embedded
-	@Builder.Default
-	private CreatedUpdatedDate commonDate = new CreatedUpdatedDate();
-	
-	
+	List<AccountsDetailsVO> accountsDetailsVO ;
 
 }
