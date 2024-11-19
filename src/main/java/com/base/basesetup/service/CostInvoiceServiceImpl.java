@@ -138,8 +138,6 @@ public class CostInvoiceServiceImpl implements CostInvoiceService {
 		costInvoiceVO.setProduct(costInvoiceDTO.getProduct());
 		costInvoiceVO.setPurVoucherNo(costInvoiceDTO.getPurVoucherNo());
 		costInvoiceVO.setPurVoucherDate(costInvoiceDTO.getPurVoucherDate());
-		costInvoiceVO.setCostInvoiceNo(costInvoiceDTO.getCostInvoiceNo());
-		costInvoiceVO.setCostInvoiceDate(costInvoiceDTO.getCostInvoiceDate());
 		costInvoiceVO.setSupplierBillNo(costInvoiceDTO.getSupplierBillNo());
 		costInvoiceVO.setSupplierType(costInvoiceDTO.getSupplierType());
 		costInvoiceVO.setSupplierCode(costInvoiceDTO.getSupplierCode());
