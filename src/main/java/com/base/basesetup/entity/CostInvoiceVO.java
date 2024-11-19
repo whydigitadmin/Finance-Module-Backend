@@ -44,10 +44,10 @@ public class CostInvoiceVO {
 	private String purVoucherNo;
 	@Column(name = "purvoucherdate")
 	private LocalDate purVoucherDate;
-	@Column(name = "costinvoiceno", length = 50)
-	private String costInvoiceNo;
-	@Column(name = "costinvoicedate")
-	private LocalDate costInvoiceDate;
+//	@Column(name = "costinvoiceno", length = 50)
+//	private String costInvoiceNo;
+//	@Column(name = "costinvoicedate")
+//	private LocalDate costInvoiceDate;
 	@Column(name = "supplierbillno", length = 50)
 	private String supplierBillNo;
 	@Column(name = "supplietype", length = 10)
