@@ -13,7 +13,7 @@ public interface IrnCreditNoteRepo extends JpaRepository<IrnCreditNoteVO, Long> 
 	@Query(nativeQuery = true, value = "select * from irncreditnote where orgid=?1")
 	List<IrnCreditNoteVO> getAllIrnCreditByOrgId(Long orgId);
 
-	@Query(nativeQuery = true, value = "select * from irncreditnote where irncreditid=?1")
+	@Query(nativeQuery = true, value = "select * from irncreditnote where irncreditnoteid=?1")
 	List<IrnCreditNoteVO> getAllIrnCreditById(Long id);
 
 	@Query(nativeQuery = true, value = "select * from irncreditnote where active=1")

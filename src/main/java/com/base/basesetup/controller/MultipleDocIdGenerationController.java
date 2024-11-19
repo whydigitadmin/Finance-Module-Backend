@@ -112,7 +112,7 @@ public class MultipleDocIdGenerationController extends BaseController {
 			
 			@GetMapping("/getPendingMultipleDocIdGeneration")
 			public ResponseEntity<ResponseDTO> getPendingMultipleDocIdGeneration(@RequestParam Long orgId,@RequestParam String branch,@RequestParam String branchCode,
-					@RequestParam String finYear,@RequestParam String finYearIdentifier,String docCode) {
+					@RequestParam String finYear,@RequestParam String finYearIdentifier,@RequestParam String docCode) {
 				String methodName = "getPendingMultipleDocIdGeneration()";
 				LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
 				String errorMsg = null;

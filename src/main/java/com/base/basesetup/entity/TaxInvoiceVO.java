@@ -114,6 +114,9 @@ public class TaxInvoiceVO {
 	@Column(name = "billmonth",length = 30)
 	private String billMonth;
 	
+	@Column(name="approvestatus",length = 20)
+	private String approveStatus;
+	
 	
 	@Column(name = "invoiceno",length = 30)
 	private String invoiceNo;

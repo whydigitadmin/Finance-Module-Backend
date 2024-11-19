@@ -18,8 +18,8 @@ public class CostInvoiceDTO {
 	private String product;
 	private String purVoucherNo;
 	private LocalDate purVoucherDate;
-	private String costInvoiceNo;
-	private LocalDate costInvoiceDate;
+//	private String costInvoiceNo;
+//	private LocalDate costInvoiceDate;
 	private String supplierBillNo;
 	private String supplierType;
 	private String supplierCode;
