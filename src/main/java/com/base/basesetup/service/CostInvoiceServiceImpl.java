@@ -390,9 +390,9 @@ public class CostInvoiceServiceImpl implements CostInvoiceService {
 			ledgerSumMap.put(ledger, ledgerSumMap.getOrDefault(ledger, BigDecimal.ZERO).add(lcAmount));
 		}
 
-		// TDS table
 		costInvoiceVO.setChargerCostInvoiceVO(chargerCostInvoiceVOs);
 
+		// TDS table
 		List<TdsCostInvoiceVO> tdsCostInvoiceVOs = new ArrayList<>();
 		for (TdsCostInvoiceDTO tdsCostInvoiceDTO : costInvoiceDTO.getTdsCostInvoiceDTO()) {
 			TdsCostInvoiceVO tdsCostInvoiceVO = new TdsCostInvoiceVO();
@@ -405,7 +405,6 @@ public class CostInvoiceServiceImpl implements CostInvoiceService {
 			BigDecimal totTdsWhAmt = BigDecimal.ZERO;
 			BigDecimal tdsWhPercent = tdsCostInvoiceDTO.getTdsWithHoldingPer();
 			System.out.println("TOTAL LC AMOUNT IS :" + sumLcAmount);
-
 			totTdsWhAmt = sumLcAmount.multiply(tdsWhPercent.divide(BigDecimal.valueOf(100)));
 			tdsCostInvoiceVO.setTotTdsWhAmnt(totTdsWhAmt);
 			tdsAmount = totTdsWhAmt;
