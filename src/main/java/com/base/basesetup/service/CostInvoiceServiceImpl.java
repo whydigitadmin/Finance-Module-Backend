@@ -68,15 +68,37 @@ public class CostInvoiceServiceImpl implements CostInvoiceService {
 
 	@Override
 	public List<CostInvoiceVO> getAllCostInvoiceById(Long id) {
-		List<CostInvoiceVO> costInvoiceVO = new ArrayList<>();
+		List<CostInvoiceVO> costInvoiceVOList = new ArrayList<>();
+
 		if (ObjectUtils.isNotEmpty(id)) {
 			LOGGER.info("Successfully Received  CostInvoice BY Id : {}", id);
-			costInvoiceVO = costInvoiceRepo.getAllCostInvoiceById(id);
-		} else {
-			LOGGER.info("Successfully Received CostInvoice For All Id.");
-			costInvoiceVO = costInvoiceRepo.findAll();
+			costInvoiceVOList = costInvoiceRepo.getAllCostInvoiceById(id);
+
+			for (CostInvoiceVO costInvoiceVO : costInvoiceVOList) {
+				List<ChargerCostInvoiceVO> gstLines = new ArrayList<>();
+				List<ChargerCostInvoiceVO> normalCharges = new ArrayList<>();
+
+				// Iterate through the chargerCostInvoiceVO list and split charges
+				for (ChargerCostInvoiceVO charge : costInvoiceVO.getChargerCostInvoiceVO()) {
+					if (isGstCharge(charge)) {
+						gstLines.add(charge); // Add GST related charges to gstLines
+					} else {
+						normalCharges.add(charge); // Add normal charges to normalCharges
+					}
+				}
+
+				costInvoiceVO.setGstLines(gstLines);
+				costInvoiceVO.setNormalCharges(normalCharges);
+			}
 		}
-		return costInvoiceVO;
+
+		return costInvoiceVOList;
+	}
+
+	private boolean isGstCharge(ChargerCostInvoiceVO charge) {
+		// Check if chargeName contains "CGST", "SGST" or "IGST" to identify GST charges
+		return charge.getChargeName() != null && (charge.getChargeName().contains("CGST")
+				|| charge.getChargeName().contains("SGST") || charge.getChargeName().contains("IGST"));
 	}
 
 	@Override

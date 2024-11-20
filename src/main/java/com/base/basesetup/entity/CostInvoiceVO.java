@@ -15,6 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.base.basesetup.dto.CreatedUpdatedDate;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -135,11 +136,16 @@ public class CostInvoiceVO {
 	private BigDecimal roundOff;
 	@Column(name = "gstinputlcamt", precision = 10, scale = 2)
 	private BigDecimal gstInputLcAmt;
-	
 
 	@OneToMany(mappedBy = "costInvoiceVO", cascade = CascadeType.ALL)
 	@JsonManagedReference
 	List<ChargerCostInvoiceVO> chargerCostInvoiceVO;
+
+	@Transient
+	List<ChargerCostInvoiceVO> gstLines;
+
+	@Transient
+	List<ChargerCostInvoiceVO> normalCharges;
 
 	@OneToMany(mappedBy = "costInvoiceVO", cascade = CascadeType.ALL)
 	@JsonManagedReference
