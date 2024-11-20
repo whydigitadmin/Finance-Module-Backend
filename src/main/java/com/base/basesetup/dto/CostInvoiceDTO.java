@@ -44,8 +44,6 @@ public class CostInvoiceDTO {
 	private String customer;
 	private String client;
 	private String finYear;
-	private String ipNo;
-	private String latitude;
 	private String payment;
 	private String accuralid;
 	private String utrRef;
