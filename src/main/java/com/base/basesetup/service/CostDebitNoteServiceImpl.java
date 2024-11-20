@@ -16,19 +16,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.base.basesetup.dto.ChargerCostInvoiceDTO;
 import com.base.basesetup.dto.CostDebitChargesDTO;
 import com.base.basesetup.dto.CostDebitNoteDTO;
 import com.base.basesetup.dto.CostDebitNoteTaxPrtculDTO;
-import com.base.basesetup.dto.TdsCostInvoiceDTO;
-import com.base.basesetup.entity.ChargerCostInvoiceVO;
 import com.base.basesetup.entity.CostDebitChargesVO;
 import com.base.basesetup.entity.CostDebitNoteGstVO;
 import com.base.basesetup.entity.CostDebitNoteTaxPrtculVO;
 import com.base.basesetup.entity.CostDebitNoteVO;
 import com.base.basesetup.entity.CostInvoiceVO;
 import com.base.basesetup.entity.DocumentTypeMappingDetailsVO;
-import com.base.basesetup.entity.TdsCostInvoiceVO;
 import com.base.basesetup.exception.ApplicationException;
 import com.base.basesetup.repo.CostDebitChargesRepo;
 import com.base.basesetup.repo.CostDebitNoteGstRepo;
@@ -209,10 +205,6 @@ public class CostDebitNoteServiceImpl implements CostDebitNoteService {
 			chargerCostDebitVO.setLcAmt(lcAmount);
 			sumLcAmount = sumLcAmount.add(lcAmount); // TDS Purpose
 
-			if (chargerCostDebitDTO.getGstPercent() != 0) {
-				taxAmount = taxAmount.add(lcAmount);
-			}
-
 //			BILL AMOUNT CALCULATION
 			billAmount = lcAmount.divide(exRate, RoundingMode.HALF_UP);
 			chargerCostDebitVO.setBillAmt(billAmount);
@@ -245,6 +237,7 @@ public class CostDebitNoteServiceImpl implements CostDebitNoteService {
 
 				String gstPercent = entry.getKey();
 				BigDecimal igstLcAmount = entry.getValue();
+				taxAmount = taxAmount.add(igstLcAmount);
 
 				Set<Object[]> chargeVO = costInvoiceRepo
 						.findChargeNameAndChargeCodeForIgstPosting(costDebitNoteDTO.getOrgId(), gstPercent);
@@ -289,7 +282,9 @@ public class CostDebitNoteServiceImpl implements CostDebitNoteService {
 				BigDecimal totalTaxAmount = entry.getValue();
 
 				BigDecimal cgstAmount = totalTaxAmount.divide(BigDecimal.valueOf(2), RoundingMode.HALF_UP);
+				taxAmount = taxAmount.add(cgstAmount);
 				BigDecimal sgstAmount = totalTaxAmount.divide(BigDecimal.valueOf(2), RoundingMode.HALF_UP);
+				taxAmount = taxAmount.add(sgstAmount);
 
 				Set<Object[]> chargeVO = costInvoiceRepo
 						.findChargeNameAndChargeCodeForCgstAndSgtsPosting(costDebitNoteDTO.getOrgId(), intraPercent);
@@ -386,13 +381,13 @@ public class CostDebitNoteServiceImpl implements CostDebitNoteService {
 		}
 		costDebitNoteVO.setCostDebitNoteTaxPrtculVO(tdsCostDebitVOs);
 
-		// Summary Calculation
+		// SUMMARY CALCULATION
 		BigDecimal totChargeAmtBillCurr = sumBillAmount;
 		BigDecimal totChargeAmtLc = sumLcAmount;
-		BigDecimal netAmountBillCurr = sumBillAmount.add(tdsAmount).add(taxAmount);
-		BigDecimal netAmountLc = taxAmount.add(sumLcAmount);
-		BigDecimal actBillAmtLc = sumLcAmount.add(tdsAmount).add(taxAmount);
-		BigDecimal actBillAmtBillCurr = sumBillAmount.add(tdsAmount).add(taxAmount);
+		BigDecimal netAmountBillCurr = sumBillAmount.subtract(tdsAmount).add(taxAmount);
+		BigDecimal netAmountLc = taxAmount.subtract(tdsAmount).add(sumLcAmount);
+		BigDecimal actBillAmtLc = sumLcAmount.subtract(tdsAmount).add(taxAmount);
+		BigDecimal actBillAmtBillCurr = sumBillAmount.add(taxAmount);
 
 		costDebitNoteVO.setTotChargesBillCurrAmt(totChargeAmtBillCurr);
 		costDebitNoteVO.setTotChargesLcAmt(totChargeAmtLc);

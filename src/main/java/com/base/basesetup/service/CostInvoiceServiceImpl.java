@@ -328,7 +328,6 @@ public class CostInvoiceServiceImpl implements CostInvoiceService {
 //		ADD CGST and SGST ROWS FOR EACH GST PERCENTAGE IN cgstCategorySumMap
 		if ("INTRA".equalsIgnoreCase(costInvoiceDTO.getGstType())) {
 			for (Map.Entry<String, BigDecimal> entry : cgstCategorySumMap.entrySet()) {
-				ChargerCostInvoiceVO igstSummaryVO = new ChargerCostInvoiceVO();
 				String gstPercent = entry.getKey();
 				BigDecimal intraPercent = new BigDecimal(gstPercent).divide(BigDecimal.valueOf(2));
 				System.out.println("PARAM" + intraPercent);
@@ -436,7 +435,7 @@ public class CostInvoiceServiceImpl implements CostInvoiceService {
 		}
 		costInvoiceVO.setTdsCostInvoiceVO(tdsCostInvoiceVOs);
 
-		// Summary Calculation
+		// SUMMARY CALCULATION
 		BigDecimal totChargeAmtBillCurr = sumBillAmount;
 		BigDecimal totChargeAmtLc = sumLcAmount;
 		BigDecimal netAmountBillCurr = sumBillAmount.subtract(tdsAmount).add(taxAmount);
