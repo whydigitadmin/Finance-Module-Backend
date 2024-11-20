@@ -214,6 +214,7 @@ public class CostInvoiceServiceImpl implements CostInvoiceService {
 		for (ChargerCostInvoiceDTO chargerCostInvoiceDTO : costInvoiceDTO.getChargerCostInvoiceDTO()) {
 			ChargerCostInvoiceVO chargerCostInvoiceVO = new ChargerCostInvoiceVO();
 
+			chargerCostInvoiceVO.setQty(chargerCostInvoiceDTO.getQty());
 			chargerCostInvoiceVO.setRate(chargerCostInvoiceDTO.getRate());
 			chargerCostInvoiceVO.setJobNo(chargerCostInvoiceDTO.getJobNo());
 			chargerCostInvoiceVO.setChargeName(chargerCostInvoiceDTO.getChargeName());

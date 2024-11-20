@@ -162,6 +162,7 @@ public class CostDebitNoteServiceImpl implements CostDebitNoteService {
 		for (CostDebitChargesDTO chargerCostDebitDTO : costDebitNoteDTO.getCostDebitChargesDTO()) {
 			CostDebitChargesVO chargerCostDebitVO = new CostDebitChargesVO();
 
+			chargerCostDebitVO.setQty(chargerCostDebitDTO.getQty());
 			chargerCostDebitVO.setRate(chargerCostDebitDTO.getRate());
 			chargerCostDebitVO.setJobNo(chargerCostDebitDTO.getJobNo());
 			chargerCostDebitVO.setChargeName(chargerCostDebitDTO.getChargeName());
