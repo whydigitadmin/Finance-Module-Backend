@@ -49,7 +49,7 @@ public class ArApAdjustmentOffSetVO {
 	@Column(name = "receiptpaymentdocid",length = 50)
 	private String receiptPaymentDocId;
 	@Column(name = "receiptpaymentdocdate")
-	private LocalDate receiptPaymentDocDate =LocalDate.now();
+	private LocalDate receiptPaymentDocDate;
 	@Column(name = "currency",length=10)
 	private String currency;
 	@Column(name = "exrate",precision = 10, scale = 2 )

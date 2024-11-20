@@ -1,8 +1,7 @@
 package com.base.basesetup.dto;
 
 import java.math.BigDecimal;
-
-
+import java.time.LocalDate;
 import java.util.List;
 
 
@@ -22,6 +21,7 @@ public class ArApAdjustmentOffSetDTO {
 	private String currency;
 	private BigDecimal exRate;
 	private BigDecimal amount;
+	private LocalDate receiptPaymentDocDate;
 	private String supplierRefNo;
 	private BigDecimal forexGainOrLoss;
 	private BigDecimal totalSettled;
