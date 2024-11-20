@@ -50,18 +50,14 @@ public class CostDebitNoteVO {
 	@Column(name = "finyear", length = 10)
 	private String finYear;
 	@Column(name = "screencode", length = 10)
-	private String screenCode="CDN";
+	private String screenCode = "CDN";
 	@Column(name = "screenname", length = 25)
-	private String screenName="COST DEBIT NOTE";
-	@Column(name = "ipno", length = 15)
-	private String ipNo;
-	@Column(name = "latitude", length = 100)
-	private String latitude;
+	private String screenName = "COST DEBIT NOTE";
 	@Column(name = "orgid", length = 15)
 	private Long orgId;
 	@Column(name = "docno", length = 50)
 	private String docNo;
-	
+
 	@Column(name = "docid", length = 50)
 	private String docId;
 
@@ -71,7 +67,7 @@ public class CostDebitNoteVO {
 	@Column(name = "product", length = 50)
 	private String product;
 	@Column(name = "docdate")
-	private LocalDate docDate=LocalDate.now();
+	private LocalDate docDate = LocalDate.now();
 
 	@Column(name = "vohno", length = 50)
 	private String vohNo;
@@ -127,18 +123,18 @@ public class CostDebitNoteVO {
 
 	@Column(name = "gsttype", length = 10)
 	private String gstType;
-	
+
 	@Column(name = "currentdate")
 	private LocalDate currentDate;
-	
+
 	@Column(name = "currentdatevalue")
 	private BigDecimal currentDateValue;
-	
-	@Column(name = "partyaddtype",length =50)
+
+	@Column(name = "partyaddtype", length = 50)
 	private String partyAddType;
-	
-	//summary 
-	
+
+	// summary
+
 	@Column(name = "totchargesbillcurramt", precision = 10, scale = 2)
 	private BigDecimal totChargesBillCurrAmt;
 	@Column(name = "totchargeslcamt", precision = 10, scale = 2)
@@ -155,8 +151,7 @@ public class CostDebitNoteVO {
 	private BigDecimal roundOff;
 	@Column(name = "gstinputlcamt", precision = 10, scale = 2)
 	private BigDecimal gstInputLcAmt;
-	
-	
+
 //	@Column(name = "totchargesbillcurramt", precision = 10, scale = 2)
 //	private BigDecimal totChargesBillCurrAmt;
 //
@@ -181,20 +176,19 @@ public class CostDebitNoteVO {
 //	@Column(name = "roundoff",precision =10,scale =2)
 //	private BigDecimal roundOff;
 
-	@OneToMany(mappedBy ="costDebitNoteVO",cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "costDebitNoteVO", cascade = CascadeType.ALL)
 	@JsonManagedReference
-    List <CostDebitChargesVO> costDebitChargesVO;
-	
-	@OneToMany(mappedBy ="costDebitNoteVO",cascade = CascadeType.ALL)
+	List<CostDebitChargesVO> costDebitChargesVO;
+
+	@OneToMany(mappedBy = "costDebitNoteVO", cascade = CascadeType.ALL)
 	@JsonManagedReference
-    List <CostDebitNoteGstVO> costDebitNoteGstVO;
-	
-	@OneToMany(mappedBy ="costDebitNoteVO",cascade = CascadeType.ALL)
+	List<CostDebitNoteGstVO> costDebitNoteGstVO;
+
+	@OneToMany(mappedBy = "costDebitNoteVO", cascade = CascadeType.ALL)
 	@JsonManagedReference
-    List <CostDebitNoteTaxPrtculVO> costDebitNoteTaxPrtculVO;
-	
-	
-    @JsonGetter("active")
+	List<CostDebitNoteTaxPrtculVO> costDebitNoteTaxPrtculVO;
+
+	@JsonGetter("active")
 	public String getActive() {
 		return active ? "Active" : "In-Active";
 	}
@@ -204,9 +198,7 @@ public class CostDebitNoteVO {
 	public String getCancel() {
 		return cancel ? "T" : "F";
 	}
-	
-	
-	
+
 	@Embedded
 	private CreatedUpdatedDate commonDate = new CreatedUpdatedDate();
 }

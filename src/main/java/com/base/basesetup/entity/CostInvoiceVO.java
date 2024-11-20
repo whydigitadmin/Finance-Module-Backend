@@ -106,10 +106,6 @@ public class CostInvoiceVO {
 	private String screenCode = "CI";
 	@Column(name = "screenname", length = 25)
 	private String screenName = "COST INVOICE";
-	@Column(name = "ipno", length = 10)
-	private String ipNo;
-	@Column(name = "latitude", length = 100)
-	private String latitude;
 	@Column(name = "docid", length = 30)
 	private String docId;
 	@Column(name = "docdate")

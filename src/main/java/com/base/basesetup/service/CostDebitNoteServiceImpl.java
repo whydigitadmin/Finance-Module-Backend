@@ -115,8 +115,6 @@ public class CostDebitNoteServiceImpl implements CostDebitNoteService {
 		costDebitNoteVO.setCancelRemarks(costDebitNoteDTO.getCancelRemarks());
 		costDebitNoteVO.setFinYear(costDebitNoteDTO.getFinYear());
 		costDebitNoteVO.setTaxExampt(costDebitNoteDTO.isTaxExampt());
-		costDebitNoteVO.setIpNo(costDebitNoteDTO.getIpNo());
-		costDebitNoteVO.setLatitude(costDebitNoteDTO.getLatitude());
 		costDebitNoteVO.setOrgId(costDebitNoteDTO.getOrgId());
 		costDebitNoteVO.setSubType(costDebitNoteDTO.getSubType());
 		costDebitNoteVO.setProduct(costDebitNoteDTO.getProduct());
