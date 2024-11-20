@@ -235,10 +235,6 @@ public class CostInvoiceServiceImpl implements CostInvoiceService {
 			chargerCostInvoiceVO.setLcAmt(lcAmount);
 			sumLcAmount = sumLcAmount.add(lcAmount); // TDS Purpose
 
-			if (chargerCostInvoiceDTO.getGstPercent() != 0) {
-				taxAmount = taxAmount.add(lcAmount);
-			}
-
 //			BILL AMOUNT CALCULATION
 			billAmount = lcAmount.divide(exRate, RoundingMode.HALF_UP);
 			chargerCostInvoiceVO.setBillAmt(billAmount);
@@ -271,6 +267,8 @@ public class CostInvoiceServiceImpl implements CostInvoiceService {
 
 				String gstPercent = entry.getKey();
 				BigDecimal igstLcAmount = entry.getValue();
+//				if (igstSummaryVO.getGSTPercent() != 0) {
+				taxAmount = taxAmount.add(igstLcAmount);
 
 				Set<Object[]> chargeVO = costInvoiceRepo
 						.findChargeNameAndChargeCodeForIgstPosting(costInvoiceDTO.getOrgId(), gstPercent);
@@ -308,15 +306,19 @@ public class CostInvoiceServiceImpl implements CostInvoiceService {
 //		ADD CGST and SGST ROWS FOR EACH GST PERCENTAGE IN cgstCategorySumMap
 		if ("INTRA".equalsIgnoreCase(costInvoiceDTO.getGstType())) {
 			for (Map.Entry<String, BigDecimal> entry : cgstCategorySumMap.entrySet()) {
-
+				ChargerCostInvoiceVO igstSummaryVO = new ChargerCostInvoiceVO();
 				String gstPercent = entry.getKey();
 				BigDecimal intraPercent = new BigDecimal(gstPercent).divide(BigDecimal.valueOf(2));
 				System.out.println("PARAM" + intraPercent);
 				BigDecimal totalTaxAmount = entry.getValue();
 
 				BigDecimal cgstAmount = totalTaxAmount.divide(BigDecimal.valueOf(2), RoundingMode.HALF_UP);
-				BigDecimal sgstAmount = totalTaxAmount.divide(BigDecimal.valueOf(2), RoundingMode.HALF_UP);
+//				if (igstSummaryVO.getGSTPercent() != 0) {
+				taxAmount = taxAmount.add(cgstAmount);
 
+				BigDecimal sgstAmount = totalTaxAmount.divide(BigDecimal.valueOf(2), RoundingMode.HALF_UP);
+//				if (igstSummaryVO.getGSTPercent() != 0) {
+				taxAmount = taxAmount.add(sgstAmount);
 				Set<Object[]> chargeVO = costInvoiceRepo
 						.findChargeNameAndChargeCodeForCgstAndSgtsPosting(costInvoiceDTO.getOrgId(), intraPercent);
 
@@ -415,10 +417,10 @@ public class CostInvoiceServiceImpl implements CostInvoiceService {
 		// Summary Calculation
 		BigDecimal totChargeAmtBillCurr = sumBillAmount;
 		BigDecimal totChargeAmtLc = sumLcAmount;
-		BigDecimal netAmountBillCurr = sumBillAmount.add(tdsAmount).add(taxAmount);
-		BigDecimal netAmountLc = taxAmount.add(sumLcAmount);
-		BigDecimal actBillAmtLc = sumLcAmount.add(tdsAmount).add(taxAmount);
-		BigDecimal actBillAmtBillCurr = sumBillAmount.add(tdsAmount).add(taxAmount);
+		BigDecimal netAmountBillCurr = sumBillAmount.subtract(tdsAmount).add(taxAmount);
+		BigDecimal netAmountLc = taxAmount.subtract(tdsAmount).add(sumLcAmount);
+		BigDecimal actBillAmtLc = sumLcAmount.subtract(tdsAmount).add(taxAmount);
+		BigDecimal actBillAmtBillCurr = sumBillAmount.add(taxAmount);
 
 		costInvoiceVO.setTotChargesBillCurrAmt(totChargeAmtBillCurr);
 		costInvoiceVO.setTotChargesLcAmt(totChargeAmtLc);

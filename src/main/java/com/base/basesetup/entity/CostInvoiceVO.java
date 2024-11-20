@@ -66,7 +66,7 @@ public class CostInvoiceVO {
 	private String currency;
 	@Column(name = "exrate", precision = 10, scale = 2)
 	private BigDecimal exRate;
-	@Column(name = "suppliergstin", length = 10)
+	@Column(name = "suppliergstin", length = 20)
 	private String supplierGstIn;
 	@Column(name = "suppliergstincode", length = 15)
 	private String supplierGstInCode;
