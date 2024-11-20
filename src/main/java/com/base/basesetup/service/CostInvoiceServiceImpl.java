@@ -428,7 +428,7 @@ public class CostInvoiceServiceImpl implements CostInvoiceService {
 		costInvoiceVO.setNetBillLcAmt(netAmountLc);
 		costInvoiceVO.setActBillCurrAmt(actBillAmtBillCurr);
 		costInvoiceVO.setActBillLcAmt(actBillAmtLc);
-		;
+
 		return costInvoiceVO;
 
 	}

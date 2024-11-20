@@ -141,28 +141,46 @@ public class CostDebitNoteVO {
 	
 	@Column(name = "totchargesbillcurramt", precision = 10, scale = 2)
 	private BigDecimal totChargesBillCurrAmt;
-
-	@Column(name = "totchargeslcamp", precision = 10, scale = 2)
-	private BigDecimal totChargesLCAmt;
-
-	@Column(name = "totgrossbillamt", precision = 10, scale = 2)
-	private BigDecimal totGrossBillAmt;
-
-	@Column(name = "totgrosslcamt", precision = 10, scale = 2)
-	private BigDecimal totGrossLCAmt;
-
+	@Column(name = "totchargeslcamt", precision = 10, scale = 2)
+	private BigDecimal totChargesLcAmt;
+	@Column(name = "actbillcurramt", precision = 10, scale = 2)
+	private BigDecimal actBillCurrAmt;
+	@Column(name = "actbilllcamt", precision = 10, scale = 2)
+	private BigDecimal actBillLcAmt;
 	@Column(name = "netbillcurramt", precision = 10, scale = 2)
 	private BigDecimal netBillCurrAmt;
-
-	@Column(name = "netlcamt", precision = 10, scale = 2)
-	private BigDecimal netLCAmt;
-
-	@Column(name = "amtinwords", length = 150)
-	private String amtInWords;
-	
-	@Column(name = "roundoff",precision =10,scale =2)
+	@Column(name = "netbilllcamt", precision = 10, scale = 2)
+	private BigDecimal netBillLcAmt;
+	@Column(name = "roundoff", precision = 10, scale = 2)
 	private BigDecimal roundOff;
+	@Column(name = "gstinputlcamt", precision = 10, scale = 2)
+	private BigDecimal gstInputLcAmt;
 	
+	
+//	@Column(name = "totchargesbillcurramt", precision = 10, scale = 2)
+//	private BigDecimal totChargesBillCurrAmt;
+//
+//	@Column(name = "totchargeslcamp", precision = 10, scale = 2)
+//	private BigDecimal totChargesLCAmt;
+//
+//	@Column(name = "totgrossbillamt", precision = 10, scale = 2)
+//	private BigDecimal totGrossBillAmt;
+//
+//	@Column(name = "totgrosslcamt", precision = 10, scale = 2)
+//	private BigDecimal totGrossLCAmt;
+//
+//	@Column(name = "netbillcurramt", precision = 10, scale = 2)
+//	private BigDecimal netBillCurrAmt;
+//
+//	@Column(name = "netlcamt", precision = 10, scale = 2)
+//	private BigDecimal netLCAmt;
+//
+//	@Column(name = "amtinwords", length = 150)
+//	private String amtInWords;
+//	
+//	@Column(name = "roundoff",precision =10,scale =2)
+//	private BigDecimal roundOff;
+
 	@OneToMany(mappedBy ="costDebitNoteVO",cascade = CascadeType.ALL)
 	@JsonManagedReference
     List <CostDebitChargesVO> costDebitChargesVO;
