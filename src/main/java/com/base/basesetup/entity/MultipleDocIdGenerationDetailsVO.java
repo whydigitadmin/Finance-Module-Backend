@@ -38,6 +38,15 @@ public class MultipleDocIdGenerationDetailsVO {
 	@Column(name = "screenname",length =50)
 	private String screenName;
 	
+	@Column(name = "sourcescreencode",length =10)
+	private String sourceScreenCode;
+	
+	@Column(name = "sourcescreenname",length =50)
+	private String sourceScreenName;
+	
+	@Column(name = "sourcedoccode",length =25)
+	private String sourceDocCode;
+	
 	@Column(name = "doccode",length =25)
 	private String docCode;
 	
