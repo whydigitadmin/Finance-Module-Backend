@@ -7,7 +7,6 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -18,11 +17,9 @@ import javax.persistence.Table;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
-import com.base.basesetup.dto.CreatedUpdatedDate;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -31,7 +28,6 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 public class AccountsVO {
 	
 	@Id
@@ -63,6 +59,10 @@ public class AccountsVO {
 	private String sourceScreen;
 	@Column(name = "sourcescreencode",length = 10)
 	private String sourceScreenCode;
+	@Column(name = "docid",length = 30)
+	private String docId;
+	@Column(name = "docdate")
+	private LocalDate docDate= LocalDate.now();
 	@Column(name = "refno",length = 30)
 	private String refNo;
 	@Column(name = "refdate")
