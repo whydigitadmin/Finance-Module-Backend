@@ -33,7 +33,7 @@ public class AccountsDetailsVO {
 	private Long id;
 	@Column(name = "accountname",length = 150)
 	private String accountName;
-	@Column(name = "acategory",length = 5)
+	@Column(name = "acategory",length = 100)
 	private String aCategory;
 	@Column(name = "subledgercode",length = 30)
 	private String subLedgerCode;
