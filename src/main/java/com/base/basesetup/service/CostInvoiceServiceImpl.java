@@ -259,7 +259,7 @@ public class CostInvoiceServiceImpl implements CostInvoiceService {
 			sumLcAmount = sumLcAmount.add(lcAmount); // TDS Purpose
 
 //			BILL AMOUNT CALCULATION
-			billAmount = lcAmount.divide(exRate, RoundingMode.HALF_UP);
+			billAmount = lcAmount.divide(exRate);
 			chargerCostInvoiceVO.setBillAmt(billAmount);
 			sumBillAmount = sumBillAmount.add(billAmount);
 
@@ -334,11 +334,11 @@ public class CostInvoiceServiceImpl implements CostInvoiceService {
 				System.out.println("PARAM" + intraPercent);
 				BigDecimal totalTaxAmount = entry.getValue();
 
-				BigDecimal cgstAmount = totalTaxAmount.divide(BigDecimal.valueOf(2), RoundingMode.HALF_UP);
+				BigDecimal cgstAmount = totalTaxAmount.divide(BigDecimal.valueOf(2));
 //				if (igstSummaryVO.getGSTPercent() != 0) {
 				taxAmount = taxAmount.add(cgstAmount);
 
-				BigDecimal sgstAmount = totalTaxAmount.divide(BigDecimal.valueOf(2), RoundingMode.HALF_UP);
+				BigDecimal sgstAmount = totalTaxAmount.divide(BigDecimal.valueOf(2));
 //				if (igstSummaryVO.getGSTPercent() != 0) {
 				taxAmount = taxAmount.add(sgstAmount);
 				Set<Object[]> chargeVO = costInvoiceRepo
@@ -443,6 +443,8 @@ public class CostInvoiceServiceImpl implements CostInvoiceService {
 		BigDecimal netAmountLc = taxAmount.subtract(tdsAmount).add(sumLcAmount);
 		BigDecimal actBillAmtLc = sumLcAmount.subtract(tdsAmount).add(taxAmount);
 		BigDecimal actBillAmtBillCurr = sumBillAmount.add(taxAmount);
+		BigDecimal roundedValue = netAmountLc.setScale(0, RoundingMode.HALF_UP);
+		BigDecimal roundOff = netAmountLc.subtract(roundedValue);
 
 		costInvoiceVO.setTotChargesBillCurrAmt(totChargeAmtBillCurr);
 		costInvoiceVO.setTotChargesLcAmt(totChargeAmtLc);
@@ -450,7 +452,8 @@ public class CostInvoiceServiceImpl implements CostInvoiceService {
 		costInvoiceVO.setNetBillLcAmt(netAmountLc);
 		costInvoiceVO.setActBillCurrAmt(actBillAmtBillCurr);
 		costInvoiceVO.setActBillLcAmt(actBillAmtLc);
-
+		costInvoiceVO.setRoundOff(roundOff);
+		costInvoiceVO.setGstInputLcAmt(taxAmount);
 		return costInvoiceVO;
 
 	}
