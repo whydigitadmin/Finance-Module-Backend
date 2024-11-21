@@ -444,7 +444,7 @@ public class CostInvoiceServiceImpl implements CostInvoiceService {
 		BigDecimal actBillAmtLc = sumLcAmount.subtract(tdsAmount).add(taxAmount);
 		BigDecimal actBillAmtBillCurr = sumBillAmount.add(taxAmount);
 		BigDecimal roundedValue = netAmountLc.setScale(0, RoundingMode.HALF_UP);
-		BigDecimal roundOff = netAmountLc.subtract(roundedValue);
+		Long roundOff = netAmountLc.subtract(roundedValue).longValue();
 
 		costInvoiceVO.setTotChargesBillCurrAmt(totChargeAmtBillCurr);
 		costInvoiceVO.setTotChargesLcAmt(totChargeAmtLc);
