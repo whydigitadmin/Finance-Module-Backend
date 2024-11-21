@@ -17,6 +17,8 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import com.base.basesetup.dto.CreatedUpdatedDate;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -120,6 +122,7 @@ public class CostInvoiceVO {
 	@Column(name = "costtype", length = 10)
 	private String costType;
 
+//	SUMMARY
 	@Column(name = "totchargesbillcurramt", precision = 10, scale = 2)
 	private BigDecimal totChargesBillCurrAmt;
 	@Column(name = "totchargeslcamt", precision = 10, scale = 2)
@@ -136,6 +139,15 @@ public class CostInvoiceVO {
 	private Long roundOff;
 	@Column(name = "gstinputlcamt", precision = 10, scale = 2)
 	private BigDecimal gstInputLcAmt;
+
+//	APPROVED
+	@Column(name = "approvestatus", length = 20)
+	private String approveStatus;
+	@Column(name = "approveby", length = 20)
+	private String approveBy;
+	@DateTimeFormat(pattern = "dd-MM-yyyy hh:mm:ss a")
+	@Column(name = "approveon")
+	private String approveOn;
 
 	@OneToMany(mappedBy = "costInvoiceVO", cascade = CascadeType.ALL)
 	@JsonManagedReference

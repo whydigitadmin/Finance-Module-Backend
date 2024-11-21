@@ -19,16 +19,22 @@ import org.springframework.stereotype.Service;
 import com.base.basesetup.dto.ChargerCostInvoiceDTO;
 import com.base.basesetup.dto.CostInvoiceDTO;
 import com.base.basesetup.dto.TdsCostInvoiceDTO;
+import com.base.basesetup.entity.AccountsVO;
 import com.base.basesetup.entity.ChargerCostInvoiceVO;
 import com.base.basesetup.entity.CostInvoiceVO;
 import com.base.basesetup.entity.DocumentTypeMappingDetailsVO;
+import com.base.basesetup.entity.MultipleDocIdGenerationDetailsVO;
 import com.base.basesetup.entity.PartyMasterVO;
+import com.base.basesetup.entity.TaxInvoiceVO;
 import com.base.basesetup.entity.TdsCostInvoiceVO;
 import com.base.basesetup.exception.ApplicationException;
+import com.base.basesetup.repo.AccountsDetailsRepo;
+import com.base.basesetup.repo.AccountsRepo;
 import com.base.basesetup.repo.ChargeTypeRequestRepo;
 import com.base.basesetup.repo.ChargerCostInvoiceRepo;
 import com.base.basesetup.repo.CostInvoiceRepo;
 import com.base.basesetup.repo.DocumentTypeMappingDetailsRepo;
+import com.base.basesetup.repo.MultipleDocIdGenerationDetailsRepo;
 import com.base.basesetup.repo.TdsCostInvoiceRepo;
 
 @Service
@@ -50,6 +56,15 @@ public class CostInvoiceServiceImpl implements CostInvoiceService {
 
 	@Autowired
 	ChargeTypeRequestRepo chargeTypeRequestRepo;
+
+	@Autowired
+	AccountsRepo accountsRepo;
+
+	@Autowired
+	AccountsDetailsRepo accountsDetailsRepo;
+
+	@Autowired
+	MultipleDocIdGenerationDetailsRepo multipleDocIdGenerationDetailsRepo;
 
 	// costInvoice
 
@@ -717,6 +732,74 @@ public class CostInvoiceServiceImpl implements CostInvoiceService {
 		}
 		return List1;
 
+	}
+
+	@Override
+	public CostInvoiceVO approveCostInvoice(Long orgId, Long id, String docId, String action, String actionBy)
+			throws ApplicationException {
+		// Fetch the CostInvoice details from Cost Invoice
+		CostInvoiceVO costInvoiceVO = costInvoiceRepo.findByOrgIdAndIdAndDocId(orgId, id, docId);
+		String screenCode = "AC";
+		String sourceScreenCode = costInvoiceVO.getScreenCode();
+
+		// Validate the approval status of the invoice
+		if (costInvoiceVO.getApproveStatus() == null || (!costInvoiceVO.getApproveStatus().equalsIgnoreCase("Approved")
+				&& !costInvoiceVO.getApproveStatus().equalsIgnoreCase("Rejected"))) {
+
+			String accountsDocId = accountsRepo.getCostInvoiceDocId(costInvoiceVO.getOrgId(),
+					costInvoiceVO.getFinYear(), costInvoiceVO.getBranchCode(), sourceScreenCode, screenCode);
+			costInvoiceVO.setDocId(docId);
+
+			// GETDOCID LASTNO +1
+			MultipleDocIdGenerationDetailsVO mulDocId = multipleDocIdGenerationDetailsRepo
+					.findByOrgIdAndFinYearAndBranchCodeAndSourceScreenCodeAndScreenCode(costInvoiceVO.getOrgId(),
+							costInvoiceVO.getFinYear(), costInvoiceVO.getBranchCode(), sourceScreenCode, screenCode);
+			mulDocId.setLastno(mulDocId.getLastno() + 1);
+			multipleDocIdGenerationDetailsRepo.save(mulDocId);
+
+			AccountsVO accountsVO = new AccountsVO();
+			accountsVO.setDocId(accountsDocId);
+			accountsVO.setSourceId(costInvoiceVO.getId());
+			accountsVO.setModifiedon(costInvoiceVO.getCommonDate().getModifiedon().toUpperCase());
+			accountsVO.setCreatedBy(costInvoiceVO.getCreatedBy());
+			accountsVO.setCreatedon(costInvoiceVO.getCommonDate().getModifiedon().toUpperCase());
+			accountsVO.setCancelRemarks(costInvoiceVO.getCancelRemarks());
+			accountsVO.setFinYear(costInvoiceVO.getFinYear());
+			accountsVO.setBranch(costInvoiceVO.getBranch());
+			accountsVO.setBranchCode(costInvoiceVO.getBranchCode());
+			accountsVO.setRefNo(costInvoiceVO.getDocId());
+			accountsVO.setRefDate(costInvoiceVO.getDocDate());
+			accountsVO.setCurrency(costInvoiceVO.getCurrency());
+			accountsVO.setExRate(costInvoiceVO.getExRate());
+
+			// Calculate total debit/credit amounts
+			BigDecimal totalDebitAmount = costInvoiceVO.getNetBillLcAmt();
+//					.add(costInvoiceVO.getTotalTaxAmountLc()); To ask jayabalan for the totalDebitAmount
+			accountsVO.setTotalDebitAmount(totalDebitAmount);
+			accountsVO.setTotalCreditAmount(totalDebitAmount);
+			accountsVO.setDueDate(costInvoiceVO.getDueDate());
+			accountsVO.setSupplierRefNo(costInvoiceVO.getSupplierBillNo());
+//			accountsVO.setSupplierRefDate(costInvoiceVO.getdate)
+			;
+			accountsVO.setCreditDays(costInvoiceVO.getCreditDays());
+			accountsVO.setSourceScreen(costInvoiceVO.getScreenName());
+			accountsVO.setSourceScreenCode(costInvoiceVO.getScreenCode());
+			accountsVO.setModifiedBy(costInvoiceVO.getUpdatedBy());
+			accountsVO.setOrgId(costInvoiceVO.getOrgId());
+			accountsVO.setRemarks(costInvoiceVO.getRemarks());
+			accountsVO.setChargeableAmount(costInvoiceVO.getTotChargesLcAmt());
+
+//			accountsVO.setAmountInWords(costInvoiceVO.getAmountInWords());
+//			accountsVO.setStTaxAmount(costInvoiceVO.getTotalTaxableAmountLc());
+//			accountsVO.setSalesType(costInvoiceVO.getSalesType());
+
+			return costInvoiceRepo.save(costInvoiceVO);
+
+		} else if (costInvoiceVO.getApproveStatus().equals("Approved")) {
+			throw new ApplicationException("This Invoice Already Approved,");
+		} else {
+			throw new ApplicationException("This Invoice Already Rejected");
+		}
 	}
 
 }

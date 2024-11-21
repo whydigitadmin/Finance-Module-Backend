@@ -81,4 +81,6 @@ public interface CostInvoiceRepo extends JpaRepository<CostInvoiceVO, Long> {
 	@Query(nativeQuery = true, value = "SELECT chargedescription,chargecode,govtsac,taxable,serviceaccountcode,gsttax FROM chargetyperequest WHERE chargedescription LIKE '%INTRA%' AND chargecode LIKE '%gst%' AND orgid=?1 AND gsttax IN (?2) GROUP BY chargedescription,chargecode,govtsac,taxable,serviceaccountcode,gsttax")
 	Set<Object[]> findChargeNameAndChargeCodeForCgstAndIgst(Long orgId, List<String> gstTax);
 
+	CostInvoiceVO findByOrgIdAndIdAndDocId(Long orgId, Long id, String docId);
+
 }
