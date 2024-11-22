@@ -3,6 +3,7 @@ package com.base.basesetup.entity;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -15,6 +16,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 import com.base.basesetup.dto.CreatedUpdatedDate;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -116,6 +119,13 @@ public class TaxInvoiceVO {
 	
 	@Column(name="approvestatus",length = 20)
 	private String approveStatus;
+	@Column(name="approveby",length = 20)
+	private String approveBy;
+	
+	@DateTimeFormat(pattern = "dd-MM-yyyy hh:mm:ss a")
+	@Column(name="approveon")
+	private String approveOn;
+	
 	
 	
 	@Column(name = "invoiceno",length = 30)
