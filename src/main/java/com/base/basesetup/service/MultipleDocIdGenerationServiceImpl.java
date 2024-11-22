@@ -41,7 +41,6 @@ public class MultipleDocIdGenerationServiceImpl implements MultipleDocIdGenerati
 		multipleDocIdGenerationVO.setScreenName(multipleDocIdGenerationDTO.getScreenName());
 		multipleDocIdGenerationVO.setScreenCode(multipleDocIdGenerationDTO.getScreenCode());
 		multipleDocIdGenerationVO.setDocCode(multipleDocIdGenerationDTO.getDocCode());
-
 		multipleDocIdGenerationVO.setCreatedBy(multipleDocIdGenerationDTO.getCreatedBy());
 		multipleDocIdGenerationVO.setUpdatedBy(multipleDocIdGenerationDTO.getCreatedBy());
 
@@ -51,9 +50,9 @@ public class MultipleDocIdGenerationServiceImpl implements MultipleDocIdGenerati
 			for (MultipleDocIdGenerationDetailsDTO multipleDocIdGenerationDetailsDTO : multipleDocIdGenerationDTO.
 					getMultipleDocIdGenerationDetailsDTO()) {
 				MultipleDocIdGenerationDetailsVO multipleDocIdGenerationDetailsVO1 = new MultipleDocIdGenerationDetailsVO();
-				multipleDocIdGenerationDetailsVO1.setScreenCode(multipleDocIdGenerationDetailsDTO.getScreenCode());
-				multipleDocIdGenerationDetailsVO1.setScreenName(multipleDocIdGenerationDetailsDTO.getScreenName());
-				multipleDocIdGenerationDetailsVO1.setDocCode(multipleDocIdGenerationDetailsDTO.getDocCode());
+				multipleDocIdGenerationDetailsVO1.setScreenCode(multipleDocIdGenerationVO.getScreenCode());
+				multipleDocIdGenerationDetailsVO1.setScreenName(multipleDocIdGenerationVO.getScreenName());
+				multipleDocIdGenerationDetailsVO1.setDocCode(multipleDocIdGenerationVO.getDocCode());
 				multipleDocIdGenerationDetailsVO1.setBranch(multipleDocIdGenerationDetailsDTO.getBranch());
 				multipleDocIdGenerationDetailsVO1.setBranchCode(multipleDocIdGenerationDetailsDTO.getBranchCode());
 				multipleDocIdGenerationDetailsVO1.setPrefixField(multipleDocIdGenerationDetailsDTO.getPrefixField());
@@ -62,6 +61,9 @@ public class MultipleDocIdGenerationServiceImpl implements MultipleDocIdGenerati
 						.setFinYearIdentifier(multipleDocIdGenerationDetailsDTO.getFinYearIdentifier());
 				multipleDocIdGenerationDetailsVO1.setConcatenation(multipleDocIdGenerationDetailsDTO.getScreenCode()
 						+ multipleDocIdGenerationDetailsDTO.getDocCode());
+				multipleDocIdGenerationDetailsVO1.setSourceDocCode(multipleDocIdGenerationDetailsDTO.getDocCode());
+				multipleDocIdGenerationDetailsVO1.setSourceScreenCode(multipleDocIdGenerationDetailsDTO.getScreenCode());
+				multipleDocIdGenerationDetailsVO1.setSourceScreenName(multipleDocIdGenerationDetailsDTO.getScreenName());
 				multipleDocIdGenerationDetailsVO1.setOrgId(multipleDocIdGenerationDTO.getOrgId());
 				multipleDocIdGenerationDetailsVO1.setMultipleDocIdGenerationVO(multipleDocIdGenerationVO);
 				multipleDocIdGenerationDetailsVO.add(multipleDocIdGenerationDetailsVO1);
