@@ -35,7 +35,7 @@ public interface CostDebitNoteService {
 
 	List<Map<String, Object>> getCurrencyAndExrates(Long orgId);
 
-	List<CostInvoiceVO> getOrginBillNoByParty(Long orgId, String party, String branchCode);
+	List<CostDebitNoteVO> getOrginBillNoByParty(Long orgId, String party, String branchCode);
 
 	List<Map<String, Object>> partyTypeForCostDebitNote(Long orgId, String branch, String finYear);
 

@@ -25,7 +25,6 @@ import com.base.basesetup.entity.CostInvoiceVO;
 import com.base.basesetup.entity.DocumentTypeMappingDetailsVO;
 import com.base.basesetup.entity.MultipleDocIdGenerationDetailsVO;
 import com.base.basesetup.entity.PartyMasterVO;
-import com.base.basesetup.entity.TaxInvoiceVO;
 import com.base.basesetup.entity.TdsCostInvoiceVO;
 import com.base.basesetup.exception.ApplicationException;
 import com.base.basesetup.repo.AccountsDetailsRepo;
@@ -173,8 +172,6 @@ public class CostInvoiceServiceImpl implements CostInvoiceService {
 
 		costInvoiceVO.setMode(costInvoiceDTO.getMode());
 		costInvoiceVO.setProduct(costInvoiceDTO.getProduct());
-		costInvoiceVO.setPurVoucherNo(costInvoiceDTO.getPurVoucherNo());
-		costInvoiceVO.setPurVoucherDate(costInvoiceDTO.getPurVoucherDate());
 		costInvoiceVO.setSupplierBillNo(costInvoiceDTO.getSupplierBillNo());
 		costInvoiceVO.setSupplierType(costInvoiceDTO.getSupplierType());
 		costInvoiceVO.setSupplierCode(costInvoiceDTO.getSupplierCode());
