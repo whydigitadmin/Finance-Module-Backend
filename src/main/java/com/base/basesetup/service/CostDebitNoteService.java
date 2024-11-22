@@ -25,7 +25,6 @@ public interface CostDebitNoteService {
 
 	CostDebitNoteVO getAllCostDebitNoteByDocId(Long orgId, String docId);
 
-
 	String getCostDebitNoteDocId(Long orgId, String finYear, String branch, String branchCode);
 
 	List<Map<String, Object>> partyDetailsForCostDebitNote(Long orgId, String branch, String finYear);
@@ -39,6 +38,5 @@ public interface CostDebitNoteService {
 	List<CostInvoiceVO> getOrginBillNoByParty(Long orgId, String party, String branchCode);
 
 	List<Map<String, Object>> partyTypeForCostDebitNote(Long orgId, String branch, String finYear);
-
 
 }

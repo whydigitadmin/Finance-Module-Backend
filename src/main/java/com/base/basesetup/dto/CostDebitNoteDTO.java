@@ -19,8 +19,6 @@ public class CostDebitNoteDTO {
 	private String createdBy;
 	private String cancelRemarks;
 	private String finYear;
-	private String ipNo;
-	private String latitude;
 	private Long orgId;
 	private String subType;
 	private String product;

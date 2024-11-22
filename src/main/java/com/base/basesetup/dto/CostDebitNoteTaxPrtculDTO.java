@@ -11,13 +11,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 
 public class CostDebitNoteTaxPrtculDTO {
-	
+
 	private Long Id;
-	
-	private String tds;
 
-	private BigDecimal tdsPercentage;
-
+	private String tdsWithHolding;
+	private BigDecimal tdsWithHoldingPer;
 	private String section;
 
 //	private BigDecimal totTDSAmt;
