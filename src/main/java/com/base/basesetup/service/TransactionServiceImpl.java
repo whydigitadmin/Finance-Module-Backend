@@ -1836,8 +1836,8 @@ public class TransactionServiceImpl implements TransactionService {
 		arApAdjustmentOffSetVO.setSubLedgerName(arApAdjustmentOffSetDTO.getSubLedgerName());
 		arApAdjustmentOffSetVO.setSubLedgerCode(arApAdjustmentOffSetDTO.getSubLedgerCode());
 		arApAdjustmentOffSetVO.setReceiptPaymentDocId(arApAdjustmentOffSetDTO.getReceiptPaymentDocId());
-		arApAdjustmentOffSetVO.setCurrency(arApAdjustmentOffSetDTO.getCurrency());
-		arApAdjustmentOffSetVO.setExRate(arApAdjustmentOffSetDTO.getExRate());
+		arApAdjustmentOffSetVO.setCurrency("IRN");
+		arApAdjustmentOffSetVO.setExRate(BigDecimal.valueOf(1.000000));
 		arApAdjustmentOffSetVO.setAmount(arApAdjustmentOffSetDTO.getAmount());
 		arApAdjustmentOffSetVO.setSupplierRefNo(arApAdjustmentOffSetDTO.getSupplierRefNo());
 		arApAdjustmentOffSetVO.setForexGainOrLoss(arApAdjustmentOffSetDTO.getForexGainOrLoss());
