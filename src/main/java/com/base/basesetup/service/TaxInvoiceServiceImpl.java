@@ -1,6 +1,7 @@
 package com.base.basesetup.service;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -156,7 +157,7 @@ public class TaxInvoiceServiceImpl implements TaxInvoiceService {
 		taxInvoiceVO.setStatus(taxInvoiceDTO.getStatus().toUpperCase());
 		taxInvoiceVO.setGstType(taxInvoiceDTO.getGstType().toUpperCase());
 		taxInvoiceVO.setSupplierBillNo(taxInvoiceDTO.getSupplierBillNo().toUpperCase());
-		taxInvoiceVO.setSupplierBillDate(taxInvoiceDTO.getSupplierBillDate());
+//		taxInvoiceVO.setSupplierBillDate(taxInvoiceDTO.getSupplierBillDate());
 		taxInvoiceVO.setBillCurr(taxInvoiceDTO.getBillCurr().toUpperCase());
 		taxInvoiceVO.setBillCurrRate(taxInvoiceDTO.getBillCurrRate());
 		taxInvoiceVO.setExAmount(taxInvoiceDTO.getExAmount());
@@ -165,8 +166,6 @@ public class TaxInvoiceServiceImpl implements TaxInvoiceService {
 		taxInvoiceVO.setShipperInvoiceNo(taxInvoiceDTO.getShipperInvoiceNo().toUpperCase());
 		taxInvoiceVO.setBillOfEntry(taxInvoiceDTO.getBillOfEntry().toUpperCase());
 		taxInvoiceVO.setBillMonth(taxInvoiceDTO.getBillMonth().toUpperCase());
-		taxInvoiceVO.setInvoiceNo(taxInvoiceDTO.getInvoiceNo().toUpperCase());
-		taxInvoiceVO.setInvoiceDate(taxInvoiceDTO.getInvoiceDate());
 		taxInvoiceVO.setSalesType(taxInvoiceDTO.getSalesType().toUpperCase());
 		taxInvoiceVO.setModifiedBy(taxInvoiceDTO.getCreatedBy());
 
@@ -243,6 +242,55 @@ public class TaxInvoiceServiceImpl implements TaxInvoiceService {
 			taxInvoiceDetailsVO.setTaxInvoiceVO(taxInvoiceVO);
 			taxInvoiceDetailsVOs.add(taxInvoiceDetailsVO);
 		}
+		
+		Map<Integer, BigDecimal> gstSumMap = new HashMap<>();
+		for (TaxInvoiceDetailsVO detailsVO : taxInvoiceDetailsVOs) {
+			int gst = detailsVO.getGSTPercent();
+			BigDecimal gstAmount = detailsVO.getGstAmount();
+
+			gstSumMap.put(gst, gstSumMap.getOrDefault(gst, BigDecimal.ZERO).add(gstAmount));
+		}
+		
+		Map<Double, BigDecimal> updatedGstSumMap = new HashMap<>();
+		if(taxInvoiceDTO.getGstType().equals("INTRA"))
+		{
+		for (Map.Entry<Integer, BigDecimal> entry : gstSumMap.entrySet()) {
+		    double halfGst = entry.getKey() / 2; // Divide GST by 2
+		    BigDecimal halfGstAmount = entry.getValue().divide(BigDecimal.valueOf(2), 2, RoundingMode.UNNECESSARY); // Divide GST Amount by 2
+		    updatedGstSumMap.put(halfGst, halfGstAmount);
+		}
+		}
+		else
+		{
+			for (Map.Entry<Integer, BigDecimal> entry : gstSumMap.entrySet()) {
+				double gst = entry.getKey(); // Keep the original GST percentage
+			    BigDecimal gstAmount = entry.getValue(); // Keep the original GST amount
+			    updatedGstSumMap.put(gst, gstAmount); //
+			}
+			
+		}
+		
+		Map<String,BigDecimal>taxDetailsMap= new HashMap<>();
+		for (Map.Entry<Double, BigDecimal> entry : updatedGstSumMap.entrySet())
+		{
+			List<GroupLedgerVO> groupLedgerVOs= groupLedgerRepo.getTaxLedgerDetails(taxInvoiceDTO.getOrgId(),taxInvoiceDTO.getGstType(),entry.getKey());
+			for(GroupLedgerVO groupLedgerVO:groupLedgerVOs)
+			{
+				taxDetailsMap.put(groupLedgerVO.getAccountGroupName(), entry.getValue());
+			}
+		}
+		List<TaxInvoiceGstVO> taxInvoiceGstVOList = new ArrayList<>();
+		for (Map.Entry<String, BigDecimal> entry : taxDetailsMap.entrySet()) {
+			TaxInvoiceGstVO taxInvoiceGstVO = new TaxInvoiceGstVO();
+			taxInvoiceGstVO.setGstChargeAcc(entry.getKey());
+			taxInvoiceGstVO.setGstCrLcAmount(entry.getValue());
+			taxInvoiceGstVO.setGstDbBillAmount(BigDecimal.ZERO);
+			taxInvoiceGstVO.setGstDbLcAmount(BigDecimal.ZERO);
+			taxInvoiceGstVO.setGstSubledgerCode("None");
+			taxInvoiceGstVO.setGstCrBillAmount(entry.getValue());
+			taxInvoiceGstVO.setTaxInvoiceVO(taxInvoiceVO);
+			taxInvoiceGstVOList.add(taxInvoiceGstVO);
+		}
 
 		Map<String, BigDecimal> ledgerSumMap = new HashMap<>();
 		for (TaxInvoiceDetailsVO detailsVO : taxInvoiceDetailsVOs) {
@@ -255,7 +303,7 @@ public class TaxInvoiceServiceImpl implements TaxInvoiceService {
 			List<TaxInvoiceGstVO> taxInvoiceGstVO = taxInvoiceGstRepo.findByTaxInvoiceVO(taxInvoiceVO);
 			taxInvoiceGstRepo.deleteAll(taxInvoiceGstVO);
 		}
-		List<TaxInvoiceGstVO> taxInvoiceGstVOList = new ArrayList<>();
+		
 		for (Map.Entry<String, BigDecimal> entry : ledgerSumMap.entrySet()) {
 			TaxInvoiceGstVO taxInvoiceGstVO = new TaxInvoiceGstVO();
 			taxInvoiceGstVO.setGstChargeAcc(entry.getKey());
@@ -457,7 +505,7 @@ public class TaxInvoiceServiceImpl implements TaxInvoiceService {
 	    if (taxInvoiceVO.getApproveStatus() == null || 
 	       (!taxInvoiceVO.getApproveStatus().equals("Approved") && !taxInvoiceVO.getApproveStatus().equals("Rejected"))) {
 
-	    	String accountsDocId = accountsRepo.getTaxInvoiceDocId(taxInvoiceVO.getOrgId(), taxInvoiceVO.getFinYear(),
+	    	String accountsDocId = accountsRepo.getApproveDocId(taxInvoiceVO.getOrgId(), taxInvoiceVO.getFinYear(),
 	    			taxInvoiceVO.getBranchCode(),sourceScreenCode,screenCode);
 			taxInvoiceVO.setDocId(docId);
 
@@ -486,6 +534,8 @@ public class TaxInvoiceServiceImpl implements TaxInvoiceService {
 	        accountsVO.setCurrency(taxInvoiceVO.getBillCurr());
 	        accountsVO.setExRate(taxInvoiceVO.getBillCurrRate());
 	        accountsVO.setRemarks(taxInvoiceVO.getBillingRemarks());
+	        accountsVO.setBillMonth(taxInvoiceVO.getBillMonth());
+	        accountsVO.setFinYear(taxInvoiceVO.getFinYear());
 
 	        // Calculate total debit/credit amounts
 	        BigDecimal totalDebitAmount = taxInvoiceVO.getTotalChargeAmountLc().add(taxInvoiceVO.getTotalTaxAmountLc());
@@ -526,7 +576,7 @@ public class TaxInvoiceServiceImpl implements TaxInvoiceService {
 	        Map<String, BigDecimal> ledgerSumMap = new HashMap<>();
 	        for (TaxInvoiceGstVO gstVO : taxInvoiceVO.getTaxInvoiceGstVO()) {
 	            String ledger = gstVO.getGstChargeAcc();
-	            BigDecimal lcAmount = gstVO.getGstCrBillAmount();
+	            BigDecimal lcAmount = gstVO.getGstCrLcAmount();
 
 	            ledgerSumMap.put(ledger, ledgerSumMap.getOrDefault(ledger, BigDecimal.ZERO).add(lcAmount));
 	        }
