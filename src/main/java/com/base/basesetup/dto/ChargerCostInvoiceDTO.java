@@ -29,4 +29,6 @@ public class ChargerCostInvoiceDTO {
 	
 	private String taxable;
 	private String exempted;
+	
+	
 }

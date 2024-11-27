@@ -1849,7 +1849,8 @@ public class TransactionServiceImpl implements TransactionService {
 		arApAdjustmentOffSetVO.setBranchCode(arApAdjustmentOffSetDTO.getBranchCode());
 		arApAdjustmentOffSetVO.setFinYear(arApAdjustmentOffSetDTO.getFinYear());		
 	    arApAdjustmentOffSetVO.setActive(arApAdjustmentOffSetDTO.isActive());
-		arApAdjustmentOffSetVO.setNarration(arApAdjustmentOffSetDTO.getNarration());
+	    arApAdjustmentOffSetVO.setReceiptPaymentDocDate(arApAdjustmentOffSetDTO.getReceiptPaymentDocDate());
+	    arApAdjustmentOffSetVO.setNarration(arApAdjustmentOffSetDTO.getNarration());
 
 		if (ObjectUtils.isNotEmpty(arApAdjustmentOffSetVO.getId())) {
 			List<ArApOffSetInvoiceDetailsVO> arApOffSetInvoiceDetailsVO1 = 
@@ -2643,7 +2644,7 @@ public class TransactionServiceImpl implements TransactionService {
 				accountParticularsVO.setDebitBase(accountParticularsDTO.getDebitBase());
 				accountParticularsVO.setCreditBase(BigDecimal.ZERO);
 			} else {
-				accountParticularsVO.setCreditBase(accountParticularsDTO.getDebitBase());
+				accountParticularsVO.setCreditBase(accountParticularsDTO.getCreditBase());
 				accountParticularsVO.setDebitBase(BigDecimal.ZERO);
 			}
 
