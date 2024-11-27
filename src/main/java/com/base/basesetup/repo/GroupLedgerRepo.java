@@ -26,5 +26,8 @@ Set<Object[]> getGroupDetails(Long orgId);
 
 GroupLedgerVO findByAccountGroupName(String key);
 
+@Query(nativeQuery = true, value = "select * from groupledger where orgid=?1 and gsttaxflag!='NA' and category='TAX' and gsttaxflag='OUTPUT TAX' and gsttype=?2 and gstpercentage=?3  order by gstpercentage desc")
+List<GroupLedgerVO> getTaxLedgerDetails(Long orgId, String gstType, Double key);
+
 
 }
