@@ -26,9 +26,7 @@ public class ChargerCostInvoiceDTO {
 	private Float gstPercent;
 	private String ledger;
 	private String govChargeCode;
-	
 	private String taxable;
 	private String exempted;
-	
-	
+
 }
