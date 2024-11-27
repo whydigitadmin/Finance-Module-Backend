@@ -71,6 +71,8 @@ import com.base.basesetup.dto.ReconcileCorpBankDTO;
 import com.base.basesetup.dto.TmsJobCardDTO;
 import com.base.basesetup.dto.WithdrawalParticularsDTO;
 import com.base.basesetup.entity.AccountParticularsVO;
+import com.base.basesetup.entity.AccountsDetailsVO;
+import com.base.basesetup.entity.AccountsVO;
 import com.base.basesetup.entity.AdjustmentJournalVO;
 import com.base.basesetup.entity.ArApAdjustmentOffSetVO;
 import com.base.basesetup.entity.ArApOffSetInvoiceDetailsVO;
@@ -94,6 +96,7 @@ import com.base.basesetup.entity.GlOpeningBalanceVO;
 import com.base.basesetup.entity.GstDebitNoteVO;
 import com.base.basesetup.entity.GstSalesVoucherVO;
 import com.base.basesetup.entity.JobCardVO;
+import com.base.basesetup.entity.MultipleDocIdGenerationDetailsVO;
 import com.base.basesetup.entity.ParticularsDebitNoteVO;
 import com.base.basesetup.entity.ParticularsGlOpeningBalanceVO;
 import com.base.basesetup.entity.ParticularsGstVoucherVO;
@@ -115,6 +118,8 @@ import com.base.basesetup.entity.TaxInvoiceVO;
 import com.base.basesetup.entity.WithdrawalParticularsVO;
 import com.base.basesetup.exception.ApplicationException;
 import com.base.basesetup.repo.AccountParticularsRepo;
+import com.base.basesetup.repo.AccountsDetailsRepo;
+import com.base.basesetup.repo.AccountsRepo;
 import com.base.basesetup.repo.AdjustmentJournalRepo;
 import com.base.basesetup.repo.ArApAdjustmentOffSetRepo;
 import com.base.basesetup.repo.ArApOffSetInvoiceDetailsRepo;
@@ -146,6 +151,7 @@ import com.base.basesetup.repo.IrnCreditNoteDetailsRepo;
 import com.base.basesetup.repo.IrnCreditNoteGstRepo;
 import com.base.basesetup.repo.IrnCreditNoteRepo;
 import com.base.basesetup.repo.JobCardRepo;
+import com.base.basesetup.repo.MultipleDocIdGenerationDetailsRepo;
 import com.base.basesetup.repo.ParticularsDebitNoteRepo;
 import com.base.basesetup.repo.ParticularsGlOpeningBalanceRepo;
 import com.base.basesetup.repo.ParticularsGstVoucherRepo;
@@ -339,6 +345,15 @@ public class TransactionServiceImpl implements TransactionService {
 
 	@Autowired
 	ContraVoucherParticularsRepo contraVoucherParticularsRepo;
+
+	@Autowired
+	AccountsRepo accountsRepo;
+
+	@Autowired
+	AccountsDetailsRepo accountsDetailsRepo;
+	
+	@Autowired
+	MultipleDocIdGenerationDetailsRepo multipleDocIdGenerationDetailsRepo;
 
 	// DailyMonthlyExRates
 	@Override
@@ -941,6 +956,9 @@ public class TransactionServiceImpl implements TransactionService {
 			throws ApplicationException {
 		String screenCode = "GJ";
 		GeneralJournalVO generalJournalVO = new GeneralJournalVO();
+
+        AccountsVO accountsVO = new AccountsVO();
+
 		String message;
 		if (ObjectUtils.isNotEmpty(generalJournalDTO.getId())) {
 			generalJournalVO = generalJournalRepo.findById(generalJournalDTO.getId())
@@ -949,24 +967,94 @@ public class TransactionServiceImpl implements TransactionService {
 			generalJournalVO.setUpdatedBy(generalJournalDTO.getCreatedBy());
 			createUpdateJournalVOByGeneralJournalDTO(generalJournalDTO, generalJournalVO);
 			message = "General Journal Updated Successfully";
+
 		} else {
-			// GETDOCID API
-			String docId = generalJournalRepo.getGeneralJournalDocId(generalJournalDTO.getOrgId(),
-					generalJournalDTO.getFinYear(), generalJournalDTO.getBranchCode(), screenCode);
-
-			generalJournalVO.setDocId(docId);
-
-//			// GETDOCID LASTNO +1
-			DocumentTypeMappingDetailsVO documentTypeMappingDetailsVO = documentTypeMappingDetailsRepo
-					.findByOrgIdAndFinYearAndBranchCodeAndScreenCode(generalJournalDTO.getOrgId(),
-							generalJournalDTO.getFinYear(), generalJournalDTO.getBranchCode(), screenCode);
-			documentTypeMappingDetailsVO.setLastno(documentTypeMappingDetailsVO.getLastno() + 1);
-			documentTypeMappingDetailsRepo.save(documentTypeMappingDetailsVO);
+			
+//			// GETDOCID API
+//			String docId = generalJournalRepo.getGeneralJournalDocId(generalJournalDTO.getOrgId(),
+//					generalJournalDTO.getFinYear(), generalJournalDTO.getBranchCode(), screenCode);
+//
+//			generalJournalVO.setDocId(docId);
+//
+////			// GETDOCID LASTNO +1
+//			DocumentTypeMappingDetailsVO documentTypeMappingDetailsVO = documentTypeMappingDetailsRepo
+//					.findByOrgIdAndFinYearAndBranchCodeAndScreenCode(generalJournalDTO.getOrgId(),
+//							generalJournalDTO.getFinYear(), generalJournalDTO.getBranchCode(), screenCode);
+//			documentTypeMappingDetailsVO.setLastno(documentTypeMappingDetailsVO.getLastno() + 1);
+//			documentTypeMappingDetailsRepo.save(documentTypeMappingDetailsVO);
 
 			generalJournalVO.setCreatedBy(generalJournalDTO.getCreatedBy());
 			generalJournalVO.setUpdatedBy(generalJournalDTO.getCreatedBy());
 			createUpdateJournalVOByGeneralJournalDTO(generalJournalDTO, generalJournalVO);
 			message = "General Journal Created Successfully";
+			
+			//Multiple docid generation
+//			String screenCode="AC";
+			String sourceScreenCode = generalJournalVO.getScreenCode();
+			String accountsDocId = accountsRepo.getGeneralJournalDocId(generalJournalVO.getOrgId(), generalJournalVO.getFinYear(),
+					generalJournalVO.getBranchCode(),sourceScreenCode,screenCode);
+			accountsVO.setDocId(accountsDocId);
+			generalJournalVO.setDocId(accountsDocId);
+
+
+			// GETDOCID LASTNO +1
+			MultipleDocIdGenerationDetailsVO multipleDocIdGenerationDetailsVO = multipleDocIdGenerationDetailsRepo
+					.findByOrgIdAndFinYearAndBranchCodeAndSourceScreenCodeAndScreenCode(generalJournalVO.getOrgId(), generalJournalVO.getFinYear(),
+							generalJournalVO.getBranchCode(),sourceScreenCode,screenCode);
+			multipleDocIdGenerationDetailsVO.setLastno(multipleDocIdGenerationDetailsVO.getLastno() + 1);
+			multipleDocIdGenerationDetailsRepo.save(multipleDocIdGenerationDetailsVO);
+			
+			
+			
+			GeneralJournalVO savedGeneralJournalVO = generalJournalRepo.save(generalJournalVO);
+			if (generalJournalDTO.getStatus() .equals("SUBMIT")) {
+
+			List<ParticularsJournalVO> particularsJournalVOLists = savedGeneralJournalVO.getParticularsJournalVO();
+			if (particularsJournalVOLists != null && !particularsJournalVOLists.isEmpty()) {
+				for (ParticularsJournalVO particularsJournalVO : particularsJournalVOLists) {
+					// Create AccountsVO object and populate its fields
+//			        accountsVO.setDocId(accountsDocId);
+					accountsVO.setSourceScreen(generalJournalVO.getScreenName());
+					accountsVO.setSourceScreenCode(generalJournalVO.getScreenCode());
+					accountsVO.setSourceId(generalJournalVO.getId());
+					accountsVO.setCreatedBy(generalJournalVO.getCreatedBy());
+					accountsVO.setModifiedBy(generalJournalVO.getUpdatedBy());
+					accountsVO.setOrgId(generalJournalVO.getOrgId());
+					accountsVO.setBranch(generalJournalVO.getBranch());
+					accountsVO.setBranchCode(generalJournalVO.getBranchCode());
+					accountsVO.setModifiedon(generalJournalVO.getCommonDate().getModifiedon().toUpperCase());
+					accountsVO.setCreatedon(generalJournalVO.getCommonDate().getModifiedon().toUpperCase());
+					accountsVO.setRefNo(generalJournalVO.getDocId());
+					accountsVO.setRefDate(generalJournalVO.getDocDate());
+					accountsVO.setCurrency(generalJournalVO.getCurrency());
+					accountsVO.setFinYear(generalJournalVO.getFinYear());
+					accountsVO.setExRate(generalJournalVO.getExRate());
+					accountsVO.setRemarks(generalJournalVO.getRemarks());
+
+					// total debit/credit amounts
+					accountsVO.setTotalDebitAmount(generalJournalVO.getTotalDebitAmount());
+					accountsVO.setTotalCreditAmount(generalJournalVO.getTotalCreditAmount());
+
+//					stockDetailsRepo.save(stockDetailsVOFrom);
+
+					// Create AccountsDetailsVO list and populate it
+					List<AccountsDetailsVO> accountsDetailsVOs = new ArrayList<>();
+
+					// Add RECEIVABLE A/C entry
+					AccountsDetailsVO accountsDetailsVO = new AccountsDetailsVO();
+					accountsDetailsVO.setAccountName(particularsJournalVO.getAccountsName());
+					accountsDetailsVO.setSubLedgerCode(particularsJournalVO.getSubLedgerCode());
+					accountsDetailsVO.setSubLedgerCode(particularsJournalVO.getSubledgerName());
+					accountsDetailsVO.setDebitAmount(particularsJournalVO.getDebitAmount());
+					accountsDetailsVO.setCreditAmount(particularsJournalVO.getCreditAmount());
+
+					accountsDetailsVOs.add(accountsDetailsVO);
+					accountsVO.setAccountsDetailsVO(accountsDetailsVOs);
+					// Save AccountsVO and update TaxInvoiceVO
+					accountsRepo.save(accountsVO);
+				}
+
+			} }
 		}
 
 		generalJournalRepo.save(generalJournalVO);
@@ -989,6 +1077,8 @@ public class TransactionServiceImpl implements TransactionService {
 		generalJournalVO.setBranch(generalJournalDTO.getBranch());
 		generalJournalVO.setBranchCode(generalJournalDTO.getBranchCode());
 		generalJournalVO.setFinYear(generalJournalDTO.getFinYear());
+		generalJournalVO.setStatus(generalJournalDTO.getStatus());
+
 
 		if (ObjectUtils.isNotEmpty(generalJournalDTO.getId())) {
 			List<ParticularsJournalVO> particularsJournalVOList = particularsJournalRepo
@@ -1777,7 +1867,7 @@ public class TransactionServiceImpl implements TransactionService {
 		if (ObjectUtils.isNotEmpty(orgId)) {
 			LOGGER.info("Successfully Received ArApAdjustmentOffSet BY OrgId : {}", orgId);
 			arApAdjustmentOffSetVO = arApAdjustmentOffSetRepo.getAllArApAdjustmentOffSetByOrgId(orgId);
-			}
+		}
 		return arApAdjustmentOffSetVO;
 	}
 
@@ -1787,7 +1877,7 @@ public class TransactionServiceImpl implements TransactionService {
 		if (ObjectUtils.isNotEmpty(id)) {
 			LOGGER.info("Successfully Received ArApAdjustmentOffSet BY Id : {}", id);
 			arApAdjustmentOffSetVO = arApAdjustmentOffSetRepo.getAllArApAdjustmentOffSetById(id);
-			} 
+		}
 		return arApAdjustmentOffSetVO;
 	}
 
@@ -1847,14 +1937,14 @@ public class TransactionServiceImpl implements TransactionService {
 		arApAdjustmentOffSetVO.setOrgId(arApAdjustmentOffSetDTO.getOrgId());
 		arApAdjustmentOffSetVO.setBranch(arApAdjustmentOffSetDTO.getBranch());
 		arApAdjustmentOffSetVO.setBranchCode(arApAdjustmentOffSetDTO.getBranchCode());
-		arApAdjustmentOffSetVO.setFinYear(arApAdjustmentOffSetDTO.getFinYear());		
-	    arApAdjustmentOffSetVO.setActive(arApAdjustmentOffSetDTO.isActive());
-	    arApAdjustmentOffSetVO.setReceiptPaymentDocDate(arApAdjustmentOffSetDTO.getReceiptPaymentDocDate());
-	    arApAdjustmentOffSetVO.setNarration(arApAdjustmentOffSetDTO.getNarration());
+		arApAdjustmentOffSetVO.setFinYear(arApAdjustmentOffSetDTO.getFinYear());
+		arApAdjustmentOffSetVO.setActive(arApAdjustmentOffSetDTO.isActive());
+		arApAdjustmentOffSetVO.setReceiptPaymentDocDate(arApAdjustmentOffSetDTO.getReceiptPaymentDocDate());
+		arApAdjustmentOffSetVO.setNarration(arApAdjustmentOffSetDTO.getNarration());
 
 		if (ObjectUtils.isNotEmpty(arApAdjustmentOffSetVO.getId())) {
-			List<ArApOffSetInvoiceDetailsVO> arApOffSetInvoiceDetailsVO1 = 
-					arApOffSetInvoiceDetailsRepo.findByArApAdjustmentOffSetVO(arApAdjustmentOffSetVO);
+			List<ArApOffSetInvoiceDetailsVO> arApOffSetInvoiceDetailsVO1 = arApOffSetInvoiceDetailsRepo
+					.findByArApAdjustmentOffSetVO(arApAdjustmentOffSetVO);
 
 			arApOffSetInvoiceDetailsRepo.deleteAll(arApOffSetInvoiceDetailsVO1);
 		}

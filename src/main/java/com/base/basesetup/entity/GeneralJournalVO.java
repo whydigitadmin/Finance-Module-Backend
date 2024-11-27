@@ -93,6 +93,9 @@ public class GeneralJournalVO {
 	@Column(name = "cancelremarks", length = 50)
 	private String cancelRemarks;
 
+	@Column(name = "status", length = 50)
+	private String status;
+	
 	@Column(name = "orgid")
 	private Long orgId;
 
