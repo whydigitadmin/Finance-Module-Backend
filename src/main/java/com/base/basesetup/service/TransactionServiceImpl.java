@@ -2644,7 +2644,7 @@ public class TransactionServiceImpl implements TransactionService {
 				accountParticularsVO.setDebitBase(accountParticularsDTO.getDebitBase());
 				accountParticularsVO.setCreditBase(BigDecimal.ZERO);
 			} else {
-				accountParticularsVO.setCreditBase(accountParticularsDTO.getDebitBase());
+				accountParticularsVO.setCreditBase(accountParticularsDTO.getCreditBase());
 				accountParticularsVO.setDebitBase(BigDecimal.ZERO);
 			}
 
