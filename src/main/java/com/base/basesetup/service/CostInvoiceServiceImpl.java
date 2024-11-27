@@ -19,7 +19,6 @@ import org.springframework.stereotype.Service;
 import com.base.basesetup.dto.ChargerCostInvoiceDTO;
 import com.base.basesetup.dto.CostInvoiceDTO;
 import com.base.basesetup.dto.TdsCostInvoiceDTO;
-import com.base.basesetup.entity.AccountsDetailsVO;
 import com.base.basesetup.entity.AccountsVO;
 import com.base.basesetup.entity.ChargerCostInvoiceVO;
 import com.base.basesetup.entity.CostInvoiceVO;
@@ -106,6 +105,7 @@ public class CostInvoiceServiceImpl implements CostInvoiceService {
 				costInvoiceVO.setNormalCharges(normalCharges);
 			}
 		}
+
 		return costInvoiceVOList;
 	}
 
@@ -770,11 +770,14 @@ public class CostInvoiceServiceImpl implements CostInvoiceService {
 			accountsVO.setExRate(costInvoiceVO.getExRate());
 
 			// Calculate total debit/credit amounts
-			BigDecimal totalDebitAmount = costInvoiceVO.getTotChargesLcAmt().add(costInvoiceVO.getTotChargesLcAmt());//tax
+			BigDecimal totalDebitAmount = costInvoiceVO.getNetBillLcAmt();
+//					.add(costInvoiceVO.getTotalTaxAmountLc()); To ask jayabalan for the totalDebitAmount
 			accountsVO.setTotalDebitAmount(totalDebitAmount);
 			accountsVO.setTotalCreditAmount(totalDebitAmount);
 			accountsVO.setDueDate(costInvoiceVO.getDueDate());
 			accountsVO.setSupplierRefNo(costInvoiceVO.getSupplierBillNo());
+//			accountsVO.setSupplierRefDate(costInvoiceVO.getdate)
+			;
 			accountsVO.setCreditDays(costInvoiceVO.getCreditDays());
 			accountsVO.setSourceScreen(costInvoiceVO.getScreenName());
 			accountsVO.setSourceScreenCode(costInvoiceVO.getScreenCode());
@@ -786,28 +789,6 @@ public class CostInvoiceServiceImpl implements CostInvoiceService {
 //			accountsVO.setAmountInWords(costInvoiceVO.getAmountInWords());
 //			accountsVO.setStTaxAmount(costInvoiceVO.getTotalTaxableAmountLc());
 //			accountsVO.setSalesType(costInvoiceVO.getSalesType());
-
-			List<AccountsDetailsVO> accountsDetailsVOs = new ArrayList<>();
-			AccountsDetailsVO accountsDetailsVO = new AccountsDetailsVO();
-			accountsDetailsVO.setNDebitAmount(BigDecimal.ZERO);
-			accountsDetailsVO.setACategory("PAYABLE A/C");
-			accountsDetailsVO.setSubLedgerCode(costInvoiceVO.getSupplierCode());
-			accountsDetailsVO.setDebitAmount(BigDecimal.ZERO);
-			accountsDetailsVO.setNCreditAmount(costInvoiceVO.getNetBillLcAmt());
-			accountsDetailsVO.setCreditAmount(costInvoiceVO.getNetBillLcAmt());
-			accountsDetailsVO.setArapFlag(true);
-			accountsDetailsVO.setArapAmount(costInvoiceVO.getNetBillLcAmt());
-			accountsDetailsVO.setBDebitAmount(BigDecimal.ZERO);
-			accountsDetailsVO.setBCrAmount(costInvoiceVO.getNetBillLcAmt());
-			accountsDetailsVO.setBArapAmount(costInvoiceVO.getNetBillLcAmt());
-			accountsDetailsVO.setACurrency(costInvoiceVO.getCurrency());
-			accountsDetailsVO.setAExRate(costInvoiceVO.getExRate());
-			accountsDetailsVO.setSubledgerName(costInvoiceVO.getSupplierName());
-			accountsDetailsVO.setSubLedgerCode(costInvoiceVO.getSupplierCode());
-			accountsDetailsVO.setNArapAmount(costInvoiceVO.getNetBillLcAmt());
-			accountsDetailsVO.setGstflag(1);
-			accountsDetailsVO.setAccountsVO(accountsVO);
-			accountsDetailsVOs.add(accountsDetailsVO);
 
 			return costInvoiceRepo.save(costInvoiceVO);
 

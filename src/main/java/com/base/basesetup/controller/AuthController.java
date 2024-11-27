@@ -72,8 +72,7 @@ public class AuthController extends BaseController {
 	}
 
 	@PostMapping("/login")
-	public ResponseEntity<ResponseDTO> login(@Valid @RequestBody LoginFormDTO loginRequest,
-			HttpServletRequest request) {
+	public ResponseEntity<ResponseDTO> login(@Valid @RequestBody LoginFormDTO loginRequest,HttpServletRequest request) {
 		String methodName = "login()";
 		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
 		String errorMsg = null;
@@ -81,7 +80,7 @@ public class AuthController extends BaseController {
 		ResponseDTO responseDTO = null;
 		UserResponseDTO userResponseDTO = null;
 		try {
-			userResponseDTO = authService.login(loginRequest, request);
+			userResponseDTO = authService.login(loginRequest,request);
 		} catch (Exception e) {
 			errorMsg = e.getMessage();
 			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME_WITH_USER_NAME, methodName, loginRequest.getUserName(),
@@ -198,7 +197,7 @@ public class AuthController extends BaseController {
 		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
 		return ResponseEntity.ok().body(responseDTO);
 	}
-
+	
 	@PutMapping("/createUpdateResponsibility")
 	public ResponseEntity<ResponseDTO> createUpdateResponsibility(@RequestBody ResponsibilityDTO responsibilityDTO) {
 		String methodName = "createUpdateResponsibility()";
@@ -208,18 +207,18 @@ public class AuthController extends BaseController {
 		ResponseDTO responseDTO = null;
 		try {
 			Map<String, Object> responsibile = authService.createUpdateResponsibilities(responsibilityDTO);
-			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, responsibile.get("message"));
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, responsibile.get("message") );
 			responseObjectsMap.put("responsibilityVO", responsibile.get("responsibilityVO"));
 			responseDTO = createServiceResponse(responseObjectsMap);
 		} catch (Exception e) {
 			errorMsg = e.getMessage();
 			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
-			responseDTO = createServiceResponseError(responseObjectsMap, errorMsg, errorMsg);
+			responseDTO = createServiceResponseError(responseObjectsMap,errorMsg, errorMsg);
 		}
 		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
 		return ResponseEntity.ok().body(responseDTO);
 	}
-
+	
 	@GetMapping("/getResponsibilityForRolesByOrgId")
 	public ResponseEntity<ResponseDTO> getResponsibilityForRolesByOrgId(@RequestParam Long orgId) {
 		String methodName = "getResponsibilityForRolesByOrgId()";
@@ -245,7 +244,7 @@ public class AuthController extends BaseController {
 		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
 		return ResponseEntity.ok().body(responseDTO);
 	}
-
+	
 	@PutMapping("/createUpdateRoles")
 	public ResponseEntity<ResponseDTO> createUpdateRoles(@RequestBody RolesDTO rolesDTO) {
 		String methodName = "createUpdateResponsibility()";
@@ -255,18 +254,18 @@ public class AuthController extends BaseController {
 		ResponseDTO responseDTO = null;
 		try {
 			Map<String, Object> roles = authService.createUpdateRoles(rolesDTO);
-			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, roles.get("message"));
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, roles.get("message") );
 			responseObjectsMap.put("rolesVO", roles.get("rolesVO"));
 			responseDTO = createServiceResponse(responseObjectsMap);
 		} catch (Exception e) {
 			errorMsg = e.getMessage();
 			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
-			responseDTO = createServiceResponseError(responseObjectsMap, errorMsg, errorMsg);
+			responseDTO = createServiceResponseError(responseObjectsMap,errorMsg, errorMsg);
 		}
 		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
 		return ResponseEntity.ok().body(responseDTO);
 	}
-
+	
 	@GetMapping("/allRolesByOrgId")
 	public ResponseEntity<ResponseDTO> getAllRolesByOrgId(@RequestParam Long orgId) {
 		String methodName = "getAllScreenNames()";
@@ -282,16 +281,18 @@ public class AuthController extends BaseController {
 			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
 		}
 		if (StringUtils.isBlank(errorMsg)) {
-			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "Roles information get successfully");
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+					"Roles information get successfully");
 			responseObjectsMap.put("rolesVO", rolesVO);
 			responseDTO = createServiceResponse(responseObjectsMap);
 		} else {
-			responseDTO = createServiceResponseError(responseObjectsMap, "Roles information receive failed", errorMsg);
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					"Roles information receive failed", errorMsg);
 		}
 		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
 		return ResponseEntity.ok().body(responseDTO);
 	}
-
+	
 	@GetMapping("/allActiveRolesByOrgId")
 	public ResponseEntity<ResponseDTO> getAllActiveRolesByOrgId(@RequestParam Long orgId) {
 		String methodName = "getAllActiveRolesByOrgId()";
@@ -307,16 +308,18 @@ public class AuthController extends BaseController {
 			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
 		}
 		if (StringUtils.isBlank(errorMsg)) {
-			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "Roles information get successfully");
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+					"Roles information get successfully");
 			responseObjectsMap.put("rolesVO", rolesVO);
 			responseDTO = createServiceResponse(responseObjectsMap);
 		} else {
-			responseDTO = createServiceResponseError(responseObjectsMap, "Roles information receive failed", errorMsg);
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					"Roles information receive failed", errorMsg);
 		}
 		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
 		return ResponseEntity.ok().body(responseDTO);
 	}
-
+	
 	@GetMapping("/rolesById")
 	public ResponseEntity<ResponseDTO> getRolesById(@RequestParam Long id) {
 		String methodName = "getRolesById()";
@@ -332,16 +335,19 @@ public class AuthController extends BaseController {
 			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
 		}
 		if (StringUtils.isBlank(errorMsg)) {
-			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "Roles information get successfully");
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+					"Roles information get successfully");
 			responseObjectsMap.put("rolesVO", rolesVO);
 			responseDTO = createServiceResponse(responseObjectsMap);
 		} else {
-			responseDTO = createServiceResponseError(responseObjectsMap, "Roles information receive failed", errorMsg);
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					"Roles information receive failed", errorMsg);
 		}
 		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
 		return ResponseEntity.ok().body(responseDTO);
 	}
-
+	
+	
 	@GetMapping("/allActiveResponsibilityByOrgId")
 	public ResponseEntity<ResponseDTO> getAllActiveResponsibilityByOrgId(@RequestParam Long orgId) {
 		String methodName = "getAllActiveResponsibilityByOrgId()";
@@ -357,17 +363,18 @@ public class AuthController extends BaseController {
 			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
 		}
 		if (StringUtils.isBlank(errorMsg)) {
-			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "Responsibility information get successfully");
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+					"Responsibility information get successfully");
 			responseObjectsMap.put("resposResponsibilityVO", resposResponsibilityVO);
 			responseDTO = createServiceResponse(responseObjectsMap);
 		} else {
-			responseDTO = createServiceResponseError(responseObjectsMap, "Responsibility information receive failed",
-					errorMsg);
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					"Responsibility information receive failed", errorMsg);
 		}
 		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
 		return ResponseEntity.ok().body(responseDTO);
 	}
-
+	
 	@GetMapping("/allResponsibilityByOrgId")
 	public ResponseEntity<ResponseDTO> getAllResponsibilityByOrgId(@RequestParam Long orgId) {
 		String methodName = "getAllResponsibilityByOrgId()";
@@ -383,12 +390,13 @@ public class AuthController extends BaseController {
 			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
 		}
 		if (StringUtils.isBlank(errorMsg)) {
-			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "Responsibility information get successfully");
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+					"Responsibility information get successfully");
 			responseObjectsMap.put("responsibilityVO", responsibilityVO);
 			responseDTO = createServiceResponse(responseObjectsMap);
 		} else {
-			responseDTO = createServiceResponseError(responseObjectsMap, "Responsibility information receive failed",
-					errorMsg);
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					"Responsibility information receive failed", errorMsg);
 		}
 		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
 		return ResponseEntity.ok().body(responseDTO);
@@ -409,17 +417,18 @@ public class AuthController extends BaseController {
 			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
 		}
 		if (StringUtils.isBlank(errorMsg)) {
-			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "Responsibility information get successfully");
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+					"Responsibility information get successfully");
 			responseObjectsMap.put("responsibilityVO", responsibilityVO);
 			responseDTO = createServiceResponse(responseObjectsMap);
 		} else {
-			responseDTO = createServiceResponseError(responseObjectsMap, "Responsibility information receive failed",
-					errorMsg);
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					"Responsibility information receive failed", errorMsg);
 		}
 		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
 		return ResponseEntity.ok().body(responseDTO);
 	}
-
+	
 	@GetMapping("/allUsersByOrgId")
 	public ResponseEntity<ResponseDTO> getAllUsersByOrgId(@RequestParam Long orgId) {
 		String methodName = "getAllUsersByOrgId()";
@@ -435,16 +444,18 @@ public class AuthController extends BaseController {
 			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
 		}
 		if (StringUtils.isBlank(errorMsg)) {
-			responseObjectsMap.put(CommonConstant.STRING_MESSAGE, "Users information get successfully");
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+					"Users information get successfully");
 			responseObjectsMap.put("userVO", userVO);
 			responseDTO = createServiceResponse(responseObjectsMap);
 		} else {
-			responseDTO = createServiceResponseError(responseObjectsMap, "Users information receive failed", errorMsg);
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					"Users information receive failed", errorMsg);
 		}
 		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
 		return ResponseEntity.ok().body(responseDTO);
 	}
-
+	
 	@GetMapping("/getUserById")
 	public ResponseEntity<ResponseDTO> getUserById(@RequestParam Long userId) {
 		String methodName = "getUserById()";
@@ -470,7 +481,7 @@ public class AuthController extends BaseController {
 		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
 		return ResponseEntity.ok().body(responseDTO);
 	}
-
+	
 	@GetMapping("/getUserByUserName")
 	public ResponseEntity<ResponseDTO> getUserByUserName(@RequestParam String userName) {
 		String methodName = "getUserByUserName()";

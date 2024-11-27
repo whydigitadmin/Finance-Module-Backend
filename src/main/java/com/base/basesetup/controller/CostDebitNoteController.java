@@ -25,7 +25,6 @@ import com.base.basesetup.common.UserConstants;
 import com.base.basesetup.dto.CostDebitNoteDTO;
 import com.base.basesetup.dto.ResponseDTO;
 import com.base.basesetup.entity.CostDebitNoteVO;
-import com.base.basesetup.entity.CostInvoiceVO;
 import com.base.basesetup.service.CostDebitNoteService;
 
 @CrossOrigin
@@ -320,7 +319,7 @@ public class CostDebitNoteController extends BaseController {
 		String errorMsg = null;
 		Map<String, Object> responseObjectsMap = new HashMap<>();
 		ResponseDTO responseDTO = null;
-		List<CostInvoiceVO> costDebitNoteVO = new ArrayList<>();
+		List<CostDebitNoteVO> costDebitNoteVO = new ArrayList<>();
 		try {
 			costDebitNoteVO = costDebitNoteService.getOrginBillNoByParty(orgId, party, branchCode);
 		} catch (Exception e) {

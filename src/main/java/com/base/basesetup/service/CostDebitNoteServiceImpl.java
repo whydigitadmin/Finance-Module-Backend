@@ -20,7 +20,6 @@ import com.base.basesetup.dto.ChargerCostDebitNoteDTO;
 import com.base.basesetup.dto.CostDebitNoteDTO;
 import com.base.basesetup.dto.TdsCostDebitNoteDTO;
 import com.base.basesetup.entity.ChargerCostDebitNoteVO;
-import com.base.basesetup.entity.ChargerCostInvoiceVO;
 import com.base.basesetup.entity.TdsCostDebitNoteVO;
 import com.base.basesetup.entity.CostDebitNoteVO;
 import com.base.basesetup.entity.CostInvoiceVO;
@@ -126,8 +125,8 @@ public class CostDebitNoteServiceImpl implements CostDebitNoteService {
 		costDebitNoteVO.setAccuralid(costDebitNoteDTO.getAccuralid());
 		costDebitNoteVO.setUtrRef(costDebitNoteDTO.getUtrRef());
 		costDebitNoteVO.setCostType(costDebitNoteDTO.getCostType());
-		costDebitNoteVO.setOriginBill(costDebitNoteDTO.getOriginBill());
-		costDebitNoteVO.setOriginBillDate(costDebitNoteDTO.getOriginBillDate());
+		costDebitNoteVO.setOrginBill(costDebitNoteDTO.getOrginBill());
+		costDebitNoteVO.setOrginBillDate(costDebitNoteDTO.getOriginBillDate());
 
 		// Set individual fields from DTO to VO
 
@@ -511,36 +510,8 @@ public class CostDebitNoteServiceImpl implements CostDebitNoteService {
 	}
 
 	@Override
-	public List<CostInvoiceVO> getOrginBillNoByParty(Long orgId, String party, String branchCode) {
-		List<CostInvoiceVO> costInvoiceVOList = new ArrayList<>();
-
-		if (ObjectUtils.isNotEmpty(orgId)) {
-			LOGGER.info("Successfully Received  Origin Bill Details BY OrgId : {}", orgId);
-			costInvoiceVOList = costDebitNoteRepo.findOrginBillNoByParty(orgId, party, branchCode);
-			for (CostInvoiceVO costInvoiceVO : costInvoiceVOList) {
-				List<ChargerCostInvoiceVO> gstLines = new ArrayList<>();
-				List<ChargerCostInvoiceVO> normalCharges = new ArrayList<>();
-
-				// Iterate through the chargerCostInvoiceVO list and split charges
-				for (ChargerCostInvoiceVO charge : costInvoiceVO.getChargerCostInvoiceVO()) {
-					if (isGstCharge(charge)) {
-						gstLines.add(charge); // Add GST related charges to gstLines
-					} else {
-						normalCharges.add(charge); // Add normal charges to normalCharges
-					}
-				}
-
-				costInvoiceVO.setGstLines(gstLines);
-				costInvoiceVO.setNormalCharges(normalCharges);
-			}
-		}
-		return costInvoiceVOList;
-	}
-
-	private boolean isGstCharge(ChargerCostInvoiceVO charge) {
-		// Check if chargeName contains "CGST", "SGST" or "IGST" to identify GST charges
-		return charge.getChargeName() != null && (charge.getChargeName().contains("CGST")
-				|| charge.getChargeName().contains("SGST") || charge.getChargeName().contains("IGST"));
+	public List<CostDebitNoteVO> getOrginBillNoByParty(Long orgId, String party, String branchCode) {
+		return costDebitNoteRepo.findOrginBillNoByParty(orgId, party, branchCode);
 	}
 
 	@Override
