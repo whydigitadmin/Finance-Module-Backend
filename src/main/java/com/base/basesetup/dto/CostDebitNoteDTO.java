@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
+import javax.persistence.Column;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,8 +18,6 @@ public class CostDebitNoteDTO {
 	private Long id;
 	private String mode;
 	private String product;
-	private String invoiceNo;
-	private LocalDate invoiceDate;
 	private String supplierBillNo;
 	private String supplierType;
 	private String supplierCode;
@@ -46,21 +46,10 @@ public class CostDebitNoteDTO {
 	private String accuralid;
 	private String utrRef;
 	private String costType;
-
-	private String orginBill;
+	private String originBill;
 	private LocalDate originBillDate;
-//	private String subType;
-//	private String partyType;
-//	private String suppRefNo;
-//	private LocalDate suppDate;
-//	private String partyName;
-//	private String partyCode;
-//	private String shipRefNo;
-//	private String status;
-//	private boolean taxExampt;
-//	private LocalDate currentDate;
-//	private BigDecimal currentDateValue;
-//	private String partyAddType;
+	private String purVoucherNo;
+	private LocalDate purVoucherDate;
 
 	private List<ChargerCostDebitNoteDTO> costDebitChargesDTO;
 

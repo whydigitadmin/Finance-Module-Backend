@@ -421,7 +421,7 @@ public class IrnCreditNoteServiceImpl implements IrnCreditNoteService {
 	        accountsDetailsVO.setACategory("RECEIVABLE A/C");
 	        accountsDetailsVO.setSubLedgerCode(irnCreditNoteVO.getPartyCode());
 	        accountsDetailsVO.setDebitAmount(BigDecimal.ZERO);
-	        accountsDetailsVO.setNCreditAmount(irnCreditNoteVO.getTotalInvAmountLc());
+	        accountsDetailsVO.setNCreditAmount(irnCreditNoteVO.getTotalInvAmountLc());//
 	        accountsDetailsVO.setCreditAmount(irnCreditNoteVO.getTotalInvAmountLc());
 	        accountsDetailsVO.setArapFlag(true);
 	        accountsDetailsVO.setArapAmount(irnCreditNoteVO.getTotalInvAmountLc().multiply(BigDecimal.valueOf(-1)));

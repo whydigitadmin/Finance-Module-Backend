@@ -145,10 +145,10 @@ public class CostDebitNoteVO {
 	private String approveOn;
 
 //
-	@Column(name = "orginbill", length = 50)
-	private String orginBill;
-	@Column(name = "orginbilldate", length = 50)
-	private LocalDate orginBillDate;
+	@Column(name = "originbill", length = 50)
+	private String originBill;
+	@Column(name = "originbilldate", length = 50)
+	private LocalDate originBillDate;
 
 //	@Column(name = "partytype", length = 50)
 //	private String partyType;

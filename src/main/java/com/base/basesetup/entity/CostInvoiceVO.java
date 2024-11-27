@@ -136,6 +136,8 @@ public class CostInvoiceVO {
 	@Column(name = "gstinputlcamt", precision = 10, scale = 2)
 	private BigDecimal gstInputLcAmt;
 
+	// imonth - nov-24
+
 //	APPROVED
 	@Column(name = "approvestatus", length = 20)
 	private String approveStatus;
