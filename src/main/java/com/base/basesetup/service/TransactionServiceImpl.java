@@ -991,7 +991,7 @@ public class TransactionServiceImpl implements TransactionService {
 			//Multiple docid generation
 //			String screenCode="AC";
 			String sourceScreenCode = generalJournalVO.getScreenCode();
-			String accountsDocId = accountsRepo.getGeneralJournalDocId(generalJournalVO.getOrgId(), generalJournalVO.getFinYear(),
+			String accountsDocId = accountsRepo.getApproveDocId(generalJournalVO.getOrgId(), generalJournalVO.getFinYear(),
 					generalJournalVO.getBranchCode(),sourceScreenCode,screenCode);
 			accountsVO.setDocId(accountsDocId);
 			generalJournalVO.setDocId(accountsDocId);
