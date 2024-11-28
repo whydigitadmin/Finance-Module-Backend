@@ -954,7 +954,8 @@ public class TransactionServiceImpl implements TransactionService {
 	@Override
 	public Map<String, Object> updateCreateGeneralJournal(@Valid GeneralJournalDTO generalJournalDTO)
 			throws ApplicationException {
-		String screenCode = "GJ";
+		String sourceScreenCode="GJ";
+		String screenCode="AC";
 		GeneralJournalVO generalJournalVO = new GeneralJournalVO();
 
         AccountsVO accountsVO = new AccountsVO();
@@ -971,40 +972,22 @@ public class TransactionServiceImpl implements TransactionService {
 		} else {
 			
 //			// GETDOCID API
-//			String docId = generalJournalRepo.getGeneralJournalDocId(generalJournalDTO.getOrgId(),
-//					generalJournalDTO.getFinYear(), generalJournalDTO.getBranchCode(), screenCode);
-//
-//			generalJournalVO.setDocId(docId);
-//
-////			// GETDOCID LASTNO +1
-//			DocumentTypeMappingDetailsVO documentTypeMappingDetailsVO = documentTypeMappingDetailsRepo
-//					.findByOrgIdAndFinYearAndBranchCodeAndScreenCode(generalJournalDTO.getOrgId(),
-//							generalJournalDTO.getFinYear(), generalJournalDTO.getBranchCode(), screenCode);
-//			documentTypeMappingDetailsVO.setLastno(documentTypeMappingDetailsVO.getLastno() + 1);
-//			documentTypeMappingDetailsRepo.save(documentTypeMappingDetailsVO);
+			String accountsDocId = accountsRepo.getApproveDocId(generalJournalDTO.getOrgId(), generalJournalDTO.getFinYear(),
+					generalJournalDTO.getBranchCode(),sourceScreenCode,screenCode);
+			accountsVO.setDocId(accountsDocId);
+			generalJournalVO.setDocId(accountsDocId);
+
+			// GETDOCID LASTNO +1
+			MultipleDocIdGenerationDetailsVO multipleDocIdGenerationDetailsVO = multipleDocIdGenerationDetailsRepo
+					.findByOrgIdAndFinYearAndBranchCodeAndSourceScreenCodeAndScreenCode(generalJournalDTO.getOrgId(), generalJournalDTO.getFinYear(),
+							generalJournalDTO.getBranchCode(),sourceScreenCode,screenCode);
+			multipleDocIdGenerationDetailsVO.setLastno(multipleDocIdGenerationDetailsVO.getLastno() + 1);
+			multipleDocIdGenerationDetailsRepo.save(multipleDocIdGenerationDetailsVO);
 
 			generalJournalVO.setCreatedBy(generalJournalDTO.getCreatedBy());
 			generalJournalVO.setUpdatedBy(generalJournalDTO.getCreatedBy());
 			createUpdateJournalVOByGeneralJournalDTO(generalJournalDTO, generalJournalVO);
-			message = "General Journal Created Successfully";
-			
-			//Multiple docid generation
-//			String screenCode="AC";
-			String sourceScreenCode = generalJournalVO.getScreenCode();
-			String accountsDocId = accountsRepo.getApproveDocId(generalJournalVO.getOrgId(), generalJournalVO.getFinYear(),
-					generalJournalVO.getBranchCode(),sourceScreenCode,screenCode);
-			accountsVO.setDocId(accountsDocId);
-			generalJournalVO.setDocId(accountsDocId);
-
-
-			// GETDOCID LASTNO +1
-			MultipleDocIdGenerationDetailsVO multipleDocIdGenerationDetailsVO = multipleDocIdGenerationDetailsRepo
-					.findByOrgIdAndFinYearAndBranchCodeAndSourceScreenCodeAndScreenCode(generalJournalVO.getOrgId(), generalJournalVO.getFinYear(),
-							generalJournalVO.getBranchCode(),sourceScreenCode,screenCode);
-			multipleDocIdGenerationDetailsVO.setLastno(multipleDocIdGenerationDetailsVO.getLastno() + 1);
-			multipleDocIdGenerationDetailsRepo.save(multipleDocIdGenerationDetailsVO);
-			
-			
+			message = "General Journal Created Successfully";			
 			
 			GeneralJournalVO savedGeneralJournalVO = generalJournalRepo.save(generalJournalVO);
 			if (generalJournalDTO.getStatus() .equals("SUBMIT")) {
@@ -1127,9 +1110,11 @@ public class TransactionServiceImpl implements TransactionService {
 
 	@Override
 	public String getGeneralJournalDocId(Long orgId, String finYear, String branch, String branchCode) {
-		String ScreenCode = "GJ";
-		String result = generalJournalRepo.getGeneralJournalByDocId(orgId, finYear, branchCode, ScreenCode);
-		return result;
+		String sourceScreenCode = "GJ";
+		String screenCode="AC";
+		String accountsDocId = accountsRepo.getApproveDocId(orgId, finYear,
+				branchCode,sourceScreenCode,screenCode);
+		return accountsDocId;
 	}
 
 	@Override
