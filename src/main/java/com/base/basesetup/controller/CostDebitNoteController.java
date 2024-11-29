@@ -25,7 +25,6 @@ import com.base.basesetup.common.UserConstants;
 import com.base.basesetup.dto.CostDebitNoteDTO;
 import com.base.basesetup.dto.ResponseDTO;
 import com.base.basesetup.entity.CostDebitNoteVO;
-import com.base.basesetup.entity.CostInvoiceVO;
 import com.base.basesetup.service.CostDebitNoteService;
 
 @CrossOrigin
@@ -389,4 +388,31 @@ public class CostDebitNoteController extends BaseController {
 		return ResponseEntity.ok().body(responseDTO);
 	}
 
+	@GetMapping("/getInterAndIntraDetailsForCostInvoice")
+	public ResponseEntity<ResponseDTO> getInterAndIntraDetailsForCostInvoice(@RequestParam Long orgId,
+			@RequestParam String gstType, @RequestParam List<String> gstPercent) {
+		String methodName = "getInterAndIntraDetailsForCostInvoice()";
+		LOGGER.debug(CommonConstant.STARTING_METHOD, methodName);
+		String errorMsg = null;
+		Map<String, Object> responseObjectsMap = new HashMap<>();
+		ResponseDTO responseDTO = null;
+		List<Map<String, Object>> charge = new ArrayList<>();
+		try {
+			charge = costDebitNoteService.getInterAndIntraDetailsForCostInvoice(orgId, gstType, gstPercent);
+		} catch (Exception e) {
+			errorMsg = e.getMessage();
+			LOGGER.error(UserConstants.ERROR_MSG_METHOD_NAME, methodName, errorMsg);
+		}
+		if (StringUtils.isBlank(errorMsg)) {
+			responseObjectsMap.put(CommonConstant.STRING_MESSAGE,
+					"Tax Details get successfully By OrgId, GstType And GstPercent");
+			responseObjectsMap.put("chargeDetails", charge);
+			responseDTO = createServiceResponse(responseObjectsMap);
+		} else {
+			responseDTO = createServiceResponseError(responseObjectsMap,
+					"Tax Detials receive failed By OrgId, GstType And GstPercent", errorMsg);
+		}
+		LOGGER.debug(CommonConstant.ENDING_METHOD, methodName);
+		return ResponseEntity.ok().body(responseDTO);
+	}
 }

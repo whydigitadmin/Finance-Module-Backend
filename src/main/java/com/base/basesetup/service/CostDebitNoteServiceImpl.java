@@ -251,24 +251,19 @@ public class CostDebitNoteServiceImpl implements CostDebitNoteService {
 				BigDecimal igstLcAmount = entry.getValue();
 				taxAmount = taxAmount.add(igstLcAmount);
 
-				Set<Object[]> chargeVO = costDebitNoteRepo
-						.findChargeNameAndChargeCodeForIgstPosting(costDebitNoteDTO.getOrgId(), gstPercent);
+				Set<Object[]> chargeVO = costDebitNoteRepo.findInterAndIntraDetailsForCostInvoicePosting(
+						costDebitNoteDTO.getOrgId(), costDebitNoteDTO.getGstType(), gstPercent);
 
 				if (!chargeVO.isEmpty()) {
 					Object[] chargeVOSet = chargeVO.iterator().next(); // Get the first element in the set
 					String chargeDesc = (String) chargeVOSet[0];
-					String chargeCode = (String) chargeVOSet[1];
-					String gChargeCode = (String) chargeVOSet[2];
-					String taxable = (String) chargeVOSet[3];
-					String sac = (String) chargeVOSet[4];
-					Float gstPer = (Float) chargeVOSet[5];
+					Float gstPer = ((Double) chargeVOSet[1]).floatValue();
+					String currency = (String) chargeVOSet[2];
+					String ledger = (String) chargeVOSet[0];
 					igstSummaryVO.setChargeName(chargeDesc);
-					igstSummaryVO.setChargeCode(chargeCode);
-					igstSummaryVO.setGovChargeCode(gChargeCode);
-					igstSummaryVO.setTaxable(taxable);
-					igstSummaryVO.setSac(sac);
+					igstSummaryVO.setCurrency(currency);
+					igstSummaryVO.setLedger(ledger);
 					igstSummaryVO.setGSTPercent(gstPer);
-
 				}
 				igstSummaryVO.setQty(Integer.valueOf(1));
 				igstSummaryVO.setRate(BigDecimal.ONE);
@@ -322,11 +317,9 @@ public class CostDebitNoteServiceImpl implements CostDebitNoteService {
 
 							ChargerCostDebitNoteVO cgstSummaryVO = new ChargerCostDebitNoteVO();
 							cgstSummaryVO.setChargeName((String) cgstRecord[0]);
-							cgstSummaryVO.setChargeCode((String) cgstRecord[1]);
-							cgstSummaryVO.setGovChargeCode((String) cgstRecord[2]);
-							cgstSummaryVO.setTaxable((String) cgstRecord[3]);
-							cgstSummaryVO.setSac((String) cgstRecord[4]);
-							cgstSummaryVO.setGSTPercent((Float) cgstRecord[5]);
+							cgstSummaryVO.setGSTPercent((Float) cgstRecord[1]);
+							cgstSummaryVO.setCurrency((String) cgstRecord[2]);
+							cgstSummaryVO.setLedger((String) cgstRecord[0]);
 							cgstSummaryVO.setQty(Integer.valueOf(1));
 							cgstSummaryVO.setRate(BigDecimal.ONE);
 							cgstSummaryVO.setExRate(BigDecimal.ONE);
@@ -339,11 +332,9 @@ public class CostDebitNoteServiceImpl implements CostDebitNoteService {
 
 							ChargerCostDebitNoteVO sgstSummaryVO = new ChargerCostDebitNoteVO();
 							sgstSummaryVO.setChargeName((String) sgstRecord[0]);
-							sgstSummaryVO.setChargeCode((String) sgstRecord[1]);
-							sgstSummaryVO.setGovChargeCode((String) sgstRecord[2]);
-							sgstSummaryVO.setTaxable((String) sgstRecord[3]);
-							sgstSummaryVO.setSac((String) sgstRecord[4]);
-							sgstSummaryVO.setGSTPercent((Float) sgstRecord[5]);
+							sgstSummaryVO.setGSTPercent((Float) sgstRecord[1]);
+							sgstSummaryVO.setCurrency((String) sgstRecord[2]);
+							sgstSummaryVO.setLedger((String) sgstRecord[0]);
 							sgstSummaryVO.setQty(Integer.valueOf(1));
 							sgstSummaryVO.setRate(BigDecimal.ONE);
 							sgstSummaryVO.setExRate(BigDecimal.ONE);
@@ -731,4 +722,25 @@ public class CostDebitNoteServiceImpl implements CostDebitNoteService {
 		}
 	}
 
+	@Override
+	public List<Map<String, Object>> getInterAndIntraDetailsForCostInvoice(Long orgId, String gstType,
+			List<String> gstPercent) {
+		Set<Object[]> chargeDetails = costDebitNoteRepo.findInterAndIntraDetailsForCostInvoice(orgId, gstType,
+				gstPercent);
+		return getChargeDe(chargeDetails);
+	}
+
+	private List<Map<String, Object>> getChargeDe(Set<Object[]> chDetails) {
+		List<Map<String, Object>> List1 = new ArrayList<>();
+		for (Object[] ch : chDetails) {
+			Map<String, Object> map = new HashMap<>();
+			map.put("taxDesc", ch[0] != null ? ch[0].toString() : ""); // Empty string if null
+			map.put("taxPercent", ch[1] != null ? ch[1].toString() : "");
+			map.put("currency", ch[2] != null ? ch[2].toString() : "");
+
+			List1.add(map);
+		}
+		return List1;
+
+	}
 }
