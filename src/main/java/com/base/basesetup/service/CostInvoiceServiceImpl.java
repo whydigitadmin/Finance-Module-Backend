@@ -779,7 +779,7 @@ public class CostInvoiceServiceImpl implements CostInvoiceService {
 			accountsDetailsVO.setAccountsVO(accountsVO);
 			accountsDetailsVOs.add(accountsDetailsVO);
 
-			if (costInvoiceVO.getRoundOff() > 0) {
+			if (costInvoiceVO.getRoundOff() != 0) {
 				accountsDetailsVO.setNDebitAmount(BigDecimal.valueOf(costInvoiceVO.getRoundOff()));
 				accountsDetailsVO.setACategory("PAYABLE A/C");
 				accountsDetailsVO.setSubLedgerCode("None");

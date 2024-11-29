@@ -39,4 +39,7 @@ public interface CostDebitNoteService {
 
 	List<Map<String, Object>> partyTypeForCostDebitNote(Long orgId, String branch, String finYear);
 
+	CostDebitNoteVO approveCostDebitNote(Long orgId, Long id, String docId, String action, String actionBy)
+			throws ApplicationException;
+
 }
