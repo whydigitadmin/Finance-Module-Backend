@@ -93,6 +93,7 @@ import com.base.basesetup.entity.DocumentTypeMappingDetailsVO;
 import com.base.basesetup.entity.FundTransferVO;
 import com.base.basesetup.entity.GeneralJournalVO;
 import com.base.basesetup.entity.GlOpeningBalanceVO;
+import com.base.basesetup.entity.GroupLedgerVO;
 import com.base.basesetup.entity.GstDebitNoteVO;
 import com.base.basesetup.entity.GstSalesVoucherVO;
 import com.base.basesetup.entity.JobCardVO;
@@ -114,7 +115,6 @@ import com.base.basesetup.entity.ReceiptReversalVO;
 import com.base.basesetup.entity.ReconcileBankVO;
 import com.base.basesetup.entity.ReconcileCashVO;
 import com.base.basesetup.entity.ReconcileCorpBankVO;
-import com.base.basesetup.entity.TaxInvoiceVO;
 import com.base.basesetup.entity.WithdrawalParticularsVO;
 import com.base.basesetup.exception.ApplicationException;
 import com.base.basesetup.repo.AccountParticularsRepo;
@@ -145,6 +145,7 @@ import com.base.basesetup.repo.DocumentTypeMappingDetailsRepo;
 import com.base.basesetup.repo.FundTransferRepo;
 import com.base.basesetup.repo.GeneralJournalRepo;
 import com.base.basesetup.repo.GlOpeningBalanceRepo;
+import com.base.basesetup.repo.GroupLedgerRepo;
 import com.base.basesetup.repo.GstDebitNoteRepo;
 import com.base.basesetup.repo.GstSalesVoucherRepo;
 import com.base.basesetup.repo.IrnCreditNoteDetailsRepo;
@@ -204,6 +205,12 @@ public class TransactionServiceImpl implements TransactionService {
 
 	@Autowired
 	IrnCreditNoteDetailsRepo irnCreditChargesRepo;
+
+	@Autowired
+	GroupLedgerRepo groupLedgerRepo;
+
+	@Autowired
+	AmountInWordsConverterService amountInWordsConverterService;
 
 	@Autowired
 	IrnCreditNoteGstRepo irnCreditGstRepo;
@@ -351,7 +358,7 @@ public class TransactionServiceImpl implements TransactionService {
 
 	@Autowired
 	AccountsDetailsRepo accountsDetailsRepo;
-	
+
 	@Autowired
 	MultipleDocIdGenerationDetailsRepo multipleDocIdGenerationDetailsRepo;
 
@@ -954,11 +961,9 @@ public class TransactionServiceImpl implements TransactionService {
 	@Override
 	public Map<String, Object> updateCreateGeneralJournal(@Valid GeneralJournalDTO generalJournalDTO)
 			throws ApplicationException {
-		String sourceScreenCode="GJ";
-		String screenCode="AC";
+		String sourceScreenCode = "GJ";
+		String screenCode = "AC";
 		GeneralJournalVO generalJournalVO = new GeneralJournalVO();
-
-        AccountsVO accountsVO = new AccountsVO();
 
 		String message;
 		if (ObjectUtils.isNotEmpty(generalJournalDTO.getId())) {
@@ -970,81 +975,95 @@ public class TransactionServiceImpl implements TransactionService {
 			message = "General Journal Updated Successfully";
 
 		} else {
-			
+
 //			// GETDOCID API
-			String accountsDocId = accountsRepo.getApproveDocId(generalJournalDTO.getOrgId(), generalJournalDTO.getFinYear(),
-					generalJournalDTO.getBranchCode(),sourceScreenCode,screenCode);
-			accountsVO.setDocId(accountsDocId);
+			String accountsDocId = accountsRepo.getApproveDocId(generalJournalDTO.getOrgId(),
+					generalJournalDTO.getFinYear(), generalJournalDTO.getBranchCode(), sourceScreenCode, screenCode);
 			generalJournalVO.setDocId(accountsDocId);
 
 			// GETDOCID LASTNO +1
 			MultipleDocIdGenerationDetailsVO multipleDocIdGenerationDetailsVO = multipleDocIdGenerationDetailsRepo
-					.findByOrgIdAndFinYearAndBranchCodeAndSourceScreenCodeAndScreenCode(generalJournalDTO.getOrgId(), generalJournalDTO.getFinYear(),
-							generalJournalDTO.getBranchCode(),sourceScreenCode,screenCode);
+					.findByOrgIdAndFinYearAndBranchCodeAndSourceScreenCodeAndScreenCode(generalJournalDTO.getOrgId(),
+							generalJournalDTO.getFinYear(), generalJournalDTO.getBranchCode(), sourceScreenCode,
+							screenCode);
 			multipleDocIdGenerationDetailsVO.setLastno(multipleDocIdGenerationDetailsVO.getLastno() + 1);
 			multipleDocIdGenerationDetailsRepo.save(multipleDocIdGenerationDetailsVO);
 
 			generalJournalVO.setCreatedBy(generalJournalDTO.getCreatedBy());
 			generalJournalVO.setUpdatedBy(generalJournalDTO.getCreatedBy());
 			createUpdateJournalVOByGeneralJournalDTO(generalJournalDTO, generalJournalVO);
-			message = "General Journal Created Successfully";			
-			
-			GeneralJournalVO savedGeneralJournalVO = generalJournalRepo.save(generalJournalVO);
-			if (generalJournalDTO.getStatus() .equals("SUBMIT")) {
-
-			List<ParticularsJournalVO> particularsJournalVOLists = savedGeneralJournalVO.getParticularsJournalVO();
-			if (particularsJournalVOLists != null && !particularsJournalVOLists.isEmpty()) {
-				for (ParticularsJournalVO particularsJournalVO : particularsJournalVOLists) {
-					// Create AccountsVO object and populate its fields
-//			        accountsVO.setDocId(accountsDocId);
-					accountsVO.setSourceScreen(generalJournalVO.getScreenName());
-					accountsVO.setSourceScreenCode(generalJournalVO.getScreenCode());
-					accountsVO.setSourceId(generalJournalVO.getId());
-					accountsVO.setCreatedBy(generalJournalVO.getCreatedBy());
-					accountsVO.setModifiedBy(generalJournalVO.getUpdatedBy());
-					accountsVO.setOrgId(generalJournalVO.getOrgId());
-					accountsVO.setBranch(generalJournalVO.getBranch());
-					accountsVO.setBranchCode(generalJournalVO.getBranchCode());
-					accountsVO.setModifiedon(generalJournalVO.getCommonDate().getModifiedon().toUpperCase());
-					accountsVO.setCreatedon(generalJournalVO.getCommonDate().getModifiedon().toUpperCase());
-					accountsVO.setRefNo(generalJournalVO.getDocId());
-					accountsVO.setRefDate(generalJournalVO.getDocDate());
-					accountsVO.setCurrency(generalJournalVO.getCurrency());
-					accountsVO.setFinYear(generalJournalVO.getFinYear());
-					accountsVO.setExRate(generalJournalVO.getExRate());
-					accountsVO.setRemarks(generalJournalVO.getRemarks());
-
-					// total debit/credit amounts
-					accountsVO.setTotalDebitAmount(generalJournalVO.getTotalDebitAmount());
-					accountsVO.setTotalCreditAmount(generalJournalVO.getTotalCreditAmount());
-
-//					stockDetailsRepo.save(stockDetailsVOFrom);
-
-					// Create AccountsDetailsVO list and populate it
-					List<AccountsDetailsVO> accountsDetailsVOs = new ArrayList<>();
-
-					// Add RECEIVABLE A/C entry
-					AccountsDetailsVO accountsDetailsVO = new AccountsDetailsVO();
-					accountsDetailsVO.setAccountName(particularsJournalVO.getAccountsName());
-					accountsDetailsVO.setSubLedgerCode(particularsJournalVO.getSubLedgerCode());
-					accountsDetailsVO.setSubLedgerCode(particularsJournalVO.getSubledgerName());
-					accountsDetailsVO.setDebitAmount(particularsJournalVO.getDebitAmount());
-					accountsDetailsVO.setCreditAmount(particularsJournalVO.getCreditAmount());
-
-					accountsDetailsVOs.add(accountsDetailsVO);
-					accountsVO.setAccountsDetailsVO(accountsDetailsVOs);
-					// Save AccountsVO and update TaxInvoiceVO
-					accountsRepo.save(accountsVO);
-				}
-
-			} }
+			message = "General Journal Created Successfully";
 		}
+		GeneralJournalVO savedGeneralJournalVO = generalJournalRepo.save(generalJournalVO);
+			if (savedGeneralJournalVO.getStatus().equalsIgnoreCase("SUBMIT")) {
+				AccountsVO accountsVO = new AccountsVO();
+				accountsVO.setDocId(savedGeneralJournalVO.getDocId());
+				accountsVO.setSourceScreen(savedGeneralJournalVO.getScreenName());
+				accountsVO.setSourceScreenCode(savedGeneralJournalVO.getScreenCode());
+				accountsVO.setSourceId(savedGeneralJournalVO.getId());
+				accountsVO.setCreatedBy(savedGeneralJournalVO.getCreatedBy());
+				accountsVO.setModifiedBy(savedGeneralJournalVO.getUpdatedBy());
+				accountsVO.setOrgId(savedGeneralJournalVO.getOrgId());
+				accountsVO.setBranch(savedGeneralJournalVO.getBranch());
+				accountsVO.setBranchCode(savedGeneralJournalVO.getBranchCode());
+				accountsVO.setModifiedon(savedGeneralJournalVO.getCommonDate().getModifiedon().toUpperCase());
+				accountsVO.setCreatedon(savedGeneralJournalVO.getCommonDate().getModifiedon().toUpperCase());
+				accountsVO.setRefNo(savedGeneralJournalVO.getDocId());
+				accountsVO.setRefDate(savedGeneralJournalVO.getDocDate());
+				accountsVO.setCurrency(savedGeneralJournalVO.getCurrency());
+				accountsVO.setExRate(savedGeneralJournalVO.getExRate());
+				accountsVO.setRemarks(savedGeneralJournalVO.getRemarks());
+				accountsVO.setFinYear(savedGeneralJournalVO.getFinYear());
 
-		generalJournalRepo.save(generalJournalVO);
+				accountsVO.setTotalDebitAmount(savedGeneralJournalVO.getTotalDebitAmount());
+				accountsVO.setTotalCreditAmount(savedGeneralJournalVO.getTotalCreditAmount());
+				accountsVO.setAmountInWords(
+						amountInWordsConverterService.convert(savedGeneralJournalVO.getTotalDebitAmount().longValue()));
+				// Create AccountsDetailsVO list and populate it
+				List<AccountsDetailsVO> accountsDetailsVOs = new ArrayList<>();
+				List<ParticularsJournalVO> particularsJournalVOLists = savedGeneralJournalVO.getParticularsJournalVO();
+				for (ParticularsJournalVO particularsJournalVO : particularsJournalVOLists) {
+					GroupLedgerVO groupLedgerVO = groupLedgerRepo
+							.findByAccountGroupName(particularsJournalVO.getAccountsName());
+					AccountsDetailsVO accountsDetailsVO = new AccountsDetailsVO();
+					accountsDetailsVO.setACategory(groupLedgerVO.getCategory());
+					accountsDetailsVO.setArapFlag(false);
+					accountsDetailsVO.setSubledgerName("None");
+					accountsDetailsVO.setSubLedgerCode("None");
+					accountsDetailsVO.setAccountName(groupLedgerVO.getAccountGroupName());
+					accountsDetailsVO.setACurrency(savedGeneralJournalVO.getCurrency());
+					accountsDetailsVO.setArapAmount(BigDecimal.ZERO);
+					accountsDetailsVO.setBArapAmount(BigDecimal.ZERO);
+					accountsDetailsVO.setNArapAmount(BigDecimal.ZERO);
+					accountsDetailsVO.setAExRate(savedGeneralJournalVO.getExRate());
+					accountsDetailsVO.setGstflag(3);
+
+					if (!particularsJournalVO.getDebitAmount().equals(BigDecimal.ZERO)) {
+						accountsDetailsVO.setNDebitAmount(particularsJournalVO.getDebitAmount());
+						accountsDetailsVO.setDebitAmount(particularsJournalVO.getDebitAmount());
+						accountsDetailsVO.setBDebitAmount(particularsJournalVO.getDebitAmount());
+						accountsDetailsVO.setNCreditAmount(BigDecimal.ZERO);
+						accountsDetailsVO.setCreditAmount(BigDecimal.ZERO);
+						accountsDetailsVO.setBCrAmount(BigDecimal.ZERO);
+					} else {
+						accountsDetailsVO.setNDebitAmount(BigDecimal.ZERO);
+						accountsDetailsVO.setDebitAmount(BigDecimal.ZERO);
+						accountsDetailsVO.setBDebitAmount(BigDecimal.ZERO);
+						accountsDetailsVO.setNCreditAmount(particularsJournalVO.getCreditAmount());
+						accountsDetailsVO.setCreditAmount(particularsJournalVO.getCreditAmount());
+						accountsDetailsVO.setBCrAmount(particularsJournalVO.getCreditAmount());
+					}
+					accountsDetailsVO.setAccountsVO(accountsVO);
+					accountsDetailsVOs.add(accountsDetailsVO);
+				}
+				accountsVO.setAccountsDetailsVO(accountsDetailsVOs);
+				accountsRepo.save(accountsVO);
+			}
 		Map<String, Object> response = new HashMap<>();
 		response.put("generalJournalVO", generalJournalVO);
 		response.put("message", message);
 		return response;
+
 	}
 
 	private void createUpdateJournalVOByGeneralJournalDTO(@Valid GeneralJournalDTO generalJournalDTO,
@@ -1061,7 +1080,6 @@ public class TransactionServiceImpl implements TransactionService {
 		generalJournalVO.setBranchCode(generalJournalDTO.getBranchCode());
 		generalJournalVO.setFinYear(generalJournalDTO.getFinYear());
 		generalJournalVO.setStatus(generalJournalDTO.getStatus());
-
 
 		if (ObjectUtils.isNotEmpty(generalJournalDTO.getId())) {
 			List<ParticularsJournalVO> particularsJournalVOList = particularsJournalRepo
@@ -1111,9 +1129,8 @@ public class TransactionServiceImpl implements TransactionService {
 	@Override
 	public String getGeneralJournalDocId(Long orgId, String finYear, String branch, String branchCode) {
 		String sourceScreenCode = "GJ";
-		String screenCode="AC";
-		String accountsDocId = accountsRepo.getApproveDocId(orgId, finYear,
-				branchCode,sourceScreenCode,screenCode);
+		String screenCode = "AC";
+		String accountsDocId = accountsRepo.getApproveDocId(orgId, finYear, branchCode, sourceScreenCode, screenCode);
 		return accountsDocId;
 	}
 
