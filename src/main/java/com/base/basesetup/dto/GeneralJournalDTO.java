@@ -20,6 +20,7 @@ public class GeneralJournalDTO {
 	private BigDecimal exRate;
 	private String refNo;
 	private LocalDate refDate;
+	private String status;
 
 	private String remarks;
 	private Long orgId;
