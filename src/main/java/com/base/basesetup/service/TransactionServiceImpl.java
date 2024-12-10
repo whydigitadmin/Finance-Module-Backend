@@ -3033,9 +3033,11 @@ public class TransactionServiceImpl implements TransactionService {
 	@Override
 	public Map<String, Object> updateCreateBankingWithdrawal(@Valid BankingWithdrawalDTO bankingWithdrawalDTO)
 			throws ApplicationException {
-		String screenCode = "BW";
+		String sourceScreenCode = "BW";
+		String screenCode = "AC";
 		BankingWithdrawalVO bankingWithdrawalVO = new BankingWithdrawalVO();
 		String message;
+
 		if (ObjectUtils.isNotEmpty(bankingWithdrawalDTO.getId())) {
 			bankingWithdrawalVO = bankingWithdrawalRepo.findById(bankingWithdrawalDTO.getId())
 					.orElseThrow(() -> new ApplicationException("BankingWithdrawal not found"));
@@ -3045,25 +3047,110 @@ public class TransactionServiceImpl implements TransactionService {
 			message = "BankingWithdrawal Updated Successfully";
 		} else {
 			// GETDOCID API
-			String docId = bankingWithdrawalRepo.getBankingWithdrawalByDocId(bankingWithdrawalDTO.getOrgId(),
-					bankingWithdrawalDTO.getFinYear(), bankingWithdrawalDTO.getBranchCode(), screenCode);
 
-			bankingWithdrawalVO.setDocId(docId);
+//			// GETDOCID API
+			String bankingDocId = accountsRepo.getApproveDocId(bankingWithdrawalDTO.getOrgId(),
+					bankingWithdrawalDTO.getFinYear(), bankingWithdrawalDTO.getBranchCode(), sourceScreenCode,
+					screenCode);
+			bankingWithdrawalVO.setDocId(bankingDocId);
 
-//						// GETDOCID LASTNO +1
-			DocumentTypeMappingDetailsVO documentTypeMappingDetailsVO = documentTypeMappingDetailsRepo
-					.findByOrgIdAndFinYearAndBranchCodeAndScreenCode(bankingWithdrawalDTO.getOrgId(),
-							bankingWithdrawalDTO.getFinYear(), bankingWithdrawalDTO.getBranchCode(), screenCode);
-			documentTypeMappingDetailsVO.setLastno(documentTypeMappingDetailsVO.getLastno() + 1);
-			documentTypeMappingDetailsRepo.save(documentTypeMappingDetailsVO);
+			// GETDOCID LASTNO +1
+			MultipleDocIdGenerationDetailsVO multipleDocIdGenerationDetailsVO = multipleDocIdGenerationDetailsRepo
+					.findByOrgIdAndFinYearAndBranchCodeAndSourceScreenCodeAndScreenCode(bankingWithdrawalDTO.getOrgId(),
+							bankingWithdrawalDTO.getFinYear(), bankingWithdrawalDTO.getBranchCode(), sourceScreenCode,
+							screenCode);
+			multipleDocIdGenerationDetailsVO.setLastno(multipleDocIdGenerationDetailsVO.getLastno() + 1);
+			multipleDocIdGenerationDetailsRepo.save(multipleDocIdGenerationDetailsVO);
 
 			bankingWithdrawalVO.setCreatedBy(bankingWithdrawalDTO.getCreatedBy());
 			bankingWithdrawalVO.setUpdatedBy(bankingWithdrawalDTO.getCreatedBy());
 			createUpdateBankingWithdrawalVOByBankingWithdrawalDTO(bankingWithdrawalDTO, bankingWithdrawalVO);
-			message = "BankingWithdrawal Created Successfully";
+			message = "Banking Withdrawal Created Successfully";
 		}
 
-		bankingWithdrawalRepo.save(bankingWithdrawalVO);
+		BankingWithdrawalVO savedBankingWithdrawalVO = bankingWithdrawalRepo.save(bankingWithdrawalVO);
+		if (savedBankingWithdrawalVO.getStatus().equalsIgnoreCase("SUBMIT")) {
+			AccountsVO accountsVO = new AccountsVO();
+			accountsVO.setDocId(savedBankingWithdrawalVO.getDocId());
+			accountsVO.setSourceScreen(savedBankingWithdrawalVO.getScreenName());
+			accountsVO.setSourceScreenCode(savedBankingWithdrawalVO.getScreenCode());
+			accountsVO.setSourceId(savedBankingWithdrawalVO.getId());
+			accountsVO.setCreatedBy(savedBankingWithdrawalVO.getCreatedBy());
+			accountsVO.setModifiedBy(savedBankingWithdrawalVO.getUpdatedBy());
+			accountsVO.setOrgId(savedBankingWithdrawalVO.getOrgId());
+			accountsVO.setBranch(savedBankingWithdrawalVO.getBranch());
+			accountsVO.setBranchCode(savedBankingWithdrawalVO.getBranchCode());
+			accountsVO.setModifiedon(savedBankingWithdrawalVO.getCommonDate().getModifiedon().toUpperCase());
+			accountsVO.setCreatedon(savedBankingWithdrawalVO.getCommonDate().getModifiedon().toUpperCase());
+			accountsVO.setRefNo(savedBankingWithdrawalVO.getDocId());
+			accountsVO.setRefDate(savedBankingWithdrawalVO.getDocDate());
+			accountsVO.setCurrency(savedBankingWithdrawalVO.getCurrency());
+			accountsVO.setExRate(savedBankingWithdrawalVO.getExchangeRate());
+			accountsVO.setRemarks(savedBankingWithdrawalVO.getRemarks());
+			accountsVO.setFinYear(savedBankingWithdrawalVO.getFinYear());
+			accountsVO.setTotalDebitAmount(savedBankingWithdrawalVO.getTotalDebitAmount());
+			accountsVO.setTotalCreditAmount(savedBankingWithdrawalVO.getTotalCreditAmount());
+			accountsVO.setAmountInWords(
+					amountInWordsConverterService.convert(savedBankingWithdrawalVO.getTotalDebitAmount().longValue()));
+
+			// Create AccountsDetailsVO list and populate it
+			List<AccountsDetailsVO> withdrawlDetailsVOs = new ArrayList<>();
+			List<WithdrawalParticularsVO> withdrawlDetailsVOLists = savedBankingWithdrawalVO
+					.getWithdrawalParticularsVO();
+			for (WithdrawalParticularsVO particularsJournalVO : withdrawlDetailsVOLists) {
+				GroupLedgerVO groupLedgerVO = groupLedgerRepo
+						.findByAccountGroupName(particularsJournalVO.getAccountsName());
+
+				AccountsDetailsVO accountsDetailsVO = new AccountsDetailsVO();
+//				if (!particularsJournalVO.getDebitAmount().equals(BigDecimal.ZERO)) {
+				// DebitAmount entry
+				accountsDetailsVO.setACategory(groupLedgerVO.getCategory());
+				accountsDetailsVO.setArapFlag(false);
+				accountsDetailsVO.setSubledgerName("None");
+				accountsDetailsVO.setSubLedgerCode("None");
+				accountsDetailsVO.setAccountName(groupLedgerVO.getAccountGroupName());
+				accountsDetailsVO.setACurrency(savedBankingWithdrawalVO.getCurrency());
+				accountsDetailsVO.setAExRate(savedBankingWithdrawalVO.getExchangeRate());
+				accountsDetailsVO.setGstflag(3);
+				accountsDetailsVO.setNDebitAmount(particularsJournalVO.getDebit());
+				accountsDetailsVO.setDebitAmount(particularsJournalVO.getDebit());
+				accountsDetailsVO.setBDebitAmount(particularsJournalVO.getDebit());
+				accountsDetailsVO.setNCreditAmount(BigDecimal.ZERO);
+				accountsDetailsVO.setCreditAmount(BigDecimal.ZERO);
+				accountsDetailsVO.setBCrAmount(BigDecimal.ZERO);
+				accountsDetailsVO.setArapAmount(BigDecimal.ZERO);
+				accountsDetailsVO.setBArapAmount(BigDecimal.ZERO);
+				accountsDetailsVO.setNArapAmount(BigDecimal.ZERO);
+				accountsDetailsVO.setGstflag(3);
+				withdrawlDetailsVOs.add(accountsDetailsVO);
+
+//				Credit Amount entry
+				accountsDetailsVO.setACategory(groupLedgerVO.getCategory());
+				accountsDetailsVO.setArapFlag(false);
+				accountsDetailsVO.setSubledgerName("None");
+				accountsDetailsVO.setSubLedgerCode("None");
+				accountsDetailsVO.setAccountName(groupLedgerVO.getAccountGroupName());
+				accountsDetailsVO.setACurrency(savedBankingWithdrawalVO.getCurrency());
+				accountsDetailsVO.setAExRate(savedBankingWithdrawalVO.getExchangeRate());
+				accountsDetailsVO.setGstflag(3);
+				accountsDetailsVO.setNDebitAmount(BigDecimal.ZERO);
+				accountsDetailsVO.setDebitAmount(BigDecimal.ZERO);
+				accountsDetailsVO.setBDebitAmount(BigDecimal.ZERO);
+				accountsDetailsVO.setNCreditAmount(particularsJournalVO.getCredit());
+				accountsDetailsVO.setCreditAmount(particularsJournalVO.getCredit());
+				accountsDetailsVO.setBCrAmount(particularsJournalVO.getCredit());
+				accountsDetailsVO.setArapAmount(BigDecimal.ZERO);
+				accountsDetailsVO.setBArapAmount(BigDecimal.ZERO);
+				accountsDetailsVO.setNArapAmount(BigDecimal.ZERO);
+				accountsDetailsVO.setGstflag(3);
+				accountsDetailsVO.setAccountsVO(accountsVO);
+				withdrawlDetailsVOs.add(accountsDetailsVO);
+			}
+			accountsVO.setAccountsDetailsVO(withdrawlDetailsVOs);
+			accountsRepo.save(accountsVO);
+		}
+
+//		bankingWithdrawalRepo.save(bankingWithdrawalVO);
 		Map<String, Object> response = new HashMap<>();
 		response.put("bankingWithdrawalVO", bankingWithdrawalVO);
 		response.put("message", message);
