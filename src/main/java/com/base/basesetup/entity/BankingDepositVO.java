@@ -39,51 +39,49 @@ public class BankingDepositVO {
 	private Long id;
 
 	@Column(name = "depositmode", length = 50)
-    private String depositMode;
+	private String depositMode;
 
-    @Column(name = "docid", length = 50)
-    private String docId;
+	@Column(name = "docid", length = 50)
+	private String docId;
 
-    @Column(name = "docdate")
-    private LocalDate docDate= LocalDate.now();
+	@Column(name = "docdate")
+	private LocalDate docDate = LocalDate.now();
 
-    @Column(name = "receivedfrom", length = 50)
-    private String receivedFrom;
+	@Column(name = "receivedfrom", length = 50)
+	private String receivedFrom;
 
-    @Column(name = "chequeno", length = 50)
-    private String chequeNo;
+	@Column(name = "chequeno", length = 50)
+	private String chequeNo;
 
-    @Column(name = "chequedate")
-    private LocalDate chequeDate;
+	@Column(name = "chequedate")
+	private LocalDate chequeDate;
 
-    @Column(name = "chequebank", length = 50)
-    private String chequeBank;
+	@Column(name = "chequebank", length = 50)
+	private String chequeBank;
 
-    @Column(name = "bankaccount", length = 50)
-    private String bankAccount;
+	@Column(name = "bankaccount", length = 50)
+	private String bankAccount;
 
-    @Column(name = "currency", length = 10)
-    private String currency;
+	@Column(name = "currency", length = 10)
+	private String currency;
 
-    @Column(name = "exchangerate", precision = 10, scale = 6)
-    private BigDecimal exchangeRate;
+	@Column(name = "exchangerate", precision = 10, scale = 6)
+	private BigDecimal exchangeRate;
 
-    @Column(name = "depositamount", precision = 10, scale = 2)
-    private BigDecimal depositAmount;
+	@Column(name = "depositamount", precision = 10, scale = 2)
+	private BigDecimal depositAmount;
 
-    @Column(name = "totaldebitamount", precision = 10, scale = 2)
-    private BigDecimal totalDebitAmount;
+	@Column(name = "totaldebitamount", precision = 10, scale = 2)
+	private BigDecimal totalDebitAmount;
 
-    @Column(name = "totalcreditamount", precision = 10, scale = 2)
-    private BigDecimal totalCreditAmount;
+	@Column(name = "totalcreditamount", precision = 10, scale = 2)
+	private BigDecimal totalCreditAmount;
 
-    @Column(name = "totalamount", precision = 10, scale = 2)
-    private BigDecimal totalAmount;
+	@Column(name = "totalamount", precision = 10, scale = 2)
+	private BigDecimal totalAmount;
 
-    @Column(name = "remarks", length = 150)
-    private String remarks;
-    
-    
+	@Column(name = "remarks", length = 150)
+	private String remarks;
 
 	@Column(name = "branch", length = 25)
 	private String branch;
@@ -111,24 +109,26 @@ public class BankingDepositVO {
 
 	@Column(name = "orgid")
 	private Long orgId;
-	
+
+	@Column(name = "status")
+	private String status;
+
 	@Column(name = "screencode", length = 5)
 	private String screenCode = "BD";
 
 	@Column(name = "screenname", length = 25)
 	private String screenName = "BANKINGDEPOSIT";
-	
-    
+
 	@OneToMany(mappedBy = "bankingDepositVO", cascade = CascadeType.ALL)
 	@JsonManagedReference
 	List<DepositParticularsVO> depositparticularsVO;
-    
+
 	@JsonGetter("active")
 	public String getActive() {
 		return active ? "Active" : "In-Active";
 	}
-    
-    @Embedded
+
+	@Embedded
 	@Builder.Default
 	private CreatedUpdatedDate commonDate = new CreatedUpdatedDate();
 }

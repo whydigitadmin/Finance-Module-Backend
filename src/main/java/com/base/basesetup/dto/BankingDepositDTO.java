@@ -26,13 +26,14 @@ public class BankingDepositDTO {
 	private BigDecimal exchangeRate;
 	private BigDecimal depositAmount;
 	private String remarks;
-	
+
 	private Long orgId;
 	private String createdBy;
 	private String branch;
 	private String branchCode;
 	private String finYear;
-	
+	private String status;
+
 	List<DepositParticularsDTO> depositParticularsDTO;
 
 }
