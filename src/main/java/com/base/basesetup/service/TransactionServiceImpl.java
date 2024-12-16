@@ -3202,6 +3202,7 @@ public class TransactionServiceImpl implements TransactionService {
 				accountsDetailsVO.setBArapAmount(BigDecimal.ZERO);
 				accountsDetailsVO.setNArapAmount(BigDecimal.ZERO);
 				accountsDetailsVO.setGstflag(3);
+				accountsDetailsVO.setAccountsVO(accountsVO);
 				withdrawlDetailsVOs.add(accountsDetailsVO);
 				}else {
 //				Credit Amount entry
