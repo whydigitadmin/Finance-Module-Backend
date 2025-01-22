@@ -3168,6 +3168,7 @@ public class TransactionServiceImpl implements TransactionService {
 		bankingWithdrawalVO.setCurrency(bankingWithdrawalDTO.getCurrency());
 		bankingWithdrawalVO.setExchangeRate(bankingWithdrawalDTO.getExchangeRate());
 		bankingWithdrawalVO.setWithdrawalAmount(bankingWithdrawalDTO.getWithdrawalAmount());
+		bankingWithdrawalVO.setStatus(bankingWithdrawalDTO.getStatus());
 
 		bankingWithdrawalVO.setRemarks(bankingWithdrawalDTO.getRemarks());
 		bankingWithdrawalVO.setOrgId(bankingWithdrawalDTO.getOrgId());
