@@ -19,6 +19,7 @@ public class GroupLedgerDTO {
 	private String gstTaxFlag;
 	private String coaList;
 	private String accountGroupName;
+	private String accountCode;
 	private String type;
 	private String gstType;
 	private double gstPercentage;
@@ -28,4 +29,6 @@ public class GroupLedgerDTO {
 	private String currency;
 	private String createdBy;
 	private boolean active;
+	private String natureOfAccount;
+	private String pBFlag;
 }

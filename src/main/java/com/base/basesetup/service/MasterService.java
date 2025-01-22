@@ -1,12 +1,15 @@
 package com.base.basesetup.service;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 import javax.validation.Valid;
 
+import org.apache.poi.EncryptedDocumentException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.base.basesetup.dto.AccountDTO;
 import com.base.basesetup.dto.BranchDTO;
@@ -192,5 +195,12 @@ public interface MasterService {
 	PartyMasterVO updateCreatePartyMaster(@Valid PartyMasterDTO partyMasterDTO) throws ApplicationException;
 
 	String getPartyMasterDocId(Long orgId, String finYear, String branch, String branchCode);
+
+	void excelUploadForGroupLedger(MultipartFile[] files, String createdBy, Long orgId)
+			throws ApplicationException, EncryptedDocumentException, IOException;
+
+	int getTotalRows();
+
+	int getSuccessfulUploads();
 
 }
