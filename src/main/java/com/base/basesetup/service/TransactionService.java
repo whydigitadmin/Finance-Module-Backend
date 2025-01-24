@@ -220,7 +220,7 @@ public interface TransactionService {
 	// ReconcileCorpBank
 	List<ReconcileCorpBankVO> getAllReconcileCorpBankByOrgId(Long orgId);
 
-	Map<String, Object> updateCreateReconcileCorpBank(@Valid ReconcileCorpBankDTO reconcileCorpBankDTO)
+	Map<String, Object> updateCreateReconcileCorpBank( ReconcileCorpBankDTO reconcileCorpBankDTO)
 			throws ApplicationException;
 
 	List<ReconcileCorpBankVO> getAllReconcileCorpBankById(Long id);

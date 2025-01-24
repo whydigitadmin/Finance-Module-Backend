@@ -950,6 +950,8 @@ public class TransactionServiceImpl implements TransactionService {
 			createUpdateJournalVOByGeneralJournalDTO(generalJournalDTO, generalJournalVO);
 			message = "General Journal Updated Successfully";
 		} else {
+			
+			createUpdateJournalVOByGeneralJournalDTO(generalJournalDTO, generalJournalVO);
 			// GETDOCID API
 			String docId = generalJournalRepo.getGeneralJournalDocId(generalJournalDTO.getOrgId(),
 					generalJournalDTO.getFinYear(), generalJournalDTO.getBranchCode(), screenCode);
@@ -965,7 +967,6 @@ public class TransactionServiceImpl implements TransactionService {
 
 			generalJournalVO.setCreatedBy(generalJournalDTO.getCreatedBy());
 			generalJournalVO.setUpdatedBy(generalJournalDTO.getCreatedBy());
-			createUpdateJournalVOByGeneralJournalDTO(generalJournalDTO, generalJournalVO);
 			message = "General Journal Created Successfully";
 		}
 
@@ -2060,9 +2061,11 @@ public class TransactionServiceImpl implements TransactionService {
 			reconcileBankVO = reconcileBankRepo.findById(reconcileBankDTO.getId())
 					.orElseThrow(() -> new ApplicationException("Invalid ReconcileBank details"));
 			reconcileBankVO.setUpdatedBy(reconcileBankDTO.getCreatedBy());
+			getReconcileBankVOFromReconcileBankDTO(reconcileBankDTO, reconcileBankVO);
 			message = "ReconcileBank Updated Successfully";
 		} else {
 
+			getReconcileBankVOFromReconcileBankDTO(reconcileBankDTO, reconcileBankVO);
 			// GETDOCID API
 			String docId = reconcileBankRepo.getReconcileBankDocId(reconcileBankDTO.getOrgId(),
 					reconcileBankDTO.getFinYear(), reconcileBankDTO.getBranchCode(), screenCode);
@@ -2075,12 +2078,13 @@ public class TransactionServiceImpl implements TransactionService {
 			documentTypeMappingDetailsVO.setLastno(documentTypeMappingDetailsVO.getLastno() + 1);
 			documentTypeMappingDetailsRepo.save(documentTypeMappingDetailsVO);
 
+			
 			reconcileBankVO.setCreatedBy(reconcileBankDTO.getCreatedBy());
 			reconcileBankVO.setUpdatedBy(reconcileBankDTO.getCreatedBy());
 			message = "ReconcileBank Created Successfully";
 		}
 
-		getReconcileBankVOFromReconcileBankDTO(reconcileBankDTO, reconcileBankVO);
+		
 		reconcileBankRepo.save(reconcileBankVO);
 		Map<String, Object> response = new HashMap<>();
 		response.put("reconcileBankVO", reconcileBankVO);
@@ -2120,6 +2124,7 @@ public class TransactionServiceImpl implements TransactionService {
 			particularsReconcileVO.setVoucherDate(particularsReconcileDTO.getVoucherDate());
 			particularsReconcileVO.setChequeNo(particularsReconcileDTO.getChequeNo());
 			particularsReconcileVO.setChequeDate(particularsReconcileDTO.getChequeDate());
+	
 			if (particularsReconcileDTO.getDeposit() != null
 					&& particularsReconcileDTO.getDeposit().compareTo(BigDecimal.ZERO) != 0) {
 				particularsReconcileVO.setDeposit(particularsReconcileDTO.getDeposit());
@@ -2128,7 +2133,6 @@ public class TransactionServiceImpl implements TransactionService {
 				particularsReconcileVO.setWithdrawal(particularsReconcileDTO.getWithdrawal());
 				particularsReconcileVO.setDeposit(BigDecimal.ZERO);
 			}
-
 			totalDeposit = totalDeposit.add(particularsReconcileVO.getDeposit());
 			totalWithdrawal = totalWithdrawal.add(particularsReconcileVO.getWithdrawal());
 			particularsReconcileVO.setBankRef(particularsReconcileDTO.getBankRef());
@@ -2139,9 +2143,10 @@ public class TransactionServiceImpl implements TransactionService {
 			reconcileBankVO.setTotalDeposit(totalDeposit);
 			reconcileBankVO.setTotalWithdrawal(totalWithdrawal);
 		} else {
-			throw new ApplicationException("Total Deposit Amount and Total Withdrawal Amount Should be Equal");
+			throw new ApplicationException("Total Debit Amount and Total Credit Amount Should be Equal");
 		}
 		reconcileBankVO.setParticularsReconcileVO(particularsReconcileVOs);
+
 	}
 
 	@Override
