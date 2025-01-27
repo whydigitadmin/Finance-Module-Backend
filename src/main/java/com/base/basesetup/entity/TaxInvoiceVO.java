@@ -95,6 +95,8 @@ public class TaxInvoiceVO {
 	private String screenCode="TI";
 	@Column(name = "screenname",length = 30)
 	private String screenName="TAX INVOICE";
+	@Column(name = "joborderno", length = 50)
+	private String jobOrderNo;
 
 	@Column(name = "docdate")
 	private LocalDate docDate= LocalDate.now();

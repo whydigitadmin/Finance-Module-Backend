@@ -117,6 +117,8 @@ public class CostInvoiceVO {
 	private String utrRef;
 	@Column(name = "costtype", length = 10)
 	private String costType;
+	@Column(name = "joborderno", length = 50)
+	private String jobOrderNo;
 
 //	SUMMARY
 	@Column(name = "totchargesbillcurramt", precision = 10, scale = 2)
